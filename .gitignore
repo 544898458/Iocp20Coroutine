@@ -22,3 +22,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# 20231008
+*.vs
+x64
