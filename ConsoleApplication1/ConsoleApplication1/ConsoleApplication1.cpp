@@ -304,8 +304,16 @@ int PostAccept()
 	char str[1024] = { 0 };
 	DWORD dwRecvcount;
 
-	BOOL bRes = AcceptEx(all_socks[0], all_socks[count], str, 0, sizeof(struct sockaddr_in) + 16,
-		sizeof(struct sockaddr_in) + 16, &dwRecvcount, &all_olp[0]);
+	BOOL bRes = AcceptEx(
+		all_socks[0],		//[in]侦听套接字。服务器应用程序在这个套接字上等待连接。
+		all_socks[count],	//
+		str, 
+		0, 
+		sizeof(struct sockaddr_in) + 16,
+		sizeof(struct sockaddr_in) + 16, 
+		&dwRecvcount, 
+		&all_olp[0]
+	);
 
 	int a = WSAGetLastError();
 	if (ERROR_IO_PENDING != a)
