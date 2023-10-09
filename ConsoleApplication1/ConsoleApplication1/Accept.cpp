@@ -4,7 +4,6 @@
 #include <mswsock.h>
 #include <winnt.h>
 #include "Accept.h"
-#define MAX_RECV_COUNT  1024
 
 bool Iocp::Accept::WsaStartup()
 {
@@ -140,8 +139,7 @@ bool Iocp::Accept::Init()
 }
 bool Iocp::Accept::PostAccept()
 {
-	auto pAcceptOverlapped = new MyOverlapped();
-	pAcceptOverlapped->op = MyOverlapped::Accept;
+	auto pAcceptOverlapped = new MyOverlapped(MyOverlapped::Accept);
 	
 	pAcceptOverlapped->socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 	//all_olp[count].hEvent = WSACreateEvent();
@@ -210,7 +208,7 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 			}
 			pThis->PostSend(CompletionKey->socket);
 			//新客户端投递recv
-			pThis->PostRecv(CompletionKey->socket);
+			pThis->PostRecv(CompletionKey);
 			//count++;
 			pThis->PostAccept();
 		}
@@ -221,21 +219,21 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 				//客户端下线
 				printf("close\n");
 				//关闭
-				closesocket(all_socks[CompletionKey]);
-				WSACloseEvent(all_olp[CompletionKey].hEvent);
+				closesocket(CompletionKey->socket);
+				//WSACloseEvent(all_olp[CompletionKey].hEvent);
 				//从数组中删掉
-				all_socks[CompletionKey] = 0;
-				all_olp[CompletionKey].hEvent = NULL;
+				//all_socks[CompletionKey] = 0;
+				//all_olp[CompletionKey].hEvent = NULL;
 			}
 			else
 			{
-				if (0 != recv_buf[0])
+				if (0 != CompletionKey->recv_buf[0])
 				{
 					//收到  recv
-					printf("%s\n", recv_buf);
-					memset(recv_buf, 0, sizeof(recv_buf));
+					printf("%s\n", CompletionKey->recv_buf);
+					memset(CompletionKey->recv_buf, 0, sizeof(CompletionKey->recv_buf));
 					//
-					PostRecv(CompletionKey);
+					pThis->PostRecv(CompletionKey);
 				}
 				else
 				{
@@ -248,7 +246,7 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 
 	return 0;
 }
-bool Iocp::Accept::PostSend(SOCKET socket)
+bool Iocp::Accept::PostSend(MyCompeletionKey* pKey)
 {
 	WSABUF wsabuf;
 	wsabuf.buf = (CHAR*)"你好";
@@ -266,4 +264,25 @@ bool Iocp::Accept::PostSend(SOCKET socket)
 		return 1;
 	}
 	return 0;
+}
+
+
+bool Iocp::Accept::PostRecv(MyCompeletionKey *pKey)
+{
+	WSABUF wsabuf;
+	wsabuf.buf = pKey->recv_buf;
+	wsabuf.len = MAX_RECV_COUNT;
+
+	DWORD dwRecvCount;
+	DWORD dwFlag = 0;
+	auto pOverlapped = new MyOverlapped(MyOverlapped::Recv);
+	int nRes = WSARecv(pKey->socket, &wsabuf, 1, &dwRecvCount, &dwFlag, &pOverlapped->overlapped, NULL);
+
+	int a = WSAGetLastError();
+	if (ERROR_IO_PENDING != a)
+	{
+		//函数执行出错
+		return false;
+	}
+	return true;
 }

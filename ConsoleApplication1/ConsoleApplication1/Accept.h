@@ -1,5 +1,7 @@
 #pragma once
 #include<vector>
+#define MAX_RECV_COUNT  1024
+
 namespace Iocp 
 {
 	/// <summary>
@@ -8,15 +10,23 @@ namespace Iocp
 	/// </summary>
 	struct MyOverlapped
 	{
-		OVERLAPPED overlapped;
-		enum Op 
+		enum Op
 		{
 			Accept,
+			Recv,
 		};
+		MyOverlapped(MyOverlapped::Op opInit)
+		{
+			this->op = opInit;
+		}
+		OVERLAPPED overlapped;
+
 		Op op;
+		SOCKET socket;
 	};
 	struct MyCompeletionKey {
 		SOCKET socket;
+		char recv_buf[MAX_RECV_COUNT];
 	};
 	class Accept
 	{
@@ -26,7 +36,8 @@ namespace Iocp
 	private:
 		bool PostAccept();
 		static DWORD WINAPI ThreadProc(LPVOID lpParameter);
-		bool PostSend(SOCKET socket);
+		bool PostSend(MyCompeletionKey* pKey);
+		bool PostRecv(MyCompeletionKey* pKey);
 		//bool flag = true;
 	private:
 		SOCKET socketAccept=NULL;
