@@ -10,6 +10,14 @@ namespace Iocp
 	{
 		OVERLAPPED overlapped;
 		SOCKET socket;
+		enum Op 
+		{
+			Accept,
+		};
+		Op op;
+	};
+	struct CompeletionKey {
+
 	};
 	class Accept
 	{
@@ -19,6 +27,7 @@ namespace Iocp
 	private:
 		bool PostAccept();
 		static DWORD WINAPI ThreadProc(LPVOID lpParameter);
+		bool PostSend(SOCKET socket);
 		//bool flag = true;
 	private:
 		SOCKET socketAccept=NULL;

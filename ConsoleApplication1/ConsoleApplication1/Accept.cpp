@@ -4,6 +4,7 @@
 #include <mswsock.h>
 #include <winnt.h>
 #include "Accept.h"
+#define MAX_RECV_COUNT  1024
 
 bool Iocp::Accept::WsaStartup()
 {
@@ -121,7 +122,7 @@ bool Iocp::Accept::Init()
 
 	for (int i = 0; i < process_count; i++)
 	{
-		auto hThread = CreateThread(NULL, 0, ThreadProc, iocp, 0, NULL);
+		auto hThread = CreateThread(NULL, 0, ThreadProc, this, 0, NULL);
 		if (NULL == hThread)
 		{
 			int a = GetLastError();
@@ -138,6 +139,7 @@ bool Iocp::Accept::Init()
 bool Iocp::Accept::PostAccept()
 {
 	auto pSession = new MyOverlapped();
+	pSession->op = MyOverlapped::Accept;
 	pSession->socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 	//all_olp[count].hEvent = WSACreateEvent();
 
@@ -167,7 +169,8 @@ bool Iocp::Accept::PostAccept()
 
 DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 {
-	HANDLE port = (HANDLE)lpParameter;
+	auto* pThis = (Accept*)lpParameter;
+	HANDLE port = pThis->hIocp;
 	DWORD      number_of_bytes;
 	SOCKET socket;
 	LPOVERLAPPED lpOverlapped;
@@ -186,24 +189,25 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 		}
 		//处理
 		//accept
-		auto socket = CONTAINING_RECORD(lpOverlapped, MyOverlapped, socket);
-		if (nullptr == lpOverlapped)
+		//auto socket = CONTAINING_RECORD(lpOverlapped, MyOverlapped, socket);
+		auto* overlapped = (MyOverlapped*)lpOverlapped;
+		if (overlapped->op== MyOverlapped::Accept)
 		{
 			printf("accept\n");
 			//绑定到完成端口
-			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)all_socks[count], hPort, count, 0);
-			if (hPort1 != hPort)
+			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)overlapped->socket, port, overlapped->socket, 0);
+			if (hPort1 != port)
 			{
 				int a = GetLastError();
 				printf("%d\n", a);
-				closesocket(all_socks[count]);
+				closesocket(overlapped->socket);// all_socks[count]);
 				continue;
 			}
 			PostSend(count);
 			//新客户端投递recv
 			PostRecv(count);
 			count++;
-			PostAccept();
+			pThis->PostAccept();
 		}
 		else
 		{
@@ -237,5 +241,24 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 		}
 	}
 
+	return 0;
+}
+bool Iocp::Accept::PostSend(int index)
+{
+	WSABUF wsabuf;
+	wsabuf.buf = (CHAR*)"你好";
+	wsabuf.len = MAX_RECV_COUNT;
+
+	DWORD dwSendCount;
+	DWORD dwFlag = 0;
+	int nRes = WSASend(all_socks[index], &wsabuf, 1, &dwSendCount, dwFlag, &all_olp[index], NULL);
+
+	int a = WSAGetLastError();
+	if (ERROR_IO_PENDING != a)
+	{
+		//延迟处理
+		//函数执行出错
+		return 1;
+	}
 	return 0;
 }
