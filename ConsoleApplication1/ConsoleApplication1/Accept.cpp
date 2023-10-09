@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <WS2tcpip.h>
 #include <mswsock.h>
+#include <winnt.h>
 #include "Accept.h"
 
 bool Iocp::Accept::WsaStartup()
@@ -65,9 +66,9 @@ bool Iocp::Accept::Init()
 	}
 
 
-	//创建完成端口
-	this->hIocpAccept = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
-	if (0 == this->hIocpAccept)
+	//创建完成端口	创建一个I/O完成端口对象，用它面向任意数量的套接字句柄，管理多个I/O请求。要做到这一点，需要调用CreateCompletionPort函数。
+	this->hIocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+	if (0 == this->hIocp)
 	{
 		int a = GetLastError();
 		printf("%d\n", a);
@@ -77,8 +78,8 @@ bool Iocp::Accept::Init()
 		return false;
 	}
 	//绑定
-	const auto iocp = CreateIoCompletionPort((HANDLE)socketAccept, this->hIocpAccept, 0, 0);
-	if (iocp != this->hIocpAccept)
+	const auto iocp = CreateIoCompletionPort((HANDLE)socketAccept, this->hIocp, this->socketAccept, 0);
+	if (iocp != this->hIocp)
 	{
 		int a = GetLastError();
 		printf("完成端口绑定socket失败%d\n", a);
@@ -120,22 +121,23 @@ bool Iocp::Accept::Init()
 
 	for (int i = 0; i < process_count; i++)
 	{
-		auto pThread = CreateThread(NULL, 0, ThreadProc, hPort, 0, NULL);
-		if (NULL == pThread[i])
+		auto hThread = CreateThread(NULL, 0, ThreadProc, iocp, 0, NULL);
+		if (NULL == hThread)
 		{
 			int a = GetLastError();
 			printf("%d\n", a);
-			CloseHandle(hPort);
+			CloseHandle(iocp);
 			closesocket(socketAccept);
 			//清理网络库
 			//WSACleanup();
 			return false;
 		}
+		this->vecThread.push_back(hThread);
 	}
 }
 bool Iocp::Accept::PostAccept()
 {
-	auto pSession = new TcpSession();
+	auto pSession = new MyOverlapped();
 	pSession->socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 	//all_olp[count].hEvent = WSACreateEvent();
 
@@ -160,5 +162,80 @@ bool Iocp::Accept::PostAccept()
 		printf("%d\n", a);
 		return false;
 	}
+	return 0;
+}
+
+DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
+{
+	HANDLE port = (HANDLE)lpParameter;
+	DWORD      number_of_bytes;
+	SOCKET socket;
+	LPOVERLAPPED lpOverlapped;
+	while (true)
+	{
+		BOOL bFlag = GetQueuedCompletionStatus(port, &number_of_bytes, &socket, &lpOverlapped, INFINITE);
+		if (FALSE == bFlag)
+		{
+			int a = GetLastError();
+			if (64 == a)
+			{
+				printf("force close\n");
+			}
+			printf("%d\n", a);
+			continue;
+		}
+		//处理
+		//accept
+		auto socket = CONTAINING_RECORD(lpOverlapped, MyOverlapped, socket);
+		if (nullptr == lpOverlapped)
+		{
+			printf("accept\n");
+			//绑定到完成端口
+			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)all_socks[count], hPort, count, 0);
+			if (hPort1 != hPort)
+			{
+				int a = GetLastError();
+				printf("%d\n", a);
+				closesocket(all_socks[count]);
+				continue;
+			}
+			PostSend(count);
+			//新客户端投递recv
+			PostRecv(count);
+			count++;
+			PostAccept();
+		}
+		else
+		{
+			if (0 == number_of_bytes)
+			{
+				//客户端下线
+				printf("close\n");
+				//关闭
+				closesocket(all_socks[socket]);
+				WSACloseEvent(all_olp[socket].hEvent);
+				//从数组中删掉
+				all_socks[socket] = 0;
+				all_olp[socket].hEvent = NULL;
+			}
+			else
+			{
+				if (0 != recv_buf[0])
+				{
+					//收到  recv
+					printf("%s\n", recv_buf);
+					memset(recv_buf, 0, sizeof(recv_buf));
+					//
+					PostRecv(socket);
+				}
+				else
+				{
+					//send
+					printf("send ok\n");
+				}
+			}
+		}
+	}
+
 	return 0;
 }
