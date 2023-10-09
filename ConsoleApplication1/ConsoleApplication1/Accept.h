@@ -9,15 +9,14 @@ namespace Iocp
 	struct MyOverlapped
 	{
 		OVERLAPPED overlapped;
-		SOCKET socket;
 		enum Op 
 		{
 			Accept,
 		};
 		Op op;
 	};
-	struct CompeletionKey {
-
+	struct MyCompeletionKey {
+		SOCKET socket;
 	};
 	class Accept
 	{

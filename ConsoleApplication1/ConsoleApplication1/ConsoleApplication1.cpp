@@ -10,7 +10,6 @@
 #pragma comment(lib, "Mswsock.lib")
 
 #define MAX_COUNT  1024
-#define MAX_RECV_COUNT  1024
 
 SOCKET all_socks[MAX_COUNT];
 OVERLAPPED all_olp[MAX_COUNT];

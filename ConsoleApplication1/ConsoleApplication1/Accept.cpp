@@ -78,8 +78,10 @@ bool Iocp::Accept::Init()
 		//WSACleanup();
 		return false;
 	}
+	auto pCompleteKey = new MyCompeletionKey();
+	pCompleteKey->socket = this->socketAccept;
 	//绑定
-	const auto iocp = CreateIoCompletionPort((HANDLE)socketAccept, this->hIocp, this->socketAccept, 0);
+	const auto iocp = CreateIoCompletionPort((HANDLE)socketAccept, this->hIocp, (ULONG_PTR)pCompleteKey, 0);
 	if (iocp != this->hIocp)
 	{
 		int a = GetLastError();
@@ -138,9 +140,10 @@ bool Iocp::Accept::Init()
 }
 bool Iocp::Accept::PostAccept()
 {
-	auto pSession = new MyOverlapped();
-	pSession->op = MyOverlapped::Accept;
-	pSession->socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+	auto pAcceptOverlapped = new MyOverlapped();
+	pAcceptOverlapped->op = MyOverlapped::Accept;
+	
+	pAcceptOverlapped->socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 	//all_olp[count].hEvent = WSACreateEvent();
 
 	char str[1024] = { 0 };
@@ -148,13 +151,13 @@ bool Iocp::Accept::PostAccept()
 
 	BOOL bRes = AcceptEx(
 		this->socketAccept,	//[in]侦听套接字。服务器应用程序在这个套接字上等待连接。
-		pSession->socket,	//[in]将用于连接的套接字。此套接字必须不能已经绑定或者已经连接。
+		pAcceptOverlapped->socket,	//[in]将用于连接的套接字。此套接字必须不能已经绑定或者已经连接。
 		str, //[in]指向一个缓冲区，该缓冲区用于接收新建连接的所发送数据的第一个块、该服务器的本地地址和客户端的远程地址。接收到的数据将被写入到缓冲区0偏移处，而地址随后写入。 该参数必须指定，如果此参数设置为NULL，将不会得到执行，也无法通过GetAcceptExSockaddrs函数获得本地或远程的地址。
 		0,	//[in]lpOutputBuffer字节数，指定接收数据缓冲区lpOutputBuffer的大小。这一大小应不包括服务器的本地地址的大小或客户端的远程地址，他们被追加到输出缓冲区。如果dwReceiveDataLength是零，AcceptEx将不等待接收任何数据，而是尽快建立连接。
 		sizeof(struct sockaddr_in) + 16,//[in]为本地地址信息保留的字节数。此值必须比所用传输协议的最大地址大小长16个字节。
 		sizeof(struct sockaddr_in) + 16,//[in]为远程地址的信息保留的字节数。此值必须比所用传输协议的最大地址大小长16个字节。 该值不能为0。
 		&dwRecvcount,//[out]指向一个DWORD用于标识接收到的字节数。此参数只有在同步模式下有意义。如果函数返回ERROR_IO_PENDING并在迟些时候完成操作，那么这个DWORD没有意义，这时你必须获得从完成通知机制中读取操作字节数。
-		&pSession->overlapped
+		&pAcceptOverlapped->overlapped
 	);
 
 	int a = WSAGetLastError();
@@ -172,11 +175,11 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 	auto* pThis = (Accept*)lpParameter;
 	HANDLE port = pThis->hIocp;
 	DWORD      number_of_bytes;
-	SOCKET socket;
+	MyCompeletionKey *CompletionKey;
 	LPOVERLAPPED lpOverlapped;
 	while (true)
 	{
-		BOOL bFlag = GetQueuedCompletionStatus(port, &number_of_bytes, &socket, &lpOverlapped, INFINITE);
+		BOOL bFlag = GetQueuedCompletionStatus(port, &number_of_bytes, (PULONG_PTR)CompletionKey, &lpOverlapped, INFINITE);
 		if (FALSE == bFlag)
 		{
 			int a = GetLastError();
@@ -195,18 +198,20 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 		{
 			printf("accept\n");
 			//绑定到完成端口
-			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)overlapped->socket, port, overlapped->socket, 0);
+			auto pCompleteKey = new MyCompeletionKey();
+			pCompleteKey->socket = CompletionKey->socket;
+			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)CompletionKey->socket, port, (ULONG_PTR)pCompleteKey, 0);
 			if (hPort1 != port)
 			{
 				int a = GetLastError();
 				printf("%d\n", a);
-				closesocket(overlapped->socket);// all_socks[count]);
+				closesocket(CompletionKey->socket);// all_socks[count]);
 				continue;
 			}
-			PostSend(count);
+			pThis->PostSend(CompletionKey->socket);
 			//新客户端投递recv
-			PostRecv(count);
-			count++;
+			pThis->PostRecv(CompletionKey->socket);
+			//count++;
 			pThis->PostAccept();
 		}
 		else
@@ -216,11 +221,11 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 				//客户端下线
 				printf("close\n");
 				//关闭
-				closesocket(all_socks[socket]);
-				WSACloseEvent(all_olp[socket].hEvent);
+				closesocket(all_socks[CompletionKey]);
+				WSACloseEvent(all_olp[CompletionKey].hEvent);
 				//从数组中删掉
-				all_socks[socket] = 0;
-				all_olp[socket].hEvent = NULL;
+				all_socks[CompletionKey] = 0;
+				all_olp[CompletionKey].hEvent = NULL;
 			}
 			else
 			{
@@ -230,7 +235,7 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 					printf("%s\n", recv_buf);
 					memset(recv_buf, 0, sizeof(recv_buf));
 					//
-					PostRecv(socket);
+					PostRecv(CompletionKey);
 				}
 				else
 				{
@@ -243,7 +248,7 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 
 	return 0;
 }
-bool Iocp::Accept::PostSend(int index)
+bool Iocp::Accept::PostSend(SOCKET socket)
 {
 	WSABUF wsabuf;
 	wsabuf.buf = (CHAR*)"你好";
@@ -251,7 +256,7 @@ bool Iocp::Accept::PostSend(int index)
 
 	DWORD dwSendCount;
 	DWORD dwFlag = 0;
-	int nRes = WSASend(all_socks[index], &wsabuf, 1, &dwSendCount, dwFlag, &all_olp[index], NULL);
+	int nRes = WSASend(socket, &wsabuf, 1, &dwSendCount, dwFlag, &all_olp[index], NULL);
 
 	int a = WSAGetLastError();
 	if (ERROR_IO_PENDING != a)
