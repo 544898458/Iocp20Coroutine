@@ -20,7 +20,7 @@ namespace Iocp
 		{
 			this->op = opInit;
 		}
-		OVERLAPPED overlapped;
+		OVERLAPPED overlapped = { 0 };
 
 		Op op;
 		SOCKET socket;
