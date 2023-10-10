@@ -173,7 +173,7 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 	auto* pThis = (Accept*)lpParameter;
 	HANDLE port = pThis->hIocp;
 	DWORD      number_of_bytes;
-	MyCompeletionKey *CompletionKey;
+	MyCompeletionKey *CompletionKey=nullptr;
 	LPOVERLAPPED lpOverlapped;
 	while (true)
 	{
@@ -206,7 +206,9 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 				closesocket(CompletionKey->socket);// all_socks[count]);
 				continue;
 			}
-			pThis->PostSend(CompletionKey->socket);
+
+			auto pOverlapped = new MyOverlapped(MyOverlapped::Send);
+			pThis->PostSend(CompletionKey, pOverlapped);
 			//新客户端投递recv
 			pThis->PostRecv(CompletionKey);
 			//count++;
@@ -246,7 +248,7 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 
 	return 0;
 }
-bool Iocp::Accept::PostSend(MyCompeletionKey* pKey)
+bool Iocp::Accept::PostSend(MyCompeletionKey* pKey,MyOverlapped *pOverlapped)
 {
 	WSABUF wsabuf;
 	wsabuf.buf = (CHAR*)"你好";
@@ -254,7 +256,7 @@ bool Iocp::Accept::PostSend(MyCompeletionKey* pKey)
 
 	DWORD dwSendCount;
 	DWORD dwFlag = 0;
-	int nRes = WSASend(socket, &wsabuf, 1, &dwSendCount, dwFlag, &all_olp[index], NULL);
+	int nRes = WSASend(pKey->socket, &wsabuf, 1, &dwSendCount, dwFlag, &pOverlapped->overlapped, NULL);
 
 	int a = WSAGetLastError();
 	if (ERROR_IO_PENDING != a)

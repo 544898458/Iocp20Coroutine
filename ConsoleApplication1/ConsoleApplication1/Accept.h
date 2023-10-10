@@ -14,6 +14,7 @@ namespace Iocp
 		{
 			Accept,
 			Recv,
+			Send,
 		};
 		MyOverlapped(MyOverlapped::Op opInit)
 		{
@@ -36,7 +37,7 @@ namespace Iocp
 	private:
 		bool PostAccept();
 		static DWORD WINAPI ThreadProc(LPVOID lpParameter);
-		bool PostSend(MyCompeletionKey* pKey);
+		bool PostSend(MyCompeletionKey* pKey, MyOverlapped* pOverlapped);
 		bool PostRecv(MyCompeletionKey* pKey);
 		//bool flag = true;
 	private:
