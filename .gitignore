@@ -26,3 +26,4 @@ $RECYCLE.BIN/
 # 20231008
 *.vs
 x64
+enc_temp_folder

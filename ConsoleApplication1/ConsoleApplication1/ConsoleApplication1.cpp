@@ -11,17 +11,6 @@
 #include "Accept.h"
 
 
-void Clear(void)
-{
-	for (int i = 0; i < count; i++)
-	{
-		if (0 == all_socks[i])
-			continue;
-		closesocket(all_socks[i]);
-		WSACloseEvent(all_olp[i].hEvent);
-	}
-}
-
 BOOL g_flag = TRUE;
 Iocp::Accept *g_Accept = nullptr;
 BOOL WINAPI fun(DWORD dwCtrlType)
@@ -34,7 +23,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 		_CrtDumpMemoryLeaks();	 //显示内存泄漏报告
 		//释放所有socket
 		//CloseHandle(hPort);
-		Clear();
+		//Clear();
 
 		g_flag = FALSE;
 

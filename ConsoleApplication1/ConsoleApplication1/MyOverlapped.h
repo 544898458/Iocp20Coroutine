@@ -21,9 +21,9 @@ struct MyOverlapped
 
 	
 	SOCKET socket;
-	void OnComplete(MyCompeletionKey* pKey, HANDLE port)
+	void OnComplete(MyCompeletionKey* pKey, HANDLE port,DWORD      number_of_bytes)
 	{
-		pOp->OnComplete(this, pKey, port);
+		pOp->OnComplete(this, pKey, port,number_of_bytes);
 	}
 private:
 	IOp* pOp;
