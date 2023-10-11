@@ -131,9 +131,16 @@
   <ItemGroup>
     <ClCompile Include="Accept.cpp" />
     <ClCompile Include="ConsoleApplication1.cpp" />
+    <ClCompile Include="MyCompeletionKey.cpp" />
+    <ClCompile Include="MyOverlapped.cpp" />
+    <ClCompile Include="Op.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Accept.h" />
+    <ClInclude Include="Define.h" />
+    <ClInclude Include="MyCompeletionKey.h" />
+    <ClInclude Include="MyOverlapped.h" />
+    <ClInclude Include="Op.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

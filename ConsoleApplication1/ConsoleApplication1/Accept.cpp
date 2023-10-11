@@ -4,6 +4,7 @@
 #include <mswsock.h>
 #include <winnt.h>
 #include "Accept.h"
+#include"MyCompeletionKey.h"
 #pragma comment(lib,"ws2_32.lib")
 
 bool Iocp::Accept::WsaStartup()
@@ -206,7 +207,7 @@ bool Iocp::Accept::PostAccept()
 	//const auto err2 = WSAGetLastError();
 
 
-	auto pAcceptOverlapped = new MyOverlapped(MyOverlapped::Accept);
+	auto pAcceptOverlapped = new MyOverlapped(new OpAccept());
 
 	pAcceptOverlapped->socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 	//all_olp[count].hEvent = WSACreateEvent();
@@ -263,105 +264,9 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 		//accept
 		//auto socket = CONTAINING_RECORD(lpOverlapped, MyOverlapped, socket);
 		auto* overlapped = (MyOverlapped*)lpOverlapped;
-		if (overlapped->op == MyOverlapped::Accept)
-		{
-			printf("accept\n");
-			//绑定到完成端口
-			auto pNewCompleteKey = new MyCompeletionKey();
-			pNewCompleteKey->socket = overlapped->socket;
-			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)pNewCompleteKey->socket, port, (ULONG_PTR)pNewCompleteKey, 0);
-			if (hPort1 != port)
-			{
-				int a = GetLastError();
-				printf("连上来的Socket关联到完成端口失败，Error=%d\n", a);
-				closesocket(CompletionKey->socket);// all_socks[count]);
-				delete pNewCompleteKey;
-				continue;
-			}
-
-			auto pOverlapped = new MyOverlapped(MyOverlapped::Send);
-			pThis->PostSend(pNewCompleteKey, pOverlapped);
-			//新客户端投递recv
-			pThis->PostRecv(pNewCompleteKey);
-			//count++;
-			pThis->PostAccept();
-		}
-		else
-		{
-			if (0 == number_of_bytes)
-			{
-				//客户端下线
-				printf("close\n");
-				//关闭
-				closesocket(CompletionKey->socket);
-				//WSACloseEvent(all_olp[CompletionKey].hEvent);
-				//从数组中删掉
-				//all_socks[CompletionKey] = 0;
-				//all_olp[CompletionKey].hEvent = NULL;
-			}
-			else
-			{
-				if (0 != CompletionKey->recv_buf[0])
-				{
-					//收到  recv
-					printf("%s\n", CompletionKey->recv_buf);
-					memset(CompletionKey->recv_buf, 0, sizeof(CompletionKey->recv_buf));
-					//
-					pThis->PostRecv(CompletionKey);
-				}
-				else
-				{
-					//send
-					printf("send ok\n");
-				}
-			}
-		}
+		overlapped->OnComplete(CompletionKey,port);
 	}
 
 	return 0;
 }
-bool Iocp::Accept::PostSend(MyCompeletionKey* pKey, MyOverlapped* pOverlapped)
-{
-	WSABUF wsabuf;
-	wsabuf.buf = (CHAR*)"你好";
-	wsabuf.len = MAX_RECV_COUNT;
 
-	DWORD dwSendCount;
-	DWORD dwFlag = 0;
-	int nRes = WSASend(pKey->socket, &wsabuf, 1, &dwSendCount, dwFlag, &pOverlapped->overlapped, NULL);
-
-	int a = WSAGetLastError();
-	if (ERROR_IO_PENDING != a && a!=0)
-	{
-		//延迟处理
-		//函数执行出错
-		switch (a) {
-		case WSAENOTCONN:
-			printf("A request to send or receive data was disallowed because the socket is not connected and (when sending on a datagram socket using a sendto call) no address was supplied.\n");
-			break;
-		}
-		return false;
-	}
-	return true;
-}
-
-
-bool Iocp::Accept::PostRecv(MyCompeletionKey* pKey)
-{
-	WSABUF wsabuf;
-	wsabuf.buf = pKey->recv_buf;
-	wsabuf.len = MAX_RECV_COUNT;
-
-	DWORD dwRecvCount;
-	DWORD dwFlag = 0;
-	auto pOverlapped = new MyOverlapped(MyOverlapped::Recv);
-	int nRes = WSARecv(pKey->socket, &wsabuf, 1, &dwRecvCount, &dwFlag, &pOverlapped->overlapped, NULL);
-
-	int a = WSAGetLastError();
-	if (ERROR_IO_PENDING != a)
-	{
-		//函数执行出错
-		return false;
-	}
-	return true;
-}

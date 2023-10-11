@@ -21,9 +21,30 @@
     <ClCompile Include="Accept.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="MyOverlapped.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Op.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyCompeletionKey.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Accept.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyOverlapped.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Op.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyCompeletionKey.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
