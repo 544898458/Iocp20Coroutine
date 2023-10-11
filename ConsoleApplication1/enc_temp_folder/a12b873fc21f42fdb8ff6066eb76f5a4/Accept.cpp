@@ -331,7 +331,7 @@ bool Iocp::Accept::PostSend(MyCompeletionKey* pKey, MyOverlapped* pOverlapped)
 	int nRes = WSASend(pKey->socket, &wsabuf, 1, &dwSendCount, dwFlag, &pOverlapped->overlapped, NULL);
 
 	int a = WSAGetLastError();
-	if (ERROR_IO_PENDING != a && a!=0)
+	if (ERROR_IO_PENDING != a)
 	{
 		//延迟处理
 		//函数执行出错
@@ -340,9 +340,9 @@ bool Iocp::Accept::PostSend(MyCompeletionKey* pKey, MyOverlapped* pOverlapped)
 			printf("A request to send or receive data was disallowed because the socket is not connected and (when sending on a datagram socket using a sendto call) no address was supplied.\n");
 			break;
 		}
-		return false;
+		return 1;
 	}
-	return true;
+	return 0;
 }
 
 
