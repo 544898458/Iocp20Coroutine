@@ -67,29 +67,9 @@ struct MyCompeletionKey {
 		printf("PostRecv err");
 		return false;
 	}
-	bool PostAccept()
+	bool PostAccept(MyOverlapped * pAcceptOverlapped)
 	{
-		//auto client = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED); //socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-		//if (client == INVALID_SOCKET) {
-
-		//	wprintf(L"Create accept socket failed with error: %u\n", WSAGetLastError());
-		//	getchar();
-		//	closesocket(this->socketAccept);
-		//	WSACleanup();
-		//	return 1;
-		//}
-
-		//OVERLAPPED* Overlapped = new OVERLAPPED();
-		//char* str = new char[1024];// = { 0 };
-		//DWORD dwBytes(0);
-		//bool bRetVal = AcceptEx(socketAccept, client, str,//per_io_data->wsabuf.buf,
-		//	0,
-		//	sizeof(struct sockaddr_in) + 16, sizeof(struct sockaddr_in) + 16,
-		//	&dwBytes, Overlapped);
-		//const auto err2 = WSAGetLastError();
-
-
-		auto pAcceptOverlapped = new MyOverlapped(new OpAccept());
+		//auto pAcceptOverlapped = new MyOverlapped(new OpAccept());
 
 		pAcceptOverlapped->socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 		//all_olp[count].hEvent = WSACreateEvent();
@@ -97,7 +77,7 @@ struct MyCompeletionKey {
 		char* str2 = new char[1024];// = { 0 };
 		DWORD dwRecvcount = 0;
 		int b = WSAGetLastError();
-		OVERLAPPED* Overlapped = new OVERLAPPED();
+		//OVERLAPPED* Overlapped = new OVERLAPPED();
 		BOOL bRes = AcceptEx(
 			this->socket,	//[in]侦听套接字。服务器应用程序在这个套接字上等待连接。
 			pAcceptOverlapped->socket,	//[in]将用于连接的套接字。此套接字必须不能已经绑定或者已经连接。
@@ -108,6 +88,19 @@ struct MyCompeletionKey {
 			&dwRecvcount,//[out]指向一个DWORD用于标识接收到的字节数。此参数只有在同步模式下有意义。如果函数返回ERROR_IO_PENDING并在迟些时候完成操作，那么这个DWORD没有意义，这时你必须获得从完成通知机制中读取操作字节数。
 			&pAcceptOverlapped->overlapped//overlapped这里面内存必须清零，否则WSAGetLastError会返回ERROR_INVALID_HANDLE
 		);
+		const auto lastErr = WSAGetLastError();
+		if (!bRes && lastErr!= ERROR_IO_PENDING)
+		{
+			switch (lastErr) 
+			{
+			default:
+				printf("AcceptEx err=%d",lastErr);
+				break;
+			}
+			return false;
+		}
+
+
 		return true;
 	}
 };

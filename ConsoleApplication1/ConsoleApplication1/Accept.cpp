@@ -38,44 +38,6 @@ bool Iocp::Accept::WsaStartup()
 
 bool Iocp::Accept::Init()
 {
-	WSADATA wsaData;
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
-	DWORD dwBytes = 0;
-
-	if (false) 
-	{
-		SOCKET    m_socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
-		//SYSTEM_INFO sysInfo;
-		//GetSystemInfo(&sysInfo);
-		//int g_ThreadCount = sysInfo.dwNumberOfProcessors * 2;
-		auto g_hIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);// g_ThreadCount);
-		CreateIoCompletionPort((HANDLE)m_socket, g_hIOCP, (u_long)0, 0);
-		sockaddr_in server;
-		server.sin_family = AF_INET;
-		server.sin_port = htons(12345);
-		inet_pton(server.sin_family, "127.0.0.1", &server.sin_addr.S_un.S_addr);// inet_pton("127.0.0.1");
-		bind(m_socket, (sockaddr*)&server, sizeof(server));
-		listen(m_socket, SOMAXCONN);
-		
-		auto client = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED); //socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-		if (client == INVALID_SOCKET) {
-
-			wprintf(L"Create accept socket failed with error: %u\n", WSAGetLastError());
-			getchar();
-			closesocket(m_socket);
-			WSACleanup();
-			return 1;
-		}
-
-		OVERLAPPED* Overlapped = new OVERLAPPED();
-		char* str = new char[1024];// = { 0 };
-		bool bRetVal = AcceptEx(m_socket, client, str,//per_io_data->wsabuf.buf,
-			0,
-			sizeof(struct sockaddr_in) + 16, sizeof(struct sockaddr_in) + 16,
-			&dwBytes, Overlapped);
-		const auto err = WSAGetLastError();
-	}
-
 	if (this->socketAccept != NULL)
 		return false;
 
@@ -171,29 +133,17 @@ bool Iocp::Accept::Init()
 		}
 		this->vecThread.push_back(hThread);
 	}
-	if (0 != pCompleteKey->PostAccept())
+
+	if ( ! pCompleteKey->PostAccept(new MyOverlapped(new OpAccept())))
 	{
 		//Clear();
 		//清理网络库
 		WSACleanup();
-		return 0;
-	}
-
-
-	//创建
-	//pThread = (HANDLE*)malloc(sizeof(HANDLE) * process_count);
-
-	int a = WSAGetLastError();
-	switch (a) {
-	case ERROR_INVALID_HANDLE:break;
-	}
-	if (ERROR_IO_PENDING != a)
-	{
-		//函数执行出错
-		printf("AcceptEx error=%d\n", a);
 		return false;
 	}
-	return 0;
+
+
+	return true;
 }
 
 DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
@@ -206,21 +156,22 @@ DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
 	while (true)
 	{
 		BOOL bFlag = GetQueuedCompletionStatus(port, &number_of_bytes, (PULONG_PTR)&CompletionKey, &lpOverlapped, INFINITE);//没完成就会卡在这里，正常
-		if (FALSE == bFlag)
-		{
-			int a = GetLastError();//可能是Socket强制关闭
-			if (64 == a)
-			{
-				printf("force close\n");
-			}
-			printf("%d\n", a);
-			continue;
-		}
+		//if (FALSE == bFlag)
+		//{
+		//	
+		//	if (64 == a)
+		//	{
+		//		printf("force close\n");
+		//	}
+		//	printf("%d\n", a);
+		//	continue;
+		//}
+		int lastErr = GetLastError();//可能是Socket强制关闭
 		//处理
 		//accept
 		//auto socket = CONTAINING_RECORD(lpOverlapped, MyOverlapped, socket);
 		auto* overlapped = (MyOverlapped*)lpOverlapped;
-		overlapped->OnComplete(CompletionKey,port,number_of_bytes);
+		overlapped->OnComplete(CompletionKey,port,number_of_bytes, bFlag, lastErr);
 	}
 
 	return 0;

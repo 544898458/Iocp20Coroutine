@@ -1,8 +1,19 @@
 #include "Op.h"
 #include"MyCompeletionKey.h"
 #include<stdio.h>
-void OpAccept::OnComplete(MyOverlapped* pOverlapped, MyCompeletionKey* pKey, HANDLE port,DWORD      number_of_bytes)
+void OpAccept::OnComplete(MyOverlapped* pOverlapped, MyCompeletionKey* pKey, const  HANDLE port, const DWORD      number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
 {
+	if (!bGetQueuedCompletionStatusReturn)
+	{
+		switch (lastErr)
+		{
+		case ERROR_OPERATION_ABORTED:
+			printf("The I/O operation has been aborted because of either a thread exit or an application request.");
+			break;
+		default:
+			break;
+		}
+	}
 	printf("重叠Accept完成：accept\n");
 	//绑定到完成端口
 	auto pNewCompleteKey = new MyCompeletionKey();
@@ -26,10 +37,10 @@ void OpAccept::OnComplete(MyOverlapped* pOverlapped, MyCompeletionKey* pKey, HAN
 		pKey->PostRecv(pNewCompleteKey, pOverlapped);
 	}
 	//count++;
-	pKey->PostAccept();
+	pKey->PostAccept(pOverlapped);
 }
 
-void OpRecv::OnComplete(MyOverlapped* pOverlapped, MyCompeletionKey* pKey, HANDLE port, DWORD      number_of_bytes)
+void OpRecv::OnComplete(MyOverlapped* pOverlapped, MyCompeletionKey* pKey,const HANDLE port, const DWORD      number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
 {
 	if (0 == number_of_bytes)
 	{
@@ -60,6 +71,6 @@ void OpRecv::OnComplete(MyOverlapped* pOverlapped, MyCompeletionKey* pKey, HANDL
 	}
 }
 
-void OpSend::OnComplete(MyOverlapped* pOverlapped, MyCompeletionKey* pKey, HANDLE port,DWORD      number_of_bytes)
+void OpSend::OnComplete(MyOverlapped* pOverlapped, MyCompeletionKey* pKey, const HANDLE port,const DWORD      number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
 {
 }

@@ -78,6 +78,7 @@ int main(void)
 	//	return 0;
 	//}
 	auto accept = new Iocp::Accept();
+	accept->WsaStartup();
 	accept->Init();
 
 
