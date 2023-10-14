@@ -4,10 +4,10 @@
 #include <mswsock.h>
 #include <winnt.h>
 #include "Accept.h"
-#include"MyCompeletionKey.h"
+#include"SocketCompeletionKey.h"
 #pragma comment(lib,"ws2_32.lib")
 
-bool Iocp::Accept::WsaStartup()
+bool Iocp::Server::WsaStartup()
 {
 	WORD wdVersion = MAKEWORD(2, 2);
 	WSADATA wdScokMsg;
@@ -36,7 +36,7 @@ bool Iocp::Accept::WsaStartup()
 	}
 }
 
-bool Iocp::Accept::Init()
+bool Iocp::Server::Init()
 {
 	if (this->socketAccept != NULL)
 		return false;
@@ -63,8 +63,7 @@ bool Iocp::Accept::Init()
 		//WSACleanup();
 		return false;
 	}
-	auto pCompleteKey = new MyCompeletionKey();
-	pCompleteKey->socket = this->socketAccept;
+	auto pCompleteKey = new ListenSocketCompeletionKey(this->socketAccept);
 	//°ó¶¨
 	const auto iocp = CreateIoCompletionPort((HANDLE)socketAccept, this->hIocp, (ULONG_PTR)pCompleteKey, 0);
 	if (iocp != this->hIocp)
@@ -146,12 +145,12 @@ bool Iocp::Accept::Init()
 	return true;
 }
 
-DWORD WINAPI Iocp::Accept::ThreadProc(LPVOID lpParameter)
+DWORD WINAPI Iocp::Server::ThreadProc(LPVOID lpParameter)
 {
-	auto* pThis = (Accept*)lpParameter;
+	auto* pThis = (Server*)lpParameter;
 	HANDLE port = pThis->hIocp;
 	DWORD      number_of_bytes = 0;
-	MyCompeletionKey* CompletionKey = nullptr;
+	SocketCompeletionKey* CompletionKey = nullptr;
 	LPOVERLAPPED lpOverlapped;
 	while (true)
 	{

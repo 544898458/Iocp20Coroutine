@@ -20,8 +20,8 @@ struct MyOverlapped
 	OVERLAPPED overlapped = { 0 };
 
 	
-	SOCKET socket;
-	void OnComplete(MyCompeletionKey* pKey, const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
+	SOCKET socket=NULL;
+	void OnComplete(SocketCompeletionKey* pKey, const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
 	{
 		pOp->OnComplete(this, pKey, port,number_of_bytes,bGetQueuedCompletionStatusReturn,lastErr);
 	}

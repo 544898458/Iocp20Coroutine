@@ -12,7 +12,7 @@
 
 
 BOOL g_flag = TRUE;
-Iocp::Accept *g_Accept = nullptr;
+Iocp::Server *g_Accept = nullptr;
 BOOL WINAPI fun(DWORD dwCtrlType)
 {
 	switch (dwCtrlType)
@@ -77,7 +77,7 @@ int main(void)
 	//	WSACleanup();
 	//	return 0;
 	//}
-	auto accept = new Iocp::Accept();
+	auto accept = new Iocp::Server();
 	accept->WsaStartup();
 	accept->Init();
 

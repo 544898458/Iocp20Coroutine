@@ -7,7 +7,7 @@
 namespace Iocp 
 {
 	
-	class Accept
+	class Server
 	{
 	public:
 		bool WsaStartup();

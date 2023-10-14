@@ -132,7 +132,7 @@
     <ClCompile Include="Accept.cpp" />
     <ClCompile Include="ByteQueue.cpp" />
     <ClCompile Include="ConsoleApplication1.cpp" />
-    <ClCompile Include="MyCompeletionKey.cpp" />
+    <ClCompile Include="SocketCompeletionKey.cpp" />
     <ClCompile Include="MyOverlapped.cpp" />
     <ClCompile Include="Op.cpp" />
   </ItemGroup>
@@ -140,7 +140,7 @@
     <ClInclude Include="Accept.h" />
     <ClInclude Include="ByteQueue.h" />
     <ClInclude Include="Define.h" />
-    <ClInclude Include="MyCompeletionKey.h" />
+    <ClInclude Include="SocketCompeletionKey.h" />
     <ClInclude Include="MyOverlapped.h" />
     <ClInclude Include="Op.h" />
   </ItemGroup>

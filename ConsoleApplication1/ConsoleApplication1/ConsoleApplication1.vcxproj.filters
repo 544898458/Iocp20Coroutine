@@ -27,7 +27,7 @@
     <ClCompile Include="Op.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MyCompeletionKey.cpp">
+    <ClCompile Include="SocketCompeletionKey.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ByteQueue.cpp">
@@ -44,7 +44,7 @@
     <ClInclude Include="Op.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MyCompeletionKey.h">
+    <ClInclude Include="SocketCompeletionKey.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Define.h">

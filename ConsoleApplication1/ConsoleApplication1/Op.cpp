@@ -1,7 +1,7 @@
 #include "Op.h"
-#include"MyCompeletionKey.h"
+#include"SocketCompeletionKey.h"
 #include<stdio.h>
-void OpAccept::OnComplete(MyOverlapped* pOverlapped, MyCompeletionKey* pKey, const  HANDLE port, const DWORD      number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
+void OpAccept::OnComplete(MyOverlapped* pOverlapped, SocketCompeletionKey* pKey, const  HANDLE port, const DWORD      number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
 {
 	if (!bGetQueuedCompletionStatusReturn)
 	{
@@ -16,61 +16,35 @@ void OpAccept::OnComplete(MyOverlapped* pOverlapped, MyCompeletionKey* pKey, con
 	}
 	printf("重叠Accept完成：accept\n");
 	//绑定到完成端口
-	auto pNewCompleteKey = new MyCompeletionKey();
-	pNewCompleteKey->socket = pOverlapped->socket;
-	HANDLE hPort1 = CreateIoCompletionPort((HANDLE)pNewCompleteKey->socket, port, (ULONG_PTR)pNewCompleteKey, 0);
+	auto pNewCompleteKey = new SessionSocketCompeletionKey(pOverlapped->socket);
+	//pNewCompleteKey->socket = ;
+	HANDLE hPort1 = CreateIoCompletionPort((HANDLE)pNewCompleteKey->Socket(), port, (ULONG_PTR)pNewCompleteKey, 0);
 	if (hPort1 != port)
 	{
 		int a = GetLastError();
 		printf("连上来的Socket关联到完成端口失败，Error=%d\n", a);
-		closesocket(pKey->socket);// all_socks[count]);
+		//closesocket(pKey->socket);// all_socks[count]);
 		delete pNewCompleteKey;
 		return;
 	}
 	{
 		auto pOverlapped = new MyOverlapped(new OpSend());
-		pKey->PostSend(pNewCompleteKey, pOverlapped);
+		pKey->PostSend( pOverlapped);
 	}
 	{
 		auto pOverlapped = new MyOverlapped(new OpRecv());
 		//新客户端投递recv
-		pKey->PostRecv(pNewCompleteKey, pOverlapped);
+		pKey->PostRecv( pOverlapped);
 	}
 	//count++;
 	pKey->PostAccept(pOverlapped);
 }
 
-void OpRecv::OnComplete(MyOverlapped* pOverlapped, MyCompeletionKey* pKey,const HANDLE port, const DWORD      number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
+void OpRecv::OnComplete(MyOverlapped* pOverlapped, SocketCompeletionKey* pKey,const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
 {
-	if (0 == number_of_bytes)
-	{
-		//客户端下线
-		printf("客户端下线 close\n");
-		//关闭
-		closesocket(pKey->socket);
-		//WSACloseEvent(all_olp[CompletionKey].hEvent);
-		//从数组中删掉
-		//all_socks[CompletionKey] = 0;
-		//all_olp[CompletionKey].hEvent = NULL;
-	}
-	else
-	{
-		if (0 != pKey->recv_buf[0])
-		{
-			//收到  recv
-			printf("重叠接受完成：Recv,%s\n", pKey->recv_buf);
-			memset(pKey->recv_buf, 0, sizeof(pKey->recv_buf));
-			//
-			pKey->PostRecv(pKey, pOverlapped);
-		}
-		else
-		{
-			//send
-			printf("send ok\n");
-		}
-	}
+	pKey->OnCompleteRecv(number_of_bytes,pOverlapped);
 }
 
-void OpSend::OnComplete(MyOverlapped* pOverlapped, MyCompeletionKey* pKey, const HANDLE port,const DWORD      number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
+void OpSend::OnComplete(MyOverlapped* pOverlapped, SocketCompeletionKey* pKey, const HANDLE port,const DWORD      number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
 {
 }
