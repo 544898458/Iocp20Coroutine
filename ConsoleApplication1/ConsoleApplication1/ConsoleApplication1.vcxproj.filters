@@ -33,6 +33,12 @@
     <ClCompile Include="ByteQueue.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ListenSocketCompeletionKey.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CoTask.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h">
@@ -51,6 +57,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="ByteQueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ListenSocketCompeletionKey.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CoTask.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

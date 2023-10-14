@@ -13,18 +13,24 @@ struct MyOverlapped
 	//	Recv,
 	//	Send,
 	//};
-	MyOverlapped(IOp* opInit)
-	{
-		this->pOp = opInit;
-	}
+
 	OVERLAPPED overlapped = { 0 };
 
 	
 	SOCKET socket=NULL;
+
+	//完成端口返回结果，GetQueuedCompletionStatus 返回结果
+	DWORD number_of_bytes;
+	BOOL bGetQueuedCompletionStatusReturn;
+	int lastErr;
+
 	void OnComplete(SocketCompeletionKey* pKey, const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
 	{
-		pOp->OnComplete(this, pKey, port,number_of_bytes,bGetQueuedCompletionStatusReturn,lastErr);
+		this->number_of_bytes = number_of_bytes;
+		this->bGetQueuedCompletionStatusReturn = bGetQueuedCompletionStatusReturn;
+		this->lastErr = lastErr;
+		this->coTask.Run();
+		//pOp->OnComplete(this, pKey, port,number_of_bytes,bGetQueuedCompletionStatusReturn,lastErr);
 	}
-private:
-	IOp* pOp;
+	CoTask<MyOverlapped*> coTask;
 };

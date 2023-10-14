@@ -4,7 +4,7 @@
 #include <mswsock.h>
 #include <winnt.h>
 #include "Server.h"
-#include"SocketCompeletionKey.h"
+#include "ListenSocketCompeletionKey.h"
 #pragma comment(lib,"ws2_32.lib")
 
 bool Iocp::Server::WsaStartup()
@@ -52,9 +52,11 @@ bool Iocp::Server::Init()
 		//WSACleanup();
 		return false;
 	}
+	
+	auto pListenCompleteKey = new ListenSocketCompeletionKey(this->socketAccept);
 	//创建完成端口	创建一个I/O完成端口对象，用它面向任意数量的套接字句柄，管理多个I/O请求。要做到这一点，需要调用CreateCompletionPort函数。
-	this->hIocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
-	if (0 == this->hIocp)
+	pListenCompleteKey->hIocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+	if (0 == pListenCompleteKey->hIocp)
 	{
 		int a = GetLastError();
 		printf("%d\n", a);
@@ -63,10 +65,9 @@ bool Iocp::Server::Init()
 		//WSACleanup();
 		return false;
 	}
-	auto pCompleteKey = new ListenSocketCompeletionKey(this->socketAccept);
 	//绑定
-	const auto iocp = CreateIoCompletionPort((HANDLE)socketAccept, this->hIocp, (ULONG_PTR)pCompleteKey, 0);
-	if (iocp != this->hIocp)
+	const auto iocp = CreateIoCompletionPort((HANDLE)socketAccept, pListenCompleteKey->hIocp, (ULONG_PTR)pListenCompleteKey, 0);
+	if (iocp != pListenCompleteKey->hIocp)
 	{
 		int a = GetLastError();
 		printf("完成端口绑定socket失败%d\n", a);
@@ -119,7 +120,7 @@ bool Iocp::Server::Init()
 	auto process_count = system_processors_count.dwNumberOfProcessors;
 	for (int i = 0; i < process_count; i++)
 	{
-		auto hThread = CreateThread(NULL, 0, ThreadProc, this, 0, NULL);
+		auto hThread = CreateThread(NULL, 0, ThreadProc, pListenCompleteKey->hIocp, 0, NULL);
 		if (NULL == hThread)
 		{
 			int a = GetLastError();
@@ -134,7 +135,7 @@ bool Iocp::Server::Init()
 	}
 
 	//if ( !
-	pCompleteKey->StartCoRoutine();
+	pListenCompleteKey->StartCoRoutine();
 		//)
 	//{
 	//	//Clear();
@@ -149,8 +150,8 @@ bool Iocp::Server::Init()
 
 DWORD WINAPI Iocp::Server::ThreadProc(LPVOID lpParameter)
 {
-	auto* pThis = (Server*)lpParameter;
-	HANDLE port = pThis->hIocp;
+	auto hIocp= (HANDLE)lpParameter;
+	HANDLE port = hIocp;
 	DWORD      number_of_bytes = 0;
 	SocketCompeletionKey* CompletionKey = nullptr;
 	LPOVERLAPPED lpOverlapped;
