@@ -18,7 +18,7 @@
     <ClCompile Include="ConsoleApplication1.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Accept.cpp">
+    <ClCompile Include="Server.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MyOverlapped.cpp">
@@ -35,7 +35,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Accept.h">
+    <ClInclude Include="Server.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MyOverlapped.h">

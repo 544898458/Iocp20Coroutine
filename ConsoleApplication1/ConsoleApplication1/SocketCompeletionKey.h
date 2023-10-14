@@ -17,11 +17,13 @@ public:
 	SocketCompeletionKey(SOCKET s) :socket(s) {
 
 	}
-	virtual bool PostAccept(MyOverlapped* pAcceptOverlapped)=0;
+	virtual void StartCoRoutine() = 0;
+protected:
+	SOCKET Socket() const { return socket; }
+private:
 	virtual bool PostSend( MyOverlapped* pOverlapped) = 0;
 	virtual bool PostRecv(MyOverlapped* pOverlapped) = 0;
 	virtual void OnCompleteRecv(const DWORD number_of_bytes, MyOverlapped* pOverlapped) = 0;
-	SOCKET Socket() const { return socket; }
 private:
 	SOCKET socket;
 };
@@ -33,7 +35,12 @@ public:
 	{
 
 	}
-	virtual bool PostAccept(MyOverlapped* pAcceptOverlapped)override
+	virtual void StartCoRoutine() override {
+		PostAccept(new MyOverlapped(new OpAccept()));
+	}
+	
+private:
+	bool PostAccept(MyOverlapped* pAcceptOverlapped)
 	{
 		//auto pAcceptOverlapped = new MyOverlapped(new OpAccept());
 
@@ -92,10 +99,23 @@ public:
 	{
 
 	}
-	virtual bool PostAccept(MyOverlapped* pAcceptOverlapped)override 
+	//virtual bool PostAccept(MyOverlapped* pAcceptOverlapped)override 
+	//{
+	//	assert(!"SessionSocketCompeletionKey不能PostAccept");
+	//	return false;
+	//}
+	virtual void StartCoRoutine() override
 	{
-		assert(!"SessionSocketCompeletionKey不能PostAccept");
-		return false;
+		{
+			auto pOverlapped = new MyOverlapped(new OpSend());
+			PostSend(pOverlapped);
+		}
+		{
+			auto pOverlapped = new MyOverlapped(new OpRecv());
+			//新客户端投递recv
+			PostRecv(pOverlapped);
+		}
+		return ;
 	}
 	virtual bool PostSend(MyOverlapped* pOverlapped)override
 	{

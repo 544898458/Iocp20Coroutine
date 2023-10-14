@@ -3,7 +3,7 @@
 #include <WS2tcpip.h>
 #include <mswsock.h>
 #include <winnt.h>
-#include "Accept.h"
+#include "Server.h"
 #include"SocketCompeletionKey.h"
 #pragma comment(lib,"ws2_32.lib")
 
@@ -133,13 +133,15 @@ bool Iocp::Server::Init()
 		this->vecThread.push_back(hThread);
 	}
 
-	if ( ! pCompleteKey->PostAccept(new MyOverlapped(new OpAccept())))
-	{
-		//Clear();
-		//清理网络库
-		WSACleanup();
-		return false;
-	}
+	//if ( !
+	pCompleteKey->StartCoRoutine();
+		//)
+	//{
+	//	//Clear();
+	//	//清理网络库
+	//	WSACleanup();
+	//	return false;
+	//}
 
 
 	return true;

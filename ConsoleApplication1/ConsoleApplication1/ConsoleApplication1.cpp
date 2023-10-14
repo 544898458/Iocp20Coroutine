@@ -8,7 +8,7 @@
 #include <string.h>
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")
-#include "Accept.h"
+#include "Server.h"
 
 
 BOOL g_flag = TRUE;
