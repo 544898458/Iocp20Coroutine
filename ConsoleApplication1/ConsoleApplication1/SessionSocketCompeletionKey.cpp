@@ -6,47 +6,112 @@
 //	return false;
 //}
 
-inline void SessionSocketCompeletionKey::StartCoRoutine()
+void SessionSocketCompeletionKey::StartCoRoutine()
 {
 	{
 		//auto pOverlapped = new MyOverlapped();
 		//PostSend(pOverlapped);
-		auto pSendOverlapped = new MyOverlapped();
+		pSendOverlapped = new MyOverlapped();
 		pSendOverlapped->coTask = PostSend(pSendOverlapped);
 		pSendOverlapped->coTask.Run();
 	}
 	{
-		auto pOverlapped = new MyOverlapped();
-		//新客户端投递recv
-		PostRecv(pOverlapped);
+		pRecvOverlapped = new MyOverlapped();
+		pRecvOverlapped->coTask = PostRecv(pRecvOverlapped);
+		pRecvOverlapped->coTask.Run();
 	}
 	return;
 }
 
 inline CoTask<int> SessionSocketCompeletionKey::PostRecv(MyOverlapped* pOverlapped)
 {
-	WSABUF wsabuf;
-	wsabuf.buf = recv_buf;
-	wsabuf.len = MAX_RECV_COUNT;
+	while (true)
+	{
+		if (!WSARecv(pOverlapped))
+		{
+			printf("可能断网了,不再调用WSARecv\n");
+			CloseSocket();
+			delete pOverlapped;
+			break;
+		}
 
-	DWORD dwRecvCount;
-	DWORD dwFlag = 0;
+		printf("\n准备异步等待WSARecv结果\n");
+		co_yield 0;
+		printf("已异步等到WSARecv结果,numberOfBytesTransferred=%d,GetLastErrorReturn=%d\n",
+			pOverlapped->numberOfBytesTransferred, pOverlapped->GetLastErrorReturn);
+		if (0 == pOverlapped->numberOfBytesTransferred)
+		{
+			printf("numberOfBytesTransferred==0可能断网了,不再调用WSASend");
+			CloseSocket();
+			delete pOverlapped;
+			break;
+		}
+		this->recvBuf.Complete(pOverlapped->numberOfBytesTransferred);
+		this->sendBuf.Enqueue("asdf", 5);
+		this->pSendOverlapped->coTask.Run();
+	}
+}
+CoTask<int> SessionSocketCompeletionKey::PostSend(MyOverlapped* pOverlapped)
+{
+	while (true)
+	{
+		bool needYield, callSend;
+		std::tie(needYield, callSend) = WSASend(pOverlapped);
+		if (!needYield)
+		{
+			printf("可能断网了,不再调用WSASend");
+			delete pOverlapped;
+			break;
+		}
 
-	int nRes = WSARecv(Socket(), &wsabuf, 1, &dwRecvCount, &dwFlag, &pOverlapped->overlapped, NULL);
+		printf("准备异步等待WSASend结果\n");
+		co_yield 0;
+		printf("已异步等到WSASend结果,pOverlapped->numberOfBytesTransferred=%d\n", pOverlapped->numberOfBytesTransferred);
 
-	int a = WSAGetLastError();
-	if (ERROR_IO_PENDING == a)
+		if (!callSend)
+		{
+			printf("无数据可发，等有数据时再调用WSASend\n");
+			continue;
+		}
+
+		if (0 == pOverlapped->numberOfBytesTransferred)
+		{
+			printf("numberOfBytesTransferred==0可能断网了,不再调用WSASend");
+			CloseSocket();
+			delete pOverlapped;
+			break;
+		}
+
+		
+		this->sendBuf.Complete(pOverlapped->numberOfBytesTransferred);
+	}
+}
+bool SessionSocketCompeletionKey::WSARecv(MyOverlapped* pOverlapped)
+{
+
+	DWORD dwRecvCount(0);
+	DWORD dwFlag(0);
+	std::tie(pOverlapped->wsabuf.buf, pOverlapped->wsabuf.len) = this->recvBuf.BuildRecvBuf();
+	//pOverlapped->GetQueuedCompletionStatusReturn
+	const auto recvRet = ::WSARecv(Socket(), &pOverlapped->wsabuf, 1, &dwRecvCount, &dwFlag, &pOverlapped->overlapped, NULL);
+	//pOverlapped->GetLastErrorReturn 
+	const auto err = WSAGetLastError();
+
+	if (0 == recvRet)//如果未发生任何错误，并且接收操作已立即完成， 则 WSARecv 返回零。 在这种情况下，在调用线程处于可警报状态后，将已计划调用完成例程。
 	{
 		return true;
 	}
 
-	if (a == 0)//同步操作成功
+	if (SOCKET_ERROR != recvRet ||
+		ERROR_IO_PENDING != err)
 	{
-		PostRecv(pOverlapped);
-		return true;
+		printf("WSARecv重叠的操作未成功启动，并且不会发生完成指示。%d\n", err);
+		return false;// 任何其他错误代码都指示重叠的操作未成功启动，并且不会发生完成指示。
 	}
-	printf("PostRecv err");
-	return false;
+
+	// 否则，将返回 值 SOCKET_ERROR ，并且可以通过调用 WSAGetLastError 来检索特定的错误代码。 
+	// 错误代码 WSA_IO_PENDING 指示重叠操作已成功启动，稍后将指示完成。 
+	return true;
 }
 
 /// <summary>
@@ -54,55 +119,34 @@ inline CoTask<int> SessionSocketCompeletionKey::PostRecv(MyOverlapped* pOverlapp
 /// </summary>
 /// <param name="pOverlapped"></param>
 /// <param name="refSize"></param>
-/// <returns>是否调用了WSASend，是否同步返回</returns>
+/// <returns>正常等待异步完成,没有数据要发送没有调用WSASend</returns>
 std::tuple<bool, bool>  SessionSocketCompeletionKey::WSASend(MyOverlapped* pOverlapped)
 {
 	DWORD dwSendCount(0);
 	DWORD dwFlag = 0;
 	std::tie(pOverlapped->wsabuf.buf, pOverlapped->wsabuf.len) = this->sendBuf.BuildSendBuf();
-	pOverlapped->GetQueuedCompletionStatusReturn = ::WSASend(Socket(), &pOverlapped->wsabuf, 1, &dwSendCount, dwFlag, &pOverlapped->overlapped, NULL);
+	if (nullptr == pOverlapped->wsabuf.buf)
+	{
+		return std::make_tuple(true, false);
+	}
+	//pOverlapped->GetQueuedCompletionStatusReturn
+	int sendRet = ::WSASend(Socket(), &pOverlapped->wsabuf, 1, &dwSendCount, dwFlag, &pOverlapped->overlapped, NULL);
+	//pOverlapped->GetLastErrorReturn
+	int err = WSAGetLastError();
+	//pOverlapped->numberOfBytesTransferred = dwSendCount;
+	if (0 == sendRet)
+	{
+		return std::make_tuple(true, true);//如果未发生任何错误，并且发送操作已立即完成， 则 WSASend 返回零。 在这种情况下，一旦调用线程处于可警报状态，就已计划调用完成例程。
+	}
+	if (SOCKET_ERROR != sendRet ||
+		ERROR_IO_PENDING != err)
+	{
+		printf("WSASend重叠的操作未成功启动，并且不会发生完成指示。%d", pOverlapped->GetLastErrorReturn);
+		closesocket(Socket());
+		return std::make_tuple(false, true);// 任何其他错误代码都指示重叠的操作未成功启动，并且不会发生完成指示。
+	}
 
-	pOverlapped->GetLastErrorReturn = WSAGetLastError();
-	pOverlapped->numberOfBytesTransferred = dwSendCount;
-	if (pOverlapped->GetQueuedCompletionStatusReturn) 
-	{
-		return std::make_tuple(false, false);
-	}
-	if (pOverlapped->GetLastErrorReturn == 0)
-	{
-		//同步发送完成
-		//PostSend(pOverlapped);
-		return std::make_tuple(true, true);
-	}
-	if (ERROR_IO_PENDING != pOverlapped->GetLastErrorReturn)
-	{
-		//延迟处理
-		//函数执行出错
-		switch (a) {
-		case WSAENOTCONN:
-			printf("A request to send or receive data was disallowed because the socket is not connected and (when sending on a datagram socket using a sendto call) no address was supplied.\n");
-			break;
-		}
-		/*return false;*/
-	}
-	return std::make_tuple(true, false);
-}
-CoTask<int> SessionSocketCompeletionKey::PostSend(MyOverlapped* pOverlapped)
-{
-	
-	while (true) 
-	{
-		bool callSend, sync;
-		std::tie(callSend, sync) = WSASend(pOverlapped);
-		if (!callSend)
-		{
-			co_yield 0;
-			continue;
-		}
-
-		if (sync)
-			co_yield 0;
-	
-		this->sendBuf.SendComplete(pOverlapped->numberOfBytesTransferred);
-	}
+	// 否则，将返回 值 SOCKET_ERROR ，并且可以通过调用 WSAGetLastError 来检索特定的错误代码。 
+	// 错误代码 WSA_IO_PENDING 指示重叠操作已成功启动，稍后将指示完成。 
+	return std::make_tuple(true, true);
 }

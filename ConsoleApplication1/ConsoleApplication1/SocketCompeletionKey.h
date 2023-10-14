@@ -20,11 +20,8 @@ public:
 	}
 	virtual void StartCoRoutine() = 0;
 protected:
-	SOCKET Socket() const { return socket; }
-private:
-	//virtual bool PostSend( MyOverlapped* pOverlapped) = 0;
-	//virtual bool PostRecv(MyOverlapped* pOverlapped) = 0;
-	//virtual void OnCompleteRecv(const DWORD number_of_bytes, MyOverlapped* pOverlapped) = 0;
+	SOCKET Socket() const;
+	void CloseSocket();
 public:
 	HANDLE hIocp = nullptr;
 private:

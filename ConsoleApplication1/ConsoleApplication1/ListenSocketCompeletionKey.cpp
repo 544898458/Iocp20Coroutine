@@ -56,6 +56,7 @@ CoTask<int> ListenSocketCompeletionKey::PostAccept(MyOverlapped* pAcceptOverlapp
 		}
 		else
 		{
+			printf("准备异步等待重叠AcceptEx完成\n");
 			co_yield 0;
 			printf("异步重叠AcceptEx完成\n");
 		}
