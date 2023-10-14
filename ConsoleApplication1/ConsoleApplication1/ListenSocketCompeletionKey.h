@@ -12,18 +12,18 @@ public:
 	virtual void StartCoRoutine() override;
 
 private:
-	CoTask<MyOverlapped*> PostAccept(MyOverlapped* pAcceptOverlapped);
-	void AcceptEx(MyOverlapped* pAcceptOverlapped);
-	virtual bool PostSend(MyOverlapped* pAcceptOverlapped)override
-	{
-		assert(!"ListenSocketCompeletionKey不能PostSend");
-		return false;
-	}
-	virtual bool PostRecv(MyOverlapped* pAcceptOverlapped)override
-	{
-		assert(!"ListenSocketCompeletionKey不能PostRecv");
-		return false;
-	}
+	CoTask<int> PostAccept(MyOverlapped* pAcceptOverlapped);
+	bool AcceptEx(MyOverlapped* pAcceptOverlapped);
+	//virtual bool PostSend(MyOverlapped* pAcceptOverlapped)override
+	//{
+	//	assert(!"ListenSocketCompeletionKey不能PostSend");
+	//	return false;
+	//}
+	//virtual bool PostRecv(MyOverlapped* pAcceptOverlapped)override
+	//{
+	//	assert(!"ListenSocketCompeletionKey不能PostRecv");
+	//	return false;
+	//}
 	//virtual void OnCompleteRecv(const DWORD number_of_bytes, MyOverlapped* pOverlapped) override
 	//{
 	//	assert(!"ListenSocketCompeletionKey不能OnCompleteRecv");

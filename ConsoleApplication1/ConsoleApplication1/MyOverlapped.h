@@ -1,5 +1,6 @@
 #pragma once
 #include"Op.h"
+constexpr int MAX_SEND_COUNT = 2048;
 /// <summary>
 /// 重叠操作，对应一次Accet、Recv、Send
 /// CONTAINING_RECORD（）可以根据Overlapped获取PER_IO_CONTEXT数据类型。前提是Overlapped是PER_IO_CONTEXT的第一个成员。CONTAINING_RECORD可以根据Overlapped的地址获取其所在PER_IO_CONTEXT结构体的地址指针。
@@ -20,17 +21,18 @@ struct MyOverlapped
 	SOCKET socket=NULL;
 
 	//完成端口返回结果，GetQueuedCompletionStatus 返回结果
-	DWORD number_of_bytes;
-	BOOL bGetQueuedCompletionStatusReturn;
-	int lastErr;
+	DWORD numberOfBytesTransferred;
+	BOOL GetQueuedCompletionStatusReturn;
+	int GetLastErrorReturn;
 
+	WSABUF wsabuf = { 0,nullptr };
 	void OnComplete(SocketCompeletionKey* pKey, const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
 	{
-		this->number_of_bytes = number_of_bytes;
-		this->bGetQueuedCompletionStatusReturn = bGetQueuedCompletionStatusReturn;
-		this->lastErr = lastErr;
+		this->numberOfBytesTransferred = number_of_bytes;
+		this->GetQueuedCompletionStatusReturn = bGetQueuedCompletionStatusReturn;
+		this->GetLastErrorReturn = lastErr;
 		this->coTask.Run();
 		//pOp->OnComplete(this, pKey, port,number_of_bytes,bGetQueuedCompletionStatusReturn,lastErr);
 	}
-	CoTask<MyOverlapped*> coTask;
+	CoTask<int> coTask;
 };

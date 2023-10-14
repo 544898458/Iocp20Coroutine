@@ -158,20 +158,7 @@ DWORD WINAPI Iocp::Server::ThreadProc(LPVOID lpParameter)
 	while (true)
 	{
 		BOOL bFlag = GetQueuedCompletionStatus(port, &number_of_bytes, (PULONG_PTR)&CompletionKey, &lpOverlapped, INFINITE);//没完成就会卡在这里，正常
-		//if (FALSE == bFlag)
-		//{
-		//	
-		//	if (64 == a)
-		//	{
-		//		printf("force close\n");
-		//	}
-		//	printf("%d\n", a);
-		//	continue;
-		//}
 		int lastErr = GetLastError();//可能是Socket强制关闭
-		//处理
-		//accept
-		//auto socket = CONTAINING_RECORD(lpOverlapped, MyOverlapped, socket);
 		auto* overlapped = (MyOverlapped*)lpOverlapped;
 		overlapped->OnComplete(CompletionKey,port,number_of_bytes, bFlag, lastErr);
 	}
