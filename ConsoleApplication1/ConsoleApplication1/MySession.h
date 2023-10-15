@@ -3,6 +3,6 @@
 class MySession
 {
 public:
-	int OnRecv(SessionSocketCompeletionKey<MySession> &refSession,const char buf[], int len);
+	int OnRecv(Iocp::SessionSocketCompeletionKey<MySession> &refSession,const char buf[], int len);
 };
 

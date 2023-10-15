@@ -1,7 +1,7 @@
 #pragma once
 #include <Winsock2.h>
 #include"CoTask.h"
-struct MyOverlapped;
+struct Overlapped;
 struct SocketCompeletionKey;
 //struct IOp {
 //	virtual void OnComplete(MyOverlapped* pOverlapped, SocketCompeletionKey* pKey, const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr) = 0;

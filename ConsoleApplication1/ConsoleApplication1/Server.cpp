@@ -161,7 +161,7 @@ DWORD WINAPI Iocp::Server<T_Session>::ThreadProc(LPVOID lpParameter)
 	{
 		BOOL bFlag = GetQueuedCompletionStatus(port, &number_of_bytes, (PULONG_PTR)&CompletionKey, &lpOverlapped, INFINITE);//没完成就会卡在这里，正常
 		int lastErr = GetLastError();//可能是Socket强制关闭
-		auto* overlapped = (MyOverlapped*)lpOverlapped;
+		auto* overlapped = (Iocp::Overlapped*)lpOverlapped;
 		overlapped->OnComplete(CompletionKey,port,number_of_bytes, bFlag, lastErr);
 	}
 
