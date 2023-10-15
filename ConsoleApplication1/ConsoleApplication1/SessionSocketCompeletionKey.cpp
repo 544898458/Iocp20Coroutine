@@ -5,8 +5,8 @@
 //	assert(!"SessionSocketCompeletionKey不能PostAccept");
 //	return false;
 //}
-
-void SessionSocketCompeletionKey::StartCoRoutine()
+template<class T_Session>
+void SessionSocketCompeletionKey<T_Session>::StartCoRoutine()
 {
 	{
 		//auto pOverlapped = new MyOverlapped();
@@ -22,8 +22,8 @@ void SessionSocketCompeletionKey::StartCoRoutine()
 	}
 	return;
 }
-
-inline CoTask<int> SessionSocketCompeletionKey::PostRecv(MyOverlapped* pOverlapped)
+template<class T_Session>
+CoTask<int> SessionSocketCompeletionKey<T_Session>::PostRecv(MyOverlapped* pOverlapped)
 {
 	while (true)
 	{
@@ -46,12 +46,16 @@ inline CoTask<int> SessionSocketCompeletionKey::PostRecv(MyOverlapped* pOverlapp
 			delete pOverlapped;
 			break;
 		}
-		this->recvBuf.Complete(pOverlapped->numberOfBytesTransferred);
-		this->sendBuf.Enqueue("asdf", 5);
-		this->pSendOverlapped->coTask.Run();
+		char* buf(nullptr);
+		int len(0);
+		std::tie(buf,len) = this->recvBuf.Complete(pOverlapped->numberOfBytesTransferred);
+		//this->sendBuf.Enqueue("asdf", 5);
+		//this->pSendOverlapped->coTask.Run();
+		this->recvBuf.PopFront(this->Session.OnRecv(buf, len));
 	}
 }
-CoTask<int> SessionSocketCompeletionKey::PostSend(MyOverlapped* pOverlapped)
+template<class T_Session>
+CoTask<int> SessionSocketCompeletionKey<T_Session>::PostSend(MyOverlapped* pOverlapped)
 {
 	while (true)
 	{
@@ -86,7 +90,9 @@ CoTask<int> SessionSocketCompeletionKey::PostSend(MyOverlapped* pOverlapped)
 		this->sendBuf.Complete(pOverlapped->numberOfBytesTransferred);
 	}
 }
-bool SessionSocketCompeletionKey::WSARecv(MyOverlapped* pOverlapped)
+
+template<class T_Session>
+bool SessionSocketCompeletionKey<T_Session>::WSARecv(MyOverlapped* pOverlapped)
 {
 
 	DWORD dwRecvCount(0);
@@ -120,7 +126,8 @@ bool SessionSocketCompeletionKey::WSARecv(MyOverlapped* pOverlapped)
 /// <param name="pOverlapped"></param>
 /// <param name="refSize"></param>
 /// <returns>正常等待异步完成,没有数据要发送没有调用WSASend</returns>
-std::tuple<bool, bool>  SessionSocketCompeletionKey::WSASend(MyOverlapped* pOverlapped)
+template<class T_Session>
+std::tuple<bool, bool>  SessionSocketCompeletionKey<T_Session>::WSASend(MyOverlapped* pOverlapped)
 {
 	DWORD dwSendCount(0);
 	DWORD dwFlag = 0;

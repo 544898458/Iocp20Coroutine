@@ -2,6 +2,7 @@
 #include "SocketCompeletionKey.h"
 #include<WinSock2.h>
 #include "ByteQueue.h"
+template<class T_Session>
 class SessionSocketCompeletionKey :public SocketCompeletionKey
 {
 public:
@@ -17,8 +18,9 @@ private:
 	bool WSARecv(MyOverlapped* pOverlapped);
 	
 private:
-	ByteQueue sendBuf;
-	ByteQueue recvBuf;
+	T_Session Session;
+	ByteQueueSend sendBuf;
+	ByteQueueRecv recvBuf;
 	MyOverlapped* pSendOverlapped;
 	MyOverlapped* pRecvOverlapped;
 };

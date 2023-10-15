@@ -10,22 +10,35 @@ constexpr int  MAX_RECV_COUNT = 1024;
 /// </summary>
 class ByteQueue
 {
+	friend class ByteQueueSend;
+	friend class ByteQueueRecv;
 public:
 	ByteQueue();
 	bool Enqueue(const char* buf, const int len);
 	//void DeQueue(char* buf, int &len);
-	std::tuple<char*, int> BuildSendBuf();
-	std::tuple<char*, int> BuildRecvBuf();
-	void Complete(int);
 	//int Size();
 private:
 	std::vector<char> queue;
 
-
 	std::vector<char> buf;
 	std::vector<char>::iterator head ;
-
-	
-
 };
 
+class ByteQueueSend
+{
+public:
+	std::tuple<char*, int> BuildSendBuf();
+	void Complete(int);
+	void PopFront(int);
+
+	ByteQueue queue;
+};
+class ByteQueueRecv
+{
+public:
+	std::tuple<char*, int> BuildRecvBuf();
+	std::tuple<char*, int>  Complete(int);
+	void PopFront(int);
+private:
+	ByteQueue queue;
+};

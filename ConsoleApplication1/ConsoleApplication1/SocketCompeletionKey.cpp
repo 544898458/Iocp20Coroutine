@@ -7,7 +7,7 @@ SOCKET SocketCompeletionKey::Socket() const
 
 void SocketCompeletionKey::CloseSocket()
 {
-	printf("CloseSocket %d", socket);
+	printf("CloseSocket %d\n", socket);
 	closesocket(socket);
 	socket = NULL;
 }

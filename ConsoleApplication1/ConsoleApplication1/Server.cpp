@@ -7,7 +7,8 @@
 #include "ListenSocketCompeletionKey.h"
 #pragma comment(lib,"ws2_32.lib")
 
-bool Iocp::Server::WsaStartup()
+template<class T_Session>
+bool Iocp::Server<T_Session>::WsaStartup()
 {
 	WORD wdVersion = MAKEWORD(2, 2);
 	WSADATA wdScokMsg;
@@ -35,8 +36,8 @@ bool Iocp::Server::WsaStartup()
 		return false;
 	}
 }
-
-bool Iocp::Server::Init()
+template<class T_Session>
+bool Iocp::Server<T_Session>::Init()
 {
 	if (this->socketAccept != NULL)
 		return false;
@@ -53,7 +54,7 @@ bool Iocp::Server::Init()
 		return false;
 	}
 	
-	auto pListenCompleteKey = new ListenSocketCompeletionKey(this->socketAccept);
+	auto pListenCompleteKey = new ListenSocketCompeletionKey<T_Session>(this->socketAccept);
 	//创建完成端口	创建一个I/O完成端口对象，用它面向任意数量的套接字句柄，管理多个I/O请求。要做到这一点，需要调用CreateCompletionPort函数。
 	pListenCompleteKey->hIocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	if (0 == pListenCompleteKey->hIocp)
@@ -148,7 +149,8 @@ bool Iocp::Server::Init()
 	return true;
 }
 
-DWORD WINAPI Iocp::Server::ThreadProc(LPVOID lpParameter)
+template<class T_Session>
+DWORD WINAPI Iocp::Server<T_Session>::ThreadProc(LPVOID lpParameter)
 {
 	auto hIocp= (HANDLE)lpParameter;
 	HANDLE port = hIocp;

@@ -1,13 +1,15 @@
 #include "ListenSocketCompeletionKey.h"
 #include "SessionSocketCompeletionKey.h"
-void ListenSocketCompeletionKey::StartCoRoutine() 
+template<class T_Session>
+void ListenSocketCompeletionKey<T_Session>::StartCoRoutine()
 {
 	//auto op = new OpAccept();
 	auto pAcceptOverlapped = new MyOverlapped();
 	pAcceptOverlapped->coTask = PostAccept(pAcceptOverlapped) ;
 	pAcceptOverlapped->coTask.Run();
 }
-bool ListenSocketCompeletionKey::AcceptEx(MyOverlapped* pAcceptOverlapped)
+template<class T_Session>
+bool ListenSocketCompeletionKey<T_Session>::AcceptEx(MyOverlapped* pAcceptOverlapped)
 {
 	char str2[1];// = new char[1024];// = { 0 };
 	DWORD dwRecvcount = 0;
@@ -45,7 +47,8 @@ bool ListenSocketCompeletionKey::AcceptEx(MyOverlapped* pAcceptOverlapped)
 
 	return false;
 }
-CoTask<int> ListenSocketCompeletionKey::PostAccept(MyOverlapped* pAcceptOverlapped)
+template<class T_Session>
+CoTask<int> ListenSocketCompeletionKey<T_Session>::PostAccept(MyOverlapped* pAcceptOverlapped)
 {
 	while (true) 
 	{
@@ -74,7 +77,7 @@ CoTask<int> ListenSocketCompeletionKey::PostAccept(MyOverlapped* pAcceptOverlapp
 		}
 		
 		//绑定到完成端口
-		auto pNewCompleteKey = new SessionSocketCompeletionKey(pAcceptOverlapped->socket);
+		auto pNewCompleteKey = new SessionSocketCompeletionKey<T_Session>(pAcceptOverlapped->socket);
 		HANDLE hPort1 = CreateIoCompletionPort((HANDLE)pAcceptOverlapped->socket, this->hIocp, (ULONG_PTR)pNewCompleteKey, 0);
 		if (hPort1 != this->hIocp)
 		{

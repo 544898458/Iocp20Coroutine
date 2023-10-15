@@ -1,7 +1,7 @@
 #pragma once
 #include"SocketCompeletionKey.h"
 
-
+template<class T_Session>
 class ListenSocketCompeletionKey :public SocketCompeletionKey
 {
 public:

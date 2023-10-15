@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="CoTask.cpp" />
     <ClCompile Include="ListenSocketCompeletionKey.cpp" />
+    <ClCompile Include="MySession.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="ByteQueue.cpp" />
     <ClCompile Include="ConsoleApplication1.cpp" />
@@ -142,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="CoTask.h" />
     <ClInclude Include="ListenSocketCompeletionKey.h" />
+    <ClInclude Include="MySession.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="ByteQueue.h" />
     <ClInclude Include="Define.h" />

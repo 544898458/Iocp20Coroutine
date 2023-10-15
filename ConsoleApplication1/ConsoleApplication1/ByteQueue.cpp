@@ -18,37 +18,55 @@ bool ByteQueue::Enqueue(const char* buf, const int len)
 //    //return false;
 //}
 
-std::tuple<char*, int> ByteQueue:: BuildSendBuf()
+std::tuple<char*, int> ByteQueueSend:: BuildSendBuf()
 {
-    if (this->buf.end() != this->head)//固定内存还没发完
+    auto& refQueue = this->queue;
+    if (refQueue.buf.end() != refQueue.head)//固定内存还没发完
     {
-        return std::make_tuple(&(*this->head),this->buf.end()-this->head);
+        return std::make_tuple(&(*refQueue.head),refQueue.buf.end()-refQueue.head);
     }
         
-    auto size = queue.size();
+    auto size = refQueue.queue.size();
     if (size == 0)//没有可发的数据
         return std::make_tuple(nullptr, 0);
 
-    this->buf.resize(size);//可能换内存
-    std::copy(this->queue.begin(), this->queue.end(), buf.begin());//memcpy替换
-    this->queue.clear();
-    this->head = this->buf.begin();
-    return std::make_tuple(&(*this->head), (int)buf.size());
+    refQueue.buf.resize(size);//可能换内存
+    std::copy(refQueue.queue.begin(), refQueue.queue.end(), refQueue.buf.begin());//memcpy替换
+    refQueue.queue.clear();
+    refQueue.head = refQueue.buf.begin();
+    return std::make_tuple(&(*refQueue.head), (int)refQueue.buf.size());
 }
 
-std::tuple<char*, int> ByteQueue::BuildRecvBuf()
+std::tuple<char*, int> ByteQueueRecv::BuildRecvBuf()
 {
-    if (this->buf.end() != this->head)//固定内存还没收完
+    auto& refQueue = this->queue;
+    if (refQueue.buf.end() != refQueue.head)//固定内存还没收完
     {
-        return std::make_tuple(&(*this->head), this->buf.end() - this->head);
+        return std::make_tuple(&(*refQueue.head), refQueue.buf.end() - refQueue.head);
     }
 
-    this->queue.insert(this->queue.end(),this->buf.begin(), this->buf.end());//memcpy替换
+    refQueue.queue.insert(refQueue.queue.end(),refQueue.buf.begin(), refQueue.buf.end());//memcpy替换
 
-    this->head = this->buf.begin();
-    return std::make_tuple(&(*this->head), (int)buf.size());
+    refQueue.head = refQueue.buf.begin();
+    return std::make_tuple(&(*refQueue.head), (int)refQueue.buf.size());
 }
-void ByteQueue::Complete(int sent)
+void ByteQueueSend::Complete(int sent)
 {
-    this->head += sent;
+    auto& refQueue = this->queue;
+    refQueue.head += sent;
+}
+std::tuple<char*, int>  ByteQueueRecv::Complete(int sent)
+{
+    auto& refQueue = this->queue;
+    refQueue.head += sent;
+
+    refQueue.queue.insert(refQueue.queue.end(), refQueue.buf.begin(), refQueue.head);//memcpy替换
+    refQueue.head = refQueue.buf.begin();
+    return std::make_tuple(&(*refQueue.head), (int)refQueue.buf.size());
+}
+
+void ByteQueueRecv::PopFront(int len) 
+{
+    auto& refQueue = this->queue.queue;
+    refQueue.erase(refQueue.begin(), refQueue.begin() + len);
 }
