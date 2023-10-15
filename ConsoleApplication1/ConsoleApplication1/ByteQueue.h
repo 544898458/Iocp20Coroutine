@@ -36,8 +36,9 @@ public:
 class ByteQueueRecv
 {
 public:
+	ByteQueueRecv();
 	std::tuple<char*, int> BuildRecvBuf();
-	std::tuple<char*, int>  Complete(int);
+	std::tuple<char*, int> Complete(int);
 	void PopFront(int);
 private:
 	ByteQueue queue;

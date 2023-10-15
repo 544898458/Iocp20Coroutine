@@ -23,6 +23,12 @@ void SessionSocketCompeletionKey<T_Session>::StartCoRoutine()
 	return;
 }
 template<class T_Session>
+void SessionSocketCompeletionKey<T_Session>::Send(const char buf[], int len)
+{
+	this->sendBuf.queue.Enqueue(buf, len);
+	this->pSendOverlapped->coTask.Run();
+}
+template<class T_Session>
 CoTask<int> SessionSocketCompeletionKey<T_Session>::PostRecv(MyOverlapped* pOverlapped)
 {
 	while (true)
@@ -51,7 +57,7 @@ CoTask<int> SessionSocketCompeletionKey<T_Session>::PostRecv(MyOverlapped* pOver
 		std::tie(buf,len) = this->recvBuf.Complete(pOverlapped->numberOfBytesTransferred);
 		//this->sendBuf.Enqueue("asdf", 5);
 		//this->pSendOverlapped->coTask.Run();
-		this->recvBuf.PopFront(this->Session.OnRecv(buf, len));
+		this->recvBuf.PopFront(this->Session.OnRecv(*this,buf, len));
 	}
 }
 template<class T_Session>
@@ -70,7 +76,7 @@ CoTask<int> SessionSocketCompeletionKey<T_Session>::PostSend(MyOverlapped* pOver
 
 		printf("准备异步等待WSASend结果\n");
 		co_yield 0;
-		printf("已异步等到WSASend结果,pOverlapped->numberOfBytesTransferred=%d\n", pOverlapped->numberOfBytesTransferred);
+		printf("已异步等到WSASend结果,pOverlapped->numberOfBytesTransferred=%d,callSend=%d\n", pOverlapped->numberOfBytesTransferred, callSend);
 
 		if (!callSend)
 		{
@@ -80,12 +86,11 @@ CoTask<int> SessionSocketCompeletionKey<T_Session>::PostSend(MyOverlapped* pOver
 
 		if (0 == pOverlapped->numberOfBytesTransferred)
 		{
-			printf("numberOfBytesTransferred==0可能断网了,不再调用WSASend");
+			printf("numberOfBytesTransferred==0可能断网了,不再调用WSASend\n");
 			CloseSocket();
 			delete pOverlapped;
 			break;
 		}
-
 		
 		this->sendBuf.Complete(pOverlapped->numberOfBytesTransferred);
 	}

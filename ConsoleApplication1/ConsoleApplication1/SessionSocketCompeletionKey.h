@@ -11,6 +11,7 @@ public:
 
 	}
 	virtual void StartCoRoutine() override;
+	void Send(const char buf[], int len);
 private:
 	CoTask<int> PostSend(MyOverlapped* pOverlapped);
 	CoTask<int> PostRecv(MyOverlapped* pOverlapped);
