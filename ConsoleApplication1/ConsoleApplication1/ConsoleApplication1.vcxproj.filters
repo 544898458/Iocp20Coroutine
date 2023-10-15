@@ -21,7 +21,7 @@
     <ClCompile Include="Server.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MyOverlapped.cpp">
+    <ClCompile Include="Overlapped.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Op.cpp">
@@ -50,7 +50,7 @@
     <ClInclude Include="Server.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MyOverlapped.h">
+    <ClInclude Include="Overlapped.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Op.h">

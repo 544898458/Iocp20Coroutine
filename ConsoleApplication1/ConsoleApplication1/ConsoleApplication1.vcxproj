@@ -137,7 +137,7 @@
     <ClCompile Include="ConsoleApplication1.cpp" />
     <ClCompile Include="SessionSocketCompeletionKey.cpp" />
     <ClCompile Include="SocketCompeletionKey.cpp" />
-    <ClCompile Include="MyOverlapped.cpp" />
+    <ClCompile Include="Overlapped.cpp" />
     <ClCompile Include="Op.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,7 +149,7 @@
     <ClInclude Include="Define.h" />
     <ClInclude Include="SessionSocketCompeletionKey.h" />
     <ClInclude Include="SocketCompeletionKey.h" />
-    <ClInclude Include="MyOverlapped.h" />
+    <ClInclude Include="Overlapped.h" />
     <ClInclude Include="Op.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
