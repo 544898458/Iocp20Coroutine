@@ -121,18 +121,20 @@ bool Iocp::Server<T_Session>::Init()
 	auto process_count = system_processors_count.dwNumberOfProcessors;
 	for (int i = 0; i < process_count; i++)
 	{
-		auto hThread = CreateThread(NULL, 0, ThreadProc, pListenCompleteKey->hIocp, 0, NULL);
-		if (NULL == hThread)
-		{
-			int a = GetLastError();
-			printf("%d\n", a);
-			CloseHandle(iocp);
-			closesocket(socketAccept);
-			//清理网络库
-			//WSACleanup();
-			return false;
-		}
-		this->vecThread.push_back(hThread);
+		//auto hThread = CreateThread(NULL, 0, NetworkThreadProc, pListenCompleteKey->hIocp, 0, NULL);
+		thread networkThread(Server::NetworkThreadProc, this, pListenCompleteKey->hIocp);
+		networkThread.detach();
+		//if (NULL == hThread)
+		//{
+		//	int a = GetLastError();
+		//	printf("%d\n", a);
+		//	CloseHandle(iocp);
+		//	closesocket(socketAccept);
+		//	//清理网络库
+		//	//WSACleanup();
+		//	return false;
+		//}
+		//this->vecThread.push_back(hThread);
 	}
 
 	//if ( !
@@ -150,10 +152,10 @@ bool Iocp::Server<T_Session>::Init()
 }
 
 template<class T_Session>
-DWORD WINAPI Iocp::Server<T_Session>::ThreadProc(LPVOID lpParameter)
+void Iocp::Server<T_Session>::NetworkThreadProc(HANDLE port)
 {
-	auto hIocp= (HANDLE)lpParameter;
-	HANDLE port = hIocp;
+	//auto hIocp= (HANDLE)lpParameter;
+	//HANDLE port = hIocp;
 	DWORD      number_of_bytes = 0;
 	SocketCompeletionKey* CompletionKey = nullptr;
 	LPOVERLAPPED lpOverlapped;
@@ -165,6 +167,6 @@ DWORD WINAPI Iocp::Server<T_Session>::ThreadProc(LPVOID lpParameter)
 		overlapped->OnComplete(CompletionKey,port,number_of_bytes, bFlag, lastErr);
 	}
 
-	return 0;
+	return ;
 }
 

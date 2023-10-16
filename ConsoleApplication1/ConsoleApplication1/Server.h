@@ -13,7 +13,7 @@ namespace Iocp
 		bool WsaStartup();
 		bool Init();
 	private:
-		static DWORD WINAPI ThreadProc(LPVOID lpParameter);
+		static void NetworkThreadProc(LPVOID lpParameter);
 		//bool flag = true;
 	private:
 		SOCKET socketAccept=NULL;
