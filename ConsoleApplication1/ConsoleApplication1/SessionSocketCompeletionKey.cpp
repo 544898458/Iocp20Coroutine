@@ -93,6 +93,7 @@ namespace Iocp {
 			}
 
 			this->sendBuf.Complete(pOverlapped->numberOfBytesTransferred);
+			co_return 0;
 		}
 	}
 

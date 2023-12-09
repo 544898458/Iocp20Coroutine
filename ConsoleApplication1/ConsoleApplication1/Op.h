@@ -2,7 +2,7 @@
 #include <Winsock2.h>
 #include"CoTask.h"
 struct Overlapped;
-struct SocketCompeletionKey;
+class SocketCompeletionKey;
 //struct IOp {
 //	virtual void OnComplete(MyOverlapped* pOverlapped, SocketCompeletionKey* pKey, const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr) = 0;
 //	CoTask<MyOverlapped*> coTask;

@@ -122,7 +122,7 @@ bool Iocp::Server<T_Session>::Init()
 	for (int i = 0; i < process_count; i++)
 	{
 		//auto hThread = CreateThread(NULL, 0, NetworkThreadProc, pListenCompleteKey->hIocp, 0, NULL);
-		thread networkThread(Server::NetworkThreadProc, this, pListenCompleteKey->hIocp);
+		thread networkThread(Server::NetworkThreadProc, pListenCompleteKey->hIocp);
 		networkThread.detach();
 		//if (NULL == hThread)
 		//{
