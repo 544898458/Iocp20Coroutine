@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\msgpack-c-cpp-2.1.2\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\msgpack-c-cpp-2.1.2\include;D:\websocketfiles-master\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -132,6 +132,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\websocketfiles-master\src\base64.cpp" />
+    <ClCompile Include="..\..\..\websocketfiles-master\src\main.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\websocketfiles-master\src\sha1_portable.cpp" />
+    <ClCompile Include="..\..\..\websocketfiles-master\src\string_helper.cpp" />
+    <ClCompile Include="..\..\..\websocketfiles-master\src\ws_endpoint.cpp" />
+    <ClCompile Include="..\..\..\websocketfiles-master\src\ws_packet.cpp" />
     <ClCompile Include="CoTask.cpp" />
     <ClCompile Include="ListenSocketCompeletionKey.cpp" />
     <ClCompile Include="MySession.cpp" />
@@ -144,6 +152,11 @@
     <ClCompile Include="Op.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\websocketfiles-master\src\base64.h" />
+    <ClInclude Include="..\..\..\websocketfiles-master\src\sha1.h" />
+    <ClInclude Include="..\..\..\websocketfiles-master\src\string_helper.h" />
+    <ClInclude Include="..\..\..\websocketfiles-master\src\ws_endpoint.h" />
+    <ClInclude Include="..\..\..\websocketfiles-master\src\ws_packet.h" />
     <ClInclude Include="CoTask.h" />
     <ClInclude Include="ListenSocketCompeletionKey.h" />
     <ClInclude Include="MySession.h" />
@@ -154,6 +167,9 @@
     <ClInclude Include="SocketCompeletionKey.h" />
     <ClInclude Include="Overlapped.h" />
     <ClInclude Include="Op.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\websocketfiles-master\src\string_helper.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
