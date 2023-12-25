@@ -2,6 +2,7 @@
 #include<coroutine>
 #include<chrono>
 #include<assert.h>
+#include <iostream>
 using namespace std;
 
 template<typename T>
@@ -24,7 +25,11 @@ public:
 		// 协程结束前执行
 		auto final_suspend() noexcept { return std::suspend_always{}; }
 		// 出现未经处理的异常时执行
-		void unhandled_exception() { return std::terminate(); }
+		void unhandled_exception() 
+		{
+			//return std::terminate(); 
+			std::cout << "unhandled_exception" << std::endl;
+		}
 		// co_return 时执行，return_void跟return_value二选一
 		//void return_void() {}
 		void return_value(T v) { value = v; }
