@@ -47,7 +47,7 @@ namespace Iocp {
 				pOverlapped->numberOfBytesTransferred, pOverlapped->GetLastErrorReturn);
 			if (0 == pOverlapped->numberOfBytesTransferred)
 			{
-				printf("numberOfBytesTransferred==0可能断网了,不再调用WSASend");
+				printf("numberOfBytesTransferred==0可能断网了,不再调用WSARecv");
 				CloseSocket();
 				delete pOverlapped;
 				break;

@@ -27,10 +27,10 @@ struct MsgLoginRet
 	std::string nickName;
 	MSGPACK_DEFINE(id, nickName);
 };
-Iocp::SessionSocketCompeletionKey<MySession>* g_pSession;
+
 void net_write_cb(char* buf, int64_t size, void* wd)
 {
-	g_pSession->Send(buf, size);
+	static_cast<Iocp::SessionSocketCompeletionKey<MySession>*>(wd)->Send(buf, size);
 }
 WebSocketEndpoint* g_ws(nullptr);// (net_write_cb);
 class MyWebSocketEndpoint :public WebSocketEndpoint
@@ -70,6 +70,44 @@ public:
 
 	virtual int32_t user_defined_process(WebSocketPacket& packet, ByteBuffer& frame_payload)override
 	{
+		switch (packet.get_opcode())
+		{
+		case WebSocketPacket::WSOpcode_Continue:
+			// add your process code here
+			//std::cout << "WebSocketEndpoint - recv a Continue opcode." << std::endl;
+			//user_defined_process(packet, frame_payload);
+			break;
+		case WebSocketPacket::WSOpcode_Text:
+			// add your process code here
+			//std::cout << "WebSocketEndpoint - recv a Text opcode." << std::endl;
+			//user_defined_process(packet, frame_payload);
+			break;
+		case WebSocketPacket::WSOpcode_Binary:
+			// add your process code here
+			//std::cout << "WebSocketEndpoint - recv a Binary opcode." << std::endl;
+			//user_defined_process(packet, frame_payload);
+			break;
+		case WebSocketPacket::WSOpcode_Close:
+			// add your process code here
+			//std::cout << "WebSocketEndpoint - recv a Close opcode." << std::endl;
+			//user_defined_process(packet, frame_payload);
+			return 0;
+			break;
+		case WebSocketPacket::WSOpcode_Ping:
+			// add your process code here
+			//std::cout << "WebSocketEndpoint - recv a Ping opcode." << std::endl;
+			user_defined_process(packet, frame_payload);
+			break;
+		case WebSocketPacket::WSOpcode_Pong:
+			// add your process code here
+			//std::cout << "WebSocketEndpoint - recv a Pong opcode." << std::endl;
+			//user_defined_process(packet, frame_payload);
+			break;
+		default:
+			std::cout << "WebSocketEndpoint - recv an unknown opcode." << std::endl;
+			break;
+		}
+
 		msgpack::object_handle oh = msgpack::unpack(frame_payload.bytes(), frame_payload.length());
 		msgpack::object obj = oh.get();
 		std::cout << obj << std::endl;
@@ -103,7 +141,7 @@ int MySession::OnRecv(Iocp::SessionSocketCompeletionKey<MySession>& refSession, 
 	{
 		g_ws = new MyWebSocketEndpoint(net_write_cb, &refSession);
 	}
-	g_pSession = &refSession;
+
 	g_ws->from_wire(buf, len);
 	return len;
 }
