@@ -32,7 +32,6 @@ void net_write_cb(char* buf, int64_t size, void* wd)
 {
 	static_cast<Iocp::SessionSocketCompeletionKey<MySession>*>(wd)->Send(buf, size);
 }
-WebSocketEndpoint* g_ws(nullptr);// (net_write_cb);
 class MyWebSocketEndpoint :public WebSocketEndpoint
 {
 public:
@@ -120,7 +119,7 @@ public:
 		// set payload data
 		MsgLoginRet ret = { 223,GbkToUtf8("¥Ûœ¿") };
 		std::stringstream buffer;
-		msgpack::pack( buffer,ret);
+		msgpack::pack(buffer, ret);
 		buffer.seekg(0);
 
 		// deserialize the buffer into msgpack::object instance.
@@ -131,17 +130,21 @@ public:
 		wspacket.pack_dataframe(output);
 		// send to client
 		to_wire(output.bytes(), output.length());
-		
+
 		return 0;
 	}
 };
+void MySession::Init(Iocp::SessionSocketCompeletionKey<MySession>& refSession)
+{
+
+}
 int MySession::OnRecv(Iocp::SessionSocketCompeletionKey<MySession>& refSession, const char buf[], int len)
 {
-	if (g_ws == nullptr)
+	if (ws == nullptr)
 	{
-		g_ws = new MyWebSocketEndpoint(net_write_cb, &refSession);
+		ws = new MyWebSocketEndpoint(net_write_cb, &refSession);
 	}
 
-	g_ws->from_wire(buf, len);
+	ws->from_wire(buf, len);
 	return len;
 }

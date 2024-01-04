@@ -79,6 +79,7 @@ namespace Iocp {
 
 			//绑定到完成端口
 			auto pNewCompleteKey = new SessionSocketCompeletionKey<T_Session>(pAcceptOverlapped->socket);
+			pNewCompleteKey->Session.Init(*pNewCompleteKey);
 			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)pAcceptOverlapped->socket, this->hIocp, (ULONG_PTR)pNewCompleteKey, 0);
 			if (hPort1 != this->hIocp)
 			{

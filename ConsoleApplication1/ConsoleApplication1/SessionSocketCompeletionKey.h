@@ -13,6 +13,8 @@ namespace Iocp {
 		}
 		virtual void StartCoRoutine() override;
 		void Send(const char buf[], int len);
+		T_Session Session;
+
 	private:
 		CoTask<int> PostSend(Overlapped* pOverlapped);
 		CoTask<int> PostRecv(Overlapped* pOverlapped);
@@ -20,7 +22,6 @@ namespace Iocp {
 		bool WSARecv(Overlapped* pOverlapped);
 
 	private:
-		T_Session Session;
 		ByteQueueSend sendBuf;
 		ByteQueueRecv recvBuf;
 		Overlapped* pSendOverlapped;
