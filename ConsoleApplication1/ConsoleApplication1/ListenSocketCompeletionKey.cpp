@@ -4,7 +4,6 @@ namespace Iocp {
 	template<class T_Session>
 	void ListenSocketCompeletionKey<T_Session>::StartCoRoutine()
 	{
-		//auto op = new OpAccept();
 		auto pAcceptOverlapped = new Overlapped();
 		pAcceptOverlapped->coTask = PostAccept(pAcceptOverlapped);
 		pAcceptOverlapped->coTask.Run();
@@ -79,7 +78,7 @@ namespace Iocp {
 
 			//绑定到完成端口
 			auto pNewCompleteKey = new SessionSocketCompeletionKey<T_Session>(pAcceptOverlapped->socket);
-			pNewCompleteKey->Session.Init(*pNewCompleteKey);
+			pNewCompleteKey->Session.OnInit(*pNewCompleteKey);//回调用户自定义函数
 			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)pAcceptOverlapped->socket, this->hIocp, (ULONG_PTR)pNewCompleteKey, 0);
 			if (hPort1 != this->hIocp)
 			{

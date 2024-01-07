@@ -57,8 +57,10 @@ namespace Iocp {
 			std::tie(buf, len) = this->recvBuf.Complete(pOverlapped->numberOfBytesTransferred);
 			//this->sendBuf.Enqueue("asdf", 5);
 			//this->pSendOverlapped->coTask.Run();
-			this->recvBuf.PopFront(this->Session.OnRecv(*this, buf, len));
+			this->recvBuf.PopFront(this->Session.OnRecv(*this, buf, len));//回调用户自定义函数，这里是纯数据，连封包概念都没有，封包是WebSocket协议负责的内容
 		}
+		this->Session.OnDestroy();
+		delete this;
 	}
 	template<class T_Session>
 	CoTask<int> SessionSocketCompeletionKey<T_Session>::PostSend(Overlapped* pOverlapped)

@@ -54,6 +54,9 @@ public:
 	}
 	const std::chrono::duration<int, std::milli> length = 1000ms;
 	using handle = std::coroutine_handle<promise_type>;
+	/// <summary>
+	/// 继续执行协程函数代码执直到遇到yield挂起
+	/// </summary>
 	void Run() { hCoroutine.resume(); }
 private:
 	/// <summary>

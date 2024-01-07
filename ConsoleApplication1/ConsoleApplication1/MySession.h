@@ -4,8 +4,9 @@ class MyWebSocketEndpoint;
 class MySession
 {
 public:
-	void Init(Iocp::SessionSocketCompeletionKey<MySession>& refSession);
+	void OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession);
 	int OnRecv(Iocp::SessionSocketCompeletionKey<MySession> &refSession,const char buf[], int len);
+	void OnDestroy();
 private:
 	MyWebSocketEndpoint* ws = nullptr;
 };

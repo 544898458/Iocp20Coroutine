@@ -134,7 +134,7 @@ public:
 		return 0;
 	}
 };
-void MySession::Init(Iocp::SessionSocketCompeletionKey<MySession>& refSession)
+void MySession::OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession)
 {
 
 }
@@ -147,4 +147,9 @@ int MySession::OnRecv(Iocp::SessionSocketCompeletionKey<MySession>& refSession, 
 
 	ws->from_wire(buf, len);
 	return len;
+}
+
+void MySession::OnDestroy() 
+{
+
 }

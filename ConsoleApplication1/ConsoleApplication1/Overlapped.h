@@ -26,7 +26,11 @@ namespace Iocp {
 		BOOL GetQueuedCompletionStatusReturn;
 		int GetLastErrorReturn;
 
+		/// <summary>
+		/// 只在连接Socket(Session)里用到。监听Socket(Accept)不会用到
+		/// </summary>
 		WSABUF wsabuf = { 0,nullptr };
+
 		void OnComplete(SocketCompeletionKey* pKey, const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
 		{
 			this->numberOfBytesTransferred = number_of_bytes;

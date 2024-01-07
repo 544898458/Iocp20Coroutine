@@ -36,6 +36,12 @@ bool Iocp::Server<T_Session>::WsaStartup()
 		return false;
 	}
 }
+
+/// <summary>
+/// 
+/// </summary>
+/// <typeparam name="T_Session"></typeparam>
+/// <returns></returns>
 template<class T_Session>
 bool Iocp::Server<T_Session>::Init()
 {
@@ -157,14 +163,15 @@ void Iocp::Server<T_Session>::NetworkThreadProc(HANDLE port)
 	//auto hIocp= (HANDLE)lpParameter;
 	//HANDLE port = hIocp;
 	DWORD      number_of_bytes = 0;
-	SocketCompeletionKey* CompletionKey = nullptr;
+	SocketCompeletionKey* pCompletionKey = nullptr;
 	LPOVERLAPPED lpOverlapped;
 	while (true)
 	{
-		BOOL bFlag = GetQueuedCompletionStatus(port, &number_of_bytes, (PULONG_PTR)&CompletionKey, &lpOverlapped, INFINITE);//没完成就会卡在这里，正常
+		//pCompletionKey对应一个socket，lpOverlapped对应一次事件
+		BOOL bFlag = GetQueuedCompletionStatus(port, &number_of_bytes, (PULONG_PTR)&pCompletionKey, &lpOverlapped, INFINITE);//没完成就会卡在这里，正常
 		int lastErr = GetLastError();//可能是Socket强制关闭
 		auto* overlapped = (Iocp::Overlapped*)lpOverlapped;
-		overlapped->OnComplete(CompletionKey,port,number_of_bytes, bFlag, lastErr);
+		overlapped->OnComplete(pCompletionKey,port,number_of_bytes, bFlag, lastErr);
 	}
 
 	return ;
