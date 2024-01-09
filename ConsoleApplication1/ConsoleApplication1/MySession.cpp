@@ -3,30 +3,17 @@
 #include "ListenSocketCompeletionKey.cpp"
 #include "SessionSocketCompeletionKey.cpp"
 
-#include <msgpack.hpp>
 #include <iostream>
 #include <cassert>
 
 #include <ws_endpoint.h>
 #include <codecvt>
+#include "MsgQueue.h"
 
 
 template class Iocp::Server<MySession>;
 template class Iocp::ListenSocketCompeletionKey<MySession>;
 template class Iocp::SessionSocketCompeletionKey<MySession>;
-
-struct MsgLogin {
-	std::string name;
-	std::string pwd;
-	MSGPACK_DEFINE(name, pwd);
-};
-
-struct MsgLoginRet
-{
-	int id;
-	std::string nickName;
-	MSGPACK_DEFINE(id, nickName);
-};
 
 void net_write_cb(char* buf, int64_t size, void* wd)
 {
@@ -111,7 +98,7 @@ public:
 		msgpack::object obj = oh.get();
 		std::cout << obj << std::endl;
 		const auto msgLogin = obj.as<MsgLogin>();
-
+		g_MsgQueue.Push(msgLogin);
 		WebSocketPacket wspacket;
 		// set FIN and opcode
 		wspacket.set_fin(1);

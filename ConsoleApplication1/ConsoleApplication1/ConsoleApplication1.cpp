@@ -10,6 +10,7 @@
 #pragma comment(lib, "Mswsock.lib")
 #include "Server.h"
 #include "MySession.h"
+#include "MsgQueue.h"
 
 BOOL g_flag = TRUE;
 BOOL WINAPI fun(DWORD dwCtrlType)
@@ -50,17 +51,13 @@ int main(void)
 
 
 
-	//阻塞
+	//主逻辑工作线程
 	while (true)
 	{
-		Sleep(1000);
+		Sleep(100);
+		g_MsgQueue.Process();
 	}
 
-	//CloseHandle(hPort);
-	//Clear();
-	////清理网络库
-	//WSACleanup();
 
-	//system("pause");
 	return 0;
 }
