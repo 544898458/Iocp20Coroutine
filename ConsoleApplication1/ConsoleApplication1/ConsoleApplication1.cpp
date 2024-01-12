@@ -54,8 +54,11 @@ int main(void)
 	//主逻辑工作线程
 	while (true)
 	{
-		Sleep(100);
-		g_MsgQueue.Process();
+		Sleep(1000);
+		for (auto p : g_set) 
+		{
+			p->msgQueue.Process();
+		}
 	}
 
 

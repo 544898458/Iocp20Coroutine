@@ -98,7 +98,7 @@ public:
 		msgpack::object obj = oh.get();
 		std::cout << obj << std::endl;
 		const auto msgLogin = obj.as<MsgLogin>();
-		g_MsgQueue.Push(msgLogin);
+		static_cast<MySession*>(this->nt_work_data_)->msgQueue.Push(msgLogin);
 		WebSocketPacket wspacket;
 		// set FIN and opcode
 		wspacket.set_fin(1);
