@@ -10,7 +10,7 @@
 #include <codecvt>
 #include "MsgQueue.h"
 
-
+std::set<MySession*> g_set;
 template class Iocp::Server<MySession>;
 template class Iocp::ListenSocketCompeletionKey<MySession>;
 template class Iocp::SessionSocketCompeletionKey<MySession>;
@@ -98,7 +98,7 @@ public:
 		msgpack::object obj = oh.get();
 		std::cout << obj << std::endl;
 		const auto msgLogin = obj.as<MsgLogin>();
-		static_cast<MySession*>(this->nt_work_data_)->msgQueue.Push(msgLogin);
+		static_cast<Iocp::SessionSocketCompeletionKey<MySession>*>(this->nt_work_data_)->Session.msgQueue.Push(msgLogin);
 		WebSocketPacket wspacket;
 		// set FIN and opcode
 		wspacket.set_fin(1);
@@ -123,7 +123,7 @@ public:
 };
 void MySession::OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession)
 {
-
+	g_set.insert(this);
 }
 int MySession::OnRecv(Iocp::SessionSocketCompeletionKey<MySession>& refSession, const char buf[], int len)
 {

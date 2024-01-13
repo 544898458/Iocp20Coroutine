@@ -15,4 +15,4 @@ private:
 
 };
 
-std::set<MySession*> g_set;
+extern std::set<MySession*> g_set;

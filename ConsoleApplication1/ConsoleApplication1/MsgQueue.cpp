@@ -4,7 +4,7 @@ void MsgQueue::Process()
 {
 	MsgId msgId = MsgId::Login;
 	{
-		std::lock_guard(this->mutex);
+		std::lock_guard lock(this->mutex);
 		if (this->queueMsgId.empty())
 			return;
 		const auto msgId = this->queueMsgId.front();
@@ -24,9 +24,9 @@ void MsgQueue::Process()
 	}
 }
 
-inline void MsgQueue::Push(const MsgLogin& msg)
+void MsgQueue::Push(const MsgLogin& msg)
 {
-	std::lock_guard(this->mutex);
+	std::lock_guard lock(this->mutex);
 	queueLogin.push_back(msg);
 	queueMsgId.push_back(Login);
 }
