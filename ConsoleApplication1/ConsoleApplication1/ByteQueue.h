@@ -3,6 +3,7 @@
 #include<vector>
 #include<WinSock2.h>
 #include <tuple> 
+#include <mutex>
 constexpr int  MAX_RECV_COUNT = 1024;
 
 /// <summary>
@@ -18,6 +19,8 @@ public:
 	//void DeQueue(char* buf, int &len);
 	//int Size();
 private:
+	std::mutex mutex;
+
 	std::vector<char> queue;
 
 	std::vector<char> buf;

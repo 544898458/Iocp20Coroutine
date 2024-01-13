@@ -5,13 +5,15 @@ class MyWebSocketEndpoint;
 class MySession
 {
 public:
+	template<class T> void Send(const T& ref);
 	void OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession);
 	int OnRecv(Iocp::SessionSocketCompeletionKey<MySession> &refSession,const char buf[], int len);
 	void OnDestroy();
 
 	MsgQueue msgQueue;
-private:
 	MyWebSocketEndpoint* ws = nullptr;
+private:
+	
 
 };
 

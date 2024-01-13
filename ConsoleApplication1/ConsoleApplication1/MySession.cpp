@@ -38,21 +38,7 @@ public:
 
 	//	return utf8str;
 	//}
-	string GbkToUtf8(const char* src_str)
-	{
-		int len = MultiByteToWideChar(CP_ACP, 0, src_str, -1, NULL, 0);
-		wchar_t* wstr = new wchar_t[len + 1];
-		memset(wstr, 0, len + 1);
-		MultiByteToWideChar(CP_ACP, 0, src_str, -1, wstr, len);
-		len = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
-		char* str = new char[len + 1];
-		memset(str, 0, len + 1);
-		WideCharToMultiByte(CP_UTF8, 0, wstr, -1, str, len, NULL, NULL);
-		string strTemp = str;
-		if (wstr) delete[] wstr;
-		if (str) delete[] str;
-		return strTemp;
-	}
+
 
 	virtual int32_t user_defined_process(WebSocketPacket& packet, ByteBuffer& frame_payload)override
 	{
@@ -99,14 +85,20 @@ public:
 		std::cout << obj << std::endl;
 		const auto msgLogin = obj.as<MsgLogin>();
 		static_cast<Iocp::SessionSocketCompeletionKey<MySession>*>(this->nt_work_data_)->Session.msgQueue.Push(msgLogin);
+		
+		return 0;
+	}
+	template<class T>
+	void Send(const T &ref) 
+	{
 		WebSocketPacket wspacket;
 		// set FIN and opcode
 		wspacket.set_fin(1);
 		wspacket.set_opcode(0x02);// packet.get_opcode());
 		// set payload data
-		MsgLoginRet ret = { 223,GbkToUtf8("¥Ûœ¿") };
+		
 		std::stringstream buffer;
-		msgpack::pack(buffer, ret);
+		msgpack::pack(buffer, ref);
 		buffer.seekg(0);
 
 		// deserialize the buffer into msgpack::object instance.
@@ -118,9 +110,13 @@ public:
 		// send to client
 		to_wire(output.bytes(), output.length());
 
-		return 0;
 	}
 };
+template<class T>
+void MySession::Send(const T &ref)
+{
+	ws->Send(ref);
+}
 void MySession::OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession)
 {
 	g_set.insert(this);
@@ -140,3 +136,5 @@ void MySession::OnDestroy()
 {
 
 }
+
+template void MySession::Send(const MsgLoginRet&);
