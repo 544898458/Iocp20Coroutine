@@ -19,30 +19,12 @@
     <Filter Include="websocketfiles-master">
       <UniqueIdentifier>{b2ba1926-5385-4229-a02c-db888a35ca1e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="IocpNetwork">
+      <UniqueIdentifier>{b9930064-fd4a-4bfb-b28c-fa9a3254a508}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleApplication1.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Server.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Overlapped.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Op.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SocketCompeletionKey.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ByteQueue.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ListenSocketCompeletionKey.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="SessionSocketCompeletionKey.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MySession.cpp">
@@ -72,30 +54,30 @@
     <ClCompile Include="websocketfiles-master\src\ws_packet.cpp">
       <Filter>websocketfiles-master</Filter>
     </ClCompile>
+    <ClCompile Include="IocpNetwork\Server.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpNetwork\ByteQueue.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpNetwork\ListenSocketCompeletionKey.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpNetwork\Op.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpNetwork\Overlapped.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpNetwork\SessionSocketCompeletionKey.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpNetwork\SocketCompeletionKey.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Server.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Overlapped.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Op.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="SocketCompeletionKey.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Define.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ByteQueue.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ListenSocketCompeletionKey.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="SessionSocketCompeletionKey.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MySession.h">
@@ -124,6 +106,30 @@
     </ClInclude>
     <ClInclude Include="websocketfiles-master\src\ws_packet.h">
       <Filter>websocketfiles-master</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpNetwork\Server.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpNetwork\ByteQueue.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpNetwork\IOp.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpNetwork\ListenSocketCompeletionKey.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpNetwork\Op.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpNetwork\Overlapped.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpNetwork\SessionSocketCompeletionKey.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpNetwork\SocketCompeletionKey.h">
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@
 #include <string.h>
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")
-#include "Server.h"
+#include "IocpNetwork/Server.h"
 #include "MySession.h"
 #include "MsgQueue.h"
 

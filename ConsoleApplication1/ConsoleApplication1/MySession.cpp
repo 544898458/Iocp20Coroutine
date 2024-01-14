@@ -1,7 +1,7 @@
 #include "MySession.h"
-#include "Server.cpp"
-#include "ListenSocketCompeletionKey.cpp"
-#include "SessionSocketCompeletionKey.cpp"
+#include "IocpNetwork/Server.cpp"
+#include "IocpNetwork/ListenSocketCompeletionKey.cpp"
+#include "IocpNetwork/SessionSocketCompeletionKey.cpp"
 
 #include <iostream>
 #include <cassert>
