@@ -11,20 +11,21 @@ namespace Iocp {
 		{
 
 		}
+		virtual ~SessionSocketCompeletionKey();
 		virtual void StartCoRoutine() override;
 		void Send(const char buf[], int len);
 		T_Session Session;
 
 	private:
-		CoTask<int> PostSend(Overlapped* pOverlapped);
-		CoTask<int> PostRecv(Overlapped* pOverlapped);
-		std::tuple<bool, bool>  WSASend(Overlapped* pOverlapped);
-		bool WSARecv(Overlapped* pOverlapped);
+		CoTask<int> PostSend(Overlapped& pOverlapped);
+		CoTask<int> PostRecv(Overlapped& pOverlapped);
+		std::tuple<bool, bool>  WSASend(Overlapped& pOverlapped);
+		bool WSARecv(Overlapped& pOverlapped);
 
 	private:
 		ByteQueueSend sendBuf;
 		ByteQueueRecv recvBuf;
-		Overlapped* pSendOverlapped;
-		Overlapped* pRecvOverlapped;
+		Overlapped pSendOverlapped;
+		Overlapped pRecvOverlapped;
 	};
 }

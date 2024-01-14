@@ -134,7 +134,7 @@ int MySession::OnRecv(Iocp::SessionSocketCompeletionKey<MySession>& refSession, 
 
 void MySession::OnDestroy()
 {
-
+	g_set.erase(this);
 }
 
 template void MySession::Send(const MsgLoginRet&);
