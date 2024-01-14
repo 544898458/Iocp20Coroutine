@@ -16,6 +16,9 @@
     <Filter Include="CoRoutine">
       <UniqueIdentifier>{721d1059-b592-4a84-b1c8-22984b4db18a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="websocketfiles-master">
+      <UniqueIdentifier>{b2ba1926-5385-4229-a02c-db888a35ca1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleApplication1.cpp">
@@ -45,29 +48,29 @@
     <ClCompile Include="MySession.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\websocketfiles-master\src\base64.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\websocketfiles-master\src\main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\websocketfiles-master\src\sha1_portable.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\websocketfiles-master\src\string_helper.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\websocketfiles-master\src\ws_endpoint.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\websocketfiles-master\src\ws_packet.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="MsgQueue.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CoRoutine\CoTask.cpp">
       <Filter>CoRoutine</Filter>
+    </ClCompile>
+    <ClCompile Include="websocketfiles-master\src\base64.cpp">
+      <Filter>websocketfiles-master</Filter>
+    </ClCompile>
+    <ClCompile Include="websocketfiles-master\src\main.cpp">
+      <Filter>websocketfiles-master</Filter>
+    </ClCompile>
+    <ClCompile Include="websocketfiles-master\src\sha1_portable.cpp">
+      <Filter>websocketfiles-master</Filter>
+    </ClCompile>
+    <ClCompile Include="websocketfiles-master\src\string_helper.cpp">
+      <Filter>websocketfiles-master</Filter>
+    </ClCompile>
+    <ClCompile Include="websocketfiles-master\src\ws_endpoint.cpp">
+      <Filter>websocketfiles-master</Filter>
+    </ClCompile>
+    <ClCompile Include="websocketfiles-master\src\ws_packet.cpp">
+      <Filter>websocketfiles-master</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,21 +101,6 @@
     <ClInclude Include="MySession.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\websocketfiles-master\src\base64.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\websocketfiles-master\src\sha1.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\websocketfiles-master\src\string_helper.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\websocketfiles-master\src\ws_endpoint.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\websocketfiles-master\src\ws_packet.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="MsgQueue.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -122,10 +110,25 @@
     <ClInclude Include="CoRoutine\CoTask.h">
       <Filter>CoRoutine</Filter>
     </ClInclude>
+    <ClInclude Include="websocketfiles-master\src\base64.h">
+      <Filter>websocketfiles-master</Filter>
+    </ClInclude>
+    <ClInclude Include="websocketfiles-master\src\sha1.h">
+      <Filter>websocketfiles-master</Filter>
+    </ClInclude>
+    <ClInclude Include="websocketfiles-master\src\string_helper.h">
+      <Filter>websocketfiles-master</Filter>
+    </ClInclude>
+    <ClInclude Include="websocketfiles-master\src\ws_endpoint.h">
+      <Filter>websocketfiles-master</Filter>
+    </ClInclude>
+    <ClInclude Include="websocketfiles-master\src\ws_packet.h">
+      <Filter>websocketfiles-master</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\websocketfiles-master\src\string_helper.inl">
-      <Filter>头文件</Filter>
+    <None Include="websocketfiles-master\src\string_helper.inl">
+      <Filter>websocketfiles-master</Filter>
     </None>
   </ItemGroup>
 </Project>

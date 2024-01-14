@@ -5,6 +5,10 @@
 #include <iostream>
 using namespace std;
 
+/// <summary>
+/// 方便实现协程，没有任何具体逻辑，没有线程，没有网络
+/// </summary>
+/// <typeparam name="T"></typeparam>
 template<typename T>
 class CoTask
 {

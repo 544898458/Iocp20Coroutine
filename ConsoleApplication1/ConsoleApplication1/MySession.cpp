@@ -6,7 +6,7 @@
 #include <iostream>
 #include <cassert>
 
-#include <ws_endpoint.h>
+#include "websocketfiles-master/src/ws_endpoint.h"
 #include <codecvt>
 #include "MsgQueue.h"
 
@@ -85,18 +85,18 @@ public:
 		std::cout << obj << std::endl;
 		const auto msgLogin = obj.as<MsgLogin>();
 		static_cast<Iocp::SessionSocketCompeletionKey<MySession>*>(this->nt_work_data_)->Session.msgQueue.Push(msgLogin);
-		
+
 		return 0;
 	}
 	template<class T>
-	void Send(const T &ref) 
+	void Send(const T& ref)
 	{
 		WebSocketPacket wspacket;
 		// set FIN and opcode
 		wspacket.set_fin(1);
 		wspacket.set_opcode(0x02);// packet.get_opcode());
 		// set payload data
-		
+
 		std::stringstream buffer;
 		msgpack::pack(buffer, ref);
 		buffer.seekg(0);
@@ -113,7 +113,7 @@ public:
 	}
 };
 template<class T>
-void MySession::Send(const T &ref)
+void MySession::Send(const T& ref)
 {
 	ws->Send(ref);
 }
@@ -132,7 +132,7 @@ int MySession::OnRecv(Iocp::SessionSocketCompeletionKey<MySession>& refSession, 
 	return len;
 }
 
-void MySession::OnDestroy() 
+void MySession::OnDestroy()
 {
 
 }
