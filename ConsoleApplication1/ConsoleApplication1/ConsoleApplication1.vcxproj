@@ -140,7 +140,7 @@
     <ClCompile Include="..\..\..\websocketfiles-master\src\string_helper.cpp" />
     <ClCompile Include="..\..\..\websocketfiles-master\src\ws_endpoint.cpp" />
     <ClCompile Include="..\..\..\websocketfiles-master\src\ws_packet.cpp" />
-    <ClCompile Include="CoTask.cpp" />
+    <ClCompile Include="CoRoutine\CoTask.cpp" />
     <ClCompile Include="ListenSocketCompeletionKey.cpp" />
     <ClCompile Include="MsgQueue.cpp" />
     <ClCompile Include="MySession.cpp" />
@@ -159,7 +159,7 @@
     <ClInclude Include="..\..\..\websocketfiles-master\src\ws_endpoint.h" />
     <ClInclude Include="..\..\..\websocketfiles-master\src\ws_packet.h" />
     <ClInclude Include="ConsoleApplication1.h" />
-    <ClInclude Include="CoTask.h" />
+    <ClInclude Include="CoRoutine\CoTask.h" />
     <ClInclude Include="ListenSocketCompeletionKey.h" />
     <ClInclude Include="MsgQueue.h" />
     <ClInclude Include="MySession.h" />
