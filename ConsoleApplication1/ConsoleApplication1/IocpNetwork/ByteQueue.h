@@ -23,6 +23,9 @@ private:
 
 	std::vector<char> queue;
 
+	/// <summary>
+	/// 固定内存，发完才能修改，防止内存移动
+	/// </summary>
 	std::vector<char> buf;
 	std::vector<char>::iterator head ;
 };

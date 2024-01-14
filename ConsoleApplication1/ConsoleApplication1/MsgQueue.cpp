@@ -14,6 +14,7 @@ void MsgQueue::Process()
 	{
 	case Login:
 	{
+		std::lock_guard lock(this->mutex);
 		const auto msg = this->queueLogin.front();
 		this->queueLogin.pop_front();
 		OnRecv(msg);
@@ -26,6 +27,7 @@ void MsgQueue::Process()
 
 void MsgQueue::Push(const MsgLogin& msg)
 {
+	//printf("Push,");
 	std::lock_guard lock(this->mutex);
 	queueLogin.push_back(msg);
 	queueMsgId.push_back(Login);
@@ -97,7 +99,7 @@ std::string Utf8ToGbk(const std::string& str)
 void MsgQueue::OnRecv(const MsgLogin& msg)
 {
 	auto utf8Name = Utf8ToGbk(msg.name);
-	std::cout << "准备广播" << utf8Name;
+	//printf("准备广播%s",utf8Name.c_str());
 	for (auto p : g_set)
 	{
 		const auto strBroadcast = "[" + utf8Name + "]进来了";
