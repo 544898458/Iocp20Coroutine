@@ -17,4 +17,7 @@ private:
 
 };
 
+template<class T>
+void Broadcast(const T& msg);
+
 extern std::set<MySession*> g_set;

@@ -39,7 +39,42 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 	}
 	return TRUE;
 }
-//DWORD WINAPI ThreadProc(LPVOID lpParameter);
+
+class Entity 
+{
+public:
+	Entity() 
+	{
+		//创建一个协程，来回走动
+		co = Patrol();
+	}
+	void Update() 
+	{
+		co.Run();
+	}
+	CoTask<int> Patrol()
+	{
+		while (true)
+		{
+			co_yield 0;
+			x += 0.1;
+
+			MsgNotifyPos msg = {x};
+			Broadcast(msg);
+		}
+	}
+private:
+	CoTask<int> co;
+	float x = 0;
+	//MySession* pSession;
+};
+
+class Space
+{
+public:
+	std::map<int, Entity> mapEntity;
+};
+
 int main(void)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
@@ -50,7 +85,7 @@ int main(void)
 	accept->Init();
 
 
-
+	Entity entity;
 	//主逻辑工作线程
 	while (true)
 	{
@@ -59,6 +94,7 @@ int main(void)
 		{
 			p->msgQueue.Process();
 		}
+		entity.Update();
 	}
 
 

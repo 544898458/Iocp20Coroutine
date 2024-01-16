@@ -100,11 +100,13 @@ void MsgQueue::OnRecv(const MsgLogin& msg)
 {
 	auto utf8Name = Utf8ToGbk(msg.name);
 	//printf("准备广播%s",utf8Name.c_str());
-	for (auto p : g_set)
+	/*for (auto p : g_set)
 	{
 		const auto strBroadcast = "[" + utf8Name + "]进来了";
 		MsgLoginRet ret = { 223,GbkToUtf8(strBroadcast.c_str()) };
 		p->Send(ret);
-	}
-
+	}*/
+	const auto strBroadcast = "[" + utf8Name + "]进来了";
+	MsgLoginRet ret = { 223,GbkToUtf8(strBroadcast.c_str()) };
+	Broadcast(ret);
 }

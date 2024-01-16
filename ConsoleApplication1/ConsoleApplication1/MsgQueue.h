@@ -18,6 +18,13 @@ struct MsgLoginRet
 	std::string nickName;
 	MSGPACK_DEFINE(id, nickName);
 };
+
+struct MsgNotifyPos
+{
+	float x;
+	MSGPACK_DEFINE(x);
+};
+
 class MySession;
 class MsgQueue
 {

@@ -119,15 +119,12 @@ void MySession::Send(const T& ref)
 }
 void MySession::OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession)
 {
+	ws = new MyWebSocketEndpoint(net_write_cb, &refSession);
 	g_set.insert(this);
+	printf("ÃÌº”Session£¨ £”‡%d", g_set.size());
 }
 int MySession::OnRecv(Iocp::SessionSocketCompeletionKey<MySession>& refSession, const char buf[], int len)
 {
-	if (ws == nullptr)
-	{
-		ws = new MyWebSocketEndpoint(net_write_cb, &refSession);
-	}
-
 	ws->from_wire(buf, len);
 	return len;
 }
@@ -135,6 +132,20 @@ int MySession::OnRecv(Iocp::SessionSocketCompeletionKey<MySession>& refSession, 
 void MySession::OnDestroy()
 {
 	g_set.erase(this);
+	printf("…æ≥˝Session£¨ £”‡%d", g_set.size());
 }
 
 template void MySession::Send(const MsgLoginRet&);
+template void MySession::Send(const MsgNotifyPos&);
+
+template<class T>
+void Broadcast(const T& msg)
+{
+	for (auto p : g_set)
+	{
+		p->Send(msg);
+	}
+}
+
+template void Broadcast(const MsgLoginRet&);
+template void Broadcast(const MsgNotifyPos&);
