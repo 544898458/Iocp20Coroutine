@@ -22,6 +22,9 @@
     <Filter Include="IocpNetwork">
       <UniqueIdentifier>{b9930064-fd4a-4bfb-b28c-fa9a3254a508}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LogStrategy">
+      <UniqueIdentifier>{6c3059f5-dbba-4620-9142-06dfb6d5c5db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleApplication1.cpp">
@@ -74,6 +77,15 @@
     </ClCompile>
     <ClCompile Include="IocpNetwork\SocketCompeletionKey.cpp">
       <Filter>IocpNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="LogStrategy\StrategyLog.cpp">
+      <Filter>LogStrategy</Filter>
+    </ClCompile>
+    <ClCompile Include="Space.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +142,15 @@
     </ClInclude>
     <ClInclude Include="IocpNetwork\SocketCompeletionKey.h">
       <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="LogStrategy\StrategyLog.h">
+      <Filter>LogStrategy</Filter>
+    </ClInclude>
+    <ClInclude Include="Space.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

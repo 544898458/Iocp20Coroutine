@@ -11,6 +11,8 @@
 #include "IocpNetwork/Server.h"
 #include "MySession.h"
 #include "MsgQueue.h"
+#include "Space.h"
+#include "Entity.h"
 
 BOOL g_flag = TRUE;
 BOOL WINAPI fun(DWORD dwCtrlType)
@@ -39,41 +41,32 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 	}
 	return TRUE;
 }
-
-class Entity 
+CoTask<int> Patrol(float &x)
 {
-public:
-	Entity() 
+	while (true)
 	{
-		//创建一个协程，来回走动
-		co = Patrol();
-	}
-	void Update() 
-	{
-		co.Run();
-	}
-	CoTask<int> Patrol()
-	{
-		while (true)
-		{
-			co_yield 0;
-			x += 0.1;
+		co_yield 0;
 
-			MsgNotifyPos msg = {x};
-			Broadcast(msg);
-		}
-	}
-private:
-	CoTask<int> co;
-	float x = 0;
-	//MySession* pSession;
-};
+		x += 0.1;
 
-class Space
+		MsgNotifyPos msg = { x };
+		Broadcast(msg);
+	}
+}
+
+CoTask<int> TraceEnemy(float& x)
 {
-public:
-	std::map<int, Entity> mapEntity;
-};
+	while (true)
+	{
+		co_yield 0;
+
+		x += 0.1;
+
+		MsgNotifyPos msg = { x };
+		Broadcast(msg);
+	}
+}
+
 
 int main(void)
 {
@@ -85,7 +78,9 @@ int main(void)
 	accept->Init();
 
 
-	Entity entity;
+	Space space;
+	space.mapEntity[0] = new Entity(-5,space, Patrol);
+	space.mapEntity[1] = new Entity(5, space, TraceEnemy);
 	//主逻辑工作线程
 	while (true)
 	{
@@ -94,7 +89,7 @@ int main(void)
 		{
 			p->msgQueue.Process();
 		}
-		entity.Update();
+		space.Update();
 	}
 
 
