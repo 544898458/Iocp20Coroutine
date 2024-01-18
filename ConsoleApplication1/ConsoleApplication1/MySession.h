@@ -13,7 +13,7 @@ public:
 	MsgQueue msgQueue;
 	MyWebSocketEndpoint* ws = nullptr;
 private:
-	
+	Iocp::SessionSocketCompeletionKey<MySession> *pSession;
 
 };
 
@@ -21,3 +21,4 @@ template<class T>
 void Broadcast(const T& msg);
 
 extern std::set<MySession*> g_set;
+extern std::mutex g_setMutex;

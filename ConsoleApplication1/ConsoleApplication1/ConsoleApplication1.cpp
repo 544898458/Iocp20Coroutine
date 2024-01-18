@@ -60,7 +60,7 @@ CoTask<int> TraceEnemy(float& x)
 	{
 		co_yield 0;
 
-		x += 0.1;
+		x -= 0.1;
 
 		MsgNotifyPos msg = { x };
 		Broadcast(msg);

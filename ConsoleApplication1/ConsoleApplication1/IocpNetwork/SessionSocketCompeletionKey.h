@@ -25,7 +25,7 @@ namespace Iocp {
 	private:
 		ByteQueueSend sendBuf;
 		ByteQueueRecv recvBuf;
-		Overlapped pSendOverlapped;
-		Overlapped pRecvOverlapped;
+		Overlapped sendOverlapped;
+		Overlapped recvOverlapped;
 	};
 }

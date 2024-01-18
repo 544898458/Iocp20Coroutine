@@ -11,6 +11,8 @@
 #include "MsgQueue.h"
 
 std::set<MySession*> g_set;
+std::mutex g_setMutex;
+
 template class Iocp::Server<MySession>;
 template class Iocp::ListenSocketCompeletionKey<MySession>;
 template class Iocp::SessionSocketCompeletionKey<MySession>;
@@ -119,9 +121,11 @@ void MySession::Send(const T& ref)
 }
 void MySession::OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession)
 {
+	std::lock_guard lock(g_setMutex);
 	ws = new MyWebSocketEndpoint(net_write_cb, &refSession);
 	g_set.insert(this);
 	printf("ÃÌº”Session£¨ £”‡%d", g_set.size());
+	pSession = &refSession;
 }
 int MySession::OnRecv(Iocp::SessionSocketCompeletionKey<MySession>& refSession, const char buf[], int len)
 {
@@ -131,6 +135,7 @@ int MySession::OnRecv(Iocp::SessionSocketCompeletionKey<MySession>& refSession, 
 
 void MySession::OnDestroy()
 {
+	std::lock_guard lock(g_setMutex);
 	g_set.erase(this);
 	printf("…æ≥˝Session£¨ £”‡%d", g_set.size());
 }
@@ -141,6 +146,7 @@ template void MySession::Send(const MsgNotifyPos&);
 template<class T>
 void Broadcast(const T& msg)
 {
+	std::lock_guard lock(g_setMutex);
 	for (auto p : g_set)
 	{
 		p->Send(msg);

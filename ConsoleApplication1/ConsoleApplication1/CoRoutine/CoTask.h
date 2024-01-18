@@ -27,7 +27,10 @@ public:
 		// 在以上函数后执行
 		auto initial_suspend() { return std::suspend_always{}; }
 		// 协程结束前执行
-		auto final_suspend() noexcept { return std::suspend_always{}; }
+		auto final_suspend() noexcept
+		{
+			return std::suspend_always{}; 
+		}
 		// 出现未经处理的异常时执行
 		void unhandled_exception() 
 		{
@@ -62,12 +65,14 @@ public:
 	/// 继续执行协程函数代码执直到遇到yield挂起
 	/// </summary>
 	void Run() { hCoroutine.resume(); }
+	bool Finished()const { return hCoroutine.done(); }
 private:
 	/// <summary>
 	/// 唯一的成员变量
 	/// </summary>
 	handle hCoroutine=nullptr;
 	CoTask(handle handle) :hCoroutine(handle) {}
+
 public:
 	//int result;
 	CoTask(){}

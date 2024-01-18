@@ -25,6 +25,7 @@ namespace Iocp {
 		DWORD numberOfBytesTransferred;
 		BOOL GetQueuedCompletionStatusReturn;
 		int GetLastErrorReturn;
+		DWORD dwSendCount;
 
 		/// <summary>
 		/// 只在连接Socket(Session)里用到。监听Socket(Accept)不会用到
