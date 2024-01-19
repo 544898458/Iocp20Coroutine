@@ -27,5 +27,8 @@ namespace Iocp {
 		ByteQueueRecv recvBuf;
 		Overlapped sendOverlapped;
 		Overlapped recvOverlapped;
+		std::mutex lockFinish;
+		bool sendFinish = false;
+		bool recvFinish = false;
 	};
 }
