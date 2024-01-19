@@ -1,0 +1,10 @@
+﻿  Building Custom Rule D:/msgpack-c-cpp-2.1.2/CMakeLists.txt
+  objectc.c
+D:\msgpack-c-cpp-2.1.2\src\objectc.c(158,24): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
+D:\msgpack-c-cpp-2.1.2\src\objectc.c(468,24): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
+  unpack.c
+  version.c
+  vrefbuffer.c
+  zone.c
+  正在生成代码...
+  msgpackc-static.vcxproj -> D:\msgpack-c-cpp-2.1.2\build\Debug\msgpackc.lib

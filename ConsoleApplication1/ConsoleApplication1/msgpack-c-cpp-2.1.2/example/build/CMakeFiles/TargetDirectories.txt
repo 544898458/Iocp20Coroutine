@@ -1,0 +1,16 @@
+D:/msgpack-c-cpp-2.1.2/example/build/CMakeFiles/ALL_BUILD.dir
+D:/msgpack-c-cpp-2.1.2/example/build/CMakeFiles/ZERO_CHECK.dir
+D:/msgpack-c-cpp-2.1.2/example/build/c/CMakeFiles/lib_buffer_unpack.dir
+D:/msgpack-c-cpp-2.1.2/example/build/c/CMakeFiles/simple_c.dir
+D:/msgpack-c-cpp-2.1.2/example/build/c/CMakeFiles/speed_test_uint32_array.dir
+D:/msgpack-c-cpp-2.1.2/example/build/c/CMakeFiles/speed_test_uint64_array.dir
+D:/msgpack-c-cpp-2.1.2/example/build/c/CMakeFiles/user_buffer_unpack.dir
+D:/msgpack-c-cpp-2.1.2/example/build/cpp03/CMakeFiles/class_intrusive.dir
+D:/msgpack-c-cpp-2.1.2/example/build/cpp03/CMakeFiles/class_intrusive_map.dir
+D:/msgpack-c-cpp-2.1.2/example/build/cpp03/CMakeFiles/class_non_intrusive.dir
+D:/msgpack-c-cpp-2.1.2/example/build/cpp03/CMakeFiles/custom.dir
+D:/msgpack-c-cpp-2.1.2/example/build/cpp03/CMakeFiles/enum.dir
+D:/msgpack-c-cpp-2.1.2/example/build/cpp03/CMakeFiles/map_based_versionup.dir
+D:/msgpack-c-cpp-2.1.2/example/build/cpp03/CMakeFiles/protocol_new.dir
+D:/msgpack-c-cpp-2.1.2/example/build/cpp03/CMakeFiles/reuse_zone.dir
+D:/msgpack-c-cpp-2.1.2/example/build/cpp03/CMakeFiles/simple.dir

@@ -1,0 +1,982 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0882AC91-B757-3984-972F-A77477823DBB}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>msgpackc</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\msgpack-c-cpp-2.1.2\build\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">msgpackc.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">msgpackc</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\msgpack-c-cpp-2.1.2\build\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">msgpackc.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">msgpackc</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\msgpack-c-cpp-2.1.2\build\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">msgpackc.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">msgpackc</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\msgpack-c-cpp-2.1.2\build\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">msgpackc.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">msgpackc</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\msgpack-c-cpp-2.1.2\include;D:\msgpack-c-cpp-2.1.2\build\include;D:\msgpack-c-cpp-2.1.2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;CMAKE_INTDIR="Debug";msgpackc_EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\";msgpackc_EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\msgpack-c-cpp-2.1.2\include;D:\msgpack-c-cpp-2.1.2\build\include;D:\msgpack-c-cpp-2.1.2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\msgpack-c-cpp-2.1.2\include;D:\msgpack-c-cpp-2.1.2\build\include;D:\msgpack-c-cpp-2.1.2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/msgpack-c-cpp-2.1.2/build/Debug/msgpackc_import.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/msgpack-c-cpp-2.1.2/build/Debug/msgpackc.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\msgpack-c-cpp-2.1.2\include;D:\msgpack-c-cpp-2.1.2\build\include;D:\msgpack-c-cpp-2.1.2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";msgpackc_EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";msgpackc_EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\msgpack-c-cpp-2.1.2\include;D:\msgpack-c-cpp-2.1.2\build\include;D:\msgpack-c-cpp-2.1.2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\msgpack-c-cpp-2.1.2\include;D:\msgpack-c-cpp-2.1.2\build\include;D:\msgpack-c-cpp-2.1.2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/msgpack-c-cpp-2.1.2/build/Release/msgpackc_import.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/msgpack-c-cpp-2.1.2/build/Release/msgpackc.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\msgpack-c-cpp-2.1.2\include;D:\msgpack-c-cpp-2.1.2\build\include;D:\msgpack-c-cpp-2.1.2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel";msgpackc_EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";msgpackc_EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\msgpack-c-cpp-2.1.2\include;D:\msgpack-c-cpp-2.1.2\build\include;D:\msgpack-c-cpp-2.1.2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\msgpack-c-cpp-2.1.2\include;D:\msgpack-c-cpp-2.1.2\build\include;D:\msgpack-c-cpp-2.1.2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/msgpack-c-cpp-2.1.2/build/MinSizeRel/msgpackc_import.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/msgpack-c-cpp-2.1.2/build/MinSizeRel/msgpackc.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\msgpack-c-cpp-2.1.2\include;D:\msgpack-c-cpp-2.1.2\build\include;D:\msgpack-c-cpp-2.1.2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="RelWithDebInfo";msgpackc_EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\";msgpackc_EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\msgpack-c-cpp-2.1.2\include;D:\msgpack-c-cpp-2.1.2\build\include;D:\msgpack-c-cpp-2.1.2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\msgpack-c-cpp-2.1.2\include;D:\msgpack-c-cpp-2.1.2\build\include;D:\msgpack-c-cpp-2.1.2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/msgpack-c-cpp-2.1.2/build/RelWithDebInfo/msgpackc_import.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/msgpack-c-cpp-2.1.2/build/RelWithDebInfo/msgpackc.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\msgpack-c-cpp-2.1.2\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule D:/msgpack-c-cpp-2.1.2/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/msgpack-c-cpp-2.1.2 -BD:/msgpack-c-cpp-2.1.2/build --check-stamp-file D:/msgpack-c-cpp-2.1.2/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.28\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.28\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindGTest.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindZLIB.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\GoogleTest.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\SelectLibraryConfigurations.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\WriteBasicConfigVersionFile.cmake;D:\msgpack-c-cpp-2.1.2\Files.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeCCompiler.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeCXXCompiler.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeRCCompiler.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeSystem.cmake;D:\msgpack-c-cpp-2.1.2\msgpack-config.cmake.in;D:\msgpack-c-cpp-2.1.2\msgpack.pc.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule D:/msgpack-c-cpp-2.1.2/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/msgpack-c-cpp-2.1.2 -BD:/msgpack-c-cpp-2.1.2/build --check-stamp-file D:/msgpack-c-cpp-2.1.2/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.28\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.28\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindGTest.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindZLIB.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\GoogleTest.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\SelectLibraryConfigurations.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\WriteBasicConfigVersionFile.cmake;D:\msgpack-c-cpp-2.1.2\Files.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeCCompiler.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeCXXCompiler.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeRCCompiler.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeSystem.cmake;D:\msgpack-c-cpp-2.1.2\msgpack-config.cmake.in;D:\msgpack-c-cpp-2.1.2\msgpack.pc.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule D:/msgpack-c-cpp-2.1.2/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/msgpack-c-cpp-2.1.2 -BD:/msgpack-c-cpp-2.1.2/build --check-stamp-file D:/msgpack-c-cpp-2.1.2/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.28\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.28\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindGTest.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindZLIB.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\GoogleTest.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\SelectLibraryConfigurations.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\WriteBasicConfigVersionFile.cmake;D:\msgpack-c-cpp-2.1.2\Files.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeCCompiler.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeCXXCompiler.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeRCCompiler.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeSystem.cmake;D:\msgpack-c-cpp-2.1.2\msgpack-config.cmake.in;D:\msgpack-c-cpp-2.1.2\msgpack.pc.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule D:/msgpack-c-cpp-2.1.2/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/msgpack-c-cpp-2.1.2 -BD:/msgpack-c-cpp-2.1.2/build --check-stamp-file D:/msgpack-c-cpp-2.1.2/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.28\Modules\BasicConfigVersion-SameMajorVersion.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCCompilerABI.c;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCXXCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCXXCompilerABI.cpp;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeCompilerIdDetection.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompileFeatures.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompilerABI.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineCompilerId.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeDetermineSystem.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeFindBinUtils.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakePackageConfigHelpers.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeParseImplicitIncludeInfo.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeParseImplicitLinkInfo.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeParseLibraryArchitecture.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeRCCompiler.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeSystem.cmake.in;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestCompilerCommon.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CMakeTestRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\ADSP-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\ARMCC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\ARMClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\AppleClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Borland-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Cray-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\CrayClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\GHS-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\GNU-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\HP-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IAR-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Intel-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\LCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\NVHPC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\OrangeC-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\PGI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\PathScale-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SCO-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\TI-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Tasking-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\Watcom-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XL-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\zOS-C-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\CompilerId\VS-10.vcxproj.in;C:\Program Files\CMake\share\cmake-3.28\Modules\FindDoxygen.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindGTest.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\FindZLIB.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\GoogleTest.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Internal\FeatureTesting.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-Determine-CXX.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\SelectLibraryConfigurations.cmake;C:\Program Files\CMake\share\cmake-3.28\Modules\WriteBasicConfigVersionFile.cmake;D:\msgpack-c-cpp-2.1.2\Files.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeCCompiler.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeCXXCompiler.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeRCCompiler.cmake;D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\3.28.0-rc3\CMakeSystem.cmake;D:\msgpack-c-cpp-2.1.2\msgpack-config.cmake.in;D:\msgpack-c-cpp-2.1.2\msgpack.pc.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\msgpack-c-cpp-2.1.2\build\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="D:\msgpack-c-cpp-2.1.2\src\objectc.c" />
+    <ClCompile Include="D:\msgpack-c-cpp-2.1.2\src\unpack.c" />
+    <ClCompile Include="D:\msgpack-c-cpp-2.1.2\src\version.c" />
+    <ClCompile Include="D:\msgpack-c-cpp-2.1.2\src\vrefbuffer.c" />
+    <ClCompile Include="D:\msgpack-c-cpp-2.1.2\src\zone.c" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\fbuffer.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\gcc_atomic.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\object.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\pack.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\pack_define.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\pack_template.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\alpha.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\arm.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\blackfin.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\convex.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\ia64.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\m68k.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\mips.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\parisc.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\ppc.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\pyramid.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\rs6k.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\sparc.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\superh.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\sys370.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\sys390.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\x86.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\x86\32.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\x86\64.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\architecture\z.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\borland.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\clang.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\comeau.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\compaq.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\diab.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\digitalmars.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\dignus.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\edg.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\ekopath.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\gcc.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\gcc_xml.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\greenhills.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\hp_acc.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\iar.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\ibm.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\intel.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\kai.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\llvm.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\metaware.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\metrowerks.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\microtec.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\mpw.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\palm.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\pgi.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\sgi_mipspro.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\sunpro.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\tendra.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\visualc.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\compiler\watcom.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\detail\_cassert.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\detail\_exception.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\detail\comp_detected.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\detail\endian_compat.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\detail\os_detected.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\detail\platform_detected.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\detail\test.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\detail\test_def.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\hardware.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\hardware\simd.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\hardware\simd\arm.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\hardware\simd\arm\versions.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\hardware\simd\ppc.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\hardware\simd\ppc\versions.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\hardware\simd\x86.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\hardware\simd\x86\versions.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\hardware\simd\x86_amd.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\hardware\simd\x86_amd\versions.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\language.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\language\objc.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\language\stdc.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\language\stdcpp.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\c.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\c\_prefix.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\c\gnu.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\c\uc.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\c\vms.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\c\zos.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\std.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\std\_prefix.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\std\cxx.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\std\dinkumware.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\std\libcomo.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\std\modena.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\std\msl.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\std\roguewave.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\std\sgi.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\std\stdcpp3.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\std\stlport.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\library\std\vacpp.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\make.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\aix.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\amigaos.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\android.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\beos.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\bsd.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\bsd\bsdi.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\bsd\dragonfly.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\bsd\free.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\bsd\net.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\bsd\open.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\cygwin.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\haiku.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\hpux.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\ios.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\irix.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\linux.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\macos.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\os400.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\qnxnto.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\solaris.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\unix.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\vms.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\os\windows.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\other.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\other\endian.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\platform.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\platform\mingw.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\platform\windows_desktop.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\platform\windows_phone.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\platform\windows_runtime.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\platform\windows_store.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\version.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\predef\version_number.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\sbuffer.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\sysdep.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\unpack.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\unpack_define.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\unpack_template.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\util.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\version.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\version_master.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\vrefbuffer.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\zbuffer.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\zone.h" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\adaptor_base.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\adaptor_base_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\array_ref.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\array_ref_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\bool.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\boost\fusion.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\boost\msgpack_variant.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\boost\msgpack_variant_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\boost\optional.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\boost\string_ref.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\boost\string_view.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\carray.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\char_ptr.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\check_container_size.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\check_container_size_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\cpp11\array.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\cpp11\array_char.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\cpp11\array_unsigned_char.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\cpp11\forward_list.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\cpp11\reference_wrapper.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\cpp11\shared_ptr.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\cpp11\tuple.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\cpp11\unique_ptr.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\cpp11\unordered_map.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\cpp11\unordered_set.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\define.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\define_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\deque.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\ext.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\ext_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\fixint.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\fixint_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\float.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\int.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\int_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\list.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\map.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\map_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\msgpack_tuple.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\msgpack_tuple_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\nil.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\nil_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\pair.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\raw.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\raw_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\set.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\size_equal_only.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\size_equal_only_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\string.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\tr1\unordered_map.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\tr1\unordered_set.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\v4raw.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\v4raw_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\vector.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\vector_bool.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\vector_char.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\adaptor\vector_unsigned_char.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\cpp_config.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\cpp_config_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\fbuffer.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\fbuffer_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\gcc_atomic.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\iterator.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\iterator_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\meta.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\meta_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\object.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\object_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\object_fwd.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\object_fwd_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\pack.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\pack_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\parse_return.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\arithmetic.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\arithmetic\add.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\arithmetic\dec.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\arithmetic\detail\div_base.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\arithmetic\div.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\arithmetic\inc.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\arithmetic\mod.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\arithmetic\mul.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\arithmetic\sub.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\data.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\detail\get_data.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\elem.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\enum.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\insert.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\pop_back.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\pop_front.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\push_back.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\push_front.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\remove.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\replace.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\reverse.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\size.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\to_list.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\to_seq.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\array\to_tuple.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\assert_msg.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\cat.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\comma.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\comma_if.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\comparison.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\comparison\equal.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\comparison\greater.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\comparison\greater_equal.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\comparison\less.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\comparison\less_equal.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\comparison\not_equal.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\config\config.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\config\limits.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\control.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\control\deduce_d.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\control\detail\dmc\while.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\control\detail\edg\while.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\control\detail\msvc\while.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\control\detail\while.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\control\expr_if.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\control\expr_iif.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\control\if.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\control\iif.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\control\while.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\debug.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\debug\assert.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\debug\error.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\debug\line.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\dec.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\detail\auto_rec.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\detail\check.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\detail\dmc\auto_rec.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\detail\is_binary.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\detail\is_nullary.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\detail\is_unary.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\detail\null.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\detail\split.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\empty.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\enum.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\enum_params.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\enum_params_with_a_default.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\enum_params_with_defaults.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\enum_shifted.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\enum_shifted_params.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\expand.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\expr_if.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\facilities.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\facilities\apply.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\facilities\detail\is_empty.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\facilities\empty.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\facilities\expand.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\facilities\identity.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\facilities\intercept.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\facilities\is_1.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\facilities\is_empty.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\facilities\is_empty_or_1.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\facilities\is_empty_variadic.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\facilities\overload.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\for.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\identity.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\if.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\inc.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iterate.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\bounds\lower1.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\bounds\lower2.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\bounds\lower3.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\bounds\lower4.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\bounds\lower5.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\bounds\upper1.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\bounds\upper2.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\bounds\upper3.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\bounds\upper4.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\bounds\upper5.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\finish.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\iter\forward1.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\iter\forward2.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\iter\forward3.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\iter\forward4.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\iter\forward5.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\iter\reverse1.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\iter\reverse2.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\iter\reverse3.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\iter\reverse4.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\iter\reverse5.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\local.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\rlocal.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\self.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\detail\start.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\iterate.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\local.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\iteration\self.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\library.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\limits.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\adt.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\append.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\at.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\cat.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\detail\dmc\fold_left.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\detail\edg\fold_left.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\detail\edg\fold_right.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\detail\fold_left.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\detail\fold_right.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\enum.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\filter.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\first_n.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\fold_left.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\fold_right.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\for_each.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\for_each_i.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\for_each_product.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\rest_n.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\reverse.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\size.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\to_array.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\to_seq.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\to_tuple.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\list\transform.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\logical.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\logical\and.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\logical\bitand.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\logical\bitnor.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\logical\bitor.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\logical\bitxor.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\logical\bool.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\logical\compl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\logical\nor.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\logical\not.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\logical\or.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\logical\xor.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\max.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\min.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\punctuation.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\punctuation\comma.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\punctuation\comma_if.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\punctuation\detail\is_begin_parens.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\punctuation\is_begin_parens.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\punctuation\paren.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\punctuation\paren_if.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\punctuation\remove_parens.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repeat.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repeat_2nd.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repeat_3rd.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repeat_from_to.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repeat_from_to_2nd.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repeat_from_to_3rd.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\deduce_r.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\deduce_z.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\detail\dmc\for.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\detail\edg\for.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\detail\for.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\detail\msvc\for.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\enum.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\enum_binary_params.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\enum_params.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\enum_params_with_a_default.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\enum_params_with_defaults.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\enum_shifted.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\enum_shifted_binary_params.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\enum_shifted_params.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\enum_trailing.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\enum_trailing_binary_params.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\enum_trailing_params.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\for.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\repeat.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\repetition\repeat_from_to.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\selection.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\selection\max.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\selection\min.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\cat.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\detail\binary_transform.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\detail\is_empty.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\detail\split.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\elem.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\enum.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\filter.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\first_n.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\fold_left.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\fold_right.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\for_each.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\for_each_i.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\for_each_product.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\insert.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\pop_back.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\pop_front.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\push_back.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\push_front.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\remove.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\replace.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\rest_n.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\reverse.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\seq.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\size.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\subseq.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\to_array.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\to_list.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\to_tuple.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\transform.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\seq\variadic_seq_to_seq.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\slot.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\slot\counter.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\slot\detail\counter.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\slot\detail\def.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\slot\detail\shared.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\slot\detail\slot1.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\slot\detail\slot2.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\slot\detail\slot3.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\slot\detail\slot4.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\slot\detail\slot5.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\slot\slot.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\stringize.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\detail\is_single_return.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\eat.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\elem.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\enum.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\insert.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\pop_back.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\pop_front.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\push_back.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\push_front.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\rem.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\remove.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\replace.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\reverse.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\size.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\to_array.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\to_list.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\tuple\to_seq.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\variadic.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\variadic\detail\is_single_return.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\variadic\elem.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\variadic\size.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\variadic\to_array.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\variadic\to_list.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\variadic\to_seq.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\variadic\to_tuple.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\while.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\preprocessor\wstringize.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\sbuffer.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\sbuffer_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\type.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\unpack.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\unpack_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\unpack_exception.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\adaptor_base.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\adaptor_base_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\array_ref.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\array_ref_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\bool.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\boost\fusion.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\boost\msgpack_variant.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\boost\msgpack_variant_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\boost\optional.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\boost\string_ref.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\boost\string_view.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\carray.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\char_ptr.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\check_container_size.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\check_container_size_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\cpp11\array.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\cpp11\array_char.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\cpp11\array_unsigned_char.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\cpp11\forward_list.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\cpp11\reference_wrapper.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\cpp11\shared_ptr.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\cpp11\tuple.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\cpp11\unique_ptr.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\cpp11\unordered_map.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\cpp11\unordered_set.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\define.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\define_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\deque.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\detail\cpp03_define_array.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\detail\cpp03_define_array_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\detail\cpp03_define_map.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\detail\cpp03_define_map_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\detail\cpp03_msgpack_tuple.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\detail\cpp03_msgpack_tuple_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\detail\cpp11_define_array.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\detail\cpp11_define_array_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\detail\cpp11_define_map.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\detail\cpp11_define_map_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\detail\cpp11_msgpack_tuple.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\detail\cpp11_msgpack_tuple_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\ext.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\ext_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\fixint.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\fixint_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\float.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\int.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\int_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\list.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\map.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\map_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\msgpack_tuple.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\msgpack_tuple_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\nil.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\nil_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\pair.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\raw.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\raw_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\set.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\size_equal_only.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\size_equal_only_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\string.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\tr1\unordered_map.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\tr1\unordered_set.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\v4raw.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\v4raw_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\vector.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\vector_bool.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\vector_char.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\adaptor\vector_unsigned_char.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\cpp_config.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\cpp_config_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\detail\cpp03_zone.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\detail\cpp03_zone_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\detail\cpp11_zone.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\detail\cpp11_zone_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\fbuffer.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\fbuffer_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\iterator.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\iterator_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\meta.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\meta_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\object.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\object_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\object_fwd.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\object_fwd_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\pack.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\pack_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\parse_return.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\preprocessor.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\sbuffer.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\sbuffer_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\unpack.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\unpack_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\unpack_exception.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\version.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\versioning.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\vrefbuffer.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\vrefbuffer_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\zbuffer.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\zbuffer_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\zone.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v1\zone_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\adaptor_base.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\adaptor_base_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\array_ref_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\boost\msgpack_variant_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\check_container_size_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\define_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\detail\cpp03_define_array_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\detail\cpp03_define_map_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\detail\cpp03_msgpack_tuple_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\detail\cpp11_define_array_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\detail\cpp11_define_map_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\detail\cpp11_msgpack_tuple_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\ext_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\fixint_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\int_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\map_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\msgpack_tuple_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\nil_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\raw_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\size_equal_only_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\adaptor\v4raw_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\cpp_config_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\create_object_visitor.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\detail\cpp03_zone_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\detail\cpp11_zone_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\fbuffer_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\iterator_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\meta_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\null_visitor.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\object.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\object_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\object_fwd.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\object_fwd_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\pack_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\parse.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\parse_return.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\sbuffer_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\unpack.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\unpack_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\vrefbuffer_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\x3_parse.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\x3_unpack.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\zbuffer_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\v2\zone_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\version.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\versioning.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\vrefbuffer.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\vrefbuffer_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\zbuffer.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\zbuffer_decl.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\zone.hpp" />
+    <ClInclude Include="D:\msgpack-c-cpp-2.1.2\include\msgpack\zone_decl.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="D:\msgpack-c-cpp-2.1.2\build\ZERO_CHECK.vcxproj">
+      <Project>{271C3A57-2FA3-3E75-A7B1-1CB70918EAC1}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

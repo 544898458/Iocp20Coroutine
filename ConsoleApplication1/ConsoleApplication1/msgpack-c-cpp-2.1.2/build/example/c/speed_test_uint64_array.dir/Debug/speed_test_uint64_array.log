@@ -1,0 +1,3 @@
+﻿  Building Custom Rule D:/msgpack-c-cpp-2.1.2/example/c/CMakeLists.txt
+  speed_test_uint64_array.c
+  speed_test_uint64_array.vcxproj -> D:\msgpack-c-cpp-2.1.2\build\example\c\Debug\speed_test_uint64_array.exe

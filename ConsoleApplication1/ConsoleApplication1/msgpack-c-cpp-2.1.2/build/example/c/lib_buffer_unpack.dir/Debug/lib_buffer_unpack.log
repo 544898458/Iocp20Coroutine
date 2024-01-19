@@ -1,0 +1,3 @@
+﻿  Building Custom Rule D:/msgpack-c-cpp-2.1.2/example/c/CMakeLists.txt
+  lib_buffer_unpack.c
+  lib_buffer_unpack.vcxproj -> D:\msgpack-c-cpp-2.1.2\build\example\c\Debug\lib_buffer_unpack.exe

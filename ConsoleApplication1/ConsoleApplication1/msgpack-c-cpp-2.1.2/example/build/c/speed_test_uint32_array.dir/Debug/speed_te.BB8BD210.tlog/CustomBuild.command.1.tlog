@@ -1,0 +1,10 @@
+^D:\MSGPACK-C-CPP-2.1.2\EXAMPLE\C\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/msgpack-c-cpp-2.1.2/example -BD:/msgpack-c-cpp-2.1.2/example/build --check-stamp-file D:/msgpack-c-cpp-2.1.2/example/build/c/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
