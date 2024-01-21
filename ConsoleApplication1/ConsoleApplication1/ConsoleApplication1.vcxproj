@@ -142,6 +142,9 @@
     <ClCompile Include="IocpNetwork\SessionSocketCompeletionKey.cpp" />
     <ClCompile Include="IocpNetwork\SocketCompeletionKey.cpp" />
     <ClCompile Include="LogStrategy\StrategyLog.cpp" />
+    <ClCompile Include="mainGpp.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="MsgQueue.cpp" />
     <ClCompile Include="MySession.cpp" />
     <ClCompile Include="ConsoleApplication1.cpp" />

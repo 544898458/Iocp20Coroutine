@@ -64,9 +64,14 @@ public:
 	/// <summary>
 	/// 继续执行协程函数代码执直到遇到yield挂起
 	/// </summary>
-	void Run() { hCoroutine.resume(); }
+	void Run() 
+	{ 
+		std::lock_guard lock(mutex);
+		hCoroutine.resume();
+	}
 	bool Finished()const { return hCoroutine.done(); }
 private:
+	std::mutex mutex;
 	/// <summary>
 	/// 唯一的成员变量
 	/// </summary>

@@ -67,7 +67,7 @@ CoTask<int> TraceEnemy(float& x)
 	}
 }
 
-
+///*
 int main(void)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
@@ -105,3 +105,4 @@ int main(void)
 
 	return 0;
 }
+//*/
