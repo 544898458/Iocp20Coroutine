@@ -36,8 +36,15 @@ namespace Iocp {
 		this->sendOverlapped.coTask.Run();
 	}
 	template<class T_Session>
+	bool SessionSocketCompeletionKey<T_Session>::Finished()
+	{
+		std::lock_guard lock(lockFinish);
+		return recvFinish && sendFinish;
+	}
+	template<class T_Session>
 	CoTask<int> SessionSocketCompeletionKey<T_Session>::PostRecv(Overlapped& pOverlapped)
 	{
+		printf("调用PostRecv,this=%d,ThreadId=%d\n",this,GetCurrentThreadId());
 		while (true)
 		{
 			if (!WSARecv(pOverlapped))
@@ -77,9 +84,9 @@ namespace Iocp {
 				co_return;
 			}
 		}
-		this->Session.OnDestroy();
-		delete this;
-		printf("PostRecv协程结束，已删除对象,GetCurrentThreadId=%d\n", GetCurrentThreadId());
+		//this->Session.OnDestroy();
+		//delete this;
+		printf("PostRecv协程结束,GetCurrentThreadId=%d\n", GetCurrentThreadId());
 	}
 	template<class T_Session>
 	CoTask<int> SessionSocketCompeletionKey<T_Session>::PostSend(Overlapped& pOverlapped)
@@ -113,7 +120,7 @@ namespace Iocp {
 
 			if (0 == pOverlapped.numberOfBytesTransferred && pOverlapped.GetLastErrorReturn != ERROR_IO_PENDING)
 			{
-				printf("numberOfBytesTransferred==0可能断网了,不再调用WSASend,pOverlapped.GetLastErrorReturn=%d,GetThreadId=%d\n", pOverlapped.GetLastErrorReturn,GetCurrentThreadId());
+				printf("numberOfBytesTransferred==0可能断网了,不再调用WSASend,pOverlapped.GetLastErrorReturn=%d,GetThreadId=%d\n", pOverlapped.GetLastErrorReturn, GetCurrentThreadId());
 				CloseSocket();
 				//delete pOverlapped;
 				break;
@@ -127,7 +134,7 @@ namespace Iocp {
 		}
 
 		//if (!this->recvOverlapped.coTask.Finished())
-		
+
 		{
 			std::lock_guard lock(lockFinish);
 			sendFinish = true;
@@ -138,9 +145,9 @@ namespace Iocp {
 			}
 		}
 
-		this->Session.OnDestroy();
-		delete this;
-		printf("PostSend协程结束，已删除对象,GetCurrentThreadId=%d\n", GetCurrentThreadId());
+		//this->Session.OnDestroy();
+		//delete this;
+		printf("PostSend协程结束,GetCurrentThreadId=%d\n", GetCurrentThreadId());
 	}
 
 	template<class T_Session>
@@ -151,6 +158,7 @@ namespace Iocp {
 		DWORD dwFlag(0);
 		std::tie(pOverlapped.wsabuf.buf, pOverlapped.wsabuf.len) = this->recvBuf.BuildRecvBuf();
 		//pOverlapped.GetQueuedCompletionStatusReturn
+		printf("调用::WSARecv\n");
 		const auto recvRet = ::WSARecv(Socket(), &pOverlapped.wsabuf, 1, &dwRecvCount, &dwFlag, &pOverlapped.overlapped, NULL);
 		//pOverlapped.GetLastErrorReturn 
 		const auto err = WSAGetLastError();

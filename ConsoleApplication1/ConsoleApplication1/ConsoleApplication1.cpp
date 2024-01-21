@@ -85,9 +85,19 @@ int main(void)
 	while (true)
 	{
 		Sleep(1000);
+		std::set<Iocp::SessionSocketCompeletionKey<MySession>*> setDelete;
 		for (auto p : g_set) 
 		{
-			p->msgQueue.Process();
+			p->Session.msgQueue.Process();
+			if (p->Finished())
+				setDelete.insert(p);
+		}
+		for (auto p : setDelete) 
+		{
+			p->Session.OnDestroy();
+			delete p;
+			printf("已删除对象,GetCurrentThreadId=%d\n", GetCurrentThreadId());
+
 		}
 		space.Update();
 	}

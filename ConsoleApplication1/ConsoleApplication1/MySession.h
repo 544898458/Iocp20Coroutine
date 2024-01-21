@@ -20,5 +20,5 @@ private:
 template<class T>
 void Broadcast(const T& msg);
 
-extern std::set<MySession*> g_set;
+extern std::set<Iocp::SessionSocketCompeletionKey<MySession>*> g_set;
 extern std::mutex g_setMutex;

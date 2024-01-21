@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\msgpack-c-cpp-2.1.2\include;D:\websocketfiles-master\src;$(IncludePath)</IncludePath>
+    <IncludePath>msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
