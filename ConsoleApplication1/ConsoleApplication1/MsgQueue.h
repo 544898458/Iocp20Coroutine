@@ -21,8 +21,9 @@ struct MsgLoginRet
 
 struct MsgNotifyPos
 {
+	long entityId;
 	float x;
-	MSGPACK_DEFINE(x);
+	MSGPACK_DEFINE(entityId,x);
 };
 
 class MySession;

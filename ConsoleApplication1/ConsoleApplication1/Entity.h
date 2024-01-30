@@ -7,7 +7,7 @@ class Space;
 class Entity
 {
 public:
-	Entity(float x,Space &space, std::function< CoTask<int>(float&)> fun);
+	Entity(float x,Space &space, std::function< CoTask<int>(Entity*,float&)> fun);
 	void Update()
 	{
 		co.Run();
