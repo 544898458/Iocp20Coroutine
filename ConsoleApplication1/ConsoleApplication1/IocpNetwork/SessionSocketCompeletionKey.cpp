@@ -17,11 +17,13 @@ namespace Iocp {
 			//PostSend(pOverlapped);
 			//pSendOverlapped = new Overlapped();
 			sendOverlapped.coTask = PostSend(sendOverlapped);
+			sendOverlapped.coTask.desc = "PostSend";
 			sendOverlapped.coTask.Run();
 		}
 		{
 			//pRecvOverlapped = new Overlapped();
 			recvOverlapped.coTask = PostRecv(recvOverlapped);
+			recvOverlapped.coTask.desc = "PostRecv";
 			recvOverlapped.coTask.Run();
 		}
 		return;
@@ -61,7 +63,7 @@ namespace Iocp {
 				pOverlapped.numberOfBytesTransferred, pOverlapped.GetLastErrorReturn);
 			if (0 == pOverlapped.numberOfBytesTransferred)
 			{
-				printf("numberOfBytesTransferred==0可能断网了,不再调用WSARecv");
+				printf("numberOfBytesTransferred==0可能断网了,不再调用WSARecv\n");
 				CloseSocket();
 				//delete pOverlapped;
 				break;
@@ -204,13 +206,13 @@ namespace Iocp {
 		//pOverlapped.numberOfBytesTransferred = dwSendCount;
 		if (0 == sendRet)
 		{
-			printf("WSASend重叠的操作成功启动，WSAGetLastError=%d", err);
+			printf("WSASend重叠的操作成功启动，WSAGetLastError=%d\n", err);
 			return std::make_tuple(true, true);//如果未发生任何错误，并且发送操作已立即完成， 则 WSASend 返回零。 在这种情况下，一旦调用线程处于可警报状态，就已计划调用完成例程。
 		}
 		if (SOCKET_ERROR != sendRet ||
 			ERROR_IO_PENDING != err)
 		{
-			printf("WSASend重叠的操作未成功启动，并且不会发生完成指示。%d", pOverlapped.GetLastErrorReturn);
+			printf("WSASend重叠的操作未成功启动，并且不会发生完成指示。%d\n", pOverlapped.GetLastErrorReturn);
 			closesocket(Socket());
 			return std::make_tuple(false, true);// 任何其他错误代码都指示重叠的操作未成功启动，并且不会发生完成指示。
 		}

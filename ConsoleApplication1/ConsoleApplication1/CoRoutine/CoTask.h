@@ -67,9 +67,18 @@ public:
 	void Run() 
 	{ 
 		std::lock_guard lock(mutex);
+		if (hCoroutine.done())
+		{
+			printf("%s协程已结束，不再执行\n", desc.c_str());
+			return;
+		}
 		hCoroutine.resume();
 	}
-	bool Finished()const { return hCoroutine.done(); }
+	bool Finished()
+	{ 
+		std::lock_guard lock(mutex);
+		return hCoroutine.done(); 
+	}
 private:
 	std::mutex mutex;
 	/// <summary>
@@ -77,8 +86,10 @@ private:
 	/// </summary>
 	handle hCoroutine=nullptr;
 	CoTask(handle handle) :hCoroutine(handle) {}
+	
 
 public:
+	std::string desc;
 	//int result;
 	CoTask(){}
 	//CoTask(CoTask&& other)noexcept :hCoroutine(other.hCoroutine) { other.hCoroutine = nullptr; }
