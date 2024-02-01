@@ -67,11 +67,23 @@ public:
 	void Run() 
 	{ 
 		std::lock_guard lock(mutex);
-		if (hCoroutine.done())
-		{
-			printf("%s协程已结束，不再执行\n", desc.c_str());
+		//if (hCoroutine.done())
+		//{
+		//	printf("%s协程已结束，不再执行\n", desc.c_str());
+		//	return;
+		//}
+		hCoroutine.resume();
+	}
+	void Run2(const bool &send)
+	{
+		std::lock_guard lock(mutex);
+		if (send)
 			return;
-		}
+		//if (hCoroutine.done())
+		//{
+		//	printf("%s协程已结束，不再执行\n", desc.c_str());
+		//	return;
+		//}
 		hCoroutine.resume();
 	}
 	bool Finished()

@@ -26,7 +26,7 @@ namespace Iocp {
 		BOOL GetQueuedCompletionStatusReturn;
 		int GetLastErrorReturn;
 		DWORD dwSendCount;
-
+		bool callSend;
 		/// <summary>
 		/// 只在连接Socket(Session)里用到。监听Socket(Accept)不会用到
 		/// </summary>

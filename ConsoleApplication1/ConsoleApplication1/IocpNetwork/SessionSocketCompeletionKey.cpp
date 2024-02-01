@@ -35,7 +35,7 @@ namespace Iocp {
 			return;
 
 		this->sendBuf.queue.Enqueue(buf, len);
-		this->sendOverlapped.coTask.Run();
+		this->sendOverlapped.coTask.Run2(this->sendOverlapped.callSend);
 	}
 	template<class T_Session>
 	bool SessionSocketCompeletionKey<T_Session>::Finished()
@@ -91,38 +91,39 @@ namespace Iocp {
 		printf("PostRecv协程结束,GetCurrentThreadId=%d\n", GetCurrentThreadId());
 	}
 	template<class T_Session>
-	CoTask<int> SessionSocketCompeletionKey<T_Session>::PostSend(Overlapped& pOverlapped)
+	CoTask<int> SessionSocketCompeletionKey<T_Session>::PostSend(Overlapped& overlapped)
 	{
 		while (true)
 		{
-			bool needYield, callSend;
-			std::tie(needYield, callSend) = WSASend(pOverlapped);
+			bool needYield;
+			std::tie(needYield, overlapped.callSend) = WSASend(overlapped);
 			if (!needYield)
 			{
 				printf("可能断网了,不再调用WSASend");
 				//delete pOverlapped;
 				break;
 			}
-			if (callSend)
+			if (overlapped.callSend)
 				printf("准备异步等待WSASend结果,GetThreadId=%d\n", GetCurrentThreadId());
 			else
 				printf("等有数据再发WSASend,GetThreadId=%d\n", GetCurrentThreadId());
 
 			printf("开始异步等WSASend结果,pOverlapped.numberOfBytesTransferred=%d,callSend=%d,wsabuf.len=%d,GetLastErrorReturn=%d,GetThreadId=%d\n",
-				pOverlapped.numberOfBytesTransferred, callSend, pOverlapped.wsabuf.len, pOverlapped.GetLastErrorReturn, GetCurrentThreadId());
+				overlapped.numberOfBytesTransferred, overlapped.callSend, overlapped.wsabuf.len, overlapped.GetLastErrorReturn, GetCurrentThreadId());
 			co_yield 0;
 			printf("已异步等到WSASend结果,pOverlapped.numberOfBytesTransferred=%d,callSend=%d,wsabuf.len=%d,GetLastErrorReturn=%d,GetThreadId=%d\n",
-				pOverlapped.numberOfBytesTransferred, callSend, pOverlapped.wsabuf.len, pOverlapped.GetLastErrorReturn, GetCurrentThreadId());
+				overlapped.numberOfBytesTransferred, overlapped.callSend, overlapped.wsabuf.len, overlapped.GetLastErrorReturn, GetCurrentThreadId());
 
-			if (!callSend)
+			if (!overlapped.callSend)
 			{
 				printf("有数据了，准备发WSASend\n");
 				continue;
 			}
 
-			if (0 == pOverlapped.numberOfBytesTransferred && pOverlapped.GetLastErrorReturn != ERROR_IO_PENDING)
+
+			if (0 == overlapped.numberOfBytesTransferred && overlapped.GetLastErrorReturn != ERROR_IO_PENDING)
 			{
-				printf("numberOfBytesTransferred==0可能断网了,不再调用WSASend,pOverlapped.GetLastErrorReturn=%d,GetThreadId=%d\n", pOverlapped.GetLastErrorReturn, GetCurrentThreadId());
+				printf("numberOfBytesTransferred==0可能断网了,不再调用WSASend,pOverlapped.GetLastErrorReturn=%d,GetThreadId=%d\n", overlapped.GetLastErrorReturn, GetCurrentThreadId());
 				CloseSocket();
 				//delete pOverlapped;
 				break;
@@ -132,7 +133,7 @@ namespace Iocp {
 			//	printf("ERROR_IO_PENDING还没发完，下次还要接着发\n");
 			//}
 
-			this->sendBuf.Complete(pOverlapped.numberOfBytesTransferred);
+			this->sendBuf.Complete(overlapped.numberOfBytesTransferred);
 		}
 
 		//if (!this->recvOverlapped.coTask.Finished())
