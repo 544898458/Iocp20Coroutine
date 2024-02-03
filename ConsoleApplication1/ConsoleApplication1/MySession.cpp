@@ -82,11 +82,27 @@ public:
 			break;
 		}
 
-		msgpack::object_handle oh = msgpack::unpack(frame_payload.bytes(), frame_payload.length());
+		const auto msgId = (uint32_t)frame_payload.bytes();//没判断越界
+		const auto headSize = sizeof(msgId);
+		msgpack::object_handle oh = msgpack::unpack(frame_payload.bytes() + headSize, frame_payload.length() - headSize);//没判断越界
 		msgpack::object obj = oh.get();
 		std::cout << obj << std::endl;
-		const auto msgLogin = obj.as<MsgLogin>();
-		static_cast<Iocp::SessionSocketCompeletionKey<MySession>*>(this->nt_work_data_)->Session.msgQueue.Push(msgLogin);
+		auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompeletionKey<MySession>*>(this->nt_work_data_);
+		switch (msgId)
+		{
+		case MsgId::Login:
+		{
+			const auto msg = obj.as<MsgLogin>();
+			pSessionSocketCompeletionKey->Session.msgQueue.Push(msg);
+		}
+		break;
+		case MsgId::Move:
+		{
+			const auto msg = obj.as<MsgMove>();
+			pSessionSocketCompeletionKey->Session.msgQueue.Push(msgLogin);
+		}
+		break;
+		}
 
 		return 0;
 	}

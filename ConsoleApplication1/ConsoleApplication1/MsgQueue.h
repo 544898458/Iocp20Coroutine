@@ -4,12 +4,21 @@
 enum MsgId
 {
 	Login,
+	Move,
 };
 struct MsgLogin
 {
 	std::string name;
 	std::string pwd;
 	MSGPACK_DEFINE(name, pwd);
+};
+
+struct MsgMove
+{
+	float x;
+	float y;
+	float z;
+	MSGPACK_DEFINE(x, y,z);
 };
 
 struct MsgLoginRet
