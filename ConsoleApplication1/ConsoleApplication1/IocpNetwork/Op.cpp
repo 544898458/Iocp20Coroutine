@@ -1,6 +1,5 @@
 #include "Op.h"
 #include"SocketCompeletionKey.h"
-#include<stdio.h>
 
 //void OpRecv::OnComplete(MyOverlapped* pOverlapped, SocketCompeletionKey* pKey,const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
 //{

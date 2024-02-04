@@ -1,3 +1,5 @@
+#include <glog/logging.h>
+
 #include "MySession.h"
 #include "IocpNetwork/Server.cpp"
 #include "IocpNetwork/ListenSocketCompeletionKey.cpp"
@@ -141,7 +143,8 @@ void MySession::OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession)
 	std::lock_guard lock(g_setMutex);
 	ws = new MyWebSocketEndpoint(net_write_cb, &refSession);
 	g_set.insert(&refSession);
-	printf("ÃÌº”Session£¨ £”‡%d", g_set.size());
+	#include <glog/logging.h>
+	LOG(INFO) << "ÃÌº”Session£¨ £”‡" << g_set.size();
 	pSession = &refSession;
 }
 int MySession::OnRecv(Iocp::SessionSocketCompeletionKey<MySession>& refSession, const char buf[], int len)
@@ -154,7 +157,7 @@ void MySession::OnDestroy()
 {
 	std::lock_guard lock(g_setMutex);
 	g_set.erase(this->pSession);
-	printf("…æ≥˝Session£¨ £”‡%d", g_set.size());
+	LOG(INFO) << "…æ≥˝Session£¨ £”‡" << g_set.size();
 }
 
 template void MySession::Send(const MsgLoginRet&);

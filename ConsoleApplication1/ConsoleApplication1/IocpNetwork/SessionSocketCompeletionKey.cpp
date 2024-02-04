@@ -1,3 +1,5 @@
+#include <glog/logging.h>
+
 #include "SessionSocketCompeletionKey.h"
 namespace Iocp {
 	template<class T_Session>
@@ -46,24 +48,23 @@ namespace Iocp {
 	template<class T_Session>
 	CoTask<int> SessionSocketCompeletionKey<T_Session>::PostRecv(Overlapped& pOverlapped)
 	{
-		printf("调用PostRecv,this=%d,ThreadId=%d\n",this,GetCurrentThreadId());
+		LOG(INFO) << "调用PostRecv,this=" << this << ",ThreadId=" << GetCurrentThreadId();
 		while (true)
 		{
 			if (!WSARecv(pOverlapped))
 			{
-				printf("可能断网了,不再调用WSARecv\n");
+				LOG(INFO) << ("可能断网了,不再调用WSARecv\n");
 				CloseSocket();
 				//delete pOverlapped;
 				break;
 			}
 
-			printf("\n准备异步等待WSARecv结果\n");
+			LOG(INFO) << ("\n准备异步等待WSARecv结果\n");
 			co_yield 0;
-			printf("已异步等到WSARecv结果,numberOfBytesTransferred=%d,GetLastErrorReturn=%d\n",
-				pOverlapped.numberOfBytesTransferred, pOverlapped.GetLastErrorReturn);
+			LOG(INFO) << "已异步等到WSARecv结果,numberOfBytesTransferred=" << pOverlapped.numberOfBytesTransferred << ",GetLastErrorReturn=" << pOverlapped.GetLastErrorReturn;
 			if (0 == pOverlapped.numberOfBytesTransferred)
 			{
-				printf("numberOfBytesTransferred==0可能断网了,不再调用WSARecv\n");
+				LOG(INFO) << ("numberOfBytesTransferred==0可能断网了,不再调用WSARecv\n");
 				CloseSocket();
 				//delete pOverlapped;
 				break;
@@ -82,13 +83,13 @@ namespace Iocp {
 			recvFinish = true;
 			if (!sendFinish)
 			{
-				printf("PostRecv协程结束，但是sendOverlapped还没结束,GetCurrentThreadId=%d\n", GetCurrentThreadId());
+				LOG(INFO) << "PostRecv协程结束，但是sendOverlapped还没结束,GetCurrentThreadId=" << GetCurrentThreadId();
 				co_return;
 			}
 		}
 		//this->Session.OnDestroy();
 		//delete this;
-		printf("PostRecv协程结束,GetCurrentThreadId=%d\n", GetCurrentThreadId());
+		LOG(INFO) << "PostRecv协程结束,GetCurrentThreadId=" << GetCurrentThreadId();
 	}
 	template<class T_Session>
 	CoTask<int> SessionSocketCompeletionKey<T_Session>::PostSend(Overlapped& overlapped)
@@ -99,31 +100,33 @@ namespace Iocp {
 			std::tie(needYield, overlapped.callSend) = WSASend(overlapped);
 			if (!needYield)
 			{
-				printf("可能断网了,不再调用WSASend");
+				LOG(INFO) << ("可能断网了,不再调用WSASend");
 				//delete pOverlapped;
 				break;
 			}
 			if (overlapped.callSend)
-				printf("准备异步等待WSASend结果,GetThreadId=%d\n", GetCurrentThreadId());
+				LOG(INFO) << ("准备异步等待WSASend结果,GetThreadId=%d\n", GetCurrentThreadId());
 			else
-				printf("等有数据再发WSASend,GetThreadId=%d\n", GetCurrentThreadId());
+				LOG(INFO) << ("等有数据再发WSASend,GetThreadId=%d\n", GetCurrentThreadId());
 
-			printf("开始异步等WSASend结果,pOverlapped.numberOfBytesTransferred=%d,callSend=%d,wsabuf.len=%d,GetLastErrorReturn=%d,GetThreadId=%d\n",
-				overlapped.numberOfBytesTransferred, overlapped.callSend, overlapped.wsabuf.len, overlapped.GetLastErrorReturn, GetCurrentThreadId());
+			LOG(INFO) << "开始异步等WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
+				<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len
+				<< ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn << ",GetThreadId=GetCurrentThreadId()";
 			co_yield 0;
-			printf("已异步等到WSASend结果,pOverlapped.numberOfBytesTransferred=%d,callSend=%d,wsabuf.len=%d,GetLastErrorReturn=%d,GetThreadId=%d\n",
-				overlapped.numberOfBytesTransferred, overlapped.callSend, overlapped.wsabuf.len, overlapped.GetLastErrorReturn, GetCurrentThreadId());
+			LOG(INFO) << "已异步等到WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
+				<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len << ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn
+				<< ",GetThreadId=" << GetCurrentThreadId();
 
 			if (!overlapped.callSend)
 			{
-				printf("有数据了，准备发WSASend\n");
+				LOG(INFO) << ("有数据了，准备发WSASend\n");
 				continue;
 			}
 
 
 			if (0 == overlapped.numberOfBytesTransferred && overlapped.GetLastErrorReturn != ERROR_IO_PENDING)
 			{
-				printf("numberOfBytesTransferred==0可能断网了,不再调用WSASend,pOverlapped.GetLastErrorReturn=%d,GetThreadId=%d\n", overlapped.GetLastErrorReturn, GetCurrentThreadId());
+				LOG(INFO) << ("numberOfBytesTransferred==0可能断网了,不再调用WSASend,pOverlapped.GetLastErrorReturn=%d,GetThreadId=%d\n", overlapped.GetLastErrorReturn, GetCurrentThreadId());
 				CloseSocket();
 				//delete pOverlapped;
 				break;
@@ -143,14 +146,14 @@ namespace Iocp {
 			sendFinish = true;
 			if (!recvFinish)
 			{
-				printf("PostSend协程结束，但是recvOverlapped还没结束,GetCurrentThreadId=%d\n", GetCurrentThreadId());
+				LOG(INFO) << "PostSend协程结束，但是recvOverlapped还没结束,GetCurrentThreadId=" << GetCurrentThreadId();
 				co_return;
 			}
 		}
 
 		//this->Session.OnDestroy();
 		//delete this;
-		printf("PostSend协程结束,GetCurrentThreadId=%d\n", GetCurrentThreadId());
+		LOG(INFO) << "PostSend协程结束,GetCurrentThreadId=" << GetCurrentThreadId();
 	}
 
 	template<class T_Session>
@@ -161,7 +164,7 @@ namespace Iocp {
 		DWORD dwFlag(0);
 		std::tie(pOverlapped.wsabuf.buf, pOverlapped.wsabuf.len) = this->recvBuf.BuildRecvBuf();
 		//pOverlapped.GetQueuedCompletionStatusReturn
-		printf("调用::WSARecv\n");
+		LOG(INFO) << ("调用::WSARecv\n");
 		const auto recvRet = ::WSARecv(Socket(), &pOverlapped.wsabuf, 1, &dwRecvCount, &dwFlag, &pOverlapped.overlapped, NULL);
 		//pOverlapped.GetLastErrorReturn 
 		const auto err = WSAGetLastError();
@@ -174,7 +177,7 @@ namespace Iocp {
 		if (SOCKET_ERROR != recvRet ||
 			ERROR_IO_PENDING != err)
 		{
-			printf("WSARecv重叠的操作未成功启动，并且不会发生完成指示。%d\n", err);
+			LOG(INFO) << "WSARecv重叠的操作未成功启动，并且不会发生完成指示。" << err;
 			return false;// 任何其他错误代码都指示重叠的操作未成功启动，并且不会发生完成指示。
 		}
 
@@ -207,13 +210,13 @@ namespace Iocp {
 		//pOverlapped.numberOfBytesTransferred = dwSendCount;
 		if (0 == sendRet)
 		{
-			printf("WSASend重叠的操作成功启动，WSAGetLastError=%d\n", err);
+			LOG(INFO) << "WSASend重叠的操作成功启动，WSAGetLastError=" << err;
 			return std::make_tuple(true, true);//如果未发生任何错误，并且发送操作已立即完成， 则 WSASend 返回零。 在这种情况下，一旦调用线程处于可警报状态，就已计划调用完成例程。
 		}
 		if (SOCKET_ERROR != sendRet ||
 			ERROR_IO_PENDING != err)
 		{
-			printf("WSASend重叠的操作未成功启动，并且不会发生完成指示。%d\n", pOverlapped.GetLastErrorReturn);
+			LOG(INFO) << "WSASend重叠的操作未成功启动，并且不会发生完成指示。" << pOverlapped.GetLastErrorReturn;
 			closesocket(Socket());
 			return std::make_tuple(false, true);// 任何其他错误代码都指示重叠的操作未成功启动，并且不会发生完成指示。
 		}

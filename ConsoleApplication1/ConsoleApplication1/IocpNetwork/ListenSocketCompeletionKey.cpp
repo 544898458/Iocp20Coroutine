@@ -1,5 +1,7 @@
+#include <glog/logging.h>
 #include "ListenSocketCompeletionKey.h"
 #include "SessionSocketCompeletionKey.h"
+
 namespace Iocp {
 	template<class T_Session>
 	void ListenSocketCompeletionKey<T_Session>::StartCoRoutine()
@@ -35,11 +37,11 @@ namespace Iocp {
 
 		if (pAcceptOverlapped->GetLastErrorReturn != ERROR_IO_PENDING)
 		{
-			printf("AcceptEx err=%d", pAcceptOverlapped->GetLastErrorReturn);
+			LOG(INFO) << "AcceptEx err="<< pAcceptOverlapped->GetLastErrorReturn;
 			switch (pAcceptOverlapped->GetLastErrorReturn)
 			{
 			default:
-				printf("AcceptEx err=%d", pAcceptOverlapped->GetLastErrorReturn);
+				LOG(INFO) << "AcceptEx err=" << pAcceptOverlapped->GetLastErrorReturn;
 				break;
 			}
 
@@ -55,13 +57,13 @@ namespace Iocp {
 			pAcceptOverlapped->socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 			if (AcceptEx(pAcceptOverlapped))
 			{
-				printf("同步AcceptEx完成\n");
+				LOG(INFO) << "同步AcceptEx完成";
 			}
 			else
 			{
-				printf("准备异步等待重叠AcceptEx完成\n");
+				LOG(INFO) << "准备异步等待重叠AcceptEx完成\n";
 				co_yield 0;
-				printf("异步重叠AcceptEx完成\n");
+				LOG(INFO) << ("异步重叠AcceptEx完成\n");
 			}
 
 			if (!pAcceptOverlapped->GetQueuedCompletionStatusReturn)
@@ -69,7 +71,7 @@ namespace Iocp {
 				switch (pAcceptOverlapped->GetLastErrorReturn)
 				{
 				case ERROR_OPERATION_ABORTED:
-					printf("一般是Overlapped没清零引起的。The I/O operation has been aborted because of either a thread exit or an application request.");
+					LOG(INFO) << ("一般是Overlapped没清零引起的。The I/O operation has been aborted because of either a thread exit or an application request.");
 					break;
 				default:
 					break;
@@ -83,7 +85,7 @@ namespace Iocp {
 			if (hPort1 != this->hIocp)
 			{
 				int a = GetLastError();
-				printf("连上来的Socket关联到完成端口失败，Error=%d\n", a);
+				LOG(INFO) << "连上来的Socket关联到完成端口失败，Error="<< a;
 				//closesocket(pKey->socket);// all_socks[count]);
 				delete pNewCompleteKey;
 				co_return 0;

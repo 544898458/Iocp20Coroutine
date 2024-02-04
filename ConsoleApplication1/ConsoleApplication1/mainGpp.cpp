@@ -1,4 +1,4 @@
-#include <iostream>  
+#include <glog/logging.h>
 #include <thread>
 #include"./CoRoutine/CoTask.h"
 
@@ -10,14 +10,14 @@ using namespace std;
 typedef int Status;
 CoTask<int> PostSend()
 {
-	printf("PostSend\n");
+	LOG(INFO) << "PostSend";
 	bool needYield, callSend;
 	co_yield 0;
-	printf("PostSend end\n");
+	LOG(INFO) << ("PostSend end\n");
 }
 void NetworkThreadProc(CoTask<int>* co)
 {
-	printf("NetworkThreadProc\n");
+	LOG(INFO) << ("NetworkThreadProc\n");
 	co->Run();
 }
 

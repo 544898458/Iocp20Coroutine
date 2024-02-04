@@ -1,10 +1,5 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
-#include <stdio.h>
-#include <stdlib.h>
 
-#include <Winsock2.h>
-#include <mswsock.h>
-#include <WS2tcpip.h>
 #include <string.h>
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")
@@ -14,8 +9,6 @@
 #include "Space.h"
 #include "Entity.h"
 
-#define GLOG_NO_ABBREVIATED_SEVERITIES
-#define GLOG_USE_GLOG_EXPORT
 #include <glog/logging.h>
 #pragma comment(lib, "glog.lib")
 
@@ -78,9 +71,10 @@ int main(void)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
 
 	FLAGS_alsologtostderr = true;//是否将日志输出到文件和stderr
+	FLAGS_colorlogtostdout = true;
 	google::InitGoogleLogging("test");//使用glog之前必须先初始化库，仅需执行一次，括号内为程序名
 
-	LOG(INFO) << "Found " <<  " cookies";
+	//LOG(INFO) << "Found " <<  " cookies";
 
 	SetConsoleCtrlHandler(fun, TRUE);
 	
@@ -107,7 +101,7 @@ int main(void)
 		{
 			p->Session.OnDestroy();
 			delete p;
-			printf("已删除对象,GetCurrentThreadId=%d\n", GetCurrentThreadId());
+			LOG(INFO) << "已删除对象,GetCurrentThreadId=" << GetCurrentThreadId();
 
 		}
 		space.Update();

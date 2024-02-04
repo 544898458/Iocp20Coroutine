@@ -3,7 +3,6 @@
 #include <mswsock.h>
 
 #include"./Overlapped.h"
-#include<stdio.h>
 #include<assert.h>
 #include"../CoRoutine/CoTask.h"
 /// <summary>

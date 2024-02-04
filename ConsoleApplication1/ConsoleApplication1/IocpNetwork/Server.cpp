@@ -1,5 +1,7 @@
+#include <glog/logging.h>
+
 #include <Winsock2.h>
-#include <stdio.h>
+
 #include <WS2tcpip.h>
 #include <mswsock.h>
 #include <winnt.h>
@@ -20,16 +22,16 @@ bool Iocp::Server<T_Session>::WsaStartup()
 		switch (nRes)
 		{
 		case WSASYSNOTREADY:
-			printf("重启下电脑试试，或者检查网络库");
+			LOG(INFO) << "重启下电脑试试，或者检查网络库";
 			break;
 		case WSAVERNOTSUPPORTED:
-			printf("请更新网络库");
+			LOG(INFO) << ("请更新网络库");
 			break;
 		case WSAEINPROGRESS:
-			printf("请重新启动");
+			LOG(INFO) << ("请重新启动");
 			break;
 		case WSAEPROCLIM:
-			printf("请尝试关掉不必要的软件，以为当前网络运行提供充足资源");
+			LOG(INFO) << ("请尝试关掉不必要的软件，以为当前网络运行提供充足资源");
 			break;
 		}
 
@@ -66,7 +68,7 @@ bool Iocp::Server<T_Session>::Init()
 	if (0 == pListenCompleteKey->hIocp)
 	{
 		int a = GetLastError();
-		printf("%d\n", a);
+		LOG(INFO) <<  a;
 		closesocket(socketAccept);
 		//清理网络库
 		//WSACleanup();
@@ -77,7 +79,7 @@ bool Iocp::Server<T_Session>::Init()
 	if (iocp != pListenCompleteKey->hIocp)
 	{
 		int a = GetLastError();
-		printf("完成端口绑定socket失败%d\n", a);
+		LOG(INFO) << "完成端口绑定socket失败" << a;
 
 		CloseHandle(iocp);
 		closesocket(socketAccept);
@@ -101,7 +103,7 @@ bool Iocp::Server<T_Session>::Init()
 		switch (a) {
 		case WSAEADDRNOTAVAIL:szErr = "The requested address is not valid in its context.在其上下文中，该请求的地址无效。"; break;
 		}
-		printf("a=%d,%s", a, szErr);
+		LOG(INFO) << "a=" << a <<","<< szErr;
 
 
 		//释放

@@ -1,3 +1,5 @@
+#include <glog/logging.h>
+
 #include "SocketCompeletionKey.h"
 
 SOCKET SocketCompeletionKey::Socket() const 
@@ -7,7 +9,7 @@ SOCKET SocketCompeletionKey::Socket() const
 
 void SocketCompeletionKey::CloseSocket()
 {
-	printf("CloseSocket %d\n", socket);
+	LOG(INFO) << "CloseSocket " << socket;
 	closesocket(socket);
 	socket = NULL;
 }
