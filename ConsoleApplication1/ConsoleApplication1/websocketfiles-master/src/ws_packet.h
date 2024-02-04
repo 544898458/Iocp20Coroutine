@@ -24,7 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define _WS_PACKET_H_
 
 #include <stdlib.h>
-#include <iostream>
+//#include <iostream>
 #include <vector>
 #include <map>
 #include <string>

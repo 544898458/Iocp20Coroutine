@@ -27,7 +27,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef _WS_SVR_HANDLER_H_
 #define _WS_SVR_HANDLER_H_
 
-#include <iostream>
+//#include <iostream>
 #include <vector>
 #include <string>
 #include <stdint.h>

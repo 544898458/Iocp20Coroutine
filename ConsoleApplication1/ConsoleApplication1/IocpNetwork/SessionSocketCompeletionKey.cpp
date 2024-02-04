@@ -111,7 +111,7 @@ namespace Iocp {
 
 			LOG(INFO) << "开始异步等WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
 				<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len
-				<< ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn << ",GetThreadId=GetCurrentThreadId()";
+				<< ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn << ",GetThreadId=" << GetCurrentThreadId();
 			co_yield 0;
 			LOG(INFO) << "已异步等到WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
 				<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len << ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn

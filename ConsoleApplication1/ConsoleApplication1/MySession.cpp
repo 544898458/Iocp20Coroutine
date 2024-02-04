@@ -5,7 +5,7 @@
 #include "IocpNetwork/ListenSocketCompeletionKey.cpp"
 #include "IocpNetwork/SessionSocketCompeletionKey.cpp"
 
-#include <iostream>
+//#include <iostream>
 #include <cassert>
 
 #include "websocketfiles-master/src/ws_endpoint.h"
@@ -80,7 +80,7 @@ public:
 			//user_defined_process(packet, frame_payload);
 			break;
 		default:
-			std::cout << "WebSocketEndpoint - recv an unknown opcode." << std::endl;
+			LOG(INFO) << "WebSocketEndpoint - recv an unknown opcode." ;
 			break;
 		}
 
@@ -88,7 +88,7 @@ public:
 		const auto headSize = sizeof(msgId);
 		msgpack::object_handle oh = msgpack::unpack(frame_payload.bytes() + headSize, frame_payload.length() - headSize);//ц╩еп╤от╫╫Г
 		msgpack::object obj = oh.get();
-		std::cout << obj << std::endl;
+		LOG(INFO) << obj ;
 		auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompeletionKey<MySession>*>(this->nt_work_data_);
 		switch (msgId)
 		{

@@ -20,6 +20,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#include <glog/logging.h>
 #include "sha1.h"
 #include "base64.h"
 #include "ws_packet.h"
@@ -98,20 +99,20 @@ uint64_t WebSocketPacket::recv_dataframe(ByteBuffer &input)
 {
 	int header_size = fetch_frame_info(input);
 
-	//std::cout << "WebSocketPacket: header size: " << header_size
+	//LOG(INFO)  << "WebSocketPacket: header size: " << header_size
 	//		  << " payload_length_: " << payload_length_ << " input.length: " << input.length() << std::endl;
 
 	if (payload_length_ + header_size > input.length())
 	{
 		// buffer size is not enough, so we continue recving data
-		std::cout << "WebSocketPacket: recv_dataframe: continue recving data." << std::endl;
+		LOG(INFO)  << "WebSocketPacket: recv_dataframe: continue recving data." << std::endl;
 		input.resetoft();
 		return 0;
 	}
 
 	fetch_payload(input);
 
-	std::cout << "WebSocketPacket: received data with header size: " << header_size << " payload size:" << payload_length_
+	LOG(INFO)  << "WebSocketPacket: received data with header size: " << header_size << " payload size:" << payload_length_
 			  << " input oft size:" << input.getoft() << std::endl;
 	//return payload_length_;
 	return input.getoft();
@@ -159,7 +160,7 @@ int32_t WebSocketPacket::fetch_frame_info(ByteBuffer &input)
 
 		if (payload_length_ > 0xFFFFFFFF)
 		{
-			//std::cout >>
+			//LOG(INFO)  >>
 		}
 	}
 	else
@@ -260,7 +261,7 @@ int32_t WebSocketPacket::pack_dataframe(ByteBuffer &output)
 		char value = 0;
 		// save masking key
 		output.append((char *)masking_key_, 4);
-		std::cout << "WebSocketPacket: send data with header size: " << output.length()
+		LOG(INFO)  << "WebSocketPacket: send data with header size: " << output.length()
 				  << " payload size:" << payload_length_ << std::endl;
 		for (uint64_t i = 0; i < payload_length_; i++)
 		{
@@ -271,7 +272,7 @@ int32_t WebSocketPacket::pack_dataframe(ByteBuffer &output)
 	}
 	else
 	{
-		std::cout << "WebSocketPacket: send data with header size: " << output.length()
+		LOG(INFO)  << "WebSocketPacket: send data with header size: " << output.length()
 				  << " payload size:" << payload_length_ << std::endl<<std::endl;
 		output.append(payload_.bytes(), payload_.length());
 	}
@@ -335,7 +336,7 @@ int32_t WebSocketPacket::fetch_hs_element(const std::string &msg)
 		}
 
 		params_[k] = v;
-		std::cout << "handshake element k:" << k.c_str() << " v:" << v.c_str() << std::endl;
+		LOG(INFO)  << "handshake element k:" << k.c_str() << " v:" << v.c_str() << std::endl;
 	}
 
 	return endpos + 4;

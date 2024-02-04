@@ -19,6 +19,7 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+#include <glog/logging.h>
 
 #include "ws_endpoint.h"
 
@@ -48,7 +49,7 @@ int32_t WebSocketEndpoint::process(const char *readbuf, int32_t size, nt_write_c
 {
     if (write_cb == NULL || work_data == NULL)
     {
-        std::cout << "WebSocketEndpoint - Attention: write cb is NULL! It will skip current read buf!" << std::endl;
+        LOG(INFO) << "WebSocketEndpoint - Attention: write cb is NULL! It will skip current read buf!" ;
         return 0;
     }
 
@@ -61,7 +62,7 @@ int32_t WebSocketEndpoint::process(const char *readbuf, int32_t size, nt_write_c
 int32_t WebSocketEndpoint::from_wire(const char *readbuf, int32_t size)
 {
     fromwire_buf_.append(readbuf, size);
-    std::cout<< "WebSocketEndpoint - set fromwire_buf, current length:"<<fromwire_buf_.length()<<std::endl;
+    LOG(INFO) << "WebSocketEndpoint - set fromwire_buf, current length:"<<fromwire_buf_.length()<<std::endl;
     while (true)
     {
         int64_t nrcv = parse_packet(fromwire_buf_);
@@ -69,7 +70,7 @@ int32_t WebSocketEndpoint::from_wire(const char *readbuf, int32_t size)
         { // for next one
             // clear used data
             int64_t n_used = fromwire_buf_.getoft();
-            std::cout<< "WebSocketEndpoint - fromwire_buf: used data:"<<n_used <<" nrcv:"<<nrcv
+            LOG(INFO) << "WebSocketEndpoint - fromwire_buf: used data:"<<n_used <<" nrcv:"<<nrcv
                 <<" length:"<<fromwire_buf_.length()<<std::endl;
             fromwire_buf_.erase(nrcv);
             fromwire_buf_.resetoft();
@@ -132,8 +133,7 @@ int64_t WebSocketEndpoint::parse_packet(ByteBuffer &input)
         wspacket.pack_handshake_rsp(hs_rsp);
         to_wire(hs_rsp.c_str(), hs_rsp.length());
         ws_handshake_completed_ = true;
-        std::cout << "WebsocketEndpont - handshake successful!" << std::endl
-                  << std::endl;
+        LOG(INFO) << "WebsocketEndpont - handshake successful!" ;
 
         return wspacket.get_hs_length();
     }
@@ -149,7 +149,7 @@ int64_t WebSocketEndpoint::parse_packet(ByteBuffer &input)
 
         if (ndf > 0xFFFFFFFF)
         {
-            std::cout << "Attention:frame data length exceeds the max value of a uint32_t varable!" << std::endl;
+            LOG(INFO) << "Attention:frame data length exceeds the max value of a uint32_t varable!" << std::endl;
         }
 
         ByteBuffer &payload = wspacket.get_payload();
@@ -177,36 +177,36 @@ int32_t WebSocketEndpoint::process_message_data(WebSocketPacket &packet, ByteBuf
     {
     case WebSocketPacket::WSOpcode_Continue:
         // add your process code here
-        std::cout << "WebSocketEndpoint - recv a Continue opcode." << std::endl;
+        LOG(INFO) << "WebSocketEndpoint - recv a Continue opcode." << std::endl;
         user_defined_process(packet, frame_payload);
         break;
     case WebSocketPacket::WSOpcode_Text:
         // add your process code here
-        std::cout << "WebSocketEndpoint - recv a Text opcode." << std::endl;
+        LOG(INFO) << "WebSocketEndpoint - recv a Text opcode." << std::endl;
         user_defined_process(packet, frame_payload);
         break;
     case WebSocketPacket::WSOpcode_Binary:
         // add your process code here
-        std::cout << "WebSocketEndpoint - recv a Binary opcode." << std::endl;
+        LOG(INFO) << "WebSocketEndpoint - recv a Binary opcode." << std::endl;
         user_defined_process(packet, frame_payload);
         break;
     case WebSocketPacket::WSOpcode_Close:
         // add your process code here
-        std::cout << "WebSocketEndpoint - recv a Close opcode." << std::endl;
+        LOG(INFO) << "WebSocketEndpoint - recv a Close opcode." << std::endl;
         user_defined_process(packet, frame_payload);
         break;
     case WebSocketPacket::WSOpcode_Ping:
         // add your process code here
-        std::cout << "WebSocketEndpoint - recv a Ping opcode." << std::endl;
+        LOG(INFO) << "WebSocketEndpoint - recv a Ping opcode." << std::endl;
         user_defined_process(packet, frame_payload);
         break;
     case WebSocketPacket::WSOpcode_Pong:
         // add your process code here
-        std::cout << "WebSocketEndpoint - recv a Pong opcode." << std::endl;
+        LOG(INFO) << "WebSocketEndpoint - recv a Pong opcode." << std::endl;
         user_defined_process(packet, frame_payload);
         break;
     default:
-        std::cout << "WebSocketEndpoint - recv an unknown opcode." << std::endl;
+        LOG(INFO) << "WebSocketEndpoint - recv an unknown opcode." << std::endl;
         break;
     }
     //#endif
@@ -219,7 +219,7 @@ int32_t WebSocketEndpoint::user_defined_process(WebSocketPacket &packet, ByteBuf
 {
     // print received websocket payload from client
     std::string str_recv(frame_payload.bytes(), frame_payload.length());
-    std::cout << "WebSocketEndpoint - received data, length:" << str_recv.length()
+    LOG(INFO) << "WebSocketEndpoint - received data, length:" << str_recv.length()
               << " ,content:" << str_recv.c_str() << std::endl;
 
     WebSocketPacket wspacket;

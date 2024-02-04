@@ -1,8 +1,9 @@
 #pragma once
+#include <glog/logging.h>
 #include<coroutine>
 #include<chrono>
 #include<assert.h>
-#include <iostream>
+//#include <iostream>
 using namespace std;
 
 /// <summary>
@@ -35,7 +36,7 @@ public:
 		void unhandled_exception() 
 		{
 			//return std::terminate(); 
-			std::cout << "unhandled_exception" << std::endl;
+			LOG(INFO) << "unhandled_exception" ;
 		}
 		// co_return 时执行，return_void跟return_value二选一
 		//void return_void() {}
