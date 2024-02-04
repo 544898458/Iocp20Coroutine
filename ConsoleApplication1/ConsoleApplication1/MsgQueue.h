@@ -49,8 +49,10 @@ public:
 	/// </summary>
 	/// <param name="msg"></param>
 	void Push(const MsgLogin& msg);
+	void Push(const MsgMove& msg);
 	void OnRecv(const MsgLogin& msg);
 	std::deque<MsgLogin> queueLogin;
+	std::deque<MsgMove> queueMove;
 	std::deque<MsgId> queueMsgId;
 	std::mutex mutex;
 };

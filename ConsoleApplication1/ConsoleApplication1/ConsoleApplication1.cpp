@@ -14,6 +14,11 @@
 #include "Space.h"
 #include "Entity.h"
 
+#define GLOG_NO_ABBREVIATED_SEVERITIES
+#define GLOG_USE_GLOG_EXPORT
+#include <glog/logging.h>
+#pragma comment(lib, "glog.lib")
+
 BOOL g_flag = TRUE;
 BOOL WINAPI fun(DWORD dwCtrlType)
 {
@@ -71,6 +76,12 @@ CoTask<int> TraceEnemy(Entity* pEntity, float& x)
 int main(void)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
+
+	FLAGS_alsologtostderr = true;//是否将日志输出到文件和stderr
+	google::InitGoogleLogging("test");//使用glog之前必须先初始化库，仅需执行一次，括号内为程序名
+
+	LOG(INFO) << "Found " <<  " cookies";
+
 	SetConsoleCtrlHandler(fun, TRUE);
 	
 	auto accept = new Iocp::Server<MySession>();

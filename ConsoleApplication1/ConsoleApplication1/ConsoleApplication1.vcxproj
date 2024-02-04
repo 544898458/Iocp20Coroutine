@@ -71,7 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(IncludePath)</IncludePath>
+    <IncludePath>msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;glog\include;$(IncludePath)</IncludePath>
+    <LibraryPath>glog\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -99,7 +99,7 @@ public:
 		case MsgId::Move:
 		{
 			const auto msg = obj.as<MsgMove>();
-			pSessionSocketCompeletionKey->Session.msgQueue.Push(msgLogin);
+			pSessionSocketCompeletionKey->Session.msgQueue.Push(msg);
 		}
 		break;
 		}

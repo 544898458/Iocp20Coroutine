@@ -32,6 +32,13 @@ void MsgQueue::Push(const MsgLogin& msg)
 	queueLogin.push_back(msg);
 	queueMsgId.push_back(Login);
 }
+void MsgQueue::Push(const MsgMove& msg)
+{
+	//printf("Push,");
+	std::lock_guard lock(this->mutex);
+	queueMove.push_back(msg);
+	queueMsgId.push_back(Login);
+}
 string GbkToUtf8(const char* src_str)
 {
 	int len = MultiByteToWideChar(CP_ACP, 0, src_str, -1, NULL, 0);
