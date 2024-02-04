@@ -7,12 +7,21 @@ void MsgQueue::Process()
 		std::lock_guard lock(this->mutex);
 		if (this->queueMsgId.empty())
 			return;
-		const auto msgId = this->queueMsgId.front();
+
+		msgId = this->queueMsgId.front();
 		this->queueMsgId.pop_front();
 	}
 	switch (msgId)
 	{
 	case Login:
+	{
+		std::lock_guard lock(this->mutex);
+		const auto msg = this->queueLogin.front();
+		this->queueLogin.pop_front();
+		OnRecv(msg);
+	}
+	break;
+	case Move:
 	{
 		std::lock_guard lock(this->mutex);
 		const auto msg = this->queueLogin.front();

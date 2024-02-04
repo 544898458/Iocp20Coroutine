@@ -84,10 +84,11 @@ public:
 			break;
 		}
 
-		const auto msgId = (uint32_t)frame_payload.bytes();//没判断越界
-		const auto headSize = sizeof(msgId);
-		msgpack::object_handle oh = msgpack::unpack(frame_payload.bytes() + headSize, frame_payload.length() - headSize);//没判断越界
+		
+		//const auto headSize = sizeof(msgId);
+		msgpack::object_handle oh = msgpack::unpack(frame_payload.bytes() , frame_payload.length());//没判断越界
 		msgpack::object obj = oh.get();
+		const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;// (uint32_t)frame_payload.bytes();//没判断越界
 		LOG(INFO) << obj ;
 		auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompeletionKey<MySession>*>(this->nt_work_data_);
 		switch (msgId)

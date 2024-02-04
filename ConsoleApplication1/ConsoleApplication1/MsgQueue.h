@@ -8,17 +8,19 @@ enum MsgId
 };
 struct MsgLogin
 {
+	int id;
 	std::string name;
 	std::string pwd;
-	MSGPACK_DEFINE(name, pwd);
+	MSGPACK_DEFINE(id, name, pwd);
 };
 
 struct MsgMove
 {
+	int id;
 	float x;
 	float y;
 	float z;
-	MSGPACK_DEFINE(x, y,z);
+	MSGPACK_DEFINE(id,x, y,z);
 };
 
 struct MsgLoginRet
