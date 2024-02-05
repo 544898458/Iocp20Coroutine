@@ -52,18 +52,8 @@ CoTask<int> Patrol(Entity* pEntity,float &x)
 	}
 }
 
-CoTask<int> TraceEnemy(Entity* pEntity, float& x)
-{
-	while (true)
-	{
-		co_yield 0;
 
-		x -= 0.01;
-
-		MsgNotifyPos msg = { (long)pEntity, x };
-		Broadcast(msg);
-	}
-}
+Space space;
 
 ///*
 int main(void)
@@ -83,9 +73,8 @@ int main(void)
 	accept->Init();
 
 
-	Space space;
-	space.mapEntity[0] = new Entity(-5,space, Patrol);
-	space.mapEntity[1] = new Entity(5, space, TraceEnemy);
+	//space.mapEntity[0] = new Entity(-5,space, Patrol);
+	//space.mapEntity[1] = new Entity(5, space, TraceEnemy);
 	//主逻辑工作线程
 	while (true)
 	{

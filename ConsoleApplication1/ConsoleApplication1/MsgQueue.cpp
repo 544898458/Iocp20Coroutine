@@ -1,6 +1,7 @@
 #include <glog/logging.h>
 #include "MsgQueue.h"
 #include "MySession.h"
+
 void MsgQueue::Process()
 {
 	MsgId msgId = MsgId::Login;
@@ -131,4 +132,24 @@ void MsgQueue::OnRecv(const MsgLogin& msg)
 void MsgQueue::OnRecv(const MsgMove& msg)
 {
 	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
+	const auto targetX = msg.x;
+	pSession->entity.ReplaceCo(
+		[targetX](Entity* pEntity, float& x, bool& stop)->CoTask<int>
+		{
+			while (true)
+			{
+				co_yield 0;
+				if (stop)
+				{
+					LOG(INFO) << "走向" << targetX << "的协程正常退出";
+					co_return 0;
+				}
+
+				x += targetX < x ? -0.5 : 0.5;
+
+
+				MsgNotifyPos msg = { (long)pEntity, x };
+				Broadcast(msg);
+			}
+		});
 }

@@ -41,6 +41,10 @@ class MySession;
 class MsgQueue
 {
 public:
+	MsgQueue(MySession* p) :pSession(p) 
+	{
+
+	}
 	/// <summary>
 	/// 工作线程中（单线程）调用
 	/// </summary>
@@ -58,4 +62,6 @@ public:
 	std::deque<MsgMove> queueMove;
 	std::deque<MsgId> queueMsgId;
 	std::mutex mutex;
+private:
+	MySession * const pSession;
 };

@@ -1,10 +1,12 @@
 #pragma once
 #include "./IocpNetwork/SessionSocketCompeletionKey.h"
 #include "MsgQueue.h"
+#include "Entity.h"
 class MyWebSocketEndpoint;
 class MySession
 {
 public:
+	MySession();
 	template<class T> void Send(const T& ref);
 	void OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession);
 	int OnRecv(Iocp::SessionSocketCompeletionKey<MySession> &refSession,const char buf[], int len);
@@ -12,8 +14,10 @@ public:
 
 	MsgQueue msgQueue;
 	MyWebSocketEndpoint* ws = nullptr;
+	Entity entity;
 private:
 	Iocp::SessionSocketCompeletionKey<MySession> *pSession;
+	
 
 };
 

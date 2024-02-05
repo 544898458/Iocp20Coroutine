@@ -74,22 +74,35 @@ public:
 		//	return;
 		//}
 		hCoroutine.resume();
+		TryClear();
 	}
 	void Run2(const bool &send)
 	{
 		std::lock_guard lock(mutex);
 		if (send)
 			return;
+		hCoroutine.resume();
 		//if (hCoroutine.done())
 		//{
 		//	printf("%s协程已结束，不再执行\n", desc.c_str());
 		//	return;
 		//}
-		hCoroutine.resume();
+		TryClear();
+	}
+	void TryClear()
+	{
+		if (hCoroutine.done())
+		{
+			LOG(INFO) << "协程已退出" << hCoroutine.address();
+			hCoroutine = nullptr;
+		}
 	}
 	bool Finished()
 	{ 
 		std::lock_guard lock(mutex);
+		if (hCoroutine.address() == nullptr)
+			return true;
+
 		return hCoroutine.done(); 
 	}
 private:

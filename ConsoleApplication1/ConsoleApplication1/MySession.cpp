@@ -11,6 +11,7 @@
 #include "websocketfiles-master/src/ws_endpoint.h"
 #include <codecvt>
 #include "MsgQueue.h"
+#include "Space.h"
 
 std::set<Iocp::SessionSocketCompeletionKey<MySession>*> g_set;
 std::mutex g_setMutex;
@@ -139,6 +140,30 @@ void MySession::Send(const T& ref)
 	ws->Send(ref);
 
 }
+extern Space space;
+
+CoTask<int> TraceEnemy(Entity* pEntity, float& x,bool &stop)
+{
+	while (true)
+	{
+		co_yield 0;
+		if (stop) 
+		{
+
+			LOG(INFO) << "TraceEnemy协程正常退出" ;
+			co_return 0;
+		}
+		x -= 0.01;
+
+		MsgNotifyPos msg = { (long)pEntity, x };
+		Broadcast(msg);
+	}
+}
+
+MySession::MySession() : entity(5, space, TraceEnemy), msgQueue(this)
+{
+}
+
 void MySession::OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession)
 {
 	std::lock_guard lock(g_setMutex);
@@ -147,6 +172,7 @@ void MySession::OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession)
 	#include <glog/logging.h>
 	LOG(INFO) << "添加Session，剩余" << g_set.size();
 	pSession = &refSession;
+	space.mapEntity[(long)this] = &entity;
 }
 int MySession::OnRecv(Iocp::SessionSocketCompeletionKey<MySession>& refSession, const char buf[], int len)
 {

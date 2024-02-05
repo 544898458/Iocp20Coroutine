@@ -95,7 +95,7 @@ bool Iocp::Server<T_Session>::Init()
 	//inet_pton(AF_INET, "127.0.0.1", &si.sin_addr.S_un.S_addr);// inet_pton("127.0.0.1");
 	si.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
 	//int a = ~0;
-	if (SOCKET_ERROR == bind(socketAccept, (sockaddr*)&si, sizeof(si)))
+	if (SOCKET_ERROR == ::bind(socketAccept, (sockaddr*)&si, sizeof(si)))
 	{
 		//ณ๖ดํมห
 		int a = WSAGetLastError();
