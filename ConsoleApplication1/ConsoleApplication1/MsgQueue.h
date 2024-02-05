@@ -53,6 +53,7 @@ public:
 	void Push(const MsgLogin& msg);
 	void Push(const MsgMove& msg);
 	void OnRecv(const MsgLogin& msg);
+	void OnRecv(const MsgMove& msg);
 	std::deque<MsgLogin> queueLogin;
 	std::deque<MsgMove> queueMove;
 	std::deque<MsgId> queueMsgId;

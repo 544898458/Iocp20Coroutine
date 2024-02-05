@@ -1,3 +1,4 @@
+#include <glog/logging.h>
 #include "MsgQueue.h"
 #include "MySession.h"
 void MsgQueue::Process()
@@ -24,8 +25,8 @@ void MsgQueue::Process()
 	case Move:
 	{
 		std::lock_guard lock(this->mutex);
-		const auto msg = this->queueLogin.front();
-		this->queueLogin.pop_front();
+		const auto msg = this->queueMove.front();
+		this->queueMove.pop_front();
 		OnRecv(msg);
 	}
 	break;
@@ -46,7 +47,7 @@ void MsgQueue::Push(const MsgMove& msg)
 	//printf("Push,");
 	std::lock_guard lock(this->mutex);
 	queueMove.push_back(msg);
-	queueMsgId.push_back(Login);
+	queueMsgId.push_back(Move);
 }
 string GbkToUtf8(const char* src_str)
 {
@@ -125,4 +126,9 @@ void MsgQueue::OnRecv(const MsgLogin& msg)
 	const auto strBroadcast = "[" + utf8Name + "]进来了";
 	MsgLoginRet ret = { 223,GbkToUtf8(strBroadcast.c_str()) };
 	Broadcast(ret);
+}
+
+void MsgQueue::OnRecv(const MsgMove& msg)
+{
+	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
 }
