@@ -27,9 +27,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ConsoleApplication1.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="MySession.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -90,6 +87,9 @@
     <ClCompile Include="mainGpp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Iocp20Coroutine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -99,9 +99,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MsgQueue.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ConsoleApplication1.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="CoRoutine\CoTask.h">
@@ -153,6 +150,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Iocp20Coroutine.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
