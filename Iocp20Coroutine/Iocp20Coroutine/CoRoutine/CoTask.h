@@ -37,7 +37,7 @@ public:
 		void unhandled_exception() 
 		{
 			//return std::terminate(); 
-			LOG(INFO) << "unhandled_exception" ;
+			LOG(WARNING) << "unhandled_exception" ;
 		}
 		// co_return 时执行，return_void跟return_value二选一
 		//void return_void() {}

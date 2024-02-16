@@ -40,8 +40,11 @@ namespace Iocp {
 			LOG(INFO) << "AcceptEx err="<< pAcceptOverlapped->GetLastErrorReturn;
 			switch (pAcceptOverlapped->GetLastErrorReturn)
 			{
+			case ERROR_IO_INCOMPLETE:
+				LOG(WARNING) << "AcceptEx ERROR_IO_INCOMPLETE=" << pAcceptOverlapped->GetLastErrorReturn ;
+				break;
 			default:
-				LOG(INFO) << "AcceptEx err=" << pAcceptOverlapped->GetLastErrorReturn;
+				LOG(WARNING) << "AcceptEx err=" << pAcceptOverlapped->GetLastErrorReturn;
 				break;
 			}
 

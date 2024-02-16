@@ -53,7 +53,7 @@ namespace Iocp {
 		{
 			if (!WSARecv(pOverlapped))
 			{
-				LOG(INFO) << ("可能断网了,不再调用WSARecv\n");
+				LOG(WARNING) << ("可能断网了,不再调用WSARecv\n");
 				CloseSocket();
 				//delete pOverlapped;
 				break;
@@ -177,6 +177,12 @@ namespace Iocp {
 		if (SOCKET_ERROR != recvRet ||
 			ERROR_IO_PENDING != err)
 		{
+			switch (err)
+			{
+			case WSAECONNABORTED:
+				LOG(WARNING) << "An established connection was aborted by the software in your host machine.";
+				break;
+			}
 			LOG(INFO) << "WSARecv重叠的操作未成功启动，并且不会发生完成指示。" << err;
 			return false;// 任何其他错误代码都指示重叠的操作未成功启动，并且不会发生完成指示。
 		}
