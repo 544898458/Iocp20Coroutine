@@ -81,7 +81,7 @@ int main(void)
 	//主逻辑工作线程
 	while (true)
 	{
-		Sleep(1000);
+		Sleep(100);
 		std::set<Iocp::SessionSocketCompeletionKey<MySession>*> setDelete;
 		for (auto p : g_set) 
 		{
