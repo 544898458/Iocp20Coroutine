@@ -155,7 +155,7 @@ CoTask<int> TraceEnemy(Entity* pEntity, float& x,bool &stop)
 		}
 		x -= 0.01;
 
-		MsgNotifyPos msg = { (long)pEntity, x };
+		MsgNotifyPos msg = { (int)NotifyPos ,(uint64_t)pEntity, x };
 		Broadcast(msg);
 	}
 }

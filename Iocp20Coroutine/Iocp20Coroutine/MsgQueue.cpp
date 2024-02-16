@@ -125,7 +125,7 @@ void MsgQueue::OnRecv(const MsgLogin& msg)
 		p->Send(ret);
 	}*/
 	const auto strBroadcast = "[" + utf8Name + "]进来了";
-	MsgLoginRet ret = { 223,GbkToUtf8(strBroadcast.c_str()) };
+	MsgLoginRet ret = { (int)LoginRet,GbkToUtf8(strBroadcast.c_str()) };
 	Broadcast(ret);
 }
 
@@ -136,19 +136,20 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 	pSession->entity.ReplaceCo(
 		[targetX](Entity* pEntity, float& x, bool& stop)->CoTask<int>
 		{
+			const auto localTargetX = targetX;
 			while (true)
 			{
 				co_yield 0;
 				if (stop)
 				{
-					LOG(INFO) << "走向" << targetX << "的协程正常退出";
+					LOG(INFO) << "走向" << localTargetX << "的协程正常退出";
 					co_return 0;
 				}
 
-				x += targetX < x ? -0.5f : 0.5f;
+				x += localTargetX < x ? -0.5f : 0.5f;
 
 
-				MsgNotifyPos msg = { (uint64_t)pEntity, x };
+				MsgNotifyPos msg = { (int)NotifyPos , (uint64_t)pEntity, x };
 				Broadcast(msg);
 			}
 		});

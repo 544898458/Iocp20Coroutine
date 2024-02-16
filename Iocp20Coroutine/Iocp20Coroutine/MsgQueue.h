@@ -5,6 +5,8 @@ enum MsgId
 {
 	Login,
 	Move,
+	LoginRet,
+	NotifyPos,
 };
 struct MsgLogin
 {
@@ -20,28 +22,29 @@ struct MsgMove
 	float x;
 	float y;
 	float z;
-	MSGPACK_DEFINE(id,x, y,z);
+	MSGPACK_DEFINE(id, x, y, z);
 };
 
 struct MsgLoginRet
 {
-	int id;
+	int id = (int)LoginRet;
 	std::string nickName;
 	MSGPACK_DEFINE(id, nickName);
 };
 
 struct MsgNotifyPos
 {
+	int msgId = (int)NotifyPos;
 	uint64_t entityId;
 	float x;
-	MSGPACK_DEFINE(entityId,x);
+	MSGPACK_DEFINE(msgId, entityId, x);
 };
 
 class MySession;
 class MsgQueue
 {
 public:
-	MsgQueue(MySession* p) :pSession(p) 
+	MsgQueue(MySession* p) :pSession(p)
 	{
 
 	}
@@ -63,5 +66,5 @@ public:
 	std::deque<MsgId> queueMsgId;
 	std::mutex mutex;
 private:
-	MySession * const pSession;
+	MySession* const pSession;
 };
