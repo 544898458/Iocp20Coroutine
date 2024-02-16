@@ -136,16 +136,17 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 	pSession->entity.ReplaceCo(
 		[targetX](Entity* pEntity, float& x, bool& stop)->CoTask<int>
 		{
+			const auto localTargetX = targetX;
 			while (true)
 			{
 				co_yield 0;
 				if (stop)
 				{
-					LOG(INFO) << "走向" << targetX << "的协程正常退出";
+					LOG(INFO) << "走向" << localTargetX << "的协程正常退出";
 					co_return 0;
 				}
 
-				x += targetX < x ? -0.5f : 0.5f;
+				x += localTargetX < x ? -0.5f : 0.5f;
 
 
 				MsgNotifyPos msg = { (uint64_t)pEntity, x };
