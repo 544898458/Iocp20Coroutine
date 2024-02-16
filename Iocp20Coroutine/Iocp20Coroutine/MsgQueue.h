@@ -32,7 +32,7 @@ struct MsgLoginRet
 
 struct MsgNotifyPos
 {
-	long entityId;
+	uint64_t entityId;
 	float x;
 	MSGPACK_DEFINE(entityId,x);
 };

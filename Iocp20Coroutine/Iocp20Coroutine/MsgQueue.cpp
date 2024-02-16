@@ -145,10 +145,10 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 					co_return 0;
 				}
 
-				x += targetX < x ? -0.5 : 0.5;
+				x += targetX < x ? -0.5f : 0.5f;
 
 
-				MsgNotifyPos msg = { (long)pEntity, x };
+				MsgNotifyPos msg = { (uint64_t)pEntity, x };
 				Broadcast(msg);
 			}
 		});
