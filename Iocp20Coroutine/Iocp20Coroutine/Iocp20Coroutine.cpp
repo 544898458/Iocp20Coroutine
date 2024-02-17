@@ -20,7 +20,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 	case CTRL_CLOSE_EVENT://控制台关闭（点右上角X关闭）
 		//delete g_Accept;
 		//g_Accept = nullptr;
-		_CrtDumpMemoryLeaks();	 //显示内存泄漏报告
+		
 		//释放所有socket
 		//CloseHandle(hPort);
 		//Clear();
@@ -34,7 +34,10 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 		//	CloseHandle(pThread[i]);
 		//}
 		//free(pThread);
-
+		Sleep(3000);
+		_CrtDumpMemoryLeaks();	 //显示内存泄漏报告
+		//Sleep(1000);
+		false;
 		break;
 	}
 	return TRUE;
@@ -60,6 +63,9 @@ int main(void)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
 
+	const auto* pMemoryLeak = malloc(123456);//测试内存泄漏
+	pMemoryLeak = nullptr;
+
 	FLAGS_alsologtostderr = true;//是否将日志输出到文件和stderr
 	FLAGS_colorlogtostdout = true;
 	FLAGS_colorlogtostderr = true;//20240216
@@ -79,7 +85,7 @@ int main(void)
 	//space.mapEntity[0] = new Entity(-5,space, Patrol);
 	//space.mapEntity[1] = new Entity(5, space, TraceEnemy);
 	//主逻辑工作线程
-	while (true)
+	while (g_flag)
 	{
 		Sleep(100);
 		std::set<Iocp::SessionSocketCompeletionKey<MySession>*> setDelete;
@@ -98,8 +104,9 @@ int main(void)
 		}
 		space.Update();
 	}
-
-
+	accept->Stop();
+	LOG(INFO) << "正常退出,GetCurrentThreadId=" << GetCurrentThreadId();
+	Sleep(3000);
 	return 0;
 }
 //*/

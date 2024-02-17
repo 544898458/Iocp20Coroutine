@@ -11,7 +11,7 @@ namespace Iocp {
 		pAcceptOverlapped->coTask.Run();
 	}
 	template<class T_Session>
-	bool ListenSocketCompeletionKey<T_Session>::AcceptEx(Overlapped* pAcceptOverlapped)
+	std::tuple<bool, bool> ListenSocketCompeletionKey<T_Session>::AcceptEx(Overlapped* pAcceptOverlapped)
 	{
 		char str2[1];// = new char[1024];// = { 0 };
 		DWORD dwRecvcount = 0;
@@ -32,25 +32,27 @@ namespace Iocp {
 		if (pAcceptOverlapped->GetQueuedCompletionStatusReturn)//同步返回
 		{
 			assert(0 == pAcceptOverlapped->GetLastErrorReturn);
-			return true;//AcceptEx(pAcceptOverlapped);
+			return std::make_tuple(true, false);//AcceptEx(pAcceptOverlapped);
 		}
 
-		if (pAcceptOverlapped->GetLastErrorReturn != ERROR_IO_PENDING)
+		if (pAcceptOverlapped->GetLastErrorReturn == ERROR_IO_PENDING)
+			return std::make_tuple(true, true);//异步通过IOCP返回
+
+		//LOG(INFO) << "AcceptEx err="<< pAcceptOverlapped->GetLastErrorReturn;
+		switch (pAcceptOverlapped->GetLastErrorReturn)
 		{
-			LOG(INFO) << "AcceptEx err="<< pAcceptOverlapped->GetLastErrorReturn;
-			switch (pAcceptOverlapped->GetLastErrorReturn)
-			{
-			case ERROR_IO_INCOMPLETE:
-				LOG(WARNING) << "AcceptEx ERROR_IO_INCOMPLETE=" << pAcceptOverlapped->GetLastErrorReturn ;
-				break;
-			default:
-				LOG(WARNING) << "AcceptEx err=" << pAcceptOverlapped->GetLastErrorReturn;
-				break;
-			}
-
+		case ERROR_IO_INCOMPLETE:
+			LOG(WARNING) << "AcceptEx失败 Overlapped I/O event is not in a signaled state.";
+			break;
+		case WSAENOTSOCK:
+			LOG(WARNING) << "AcceptEx失败 An operation was attempted on something that is not a socket.";
+			break;
+		default:
+			LOG(WARNING) << "AcceptEx失败 GetLastErrorReturn=" << pAcceptOverlapped->GetLastErrorReturn;
+			break;
 		}
 
-		return false;
+		return std::make_tuple(false, false);
 	}
 	template<class T_Session>
 	CoTask<int> ListenSocketCompeletionKey<T_Session>::PostAccept(Overlapped* pAcceptOverlapped)
@@ -58,11 +60,18 @@ namespace Iocp {
 		while (true)
 		{
 			pAcceptOverlapped->socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
-			if (AcceptEx(pAcceptOverlapped))
+			bool acceptOk;
+			bool async;
+			std::tie(acceptOk, async) = AcceptEx(pAcceptOverlapped);
+			if (!acceptOk)
 			{
-				LOG(INFO) << "同步AcceptEx完成";
+				LOG(WARNING) << "AcceptEx失败，停止Accept";
+				co_return 0;
 			}
-			else
+
+			LOG(INFO) << "AcceptEx成功";
+
+			if (async)
 			{
 				LOG(INFO) << "准备异步等待重叠AcceptEx完成\n";
 				co_yield 0;
@@ -74,11 +83,13 @@ namespace Iocp {
 				switch (pAcceptOverlapped->GetLastErrorReturn)
 				{
 				case ERROR_OPERATION_ABORTED:
-					LOG(INFO) << ("一般是Overlapped没清零引起的。The I/O operation has been aborted because of either a thread exit or an application request.");
+					LOG(WARNING) << ("The I/O operation has been aborted because of either a thread exit or an application request.");
 					break;
 				default:
+					LOG(WARNING) << "AcceptEx失败,GetLastErrorReturn=" << pAcceptOverlapped->GetLastErrorReturn;
 					break;
 				}
+				co_yield 0;
 			}
 
 			//绑定到完成端口
@@ -88,7 +99,7 @@ namespace Iocp {
 			if (hPort1 != this->hIocp)
 			{
 				int a = GetLastError();
-				LOG(INFO) << "连上来的Socket关联到完成端口失败，Error="<< a;
+				LOG(INFO) << "连上来的Socket关联到完成端口失败，Error=" << a;
 				//closesocket(pKey->socket);// all_socks[count]);
 				delete pNewCompleteKey;
 				co_return 0;

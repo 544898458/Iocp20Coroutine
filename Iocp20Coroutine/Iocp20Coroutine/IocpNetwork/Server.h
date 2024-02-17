@@ -12,6 +12,7 @@ namespace Iocp
 	public:
 		bool WsaStartup();
 		bool Init();
+		void Stop();
 	private:
 		static void NetworkThreadProc(LPVOID lpParameter);
 		//bool flag = true;

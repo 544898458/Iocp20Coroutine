@@ -13,7 +13,7 @@ namespace Iocp {
 
 	private:
 		CoTask<int> PostAccept(Overlapped* pAcceptOverlapped);
-		bool AcceptEx(Overlapped* pAcceptOverlapped);
+		std::tuple<bool,bool> AcceptEx(Overlapped* pAcceptOverlapped);
 		//virtual bool PostSend(MyOverlapped* pAcceptOverlapped)override
 		//{
 		//	assert(!"ListenSocketCompeletionKey²»ÄÜPostSend");

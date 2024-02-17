@@ -50,8 +50,6 @@ bool Iocp::Server<T_Session>::Init()
 	if (this->socketAccept != NULL)
 		return false;
 
-	//WSADATA wsaData;
-	//WSAStartup(MAKEWORD(2, 2), &wsaData);
 	this->socketAccept = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 	//int a = WSAGetLastError();
 	if (INVALID_SOCKET == socketAccept)
@@ -161,6 +159,13 @@ bool Iocp::Server<T_Session>::Init()
 }
 
 template<class T_Session>
+void Iocp::Server<T_Session>::Stop()
+{
+	closesocket(this->socketAccept);
+	this->socketAccept = NULL;
+}
+
+template<class T_Session>
 void Iocp::Server<T_Session>::NetworkThreadProc(HANDLE port)
 {
 	//auto hIocp= (HANDLE)lpParameter;
@@ -175,8 +180,16 @@ void Iocp::Server<T_Session>::NetworkThreadProc(HANDLE port)
 		int lastErr = GetLastError();//可能是Socket强制关闭
 		auto* overlapped = (Iocp::Overlapped*)lpOverlapped;
 		overlapped->OnComplete(pCompletionKey,port,number_of_bytes, bFlag, lastErr);
+		if (!bFlag)
+		{
+			switch (lastErr)
+			{
+			case ERROR_OPERATION_ABORTED:
+				LOG(WARNING) << "The I/O operation has been aborted because of either a thread exit or an application request.";
+				break;
+			}
+			return;
+		}
 	}
-
-	return ;
 }
 
