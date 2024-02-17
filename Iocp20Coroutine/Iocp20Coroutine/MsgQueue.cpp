@@ -133,10 +133,12 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 {
 	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
 	const auto targetX = msg.x;
+	const auto targetZ = msg.z;
 	pSession->entity.ReplaceCo(
-		[targetX](Entity* pEntity, float& x, bool& stop)->CoTask<int>
+		[targetX, targetZ](Entity* pEntity, float& x, float& z, bool& stop)->CoTask<int>
 		{
 			const auto localTargetX = targetX;
+			const auto localTargetZ = targetZ;
 			while (true)
 			{
 				co_yield 0;
@@ -147,9 +149,10 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 				}
 
 				x += localTargetX < x ? -0.5f : 0.5f;
+				z += localTargetZ < z ? -0.5f : 0.5f;
 
 
-				MsgNotifyPos msg = { (int)NotifyPos , (uint64_t)pEntity, x };
+				MsgNotifyPos msg = { (int)NotifyPos , (uint64_t)pEntity, x,z };
 				Broadcast(msg);
 			}
 		});

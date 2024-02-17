@@ -142,7 +142,7 @@ void MySession::Send(const T& ref)
 }
 extern Space space;
 
-CoTask<int> TraceEnemy(Entity* pEntity, float& x,bool &stop)
+CoTask<int> TraceEnemy(Entity* pEntity, float& x, float& z,bool &stop)
 {
 	while (true)
 	{
@@ -155,7 +155,7 @@ CoTask<int> TraceEnemy(Entity* pEntity, float& x,bool &stop)
 		}
 		x -= 0.01;
 
-		MsgNotifyPos msg = { (int)NotifyPos ,(uint64_t)pEntity, x };
+		MsgNotifyPos msg = { (int)NotifyPos ,(uint64_t)pEntity, x,z };
 		Broadcast(msg);
 	}
 }

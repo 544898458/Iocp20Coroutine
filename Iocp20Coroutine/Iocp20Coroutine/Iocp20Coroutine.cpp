@@ -39,7 +39,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 	}
 	return TRUE;
 }
-CoTask<int> Patrol(Entity* pEntity,float &x)
+CoTask<int> Patrol(Entity* pEntity,float &x, float& z)
 {
 	while (true)
 	{
@@ -47,7 +47,7 @@ CoTask<int> Patrol(Entity* pEntity,float &x)
 
 		x += 0.01f;
 
-		MsgNotifyPos msg  {(int)NotifyPos ,(uint64_t)pEntity, x};
+		MsgNotifyPos msg  {(int)NotifyPos ,(uint64_t)pEntity, x,z};
 		Broadcast(msg);
 	}
 }

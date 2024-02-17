@@ -37,7 +37,8 @@ struct MsgNotifyPos
 	int msgId = (int)NotifyPos;
 	uint64_t entityId;
 	float x;
-	MSGPACK_DEFINE(msgId, entityId, x);
+	float z;
+	MSGPACK_DEFINE(msgId, entityId, x, z);
 };
 
 class MySession;
