@@ -18,6 +18,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 	switch (dwCtrlType)
 	{
 	case CTRL_CLOSE_EVENT://控制台关闭（点右上角X关闭）
+		LOG(WARNING) << "不能点右上角X关闭，可能有数据没保存";
 		//delete g_Accept;
 		//g_Accept = nullptr;
 		
@@ -37,7 +38,11 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 		Sleep(3000);
 		_CrtDumpMemoryLeaks();	 //显示内存泄漏报告
 		//Sleep(1000);
-		false;
+		//false;
+		break;
+	case CTRL_C_EVENT:
+		g_flag = FALSE;
+		//return false;
 		break;
 	}
 	return TRUE;
@@ -61,6 +66,10 @@ Space space;
 ///*
 int main(void)
 {
+	//屏蔽控制台最小按钮和关闭按钮
+	HWND hwnd = GetConsoleWindow();
+	HMENU hmenu = GetSystemMenu(hwnd, false);
+	RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
 
 	const auto* pMemoryLeak = malloc(123456);//测试内存泄漏
@@ -107,6 +116,7 @@ int main(void)
 	accept->Stop();
 	LOG(INFO) << "正常退出,GetCurrentThreadId=" << GetCurrentThreadId();
 	Sleep(3000);
+	//system(0);
 	return 0;
 }
 //*/
