@@ -61,7 +61,7 @@ CoTask<int> Patrol(Entity* pEntity,float &x, float& z)
 }
 
 
-Space space;
+
 
 ///*
 int main(void)

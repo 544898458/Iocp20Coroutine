@@ -1,4 +1,7 @@
 #include <glog/logging.h>
+#pragma comment(lib, "glog.lib")
+#pragma comment(lib, "Ws2_32.lib")
+#pragma comment(lib, "Mswsock.lib")
 #include <thread>
 #include"./CoRoutine/CoTask.h"
 
@@ -24,7 +27,7 @@ void NetworkThreadProc(CoTask<int>* co)
 int main()
 {
 	Status i = 1;
-	cout << T * i << endl; //Test Cout  
+	//LOG(INFO) << T * i << endl; //Test Cout  
 	CoTask<int> co = PostSend();
 	std::thread networkThread(NetworkThreadProc, &co);
 	networkThread.detach();
