@@ -9,6 +9,7 @@ namespace Iocp {
 		auto pAcceptOverlapped = new Overlapped();
 		pAcceptOverlapped->needDeleteMe = true;
 		pAcceptOverlapped->coTask = PostAccept(pAcceptOverlapped,hIocp, socketListen);
+		pAcceptOverlapped->coTask.desc = "PostAccept";
 		pAcceptOverlapped->coTask.Run();
 	}
 	template<class T_Session>
@@ -90,6 +91,8 @@ namespace Iocp {
 					LOG(WARNING) << "AcceptExÊ§°Ü,GetLastErrorReturn=" << pAcceptOverlapped->GetLastErrorReturn;
 					break;
 				}
+				closesocket(pAcceptOverlapped->socket);
+				pAcceptOverlapped->socket = NULL;
 				co_return 0;
 			}
 

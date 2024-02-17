@@ -62,7 +62,7 @@ bool Iocp::Server<T_Session>::Init()
 	
 	//auto pListenCompleteKey = new ListenSocketCompeletionKey<T_Session>(this->socketAccept);
 	//创建完成端口	创建一个I/O完成端口对象，用它面向任意数量的套接字句柄，管理多个I/O请求。要做到这一点，需要调用CreateCompletionPort函数。
-	auto hIocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+	this->hIocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	if (0 == hIocp)
 	{
 		int a = GetLastError();
@@ -163,6 +163,7 @@ void Iocp::Server<T_Session>::Stop()
 {
 	closesocket(this->socketAccept);
 	this->socketAccept = NULL;
+	CloseHandle(this->hIocp);
 }
 
 template<class T_Session>
@@ -178,12 +179,16 @@ void Iocp::Server<T_Session>::NetworkThreadProc(HANDLE port)
 		//pCompletionKey对应一个socket，lpOverlapped对应一次事件
 		BOOL bFlag = GetQueuedCompletionStatus(port, &number_of_bytes, (PULONG_PTR)&pCompletionKey, &lpOverlapped, INFINITE);//没完成就会卡在这里，正常
 		int lastErr = GetLastError();//可能是Socket强制关闭
-		auto* overlapped = (Iocp::Overlapped*)lpOverlapped;
-		overlapped->OnComplete(pCompletionKey,port,number_of_bytes, bFlag, lastErr);
-		if (overlapped->needDeleteMe && overlapped->coTask.Finished())
+		if (lpOverlapped != nullptr)
 		{
-			delete overlapped;
-			overlapped = nullptr;
+			auto* overlapped = (Iocp::Overlapped*)lpOverlapped;
+			overlapped->OnComplete(pCompletionKey, port, number_of_bytes, bFlag, lastErr);
+			if (overlapped->needDeleteMe && overlapped->coTask.Finished())
+			{
+				LOG(INFO) << "删除" << overlapped->coTask.desc;
+				delete overlapped;
+				overlapped = nullptr;
+			}
 		}
 		if (!bFlag)
 		{

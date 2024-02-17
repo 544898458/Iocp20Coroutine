@@ -18,6 +18,7 @@ namespace Iocp
 		//bool flag = true;
 	private:
 		SOCKET socketAccept=NULL;
+		HANDLE hIocp = NULL;
 		std::vector<HANDLE> vecThread;
 	};
 }

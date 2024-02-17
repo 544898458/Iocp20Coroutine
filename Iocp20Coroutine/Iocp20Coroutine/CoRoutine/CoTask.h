@@ -94,7 +94,7 @@ public:
 	{
 		if (hCoroutine.done())
 		{
-			LOG(INFO) << "协程已退出" << hCoroutine.address();
+			LOG(INFO) << desc <<"协程已退出" << hCoroutine.address();
 			hCoroutine = nullptr;
 		}
 	}
