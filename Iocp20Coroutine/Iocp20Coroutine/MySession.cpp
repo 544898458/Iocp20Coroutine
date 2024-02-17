@@ -169,7 +169,7 @@ void MySession::OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession)
 	std::lock_guard lock(g_setMutex);
 	ws = new MyWebSocketEndpoint(net_write_cb, &refSession);
 	g_set.insert(&refSession);
-	#include <glog/logging.h>
+	//#include <glog/logging.h>
 	LOG(INFO) << "Ìí¼ÓSession£¬Ê£Óà" << g_set.size();
 	pSession = &refSession;
 	space.mapEntity[(long)this] = &entity;
@@ -184,6 +184,7 @@ void MySession::OnDestroy()
 {
 	std::lock_guard lock(g_setMutex);
 	g_set.erase(this->pSession);
+	space.mapEntity.erase((long)this);
 	LOG(INFO) << "É¾³ýSession£¬Ê£Óà" << g_set.size();
 }
 
