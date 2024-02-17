@@ -60,10 +60,10 @@ bool Iocp::Server<T_Session>::Init()
 		return false;
 	}
 	
-	auto pListenCompleteKey = new ListenSocketCompeletionKey<T_Session>(this->socketAccept);
+	//auto pListenCompleteKey = new ListenSocketCompeletionKey<T_Session>(this->socketAccept);
 	//创建完成端口	创建一个I/O完成端口对象，用它面向任意数量的套接字句柄，管理多个I/O请求。要做到这一点，需要调用CreateCompletionPort函数。
-	pListenCompleteKey->hIocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
-	if (0 == pListenCompleteKey->hIocp)
+	auto hIocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+	if (0 == hIocp)
 	{
 		int a = GetLastError();
 		LOG(INFO) <<  a;
@@ -73,8 +73,8 @@ bool Iocp::Server<T_Session>::Init()
 		return false;
 	}
 	//绑定
-	const auto iocp = CreateIoCompletionPort((HANDLE)socketAccept, pListenCompleteKey->hIocp, (ULONG_PTR)pListenCompleteKey, 0);
-	if (iocp != pListenCompleteKey->hIocp)
+	const auto iocp = CreateIoCompletionPort((HANDLE)socketAccept, hIocp, (ULONG_PTR)0, 0);
+	if (iocp != hIocp)
 	{
 		int a = GetLastError();
 		LOG(INFO) << "完成端口绑定socket失败" << a;
@@ -129,7 +129,7 @@ bool Iocp::Server<T_Session>::Init()
 	for (int i = 0; i < process_count; i++)
 	{
 		//auto hThread = CreateThread(NULL, 0, NetworkThreadProc, pListenCompleteKey->hIocp, 0, NULL);
-		thread networkThread(Server::NetworkThreadProc, pListenCompleteKey->hIocp);
+		thread networkThread(Server::NetworkThreadProc, hIocp);
 		networkThread.detach();
 		//if (NULL == hThread)
 		//{
@@ -145,7 +145,7 @@ bool Iocp::Server<T_Session>::Init()
 	}
 
 	//if ( !
-	pListenCompleteKey->StartCoRoutine();
+	ListenSocketCompeletionKey<T_Session>::StartCoRoutine(hIocp, socketAccept);
 		//)
 	//{
 	//	//Clear();
@@ -180,6 +180,11 @@ void Iocp::Server<T_Session>::NetworkThreadProc(HANDLE port)
 		int lastErr = GetLastError();//可能是Socket强制关闭
 		auto* overlapped = (Iocp::Overlapped*)lpOverlapped;
 		overlapped->OnComplete(pCompletionKey,port,number_of_bytes, bFlag, lastErr);
+		if (overlapped->needDeleteMe && overlapped->coTask.Finished())
+		{
+			delete overlapped;
+			overlapped = nullptr;
+		}
 		if (!bFlag)
 		{
 			switch (lastErr)

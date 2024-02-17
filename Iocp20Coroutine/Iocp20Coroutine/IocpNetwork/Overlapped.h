@@ -41,5 +41,6 @@ namespace Iocp {
 			//pOp->OnComplete(this, pKey, port,number_of_bytes,bGetQueuedCompletionStatusReturn,lastErr);
 		}
 		CoTask<int> coTask;
+		bool needDeleteMe=false;
 	};
 }

@@ -2,33 +2,18 @@
 #include"SocketCompeletionKey.h"
 namespace Iocp {
 	template<class T_Session>
-	class ListenSocketCompeletionKey :public SocketCompeletionKey
+	class ListenSocketCompeletionKey //:public SocketCompeletionKey
 	{
 	public:
-		ListenSocketCompeletionKey(SOCKET s) :SocketCompeletionKey(s)
-		{
+		//ListenSocketCompeletionKey(SOCKET s) :SocketCompeletionKey(s)
+		//{
 
-		}
-		virtual void StartCoRoutine() override;
-
+		//}
+		static void StartCoRoutine( HANDLE hIocp, SOCKET socketListen);
+		//Overlapped acceptOverlapped;
 	private:
-		CoTask<int> PostAccept(Overlapped* pAcceptOverlapped);
-		std::tuple<bool,bool> AcceptEx(Overlapped* pAcceptOverlapped);
-		//virtual bool PostSend(MyOverlapped* pAcceptOverlapped)override
-		//{
-		//	assert(!"ListenSocketCompeletionKey不能PostSend");
-		//	return false;
-		//}
-		//virtual bool PostRecv(MyOverlapped* pAcceptOverlapped)override
-		//{
-		//	assert(!"ListenSocketCompeletionKey不能PostRecv");
-		//	return false;
-		//}
-		//virtual void OnCompleteRecv(const DWORD number_of_bytes, MyOverlapped* pOverlapped) override
-		//{
-		//	assert(!"ListenSocketCompeletionKey不能OnCompleteRecv");
-		//}
-	private:
-		//CoTask<MyOverlapped*> taskAccept;
+		static CoTask<int> PostAccept(Overlapped* pAcceptOverlapped, HANDLE hIocp, SOCKET socketListen);
+		static std::tuple<bool,bool> AcceptEx(Overlapped* pAcceptOverlapped, SOCKET socketListen);
+		
 	};
 }

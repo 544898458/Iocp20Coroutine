@@ -4,21 +4,22 @@
 
 namespace Iocp {
 	template<class T_Session>
-	void ListenSocketCompeletionKey<T_Session>::StartCoRoutine()
+	void ListenSocketCompeletionKey<T_Session>::StartCoRoutine( HANDLE hIocp,SOCKET socketListen)
 	{
 		auto pAcceptOverlapped = new Overlapped();
-		pAcceptOverlapped->coTask = PostAccept(pAcceptOverlapped);
+		pAcceptOverlapped->needDeleteMe = true;
+		pAcceptOverlapped->coTask = PostAccept(pAcceptOverlapped,hIocp, socketListen);
 		pAcceptOverlapped->coTask.Run();
 	}
 	template<class T_Session>
-	std::tuple<bool, bool> ListenSocketCompeletionKey<T_Session>::AcceptEx(Overlapped* pAcceptOverlapped)
+	std::tuple<bool, bool> ListenSocketCompeletionKey<T_Session>::AcceptEx(Overlapped* pAcceptOverlapped, SOCKET socketListen)
 	{
 		char str2[1];// = new char[1024];// = { 0 };
 		DWORD dwRecvcount = 0;
 		//int b = WSAGetLastError();
 		//OVERLAPPED* Overlapped = new OVERLAPPED();
 		pAcceptOverlapped->GetQueuedCompletionStatusReturn = ::AcceptEx(
-			this->Socket(),	//[in]侦听套接字。服务器应用程序在这个套接字上等待连接。
+			socketListen,	//[in]侦听套接字。服务器应用程序在这个套接字上等待连接。
 			pAcceptOverlapped->socket,	//[in]将用于连接的套接字。此套接字必须不能已经绑定或者已经连接。
 			str2, //[in]指向一个缓冲区，该缓冲区用于接收新建连接的所发送数据的第一个块、该服务器的本地地址和客户端的远程地址。接收到的数据将被写入到缓冲区0偏移处，而地址随后写入。 该参数必须指定，如果此参数设置为NULL，将不会得到执行，也无法通过GetAcceptExSockaddrs函数获得本地或远程的地址。
 			0,	//[in]lpOutputBuffer字节数，指定接收数据缓冲区lpOutputBuffer的大小。这一大小应不包括服务器的本地地址的大小或客户端的远程地址，他们被追加到输出缓冲区。如果dwReceiveDataLength是零，AcceptEx将不等待接收任何数据，而是尽快建立连接。
@@ -55,14 +56,14 @@ namespace Iocp {
 		return std::make_tuple(false, false);
 	}
 	template<class T_Session>
-	CoTask<int> ListenSocketCompeletionKey<T_Session>::PostAccept(Overlapped* pAcceptOverlapped)
+	CoTask<int> ListenSocketCompeletionKey<T_Session>::PostAccept(Overlapped* pAcceptOverlapped,HANDLE hIocp, SOCKET socketListen)
 	{
 		while (true)
 		{
 			pAcceptOverlapped->socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 			bool acceptOk;
 			bool async;
-			std::tie(acceptOk, async) = AcceptEx(pAcceptOverlapped);
+			std::tie(acceptOk, async) = AcceptEx(pAcceptOverlapped, socketListen);
 			if (!acceptOk)
 			{
 				LOG(WARNING) << "AcceptEx失败，停止Accept";
@@ -89,14 +90,14 @@ namespace Iocp {
 					LOG(WARNING) << "AcceptEx失败,GetLastErrorReturn=" << pAcceptOverlapped->GetLastErrorReturn;
 					break;
 				}
-				co_yield 0;
+				co_return 0;
 			}
 
 			//绑定到完成端口
 			auto pNewCompleteKey = new SessionSocketCompeletionKey<T_Session>(pAcceptOverlapped->socket);
 			pNewCompleteKey->Session.OnInit(*pNewCompleteKey);//回调用户自定义函数
-			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)pAcceptOverlapped->socket, this->hIocp, (ULONG_PTR)pNewCompleteKey, 0);
-			if (hPort1 != this->hIocp)
+			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)pAcceptOverlapped->socket, hIocp, (ULONG_PTR)pNewCompleteKey, 0);
+			if (hPort1 != hIocp)
 			{
 				int a = GetLastError();
 				LOG(INFO) << "连上来的Socket关联到完成端口失败，Error=" << a;

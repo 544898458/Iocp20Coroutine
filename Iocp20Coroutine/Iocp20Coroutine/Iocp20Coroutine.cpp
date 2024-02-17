@@ -86,9 +86,9 @@ int main(void)
 
 	SetConsoleCtrlHandler(fun, TRUE);
 	
-	auto accept = new Iocp::Server<MySession>();
-	accept->WsaStartup();
-	accept->Init();
+	Iocp::Server<MySession> accept;
+	accept.WsaStartup();
+	accept.Init();
 
 
 	//space.mapEntity[0] = new Entity(-5,space, Patrol);
@@ -113,7 +113,7 @@ int main(void)
 		}
 		space.Update();
 	}
-	accept->Stop();
+	accept.Stop();
 	LOG(INFO) << "正常退出,GetCurrentThreadId=" << GetCurrentThreadId();
 	Sleep(3000);
 	//system(0);
