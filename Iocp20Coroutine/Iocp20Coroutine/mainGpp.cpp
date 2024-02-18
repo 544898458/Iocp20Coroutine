@@ -20,10 +20,10 @@ CoTask<int> PostSend()
 	//co_yield 0;
 	//LOG(INFO) << ("PostSend end\n");
 }
-void NetworkThreadProc(CoTask<int>* co)
+void NetworkThreadProc(CoTask<int>* m_coWalk)
 {
 	LOG(INFO) << ("NetworkThreadProc\n");
-	co->Run();
+	m_coWalk->Run();
 }
 
 
@@ -97,14 +97,14 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
 	Status i = 1;
 	//LOG(INFO) << T * i << endl; //Test Cout  
-	CoTask<int> co = PostSend();
-	//std::thread networkThread(NetworkThreadProc, &co);
+	CoTask<int> m_coWalk = PostSend();
+	//std::thread networkThread(NetworkThreadProc, &m_coWalk);
 	//networkThread.detach();
 	//std::this_thread::sleep_for(2000ms);
-	//std::thread networkThread2(NetworkThreadProc, &co);
+	//std::thread networkThread2(NetworkThreadProc, &m_coWalk);
 	//networkThread2.detach();
 	//std::this_thread::sleep_for(2000ms);
-	co.Run();
+	m_coWalk.Run();
 	_CrtDumpMemoryLeaks();	 //显示内存泄漏报告
 	return 0;
 }

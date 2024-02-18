@@ -1,16 +1,16 @@
 #pragma once
-#include <glog/logging.h>
+#include<glog/logging.h>
 #include<coroutine>
 #include<chrono>
 #include<assert.h>
 #include<mutex>
-//#include <iostream>
 using namespace std;
 
 /// <summary>
 /// 方便实现协程，没有任何具体逻辑，没有线程，没有网络
+/// 命名参考C#的ETTask或UniTask，C++20协程标准采用的是微软方案，因此命名也使用C#名字
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">返回值</typeparam>
 template<typename T>
 class CoTask
 {
@@ -26,14 +26,28 @@ public:
 		{
 			return CoTask{ handle::from_promise(*this) };
 		}
-		// 在以上函数后执行
+		
+		/// <summary>
+		/// 在以上函数后执行
+		/// suspend_always表示协程创建后立刻挂起，不执行任何代码，等着用户执行resume
+		/// </summary>
+		/// <returns></returns>
 		auto initial_suspend() { return std::suspend_always{}; }
-		// 协程结束前执行
+		
+		/// <summary>
+		/// 协程结束前执行
+		/// 如果改成suspend_never就问题很多，不知道为什么
+		/// </summary>
+		/// <returns></returns>
 		auto final_suspend() noexcept
 		{
 			return std::suspend_always{}; 
 		}
-		// 出现未经处理的异常时执行
+		/// <summary>
+		/// 出现未经处理的异常时执行
+		/// 这里只知道协程执行异常，却无法知道是什么异常
+		/// 只有在每一段co_yield前后都手工加try才能知道具体错
+		/// </summary>
 		void unhandled_exception() 
 		{
 			//return std::terminate(); 
@@ -77,6 +91,10 @@ public:
 		hCoroutine.resume();
 		TryClear();
 	}
+	/// <summary>
+	/// Send专用
+	/// </summary>
+	/// <param name="send"></param>
 	void Run2(const bool &send)
 	{
 		std::lock_guard lock(mutex);

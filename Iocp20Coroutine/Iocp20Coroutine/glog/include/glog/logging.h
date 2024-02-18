@@ -334,7 +334,7 @@ struct [[deprecated("Use LogMessage instead.")]] LogMessageInfo {
 //   mm               The month (zero padded; ie May is '05')
 //   dd               The day (zero padded)
 //   hh:mm:ss.uuuuuu  Time in hours, minutes and fractional seconds
-//   threadid         The space-padded thread ID as returned by GetTID()
+//   threadid         The m_space-padded thread ID as returned by GetTID()
 //                    (this matches the PID on Linux)
 //   file             The file name
 //   line             The line number
@@ -1393,7 +1393,7 @@ class GLOG_EXPORT LogMessage {
   static int64 num_messages_[NUM_SEVERITIES];  // under log_mutex
 
   // We keep the data in a separate struct so that each instance of
-  // LogMessage uses less stack space.
+  // LogMessage uses less stack m_space.
   logging::internal::LogMessageData* allocated_;
   logging::internal::LogMessageData* data_;
   LogMessageTime time_;

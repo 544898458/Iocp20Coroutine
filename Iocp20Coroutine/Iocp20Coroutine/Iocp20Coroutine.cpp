@@ -93,8 +93,8 @@ int main(void)
 	accept.Init();
 
 
-	//space.mapEntity[0] = new Entity(-5,space, Patrol);
-	//space.mapEntity[1] = new Entity(5, space, TraceEnemy);
+	//m_space.mapEntity[0] = new Entity(-5,m_space, Patrol);
+	//m_space.mapEntity[1] = new Entity(5, m_space, TraceEnemy);
 	//主逻辑工作线程
 	while (g_flag)
 	{

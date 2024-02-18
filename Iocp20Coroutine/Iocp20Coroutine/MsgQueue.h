@@ -47,7 +47,6 @@ class MsgQueue
 public:
 	MsgQueue(MySession* p) :m_pSession(p)
 	{
-
 	}
 	/// <summary>
 	/// 工作线程中（单线程）调用
@@ -67,11 +66,17 @@ public:
 	/// <param name="msg"></param>
 	void OnRecv(const MsgLogin& msg);
 	void OnRecv(const MsgMove& msg);
-	std::deque<MsgLogin> queueLogin;
+	/// <summary>
+	/// 这里保存的都是解析后的消息明文
+	/// </summary>
+	std::deque<MsgLogin> m_queueLogin;
 	std::deque<MsgMove> m_queueMove;
 	std::deque<MsgId> m_queueMsgId;
 
 	std::mutex m_mutex;
 private:
+	/// <summary>
+	/// 弱引用，不要销毁
+	/// </summary>
 	MySession* const m_pSession;
 };
