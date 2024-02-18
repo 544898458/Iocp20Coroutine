@@ -33,3 +33,4 @@ enc_temp_folder
 *.recipe
 *.idb
 *.pdb
+*.exe
