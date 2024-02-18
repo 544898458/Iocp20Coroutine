@@ -7,3 +7,4 @@ public:
 	std::map<int, Entity*> mapEntity;
 	void Update();
 };
+extern Space space;

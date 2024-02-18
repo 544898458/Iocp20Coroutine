@@ -95,6 +95,7 @@ public:
 		if (hCoroutine.done())
 		{
 			LOG(INFO) << desc <<"协程已退出" << hCoroutine.address();
+			hCoroutine.destroy();
 			hCoroutine = nullptr;
 		}
 	}

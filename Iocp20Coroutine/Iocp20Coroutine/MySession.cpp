@@ -140,7 +140,6 @@ void MySession::Send(const T& ref)
 	ws->Send(ref);
 
 }
-extern Space space;
 
 CoTask<int> TraceEnemy(Entity* pEntity, float& x, float& z,bool &stop)
 {

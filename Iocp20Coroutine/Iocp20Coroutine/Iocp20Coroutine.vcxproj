@@ -136,9 +136,7 @@
   <ItemGroup>
     <ClCompile Include="CoRoutine\CoTask.cpp" />
     <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="Iocp20Coroutine.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="Iocp20Coroutine.cpp" />
     <ClCompile Include="IocpNetwork\ByteQueue.cpp" />
     <ClCompile Include="IocpNetwork\ListenSocketCompeletionKey.cpp" />
     <ClCompile Include="IocpNetwork\Op.cpp" />
@@ -148,7 +146,7 @@
     <ClCompile Include="IocpNetwork\SocketCompeletionKey.cpp" />
     <ClCompile Include="LogStrategy\StrategyLog.cpp" />
     <ClCompile Include="mainGpp.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="MsgQueue.cpp" />
     <ClCompile Include="MySession.cpp" />
