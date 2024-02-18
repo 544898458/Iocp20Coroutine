@@ -26,4 +26,10 @@ $RECYCLE.BIN/
 # 20231008
 *.vs
 enc_temp_folder
-x64
+*.obj
+*.ilk
+*.log
+*.tlog
+*.recipe
+*.idb
+*.pdb
