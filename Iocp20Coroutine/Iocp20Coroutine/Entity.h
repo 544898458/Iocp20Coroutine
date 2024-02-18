@@ -20,6 +20,6 @@ public:
 
 private:
 	Space& space;
-	//MySession* pSession;
+	//MySession* m_pSession;
 };
 

@@ -45,7 +45,7 @@ class MySession;
 class MsgQueue
 {
 public:
-	MsgQueue(MySession* p) :pSession(p)
+	MsgQueue(MySession* p) :m_pSession(p)
 	{
 
 	}
@@ -60,12 +60,18 @@ public:
 	/// <param name="msg"></param>
 	void Push(const MsgLogin& msg);
 	void Push(const MsgMove& msg);
+
+	/// <summary>
+	/// 主逻辑线程（控制台界面线程）调用
+	/// </summary>
+	/// <param name="msg"></param>
 	void OnRecv(const MsgLogin& msg);
 	void OnRecv(const MsgMove& msg);
 	std::deque<MsgLogin> queueLogin;
-	std::deque<MsgMove> queueMove;
-	std::deque<MsgId> queueMsgId;
-	std::mutex mutex;
+	std::deque<MsgMove> m_queueMove;
+	std::deque<MsgId> m_queueMsgId;
+
+	std::mutex m_mutex;
 private:
-	MySession* const pSession;
+	MySession* const m_pSession;
 };

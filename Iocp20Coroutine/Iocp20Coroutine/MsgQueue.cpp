@@ -6,18 +6,18 @@ void MsgQueue::Process()
 {
 	MsgId msgId = MsgId::Login;
 	{
-		std::lock_guard lock(this->mutex);
-		if (this->queueMsgId.empty())
+		std::lock_guard lock(this->m_mutex);
+		if (this->m_queueMsgId.empty())
 			return;
 
-		msgId = this->queueMsgId.front();
-		this->queueMsgId.pop_front();
+		msgId = this->m_queueMsgId.front();
+		this->m_queueMsgId.pop_front();
 	}
 	switch (msgId)
 	{
 	case Login:
 	{
-		std::lock_guard lock(this->mutex);
+		std::lock_guard lock(this->m_mutex);
 		const auto msg = this->queueLogin.front();
 		this->queueLogin.pop_front();
 		OnRecv(msg);
@@ -25,9 +25,9 @@ void MsgQueue::Process()
 	break;
 	case Move:
 	{
-		std::lock_guard lock(this->mutex);
-		const auto msg = this->queueMove.front();
-		this->queueMove.pop_front();
+		std::lock_guard lock(this->m_mutex);
+		const auto msg = this->m_queueMove.front();
+		this->m_queueMove.pop_front();
 		OnRecv(msg);
 	}
 	break;
@@ -39,16 +39,16 @@ void MsgQueue::Process()
 void MsgQueue::Push(const MsgLogin& msg)
 {
 	//printf("Push,");
-	std::lock_guard lock(this->mutex);
+	std::lock_guard lock(this->m_mutex);
 	queueLogin.push_back(msg);
-	queueMsgId.push_back(Login);
+	m_queueMsgId.push_back(Login);
 }
 void MsgQueue::Push(const MsgMove& msg)
 {
 	//printf("Push,");
-	std::lock_guard lock(this->mutex);
-	queueMove.push_back(msg);
-	queueMsgId.push_back(Move);
+	std::lock_guard lock(this->m_mutex);
+	m_queueMove.push_back(msg);
+	m_queueMsgId.push_back(Move);
 }
 string GbkToUtf8(const char* src_str)
 {
@@ -134,7 +134,7 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
-	pSession->entity.ReplaceCo(
+	m_pSession->m_entity.ReplaceCo(
 		[targetX, targetZ](Entity* pEntity, float& x, float& z, bool& stop)->CoTask<int>
 		{
 			const auto localTargetX = targetX;

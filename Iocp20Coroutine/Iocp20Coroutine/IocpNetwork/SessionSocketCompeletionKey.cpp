@@ -72,12 +72,8 @@ namespace Iocp {
 			char* buf(nullptr);
 			int len(0);
 			std::tie(buf, len) = this->recvBuf.Complete(pOverlapped.numberOfBytesTransferred);
-			//this->sendBuf.Enqueue("asdf", 5);
-			//this->pSendOverlapped->coTask.Run();
-			this->recvBuf.PopFront(this->Session.OnRecv(*this, buf, len));//回调用户自定义函数，这里是纯数据，连封包概念都没有，封包是WebSocket协议负责的内容
+			this->recvBuf.PopFront(this->Session.OnRecv(*this, buf, len));//回调用户自定义函数，这里是纯数据，连封包概念都没有，封包是WebSocket协议负责的工作
 		}
-		//this->pSendOverlapped.coTask.Run();
-		//if (!this->sendOverlapped.coTask.Finished())
 		{
 			std::lock_guard lock(lockFinish);
 			recvFinish = true;

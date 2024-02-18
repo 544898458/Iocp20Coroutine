@@ -1,10 +1,13 @@
 #pragma once
 #include <map>
 class Entity;
+/// <summary>
+/// Go”Ô—‘GoWorldøÚº‹Space/Entity£¨œ‡µ±”⁄C#”Ô—‘ETøÚº‹Scene/Unit
+/// </summary>
 class Space
 {
 public:
 	std::map<int, Entity*> mapEntity;
 	void Update();
 };
-extern Space space;
+extern Space g_space;

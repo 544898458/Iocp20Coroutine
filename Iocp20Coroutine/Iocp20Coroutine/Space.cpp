@@ -1,7 +1,7 @@
 #include "Space.h"
 #include "Entity.h"
 
-Space space;
+Space g_space;
 
 void Space::Update()
 {
