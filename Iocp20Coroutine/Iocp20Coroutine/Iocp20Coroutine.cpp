@@ -72,7 +72,9 @@ int main(void)
 	RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
 
-	const auto* pMemoryLeak = malloc(123456);//测试内存泄漏
+	auto* pMemoryLeak = malloc(123);//测试内存泄漏
+	const char sz[] = "Memory Leak Test.Nei Cun Xie Lou Jian Ce.This is not a real Defect.Zhe Bu Shi Yi Ge Zhen De Que Xian.";
+	memcpy(pMemoryLeak, sz,sizeof(sz));
 	pMemoryLeak = nullptr;
 
 	FLAGS_alsologtostderr = true;//是否将日志输出到文件和stderr
