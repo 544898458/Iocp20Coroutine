@@ -185,7 +185,7 @@ void Iocp::Server<T_Session>::NetworkThreadProc(HANDLE port)
 			overlapped->OnComplete(pCompletionKey, port, number_of_bytes, bFlag, lastErr);
 			if (overlapped->needDeleteMe && overlapped->coTask.Finished())
 			{
-				LOG(INFO) << "É¾³ý" << overlapped->coTask.desc;
+				LOG(INFO) << "É¾³ý" << overlapped->coTask.m_desc;
 				delete overlapped;
 				overlapped = nullptr;
 			}

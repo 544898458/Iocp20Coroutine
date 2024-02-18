@@ -20,10 +20,10 @@ CoTask<int> PostSend()
 	//co_yield 0;
 	//LOG(INFO) << ("PostSend end\n");
 }
-void NetworkThreadProc(CoTask<int>* co)
+void NetworkThreadProc(CoTask<int>* m_coWalk)
 {
 	LOG(INFO) << ("NetworkThreadProc\n");
-	co->Run();
+	m_coWalk->Run();
 }
 
 
@@ -60,14 +60,14 @@ public:
 	};
 	using handle = std::coroutine_handle<promise_type>;
 private:
-	handle hCoroutine;
-	MyCoroutine(handle handle) :hCoroutine(handle) {}
+	handle m_hCoroutine;
+	MyCoroutine(handle handle) :m_hCoroutine(handle) {}
 public:
 	//int result;
-	MyCoroutine(MyCoroutine&& other)noexcept :hCoroutine(other.hCoroutine) { other.hCoroutine = nullptr; }
-	~MyCoroutine() { if (hCoroutine) hCoroutine.destroy(); }
-	bool MoveNext() const { return hCoroutine && (hCoroutine.resume(), !hCoroutine.done()); }
-	T GetValue() const { return hCoroutine.promise().value; }
+	MyCoroutine(MyCoroutine&& other)noexcept :m_hCoroutine(other.m_hCoroutine) { other.m_hCoroutine = nullptr; }
+	~MyCoroutine() { if (m_hCoroutine) m_hCoroutine.destroy(); }
+	bool MoveNext() const { return m_hCoroutine && (m_hCoroutine.resume(), !m_hCoroutine.done()); }
+	T GetValue() const { return m_hCoroutine.promise().value; }
 };
 
 MyCoroutine<int> task()
@@ -97,14 +97,14 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
 	Status i = 1;
 	//LOG(INFO) << T * i << endl; //Test Cout  
-	CoTask<int> co = PostSend();
-	//std::thread networkThread(NetworkThreadProc, &co);
+	CoTask<int> m_coWalk = PostSend();
+	//std::thread networkThread(NetworkThreadProc, &m_coWalk);
 	//networkThread.detach();
 	//std::this_thread::sleep_for(2000ms);
-	//std::thread networkThread2(NetworkThreadProc, &co);
+	//std::thread networkThread2(NetworkThreadProc, &m_coWalk);
 	//networkThread2.detach();
 	//std::this_thread::sleep_for(2000ms);
-	co.Run();
+	m_coWalk.Run();
 	_CrtDumpMemoryLeaks();	 //显示内存泄漏报告
 	return 0;
 }

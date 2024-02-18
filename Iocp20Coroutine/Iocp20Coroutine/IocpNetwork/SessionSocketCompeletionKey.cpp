@@ -19,13 +19,13 @@ namespace Iocp {
 			//PostSend(pOverlapped);
 			//pSendOverlapped = new Overlapped();
 			sendOverlapped.coTask = PostSend(sendOverlapped);
-			sendOverlapped.coTask.desc = "PostSend";
+			sendOverlapped.coTask.m_desc = "PostSend";
 			sendOverlapped.coTask.Run();
 		}
 		{
 			//pRecvOverlapped = new Overlapped();
 			recvOverlapped.coTask = PostRecv(recvOverlapped);
-			recvOverlapped.coTask.desc = "PostRecv";
+			recvOverlapped.coTask.m_desc = "PostRecv";
 			recvOverlapped.coTask.Run();
 		}
 		return;

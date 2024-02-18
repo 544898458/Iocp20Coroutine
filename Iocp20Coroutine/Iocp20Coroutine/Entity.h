@@ -7,19 +7,24 @@ class Space;
 class Entity
 {
 public:
-	Entity(float x, Space& space, std::function< CoTask<int>(Entity*, float&, float&, bool&)> fun);
+	Entity(float x, Space& m_space, std::function< CoTask<int>(Entity*, float&, float&, bool&)> fun);
 	void ReplaceCo(std::function<CoTask<int>(Entity*, float&, float&, bool&)> fun);
 	void Update()
 	{
-		co.Run();
+		m_coWalk.Run();
 	}
 	float x = 0;
 	float z = 0;
-	CoTask<int> co;
-	bool coStop = false;
+	/// <summary>
+	/// 走路协程，替换这个协程就执行新的走路过程
+	/// </summary>
+	CoTask<int> m_coWalk;
+	/// <summary>
+	/// 简单的协程退出机制，逻辑判断
+	/// </summary>
+	bool m_coStop = false;
 
 private:
-	Space& space;
-	//MySession* m_pSession;
+	Space& m_space;
 };
 

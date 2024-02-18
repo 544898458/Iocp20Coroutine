@@ -18,8 +18,8 @@ void MsgQueue::Process()
 	case Login:
 	{
 		std::lock_guard lock(this->m_mutex);
-		const auto msg = this->queueLogin.front();
-		this->queueLogin.pop_front();
+		const auto msg = this->m_queueLogin.front();
+		this->m_queueLogin.pop_front();
 		OnRecv(msg);
 	}
 	break;
@@ -40,7 +40,7 @@ void MsgQueue::Push(const MsgLogin& msg)
 {
 	//printf("Push,");
 	std::lock_guard lock(this->m_mutex);
-	queueLogin.push_back(msg);
+	m_queueLogin.push_back(msg);
 	m_queueMsgId.push_back(Login);
 }
 void MsgQueue::Push(const MsgMove& msg)

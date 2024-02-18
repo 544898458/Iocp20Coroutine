@@ -1,16 +1,16 @@
 #pragma once
-#include <glog/logging.h>
+#include<glog/logging.h>
 #include<coroutine>
 #include<chrono>
 #include<assert.h>
 #include<mutex>
-//#include <iostream>
 using namespace std;
 
 /// <summary>
 /// 方便实现协程，没有任何具体逻辑，没有线程，没有网络
+/// 命名参考C#的ETTask或UniTask，C++20协程标准采用的是微软方案，因此命名也使用C#名字
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">返回值</typeparam>
 template<typename T>
 class CoTask
 {
@@ -26,14 +26,28 @@ public:
 		{
 			return CoTask{ handle::from_promise(*this) };
 		}
-		// 在以上函数后执行
+		
+		/// <summary>
+		/// 在以上函数后执行
+		/// suspend_always表示协程创建后立刻挂起，不执行任何代码，等着用户执行resume
+		/// </summary>
+		/// <returns></returns>
 		auto initial_suspend() { return std::suspend_always{}; }
-		// 协程结束前执行
+		
+		/// <summary>
+		/// 协程结束前执行
+		/// 如果改成suspend_never就问题很多，不知道为什么
+		/// </summary>
+		/// <returns></returns>
 		auto final_suspend() noexcept
 		{
 			return std::suspend_always{}; 
 		}
-		// 出现未经处理的异常时执行
+		/// <summary>
+		/// 出现未经处理的异常时执行
+		/// 这里只知道协程执行异常，却无法知道是什么异常
+		/// 只有在每一段co_yield前后都手工加try才能知道具体错
+		/// </summary>
 		void unhandled_exception() 
 		{
 			//return std::terminate(); 
@@ -68,66 +82,74 @@ public:
 	/// </summary>
 	void Run() 
 	{ 
-		std::lock_guard lock(mutex);
-		//if (hCoroutine.done())
+		std::lock_guard lock(m_mutex);
+		//if (m_hCoroutine.done())
 		//{
-		//	printf("%s协程已结束，不再执行\n", desc.c_str());
+		//	printf("%s协程已结束，不再执行\n", m_desc.c_str());
 		//	return;
 		//}
-		hCoroutine.resume();
+		m_hCoroutine.resume();
 		TryClear();
 	}
+	/// <summary>
+	/// Send专用
+	/// </summary>
+	/// <param name="send"></param>
 	void Run2(const bool &send)
 	{
-		std::lock_guard lock(mutex);
+		std::lock_guard lock(m_mutex);
 		if (send)
 			return;
-		hCoroutine.resume();
-		//if (hCoroutine.done())
-		//{
-		//	printf("%s协程已结束，不再执行\n", desc.c_str());
-		//	return;
-		//}
+
+		m_hCoroutine.resume();
 		TryClear();
 	}
 	void TryClear()
 	{
-		if (hCoroutine.done())
+		if (m_hCoroutine.done())
 		{
-			LOG(INFO) << desc <<"协程已退出" << hCoroutine.address();
-			hCoroutine.destroy();
-			hCoroutine = nullptr;
+			LOG(INFO) << m_desc <<"协程已退出" << m_hCoroutine.address();
+			m_hCoroutine.destroy();
+			m_hCoroutine = nullptr;
 		}
 	}
 	bool Finished()
 	{ 
-		std::lock_guard lock(mutex);
-		if (hCoroutine.address() == nullptr)
+		std::lock_guard lock(m_mutex);
+		if (m_hCoroutine.address() == nullptr)
 			return true;
 
-		return hCoroutine.done(); 
+		return m_hCoroutine.done(); 
 	}
 private:
-	std::mutex mutex;
+	std::mutex m_mutex;
 	/// <summary>
 	/// 唯一的成员变量
 	/// </summary>
-	handle hCoroutine=nullptr;
-	CoTask(handle handle) :hCoroutine(handle) {}
+	handle m_hCoroutine=nullptr;
+	CoTask(handle handle) :m_hCoroutine(handle) {}
 	
 
 public:
-	std::string desc;
+	/// <summary>
+	/// 方便调试
+	/// </summary>
+	std::string m_desc;
 	//int result;
 	CoTask(){}
-	//CoTask(CoTask&& other)noexcept :hCoroutine(other.hCoroutine) { other.hCoroutine = nullptr; }
+	//CoTask(CoTask&& other)noexcept :m_hCoroutine(other.m_hCoroutine) { other.m_hCoroutine = nullptr; }
+	
+	/// <summary>
+	/// 移动语义，这是必须的，协程反悔的临时对象是右值引用，传统复制构造函数传入的const&无法修改传进来的对象
+	/// </summary>
+	/// <param name="other"></param>
 	void operator=(CoTask&& other)noexcept 
 	{
-		assert(hCoroutine == nullptr);
-		hCoroutine = other.hCoroutine;
-		other.hCoroutine = nullptr; 
+		assert(m_hCoroutine == nullptr);
+		m_hCoroutine = other.m_hCoroutine;
+		other.m_hCoroutine = nullptr; 
 	}
-	~CoTask() { if (hCoroutine) hCoroutine.destroy(); }
-	//bool MoveNext() const { return hCoroutine && (hCoroutine.resume(), !hCoroutine.done()); }
-	T GetValue() const { return hCoroutine.promise().value; }
+	~CoTask() { if (m_hCoroutine) m_hCoroutine.destroy(); }
+	//bool MoveNext() const { return m_hCoroutine && (m_hCoroutine.resume(), !m_hCoroutine.done()); }
+	T GetValue() const { return m_hCoroutine.promise().value; }
 };
