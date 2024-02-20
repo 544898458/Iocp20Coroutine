@@ -134,23 +134,23 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
-	m_pSession->m_entity.ReplaceCo(
+	m_pSession->m_entity.ReplaceCo(	//替换协程
 		[targetX, targetZ](Entity* pEntity, float& x, float& z, bool& stop)->CoTask<int>
 		{
 			const auto localTargetX = targetX;
 			const auto localTargetZ = targetZ;
 			while (true)
 			{
-				co_yield 0;
+				co_yield 0;//服务器主工作线程大循环，每次循环触发一次
 				if (stop)
 				{
-					LOG(INFO) << "走向" << localTargetX << "的协程正常退出";
+					LOG(INFO) << "走向" << localTargetX << "," << localTargetZ << "的协程正常退出";
 					co_return 0;
 				}
 
-				x += localTargetX < x ? -0.5f : 0.5f;
-				z += localTargetZ < z ? -0.5f : 0.5f;
-
+				const auto step = 0.5f;
+				x += localTargetX < x ? -step : step;
+				z += localTargetZ < z ? -step : step;
 
 				MsgNotifyPos msg = { (int)NotifyPos , (uint64_t)pEntity, x,z };
 				Broadcast(msg);
