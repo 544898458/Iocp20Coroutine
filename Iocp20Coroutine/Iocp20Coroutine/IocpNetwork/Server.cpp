@@ -59,14 +59,14 @@ bool Iocp::Server<T_Session>::Init()
 		//WSACleanup();
 		return false;
 	}
-	
+
 	//auto pListenCompleteKey = new ListenSocketCompeletionKey<T_Session>(this->socketAccept);
 	//创建完成端口	创建一个I/O完成端口对象，用它面向任意数量的套接字句柄，管理多个I/O请求。要做到这一点，需要调用CreateCompletionPort函数。
 	this->hIocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	if (0 == hIocp)
 	{
 		int a = GetLastError();
-		LOG(INFO) <<  a;
+		LOG(INFO) << a;
 		closesocket(socketAccept);
 		//清理网络库
 		//WSACleanup();
@@ -101,7 +101,7 @@ bool Iocp::Server<T_Session>::Init()
 		switch (a) {
 		case WSAEADDRNOTAVAIL:szErr = "The requested address is not valid in its context.在其上下文中，该请求的地址无效。"; break;
 		}
-		LOG(INFO) << "a=" << a <<","<< szErr;
+		LOG(INFO) << "a=" << a << "," << szErr;
 
 
 		//释放
@@ -145,14 +145,14 @@ bool Iocp::Server<T_Session>::Init()
 	}
 
 	//if ( !
-	ListenSocketCompeletionKey<T_Session>::StartCoRoutine(hIocp, socketAccept);
-		//)
-	//{
-	//	//Clear();
-	//	//清理网络库
-	//	WSACleanup();
-	//	return false;
-	//}
+	ListenSocketCompeletionKey::StartCoRoutine<T_Session>(hIocp, socketAccept);
+	//)
+//{
+//	//Clear();
+//	//清理网络库
+//	WSACleanup();
+//	return false;
+//}
 
 
 	return true;
@@ -169,8 +169,6 @@ void Iocp::Server<T_Session>::Stop()
 template<class T_Session>
 void Iocp::Server<T_Session>::NetworkThreadProc(HANDLE port)
 {
-	//auto hIocp= (HANDLE)lpParameter;
-	//HANDLE port = hIocp;
 	DWORD      number_of_bytes = 0;
 	SocketCompeletionKey* pCompletionKey = nullptr;
 	LPOVERLAPPED lpOverlapped;

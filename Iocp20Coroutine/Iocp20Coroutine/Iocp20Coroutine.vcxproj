@@ -138,7 +138,9 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Iocp20Coroutine.cpp" />
     <ClCompile Include="IocpNetwork\ByteQueue.cpp" />
-    <ClCompile Include="IocpNetwork\ListenSocketCompeletionKey.cpp" />
+    <ClCompile Include="IocpNetwork\ListenSocketCompeletionKey.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="IocpNetwork\Op.cpp" />
     <ClCompile Include="IocpNetwork\Overlapped.cpp" />
     <ClCompile Include="IocpNetwork\Server.cpp" />

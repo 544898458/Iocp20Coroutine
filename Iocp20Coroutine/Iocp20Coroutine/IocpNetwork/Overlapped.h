@@ -38,7 +38,6 @@ namespace Iocp {
 			this->GetQueuedCompletionStatusReturn = bGetQueuedCompletionStatusReturn;
 			this->GetLastErrorReturn = lastErr;
 			this->coTask.Run();
-			//pOp->OnComplete(this, pKey, port,number_of_bytes,bGetQueuedCompletionStatusReturn,lastErr);
 		}
 		CoTask<int> coTask;
 		bool needDeleteMe=false;

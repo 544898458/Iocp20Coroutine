@@ -17,7 +17,8 @@ std::set<Iocp::SessionSocketCompeletionKey<MySession>*> g_setSession;
 std::mutex g_setSessionMutex;
 
 template class Iocp::Server<MySession>;
-template class Iocp::ListenSocketCompeletionKey<MySession>;
+//template class Iocp::ListenSocketCompeletionKey<MySession>;
+//template Iocp::ListenSocketCompeletionKey::AcceptEx<MySession>(Iocp::Overlapped* pAcceptOverlapped, SOCKET socketListen);
 template class Iocp::SessionSocketCompeletionKey<MySession>;
 
 void net_write_cb(char* buf, int64_t size, void* wd)
