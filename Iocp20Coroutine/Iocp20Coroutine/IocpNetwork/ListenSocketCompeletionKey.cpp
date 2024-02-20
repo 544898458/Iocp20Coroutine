@@ -4,16 +4,15 @@
 
 namespace Iocp {
 	template<class T_Session>
-	void ListenSocketCompeletionKey<T_Session>::StartCoRoutine( HANDLE hIocp,SOCKET socketListen)
+	void ListenSocketCompeletionKey::StartCoRoutine( HANDLE hIocp,SOCKET socketListen)
 	{
 		auto pAcceptOverlapped = new Overlapped();
 		pAcceptOverlapped->needDeleteMe = true;
-		pAcceptOverlapped->coTask = PostAccept(pAcceptOverlapped,hIocp, socketListen);
+		pAcceptOverlapped->coTask = PostAccept<T_Session>(pAcceptOverlapped,hIocp, socketListen);
 		pAcceptOverlapped->coTask.m_desc = "PostAccept";
 		pAcceptOverlapped->coTask.Run();
 	}
-	template<class T_Session>
-	std::tuple<bool, bool> ListenSocketCompeletionKey<T_Session>::AcceptEx(Overlapped* pAcceptOverlapped, SOCKET socketListen)
+	std::tuple<bool, bool> ListenSocketCompeletionKey::AcceptEx(Overlapped* pAcceptOverlapped, SOCKET socketListen)
 	{
 		char str2[1];// = new char[1024];// = { 0 };
 		DWORD dwRecvcount = 0;
@@ -57,7 +56,7 @@ namespace Iocp {
 		return std::make_tuple(false, false);
 	}
 	template<class T_Session>
-	CoTask<int> ListenSocketCompeletionKey<T_Session>::PostAccept(Overlapped* pAcceptOverlapped,HANDLE hIocp, SOCKET socketListen)
+	CoTask<int> ListenSocketCompeletionKey::PostAccept(Overlapped* pAcceptOverlapped,HANDLE hIocp, SOCKET socketListen)
 	{
 		while (true)
 		{
@@ -68,6 +67,8 @@ namespace Iocp {
 			if (!acceptOk)
 			{
 				LOG(WARNING) << "AcceptExʧ�ܣ�ֹͣAccept";
+				closesocket(pAcceptOverlapped->socket);
+				pAcceptOverlapped->socket = NULL;
 				co_return 0;
 			}
 
