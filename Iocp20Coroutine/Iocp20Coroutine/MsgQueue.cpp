@@ -1,4 +1,5 @@
 #include <glog/logging.h>
+#include <cstdlib>
 #include "MsgQueue.h"
 #include "MySession.h"
 
@@ -125,7 +126,9 @@ void MsgQueue::OnRecv(const MsgLogin& msg)
 		p->Send(ret);
 	}*/
 	const auto strBroadcast = "[" + utf8Name + "]进来了";
-	MsgLoginRet ret = { (int)LoginRet,GbkToUtf8(strBroadcast.c_str()) };
+	MsgLoginRet ret;
+	ret.nickName = GbkToUtf8(strBroadcast.c_str());
+	ret.entityId = (uint64_t)&m_pSession->m_entity;
 	Broadcast(ret);
 }
 
@@ -139,6 +142,9 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 		{
 			const auto localTargetX = targetX;
 			const auto localTargetZ = targetZ;
+			MsgChangeSkeleAnim msg(pEntity, "run");
+			Broadcast(msg);
+
 			while (true)
 			{
 				co_yield 0;//服务器主工作线程大循环，每次循环触发一次
@@ -149,10 +155,17 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 				}
 
 				const auto step = 0.5f;
+				if (std::abs(localTargetX - x) < step && std::abs(localTargetZ - z) < step) {
+					LOG(INFO) << "已走到" << localTargetX << "," << localTargetZ << "附近，协程正常退出";
+					MsgChangeSkeleAnim msg(pEntity, "idle");
+					Broadcast(msg);
+					co_return 0;
+				}
+
 				x += localTargetX < x ? -step : step;
 				z += localTargetZ < z ? -step : step;
 
-				MsgNotifyPos msg = { (int)NotifyPos , (uint64_t)pEntity, x,z };
+				MsgNotifyPos msg(pEntity, x, z);
 				Broadcast(msg);
 			}
 		});

@@ -88,6 +88,8 @@ public:
 		//	printf("%s协程已结束，不再执行\n", m_desc.c_str());
 		//	return;
 		//}
+		if (!m_hCoroutine)
+			return;
 		m_hCoroutine.resume();
 		TryClear();
 	}
@@ -99,6 +101,8 @@ public:
 	{
 		std::lock_guard lock(m_mutex);
 		if (send)
+			return;
+		if (!m_hCoroutine)
 			return;
 
 		m_hCoroutine.resume();

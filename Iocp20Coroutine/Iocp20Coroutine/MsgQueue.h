@@ -1,12 +1,14 @@
 #pragma once
 #include <msgpack.hpp>
 #include <mutex>
+class Entity;
 enum MsgId
 {
 	Login,
 	Move,
 	LoginRet,
 	NotifyPos,
+	ChangeSkeleAnim,
 };
 struct MsgLogin
 {
@@ -28,17 +30,27 @@ struct MsgMove
 struct MsgLoginRet
 {
 	int id = (int)LoginRet;
+	uint64_t entityId;
 	std::string nickName;
-	MSGPACK_DEFINE(id, nickName);
+	MSGPACK_DEFINE(id, entityId, nickName);
 };
 
 struct MsgNotifyPos
 {
+	MsgNotifyPos(Entity* p, float argX, float argZ):entityId((uint64_t)p),x(argX),z(argZ){}
 	int msgId = (int)NotifyPos;
 	uint64_t entityId;
 	float x;
 	float z;
 	MSGPACK_DEFINE(msgId, entityId, x, z);
+};
+struct MsgChangeSkeleAnim 
+{
+	MsgChangeSkeleAnim(Entity *p,std::string name):entityId((uint64_t)p),clipName(name){}
+	int msgId = (int)ChangeSkeleAnim;
+	uint64_t entityId;
+	std::string clipName;
+	MSGPACK_DEFINE(msgId, entityId, clipName);
 };
 
 class MySession;

@@ -55,7 +55,7 @@ CoTask<int> Patrol(Entity* pEntity,float &x, float& z)
 
 		x += 0.01f;
 
-		MsgNotifyPos msg  {(int)NotifyPos ,(uint64_t)pEntity, x,z};
+		MsgNotifyPos msg(pEntity, x,z);
 		Broadcast(msg);
 	}
 }
