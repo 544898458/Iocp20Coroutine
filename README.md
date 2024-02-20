@@ -7,8 +7,8 @@ C++20,IOCP,Coroutine,TCP Server Framework
 
 #### 一个实例：协程可以消除部分成员变量和全局变量
 功能：玩家走向目标点，每帧移动0.5米。  
-注意：目标点的坐标，没有记录在任何成员变量或全局变量里，而是记录在协程的局部变量里。
-这是此项目中真实运行的代码，并不是伪代码。
+注意：目标点的坐标，没有记录在任何成员变量或全局变量里，而是记录在协程的局部变量里。  
+这是此项目中真实运行的代码，并不是伪代码。  
 ```c++
 void MsgQueue::OnRecv(const MsgMove& msg)
 {
@@ -47,8 +47,8 @@ C++20标准采纳了微软的协程方案，此方案和C#的协程方案很像�
 #### 另一个实例，协程替代OOP的多态、Switch/Case、分支逻辑
 
 功能：有三个完成事件要区分处理，分别是Accept完成、Recv完成、Send完成，分别要执行完全不同的代码；  
-注意：没用OOP多态、没用Switch/Case以及函数字典等任何分支逻辑，唯一核心调用就是resume协程；
-这是此项目中真实运行的代码，并不是伪代码。
+注意：没用OOP多态、没用Switch/Case以及函数字典等任何分支逻辑，唯一核心调用就是resume协程；  
+这是此项目中真实运行的代码，并不是伪代码。  
 ```C++
 	void Overlapped::OnComplete(SocketCompeletionKey* pKey, const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
 	{
@@ -58,9 +58,9 @@ C++20标准采纳了微软的协程方案，此方案和C#的协程方案很像�
 		this->coTask.Run();//resume此协程
 	}
 ```
-上面代码中,Overlapped重叠结构在初始化时，就对coTask赋值了三个不同的协程中的一个，一旦协程resume，就会执行对应的协程的co_yield后面的代码，所以不用写任何逻辑分支判断。
-程序员思考的逻辑对应代码就是，有三种协程Accept、Recv、Send，它们在等待完成时suspend了，一旦事件完成，就resume。
-可以想想这三个协程内部也是一个while(true)循环，中间有co_yiled;
+上面代码中,Overlapped重叠结构在初始化时，就对coTask赋值了三个不同的协程中的一个，一旦协程resume，就会执行对应的协程的co_yield后面的代码，所以不用写任何逻辑分支判断。  
+程序员思考的逻辑对应代码就是，有三种协程Accept、Recv、Send，它们在等待完成时suspend了，一旦事件完成，就resume。  
+可以想象这三个协程内部也是一个while(true)循环，中间有co_yiled;  
 
 #### 软件架构
 软件架构说明
