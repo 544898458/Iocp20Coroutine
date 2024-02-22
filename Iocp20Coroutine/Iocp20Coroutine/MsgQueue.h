@@ -2,6 +2,13 @@
 #include <msgpack.hpp>
 #include <mutex>
 class Entity;
+
+struct Position
+{
+	float x;
+	float z;
+};
+
 enum MsgId
 {
 	Login,

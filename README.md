@@ -62,6 +62,36 @@ C++20标准采纳了微软的协程方案，此方案和C#的协程方案很像�
 程序员思考的逻辑对应代码就是，有三种协程Accept、Recv、Send，它们在等待完成时suspend了，一旦事件完成，就resume。  
 可以想象这三个协程内部也是一个while(true)循环，中间有co_yiled;  
 
+#### 第三个示例，协程同步等待一段时间替代定时器事件
+功能：技能过程为 前摇3秒，然后造成3段伤害，伤害之间有间隔，最后是后摇和公共冷却。
+注意：协程Wait把定时器事件改为同步编程方式，相同的有顺序关系的代码也按顺序关系排在一起（还支持循环和if/switch分支）。如果没有协程等待而用传统定时器事件实现，代码必然分散。
+这是此项目中真实运行的代码，并不是伪代码。
+```C++
+	CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, bool& stop)
+	{
+		{
+			MsgChangeSkeleAnim msg(pEntity, "attack");//播放攻击动作
+			Broadcast(msg);
+		}
+
+		co_await CoTimer::Wait(3000ms);//等3秒	前摇
+		pDefencer->Hurt(1);//第一次让对方伤1点生命
+		co_await CoTimer::Wait(500ms);//等0.5秒
+		pDefencer->Hurt(3);//第二次让对方伤3点生命
+		co_await CoTimer::Wait(500ms);//等0.5秒
+		pDefencer->Hurt(10);//第三次让对方伤10点生命
+		co_await CoTimer::Wait(3000ms);//等3秒	后摇
+		{
+			MsgChangeSkeleAnim msg(pEntity, "idle");//播放休闲待机动作
+			Broadcast(msg);
+		}
+
+		co_await CoTimer::Wait(5000ms);//等5秒	公共冷却
+	
+		co_return 0;
+	}
+```
+
 #### 软件架构
 软件架构说明
 

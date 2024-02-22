@@ -10,8 +10,8 @@ public:
 	Entity(float x, Space& m_space, std::function< CoTask<int>(Entity*, float&, float&, bool&)> fun);
 	void ReplaceCo(std::function<CoTask<int>(Entity*, float&, float&, bool&)> fun);
 	void Update();
-	float x = 0;
-	float z = 0;
+	void Hurt(int) {}
+	Position m_Pos;
 	/// <summary>
 	/// 走路协程，替换这个协程就执行新的走路过程
 	/// </summary>
@@ -30,3 +30,4 @@ private:
 	
 };
 
+CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, bool& stop);
