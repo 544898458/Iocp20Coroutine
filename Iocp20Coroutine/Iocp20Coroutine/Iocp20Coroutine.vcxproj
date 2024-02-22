@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CoRoutine\CoTask.cpp" />
+    <ClCompile Include="CoTimer.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Iocp20Coroutine.cpp" />
     <ClCompile Include="IocpNetwork\ByteQueue.cpp" />
@@ -164,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoRoutine\CoTask.h" />
+    <ClInclude Include="CoTimer.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Iocp20Coroutine.h" />
     <ClInclude Include="IocpNetwork\ByteQueue.h" />

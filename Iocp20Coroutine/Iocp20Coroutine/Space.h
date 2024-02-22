@@ -1,5 +1,5 @@
 #pragma once
-#include <map>
+#include <set>
 class Entity;
 /// <summary>
 /// Go”Ô—‘GoWorldøÚº‹Space/Entity£¨œ‡µ±”⁄C#”Ô—‘ETøÚº‹Scene/Unit
@@ -7,7 +7,7 @@ class Entity;
 class Space
 {
 public:
-	std::map<int, Entity*> mapEntity;
+	std::set<Entity*> setEntity;
 	void Update();
 };
 extern Space g_space;

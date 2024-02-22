@@ -161,7 +161,7 @@ void MySession::OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession)
 	//#include <glog/logging.h>
 	LOG(INFO) << "Ìí¼ÓSession£¬Ê£Óà" << g_setSession.size();
 	m_pSession = &refSession;
-	g_space.mapEntity[(long)this] = &m_entity;
+	g_space.setEntity.insert(& m_entity);
 }
 int MySession::OnRecv(Iocp::SessionSocketCompeletionKey<MySession>& refSession, const char buf[], int len)
 {
@@ -173,7 +173,7 @@ void MySession::OnDestroy()
 {
 	std::lock_guard lock(g_setSessionMutex);
 	g_setSession.erase(this->m_pSession);
-	g_space.mapEntity.erase((long)this);
+	g_space.setEntity.erase(&m_entity);
 	LOG(INFO) << "É¾³ýSession£¬Ê£Óà" << g_setSession.size();
 	
 }

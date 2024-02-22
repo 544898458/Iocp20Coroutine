@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include "MsgQueue.h"
 #include "MySession.h"
-
+#include "Space.h"
 void MsgQueue::Process()
 {
 	MsgId msgId = MsgId::Login;
@@ -125,11 +125,22 @@ void MsgQueue::OnRecv(const MsgLogin& msg)
 		MsgLoginRet ret = { 223,GbkToUtf8(strBroadcast.c_str()) };
 		p->Send(ret);
 	}*/
-	const auto strBroadcast = "[" + utf8Name + "]进来了";
+	//const auto strBroadcast = "[" + utf8Name + "]进来了";
 	MsgLoginRet ret;
-	ret.nickName = GbkToUtf8(strBroadcast.c_str());
+	ret.nickName = GbkToUtf8(utf8Name.c_str());// strBroadcast.c_str());
 	ret.entityId = (uint64_t)&m_pSession->m_entity;
+	m_pSession->m_entity.m_nickName = utf8Name;
 	Broadcast(ret);
+
+	for (const auto pENtity : g_space.setEntity)
+	{
+		if (pENtity == &m_pSession->m_entity)
+			continue;
+
+		ret.nickName = GbkToUtf8(m_pSession->m_entity.m_nickName.c_str());
+		ret.entityId = (uint64_t)pENtity;
+		m_pSession->Send(ret);
+	}
 }
 
 void MsgQueue::OnRecv(const MsgMove& msg)
@@ -169,4 +180,5 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 				Broadcast(msg);
 			}
 		});
+	m_pSession->m_entity.m_coWalk.Run();
 }

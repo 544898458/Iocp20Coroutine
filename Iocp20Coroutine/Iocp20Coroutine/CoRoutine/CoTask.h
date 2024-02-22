@@ -26,14 +26,14 @@ public:
 		{
 			return CoTask{ handle::from_promise(*this) };
 		}
-		
+
 		/// <summary>
 		/// 在以上函数后执行
 		/// suspend_always表示协程创建后立刻挂起，不执行任何代码，等着用户执行resume
 		/// </summary>
 		/// <returns></returns>
 		auto initial_suspend() { return std::suspend_always{}; }
-		
+
 		/// <summary>
 		/// 协程结束前执行
 		/// 如果改成suspend_never就问题很多，不知道为什么
@@ -41,17 +41,17 @@ public:
 		/// <returns></returns>
 		auto final_suspend() noexcept
 		{
-			return std::suspend_always{}; 
+			return std::suspend_always{};
 		}
 		/// <summary>
 		/// 出现未经处理的异常时执行
 		/// 这里只知道协程执行异常，却无法知道是什么异常
 		/// 只有在每一段co_yield前后都手工加try才能知道具体错
 		/// </summary>
-		void unhandled_exception() 
+		void unhandled_exception()
 		{
 			//return std::terminate(); 
-			LOG(WARNING) << "unhandled_exception" ;
+			LOG(WARNING) << "unhandled_exception";
 		}
 		// co_return 时执行，return_void跟return_value二选一
 		//void return_void() {}
@@ -80,15 +80,15 @@ public:
 	/// <summary>
 	/// 继续执行协程函数代码执直到遇到yield挂起
 	/// </summary>
-	void Run() 
-	{ 
+	void Run()
+	{
 		std::lock_guard lock(m_mutex);
 		//if (m_hCoroutine.done())
 		//{
 		//	printf("%s协程已结束，不再执行\n", m_desc.c_str());
 		//	return;
 		//}
-		if (!m_hCoroutine)
+		if (m_hCoroutine == nullptr)
 			return;
 		m_hCoroutine.resume();
 		TryClear();
@@ -97,7 +97,7 @@ public:
 	/// Send专用
 	/// </summary>
 	/// <param name="send"></param>
-	void Run2(const bool &send)
+	void Run2(const bool& send)
 	{
 		std::lock_guard lock(m_mutex);
 		if (send)
@@ -112,27 +112,27 @@ public:
 	{
 		if (m_hCoroutine.done())
 		{
-			LOG(INFO) << m_desc <<"协程已退出" << m_hCoroutine.address();
+			LOG(INFO) << m_desc << "协程已退出" << m_hCoroutine.address();
 			m_hCoroutine.destroy();
 			m_hCoroutine = nullptr;
 		}
 	}
 	bool Finished()
-	{ 
+	{
 		std::lock_guard lock(m_mutex);
-		if (m_hCoroutine.address() == nullptr)
+		if (m_hCoroutine == nullptr || m_hCoroutine.address() == nullptr)
 			return true;
 
-		return m_hCoroutine.done(); 
+		return m_hCoroutine.done();
 	}
 private:
 	std::mutex m_mutex;
 	/// <summary>
 	/// 唯一的成员变量
 	/// </summary>
-	handle m_hCoroutine=nullptr;
+	handle m_hCoroutine = nullptr;
 	CoTask(handle handle) :m_hCoroutine(handle) {}
-	
+
 
 public:
 	/// <summary>
@@ -140,18 +140,23 @@ public:
 	/// </summary>
 	std::string m_desc;
 	//int result;
-	CoTask(){}
-	//CoTask(CoTask&& other)noexcept :m_hCoroutine(other.m_hCoroutine) { other.m_hCoroutine = nullptr; }
-	
+	CoTask() {}
+
+	/// <summary>
+	/// 带有移动语言的复制构造函数
+	/// </summary>
+	/// <param name="other"></param>
+	CoTask(CoTask&& other)noexcept :m_hCoroutine(other.m_hCoroutine) { other.m_hCoroutine = nullptr; }
+
 	/// <summary>
 	/// 移动语义，这是必须的，协程反悔的临时对象是右值引用，传统复制构造函数传入的const&无法修改传进来的对象
 	/// </summary>
 	/// <param name="other"></param>
-	void operator=(CoTask&& other)noexcept 
+	void operator=(CoTask&& other)noexcept
 	{
 		assert(m_hCoroutine == nullptr);
 		m_hCoroutine = other.m_hCoroutine;
-		other.m_hCoroutine = nullptr; 
+		other.m_hCoroutine = nullptr;
 	}
 	~CoTask() { if (m_hCoroutine) m_hCoroutine.destroy(); }
 	//bool MoveNext() const { return m_hCoroutine && (m_hCoroutine.resume(), !m_hCoroutine.done()); }

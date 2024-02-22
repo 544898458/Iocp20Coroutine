@@ -5,8 +5,8 @@ Space g_space;
 
 void Space::Update()
 {
-	for (auto& kv : mapEntity)
+	for (auto pEntity : setEntity)
 	{
-		kv.second->Update();
+		pEntity->Update();
 	}
 }

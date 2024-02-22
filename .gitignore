@@ -34,3 +34,5 @@ enc_temp_folder
 *.idb
 *.pdb
 *.exe
+*.txt
+*.enc
