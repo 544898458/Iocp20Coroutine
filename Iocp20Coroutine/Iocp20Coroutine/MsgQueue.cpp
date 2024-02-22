@@ -159,8 +159,8 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 			const auto localTargetZ = targetZ;
 			MsgChangeSkeleAnim msg(pEntity, "run");
 			Broadcast(msg);
-			bool stop = true;
-			funCancel = [&stop]() {stop = false; };
+			bool stop = false;
+			funCancel = [&stop]() {stop = true; };
 			while (true)
 			{
 				if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次

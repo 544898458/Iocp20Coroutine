@@ -146,7 +146,7 @@ public:
 	CoTask(CoTask&& other)noexcept :m_hCoroutine(other.m_hCoroutine) { other.m_hCoroutine = nullptr; }
 
 	/// <summary>
-	/// 移动语义，这是必须的，协程反悔的临时对象是右值引用，传统复制构造函数传入的const&无法修改传进来的对象
+	/// 移动语义，这是必须的，协程反回的临时对象是右值引用，传统复制构造函数传入的const&无法修改传进来的对象
 	/// </summary>
 	/// <param name="other"></param>
 	void operator=(CoTask&& other)noexcept
@@ -202,10 +202,34 @@ struct CoAwaiter
 	std::coroutine_handle<> m_hAwaiter;
 	CoAwaiter(const CoAwaiter& other) 
 	{
+		CopyFrom(other);
+	}
+	void CopyFrom(const CoAwaiter& other)
+	{
 		m_hAwaiter = other.m_hAwaiter;
 		m_sn = other.m_sn;
 		//other.m_hAwaiter = nullptr;
 		//other.m_sn = 0;
+		m_Canceled = other.m_Canceled;
+	}
+	CoAwaiter( CoAwaiter&& other)noexcept
+	{
+		MoveFrom(other);
+	}
+	void operator =(CoAwaiter&& other)noexcept
+	{
+		MoveFrom(other);
+	}
+	void operator =(const CoAwaiter& other)noexcept
+	{
+		CopyFrom(other);
+	}
+	void MoveFrom(CoAwaiter& other)noexcept
+	{
+		m_hAwaiter = other.m_hAwaiter;
+		m_sn = other.m_sn;
+		other.m_hAwaiter = nullptr;
+		other.m_sn = 0;
 		m_Canceled = other.m_Canceled;
 	}
 	void Cancel() 
@@ -227,6 +251,7 @@ public:
 	~KeepCancel()
 	{
 		refFunCancel = funCancelOld;
+		funCancelOld = nullptr;
 	}
 	std::function<void()> funCancelOld;
 	std::function<void()>& refFunCancel;

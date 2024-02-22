@@ -11,8 +11,8 @@ namespace CoTimer
 	//}
 
 	std::multimap<std::chrono::steady_clock::time_point, CoAwaiter > g_multiTimer;
-	std::map<long,CoAwaiter> g_NextUpdate;
-	CoAwaiter& Wait(const std::chrono::milliseconds& milli, std::function<void()> &cancel)
+	std::map<long, CoAwaiter> g_NextUpdate;
+	CoAwaiter& Wait(const std::chrono::milliseconds& milli, std::function<void()>& cancel)
 	{
 		//g_multiTimer.insert({ std::chrono::steady_clock::now() + milli,Wait2() });
 		//co_await(*g_multiTimer.begin()).second;
@@ -20,7 +20,7 @@ namespace CoTimer
 		const auto time = std::chrono::steady_clock::now() + milli;
 		auto iter = g_multiTimer.insert({ time ,CoAwaiter(true) });
 		const auto sn = iter->second.Sn();
-		cancel = [time,sn]()
+		cancel = [time, sn]()
 			{
 				auto pair = g_multiTimer.equal_range(time);
 				for (auto iter = pair.first; iter != pair.second; ++iter)
@@ -43,25 +43,28 @@ namespace CoTimer
 		auto ret = CoAwaiter(true);
 		g_NextUpdate[ret.Sn()] = ret;
 		const auto sn = ret.Sn();
-		auto old = cancel;
-		cancel = [sn,&cancel,old]()
+		//auto old = cancel;
+		cancel = [sn]()
 			{
 				g_NextUpdate[sn].Cancel();
 				g_NextUpdate.erase(sn);
-				cancel = old;
+				//cancel = old;
 			};
 		return g_NextUpdate[ret.Sn()];
 	}
 	void Update()
 	{
-		auto old = g_NextUpdate;
-		g_NextUpdate.clear();
-		for (auto& awaiter : old)
+		std::vector<int> vecDel;
+		for (auto& kv : g_NextUpdate)
 		{
-			awaiter.second.m_hAwaiter.resume();
+			vecDel.push_back(kv.second.Sn());
+		}
+		for (const auto sn : vecDel)
+		{
+			g_NextUpdate[sn].m_hAwaiter.resume();
+			g_NextUpdate.erase(sn);
 		}
 		
-
 		const auto now = std::chrono::steady_clock::now();
 		while (!g_multiTimer.empty())
 		{
@@ -70,8 +73,8 @@ namespace CoTimer
 			if (kv.first > now)
 				return;
 
-			if( ! kv.second.m_hAwaiter.done() )
-			kv.second.m_hAwaiter.resume();
+			if (!kv.second.m_hAwaiter.done())
+				kv.second.m_hAwaiter.resume();
 			//assert(kv.second.Finished());
 			g_multiTimer.erase(kv.first);
 		}
