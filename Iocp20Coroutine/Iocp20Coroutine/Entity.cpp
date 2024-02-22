@@ -46,16 +46,16 @@ CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, bool&
 
 void Entity::Update()
 {
-	if (!m_coAttack.Finished())
-	{
-		m_coAttack.Run();
-		return;
-	}
-	if (!m_coWalk.Finished())
-	{
-		m_coWalk.Run();
-		return;
-	}
+	//if (!m_coAttack.Finished())
+	//{
+	//	m_coAttack.Run();
+	//	return;
+	//}
+	//if (!m_coWalk.Finished())
+	//{
+	//	m_coWalk.Run();
+	//	return;
+	//}
 	for (const auto pENtity : m_space.setEntity)
 	{
 		if (pENtity == this)
@@ -67,7 +67,7 @@ void Entity::Update()
 		m_coStop = false;
 
 		m_coAttack = Attack(this, this, this->m_Pos.x, this->m_Pos.z, m_coStop);
-		//m_coAttack.Run();
+		m_coAttack.Run();
 		return;
 	}
 }

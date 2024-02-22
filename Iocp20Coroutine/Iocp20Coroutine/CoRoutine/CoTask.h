@@ -66,15 +66,7 @@ public:
 			return std::suspend_always{};
 		}
 	};
-	constexpr void await_resume() const noexcept {}
-	constexpr bool await_ready() const noexcept { return false; }
-	constexpr void await_suspend(std::coroutine_handle<> h) const noexcept
-	{
-		auto t = std::jthread([h, l = length] {
-			std::this_thread::sleep_for(l);
-			h.resume();
-			});
-	}
+
 	const std::chrono::duration<int, std::milli> length = 1000ms;
 	using handle = std::coroutine_handle<promise_type>;
 	/// <summary>
@@ -83,11 +75,11 @@ public:
 	void Run()
 	{
 		std::lock_guard lock(m_mutex);
-		//if (m_hCoroutine.done())
-		//{
-		//	printf("%s协程已结束，不再执行\n", m_desc.c_str());
-		//	return;
-		//}
+		if (FinishedNoLock())
+		{
+			LOG(INFO) << m_desc << "协程已结束，不再执行\n";
+			return;
+		}
 		if (m_hCoroutine == nullptr)
 			return;
 		m_hCoroutine.resume();
@@ -120,6 +112,10 @@ public:
 	bool Finished()
 	{
 		std::lock_guard lock(m_mutex);
+		return FinishedNoLock();
+	}
+	bool FinishedNoLock()
+	{
 		if (m_hCoroutine == nullptr || m_hCoroutine.address() == nullptr)
 			return true;
 
@@ -154,11 +150,40 @@ public:
 	/// <param name="other"></param>
 	void operator=(CoTask&& other)noexcept
 	{
-		assert(m_hCoroutine == nullptr);
+		assert(FinishedNoLock());
 		m_hCoroutine = other.m_hCoroutine;
 		other.m_hCoroutine = nullptr;
 	}
 	~CoTask() { if (m_hCoroutine) m_hCoroutine.destroy(); }
 	//bool MoveNext() const { return m_hCoroutine && (m_hCoroutine.resume(), !m_hCoroutine.done()); }
 	T GetValue() const { return m_hCoroutine.promise().value; }
+};
+
+
+struct CoAwaiter
+{
+	// await_ready告诉co_await准备好没有，如果返回false，
+	//    如果await_suspend返回coroutine_handle的一个实例h，
+	//    那么恢复这个handle，即运行await_suspend(h).resume()
+	//    即暂停本协程同时恢复另一个协程。
+	//    如果await_suspend返回bool，如果为false则恢复自己。
+	//    如果await_suspend返回void, 那么直接执行，执行完暂停本协程。
+	// 如果await_ready返回true或者协程被恢复了，那么执行await_resume，
+	// 执行完暂停本协程。
+	// 总结下：
+	//    await_ready:准备好了没有。
+	//    await_suspend:停不停止。 
+	//    await_resume:好了做什么。
+	constexpr void await_resume() const noexcept {}
+	constexpr bool await_ready() const noexcept { return false; }
+	constexpr void await_suspend(std::coroutine_handle<> h) noexcept
+	{
+		//auto t = std::jthread([h, l = length] {
+		//	std::this_thread::sleep_for(l);
+		//h.resume();
+		//	});
+		m_hAwaiter = h;
+	}
+	std::coroutine_handle<> m_hAwaiter;
+
 };

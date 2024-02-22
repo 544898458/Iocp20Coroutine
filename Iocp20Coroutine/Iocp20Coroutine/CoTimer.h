@@ -4,7 +4,8 @@
 #include"CoRoutine/CoTask.h"
 namespace CoTimer
 {
-	CoTask<int> Wait(const std::chrono::milliseconds &);
+	CoAwaiter Wait(const std::chrono::milliseconds &);
+	CoAwaiter& WaitNextUpdate();
 	void Update();
 };
 

@@ -3,6 +3,8 @@
 #include "MsgQueue.h"
 #include "MySession.h"
 #include "Space.h"
+#include "CoTimer.h"
+
 void MsgQueue::Process()
 {
 	MsgId msgId = MsgId::Login;
@@ -158,7 +160,7 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 
 			while (true)
 			{
-				co_yield 0;//服务器主工作线程大循环，每次循环触发一次
+				co_await CoTimer::WaitNextUpdate();//服务器主工作线程大循环，每次循环触发一次
 				if (stop)
 				{
 					LOG(INFO) << "走向" << localTargetX << "," << localTargetZ << "的协程正常退出";

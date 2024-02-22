@@ -8,7 +8,7 @@
 #include "MsgQueue.h"
 #include "Space.h"
 #include "Entity.h"
-
+#include "CoTimer.h"
 #include <glog/logging.h>
 #pragma comment(lib, "glog.lib")
 
@@ -47,18 +47,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 	}
 	return TRUE;
 }
-CoTask<int> Patrol(Entity* pEntity,float &x, float& z)
-{
-	while (true)
-	{
-		co_yield 0;
 
-		x += 0.01f;
-
-		MsgNotifyPos msg(pEntity, x,z);
-		Broadcast(msg);
-	}
-}
 
 
 
@@ -114,6 +103,7 @@ int main(void)
 
 		}
 		g_space.Update();
+		CoTimer::Update();
 	}
 	accept.Stop();
 	LOG(INFO) << "正常退出,GetCurrentThreadId=" << GetCurrentThreadId();
