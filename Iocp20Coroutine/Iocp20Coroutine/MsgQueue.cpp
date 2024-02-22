@@ -151,16 +151,20 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
 	m_pSession->m_entity.ReplaceCo(	//替换协程
-		[targetX, targetZ](Entity* pEntity, float& x, float& z, bool& stop)->CoTask<int>
+		[targetX, targetZ](Entity* pEntity, float& x, float& z, std::function<void()>& funCancel)->CoTask<int>
 		{
+			KeepCancel kc(funCancel);
+
 			const auto localTargetX = targetX;
 			const auto localTargetZ = targetZ;
 			MsgChangeSkeleAnim msg(pEntity, "run");
 			Broadcast(msg);
-
+			bool stop = true;
+			funCancel = [&stop]() {stop = false; };
 			while (true)
 			{
-				co_await CoTimer::WaitNextUpdate();//服务器主工作线程大循环，每次循环触发一次
+				if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
+					co_return 0;
 				if (stop)
 				{
 					LOG(INFO) << "走向" << localTargetX << "," << localTargetZ << "的协程正常退出";

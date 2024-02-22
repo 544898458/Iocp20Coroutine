@@ -4,6 +4,7 @@
 #include<chrono>
 #include<assert.h>
 #include<mutex>
+#include<functional>
 using namespace std;
 
 /// <summary>
@@ -162,6 +163,17 @@ public:
 
 struct CoAwaiter
 {
+	CoAwaiter(bool initSn=false):m_Canceled(false)
+	{
+		if (initSn)
+			m_sn = GenSn();
+	}
+	static long GenSn()
+	{
+		static long sn = 0;
+		return ++sn;
+	}
+	long Sn()const { return m_sn; }
 	// await_ready告诉co_await准备好没有，如果返回false，
 	//    如果await_suspend返回coroutine_handle的一个实例h，
 	//    那么恢复这个handle，即运行await_suspend(h).resume()
@@ -174,7 +186,10 @@ struct CoAwaiter
 	//    await_ready:准备好了没有。
 	//    await_suspend:停不停止。 
 	//    await_resume:好了做什么。
-	constexpr void await_resume() const noexcept {}
+	bool await_resume() const noexcept 
+	{
+		return m_Canceled; 
+	}
 	constexpr bool await_ready() const noexcept { return false; }
 	constexpr void await_suspend(std::coroutine_handle<> h) noexcept
 	{
@@ -185,5 +200,34 @@ struct CoAwaiter
 		m_hAwaiter = h;
 	}
 	std::coroutine_handle<> m_hAwaiter;
+	CoAwaiter(const CoAwaiter& other) 
+	{
+		m_hAwaiter = other.m_hAwaiter;
+		m_sn = other.m_sn;
+		//other.m_hAwaiter = nullptr;
+		//other.m_sn = 0;
+		m_Canceled = other.m_Canceled;
+	}
+	void Cancel() 
+	{
+		m_Canceled = true;
+		m_hAwaiter.resume();
+	}
+private :
+	long m_sn;
+	bool m_Canceled;
+};
 
+class KeepCancel
+{
+public:
+	KeepCancel(std::function<void()>& old) :funCancelOld(old), refFunCancel(old)
+	{
+	}
+	~KeepCancel()
+	{
+		refFunCancel = funCancelOld;
+	}
+	std::function<void()> funCancelOld;
+	std::function<void()>& refFunCancel;
 };

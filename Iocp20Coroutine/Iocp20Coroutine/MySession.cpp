@@ -12,6 +12,7 @@
 #include <codecvt>
 #include "MsgQueue.h"
 #include "Space.h"
+#include "CoTimer.h"
 
 std::set<Iocp::SessionSocketCompeletionKey<MySession>*> g_setSession;
 std::mutex g_setSessionMutex;
@@ -36,7 +37,7 @@ public:
 	MyWebSocketEndpoint(nt_write_cb write_cb, void* work_data) :WebSocketEndpoint(write_cb, work_data)
 	{
 	}
-	
+
 	virtual int32_t user_defined_process(WebSocketPacket& packet, ByteBuffer& frame_payload)override
 	{
 		switch (packet.get_opcode())
@@ -73,14 +74,14 @@ public:
 			//user_defined_process(packet, frame_payload);
 			break;
 		default:
-			LOG(INFO) << "WebSocketEndpoint - recv an unknown opcode." ;
+			LOG(INFO) << "WebSocketEndpoint - recv an unknown opcode.";
 			break;
 		}
 
-		msgpack::object_handle oh = msgpack::unpack(frame_payload.bytes() , frame_payload.length());//没判断越界，要加try
+		msgpack::object_handle oh = msgpack::unpack(frame_payload.bytes(), frame_payload.length());//没判断越界，要加try
 		msgpack::object obj = oh.get();
 		const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
-		LOG(INFO) << obj ;
+		LOG(INFO) << obj;
 		auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompeletionKey<MySession>*>(this->nt_work_data_);
 		switch (msgId)
 		{
@@ -128,23 +129,28 @@ template<class T>
 void MySession::Send(const T& ref)
 {
 	m_webSocketEndpoint->Send(ref);
-
 }
 
-CoTask<int> TraceEnemy(Entity* pEntity, float& x, float& z,bool &stop)
+
+CoTask<int> TraceEnemy(Entity* pEntity, float& x, float& z, std::function<void()>& funCancel)
 {
+	KeepCancel kc(funCancel);
+	bool stop = true;
+	funCancel = [&stop]() {stop = false; };
 	while (true)
 	{
-		co_yield 0;
-		if (stop) 
+		if (co_await CoTimer::WaitNextUpdate(funCancel))
+			co_return 0;
+
+		if (stop)
 		{
 
-			LOG(INFO) << "TraceEnemy协程正常退出" ;
+			LOG(INFO) << "TraceEnemy协程正常退出";
 			co_return 0;
 		}
 		x -= 0.01;
 
-		MsgNotifyPos msg(pEntity, x,z );
+		MsgNotifyPos msg(pEntity, x, z);
 		Broadcast(msg);
 	}
 }
@@ -156,12 +162,12 @@ MySession::MySession() : m_entity(5, g_space, TraceEnemy), m_msgQueue(this)
 void MySession::OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession)
 {
 	std::lock_guard lock(g_setSessionMutex);
-	m_webSocketEndpoint.reset( new MyWebSocketEndpoint(net_write_cb, &refSession));
+	m_webSocketEndpoint.reset(new MyWebSocketEndpoint(net_write_cb, &refSession));
 	g_setSession.insert(&refSession);
 	//#include <glog/logging.h>
 	LOG(INFO) << "添加Session，剩余" << g_setSession.size();
 	m_pSession = &refSession;
-	g_space.setEntity.insert(& m_entity);
+	g_space.setEntity.insert(&m_entity);
 }
 int MySession::OnRecv(Iocp::SessionSocketCompeletionKey<MySession>& refSession, const char buf[], int len)
 {
@@ -175,7 +181,7 @@ void MySession::OnDestroy()
 	g_setSession.erase(this->m_pSession);
 	g_space.setEntity.erase(&m_entity);
 	LOG(INFO) << "删除Session，剩余" << g_setSession.size();
-	
+
 }
 
 template void MySession::Send(const MsgLoginRet&);
