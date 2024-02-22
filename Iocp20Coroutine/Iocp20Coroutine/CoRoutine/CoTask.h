@@ -146,7 +146,7 @@ public:
 	CoTask(CoTask&& other)noexcept :m_hCoroutine(other.m_hCoroutine) { other.m_hCoroutine = nullptr; }
 
 	/// <summary>
-	/// 移动语义，这是必须的，协程反悔的临时对象是右值引用，传统复制构造函数传入的const&无法修改传进来的对象
+	/// 移动语义，这是必须的，协程反回的临时对象是右值引用，传统复制构造函数传入的const&无法修改传进来的对象
 	/// </summary>
 	/// <param name="other"></param>
 	void operator=(CoTask&& other)noexcept
@@ -161,13 +161,37 @@ public:
 };
 
 
+class KeepCancel
+{
+public:
+	KeepCancel(std::function<void()>& old,bool autoRevert=true) :funCancelOld(old), refFunCancel(old), m_autoRevert(autoRevert)
+	{
+	}
+	~KeepCancel() 
+	{
+		if (m_autoRevert)
+			Revert();
+	}
+	void Revert()
+	{
+		refFunCancel = funCancelOld;
+		funCancelOld = nullptr;
+	}
+	std::function<void()> funCancelOld;
+	std::function<void()>& refFunCancel;
+	const bool m_autoRevert;
+};
+
+
 struct CoAwaiter
 {
-	CoAwaiter(bool initSn=false):m_Canceled(false)
+	static std::function<void()> funEmpty;
+	CoAwaiter(bool initSn = false, std::function<void()>& cancel = funEmpty) :m_Canceled(false), m_Kc(cancel,false)
 	{
 		if (initSn)
 			m_sn = GenSn();
 	}
+
 	static long GenSn()
 	{
 		static long sn = 0;
@@ -186,9 +210,9 @@ struct CoAwaiter
 	//    await_ready:准备好了没有。
 	//    await_suspend:停不停止。 
 	//    await_resume:好了做什么。
-	bool await_resume() const noexcept 
+	bool await_resume() const noexcept
 	{
-		return m_Canceled; 
+		return m_Canceled;
 	}
 	constexpr bool await_ready() const noexcept { return false; }
 	constexpr void await_suspend(std::coroutine_handle<> h) noexcept
@@ -200,7 +224,11 @@ struct CoAwaiter
 		m_hAwaiter = h;
 	}
 	std::coroutine_handle<> m_hAwaiter;
-	CoAwaiter(const CoAwaiter& other) 
+	CoAwaiter(const CoAwaiter& other):m_Kc(other.m_Kc.refFunCancel,false)
+	{
+		CopyFrom(other);
+	}
+	void CopyFrom(const CoAwaiter& other)
 	{
 		m_hAwaiter = other.m_hAwaiter;
 		m_sn = other.m_sn;
@@ -208,26 +236,33 @@ struct CoAwaiter
 		//other.m_sn = 0;
 		m_Canceled = other.m_Canceled;
 	}
-	void Cancel() 
+	CoAwaiter(CoAwaiter&& other) noexcept :m_Kc(other.m_Kc.refFunCancel, false)
+	{
+		MoveFrom(other);
+	}
+	void operator =(CoAwaiter&& other)noexcept
+	{
+		MoveFrom(other);
+	}
+	void operator =(const CoAwaiter& other)noexcept
+	{
+		CopyFrom(other);
+	}
+	void MoveFrom(CoAwaiter& other)noexcept
+	{
+		m_hAwaiter = other.m_hAwaiter;
+		m_sn = other.m_sn;
+		other.m_hAwaiter = nullptr;
+		other.m_sn = 0;
+		m_Canceled = other.m_Canceled;
+	}
+	void Cancel()
 	{
 		m_Canceled = true;
 		m_hAwaiter.resume();
 	}
-private :
+private:
 	long m_sn;
 	bool m_Canceled;
-};
-
-class KeepCancel
-{
-public:
-	KeepCancel(std::function<void()>& old) :funCancelOld(old), refFunCancel(old)
-	{
-	}
-	~KeepCancel()
-	{
-		refFunCancel = funCancelOld;
-	}
-	std::function<void()> funCancelOld;
-	std::function<void()>& refFunCancel;
+	KeepCancel m_Kc;
 };

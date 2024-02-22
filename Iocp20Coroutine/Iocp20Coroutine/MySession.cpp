@@ -135,13 +135,15 @@ void MySession::Send(const T& ref)
 CoTask<int> TraceEnemy(Entity* pEntity, float& x, float& z, std::function<void()>& funCancel)
 {
 	KeepCancel kc(funCancel);
-	bool stop = true;
-	funCancel = [&stop]() {stop = false; };
+	bool stop = false;
+	funCancel = [&stop]() {stop = true; };
 	while (true)
 	{
 		if (co_await CoTimer::WaitNextUpdate(funCancel))
+		{
+			LOG(INFO) << "调用者手动取消了协程TraceEnemy";
 			co_return 0;
-
+		}
 		if (stop)
 		{
 

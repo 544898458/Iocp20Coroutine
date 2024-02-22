@@ -14,8 +14,8 @@ public:
 	Position m_Pos;
 	CoTask<int> m_coWalk;
 	CoTask<int> m_coAttack;
-	std::function<void()> m_cancelAttack;
-	std::function<void()> m_cancelWaklk;
+	//std::function<void()> m_cancelAttack;
+	std::function<void()> m_cancel;
 	const uint64_t Id;
 	int m_hp = 10;
 	std::string m_nickName;
