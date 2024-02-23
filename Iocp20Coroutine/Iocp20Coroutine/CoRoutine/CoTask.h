@@ -174,12 +174,18 @@ public:
 	}
 	void Revert()
 	{
+		LOG(INFO) << "Revert" ;
 		refFunCancel = funCancelOld;
 		funCancelOld = nullptr;
 	}
 	std::function<void()> funCancelOld;
 	std::function<void()>& refFunCancel;
-	const bool m_autoRevert;
+	void operator=(const KeepCancel& other) 
+	{
+		funCancelOld = refFunCancel = other.refFunCancel;
+		m_autoRevert = other.m_autoRevert;
+	}
+	bool m_autoRevert;
 };
 
 
@@ -223,7 +229,7 @@ struct CoAwaiter
 		//	});
 		m_hAwaiter = h;
 	}
-	std::coroutine_handle<> m_hAwaiter;
+	
 	CoAwaiter(const CoAwaiter& other):m_Kc(other.m_Kc.refFunCancel,false)
 	{
 		CopyFrom(other);
@@ -235,6 +241,7 @@ struct CoAwaiter
 		//other.m_hAwaiter = nullptr;
 		//other.m_sn = 0;
 		m_Canceled = other.m_Canceled;
+		m_Kc = other.m_Kc;
 	}
 	CoAwaiter(CoAwaiter&& other) noexcept :m_Kc(other.m_Kc.refFunCancel, false)
 	{
@@ -261,8 +268,13 @@ struct CoAwaiter
 		m_Canceled = true;
 		m_hAwaiter.resume();
 	}
+	void Run() 
+	{
+		m_hAwaiter.resume();
+	}
 private:
 	long m_sn;
 	bool m_Canceled;
 	KeepCancel m_Kc;
+	std::coroutine_handle<> m_hAwaiter;
 };

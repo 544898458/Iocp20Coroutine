@@ -16,8 +16,13 @@ void Entity::ReplaceCo(std::function< CoTask<int>(Entity*, float&, float&, std::
 	//m_coStop = true;
 	if (m_cancel)
 		m_cancel();
+	else if (!m_coWalk.Finished() || !m_coAttack.Finished())
+	{
+		LOG(ERROR) << "协程没结束，却提前清空了m_cancel"  ;
+	}
 	m_coWalk.Run();
 	assert(m_coWalk.Finished());//20240205
+	assert(m_coAttack.Finished());//20240205
 	/*m_coStop = false;*/
 	m_coWalk = fun(this, this->m_Pos.x, this->m_Pos.z, m_cancel);
 }
@@ -57,13 +62,12 @@ void Entity::Update()
 {
 	if (!m_coAttack.Finished())
 	{
-		return;
+		return;//表示不允许打断
 	}
-	//if (!m_coWalk.Finished())
-	//{
-	//	m_coWalk.Run();
-	//	return;
-	//}
+	if (!m_coWalk.Finished())
+	{
+		return;//表示不允许打断
+	}
 	for (const auto pENtity : m_space.setEntity)
 	{
 		if (pENtity == this)

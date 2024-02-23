@@ -29,7 +29,7 @@ namespace CoTimer
 				{
 					if (iter->second.Sn() == sn)
 					{
-						iter->second.m_hAwaiter.resume();//迭代器失效
+						iter->second.Cancel();//迭代器失效
 						break;
 						//g_multiTimer.erase(iter);
 					}
@@ -76,7 +76,7 @@ namespace CoTimer
 		}
 		for (const auto sn : vecDel)
 		{
-			g_NextUpdate[sn].m_hAwaiter.resume();
+			g_NextUpdate[sn].Run();
 			g_NextUpdate.erase(sn);
 		}
 		
@@ -88,8 +88,7 @@ namespace CoTimer
 			if (kv.first > now)
 				return;
 
-			if (!kv.second.m_hAwaiter.done())
-				kv.second.m_hAwaiter.resume();
+			kv.second.Run();
 			//assert(kv.second.Finished());
 			g_multiTimer.erase(kv.first);
 		}
