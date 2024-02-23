@@ -31,31 +31,32 @@ CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, std::
 {
 	KeepCancel kc(cancel);
 
-	{
-		MsgChangeSkeleAnim msg(pEntity, "attack");//播放攻击动作
-		Broadcast(msg);
-	}
-	
+	Broadcast(MsgChangeSkeleAnim(pEntity, "attack"));//播放攻击动作
+		
 	if (co_await CoTimer::Wait(3000ms, cancel))//等3秒	前摇
-		co_return 0;
-	pDefencer->Hurt(1);//第一次让对方伤1点生命
-	if (co_await CoTimer::Wait(500ms, cancel))//等0.5秒
-		co_return 0;
-	pDefencer->Hurt(3);//第二次让对方伤3点生命
-	if(co_await CoTimer::Wait(500ms, cancel))//等0.5秒
-		co_return 0;
-	pDefencer->Hurt(10);//第三次让对方伤10点生命
-	if(co_await CoTimer::Wait(3000ms, cancel))//等3秒	后摇
-		co_return 0;
-	{
-		MsgChangeSkeleAnim msg(pEntity, "idle");//播放休闲待机动作
-		Broadcast(msg);
-	}
+		co_return 0;//协程取消
 
-	if(co_await CoTimer::Wait(5000ms, cancel))//等5秒	公共冷却
-		co_return 0;
+	pDefencer->Hurt(1);//第一次让对方伤1点生命
+
+	if (co_await CoTimer::Wait(500ms, cancel))//等0.5秒
+		co_return 0;//协程取消
+
+	pDefencer->Hurt(3);//第二次让对方伤3点生命
+
+	if(co_await CoTimer::Wait(500ms, cancel))//等0.5秒
+		co_return 0;//协程取消
+
+	pDefencer->Hurt(10);//第三次让对方伤10点生命
+
+	if(co_await CoTimer::Wait(3000ms, cancel))//等3秒	后摇
+		co_return 0;//协程取消
+
+	Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));//播放休闲待机动作
 	
-	co_return 0;
+	if(co_await CoTimer::Wait(5000ms, cancel))//等5秒	公共冷却
+		co_return 0;//协程取消
+	
+	co_return 0;//协程正常退出
 }
 
 void Entity::Update()

@@ -16,27 +16,36 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
 	m_pSession->m_entity.ReplaceCo(	//替换协程
-		[targetX, targetZ](Entity* pEntity, float& x, float& z, bool& stop)->CoTask<int>
+		[targetX, targetZ](Entity* pEntity, float& x, float& z, std::function<void()>& funCancel)->CoTask<int>
 		{
+			KeepCancel kc(funCancel);
 			const auto localTargetX = targetX;
 			const auto localTargetZ = targetZ;
+
+			Broadcast(MsgChangeSkeleAnim(pEntity, "run"));
+			
 			while (true)
 			{
-				co_yield 0;//服务器主工作线程大循环，每次循环触发一次
-				if (stop)
+				if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
 				{
-					LOG(INFO) << "走向" << localTargetX << "," << localTargetZ << "的协程正常退出";
+					LOG(INFO) << "走向" << localTargetX << "," << localTargetZ << "的协程取消了";
 					co_return 0;
 				}
 
 				const auto step = 0.5f;
+				if (std::abs(localTargetX - x) < step && std::abs(localTargetZ - z) < step) {
+					LOG(INFO) << "已走到" << localTargetX << "," << localTargetZ << "附近，协程正常退出";
+					Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));
+					co_return 0;
+				}
+
 				x += localTargetX < x ? -step : step;
 				z += localTargetZ < z ? -step : step;
 
-				MsgNotifyPos msg = { (int)NotifyPos , (uint64_t)pEntity, x,z };
-				Broadcast(msg);
+				Broadcast(MsgNotifyPos(pEntity, x, z));
 			}
 		});
+	m_pSession->m_entity.m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 }
 ```
 如此简单的编程手段早就在lua、python、typescript、java、C#、golang广泛使用，而C++却只能用boost或者腾讯协程库。  
@@ -63,33 +72,41 @@ C++20标准采纳了微软的协程方案，此方案和C#的协程方案很像�
 可以想象这三个协程内部也是一个while(true)循环，中间有co_yiled;  
 
 #### 第三个实例，协程同步等待一段时间替代定时器事件
-功能：技能过程为前摇3秒，然后造成3段伤害，伤害之间有间隔，最后是后摇和公共冷却。  
+功能：技能过程为前摇3秒，然后造成3段伤害，各段伤害之间有间隔，最后是后摇（硬直）和公共冷却（不可释放其它已冷却的技能）。  
 注意：协程Wait把定时器事件改为同步编程方式，相同的有顺序关系的代码也按顺序关系排在一起（还支持循环和if/switch分支）。如果没有协程等待而用传统定时器事件实现，代码必然分散。  
 这是此项目中真实运行的代码，并不是伪代码。  
 ```C++
-	CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, bool& stop)
-	{
-		{
-			MsgChangeSkeleAnim msg(pEntity, "attack");//播放攻击动作
-			Broadcast(msg);
-		}
+CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, std::function<void()> &cancel)
+{
+	KeepCancel kc(cancel);
 
-		co_await CoTimer::Wait(3000ms);//等3秒	前摇
-		pDefencer->Hurt(1);//第一次让对方伤1点生命
-		co_await CoTimer::Wait(500ms);//等0.5秒
-		pDefencer->Hurt(3);//第二次让对方伤3点生命
-		co_await CoTimer::Wait(500ms);//等0.5秒
-		pDefencer->Hurt(10);//第三次让对方伤10点生命
-		co_await CoTimer::Wait(3000ms);//等3秒	后摇
-		{
-			MsgChangeSkeleAnim msg(pEntity, "idle");//播放休闲待机动作
-			Broadcast(msg);
-		}
+	Broadcast(MsgChangeSkeleAnim(pEntity, "attack"));//播放攻击动作
+		
+	if (co_await CoTimer::Wait(3000ms, cancel))//等3秒	前摇
+		co_return 0;//协程取消
 
-		co_await CoTimer::Wait(5000ms);//等5秒	公共冷却
+	pDefencer->Hurt(1);//第一次让对方伤1点生命
+
+	if (co_await CoTimer::Wait(500ms, cancel))//等0.5秒
+		co_return 0;//协程取消
+
+	pDefencer->Hurt(3);//第二次让对方伤3点生命
+
+	if(co_await CoTimer::Wait(500ms, cancel))//等0.5秒
+		co_return 0;//协程取消
+
+	pDefencer->Hurt(10);//第三次让对方伤10点生命
+
+	if(co_await CoTimer::Wait(3000ms, cancel))//等3秒	后摇
+		co_return 0;//协程取消
+
+	Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));//播放休闲待机动作
 	
-		co_return 0;
-	}
+	if(co_await CoTimer::Wait(5000ms, cancel))//等5秒	公共冷却
+		co_return 0;//协程取消
+	
+	co_return 0;//协程正常退出
+}
 ```
 
 #### 用协程辅助实现RPC网络消息的同步接收
