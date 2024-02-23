@@ -230,6 +230,10 @@ struct CoAwaiter
 	}
 	void CopyFrom(const CoAwaiter& other)
 	{
+		CopyFrom(other);
+	}
+	void CopyFrom(const CoAwaiter& other)
+	{
 		m_hAwaiter = other.m_hAwaiter;
 		m_sn = other.m_sn;
 		//other.m_hAwaiter = nullptr;
