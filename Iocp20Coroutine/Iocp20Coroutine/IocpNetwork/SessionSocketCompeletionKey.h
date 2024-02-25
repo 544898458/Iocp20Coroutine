@@ -1,6 +1,7 @@
 #pragma once
 #include "SocketCompeletionKey.h"
 #include<WinSock2.h>
+#include <set>
 #include "ByteQueue.h"
 namespace Iocp {
 	template<class T_Session>
@@ -33,3 +34,22 @@ namespace Iocp {
 		bool recvFinish = false;
 	};
 }
+/// <summary>
+/// 所有活动连接
+/// </summary>
+template<class T_Session>
+std::set<Iocp::SessionSocketCompeletionKey<T_Session>*> g_setSession;
+/// <summary>
+/// 多线程全局操作g_setSession
+/// </summary>
+template<class T_Session>
+std::mutex g_setSessionMutex;
+
+
+/// <summary>
+/// 向所有连接广播消息
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="msg"></param>
+template<class T,class T_Session>
+void Broadcast(const T& msg);

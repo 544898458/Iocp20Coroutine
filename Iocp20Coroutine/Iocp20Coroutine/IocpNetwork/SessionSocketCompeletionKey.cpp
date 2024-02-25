@@ -1,6 +1,12 @@
 #include <glog/logging.h>
 
 #include "SessionSocketCompeletionKey.h"
+
+//template<class T_Session>
+//std::set<Iocp::SessionSocketCompeletionKey<T_Session>*> g_setSession;
+//template<class T_Session>
+//std::mutex g_setSessionMutex;
+
 namespace Iocp {
 	template<class T_Session>
 	SessionSocketCompeletionKey<T_Session>::~SessionSocketCompeletionKey()

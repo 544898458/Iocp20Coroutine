@@ -60,11 +60,11 @@ struct MsgChangeSkeleAnim
 	MSGPACK_DEFINE(msgId, entityId, clipName);
 };
 
-class MySession;
+class WebSocketSession;
 class MsgQueue
 {
 public:
-	MsgQueue(MySession* p) :m_pSession(p)
+	MsgQueue(WebSocketSession* p) :m_pSession(p)
 	{
 	}
 	/// <summary>
@@ -97,5 +97,5 @@ private:
 	/// <summary>
 	/// 弱引用，不要销毁
 	/// </summary>
-	MySession* const m_pSession;
+	WebSocketSession* const m_pSession;
 };

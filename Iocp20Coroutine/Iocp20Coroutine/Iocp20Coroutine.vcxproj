@@ -145,6 +145,9 @@
     <ClCompile Include="IocpNetwork\Op.cpp" />
     <ClCompile Include="IocpNetwork\Overlapped.cpp" />
     <ClCompile Include="IocpNetwork\Server.cpp" />
+    <ClInclude Include="IocpNetwork\ServerTemplate.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClCompile Include="IocpNetwork\SessionSocketCompeletionKey.cpp" />
     <ClCompile Include="IocpNetwork\SocketCompeletionKey.cpp" />
     <ClCompile Include="LogStrategy\StrategyLog.cpp" />

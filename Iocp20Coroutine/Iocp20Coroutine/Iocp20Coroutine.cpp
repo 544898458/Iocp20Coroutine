@@ -77,9 +77,9 @@ int main(void)
 
 	SetConsoleCtrlHandler(fun, TRUE);
 	
-	Iocp::Server<MySession> accept;
+	Iocp::Server accept;
 	accept.WsaStartup();
-	accept.Init();
+	accept.Init<WebSocketSession>();
 
 
 	//m_space.mapEntity[0] = new Entity(-5,m_space, Patrol);
@@ -88,8 +88,8 @@ int main(void)
 	while (g_flag)
 	{
 		Sleep(100);
-		std::set<Iocp::SessionSocketCompeletionKey<MySession>*> setDelete;
-		for (auto p : g_setSession) 
+		std::set<Iocp::SessionSocketCompeletionKey<WebSocketSession>*> setDelete;
+		for (auto p : g_setSession<WebSocketSession>) 
 		{
 			p->Session.m_msgQueue.Process();
 			if (p->Finished())

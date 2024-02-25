@@ -2,7 +2,7 @@
 #include "MySession.h"
 #include "Space.h"
 #include "CoTimer.h"
-
+using namespace std;
 Entity::Entity(float x, Space& m_space, std::function< CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun) :m_space(m_space), Id((uint64_t)this)
 {
 	//创建一个协程，来回走动
@@ -31,7 +31,7 @@ CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, std::
 {
 	KeepCancel kc(cancel);
 
-	Broadcast(MsgChangeSkeleAnim(pEntity, "attack"));//播放攻击动作
+	Broadcast<MsgChangeSkeleAnim,WebSocketSession>(MsgChangeSkeleAnim(pEntity, "attack"));//播放攻击动作
 		
 	if (co_await CoTimer::Wait(3000ms, cancel))//等3秒	前摇
 		co_return 0;//协程取消
@@ -51,7 +51,7 @@ CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, std::
 	if(co_await CoTimer::Wait(3000ms, cancel))//等3秒	后摇
 		co_return 0;//协程取消
 
-	Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));//播放休闲待机动作
+	Broadcast<MsgChangeSkeleAnim,WebSocketSession>(MsgChangeSkeleAnim(pEntity, "idle"));//播放休闲待机动作
 	
 	if(co_await CoTimer::Wait(5000ms, cancel))//等5秒	公共冷却
 		co_return 0;//协程取消

@@ -2,7 +2,9 @@
 #include "ListenSocketCompeletionKey.h"
 #include "SessionSocketCompeletionKey.h"
 
+
 namespace Iocp {
+
 	template<class T_Session>
 	void ListenSocketCompeletionKey::StartCoRoutine( HANDLE hIocp,SOCKET socketListen)
 	{
@@ -100,6 +102,11 @@ namespace Iocp {
 			//绑定到完成端口
 			auto pNewCompleteKey = new SessionSocketCompeletionKey<T_Session>(pAcceptOverlapped->socket);
 			pNewCompleteKey->Session.OnInit(*pNewCompleteKey);//回调用户自定义函数
+			
+			g_setSession<T_Session>.insert(pNewCompleteKey);
+			//#include <glog/logging.h>
+			LOG(INFO) << "添加Session，剩余" << g_setSession<T_Session>.size();
+
 			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)pAcceptOverlapped->socket, hIocp, (ULONG_PTR)pNewCompleteKey, 0);
 			if (hPort1 != hIocp)
 			{

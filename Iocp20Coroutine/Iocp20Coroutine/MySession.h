@@ -6,14 +6,14 @@ class MyWebSocketEndpoint;
 /// <summary>
 /// 对应一个网络连接
 /// </summary>
-class MySession
+class WebSocketSession
 {
 public:
 	/// <summary>
 	/// 构造函数和OnInit会紧挨着调用，初始化代码可以随便找个地方写，只要能编译通过，效果就完全相同
 	/// </summary>
-	MySession();
-	void OnInit(Iocp::SessionSocketCompeletionKey<MySession>& refSession);
+	WebSocketSession();
+	void OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession>& refSession);
 	/// <summary>
 	/// 用户自定义函数，这里是纯数据，连封包概念都没有，封包是WebSocket协议负责的工作
 	/// </summary>
@@ -21,7 +21,7 @@ public:
 	/// <param name="buf"></param>
 	/// <param name="len"></param>
 	/// <returns></returns>
-	int OnRecv(Iocp::SessionSocketCompeletionKey<MySession> &refSession,const char buf[], int len);
+	int OnRecv(Iocp::SessionSocketCompeletionKey<WebSocketSession> &refSession,const char buf[], int len);
 	/// <summary>
 /// 从全局连接set里删除连接，从全局Space里删除实体
 /// </summary>
@@ -48,22 +48,7 @@ public:
 	/// </summary>
 	Entity m_entity;
 private:
-	Iocp::SessionSocketCompeletionKey<MySession> *m_pSession;
+	Iocp::SessionSocketCompeletionKey<WebSocketSession> *m_pSession;
 };
 
-/// <summary>
-/// 向所有连接广播消息
-/// </summary>
-/// <typeparam name="T"></typeparam>
-/// <param name="msg"></param>
-template<class T>
-void Broadcast(const T& msg);
 
-/// <summary>
-/// 所有活动连接
-/// </summary>
-extern std::set<Iocp::SessionSocketCompeletionKey<MySession>*> g_setSession;
-/// <summary>
-/// 多线程全局操作g_setSession
-/// </summary>
-extern std::mutex g_setSessionMutex;
