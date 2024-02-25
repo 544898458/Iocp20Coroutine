@@ -1,9 +1,9 @@
 #include <glog/logging.h>
 
-#include "MySession.h"
-#include "IocpNetwork/Server.cpp"
+#include "IocpNetwork/ServerTemplate.h"
 #include "IocpNetwork/ListenSocketCompeletionKey.cpp"
 #include "IocpNetwork/SessionSocketCompeletionKey.cpp"
+#include "MySession.h"
 
 //#include <iostream>
 #include <cassert>
@@ -17,7 +17,7 @@
 std::set<Iocp::SessionSocketCompeletionKey<MySession>*> g_setSession;
 std::mutex g_setSessionMutex;
 
-template class Iocp::Server<MySession>;
+template bool Iocp::Server::Init<MySession>();
 //template class Iocp::ListenSocketCompeletionKey<MySession>;
 //template Iocp::ListenSocketCompeletionKey::AcceptEx<MySession>(Iocp::Overlapped* pAcceptOverlapped, SOCKET socketListen);
 template class Iocp::SessionSocketCompeletionKey<MySession>;

@@ -5,7 +5,6 @@
 #include<assert.h>
 #include<mutex>
 #include<functional>
-using namespace std;
 
 /// <summary>
 /// 方便实现协程，没有任何具体逻辑，没有线程，没有网络
@@ -68,7 +67,7 @@ public:
 		}
 	};
 
-	const std::chrono::duration<int, std::milli> length = 1000ms;
+	//const std::chrono::duration<int, std::milli> length = 1000ms;
 	using handle = std::coroutine_handle<promise_type>;
 	/// <summary>
 	/// 继续执行协程函数代码执直到遇到yield挂起

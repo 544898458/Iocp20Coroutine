@@ -36,3 +36,4 @@ enc_temp_folder
 *.exe
 *.txt
 *.enc
+*x64/Debug/*

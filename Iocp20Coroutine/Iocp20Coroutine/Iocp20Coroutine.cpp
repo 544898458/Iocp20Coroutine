@@ -77,9 +77,9 @@ int main(void)
 
 	SetConsoleCtrlHandler(fun, TRUE);
 	
-	Iocp::Server<MySession> accept;
+	Iocp::Server accept;
 	accept.WsaStartup();
-	accept.Init();
+	accept.Init<MySession>();
 
 
 	//m_space.mapEntity[0] = new Entity(-5,m_space, Patrol);

@@ -2,7 +2,7 @@
 #include "MySession.h"
 #include "Space.h"
 #include "CoTimer.h"
-
+using namespace std;
 Entity::Entity(float x, Space& m_space, std::function< CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun) :m_space(m_space), Id((uint64_t)this)
 {
 	//创建一个协程，来回走动

@@ -53,7 +53,7 @@ void MsgQueue::Push(const MsgMove& msg)
 	m_queueMove.push_back(msg);
 	m_queueMsgId.push_back(Move);
 }
-string GbkToUtf8(const char* src_str)
+std::string GbkToUtf8(const char* src_str)
 {
 	int len = MultiByteToWideChar(CP_ACP, 0, src_str, -1, NULL, 0);
 	wchar_t* wstr = new wchar_t[len + 1];
@@ -63,7 +63,7 @@ string GbkToUtf8(const char* src_str)
 	char* str = new char[len + 1];
 	memset(str, 0, len + 1);
 	WideCharToMultiByte(CP_UTF8, 0, wstr, -1, str, len, NULL, NULL);
-	string strTemp = str;
+	auto strTemp = str;
 	if (wstr) delete[] wstr;
 	if (str) delete[] str;
 	return strTemp;
