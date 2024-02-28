@@ -110,7 +110,7 @@ CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, std::
 ```
 
 #### 用协程辅助实现RPC网络消息的同步接收
-
+同步接收回应的意思就是，前一行代码发送Reqire消息，下一行代码就能直接接收Response消息，而不是设置回调处理，也不是在某个很远处的代码用switch/函数字典接收回应。
 
 #### 软件架构
 软件架构说明
