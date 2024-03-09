@@ -18,7 +18,7 @@ template<class T_Callback, class T_Data>
 class MyWebSocketEndpoint :public WebSocketEndpoint< T_Callback, T_Data>
 {
 public:
-	MyWebSocketEndpoint(T_Callback *write_cb, T_Data* work_data) :WebSocketEndpoint(write_cb, work_data)
+	MyWebSocketEndpoint(T_Callback *write_cb, T_Data* work_data) :WebSocketEndpoint< T_Callback, T_Data>(write_cb, work_data)
 	{
 	}
 
@@ -89,27 +89,31 @@ public:
 		*/
 		return 0;
 	}	
-	template<class T>
-	void Send(const T& ref)
+	/// <summary>
+	/// 发送一个WebSocket数据包到客户端
+	/// </summary>
+	/// <param name="ref"></param>
+	void Send(const char buf[], const int len)
 	{
-		WebSocketPacket wspacket;
-		// set FIN and opcode
-		wspacket.set_fin(1);
-		wspacket.set_opcode(0x02);// packet.get_opcode());
+		//WebSocketPacket wspacket;
+		//// set FIN and opcode
+		//wspacket.set_fin(1);
+		//wspacket.set_opcode(0x02);// packet.get_opcode());
 		// set payload data
 
-		std::stringstream buffer;
-		msgpack::pack(buffer, ref);
-		buffer.seekg(0);
+		//std::stringstream buffer;
+		//msgpack::pack(buffer, ref);
+		//buffer.seekg(0);
 
-		// deserialize the buffer into msgpack::object instance.
-		std::string str(buffer.str());
-		wspacket.set_payload(str.data(), str.size());
-		ByteBuffer output;
-		// pack a websocket data frame
-		wspacket.pack_dataframe(output);
+		//// deserialize the buffer into msgpack::object instance.
+		//std::string str(buffer.str());
+		//wspacket.set_payload(str.data(), str.size());
+		//ByteBuffer output;
+		//// pack a websocket data frame
+		//wspacket.pack_dataframe(output);
 		// send to client
-		this->to_wire(output.bytes(), output.length());
+		//this->to_wire(output.bytes(), output.length());
+		this->to_wire(buf, len);
 	}
 };
 
@@ -125,7 +129,7 @@ public:
 	/// </summary>
 	//WebSocketSession();
 	virtual ~WebSocketSession() {}
-	void OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession>& refSession);
+	void OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession);
 	/// <summary>
 	/// 用户自定义函数，这里是纯数据，连封包概念都没有，封包是WebSocket协议负责的工作
 	/// </summary>
@@ -133,20 +137,24 @@ public:
 	/// <param name="buf"></param>
 	/// <param name="len"></param>
 	/// <returns></returns>
-	int OnRecv(Iocp::SessionSocketCompeletionKey<WebSocketSession>& refSession, const char buf[], int len);
+	int OnRecv(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession, const char buf[], int len);
 	/// <summary>
 /// 从全局连接set里删除连接，从全局Space里删除实体
 /// </summary>
 	void OnDestroy();
-
+	void Send(const char buf[], const int len)
+	{
+		m_webSocketEndpoint->Send(buf, len);
+	}
 
 	/// <summary>
 	/// 开源WebSocket库
 	/// </summary>
-	std::unique_ptr<MyWebSocketEndpoint<T_Session,Iocp::SessionSocketCompeletionKey<WebSocketSession>>> m_webSocketEndpoint;
+	std::unique_ptr<MyWebSocketEndpoint<T_Session,Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>>> m_webSocketEndpoint;
 	T_Session m_Session;
+	Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>* m_pSession;
 private:
-	Iocp::SessionSocketCompeletionKey<WebSocketSession>* m_pSession;
+	
 	
 };
 
@@ -154,13 +162,11 @@ class MySession
 {
 public:
 	MySession();
-	/// <summary>
-	/// 发送消息给客户端
-	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	/// <param name="ref"></param>
-	template<class T> void Send(const T& ref);
-
+	void OnRecvWsPack(const char buf[], const int len);
+	void OnInit(WebSocketSession<MySession>* pWsSession);
+	void OnDestroy();
+	template<class T>
+	void Send(const T& ref);
 	/// <summary>
 	/// 加入Space空间的实体（玩家角色）
 	/// </summary>
@@ -169,4 +175,6 @@ public:
 	/// 解析后的消息队列，解析消息在完成端口线程，处理消息在主线程（控制台界面线程）
 	/// </summary>
 	MsgQueue m_msgQueue;
+private:
+	WebSocketSession<MySession>* m_pWsSession = nullptr;
 };

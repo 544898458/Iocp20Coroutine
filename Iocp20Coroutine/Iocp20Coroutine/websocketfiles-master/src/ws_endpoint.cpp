@@ -45,7 +45,7 @@ int32_t WebSocketEndpoint<T_Callback, T_Data>::process(const char *readbuf, int3
     return from_wire(readbuf, size);
 }
 template<class T_Callback, class T_Data>
-int32_t WebSocketEndpoint<T_Callback>::process(const char *readbuf, int32_t size, nt_write_cb write_cb, void *work_data)
+int32_t WebSocketEndpoint<T_Callback, T_Data>::process(const char *readbuf, int32_t size, T_Callback *write_cb, T_Data*work_data)
 {
     if (write_cb == NULL || work_data == NULL)
     {
@@ -106,7 +106,7 @@ int32_t WebSocketEndpoint<T_Callback, T_Data>::to_wire(const char *writebuf, int
         return 0;
     }
 
-    nt_write_cb_(const_cast<char *>(writebuf), size, nt_work_data_);
+    nt_work_data_->Send(const_cast<char*>(writebuf), size);// , nt_work_data_);
     return 0;
 }
 template<class T_Callback, class T_Data>

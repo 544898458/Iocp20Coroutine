@@ -132,7 +132,7 @@ void MsgQueue::OnRecv(const MsgLogin& msg)
 	ret.nickName = GbkToUtf8(utf8Name.c_str());// strBroadcast.c_str());
 	ret.entityId = (uint64_t)&m_pSession->m_entity;
 	m_pSession->m_entity.m_nickName = utf8Name;
-	Broadcast<MsgLoginRet ,WebSocketSession>(ret);
+	Broadcast<MsgLoginRet ,WebSocketSession<MySession>>(ret);
 
 	for (const auto pENtity : g_space.setEntity)
 	{
@@ -157,7 +157,7 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 			const auto localTargetX = targetX;
 			const auto localTargetZ = targetZ;
 
-			Broadcast<MsgChangeSkeleAnim,WebSocketSession>(MsgChangeSkeleAnim(pEntity, "run"));
+			Broadcast<MsgChangeSkeleAnim,WebSocketSession<MySession>>(MsgChangeSkeleAnim(pEntity, "run"));
 			
 			while (true)
 			{
@@ -170,14 +170,14 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 				const auto step = 0.5f;
 				if (std::abs(localTargetX - x) < step && std::abs(localTargetZ - z) < step) {
 					LOG(INFO) << "已走到" << localTargetX << "," << localTargetZ << "附近，协程正常退出";
-					Broadcast<MsgChangeSkeleAnim,WebSocketSession>(MsgChangeSkeleAnim(pEntity, "idle"));
+					Broadcast<MsgChangeSkeleAnim,WebSocketSession<MySession>>(MsgChangeSkeleAnim(pEntity, "idle"));
 					co_return 0;
 				}
 
 				x += localTargetX < x ? -step : step;
 				z += localTargetZ < z ? -step : step;
 
-				Broadcast<MsgNotifyPos,WebSocketSession>(MsgNotifyPos(pEntity, x, z));
+				Broadcast<MsgNotifyPos,WebSocketSession<MySession>>(MsgNotifyPos(pEntity, x, z));
 			}
 		});
 	m_pSession->m_entity.m_coWalk.Run();//协程离开开始运行（运行到第一个co_await

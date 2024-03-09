@@ -3,6 +3,8 @@
 #include "IocpNetwork/ServerTemplate.h"
 #include "IocpNetwork/ListenSocketCompeletionKey.cpp"
 #include "IocpNetwork/SessionSocketCompeletionKey.cpp"
+#include "websocketfiles-master/src/ws_endpoint.cpp"
+
 #include "MySession.h"
 
 //#include <iostream>
@@ -25,7 +27,24 @@ template class Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> >;
 template<class T>
 void MySession::Send(const T& ref)
 {
-	m_webSocketEndpoint->Send(ref);
+	WebSocketPacket wspacket;
+	// set FIN and opcode
+	wspacket.set_fin(1);
+	wspacket.set_opcode(0x02);// packet.get_opcode());
+
+	std::stringstream buffer;
+	msgpack::pack(buffer, ref);
+	buffer.seekg(0);
+
+	// deserialize the buffer into msgpack::object instance.
+	std::string str(buffer.str());
+	wspacket.set_payload(str.data(), str.size());
+	ByteBuffer output;
+	// pack a websocket data frame
+	wspacket.pack_dataframe(output);
+	//send to client
+	//this->to_wire(output.bytes(), output.length());
+	this->m_pWsSession->Send(output.bytes(), output.length());
 }
 
 
@@ -56,14 +75,48 @@ CoTask<int> TraceEnemy(Entity* pEntity, float& x, float& z, std::function<void()
 MySession::MySession() : m_entity(5, g_space, TraceEnemy), m_msgQueue(this)
 {
 }
-template<class T_Session>
-void WebSocketSession<T_Session>::OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession)
+void MySession::OnRecvWsPack(const char buf[], const int len)
 {
-	std::lock_guard lock(g_setSessionMutex<WebSocketSession<T_Session>>);
-	m_webSocketEndpoint.reset(new MyWebSocketEndpoint<T_Session>(net_write_cb, &refSession));
+	msgpack::object_handle oh = msgpack::unpack(buf, len);//没判断越界，要加try
+	msgpack::object obj = oh.get();
+	const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
+	LOG(INFO) << obj;
+	//auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession>>*>(this->nt_work_data_);
+	auto pSessionSocketCompeletionKey = this->m_pWsSession->m_pSession;
+	switch (msgId)
+	{
+	case MsgId::Login:
+	{
+		const auto msg = obj.as<MsgLogin>();
+		pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
+	}
+	break;
+	case MsgId::Move:
+	{
+		const auto msg = obj.as<MsgMove>();
+		pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
+	}
+	break;
+	}
+}
+inline void MySession::OnInit(WebSocketSession<MySession>* pWsSession)
+{
+	m_pWsSession = pWsSession;
+	g_space.setEntity.insert(&m_entity);
+
+}
+void MySession::OnDestroy()
+{
+	g_space.setEntity.erase(&m_entity);
+}
+template<class T_Session>
+void WebSocketSession<T_Session>::OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session> >& refSession)
+{
+	std::lock_guard lock(g_setSessionMutex<WebSocketSession<T_Session> >);
+	m_webSocketEndpoint.reset(new MyWebSocketEndpoint<T_Session, Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session> > >(&this->m_Session, &refSession));
 
 	m_pSession = &refSession;
-	g_space.setEntity.insert(&m_entity);
+	this->m_Session.OnInit(this);
 }
 template<class T_Session>
 int WebSocketSession< T_Session>::OnRecv(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession, const char buf[], int len)
@@ -76,7 +129,7 @@ void WebSocketSession< T_Session>::OnDestroy()
 {
 	std::lock_guard lock(g_setSessionMutex<WebSocketSession>);
 	g_setSession<WebSocketSession>.erase(this->m_pSession);
-	g_space.setEntity.erase(&m_entity);
+	m_Session.OnDestroy();
 	LOG(INFO) << "删除Session，剩余" << g_setSession<WebSocketSession>.size();
 
 }
@@ -90,10 +143,12 @@ void Broadcast(const T& msg)
 	std::lock_guard lock(g_setSessionMutex<T_Session>);
 	for (auto p : g_setSession<T_Session>)
 	{
-		p->Session.Send(msg);
+		p->Session.m_Session.Send(msg);
 	}
 }
 
 template void Broadcast<MsgLoginRet,WebSocketSession<MySession>>(const MsgLoginRet&);
 template void Broadcast<MsgNotifyPos, WebSocketSession<MySession>>(const MsgNotifyPos&);
 template void Broadcast<MsgChangeSkeleAnim, WebSocketSession<MySession>>(const MsgChangeSkeleAnim&);
+template class WebSocketSession<MySession>;
+template class WebSocketEndpoint<MySession, Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> > >;

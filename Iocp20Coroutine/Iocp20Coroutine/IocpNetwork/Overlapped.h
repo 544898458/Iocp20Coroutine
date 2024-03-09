@@ -1,4 +1,5 @@
 #pragma once
+#include <Winsock2.h>
 #include "../CoRoutine/CoTask.h"
 class SocketCompeletionKey;
 namespace Iocp 
