@@ -142,7 +142,6 @@
     <ClCompile Include="IocpNetwork\ListenSocketCompeletionKey.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="IocpNetwork\Op.cpp" />
     <ClCompile Include="IocpNetwork\Overlapped.cpp" />
     <ClCompile Include="IocpNetwork\Server.cpp" />
     <ClInclude Include="IocpNetwork\ServerTemplate.h">
@@ -172,9 +171,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Iocp20Coroutine.h" />
     <ClInclude Include="IocpNetwork\ByteQueue.h" />
-    <ClInclude Include="IocpNetwork\IOp.h" />
     <ClInclude Include="IocpNetwork\ListenSocketCompeletionKey.h" />
-    <ClInclude Include="IocpNetwork\Op.h" />
     <ClInclude Include="IocpNetwork\Overlapped.h" />
     <ClInclude Include="IocpNetwork\Server.h" />
     <ClInclude Include="IocpNetwork\SessionSocketCompeletionKey.h" />

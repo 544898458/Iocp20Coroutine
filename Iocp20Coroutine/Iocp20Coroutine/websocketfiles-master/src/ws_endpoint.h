@@ -33,12 +33,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <stdint.h>
 #include "ws_packet.h"
 
-typedef void (*nt_write_cb)(char * buf,int64_t size, void* wd);
+//typedef void (*nt_write_cb)(char * buf,int64_t size, void* wd);
 
+template<class T_Callback, class T_Data>
 class WebSocketEndpoint
 {
 public:
-    WebSocketEndpoint( nt_write_cb write_cb, void* work_data);
+    WebSocketEndpoint(T_Callback *write_cb, T_Data* work_data);
     WebSocketEndpoint();
     virtual ~WebSocketEndpoint();
 
@@ -48,7 +49,7 @@ public:
     // start a websocket endpoint process. 
     virtual int32_t process(const char * readbuf, int32_t size);
     // start a websocket endpoint process. Also we register a write callback function
-    virtual int32_t process(const char * readbuf, int32_t size, nt_write_cb write_cb, void* work_data);
+    virtual int32_t process(const char * readbuf, int32_t size, T_Callback *write_cb, T_Data* work_data);
 
     // receive data from wire until we get an entire handshake or frame data packet
     virtual int32_t from_wire(const char * readbuf, int32_t size);
@@ -72,9 +73,9 @@ private:
     ByteBuffer fromwire_buf_;
     ByteBuffer message_data_;
 
-    nt_write_cb nt_write_cb_;
 protected:
-    void * nt_work_data_;
+    T_Data* nt_work_data_;
+    T_Callback* nt_write_cb_;
 
 };
 #endif//_WS_SVR_HANDLER_H_

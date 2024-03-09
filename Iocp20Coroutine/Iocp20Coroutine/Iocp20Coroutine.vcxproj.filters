@@ -63,9 +63,6 @@
     <ClCompile Include="IocpNetwork\ListenSocketCompeletionKey.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
-    <ClCompile Include="IocpNetwork\Op.cpp">
-      <Filter>IocpNetwork</Filter>
-    </ClCompile>
     <ClCompile Include="IocpNetwork\Overlapped.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
@@ -128,13 +125,7 @@
     <ClInclude Include="IocpNetwork\ByteQueue.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="IocpNetwork\IOp.h">
-      <Filter>IocpNetwork</Filter>
-    </ClInclude>
     <ClInclude Include="IocpNetwork\ListenSocketCompeletionKey.h">
-      <Filter>IocpNetwork</Filter>
-    </ClInclude>
-    <ClInclude Include="IocpNetwork\Op.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="IocpNetwork\Overlapped.h">

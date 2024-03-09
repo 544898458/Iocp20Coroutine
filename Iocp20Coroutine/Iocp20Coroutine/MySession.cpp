@@ -8,7 +8,6 @@
 //#include <iostream>
 #include <cassert>
 
-#include "websocketfiles-master/src/ws_endpoint.h"
 #include <codecvt>
 #include "MsgQueue.h"
 #include "Space.h"
@@ -19,116 +18,12 @@
 //template<MySession> std::mutex g_setSessionMutex;
 
 
-template bool Iocp::Server::Init<WebSocketSession>();
-//template class Iocp::ListenSocketCompeletionKey<MySession>;
-//template Iocp::ListenSocketCompeletionKey::AcceptEx<MySession>(Iocp::Overlapped* pAcceptOverlapped, SOCKET socketListen);
-template class Iocp::SessionSocketCompeletionKey<WebSocketSession>;
+template bool Iocp::Server::Init<WebSocketSession<MySession> >();
+template class Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> >;
 
-void net_write_cb(char* buf, int64_t size, void* wd)
-{
-	static_cast<Iocp::SessionSocketCompeletionKey<WebSocketSession>*>(wd)->Send(buf, size);
-}
-/// <summary>
-/// https://github.com/basson099/websocketfiles
-/// https://blog.csdn.net/qq_39540028/article/details/104493049
-/// 此开源库才几百行，就能把原有在C++在TCP服务器快速改成WebSocket服务器
-/// </summary>
-class MyWebSocketEndpoint :public WebSocketEndpoint
-{
-public:
-	MyWebSocketEndpoint(nt_write_cb write_cb, void* work_data) :WebSocketEndpoint(write_cb, work_data)
-	{
-	}
-
-	virtual int32_t user_defined_process(WebSocketPacket& packet, ByteBuffer& frame_payload)override
-	{
-		switch (packet.get_opcode())
-		{
-		case WebSocketPacket::WSOpcode_Continue:
-			// add your process code here
-			//std::cout << "WebSocketEndpoint - recv a Continue opcode." << std::endl;
-			//user_defined_process(packet, frame_payload);
-			break;
-		case WebSocketPacket::WSOpcode_Text:
-			// add your process code here
-			//std::cout << "WebSocketEndpoint - recv a Text opcode." << std::endl;
-			//user_defined_process(packet, frame_payload);
-			break;
-		case WebSocketPacket::WSOpcode_Binary:
-			// add your process code here
-			//std::cout << "WebSocketEndpoint - recv a Binary opcode." << std::endl;
-			//user_defined_process(packet, frame_payload);
-			break;
-		case WebSocketPacket::WSOpcode_Close:
-			// add your process code here
-			//std::cout << "WebSocketEndpoint - recv a Close opcode." << std::endl;
-			//user_defined_process(packet, frame_payload);
-			return 0;
-			break;
-		case WebSocketPacket::WSOpcode_Ping:
-			// add your process code here
-			//std::cout << "WebSocketEndpoint - recv a Ping opcode." << std::endl;
-			user_defined_process(packet, frame_payload);
-			break;
-		case WebSocketPacket::WSOpcode_Pong:
-			// add your process code here
-			//std::cout << "WebSocketEndpoint - recv a Pong opcode." << std::endl;
-			//user_defined_process(packet, frame_payload);
-			break;
-		default:
-			LOG(INFO) << "WebSocketEndpoint - recv an unknown opcode.";
-			break;
-		}
-
-		msgpack::object_handle oh = msgpack::unpack(frame_payload.bytes(), frame_payload.length());//没判断越界，要加try
-		msgpack::object obj = oh.get();
-		const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
-		LOG(INFO) << obj;
-		auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompeletionKey<WebSocketSession>*>(this->nt_work_data_);
-		switch (msgId)
-		{
-		case MsgId::Login:
-		{
-			const auto msg = obj.as<MsgLogin>();
-			pSessionSocketCompeletionKey->Session.m_msgQueue.Push(msg);
-		}
-		break;
-		case MsgId::Move:
-		{
-			const auto msg = obj.as<MsgMove>();
-			pSessionSocketCompeletionKey->Session.m_msgQueue.Push(msg);
-		}
-		break;
-		}
-
-		return 0;
-	}
-	template<class T>
-	void Send(const T& ref)
-	{
-		WebSocketPacket wspacket;
-		// set FIN and opcode
-		wspacket.set_fin(1);
-		wspacket.set_opcode(0x02);// packet.get_opcode());
-		// set payload data
-
-		std::stringstream buffer;
-		msgpack::pack(buffer, ref);
-		buffer.seekg(0);
-
-		// deserialize the buffer into msgpack::object instance.
-		std::string str(buffer.str());
-		wspacket.set_payload(str.data(), str.size());
-		ByteBuffer output;
-		// pack a websocket data frame
-		wspacket.pack_dataframe(output);
-		// send to client
-		to_wire(output.bytes(), output.length());
-	}
-};
 
 template<class T>
-void WebSocketSession::Send(const T& ref)
+void MySession::Send(const T& ref)
 {
 	m_webSocketEndpoint->Send(ref);
 }
@@ -154,29 +49,30 @@ CoTask<int> TraceEnemy(Entity* pEntity, float& x, float& z, std::function<void()
 		}
 		x -= 0.01;
 
-		Broadcast<MsgNotifyPos,WebSocketSession>(MsgNotifyPos(pEntity, x, z));
+		Broadcast<MsgNotifyPos,WebSocketSession<MySession>>(MsgNotifyPos(pEntity, x, z));
 	}
 }
 
-WebSocketSession::WebSocketSession() : m_entity(5, g_space, TraceEnemy), m_msgQueue(this)
+MySession::MySession() : m_entity(5, g_space, TraceEnemy), m_msgQueue(this)
 {
 }
-
-void WebSocketSession::OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession>& refSession)
+template<class T_Session>
+void WebSocketSession<T_Session>::OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession)
 {
-	std::lock_guard lock(g_setSessionMutex<WebSocketSession>);
-	m_webSocketEndpoint.reset(new MyWebSocketEndpoint(net_write_cb, &refSession));
+	std::lock_guard lock(g_setSessionMutex<WebSocketSession<T_Session>>);
+	m_webSocketEndpoint.reset(new MyWebSocketEndpoint<T_Session>(net_write_cb, &refSession));
 
 	m_pSession = &refSession;
 	g_space.setEntity.insert(&m_entity);
 }
-int WebSocketSession::OnRecv(Iocp::SessionSocketCompeletionKey<WebSocketSession>& refSession, const char buf[], int len)
+template<class T_Session>
+int WebSocketSession< T_Session>::OnRecv(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession, const char buf[], int len)
 {
 	m_webSocketEndpoint->from_wire(buf, len);
 	return len;
 }
-
-void WebSocketSession::OnDestroy()
+template<class T_Session>
+void WebSocketSession< T_Session>::OnDestroy()
 {
 	std::lock_guard lock(g_setSessionMutex<WebSocketSession>);
 	g_setSession<WebSocketSession>.erase(this->m_pSession);
@@ -185,8 +81,8 @@ void WebSocketSession::OnDestroy()
 
 }
 
-template void WebSocketSession::Send(const MsgLoginRet&);
-template void WebSocketSession::Send(const MsgNotifyPos&);
+template void MySession::Send(const MsgLoginRet&);
+template void MySession::Send(const MsgNotifyPos&);
 
 template<class T,class T_Session>
 void Broadcast(const T& msg)
@@ -198,6 +94,6 @@ void Broadcast(const T& msg)
 	}
 }
 
-template void Broadcast<MsgLoginRet,WebSocketSession>(const MsgLoginRet&);
-template void Broadcast<MsgNotifyPos, WebSocketSession>(const MsgNotifyPos&);
-template void Broadcast<MsgChangeSkeleAnim, WebSocketSession>(const MsgChangeSkeleAnim&);
+template void Broadcast<MsgLoginRet,WebSocketSession<MySession>>(const MsgLoginRet&);
+template void Broadcast<MsgNotifyPos, WebSocketSession<MySession>>(const MsgNotifyPos&);
+template void Broadcast<MsgChangeSkeleAnim, WebSocketSession<MySession>>(const MsgChangeSkeleAnim&);

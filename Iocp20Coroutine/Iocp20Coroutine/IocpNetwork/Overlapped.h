@@ -1,6 +1,8 @@
 #pragma once
-#include"Op.h"
-namespace Iocp {
+#include "../CoRoutine/CoTask.h"
+class SocketCompeletionKey;
+namespace Iocp 
+{
 	//constexpr int MAX_SEND_COUNT = 2048;
 	/// <summary>
 	/// 重叠操作，对应一次Accet、Recv、Send

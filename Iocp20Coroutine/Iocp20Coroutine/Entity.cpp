@@ -31,7 +31,7 @@ CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, std::
 {
 	KeepCancel kc(cancel);
 
-	Broadcast<MsgChangeSkeleAnim,WebSocketSession>(MsgChangeSkeleAnim(pEntity, "attack"));//播放攻击动作
+	Broadcast<MsgChangeSkeleAnim,WebSocketSession<MySession>>(MsgChangeSkeleAnim(pEntity, "attack"));//播放攻击动作
 		
 	if (co_await CoTimer::Wait(3000ms, cancel))//等3秒	前摇
 		co_return 0;//协程取消
@@ -51,7 +51,7 @@ CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, std::
 	if(co_await CoTimer::Wait(3000ms, cancel))//等3秒	后摇
 		co_return 0;//协程取消
 
-	Broadcast<MsgChangeSkeleAnim,WebSocketSession>(MsgChangeSkeleAnim(pEntity, "idle"));//播放休闲待机动作
+	Broadcast<MsgChangeSkeleAnim,WebSocketSession<MySession>>(MsgChangeSkeleAnim(pEntity, "idle"));//播放休闲待机动作
 	
 	if(co_await CoTimer::Wait(5000ms, cancel))//等5秒	公共冷却
 		co_return 0;//协程取消

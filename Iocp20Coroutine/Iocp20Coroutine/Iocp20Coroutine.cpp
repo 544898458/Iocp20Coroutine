@@ -79,7 +79,7 @@ int main(void)
 	
 	Iocp::Server accept;
 	accept.WsaStartup();
-	accept.Init<WebSocketSession>();
+	accept.Init<WebSocketSession<MySession>>();
 
 	//m_space.mapEntity[0] = new Entity(-5,m_space, Patrol);
 	//m_space.mapEntity[1] = new Entity(5, m_space, TraceEnemy);
@@ -87,10 +87,10 @@ int main(void)
 	while (g_flag)
 	{
 		Sleep(100);
-		std::set<Iocp::SessionSocketCompeletionKey<WebSocketSession>*> setDelete;
-		for (auto p : g_setSession<WebSocketSession>) 
+		std::set<Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession>>*> setDelete;
+		for (auto p : g_setSession<WebSocketSession<MySession>>)
 		{
-			p->Session.m_msgQueue.Process();
+			p->Session.m_Session.m_msgQueue.Process();
 			if (p->Finished())
 				setDelete.insert(p);
 		}

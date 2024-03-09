@@ -22,30 +22,30 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <glog/logging.h>
 
 #include "ws_endpoint.h"
-
-WebSocketEndpoint::WebSocketEndpoint()
+template<class T_Callback, class T_Data>
+WebSocketEndpoint< T_Callback, T_Data>::WebSocketEndpoint()
 {
     //networklayer_ = nt;
     nt_write_cb_ = NULL;
     ws_handshake_completed_ = false;
 }
-
-WebSocketEndpoint::WebSocketEndpoint(nt_write_cb write_cb, void* work_data)
+template<class T_Callback, class T_Data>
+WebSocketEndpoint< T_Callback, T_Data>::WebSocketEndpoint(T_Callback* write_cb, T_Data* work_data)
 {
     //networklayer_ = nt;
     nt_write_cb_ = write_cb;
     ws_handshake_completed_ = false;
     nt_work_data_ = work_data;
 }
-
-WebSocketEndpoint::~WebSocketEndpoint() {}
-
-int32_t WebSocketEndpoint::process(const char *readbuf, int32_t size)
+template<class T_Callback, class T_Data>
+WebSocketEndpoint<T_Callback, T_Data>::~WebSocketEndpoint() {}
+template<class T_Callback, class T_Data>
+int32_t WebSocketEndpoint<T_Callback, T_Data>::process(const char *readbuf, int32_t size)
 {
     return from_wire(readbuf, size);
 }
-
-int32_t WebSocketEndpoint::process(const char *readbuf, int32_t size, nt_write_cb write_cb, void *work_data)
+template<class T_Callback, class T_Data>
+int32_t WebSocketEndpoint<T_Callback>::process(const char *readbuf, int32_t size, nt_write_cb write_cb, void *work_data)
 {
     if (write_cb == NULL || work_data == NULL)
     {
@@ -58,8 +58,8 @@ int32_t WebSocketEndpoint::process(const char *readbuf, int32_t size, nt_write_c
 
     return from_wire(readbuf, size);
 }
-
-int32_t WebSocketEndpoint::from_wire(const char *readbuf, int32_t size)
+template<class T_Callback, class T_Data>
+int32_t WebSocketEndpoint<T_Callback, T_Data>::from_wire(const char *readbuf, int32_t size)
 {
     fromwire_buf_.append(readbuf, size);
     LOG(INFO) << "WebSocketEndpoint - set fromwire_buf, current length:"<<fromwire_buf_.length()<<std::endl;
@@ -97,8 +97,8 @@ int32_t WebSocketEndpoint::from_wire(const char *readbuf, int32_t size)
     // make it happy
     return 0;
 }
-
-int32_t WebSocketEndpoint::to_wire(const char *writebuf, int64_t size)
+template<class T_Callback, class T_Data>
+int32_t WebSocketEndpoint<T_Callback, T_Data>::to_wire(const char *writebuf, int64_t size)
 {
     //networklayer_->toWire(writebuf,size);
     if (nt_write_cb_ == NULL || nt_work_data_ == NULL || writebuf == NULL || size <= 0)
@@ -109,8 +109,8 @@ int32_t WebSocketEndpoint::to_wire(const char *writebuf, int64_t size)
     nt_write_cb_(const_cast<char *>(writebuf), size, nt_work_data_);
     return 0;
 }
-
-int64_t WebSocketEndpoint::parse_packet(ByteBuffer &input)
+template<class T_Callback, class T_Data>
+int64_t WebSocketEndpoint<T_Callback, T_Data>::parse_packet(ByteBuffer &input)
 {
     WebSocketPacket wspacket;
     if (!ws_handshake_completed_)
@@ -169,8 +169,8 @@ int64_t WebSocketEndpoint::parse_packet(ByteBuffer &input)
 
     return -1;
 }
-
-int32_t WebSocketEndpoint::process_message_data(WebSocketPacket &packet, ByteBuffer &frame_payload)
+template<class T_Callback, class T_Data>
+int32_t WebSocketEndpoint<T_Callback, T_Data>::process_message_data(WebSocketPacket &packet, ByteBuffer &frame_payload)
 {
     //#ifdef _SHOW_OPCODE_
     switch (packet.get_opcode())
@@ -215,7 +215,8 @@ int32_t WebSocketEndpoint::process_message_data(WebSocketPacket &packet, ByteBuf
 
 // we directly return what we get from client
 // user could modify this function
-int32_t WebSocketEndpoint::user_defined_process(WebSocketPacket &packet, ByteBuffer &frame_payload)
+template<class T_Callback, class T_Data>
+int32_t WebSocketEndpoint<T_Callback, T_Data>::user_defined_process(WebSocketPacket &packet, ByteBuffer &frame_payload)
 {
     // print received websocket payload from client
     std::string str_recv(frame_payload.bytes(), frame_payload.length());
