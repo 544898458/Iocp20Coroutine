@@ -93,6 +93,9 @@
     <ClCompile Include="IocpNetwork\WebSocketSession.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
+    <ClCompile Include="MyServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -159,6 +162,12 @@
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="IocpNetwork\WebSocketSession.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="MyServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
   </ItemGroup>

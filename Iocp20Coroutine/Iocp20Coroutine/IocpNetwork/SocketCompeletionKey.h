@@ -22,7 +22,7 @@ public:
 	/// 监听Socket同时只有一个重叠操作Accept
 	/// 连接Socket同时有两个重叠操作Recv和Accept
 	/// </summary>
-	virtual void StartCoRoutine() = 0;
+	//virtual void StartCoRoutine() = 0;
 protected:
 	SOCKET Socket() const;
 	void CloseSocket();

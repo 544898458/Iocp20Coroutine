@@ -5,6 +5,7 @@
 /// </summary>
 /// <typeparam name="T_Session"></typeparam>
 /// <returns></returns>
+template<class T_Server>
 template<class T_Session>
 	requires requires(T_Session& refSession)
 {
@@ -12,7 +13,7 @@ template<class T_Session>
 	std::is_function_v<decltype(T_Session::OnRecv)>;
 	std::is_function_v<decltype(T_Session::OnDestroy)>;
 }
-bool Iocp::Server::Init()
+bool Iocp::Server<T_Server>::Init()
 {
 	if (this->m_socketAccept != NULL)
 		return false;
@@ -112,7 +113,7 @@ bool Iocp::Server::Init()
 	}
 
 	//if ( !
-	ListenSocketCompeletionKey::StartCoRoutine<T_Session>(m_hIocp, m_socketAccept);
+	ListenSocketCompeletionKey::StartCoRoutine<T_Session,T_Server>(m_hIocp, m_socketAccept,m_Server);
 	//)
 //{
 //	//Clear();
@@ -123,4 +124,77 @@ bool Iocp::Server::Init()
 
 
 	return true;
+}
+
+
+template<class T_Server>
+bool Iocp::Server< T_Server>::WsaStartup()
+{
+	WORD wdVersion = MAKEWORD(2, 2);
+	WSADATA wdScokMsg;
+	int nRes = WSAStartup(wdVersion, &wdScokMsg);
+
+	if (0 == nRes)
+		return true;
+	{
+		switch (nRes)
+		{
+		case WSASYSNOTREADY:
+			LOG(INFO) << "重启下电脑试试，或者检查网络库";
+			break;
+		case WSAVERNOTSUPPORTED:
+			LOG(INFO) << ("请更新网络库");
+			break;
+		case WSAEINPROGRESS:
+			LOG(INFO) << ("请重新启动");
+			break;
+		case WSAEPROCLIM:
+			LOG(INFO) << ("请尝试关掉不必要的软件，以为当前网络运行提供充足资源");
+			break;
+		}
+
+		return false;
+	}
+}
+
+template<class T_Server>
+void Iocp::Server< T_Server>::Stop()
+{
+	closesocket(this->m_socketAccept);
+	this->m_socketAccept = NULL;
+	CloseHandle(this->m_hIocp);
+}
+template<class T_Server>
+void Iocp::Server< T_Server>::NetworkThreadProc(HANDLE port)
+{
+	DWORD      number_of_bytes = 0;
+	SocketCompeletionKey* pCompletionKey = nullptr;
+	LPOVERLAPPED lpOverlapped;
+	while (true)
+	{
+		//pCompletionKey对应一个socket，lpOverlapped对应一次事件
+		BOOL bFlag = GetQueuedCompletionStatus(port, &number_of_bytes, (PULONG_PTR)&pCompletionKey, &lpOverlapped, INFINITE);//没完成就会卡在这里，正常
+		int lastErr = GetLastError();//可能是Socket强制关闭
+		if (lpOverlapped != nullptr)
+		{
+			auto* overlapped = (Iocp::Overlapped*)lpOverlapped;
+			overlapped->OnComplete(pCompletionKey, port, number_of_bytes, bFlag, lastErr);
+			if (overlapped->needDeleteMe && overlapped->coTask.Finished())
+			{
+				LOG(INFO) << "删除" << overlapped->coTask.m_desc;
+				delete overlapped;
+				overlapped = nullptr;
+			}
+		}
+		if (!bFlag)
+		{
+			switch (lastErr)
+			{
+			case ERROR_OPERATION_ABORTED:
+				LOG(WARNING) << "The I/O operation has been aborted because of either a thread exit or an application request.";
+				break;
+			}
+			return;
+		}
+	}
 }

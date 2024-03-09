@@ -6,6 +6,7 @@
 
 namespace Iocp 
 {
+	template<class T_Server>
 	class Server
 	{
 	public:
@@ -25,5 +26,6 @@ namespace Iocp
 		SOCKET m_socketAccept=NULL;
 		HANDLE m_hIocp = NULL;
 		//std::vector<HANDLE> vecThread;
+		T_Server m_Server;
 	};
 }

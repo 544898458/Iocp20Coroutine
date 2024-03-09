@@ -142,6 +142,9 @@
     <ClCompile Include="IocpNetwork\ListenSocketCompeletionKey.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClInclude Include="IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClCompile Include="IocpNetwork\Overlapped.cpp" />
     <ClCompile Include="IocpNetwork\Server.cpp" />
     <ClInclude Include="IocpNetwork\ServerTemplate.h">
@@ -155,6 +158,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="MsgQueue.cpp" />
+    <ClCompile Include="MyServer.cpp" />
     <ClCompile Include="MySession.cpp" />
     <ClCompile Include="Space.cpp" />
     <ClCompile Include="websocketfiles-master\src\base64.cpp" />
@@ -180,6 +184,7 @@
     <ClInclude Include="IocpNetwork\WebSocketSession.h" />
     <ClInclude Include="LogStrategy\StrategyLog.h" />
     <ClInclude Include="MsgQueue.h" />
+    <ClInclude Include="MyServer.h" />
     <ClInclude Include="MySession.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Space.h" />

@@ -1,7 +1,6 @@
 #include <glog/logging.h>
 
-#include "IocpNetwork/ServerTemplate.h"
-#include "IocpNetwork/ListenSocketCompeletionKey.cpp"
+//#include "IocpNetwork/ListenSocketCompeletionKey.cpp"
 #include "IocpNetwork/SessionSocketCompeletionKey.cpp"
 #include "websocketfiles-master/src/ws_endpoint.cpp"
 #include "./IocpNetwork/WebSocketSession.cpp"
@@ -19,10 +18,7 @@
 //template<MySession>
 //std::set<Iocp::SessionSocketCompeletionKey<MySession>*> g_setSession;
 //template<MySession> std::mutex g_setSessionMutex;
-
-
-template bool Iocp::Server::Init<WebSocketSession<MySession> >();
-template class Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> >;
+template Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> >;
 
 
 template<class T>
@@ -102,12 +98,23 @@ void MySession::OnRecvWsPack(const char buf[], const int len)
 }
 inline void MySession::OnInit(WebSocketSession<MySession>* pWsSession)
 {
-	m_pWsSession = pWsSession;
+	std::lock_guard lock(g_setSessionMutex<WebSocketSession<MySession> >);
+	
+
+	//m_pWsSession = pWsSession;
 	g_space.setEntity.insert(&m_entity);
+	g_setSession< WebSocketSession<MySession> >.insert(pWsSession->m_pSession);
+	//#include <glog/logging.h>
+	LOG(INFO) << "Ìí¼ÓSession£¬Ê£Óà" << g_setSession<WebSocketSession<MySession> >.size();
+
 
 }
 void MySession::OnDestroy()
 {
+	std::lock_guard lock(g_setSessionMutex<WebSocketSession<MySession> >);
+	g_setSession<WebSocketSession<MySession>>.erase(this->m_pWsSession->m_pSession);
+	LOG(INFO) << "É¾³ýSession£¬Ê£Óà" << g_setSession<WebSocketSession<MySession> >.size();
+
 	g_space.setEntity.erase(&m_entity);
 }
 template void MySession::Send(const MsgLoginRet&);

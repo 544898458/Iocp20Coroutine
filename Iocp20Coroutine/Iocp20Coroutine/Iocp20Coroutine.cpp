@@ -9,6 +9,7 @@
 #include "Space.h"
 #include "Entity.h"
 #include "CoTimer.h"
+#include "MyServer.h"
 #include <glog/logging.h>
 #pragma comment(lib, "glog.lib")
 
@@ -50,8 +51,6 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 
 
 
-
-
 ///*
 int main(void)
 {
@@ -77,7 +76,7 @@ int main(void)
 
 	SetConsoleCtrlHandler(fun, TRUE);
 	
-	Iocp::Server accept;
+	Iocp::Server<MyServer> accept;
 	accept.WsaStartup();
 	accept.Init<WebSocketSession<MySession>>();
 
