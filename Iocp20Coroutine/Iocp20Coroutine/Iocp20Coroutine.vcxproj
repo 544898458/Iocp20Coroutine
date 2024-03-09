@@ -149,6 +149,7 @@
     </ClInclude>
     <ClCompile Include="IocpNetwork\SessionSocketCompeletionKey.cpp" />
     <ClCompile Include="IocpNetwork\SocketCompeletionKey.cpp" />
+    <ClCompile Include="IocpNetwork\WebSocketSession.cpp" />
     <ClCompile Include="LogStrategy\StrategyLog.cpp" />
     <ClCompile Include="mainGpp.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -176,6 +177,7 @@
     <ClInclude Include="IocpNetwork\Server.h" />
     <ClInclude Include="IocpNetwork\SessionSocketCompeletionKey.h" />
     <ClInclude Include="IocpNetwork\SocketCompeletionKey.h" />
+    <ClInclude Include="IocpNetwork\WebSocketSession.h" />
     <ClInclude Include="LogStrategy\StrategyLog.h" />
     <ClInclude Include="MsgQueue.h" />
     <ClInclude Include="MySession.h" />
