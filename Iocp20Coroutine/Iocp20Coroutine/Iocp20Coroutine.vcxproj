@@ -134,28 +134,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CoRoutine\CoTask.cpp" />
+    <ClCompile Include="..\CoRoutine\CoTask.cpp" />
     <ClCompile Include="CoTimer.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Iocp20Coroutine.cpp" />
-    <ClCompile Include="IocpNetwork\ByteQueue.cpp" />
-    <ClCompile Include="IocpNetwork\ListenSocketCompeletionKey.cpp">
+    <ClCompile Include="..\IocpNetwork\ByteQueue.cpp" />
+    <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClInclude Include="IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClCompile Include="IocpNetwork\Overlapped.cpp" />
-    <ClCompile Include="IocpNetwork\Server.cpp" />
-    <ClInclude Include="IocpNetwork\ServerTemplate.h">
+    <ClCompile Include="..\IocpNetwork\Overlapped.cpp" />
+    <ClCompile Include="..\IocpNetwork\Server.cpp" />
+    <ClInclude Include="..\IocpNetwork\ServerTemplate.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClCompile Include="IocpNetwork\SessionSocketCompeletionKey.cpp" />
-    <ClCompile Include="IocpNetwork\SocketCompeletionKey.cpp" />
-    <ClInclude Include="IocpNetwork\WebSocketSessionTemplate.h">
+    <ClCompile Include="..\IocpNetwork\SessionSocketCompeletionKey.cpp" />
+    <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp" />
+    <ClInclude Include="..\IocpNetwork\WebSocketSessionTemplate.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClCompile Include="LogStrategy\StrategyLog.cpp" />
+    <ClCompile Include="..\LogStrategy\StrategyLog.cpp" />
     <ClCompile Include="mainGpp.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -163,41 +163,41 @@
     <ClCompile Include="MyServer.cpp" />
     <ClCompile Include="MySession.cpp" />
     <ClCompile Include="Space.cpp" />
-    <ClCompile Include="websocketfiles-master\src\base64.cpp" />
-    <ClCompile Include="websocketfiles-master\src\main.cpp">
+    <ClCompile Include="..\websocketfiles-master\src\base64.cpp" />
+    <ClCompile Include="..\websocketfiles-master\src\main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="websocketfiles-master\src\sha1_portable.cpp" />
-    <ClCompile Include="websocketfiles-master\src\string_helper.cpp" />
-    <ClCompile Include="websocketfiles-master\src\ws_endpoint.cpp" />
-    <ClCompile Include="websocketfiles-master\src\ws_packet.cpp" />
+    <ClCompile Include="..\websocketfiles-master\src\sha1_portable.cpp" />
+    <ClCompile Include="..\websocketfiles-master\src\string_helper.cpp" />
+    <ClCompile Include="..\websocketfiles-master\src\ws_endpoint.cpp" />
+    <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CoRoutine\CoTask.h" />
-    <ClInclude Include="CoTimer.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="Iocp20Coroutine.h" />
-    <ClInclude Include="IocpNetwork\ByteQueue.h" />
-    <ClInclude Include="IocpNetwork\ListenSocketCompeletionKey.h" />
-    <ClInclude Include="IocpNetwork\Overlapped.h" />
-    <ClInclude Include="IocpNetwork\Server.h" />
-    <ClInclude Include="IocpNetwork\SessionSocketCompeletionKey.h" />
-    <ClInclude Include="IocpNetwork\SocketCompeletionKey.h" />
-    <ClInclude Include="IocpNetwork\WebSocketSession.h" />
-    <ClInclude Include="LogStrategy\StrategyLog.h" />
-    <ClInclude Include="MsgQueue.h" />
+    <ClInclude Include="..\CoRoutine\CoTask.h" />
+    <ClInclude Include="..\CoTimer.h" />
+    <ClInclude Include="..\Entity.h" />
+    <ClInclude Include="..\Iocp20Coroutine.h" />
+    <ClInclude Include="..\IocpNetwork\ByteQueue.h" />
+    <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKey.h" />
+    <ClInclude Include="..\IocpNetwork\Overlapped.h" />
+    <ClInclude Include="..\IocpNetwork\Server.h" />
+    <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKey.h" />
+    <ClInclude Include="..\IocpNetwork\SocketCompeletionKey.h" />
+    <ClInclude Include="..\IocpNetwork\WebSocketSession.h" />
+    <ClInclude Include="..\LogStrategy\StrategyLog.h" />
+    <ClInclude Include="..\MsgQueue.h" />
     <ClInclude Include="MyServer.h" />
     <ClInclude Include="MySession.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Space.h" />
-    <ClInclude Include="websocketfiles-master\src\base64.h" />
-    <ClInclude Include="websocketfiles-master\src\sha1.h" />
-    <ClInclude Include="websocketfiles-master\src\string_helper.h" />
-    <ClInclude Include="websocketfiles-master\src\ws_endpoint.h" />
-    <ClInclude Include="websocketfiles-master\src\ws_packet.h" />
+    <ClInclude Include="..\websocketfiles-master\src\base64.h" />
+    <ClInclude Include="..\websocketfiles-master\src\sha1.h" />
+    <ClInclude Include="..\websocketfiles-master\src\string_helper.h" />
+    <ClInclude Include="..\websocketfiles-master\src\ws_endpoint.h" />
+    <ClInclude Include="..\websocketfiles-master\src\ws_packet.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="websocketfiles-master\src\string_helper.inl" />
+    <None Include="..\websocketfiles-master\src\string_helper.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
