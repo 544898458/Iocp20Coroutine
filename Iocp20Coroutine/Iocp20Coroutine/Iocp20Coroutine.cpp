@@ -3,12 +3,12 @@
 #include <string.h>
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")
-#include "IocpNetwork/Server.h"
+#include "../IocpNetwork/Server.h"
 #include "MySession.h"
 #include "MsgQueue.h"
 #include "Space.h"
 #include "Entity.h"
-#include "CoTimer.h"
+#include "../CoRoutine/CoTimer.h"
 #include "MyServer.h"
 #include <glog/logging.h>
 #pragma comment(lib, "glog.lib")

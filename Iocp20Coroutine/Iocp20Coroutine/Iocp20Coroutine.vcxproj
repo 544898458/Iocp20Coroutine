@@ -72,8 +72,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;VisualLeakDetector\include;$(IncludePath)</IncludePath>
-    <LibraryPath>glog\lib;VisualLeakDetector\lib\Win64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;$(SolutionDir)\VisualLeakDetector\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\glog\lib;$(SolutionDir)\VisualLeakDetector\lib\Win64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -135,13 +135,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\CoRoutine\CoTask.cpp" />
-    <ClCompile Include="CoTimer.cpp" />
+    <ClCompile Include="..\CoRoutine\CoTimer.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Iocp20Coroutine.cpp" />
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp" />
     <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClInclude Include="..\CoRoutine\CoTimer.h" />
     <ClInclude Include="IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -174,7 +175,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CoRoutine\CoTask.h" />
-    <ClInclude Include="..\CoTimer.h" />
     <ClInclude Include="..\Entity.h" />
     <ClInclude Include="..\Iocp20Coroutine.h" />
     <ClInclude Include="..\IocpNetwork\ByteQueue.h" />

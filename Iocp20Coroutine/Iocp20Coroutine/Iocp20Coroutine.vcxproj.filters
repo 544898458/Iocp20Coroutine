@@ -45,9 +45,6 @@
     <ClCompile Include="Iocp20Coroutine.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CoTimer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="MyServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -93,6 +90,9 @@
     <ClCompile Include="..\CoRoutine\CoTask.cpp">
       <Filter>CoRoutine</Filter>
     </ClCompile>
+    <ClCompile Include="..\CoRoutine\CoTimer.cpp">
+      <Filter>CoRoutine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -114,9 +114,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\WebSocketSessionTemplate.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\CoTimer.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\Entity.h">
@@ -168,6 +165,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoTask.h">
+      <Filter>CoRoutine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CoRoutine\CoTimer.h">
       <Filter>CoRoutine</Filter>
     </ClInclude>
   </ItemGroup>

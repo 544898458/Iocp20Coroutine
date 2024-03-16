@@ -1,7 +1,7 @@
 #pragma once
 #include "MsgQueue.h"
 #include "Entity.h"
-#include "./IocpNetwork/WebSocketSession.h"
+#include "../IocpNetwork/WebSocketSession.h"
 
 class MyServer;
 class MySession 
