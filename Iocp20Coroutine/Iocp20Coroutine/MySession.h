@@ -24,19 +24,6 @@ private:
 	WebSocketSession<MySession>* m_pWsSession = nullptr;
 };
 
-
-/// <summary>
-/// 所有活动连接
-/// </summary>
-template<class T_Session>
-std::set<Iocp::SessionSocketCompeletionKey<T_Session>*> g_setSession;
-/// <summary>
-/// 多线程全局操作g_setSession
-/// </summary>
-template<class T_Session>
-std::mutex g_setSessionMutex;
-
-
 /// <summary>
 /// 向所有连接广播消息
 /// </summary>

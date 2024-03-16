@@ -20,12 +20,13 @@ namespace Iocp
 		}
 		bool Init();
 		void Stop();
+		T_Server m_Server;
 	private:
 		static void NetworkThreadProc(HANDLE port);
 	private:
 		SOCKET m_socketAccept=NULL;
 		HANDLE m_hIocp = NULL;
 		//std::vector<HANDLE> vecThread;
-		T_Server m_Server;
+		
 	};
 }

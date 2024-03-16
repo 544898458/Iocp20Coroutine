@@ -86,8 +86,9 @@ int main(void)
 	while (g_flag)
 	{
 		Sleep(100);
-		std::set<Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession>>*> setDelete;
-		for (auto p : g_setSession<WebSocketSession<MySession>>)
+		std::lock_guard lock(accept.m_Server.g_setSessionMutex);
+		std::set<MyServer::Session*> setDelete;
+		for (auto p : accept.m_Server.g_setSession)
 		{
 			p->Session.m_Session.m_msgQueue.Process();
 			if (p->Finished())
