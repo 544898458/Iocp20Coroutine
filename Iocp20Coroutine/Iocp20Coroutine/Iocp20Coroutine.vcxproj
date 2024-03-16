@@ -72,7 +72,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;glog\include;VisualLeakDetector\include;$(IncludePath)</IncludePath>
+    <IncludePath>msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;VisualLeakDetector\include;$(IncludePath)</IncludePath>
     <LibraryPath>glog\lib;VisualLeakDetector\lib\Win64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
