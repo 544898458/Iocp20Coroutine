@@ -28,6 +28,6 @@ public:
 	/// <summary>
 	/// 多线程全局操作g_setSession
 	/// </summary>
-	std::mutex m_setSessionMutex;
+	std::recursive_mutex m_setSessionMutex;
 };
 

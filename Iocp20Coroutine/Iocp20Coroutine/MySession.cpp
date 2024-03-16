@@ -101,8 +101,8 @@ inline void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer 
 	m_pServer = &server;
 	std::lock_guard lock(m_pServer->m_setSessionMutex);
 
-	m_entity.Init(5, m_pServer->g_space, TraceEnemy);
-	//m_pWsSession = pWsSession;
+	m_entity.Init(5, m_pServer->g_space, TraceEnemy, this);
+	m_pWsSession = pWsSession;
 	m_pServer->g_space.setEntity.insert(&m_entity);
 	m_pServer->m_setSession.insert(pWsSession->m_pSession);
 	//#include <glog/logging.h>

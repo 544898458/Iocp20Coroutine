@@ -150,14 +150,15 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
+	auto pServer = m_pSession->m_pServer;
 	m_pSession->m_entity.ReplaceCo(	//替换协程
-		[targetX, targetZ, this](Entity* pEntity, float& x, float& z, std::function<void()>& funCancel)->CoTask<int>
+		[targetX, targetZ, pServer](Entity* pEntity, float& x, float& z, std::function<void()>& funCancel)->CoTask<int>
 		{
 			KeepCancel kc(funCancel);
 			const auto localTargetX = targetX;
 			const auto localTargetZ = targetZ;
-
-			m_pSession->m_pServer->Broadcast(MsgChangeSkeleAnim(pEntity, "run"));
+			auto pLocalServer = pServer;
+			pLocalServer->Broadcast(MsgChangeSkeleAnim(pEntity, "run"));
 			
 			while (true)
 			{
@@ -170,14 +171,14 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 				const auto step = 0.5f;
 				if (std::abs(localTargetX - x) < step && std::abs(localTargetZ - z) < step) {
 					LOG(INFO) << "已走到" << localTargetX << "," << localTargetZ << "附近，协程正常退出";
-					m_pSession->m_pServer->Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));
+					pLocalServer->Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));
 					co_return 0;
 				}
 
 				x += localTargetX < x ? -step : step;
 				z += localTargetZ < z ? -step : step;
 
-				m_pSession->m_pServer->Broadcast(MsgNotifyPos(pEntity, x, z));
+				pLocalServer->Broadcast(MsgNotifyPos(pEntity, x, z));
 			}
 		});
 	m_pSession->m_entity.m_coWalk.Run();//协程离开开始运行（运行到第一个co_await

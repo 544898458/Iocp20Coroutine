@@ -86,12 +86,13 @@ namespace Iocp {
 			if (!sendFinish)
 			{
 				LOG(INFO) << "PostRecv协程结束，但是sendOverlapped还没结束,GetCurrentThreadId=" << GetCurrentThreadId();
-				co_return;
+				co_return -1;
 			}
 		}
 		//this->Session.OnDestroy();
 		//delete this;
 		LOG(INFO) << "PostRecv协程结束,GetCurrentThreadId=" << GetCurrentThreadId();
+		co_return 0;
 	}
 	template<class T_Session>
 	CoTask<int> SessionSocketCompeletionKey<T_Session>::PostSend(Overlapped& overlapped)
