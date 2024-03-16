@@ -128,7 +128,8 @@ public:
 	/// </summary>
 	//WebSocketSession();
 	virtual ~WebSocketSession() {}
-	void OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession);
+	template<class T_Server>
+	void OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
 	/// <summary>
 	/// 用户自定义函数，这里是纯数据，连封包概念都没有，封包是WebSocket协议负责的工作
 	/// </summary>

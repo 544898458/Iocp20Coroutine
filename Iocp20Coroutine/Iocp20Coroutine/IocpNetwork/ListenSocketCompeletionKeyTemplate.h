@@ -101,7 +101,7 @@ namespace Iocp {
 
 			//绑定到完成端口
 			auto pNewCompleteKey = new SessionSocketCompeletionKey<T_Session>(pAcceptOverlapped->socket);
-			pNewCompleteKey->Session.OnInit(*pNewCompleteKey);//回调用户自定义函数
+			pNewCompleteKey->Session.OnInit(*pNewCompleteKey,refServer);//回调用户自定义函数
 			refServer.OnAdd(*pNewCompleteKey);
 			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)pAcceptOverlapped->socket, hIocp, (ULONG_PTR)pNewCompleteKey, 0);
 			if (hPort1 != hIocp)

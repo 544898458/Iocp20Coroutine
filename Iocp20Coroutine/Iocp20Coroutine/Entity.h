@@ -7,7 +7,8 @@ class Space;
 class Entity
 {
 public:
-	Entity(float x, Space& m_space, std::function< CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun);
+	Entity();
+	void Init(float x, Space& m_space, std::function< CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun);
 	void ReplaceCo(std::function<CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun);
 	void Update();
 	void Hurt(int) {}
@@ -19,7 +20,8 @@ public:
 	const uint64_t Id;
 	int m_hp = 10;
 	std::string m_nickName;
+	MySession* m_pSession = nullptr;
 private:
-	Space& m_space;
+	Space *m_space;
 	
 };

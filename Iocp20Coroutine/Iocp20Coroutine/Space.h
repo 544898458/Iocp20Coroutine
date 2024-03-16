@@ -10,4 +10,3 @@ public:
 	std::set<Entity*> setEntity;
 	void Update();
 };
-extern Space g_space;

@@ -9,7 +9,7 @@ template<class T_Server>
 template<class T_Session>
 	requires requires(T_Session& refSession)
 {
-	std::is_function_v<decltype(T_Session::OnInit)>;
+	//std::is_function_v<decltype(T_Session::OnInit)>;
 	std::is_function_v<decltype(T_Session::OnRecv)>;
 	std::is_function_v<decltype(T_Session::OnDestroy)>;
 }
@@ -94,7 +94,7 @@ bool Iocp::Server<T_Server>::Init()
 	SYSTEM_INFO system_processors_count;
 	GetSystemInfo(&system_processors_count);
 	auto process_count = system_processors_count.dwNumberOfProcessors;
-	for (int i = 0; i < process_count; i++)
+	for (decltype(process_count) i = 0; i < process_count; i++)
 	{
 		//auto hThread = CreateThread(NULL, 0, NetworkThreadProc, pListenCompleteKey->hIocp, 0, NULL);
 		std::thread networkThread(Server::NetworkThreadProc, m_hIocp);

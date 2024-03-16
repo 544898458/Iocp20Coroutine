@@ -3,7 +3,7 @@
 //#include "IocpNetwork/ListenSocketCompeletionKey.cpp"
 #include "IocpNetwork/SessionSocketCompeletionKey.cpp"
 #include "websocketfiles-master/src/ws_endpoint.cpp"
-#include "./IocpNetwork/WebSocketSession.cpp"
+#include "./IocpNetwork/WebSocketSessionTemplate.h"
 
 #include "MySession.h"
 
@@ -14,7 +14,7 @@
 #include "MsgQueue.h"
 #include "Space.h"
 #include "CoTimer.h"
-
+#include "MyServer.h"
 //template<MySession>
 //std::set<Iocp::SessionSocketCompeletionKey<MySession>*> g_setSession;
 //template<MySession> std::mutex g_setSessionMutex;
@@ -63,13 +63,13 @@ CoTask<int> TraceEnemy(Entity* pEntity, float& x, float& z, std::function<void()
 			LOG(INFO) << "TraceEnemyÐ­³ÌÕý³£ÍË³ö";
 			co_return 0;
 		}
-		x -= 0.01;
+		x -= 0.01f;
 
-		Broadcast<MsgNotifyPos,WebSocketSession<MySession>>(MsgNotifyPos(pEntity, x, z));
+		pEntity->m_pSession->m_pServer->Broadcast(MsgNotifyPos(pEntity, x, z));
 	}
 }
 
-MySession::MySession() : m_entity(5, g_space, TraceEnemy), m_msgQueue(this)
+MySession::MySession() : m_msgQueue(this)
 {
 }
 void MySession::OnRecvWsPack(const char buf[], const int len)
@@ -96,42 +96,35 @@ void MySession::OnRecvWsPack(const char buf[], const int len)
 	break;
 	}
 }
-inline void MySession::OnInit(WebSocketSession<MySession>* pWsSession)
+inline void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer &server)
 {
-	std::lock_guard lock(g_setSessionMutex<WebSocketSession<MySession> >);
-	
+	m_pServer = &server;
+	std::lock_guard lock(m_pServer->m_setSessionMutex);
 
+	m_entity.Init(5, m_pServer->g_space, TraceEnemy);
 	//m_pWsSession = pWsSession;
-	g_space.setEntity.insert(&m_entity);
-	g_setSession< WebSocketSession<MySession> >.insert(pWsSession->m_pSession);
+	m_pServer->g_space.setEntity.insert(&m_entity);
+	m_pServer->m_setSession.insert(pWsSession->m_pSession);
 	//#include <glog/logging.h>
-	LOG(INFO) << "Ìí¼ÓSession£¬Ê£Óà" << g_setSession<WebSocketSession<MySession> >.size();
+	LOG(INFO) << "Ìí¼ÓSession£¬Ê£Óà" << m_pServer->m_setSession.size();
 
 
 }
 void MySession::OnDestroy()
 {
-	std::lock_guard lock(g_setSessionMutex<WebSocketSession<MySession> >);
-	g_setSession<WebSocketSession<MySession>>.erase(this->m_pWsSession->m_pSession);
-	LOG(INFO) << "É¾³ýSession£¬Ê£Óà" << g_setSession<WebSocketSession<MySession> >.size();
+	std::lock_guard lock(m_pServer->m_setSessionMutex);
+	m_pServer->m_setSession.erase(this->m_pWsSession->m_pSession);
+	LOG(INFO) << "É¾³ýSession£¬Ê£Óà" << m_pServer->m_setSession.size();
 
-	g_space.setEntity.erase(&m_entity);
+	m_pServer->g_space.setEntity.erase(&m_entity);
+	m_pServer = nullptr;
 }
 template void MySession::Send(const MsgLoginRet&);
 template void MySession::Send(const MsgNotifyPos&);
+template void MySession::Send(const MsgChangeSkeleAnim&);
 
-template<class T,class T_Session>
-void Broadcast(const T& msg)
-{
-	std::lock_guard lock(g_setSessionMutex<T_Session>);
-	for (auto p : g_setSession<T_Session>)
-	{
-		p->Session.m_Session.Send(msg);
-	}
-}
 
-template void Broadcast<MsgLoginRet,WebSocketSession<MySession>>(const MsgLoginRet&);
-template void Broadcast<MsgNotifyPos, WebSocketSession<MySession>>(const MsgNotifyPos&);
-template void Broadcast<MsgChangeSkeleAnim, WebSocketSession<MySession>>(const MsgChangeSkeleAnim&);
+
 template class WebSocketSession<MySession>;
+template void WebSocketSession<MySession>::OnInit<MyServer>(Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> >& refSession, MyServer& server);
 template class WebSocketEndpoint<MySession, Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> > >;

@@ -1,14 +1,14 @@
 #include "WebSocketSession.h"
 
-
 template<class T_Session>
-void WebSocketSession<T_Session>::OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session> >& refSession)
+template<class T_Server>
+void WebSocketSession<T_Session>::OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session> >& refSession, T_Server&server)
 {
 	//std::lock_guard lock(g_setSessionMutex<WebSocketSession<T_Session> >);
 	m_webSocketEndpoint.reset(new MyWebSocketEndpoint<T_Session, Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session> > >(&this->m_Session, &refSession));
 
 	m_pSession = &refSession;
-	this->m_Session.OnInit(this);
+	this->m_Session.OnInit(this, server);
 }
 template<class T_Session>
 int WebSocketSession< T_Session>::OnRecv(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession, const char buf[], int len)

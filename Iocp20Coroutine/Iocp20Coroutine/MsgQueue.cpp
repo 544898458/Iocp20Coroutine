@@ -4,7 +4,7 @@
 #include "MySession.h"
 #include "Space.h"
 #include "CoTimer.h"
-
+#include "MyServer.h"
 void MsgQueue::Process()
 {
 	MsgId msgId = MsgId::Login;
@@ -132,9 +132,9 @@ void MsgQueue::OnRecv(const MsgLogin& msg)
 	ret.nickName = GbkToUtf8(utf8Name.c_str());// strBroadcast.c_str());
 	ret.entityId = (uint64_t)&m_pSession->m_entity;
 	m_pSession->m_entity.m_nickName = utf8Name;
-	Broadcast<MsgLoginRet ,WebSocketSession<MySession>>(ret);
+	m_pSession->m_pServer->Broadcast(ret);
 
-	for (const auto pENtity : g_space.setEntity)
+	for (const auto pENtity : m_pSession->m_pServer->g_space.setEntity)
 	{
 		if (pENtity == &m_pSession->m_entity)
 			continue;
@@ -151,13 +151,13 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
 	m_pSession->m_entity.ReplaceCo(	//替换协程
-		[targetX, targetZ](Entity* pEntity, float& x, float& z, std::function<void()>& funCancel)->CoTask<int>
+		[targetX, targetZ, this](Entity* pEntity, float& x, float& z, std::function<void()>& funCancel)->CoTask<int>
 		{
 			KeepCancel kc(funCancel);
 			const auto localTargetX = targetX;
 			const auto localTargetZ = targetZ;
 
-			Broadcast<MsgChangeSkeleAnim,WebSocketSession<MySession>>(MsgChangeSkeleAnim(pEntity, "run"));
+			m_pSession->m_pServer->Broadcast(MsgChangeSkeleAnim(pEntity, "run"));
 			
 			while (true)
 			{
@@ -170,14 +170,14 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 				const auto step = 0.5f;
 				if (std::abs(localTargetX - x) < step && std::abs(localTargetZ - z) < step) {
 					LOG(INFO) << "已走到" << localTargetX << "," << localTargetZ << "附近，协程正常退出";
-					Broadcast<MsgChangeSkeleAnim,WebSocketSession<MySession>>(MsgChangeSkeleAnim(pEntity, "idle"));
+					m_pSession->m_pServer->Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));
 					co_return 0;
 				}
 
 				x += localTargetX < x ? -step : step;
 				z += localTargetZ < z ? -step : step;
 
-				Broadcast<MsgNotifyPos,WebSocketSession<MySession>>(MsgNotifyPos(pEntity, x, z));
+				m_pSession->m_pServer->Broadcast(MsgNotifyPos(pEntity, x, z));
 			}
 		});
 	m_pSession->m_entity.m_coWalk.Run();//协程离开开始运行（运行到第一个co_await

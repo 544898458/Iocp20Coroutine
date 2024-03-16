@@ -86,22 +86,7 @@ int main(void)
 	while (g_flag)
 	{
 		Sleep(100);
-		std::lock_guard lock(accept.m_Server.g_setSessionMutex);
-		std::set<MyServer::Session*> setDelete;
-		for (auto p : accept.m_Server.g_setSession)
-		{
-			p->Session.m_Session.m_msgQueue.Process();
-			if (p->Finished())
-				setDelete.insert(p);
-		}
-		for (auto p : setDelete) 
-		{
-			p->Session.OnDestroy();
-			delete p;
-			LOG(INFO) << "已删除对象,GetCurrentThreadId=" << GetCurrentThreadId();
-
-		}
-		g_space.Update();
+		accept.m_Server.Update();
 		CoTimer::Update();
 	}
 	accept.Stop();

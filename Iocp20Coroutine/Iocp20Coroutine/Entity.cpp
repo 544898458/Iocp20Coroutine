@@ -2,13 +2,21 @@
 #include "MySession.h"
 #include "Space.h"
 #include "CoTimer.h"
+#include "MyServer.h"
+
 using namespace std;
-Entity::Entity(float x, Space& m_space, std::function< CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun) :m_space(m_space), Id((uint64_t)this)
+Entity::Entity() :Id((uint64_t)this) 
 {
-	//创建一个协程，来回走动
+
+}
+void Entity::Init(float x, Space& space, std::function< CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun)
+{
+	m_space = &space;
+	
 	this->m_Pos.x = x;
 	m_coWalk = fun(this, this->m_Pos.x, this->m_Pos.z, m_cancel);
 	m_coWalk.Run();
+
 }
 
 void Entity::ReplaceCo(std::function< CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun)
@@ -31,7 +39,7 @@ CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, std::
 {
 	KeepCancel kc(cancel);
 
-	Broadcast<MsgChangeSkeleAnim,WebSocketSession<MySession>>(MsgChangeSkeleAnim(pEntity, "attack"));//播放攻击动作
+	pEntity->m_pSession->m_pServer->Broadcast(MsgChangeSkeleAnim(pEntity, "attack"));//播放攻击动作
 		
 	if (co_await CoTimer::Wait(3000ms, cancel))//等3秒	前摇
 		co_return 0;//协程取消
@@ -51,7 +59,7 @@ CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, std::
 	if(co_await CoTimer::Wait(3000ms, cancel))//等3秒	后摇
 		co_return 0;//协程取消
 
-	Broadcast<MsgChangeSkeleAnim,WebSocketSession<MySession>>(MsgChangeSkeleAnim(pEntity, "idle"));//播放休闲待机动作
+	pEntity->m_pSession->m_pServer->Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));//播放休闲待机动作
 	
 	if(co_await CoTimer::Wait(5000ms, cancel))//等5秒	公共冷却
 		co_return 0;//协程取消
@@ -69,7 +77,7 @@ void Entity::Update()
 	{
 		return;//表示不允许打断
 	}
-	for (const auto pENtity : m_space.setEntity)
+	for (const auto pENtity : m_space->setEntity)
 	{
 		if (pENtity == this)
 			continue;

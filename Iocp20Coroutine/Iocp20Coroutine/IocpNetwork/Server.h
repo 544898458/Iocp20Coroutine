@@ -14,7 +14,7 @@ namespace Iocp
 		template<class T_Session>
 			requires requires(T_Session &refSession)
 		{
-			std::is_function_v<decltype(T_Session::OnInit)>;
+			//std::is_function_v<decltype(T_Session::OnInit)>;
 			std::is_function_v<decltype(T_Session::OnRecv)>;
 			std::is_function_v<decltype(T_Session::OnDestroy)>;
 		}

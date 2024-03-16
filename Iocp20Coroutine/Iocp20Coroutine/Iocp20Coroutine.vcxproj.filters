@@ -90,9 +90,6 @@
     <ClCompile Include="CoTimer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="IocpNetwork\WebSocketSession.cpp">
-      <Filter>IocpNetwork</Filter>
-    </ClCompile>
     <ClCompile Include="MyServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -168,6 +165,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpNetwork\WebSocketSessionTemplate.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
   </ItemGroup>
