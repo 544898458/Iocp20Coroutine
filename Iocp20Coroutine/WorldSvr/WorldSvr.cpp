@@ -10,14 +10,26 @@ class WorldServer;
 class WorldSession
 {
 public:
-	void OnInit(Iocp::SessionSocketCompeletionKey<WorldSession>& session, WorldServer&);
-	int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len);
-	void OnDestroy();
+	void OnInit(Iocp::SessionSocketCompeletionKey<WorldSession>& session, WorldServer&)
+	{
+		
+	}
+	int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len) 
+	{
+		return len;
+	}
+	void OnDestroy() 
+	{
+
+	}
 };
 class WorldServer 
 {
 public:
-	void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session);
+	void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
+	{
+
+	}
 	
 };
 
