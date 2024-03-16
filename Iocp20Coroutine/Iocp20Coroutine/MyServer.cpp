@@ -6,7 +6,7 @@
 #include "../IocpNetwork/ListenSocketCompeletionKeyTemplate.h"
 
 template Iocp::Server<MyServer>;
-template bool Iocp::Server<MyServer>::Init<WebSocketSession<MySession> >();
+template bool Iocp::Server<MyServer>::Init<WebSocketSession<MySession> >(const uint16_t);
 template void Iocp::ListenSocketCompeletionKey::StartCoRoutine<WebSocketSession<MySession>, MyServer >(HANDLE hIocp, SOCKET socketListen, MyServer&);
 
 void MyServer::OnAdd(Session&)

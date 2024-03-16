@@ -48,25 +48,7 @@
     <ClCompile Include="MyServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\LogStrategy\StrategyLog.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\websocketfiles-master\src\main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\websocketfiles-master\src\sha1_portable.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\websocketfiles-master\src\string_helper.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\websocketfiles-master\src\ws_endpoint.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\CoRoutine\CoTask.cpp">
@@ -81,14 +63,32 @@
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
-    <ClCompile Include="..\websocketfiles-master\src\base64.cpp">
-      <Filter>IocpNetwork</Filter>
-    </ClCompile>
     <ClCompile Include="..\IocpNetwork\Server.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\Overlapped.cpp">
       <Filter>IocpNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LogStrategy\StrategyLog.cpp">
+      <Filter>LogStrategy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocketfiles-master\src\ws_endpoint.cpp">
+      <Filter>websocketfiles-master</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp">
+      <Filter>websocketfiles-master</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocketfiles-master\src\string_helper.cpp">
+      <Filter>websocketfiles-master</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocketfiles-master\src\sha1_portable.cpp">
+      <Filter>websocketfiles-master</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocketfiles-master\src\base64.cpp">
+      <Filter>websocketfiles-master</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -107,37 +107,13 @@
     <ClInclude Include="IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="..\IocpNetwork\WebSocketSessionTemplate.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\Entity.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\Iocp20Coroutine.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\IocpNetwork\SocketCompeletionKey.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\IocpNetwork\WebSocketSession.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LogStrategy\StrategyLog.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\MsgQueue.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\websocketfiles-master\src\sha1.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\websocketfiles-master\src\string_helper.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\websocketfiles-master\src\ws_endpoint.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\websocketfiles-master\src\ws_packet.h">
+    <ClInclude Include="MsgQueue.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoTask.h">
@@ -150,9 +126,6 @@
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\ByteQueue.h">
-      <Filter>IocpNetwork</Filter>
-    </ClInclude>
-    <ClInclude Include="..\websocketfiles-master\src\base64.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKey.h">
@@ -170,10 +143,37 @@
     <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKeyTemplate.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
+    <ClInclude Include="..\IocpNetwork\WebSocketSessionTemplate.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\WebSocketSession.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LogStrategy\StrategyLog.h">
+      <Filter>LogStrategy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\SocketCompeletionKey.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocketfiles-master\src\ws_packet.h">
+      <Filter>websocketfiles-master</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocketfiles-master\src\ws_endpoint.h">
+      <Filter>websocketfiles-master</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocketfiles-master\src\string_helper.h">
+      <Filter>websocketfiles-master</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocketfiles-master\src\sha1.h">
+      <Filter>websocketfiles-master</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocketfiles-master\src\base64.h">
+      <Filter>websocketfiles-master</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\websocketfiles-master\src\string_helper.inl">
-      <Filter>头文件</Filter>
+      <Filter>websocketfiles-master</Filter>
     </None>
   </ItemGroup>
 </Project>

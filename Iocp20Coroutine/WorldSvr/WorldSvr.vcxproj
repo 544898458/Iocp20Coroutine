@@ -140,6 +140,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\CoRoutine\CoTask.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\CoRoutine\CoTimer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -164,6 +170,8 @@
     <ClCompile Include="WorldSvr.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\CoRoutine\CoTask.h" />
+    <ClInclude Include="..\CoRoutine\CoTimer.h" />
     <ClInclude Include="..\IocpNetwork\ByteQueue.h" />
     <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKey.h" />
     <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKeyTemplate.h" />

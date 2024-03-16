@@ -13,7 +13,7 @@ template<class T_Session>
 	std::is_function_v<decltype(T_Session::OnRecv)>;
 	std::is_function_v<decltype(T_Session::OnDestroy)>;
 }
-bool Iocp::Server<T_Server>::Init()
+bool Iocp::Server<T_Server>::Init(const uint16_t usPort)
 {
 	if (this->m_socketAccept != NULL)
 		return false;
@@ -56,7 +56,7 @@ bool Iocp::Server<T_Server>::Init()
 
 	sockaddr_in si;
 	si.sin_family = AF_INET;
-	si.sin_port = htons(12345);
+	si.sin_port = htons(usPort);
 	//inet_pton(AF_INET, param._pip4_dst, &param_init._address_dest.sin_addr.S_un.S_addr);
 	//inet_pton(AF_INET, "127.0.0.1", &si.sin_addr.S_un.S_addr);// inet_pton("127.0.0.1");
 	si.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
@@ -113,7 +113,7 @@ bool Iocp::Server<T_Server>::Init()
 	}
 
 	//if ( !
-	ListenSocketCompeletionKey::StartCoRoutine<T_Session,T_Server>(m_hIocp, m_socketAccept,m_Server);
+	ListenSocketCompeletionKey::StartCoRoutine<T_Session, T_Server>(m_hIocp, m_socketAccept, m_Server);
 	//)
 //{
 //	//Clear();

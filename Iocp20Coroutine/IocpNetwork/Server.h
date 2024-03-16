@@ -18,7 +18,7 @@ namespace Iocp
 			std::is_function_v<decltype(T_Session::OnRecv)>;
 			std::is_function_v<decltype(T_Session::OnDestroy)>;
 		}
-		bool Init();
+		bool Init(const uint16_t usPort);
 		void Stop();
 		T_Server m_Server;
 	private:

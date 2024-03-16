@@ -3,35 +3,51 @@
 #include "MsgQueue.h"
 #include "MySession.h"
 #include "Space.h"
-#include "CoTimer.h"
+#include "../CoRoutine/CoTimer.h"
 #include "MyServer.h"
-void MsgQueue::Process()
-{
-	MsgId msgId = MsgId::Login;
-	{
-		std::lock_guard lock(this->m_mutex);
-		if (this->m_queueMsgId.empty())
-			return;
 
-		msgId = this->m_queueMsgId.front();
-		this->m_queueMsgId.pop_front();
-	}
+MsgId MsgQueue::PopMsg()
+{
+	std::lock_guard lock(this->m_mutex);
+	if (this->m_queueMsgId.empty())
+		return MsgId::Invalid_0;
+
+	const auto msgId = this->m_queueMsgId.front();
+	this->m_queueMsgId.pop_front();
+
+	return msgId;
+}
+void MyMsgQueue::Process()
+{
+	MsgId msgId = this->m_MsgQueue.PopMsg();
+	//{
+	//	std::lock_guard lock(this->m_MsgQueue.m_mutex);
+	//	if (this->m_MsgQueue.m_queueMsgId.empty())
+	//		return;
+
+	//	msgId = this->m_MsgQueue.m_queueMsgId.front();
+	//	this->m_MsgQueue.m_queueMsgId.pop_front();
+	//}
 	switch (msgId)
 	{
-	case Login:
+	case MsgId::Invalid_0://没有消息可处理
+		return;
+	case MsgId::Login:
 	{
-		std::lock_guard lock(this->m_mutex);
-		const auto msg = this->m_queueLogin.front();
-		this->m_queueLogin.pop_front();
-		OnRecv(msg);
+		//std::lock_guard lock(this->m_mutex);
+		//const auto msg = this->m_queueLogin.front();
+		//this->m_queueLogin.pop_front();
+		//OnRecv(msg);
+		this->m_MsgQueue.OnRecv(this->m_queueLogin, this, OnRecv);
 	}
 	break;
-	case Move:
+	case MsgId::Move:
 	{
-		std::lock_guard lock(this->m_mutex);
+		/*std::lock_guard lock(this->m_mutex);
 		const auto msg = this->m_queueMove.front();
 		this->m_queueMove.pop_front();
-		OnRecv(msg);
+		OnRecv(msg);*/
+		this->m_MsgQueue.OnRecv(this->m_queueMove, this, OnRecv);
 	}
 	break;
 	default:
@@ -39,19 +55,36 @@ void MsgQueue::Process()
 	}
 }
 
-void MsgQueue::Push(const MsgLogin& msg)
+void MyMsgQueue::Push(const MsgLogin& msg)
 {
-	//printf("Push,");
-	std::lock_guard lock(this->m_mutex);
-	m_queueLogin.push_back(msg);
-	m_queueMsgId.push_back(Login);
+	//std::lock_guard lock(this->m_mutex);
+	//m_queueLogin.push_back(msg);
+	//m_queueMsgId.push_back(Login);
+	m_MsgQueue.Push(msg, m_queueLogin);
 }
-void MsgQueue::Push(const MsgMove& msg)
+
+template<class T_Msg>
+void MsgQueue::Push(const T_Msg& msg, std::deque<T_Msg>& queue)
 {
-	//printf("Push,");
 	std::lock_guard lock(this->m_mutex);
-	m_queueMove.push_back(msg);
-	m_queueMsgId.push_back(Move);
+	queue.push_back(msg);
+	this->m_queueMsgId.push_back(msg.id);
+}
+
+template<class T_Sub, class T_Msg>
+void MsgQueue::OnRecv(std::deque<T_Msg>& queue, T_Sub* pSub, void (*funOnRecv)(T_Sub* pSub, const T_Msg&))
+{
+	std::lock_guard lock(this->m_mutex);
+	const auto msg = queue.front();
+	queue.pop_front();
+	funOnRecv(pSub, msg);
+}
+void MyMsgQueue::Push(const MsgMove& msg)
+{
+	//std::lock_guard lock(this->m_mutex);
+	//m_queueMove.push_back(msg);
+	//m_queueMsgId.push_back(Move);
+	m_MsgQueue.Push(msg, m_queueMove);
 }
 std::string GbkToUtf8(const char* src_str)
 {
@@ -117,7 +150,7 @@ std::string Utf8ToGbk(const std::string& str)
 #endif
 }
 
-void MsgQueue::OnRecv(const MsgLogin& msg)
+void MyMsgQueue::OnRecv(MyMsgQueue* pThis, const MsgLogin& msg)
 {
 	auto utf8Name = Utf8ToGbk(msg.name);
 	//printf("准备广播%s",utf8Name.c_str());
@@ -130,28 +163,28 @@ void MsgQueue::OnRecv(const MsgLogin& msg)
 	//const auto strBroadcast = "[" + utf8Name + "]进来了";
 	MsgLoginRet ret;
 	ret.nickName = GbkToUtf8(utf8Name.c_str());// strBroadcast.c_str());
-	ret.entityId = (uint64_t)&m_pSession->m_entity;
-	m_pSession->m_entity.m_nickName = utf8Name;
-	m_pSession->m_pServer->Broadcast(ret);
+	ret.entityId = (uint64_t)&pThis->m_pSession->m_entity;
+	pThis->m_pSession->m_entity.m_nickName = utf8Name;
+	pThis->m_pSession->m_pServer->Broadcast(ret);
 
-	for (const auto pENtity : m_pSession->m_pServer->g_space.setEntity)
+	for (const auto pENtity : pThis->m_pSession->m_pServer->g_space.setEntity)
 	{
-		if (pENtity == &m_pSession->m_entity)
+		if (pENtity == &pThis->m_pSession->m_entity)
 			continue;
 
-		ret.nickName = GbkToUtf8(m_pSession->m_entity.m_nickName.c_str());
+		ret.nickName = GbkToUtf8(pThis->m_pSession->m_entity.m_nickName.c_str());
 		ret.entityId = (uint64_t)pENtity;
-		m_pSession->Send(ret);
+		pThis->m_pSession->Send(ret);
 	}
 }
 
-void MsgQueue::OnRecv(const MsgMove& msg)
+void MyMsgQueue::OnRecv(MyMsgQueue* pThis, const MsgMove& msg)
 {
 	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
-	auto pServer = m_pSession->m_pServer;
-	m_pSession->m_entity.ReplaceCo(	//替换协程
+	auto pServer = pThis->m_pSession->m_pServer;
+	pThis->m_pSession->m_entity.ReplaceCo(	//替换协程
 		[targetX, targetZ, pServer](Entity* pEntity, float& x, float& z, std::function<void()>& funCancel)->CoTask<int>
 		{
 			KeepCancel kc(funCancel);
@@ -159,7 +192,7 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 			const auto localTargetZ = targetZ;
 			auto pLocalServer = pServer;
 			pLocalServer->Broadcast(MsgChangeSkeleAnim(pEntity, "run"));
-			
+
 			while (true)
 			{
 				if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
@@ -181,5 +214,5 @@ void MsgQueue::OnRecv(const MsgMove& msg)
 				pLocalServer->Broadcast(MsgNotifyPos(pEntity, x, z));
 			}
 		});
-	m_pSession->m_entity.m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
+	pThis->m_pSession->m_entity.m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 }

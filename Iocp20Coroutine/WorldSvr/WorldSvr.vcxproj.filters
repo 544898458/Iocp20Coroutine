@@ -16,6 +16,9 @@
     <Filter Include="IocpServer">
       <UniqueIdentifier>{a89406d5-9808-4afc-8b5e-acde63084d8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CoRountine">
+      <UniqueIdentifier>{eff78417-4055-4d99-8ebf-1905c6c2a412}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WorldSvr.cpp">
@@ -38,6 +41,12 @@
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp">
       <Filter>IocpServer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CoRoutine\CoTask.cpp">
+      <Filter>CoRountine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CoRoutine\CoTimer.cpp">
+      <Filter>CoRountine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +79,12 @@
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKeyTemplate.h">
       <Filter>IocpServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CoRoutine\CoTask.h">
+      <Filter>CoRountine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CoRoutine\CoTimer.h">
+      <Filter>CoRountine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

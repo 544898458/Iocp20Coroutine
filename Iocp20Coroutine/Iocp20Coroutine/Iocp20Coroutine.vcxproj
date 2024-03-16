@@ -185,7 +185,7 @@
     <ClInclude Include="..\IocpNetwork\SocketCompeletionKey.h" />
     <ClInclude Include="..\IocpNetwork\WebSocketSession.h" />
     <ClInclude Include="..\LogStrategy\StrategyLog.h" />
-    <ClInclude Include="..\MsgQueue.h" />
+    <ClInclude Include="MsgQueue.h" />
     <ClInclude Include="MyServer.h" />
     <ClInclude Include="MySession.h" />
     <ClInclude Include="Define.h" />

@@ -20,7 +20,7 @@ public:
 	/// <summary>
 	/// 解析后的消息队列，解析消息在完成端口线程，处理消息在主线程（控制台界面线程）
 	/// </summary>
-	MsgQueue m_msgQueue;
+	MyMsgQueue m_msgQueue;
 	MyServer* m_pServer = nullptr;
 private:
 	WebSocketSession<MySession>* m_pWsSession = nullptr;

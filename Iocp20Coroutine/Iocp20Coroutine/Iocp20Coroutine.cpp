@@ -13,7 +13,7 @@
 #include <glog/logging.h>
 #pragma comment(lib, "glog.lib")
 
-BOOL g_flag = TRUE;
+BOOL g_running = TRUE;
 BOOL WINAPI fun(DWORD dwCtrlType)
 {
 	switch (dwCtrlType)
@@ -27,7 +27,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 		//CloseHandle(hPort);
 		//Clear();
 
-		g_flag = FALSE;
+		g_running = FALSE;
 
 		//释放线程句柄
 		//for (int i = 0; i < process_count; i++)
@@ -42,7 +42,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 		//false;
 		break;
 	case CTRL_C_EVENT:
-		g_flag = FALSE;
+		g_running = FALSE;
 		//return false;
 		break;
 	}
@@ -78,12 +78,12 @@ int main(void)
 	
 	Iocp::Server<MyServer> accept;
 	accept.WsaStartup();
-	accept.Init<WebSocketSession<MySession>>();
+	accept.Init<WebSocketSession<MySession>>(12345);
 
 	//m_space.mapEntity[0] = new Entity(-5,m_space, Patrol);
 	//m_space.mapEntity[1] = new Entity(5, m_space, TraceEnemy);
 	//主逻辑工作线程
-	while (g_flag)
+	while (g_running)
 	{
 		Sleep(100);
 		accept.m_Server.Update();

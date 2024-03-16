@@ -1,6 +1,7 @@
 #pragma once
 #include <msgpack.hpp>
 #include <mutex>
+
 class Entity;
 
 struct Position
@@ -11,15 +12,18 @@ struct Position
 
 enum MsgId
 {
+	Invalid_0,
 	Login,
 	Move,
 	LoginRet,
 	NotifyPos,
 	ChangeSkeleAnim,
 };
+MSGPACK_ADD_ENUM(MsgId);
+
 struct MsgLogin
 {
-	int id;
+	MsgId id;
 	std::string name;
 	std::string pwd;
 	MSGPACK_DEFINE(id, name, pwd);
@@ -27,7 +31,7 @@ struct MsgLogin
 
 struct MsgMove
 {
-	int id;
+	MsgId id;
 	float x;
 	float y;
 	float z;
@@ -36,7 +40,7 @@ struct MsgMove
 
 struct MsgLoginRet
 {
-	int id = (int)LoginRet;
+	MsgId id = LoginRet;
 	uint64_t entityId;
 	std::string nickName;
 	MSGPACK_DEFINE(id, entityId, nickName);
@@ -44,17 +48,17 @@ struct MsgLoginRet
 
 struct MsgNotifyPos
 {
-	MsgNotifyPos(Entity* p, float argX, float argZ):entityId((uint64_t)p),x(argX),z(argZ){}
-	int msgId = (int)NotifyPos;
+	MsgNotifyPos(Entity* p, float argX, float argZ) :entityId((uint64_t)p), x(argX), z(argZ) {}
+	MsgId msgId = NotifyPos;
 	uint64_t entityId;
 	float x;
 	float z;
 	MSGPACK_DEFINE(msgId, entityId, x, z);
 };
-struct MsgChangeSkeleAnim 
+struct MsgChangeSkeleAnim
 {
-	MsgChangeSkeleAnim(Entity *p,std::string name):entityId((uint64_t)p),clipName(name){}
-	int msgId = (int)ChangeSkeleAnim;
+	MsgChangeSkeleAnim(Entity* p, std::string name) :entityId((uint64_t)p), clipName(name) {}
+	MsgId msgId = ChangeSkeleAnim;
 	uint64_t entityId;
 	std::string clipName;
 	MSGPACK_DEFINE(msgId, entityId, clipName);
@@ -64,13 +68,26 @@ class MySession;
 class MsgQueue
 {
 public:
-	MsgQueue(MySession* p) :m_pSession(p)
+	
+	MsgId PopMsg();
+
+	template<class T_Msg>
+	void Push(const T_Msg& msg, std::deque<T_Msg>& queue);
+
+	template<class T_Sub,class T_Msg>
+	void OnRecv(std::deque<T_Msg>& queue, T_Sub *pSub, void (*funOnRecv)(T_Sub *pSub,const T_Msg&));
+
+	std::deque<MsgId> m_queueMsgId;
+	std::mutex m_mutex;
+};
+
+class MyMsgQueue
+{
+public:
+	MyMsgQueue(MySession* p) :m_pSession(p)
 	{
 	}
-	/// <summary>
-	/// 工作线程中（单线程）调用
-	/// </summary>
-	void Process();
+	
 
 	/// <summary>
 	/// 网络线程中（多线程）调用
@@ -83,19 +100,23 @@ public:
 	/// 主逻辑线程（控制台界面线程）调用
 	/// </summary>
 	/// <param name="msg"></param>
-	void OnRecv(const MsgLogin& msg);
-	void OnRecv(const MsgMove& msg);
+	static void OnRecv(MyMsgQueue* pThis, const MsgLogin& msg);
+	static void OnRecv(MyMsgQueue* pThis, const MsgMove& msg);
+	/// <summary>
+	/// 工作线程中（单线程）调用
+	/// </summary>
+	void Process();
+private:
 	/// <summary>
 	/// 这里保存的都是解析后的消息明文
 	/// </summary>
 	std::deque<MsgLogin> m_queueLogin;
 	std::deque<MsgMove> m_queueMove;
-	std::deque<MsgId> m_queueMsgId;
 
-	std::mutex m_mutex;
-private:
 	/// <summary>
 	/// 弱引用，不要销毁
 	/// </summary>
 	MySession* const m_pSession;
+	MsgQueue m_MsgQueue;
 };
+
