@@ -139,9 +139,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Iocp20Coroutine.cpp" />
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp" />
-    <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp" />
     <ClInclude Include="..\CoRoutine\CoTimer.h" />
     <ClInclude Include="IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
       <FileType>CppCode</FileType>
@@ -151,7 +149,9 @@
     <ClInclude Include="..\IocpNetwork\ServerTemplate.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClCompile Include="..\IocpNetwork\SessionSocketCompeletionKey.cpp" />
+    <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKeyTemplate.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp" />
     <ClInclude Include="..\IocpNetwork\WebSocketSessionTemplate.h">
       <FileType>CppCode</FileType>

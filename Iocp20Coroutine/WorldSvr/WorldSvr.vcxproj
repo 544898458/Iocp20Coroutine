@@ -70,6 +70,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)\msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;$(SolutionDir)\VisualLeakDetector\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\glog\lib;$(SolutionDir)\VisualLeakDetector\lib\Win64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -106,7 +110,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLOG_NO_ABBREVIATED_SEVERITIES;GLOG_USE_GLOG_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -136,6 +140,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\IocpNetwork\ByteQueue.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\Overlapped.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\Server.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -145,6 +164,15 @@
     <ClCompile Include="WorldSvr.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\IocpNetwork\ByteQueue.h" />
+    <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKey.h" />
+    <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKeyTemplate.h" />
+    <ClInclude Include="..\IocpNetwork\Overlapped.h" />
+    <ClInclude Include="..\IocpNetwork\Server.h" />
+    <ClInclude Include="..\IocpNetwork\ServerTemplate.h" />
+    <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKey.h" />
+    <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKeyTemplate.h" />
+    <ClInclude Include="..\IocpNetwork\SocketCompeletionKey.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

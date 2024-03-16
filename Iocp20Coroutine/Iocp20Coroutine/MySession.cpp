@@ -1,9 +1,9 @@
 #include <glog/logging.h>
 
 //#include "IocpNetwork/ListenSocketCompeletionKey.cpp"
-#include "IocpNetwork/SessionSocketCompeletionKey.cpp"
-#include "websocketfiles-master/src/ws_endpoint.cpp"
-#include "./IocpNetwork/WebSocketSessionTemplate.h"
+#include "../IocpNetwork/SessionSocketCompeletionKeyTemplate.h"
+#include "../websocketfiles-master/src/ws_endpoint.cpp"
+#include "../IocpNetwork/WebSocketSessionTemplate.h"
 
 #include "MySession.h"
 
@@ -13,7 +13,7 @@
 #include <codecvt>
 #include "MsgQueue.h"
 #include "Space.h"
-#include "CoTimer.h"
+#include "../CoRoutine/CoTimer.h"
 #include "MyServer.h"
 //template<MySession>
 //std::set<Iocp::SessionSocketCompeletionKey<MySession>*> g_setSession;

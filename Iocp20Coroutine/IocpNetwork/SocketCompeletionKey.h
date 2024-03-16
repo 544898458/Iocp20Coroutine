@@ -1,6 +1,6 @@
 #pragma once
 #include<WinSock2.h>
-#include <mswsock.h>
+#include<mswsock.h>
 
 #include"./Overlapped.h"
 #include<assert.h>
@@ -11,10 +11,10 @@
 	/// 连接Socket同时有两个重叠操作Recv和Accept
 	/// 名字带有CompeletionKey 说明这是传给CreateIoCompletionPort的参数，在出现对应事件后会在
 	/// </summary>
-class SocketCompeletionKey 
+class SocketCompeletionKey
 {
 public:
-	SocketCompeletionKey(SOCKET s) :socket(s) 
+	SocketCompeletionKey(SOCKET s) :socket(s)
 	{
 
 	}
@@ -30,6 +30,6 @@ public:
 	HANDLE hIocp = nullptr;
 private:
 	SOCKET socket;
-	
+
 };
 
