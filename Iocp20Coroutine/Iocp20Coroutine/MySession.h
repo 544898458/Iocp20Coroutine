@@ -1,5 +1,5 @@
 #pragma once
-#include "MsgQueue.h"
+#include "MyMsgQueue.h"
 #include "Entity.h"
 #include "../IocpNetwork/WebSocketSession.h"
 

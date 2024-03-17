@@ -30,7 +30,7 @@
     <ClCompile Include="MySession.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MsgQueue.cpp">
+    <ClCompile Include="MyMsgQueue.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Space.cpp">
@@ -90,6 +90,9 @@
     <ClCompile Include="..\websocketfiles-master\src\base64.cpp">
       <Filter>websocketfiles-master</Filter>
     </ClCompile>
+    <ClCompile Include="..\IocpNetwork\MsgQueue.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -113,7 +116,7 @@
     <ClInclude Include="..\Iocp20Coroutine.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MsgQueue.h">
+    <ClInclude Include="MyMsgQueue.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoTask.h">
@@ -169,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="..\websocketfiles-master\src\base64.h">
       <Filter>websocketfiles-master</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\MsgQueue.h">
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

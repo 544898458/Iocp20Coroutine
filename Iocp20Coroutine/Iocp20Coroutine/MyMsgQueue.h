@@ -1,7 +1,6 @@
 #pragma once
 #include <msgpack.hpp>
-#include <mutex>
-
+#include "../IocpNetwork/MsgQueue.h"
 class Entity;
 
 struct Position
@@ -65,21 +64,6 @@ struct MsgChangeSkeleAnim
 };
 
 class MySession;
-class MsgQueue
-{
-public:
-	
-	MsgId PopMsg();
-
-	template<class T_Msg>
-	void Push(const T_Msg& msg, std::deque<T_Msg>& queue);
-
-	template<class T_Sub,class T_Msg>
-	void OnRecv(std::deque<T_Msg>& queue, T_Sub *pSub, void (*funOnRecv)(T_Sub *pSub,const T_Msg&));
-
-	std::deque<MsgId> m_queueMsgId;
-	std::mutex m_mutex;
-};
 
 class MyMsgQueue
 {

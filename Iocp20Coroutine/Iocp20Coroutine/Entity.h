@@ -1,6 +1,5 @@
 #pragma once
 #include "../CoRoutine/CoTask.h"
-#include "MsgQueue.h"
 #include <functional>
 
 class Space;

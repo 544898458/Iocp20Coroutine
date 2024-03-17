@@ -7,6 +7,7 @@
 #include "../IocpNetwork/ListenSocketCompeletionKeyTemplate.h"
 #include "../IocpNetwork/SessionSocketCompeletionKeyTemplate.h"
 #include "../CoRoutine/CoTimer.h"
+#include <glog/logging.h>
 
 class WorldServer;
 class WorldSession
@@ -14,25 +15,52 @@ class WorldSession
 public:
 	void OnInit(Iocp::SessionSocketCompeletionKey<WorldSession>& session, WorldServer&)
 	{
-		
+
 	}
-	int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len) 
+
+	/// <summary>
+	///
+	/// </summary>
+	/// <param name="refSession"></param>
+	/// <param name="buf"></param>
+	/// <param name="len"></param>
+	/// <returns>返回已处理的字节数，这些数据将立刻从接受缓冲中删除</returns>
+	int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
 	{
+		uint16_t usPackLen(0);
+		const auto sizeofPackLen = sizeof(usPackLen);
+		if (sizeofPackLen > len)
+			return 0;
+
+		usPackLen = *(uint16_t*)buf;
+		if (usPackLen > 8192)
+		{
+			LOG(ERROR) << "跳过数据包len=" << len;
+			return len;
+		}
+		if (usPackLen + sizeofPackLen > len)
+			return 0;
+
+		OnRecvPack(buf + sizeofPackLen, len - sizeofPackLen);
 		return len;
 	}
-	void OnDestroy() 
+	void OnRecvPack(const char buf[], int len)
+	{
+
+	}
+	void OnDestroy()
 	{
 
 	}
 };
-class WorldServer 
+class WorldServer
 {
 public:
 	void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
 	{
 
 	}
-	
+
 };
 
 
@@ -63,7 +91,7 @@ int main()
 	Iocp::Server<WorldServer> accept;
 	accept.WsaStartup();
 	accept.Init<WorldSession>(12346);
-	
+
 	while (g_running)
 	{
 		Sleep(100);

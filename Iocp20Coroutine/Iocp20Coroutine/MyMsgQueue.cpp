@@ -1,22 +1,12 @@
 #include <glog/logging.h>
 #include <cstdlib>
-#include "MsgQueue.h"
+#include "MyMsgQueue.h"
 #include "MySession.h"
 #include "Space.h"
 #include "../CoRoutine/CoTimer.h"
 #include "MyServer.h"
 
-MsgId MsgQueue::PopMsg()
-{
-	std::lock_guard lock(this->m_mutex);
-	if (this->m_queueMsgId.empty())
-		return MsgId::Invalid_0;
 
-	const auto msgId = this->m_queueMsgId.front();
-	this->m_queueMsgId.pop_front();
-
-	return msgId;
-}
 void MyMsgQueue::Process()
 {
 	MsgId msgId = this->m_MsgQueue.PopMsg();

@@ -136,11 +136,13 @@
   <ItemGroup>
     <ClCompile Include="..\CoRoutine\CoTask.cpp" />
     <ClCompile Include="..\CoRoutine\CoTimer.cpp" />
+    <ClCompile Include="..\IocpNetwork\MsgQueue.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Iocp20Coroutine.cpp" />
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp" />
     <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp" />
     <ClInclude Include="..\CoRoutine\CoTimer.h" />
+    <ClInclude Include="..\IocpNetwork\MsgQueue.h" />
     <ClInclude Include="IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -160,7 +162,7 @@
     <ClCompile Include="mainGpp.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="MsgQueue.cpp" />
+    <ClCompile Include="MyMsgQueue.cpp" />
     <ClCompile Include="MyServer.cpp" />
     <ClCompile Include="MySession.cpp" />
     <ClCompile Include="Space.cpp" />
@@ -185,7 +187,7 @@
     <ClInclude Include="..\IocpNetwork\SocketCompeletionKey.h" />
     <ClInclude Include="..\IocpNetwork\WebSocketSession.h" />
     <ClInclude Include="..\LogStrategy\StrategyLog.h" />
-    <ClInclude Include="MsgQueue.h" />
+    <ClInclude Include="MyMsgQueue.h" />
     <ClInclude Include="MyServer.h" />
     <ClInclude Include="MySession.h" />
     <ClInclude Include="Define.h" />
