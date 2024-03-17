@@ -1,8 +1,11 @@
 #pragma once
 #include "../CoRoutine/CoTask.h"
 #include <functional>
+#include "MyMsgQueue.h"
 
 class Space;
+class MySession;
+
 class Entity
 {
 public:

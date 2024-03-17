@@ -176,6 +176,9 @@
     <ClInclude Include="..\IocpNetwork\MsgQueue.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
+    <ClInclude Include="..\IocpNetwork\MsgQueueTemplate.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\websocketfiles-master\src\string_helper.inl">

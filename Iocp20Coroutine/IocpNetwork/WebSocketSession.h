@@ -120,6 +120,10 @@ public:
 /// 对应一个网络连接
 /// </summary>
 template<class T_Session>
+//requires requires(T_Session& refSession)
+//{
+//	refSession.OnRecvWsPack((const char[])0, (const int )0	);
+//}
 class WebSocketSession
 {
 public:

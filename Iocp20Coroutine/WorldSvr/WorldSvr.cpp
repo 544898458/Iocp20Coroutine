@@ -8,7 +8,9 @@
 #include "../IocpNetwork/SessionSocketCompeletionKeyTemplate.h"
 #include "../CoRoutine/CoTimer.h"
 #include <glog/logging.h>
+#include <msgpack.hpp>
 
+enum MsgId;
 class WorldServer;
 class WorldSession
 {
@@ -46,7 +48,27 @@ public:
 	}
 	void OnRecvPack(const char buf[], int len)
 	{
-
+		msgpack::object_handle oh = msgpack::unpack(buf, len);//没判断越界，要加try
+		msgpack::object obj = oh.get();
+		const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
+		LOG(INFO) << obj;
+		
+		//auto pSessionSocketCompeletionKey = this->m_pWsSession->m_pSession;
+		//switch (msgId)
+		//{
+		//case MsgId::Login:
+		//{
+		//	const auto msg = obj.as<MsgLogin>();
+		//	pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
+		//}
+		//break;
+		//case MsgId::Move:
+		//{
+		//	const auto msg = obj.as<MsgMove>();
+		//	pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
+		//}
+		//break;
+		//}
 	}
 	void OnDestroy()
 	{

@@ -71,7 +71,6 @@ public:
 	MyMsgQueue(MySession* p) :m_pSession(p)
 	{
 	}
-	
 
 	/// <summary>
 	/// 网络线程中（多线程）调用
@@ -103,4 +102,3 @@ private:
 	MySession* const m_pSession;
 	MsgQueue m_MsgQueue;
 };
-

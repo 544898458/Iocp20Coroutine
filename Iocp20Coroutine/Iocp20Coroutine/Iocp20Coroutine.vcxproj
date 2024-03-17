@@ -143,6 +143,7 @@
     <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp" />
     <ClInclude Include="..\CoRoutine\CoTimer.h" />
     <ClInclude Include="..\IocpNetwork\MsgQueue.h" />
+    <ClInclude Include="..\IocpNetwork\MsgQueueTemplate.h" />
     <ClInclude Include="IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
       <FileType>CppCode</FileType>
     </ClInclude>

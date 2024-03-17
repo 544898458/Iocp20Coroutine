@@ -8,6 +8,10 @@ class MsgQueue
 {
 public:
 
+	/// <summary>
+	/// 强制要求MsgId枚举0是非法值
+	/// </summary>
+	/// <returns></returns>
 	MsgId PopMsg();
 
 	template<class T_Msg>

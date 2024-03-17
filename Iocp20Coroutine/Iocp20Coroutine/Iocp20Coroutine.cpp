@@ -5,7 +5,7 @@
 #pragma comment(lib, "Mswsock.lib")
 #include "../IocpNetwork/Server.h"
 #include "MySession.h"
-#include "MsgQueue.h"
+//#include "MsgQueue.h"
 #include "Space.h"
 #include "Entity.h"
 #include "../CoRoutine/CoTimer.h"

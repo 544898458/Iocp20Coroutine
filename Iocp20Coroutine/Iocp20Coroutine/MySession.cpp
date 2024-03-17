@@ -11,7 +11,7 @@
 #include <cassert>
 
 #include <codecvt>
-#include "MsgQueue.h"
+//#include "MsgQueue.h"
 #include "Space.h"
 #include "../CoRoutine/CoTimer.h"
 #include "MyServer.h"
@@ -96,7 +96,7 @@ void MySession::OnRecvWsPack(const char buf[], const int len)
 	break;
 	}
 }
-inline void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer &server)
+inline void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer& server)
 {
 	m_pServer = &server;
 	std::lock_guard lock(m_pServer->m_setSessionMutex);
