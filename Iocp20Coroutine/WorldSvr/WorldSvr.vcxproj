@@ -149,6 +149,9 @@
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\IocpNetwork\Client.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -173,6 +176,7 @@
     <ClInclude Include="..\CoRoutine\CoTask.h" />
     <ClInclude Include="..\CoRoutine\CoTimer.h" />
     <ClInclude Include="..\IocpNetwork\ByteQueue.h" />
+    <ClInclude Include="..\IocpNetwork\Client.h" />
     <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKey.h" />
     <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKeyTemplate.h" />
     <ClInclude Include="..\IocpNetwork\Overlapped.h" />

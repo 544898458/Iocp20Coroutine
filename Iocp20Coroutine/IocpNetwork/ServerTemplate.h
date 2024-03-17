@@ -1,5 +1,6 @@
 #include "Server.h"
 #include "ListenSocketCompeletionKey.h"
+#include "Client.h"
 /// <summary>
 /// 
 /// </summary>
@@ -164,6 +165,14 @@ void Iocp::Server< T_Server>::Stop()
 	this->m_socketAccept = NULL;
 	CloseHandle(this->m_hIocp);
 }
+
+template<class T_Server>
+void Iocp::Server<T_Server>::Connect(const wchar_t* szIp, const wchar_t* szPort)
+{
+	auto client = new Client();
+	client->Connect(szIp, szPort, m_hIocp);
+}
+
 template<class T_Server>
 void Iocp::Server< T_Server>::NetworkThreadProc(HANDLE port)
 {

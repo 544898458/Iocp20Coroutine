@@ -113,7 +113,7 @@ int main()
 	Iocp::Server<WorldServer> accept;
 	accept.WsaStartup();
 	accept.Init<WorldSession>(12346);
-
+	accept.Connect( L"127.0.0.1", L"12345");
 	while (g_running)
 	{
 		Sleep(100);

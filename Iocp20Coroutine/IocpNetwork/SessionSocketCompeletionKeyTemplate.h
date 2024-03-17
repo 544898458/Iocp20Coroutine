@@ -150,7 +150,7 @@ namespace Iocp {
 			if (!recvFinish)
 			{
 				LOG(INFO) << "PostSend协程结束，但是recvOverlapped还没结束,GetCurrentThreadId=" << GetCurrentThreadId();
-				co_return;
+				co_return 0;
 			}
 		}
 

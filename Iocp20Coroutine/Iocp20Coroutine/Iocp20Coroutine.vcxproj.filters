@@ -93,6 +93,9 @@
     <ClCompile Include="..\IocpNetwork\MsgQueue.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
+    <ClCompile Include="..\IocpNetwork\Client.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -177,6 +180,9 @@
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\MsgQueueTemplate.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\Client.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
   </ItemGroup>

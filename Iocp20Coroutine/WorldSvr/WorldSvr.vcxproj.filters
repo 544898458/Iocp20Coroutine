@@ -13,11 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="IocpServer">
-      <UniqueIdentifier>{a89406d5-9808-4afc-8b5e-acde63084d8b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="CoRountine">
       <UniqueIdentifier>{eff78417-4055-4d99-8ebf-1905c6c2a412}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IocpNetwork">
+      <UniqueIdentifier>{a89406d5-9808-4afc-8b5e-acde63084d8b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -28,19 +28,19 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp">
-      <Filter>IocpServer</Filter>
+      <Filter>IocpNetwork</Filter>
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\Overlapped.cpp">
-      <Filter>IocpServer</Filter>
+      <Filter>IocpNetwork</Filter>
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\Server.cpp">
-      <Filter>IocpServer</Filter>
+      <Filter>IocpNetwork</Filter>
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp">
-      <Filter>IocpServer</Filter>
+      <Filter>IocpNetwork</Filter>
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp">
-      <Filter>IocpServer</Filter>
+      <Filter>IocpNetwork</Filter>
     </ClCompile>
     <ClCompile Include="..\CoRoutine\CoTask.cpp">
       <Filter>CoRountine</Filter>
@@ -48,43 +48,49 @@
     <ClCompile Include="..\CoRoutine\CoTimer.cpp">
       <Filter>CoRountine</Filter>
     </ClCompile>
+    <ClCompile Include="..\IocpNetwork\Client.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKey.h">
-      <Filter>IocpServer</Filter>
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
-      <Filter>IocpServer</Filter>
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\Overlapped.h">
-      <Filter>IocpServer</Filter>
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\Server.h">
-      <Filter>IocpServer</Filter>
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\ServerTemplate.h">
-      <Filter>IocpServer</Filter>
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKey.h">
-      <Filter>IocpServer</Filter>
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\SocketCompeletionKey.h">
-      <Filter>IocpServer</Filter>
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\ByteQueue.h">
-      <Filter>IocpServer</Filter>
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKeyTemplate.h">
-      <Filter>IocpServer</Filter>
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoTask.h">
       <Filter>CoRountine</Filter>
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoTimer.h">
       <Filter>CoRountine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\Client.h">
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
