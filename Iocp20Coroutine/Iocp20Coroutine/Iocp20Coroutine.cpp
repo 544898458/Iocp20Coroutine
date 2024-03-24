@@ -11,6 +11,8 @@
 #include "../CoRoutine/CoTimer.h"
 #include "MyServer.h"
 #include <glog/logging.h>
+#include "../IocpNetwork/ThreadPool.h"
+
 #pragma comment(lib, "glog.lib")
 
 BOOL g_running = TRUE;
@@ -77,9 +79,16 @@ int main(void)
 	SetConsoleCtrlHandler(fun, TRUE);
 	
 	Iocp::Server<MyServer> accept;
-	accept.WsaStartup();
+	Iocp::Server<MyServer>::WsaStartup();
 	accept.Init<WebSocketSession<MySession>>(12345);
+	Iocp::ThreadPool::Add(accept.GetIocp());
 
+	Iocp::Server<WorldServer> worldSvr;
+	worldSvr.Init<WebSocketSession<WorldSession>>(12346);
+	Iocp::ThreadPool::Add(accept.GetIocp());
+
+
+	Iocp::ThreadPool::Init();
 	//m_space.mapEntity[0] = new Entity(-5,m_space, Patrol);
 	//m_space.mapEntity[1] = new Entity(5, m_space, TraceEnemy);
 	//主逻辑工作线程

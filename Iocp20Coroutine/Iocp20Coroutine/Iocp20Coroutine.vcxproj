@@ -138,6 +138,7 @@
     <ClCompile Include="..\CoRoutine\CoTimer.cpp" />
     <ClCompile Include="..\IocpNetwork\Client.cpp" />
     <ClCompile Include="..\IocpNetwork\MsgQueue.cpp" />
+    <ClCompile Include="..\IocpNetwork\ThreadPool.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Iocp20Coroutine.cpp" />
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="..\IocpNetwork\Client.h" />
     <ClInclude Include="..\IocpNetwork\MsgQueue.h" />
     <ClInclude Include="..\IocpNetwork\MsgQueueTemplate.h" />
+    <ClInclude Include="..\IocpNetwork\ThreadPool.h" />
     <ClInclude Include="IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
       <FileType>CppCode</FileType>
     </ClInclude>

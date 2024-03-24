@@ -10,7 +10,7 @@ namespace Iocp
 	class Server
 	{
 	public:
-		bool WsaStartup();
+		static bool WsaStartup();
 		template<class T_Session>
 			requires requires(T_Session &refSession)
 		{
@@ -21,9 +21,9 @@ namespace Iocp
 		bool Init(const uint16_t usPort);
 		void Stop();
 		void Connect(const wchar_t *szIp, const wchar_t* szPort);
+		HANDLE GetIocp()const { return m_hIocp; }
 		T_Server m_Server;
-	private:
-		static void NetworkThreadProc(HANDLE port);
+	
 	private:
 		SOCKET m_socketAccept=NULL;
 		HANDLE m_hIocp = NULL;
