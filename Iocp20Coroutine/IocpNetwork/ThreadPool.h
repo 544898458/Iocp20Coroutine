@@ -1,11 +1,7 @@
 #pragma once
 #include <Winsock2.h>
-namespace Iocp 
+namespace Iocp::ThreadPool
 {
-	namespace ThreadPool
-	{
-		static void Init();
-		static void Add(HANDLE hIocp);
-	};
-
+	void Init();
+	bool Add(HANDLE hIocp);
 }

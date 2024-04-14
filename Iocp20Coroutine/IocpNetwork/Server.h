@@ -1,9 +1,7 @@
 #pragma once
 #include <Winsock2.h>
-
-#include<vector>
 #include<type_traits>
-
+#include"SessionSocketCompeletionKey.h"
 namespace Iocp 
 {
 	template<class T_Server>
@@ -12,11 +10,14 @@ namespace Iocp
 	public:
 		static bool WsaStartup();
 		template<class T_Session>
-			requires requires(T_Session &refSession)
+			requires requires(Iocp::SessionSocketCompeletionKey<T_Session>& refCompletetionKeySession, T_Session &refSession, T_Server &refServer)
 		{
-			//std::is_function_v<decltype(T_Session::OnInit)>;
-			std::is_function_v<decltype(T_Session::OnRecv)>;
-			std::is_function_v<decltype(T_Session::OnDestroy)>;
+			//requires std::is_function_v<decltype(T_Session::OnRecv)>;
+			requires std::is_same_v<int,decltype(refSession.OnRecv(refCompletetionKeySession, (const char*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
+			
+			//requires std::is_function_v<decltype(T_Session::OnDestroy)>;
+			requires std::is_same_v<void,decltype(refSession.OnDestroy())>;//void OnDestroy();
+			requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
 		}
 		bool Init(const uint16_t usPort);
 		void Stop();
@@ -27,7 +28,5 @@ namespace Iocp
 	private:
 		SOCKET m_socketAccept=NULL;
 		HANDLE m_hIocp = NULL;
-		//std::vector<HANDLE> vecThread;
-		
 	};
 }

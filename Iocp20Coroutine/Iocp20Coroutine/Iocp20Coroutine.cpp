@@ -1,17 +1,21 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
+
 #include <vld.h>
 #include <string.h>
-#pragma comment(lib, "Ws2_32.lib")
-#pragma comment(lib, "Mswsock.lib")
 #include "../IocpNetwork/Server.h"
-#include "MySession.h"
-//#include "MsgQueue.h"
+#include "../IocpNetwork/ThreadPool.h"
+#include "../CoRoutine/CoTimer.h"
 #include "Space.h"
 #include "Entity.h"
-#include "../CoRoutine/CoTimer.h"
 #include "MyServer.h"
+#include "MySession.h"
+#include "WorldServer.h"
+#include "WorldSession.h"
 #include <glog/logging.h>
-#include "../IocpNetwork/ThreadPool.h"
+
+#pragma comment(lib, "Ws2_32.lib")
+#pragma comment(lib, "Mswsock.lib")
+
 
 #pragma comment(lib, "glog.lib")
 
@@ -84,7 +88,7 @@ int main(void)
 	Iocp::ThreadPool::Add(accept.GetIocp());
 
 	Iocp::Server<WorldServer> worldSvr;
-	worldSvr.Init<WebSocketSession<WorldSession>>(12346);
+	worldSvr.Init<WorldSession>(12346);
 	Iocp::ThreadPool::Add(accept.GetIocp());
 
 

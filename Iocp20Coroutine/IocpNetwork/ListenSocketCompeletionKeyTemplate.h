@@ -6,6 +6,10 @@
 namespace Iocp {
 
 	template<class T_Session,class T_Server>
+		requires requires(Iocp::SessionSocketCompeletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
+	{
+		requires std::is_same_v<void, decltype(refSession.OnInit(refCompletetionKeySession, refServer))>;//void OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
+	}
 	void ListenSocketCompeletionKey::StartCoRoutine( HANDLE hIocp,SOCKET socketListen, T_Server &refServer)
 	{
 		auto pAcceptOverlapped = new Overlapped();
@@ -16,6 +20,10 @@ namespace Iocp {
 	}
 	
 	template<class T_Session, class T_Server>
+	//	requires requires(T_Session& refSession, T_Server& refServer)
+	//{
+	//	requires std::is_same_v<void, decltype(refSession.OnInit(&refSession, refServer))>;//void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer& server)
+	//}
 	CoTask<int> ListenSocketCompeletionKey::PostAccept(Overlapped* pAcceptOverlapped,HANDLE hIocp, SOCKET socketListen, T_Server& refServer)
 	{
 		while (true)

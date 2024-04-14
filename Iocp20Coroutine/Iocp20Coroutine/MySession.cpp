@@ -96,7 +96,7 @@ void MySession::OnRecvWsPack(const char buf[], const int len)
 	break;
 	}
 }
-inline void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer& server)
+void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer& server)
 {
 	m_pServer = &server;
 	std::lock_guard lock(m_pServer->m_setSessionMutex);

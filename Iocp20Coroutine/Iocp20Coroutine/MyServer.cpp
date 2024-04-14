@@ -1,6 +1,5 @@
 #include "MyServer.h"
 #include "../IocpNetwork/Server.h"
-#include "MyServer.h"
 #include "../IocpNetwork/ServerTemplate.h"
 #include "MySession.h"
 #include "../IocpNetwork/ListenSocketCompeletionKeyTemplate.h"

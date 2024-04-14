@@ -1,7 +1,5 @@
 #include <glog/logging.h>
 #include "ListenSocketCompeletionKey.h"
-#include "SessionSocketCompeletionKey.h"
-
 
 namespace Iocp 
 {

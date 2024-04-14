@@ -1,7 +1,7 @@
 #include "ThreadPool.h"
 #include "SocketCompeletionKey.h"
 #include <set>
-namespace Iocp
+namespace Iocp::ThreadPool
 {
 	std::set<HANDLE> g_setHandle;
 

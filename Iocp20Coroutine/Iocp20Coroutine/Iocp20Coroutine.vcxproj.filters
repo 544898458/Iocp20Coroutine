@@ -99,6 +99,12 @@
     <ClCompile Include="..\IocpNetwork\ThreadPool.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
+    <ClCompile Include="WorldServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldSession.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -112,9 +118,6 @@
     </ClInclude>
     <ClInclude Include="MyServer.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
-      <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\Entity.h">
       <Filter>头文件</Filter>
@@ -189,6 +192,15 @@
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\ThreadPool.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldSession.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
   </ItemGroup>
