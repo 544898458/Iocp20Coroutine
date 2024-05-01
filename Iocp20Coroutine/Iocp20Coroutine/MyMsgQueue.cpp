@@ -139,9 +139,9 @@ void MyMsgQueue::OnRecv(MyMsgQueue* pThis, const MsgLogin& msg)
 	ret.nickName = GbkToUtf8(utf8Name.c_str());// strBroadcast.c_str());
 	ret.entityId = (uint64_t)&pThis->m_pSession->m_entity;
 	pThis->m_pSession->m_entity.m_nickName = utf8Name;
-	pThis->m_pSession->m_pServer->Broadcast(ret);
+	pThis->m_pSession->m_pServer->m_Sessions.Broadcast(ret);
 
-	for (const auto pENtity : pThis->m_pSession->m_pServer->g_space.setEntity)
+	for (const auto pENtity : pThis->m_pSession->m_pServer->m_space.setEntity)
 	{
 		if (pENtity == &pThis->m_pSession->m_entity)
 			continue;
@@ -165,7 +165,7 @@ void MyMsgQueue::OnRecv(MyMsgQueue* pThis, const MsgMove& msg)
 			const auto localTargetX = targetX;
 			const auto localTargetZ = targetZ;
 			auto pLocalServer = pServer;
-			pLocalServer->Broadcast(MsgChangeSkeleAnim(pEntity, "run"));
+			pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "run"));
 
 			while (true)
 			{
@@ -178,14 +178,14 @@ void MyMsgQueue::OnRecv(MyMsgQueue* pThis, const MsgMove& msg)
 				const auto step = 0.5f;
 				if (std::abs(localTargetX - x) < step && std::abs(localTargetZ - z) < step) {
 					LOG(INFO) << "已走到" << localTargetX << "," << localTargetZ << "附近，协程正常退出";
-					pLocalServer->Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));
+					pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));
 					co_return 0;
 				}
 
 				x += localTargetX < x ? -step : step;
 				z += localTargetZ < z ? -step : step;
 
-				pLocalServer->Broadcast(MsgNotifyPos(pEntity, x, z));
+				pLocalServer->m_Sessions.Broadcast(MsgNotifyPos(pEntity, x, z));
 			}
 		});
 	pThis->m_pSession->m_entity.m_coWalk.Run();//协程离开开始运行（运行到第一个co_await

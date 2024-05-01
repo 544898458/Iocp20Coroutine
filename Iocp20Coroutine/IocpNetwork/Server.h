@@ -4,6 +4,11 @@
 #include"SessionSocketCompeletionKey.h"
 namespace Iocp 
 {
+	/// <summary>
+	/// Server不需要T_Session，所以这里不能有T_Session成员变量
+	/// T_Session只在Init的时候需要传入
+	/// </summary>
+	/// <typeparam name="T_Server"></typeparam>
 	template<class T_Server>
 	class Server
 	{

@@ -203,6 +203,12 @@
     <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
+    <ClInclude Include="Sessions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SessionsTemplate.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\websocketfiles-master\src\string_helper.inl">

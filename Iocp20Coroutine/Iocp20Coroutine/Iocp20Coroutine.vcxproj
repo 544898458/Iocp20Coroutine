@@ -143,6 +143,9 @@
     <ClCompile Include="Iocp20Coroutine.cpp" />
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp" />
     <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp" />
+    <ClInclude Include="SessionsTemplate.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClCompile Include="WorldServer.cpp" />
     <ClCompile Include="WorldSession.cpp" />
     <ClInclude Include="..\CoRoutine\CoTimer.h" />
@@ -179,6 +182,7 @@
     <ClCompile Include="..\websocketfiles-master\src\string_helper.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\ws_endpoint.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp" />
+    <ClInclude Include="Sessions.h" />
     <ClInclude Include="WorldServer.h" />
     <ClInclude Include="WorldSession.h" />
   </ItemGroup>

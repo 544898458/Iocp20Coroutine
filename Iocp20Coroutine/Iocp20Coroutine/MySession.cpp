@@ -4,7 +4,7 @@
 #include "../IocpNetwork/SessionSocketCompeletionKeyTemplate.h"
 #include "../websocketfiles-master/src/ws_endpoint.cpp"
 #include "../IocpNetwork/WebSocketSessionTemplate.h"
-
+#include "SessionsTemplate.h"
 #include "MySession.h"
 
 //#include <iostream>
@@ -65,7 +65,7 @@ CoTask<int> TraceEnemy(Entity* pEntity, float& x, float& z, std::function<void()
 		}
 		x -= 0.01f;
 
-		pEntity->m_pSession->m_pServer->Broadcast(MsgNotifyPos(pEntity, x, z));
+		pEntity->m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(pEntity, x, z));
 	}
 }
 
@@ -98,26 +98,41 @@ void MySession::OnRecvWsPack(const char buf[], const int len)
 }
 void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer& server)
 {
-	m_pServer = &server;
-	std::lock_guard lock(m_pServer->m_setSessionMutex);
+	server.m_Sessions.AddSession(pWsSession->m_pSession, [this, pWsSession, &server]()
+		{
+			m_entity.Init(5, m_pServer->m_space, TraceEnemy, this);
+			m_pServer->m_space.setEntity.insert(&m_entity);
+			m_pServer = &server;
+			m_pWsSession = pWsSession;
+		});
+	/*
+	std::lock_guard lock(m_pServer->m_Sessions.m_setSessionMutex);
 
-	m_entity.Init(5, m_pServer->g_space, TraceEnemy, this);
+	m_entity.Init(5, m_pServer->m_space, TraceEnemy, this);
 	m_pWsSession = pWsSession;
-	m_pServer->g_space.setEntity.insert(&m_entity);
-	m_pServer->m_setSession.insert(pWsSession->m_pSession);
+	m_pServer->m_space.setEntity.insert(&m_entity);
+	m_pServer->m_Sessions.m_setSession.insert(pWsSession->m_pSession);
 	//#include <glog/logging.h>
-	LOG(INFO) << "Ìí¼ÓSession£¬Ê£Óà" << m_pServer->m_setSession.size();
-
+	LOG(INFO) << "Ìí¼ÓSession£¬Ê£Óà" << m_pServer->m_Sessions.m_setSession.size();
+	*/
 
 }
 void MySession::OnDestroy()
 {
-	std::lock_guard lock(m_pServer->m_setSessionMutex);
-	m_pServer->m_setSession.erase(this->m_pWsSession->m_pSession);
-	LOG(INFO) << "É¾³ýSession£¬Ê£Óà" << m_pServer->m_setSession.size();
+	m_pServer->m_Sessions.DeleteSession(this->m_pWsSession->m_pSession, [this]()
+		{
+			m_pServer->m_space.setEntity.erase(&m_entity);
+		});
 
-	m_pServer->g_space.setEntity.erase(&m_entity);
+	m_pServer = nullptr;//²»ÓÃ¼ÓËø
+	/*
+	std::lock_guard lock(m_pServer->m_Sessions.m_setSessionMutex);
+	m_pServer->m_Sessions.m_setSession.erase(this->m_pWsSession->m_pSession);
+	LOG(INFO) << "É¾³ýSession£¬Ê£Óà" << m_pServer->m_Sessions.m_setSession.size();
+
+	m_pServer->m_space.setEntity.erase(&m_entity);
 	m_pServer = nullptr;
+	*/
 }
 template void MySession::Send(const MsgLoginRet&);
 template void MySession::Send(const MsgNotifyPos&);
