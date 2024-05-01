@@ -3,7 +3,7 @@
 #include "../IocpNetwork/SessionSocketCompeletionKey.h"
 #include "MySession.h"
 #include "Space.h"
-#include "Sessions.h"
+#include "../IocpNetwork/Sessions.h"
 
 class MyServer
 {

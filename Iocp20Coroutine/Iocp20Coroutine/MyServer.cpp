@@ -3,7 +3,7 @@
 #include "../IocpNetwork/ServerTemplate.h"
 #include "MySession.h"
 #include "../IocpNetwork/ListenSocketCompeletionKeyTemplate.h"
-#include "SessionsTemplate.h"
+#include "../IocpNetwork/SessionsTemplate.h"
 
 template Iocp::Server<MyServer>;
 template bool Iocp::Server<MyServer>::Init<WebSocketSession<MySession> >(const uint16_t);

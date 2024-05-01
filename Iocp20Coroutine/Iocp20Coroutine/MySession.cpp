@@ -4,7 +4,7 @@
 #include "../IocpNetwork/SessionSocketCompeletionKeyTemplate.h"
 #include "../websocketfiles-master/src/ws_endpoint.cpp"
 #include "../IocpNetwork/WebSocketSessionTemplate.h"
-#include "SessionsTemplate.h"
+#include "../IocpNetwork/SessionsTemplate.h"
 #include "MySession.h"
 
 //#include <iostream>

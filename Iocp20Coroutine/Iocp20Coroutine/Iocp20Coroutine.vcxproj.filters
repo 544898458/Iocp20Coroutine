@@ -203,11 +203,11 @@
     <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="Sessions.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\IocpNetwork\Sessions.h">
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="SessionsTemplate.h">
-      <Filter>源文件</Filter>
+    <ClInclude Include="..\IocpNetwork\SessionsTemplate.h">
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
