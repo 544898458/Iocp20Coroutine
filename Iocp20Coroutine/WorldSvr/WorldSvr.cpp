@@ -11,11 +11,11 @@
 #include <msgpack.hpp>
 
 enum MsgId;
-class WorldServer;
-class WorldSession
+class WorldClient;
+class WorldClientSession
 {
 public:
-	void OnInit(Iocp::SessionSocketCompeletionKey<WorldSession>& session, WorldServer&)
+	void OnInit(Iocp::SessionSocketCompeletionKey<WorldClientSession>& session, WorldClient&)
 	{
 
 	}
@@ -27,7 +27,7 @@ public:
 	/// <param name="buf"></param>
 	/// <param name="len"></param>
 	/// <returns>返回已处理的字节数，这些数据将立刻从接受缓冲中删除</returns>
-	int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
+	int OnRecv(Iocp::SessionSocketCompeletionKey<WorldClientSession>& refSession, const char buf[], int len)
 	{
 		uint16_t usPackLen(0);
 		const auto sizeofPackLen = sizeof(usPackLen);
@@ -75,10 +75,10 @@ public:
 
 	}
 };
-class WorldServer
+class WorldClient
 {
 public:
-	void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
+	void OnAdd(Iocp::SessionSocketCompeletionKey<WorldClientSession>& session)
 	{
 
 	}
@@ -86,10 +86,10 @@ public:
 };
 
 
-template Iocp::Server<WorldServer>;
-template bool Iocp::Server<WorldServer>::Init<WorldSession>(const uint16_t);
-template void Iocp::ListenSocketCompeletionKey::StartCoRoutine<WorldSession, WorldServer >(HANDLE hIocp, SOCKET socketListen, WorldServer&);
-template Iocp::SessionSocketCompeletionKey<WorldSession>;
+template Iocp::Server<WorldClient>;
+template bool Iocp::Server<WorldClient>::Init<WorldClientSession>(const uint16_t);
+template void Iocp::ListenSocketCompeletionKey::StartCoRoutine<WorldClientSession, WorldClient >(HANDLE hIocp, SOCKET socketListen, WorldClient&);
+template Iocp::SessionSocketCompeletionKey<WorldClientSession>;
 BOOL g_running = TRUE;
 BOOL WINAPI fun(DWORD dwCtrlType)
 {
@@ -110,9 +110,9 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 
 int main()
 {
-	Iocp::Server<WorldServer> accept;
+	Iocp::Server<WorldClient> accept;
 	accept.WsaStartup();
-	accept.Init<WorldSession>(12346);
+	accept.Init<WorldClientSession>(12346);
 	accept.Connect( L"127.0.0.1", L"12345");
 	while (g_running)
 	{
