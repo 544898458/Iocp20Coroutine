@@ -79,6 +79,7 @@ int main(void)
 	LOG(INFO) << "Test GLOG_INFO";
 	LOG(WARNING) << "Test GLOG_WARNING";
 	LOG(ERROR) << "Test GLOG_ERROR";
+	LOG(INFO) << "GameSvr已启动";
 
 	SetConsoleCtrlHandler(fun, TRUE);
 	

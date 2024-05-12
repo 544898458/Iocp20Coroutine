@@ -3,7 +3,7 @@
 #define CHECK_PTR( PTR ) \
 {\
 	auto* p = PTR;\
-	assert(nullptr == p);\
+	assert(nullptr != p);\
 	if (nullptr == p) \
 	{\
 		LOG(INFO) << #PTR "ÊÇnullptr";\

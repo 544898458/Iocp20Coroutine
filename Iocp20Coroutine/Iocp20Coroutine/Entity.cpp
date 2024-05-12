@@ -84,15 +84,7 @@ void Entity::Update()
 			continue;
 
 		//m_coStop = true;
-		if (m_cancel)
-		{
-			LOG(INFO) << "调用m_cancel";
-			m_cancel();
-		}
-		else
-		{
-			LOG(WARNING) << "m_cancel是空的";
-		}
+		TryCancel();
 
 		m_coWalk.Run();
 		if (!m_coWalk.Finished())//20240205
@@ -105,4 +97,23 @@ void Entity::Update()
 		m_coAttack.Run();
 		return;
 	}
+}
+
+void Entity::TryCancel()
+{
+	if (m_cancel)
+	{
+		LOG(INFO) << "调用m_cancel";
+		m_cancel();
+	}
+	else
+	{
+		LOG(WARNING) << "m_cancel是空的";
+	}
+}
+
+void Entity::OnDestroy()
+{
+	LOG(INFO) << "调用Entity::OnDestroy";
+	TryCancel();
 }

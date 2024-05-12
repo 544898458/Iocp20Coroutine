@@ -94,16 +94,20 @@ void MySession::OnRecvWsPack(const char buf[], const int len)
 		pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
 	}
 	break;
+	default:
+		assert(false);
+		break;
 	}
 }
 void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer& server)
 {
 	server.m_Sessions.AddSession(pWsSession->m_pSession, [this, pWsSession, &server]()
 		{
-			m_entity.Init(5, m_pServer->m_space, TraceEnemy, this);
-			m_pServer->m_space.setEntity.insert(&m_entity);
 			m_pServer = &server;
 			m_pWsSession = pWsSession;
+
+			m_entity.Init(5, m_pServer->m_space, TraceEnemy, this);
+			m_pServer->m_space.setEntity.insert(&m_entity);			
 		});
 	/*
 	std::lock_guard lock(m_pServer->m_Sessions.m_setSessionMutex);
@@ -119,6 +123,7 @@ void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer& server
 }
 void MySession::OnDestroy()
 {
+	m_entity.OnDestroy();
 	m_pServer->m_Sessions.DeleteSession(this->m_pWsSession->m_pSession, [this]()
 		{
 			m_pServer->m_space.setEntity.erase(&m_entity);

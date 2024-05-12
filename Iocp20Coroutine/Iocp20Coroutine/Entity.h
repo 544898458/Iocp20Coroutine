@@ -13,7 +13,9 @@ public:
 	void Init(float x, Space& m_space, std::function< CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun, MySession* pSession);
 	void ReplaceCo(std::function<CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun);
 	void Update();
+	void TryCancel();
 	void Hurt(int) {}
+	void OnDestroy();
 	Position m_Pos;
 	CoTask<int> m_coWalk;
 	CoTask<int> m_coAttack;
