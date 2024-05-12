@@ -12,8 +12,12 @@ namespace Iocp::ThreadPool
 		LPOVERLAPPED lpOverlapped;
 
 		//pCompletionKey对应一个socket，lpOverlapped对应一次事件
+
+		LOG(INFO) << "准备调用GetQueuedCompletionStatus返回port=" << port << ",GetCurrentThreadId=" << GetCurrentThreadId();
 		BOOL bFlag = GetQueuedCompletionStatus(port, &number_of_bytes, (PULONG_PTR)&pCompletionKey, &lpOverlapped, INFINITE);//没完成就会卡在这里，正常
 		int lastErr = GetLastError();//可能是Socket强制关闭
+		LOG(INFO) << "GetQueuedCompletionStatus返回lastErr=" << lastErr << ",GetCurrentThreadId=" << GetCurrentThreadId();
+
 		if (lpOverlapped != nullptr)
 		{
 			auto* overlapped = (Iocp::Overlapped*)lpOverlapped;
@@ -24,6 +28,10 @@ namespace Iocp::ThreadPool
 				delete overlapped;
 				overlapped = nullptr;
 			}
+		}
+		else
+		{
+			LOG(INFO) << "GetQueuedCompletionStatus,lpOverlapped is null";
 		}
 
 		if (!bFlag)
@@ -42,12 +50,15 @@ namespace Iocp::ThreadPool
 
 	static void NetworkThreadProc()
 	{
-		for (auto iter = g_setHandle.begin(); iter != g_setHandle.end(); ++iter)
+		while (true) //还没做退出功能
 		{
-			if (NetworkThreadProcOneIocp(*iter))
-				continue;
+			for (auto iter = g_setHandle.begin(); iter != g_setHandle.end(); ++iter)
+			{
+				if (NetworkThreadProcOneIocp(*iter))
+					continue;
 
-			iter = g_setHandle.erase(iter);
+				iter = g_setHandle.erase(iter);
+			}
 		}
 	}
 	bool Add(HANDLE hIocp)

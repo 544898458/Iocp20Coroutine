@@ -108,9 +108,9 @@ namespace Iocp {
 				break;
 			}
 			if (overlapped.callSend)
-				LOG(INFO) << ("准备异步等待WSASend结果,GetThreadId=%d\n", GetCurrentThreadId());
+				LOG(INFO) << "准备异步等待WSASend结果,GetThreadId=" << GetCurrentThreadId();
 			else
-				LOG(INFO) << ("等有数据再发WSASend,GetThreadId=%d\n", GetCurrentThreadId());
+				LOG(INFO) << "等有数据再发WSASend,GetThreadId=%d" << GetCurrentThreadId();
 
 			LOG(INFO) << "开始异步等WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
 				<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len
@@ -140,6 +140,7 @@ namespace Iocp {
 			//}
 
 			this->sendBuf.Complete(overlapped.numberOfBytesTransferred);
+			overlapped.callSend = true;
 		}
 
 		//if (!this->recvOverlapped.coTask.Finished())
@@ -160,16 +161,17 @@ namespace Iocp {
 	}
 
 	template<class T_Session>
-	bool SessionSocketCompeletionKey<T_Session>::WSARecv(Overlapped& pOverlapped)
+	bool SessionSocketCompeletionKey<T_Session>::WSARecv(Overlapped& refOverlapped)
 	{
 
 		DWORD dwRecvCount(0);
 		DWORD dwFlag(0);
-		std::tie(pOverlapped.wsabuf.buf, pOverlapped.wsabuf.len) = this->recvBuf.BuildRecvBuf();
-		//pOverlapped.GetQueuedCompletionStatusReturn
+		refOverlapped.numberOfBytesTransferred = 0;
+		std::tie(refOverlapped.wsabuf.buf, refOverlapped.wsabuf.len) = this->recvBuf.BuildRecvBuf();
+		//refOverlapped.GetQueuedCompletionStatusReturn
 		LOG(INFO) << ("调用::WSARecv\n");
-		const auto recvRet = ::WSARecv(Socket(), &pOverlapped.wsabuf, 1, &dwRecvCount, &dwFlag, &pOverlapped.overlapped, NULL);
-		//pOverlapped.GetLastErrorReturn 
+		const auto recvRet = ::WSARecv(Socket(), &refOverlapped.wsabuf, 1, &dwRecvCount, &dwFlag, &refOverlapped.overlapped, NULL);
+		//refOverlapped.GetLastErrorReturn 
 		const auto err = WSAGetLastError();
 
 		if (0 == recvRet)//如果未发生任何错误，并且接收操作已立即完成， 则 WSARecv 返回零。 在这种情况下，在调用线程处于可警报状态后，将已计划调用完成例程。
@@ -198,25 +200,25 @@ namespace Iocp {
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <param name="pOverlapped"></param>
+	/// <param name="refOverlapped"></param>
 	/// <param name="refSize"></param>
 	/// <returns>正常等待异步完成,没有数据要发送没有调用WSASend</returns>
 	template<class T_Session>
-	std::tuple<bool, bool>  SessionSocketCompeletionKey<T_Session>::WSASend(Overlapped& pOverlapped)
+	std::tuple<bool, bool>  SessionSocketCompeletionKey<T_Session>::WSASend(Overlapped& refOverlapped)
 	{
 		DWORD dwFlag = 0;
-		pOverlapped.numberOfBytesTransferred = 0;
-		pOverlapped.dwSendCount = 0;
-		std::tie(pOverlapped.wsabuf.buf, pOverlapped.wsabuf.len) = this->sendBuf.BuildSendBuf();
-		if (nullptr == pOverlapped.wsabuf.buf)
+		refOverlapped.numberOfBytesTransferred = 0;
+		refOverlapped.dwSendCount = 0;
+		std::tie(refOverlapped.wsabuf.buf, refOverlapped.wsabuf.len) = this->sendBuf.BuildSendBuf();
+		if (nullptr == refOverlapped.wsabuf.buf)
 		{
 			return std::make_tuple(true, false);
 		}
-		//pOverlapped.GetQueuedCompletionStatusReturn
-		int sendRet = ::WSASend(Socket(), &pOverlapped.wsabuf, 1, &pOverlapped.dwSendCount, dwFlag, &pOverlapped.overlapped, NULL);
-		//pOverlapped.GetLastErrorReturn
+		//refOverlapped.GetQueuedCompletionStatusReturn
+		int sendRet = ::WSASend(Socket(), &refOverlapped.wsabuf, 1, &refOverlapped.dwSendCount, dwFlag, &refOverlapped.overlapped, NULL);
+		//refOverlapped.GetLastErrorReturn
 		int err = WSAGetLastError();
-		//pOverlapped.numberOfBytesTransferred = dwSendCount;
+		//refOverlapped.numberOfBytesTransferred = dwSendCount;
 		if (0 == sendRet)
 		{
 			LOG(INFO) << "WSASend重叠的操作成功启动，WSAGetLastError=" << err;
@@ -225,7 +227,7 @@ namespace Iocp {
 		if (SOCKET_ERROR != sendRet ||
 			ERROR_IO_PENDING != err)
 		{
-			LOG(INFO) << "WSASend重叠的操作未成功启动，并且不会发生完成指示。" << pOverlapped.GetLastErrorReturn;
+			LOG(INFO) << "WSASend重叠的操作未成功启动，并且不会发生完成指示。" << refOverlapped.GetLastErrorReturn;
 			closesocket(Socket());
 			return std::make_tuple(false, true);// 任何其他错误代码都指示重叠的操作未成功启动，并且不会发生完成指示。
 		}
