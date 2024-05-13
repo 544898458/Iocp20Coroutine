@@ -17,6 +17,7 @@ enum MsgId
 	LoginRet,
 	NotifyPos,
 	ChangeSkeleAnim,
+	Say,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -36,7 +37,12 @@ struct MsgMove
 	float z;
 	MSGPACK_DEFINE(id, x, y, z);
 };
-
+struct MsgSay
+{
+	MsgId id;
+	std::string content;
+	MSGPACK_DEFINE(id, content);
+};
 struct MsgLoginRet
 {
 	MsgId id = LoginRet;
@@ -78,13 +84,15 @@ public:
 	/// <param name="msg"></param>
 	void Push(const MsgLogin& msg);
 	void Push(const MsgMove& msg);
+	void Push(const MsgSay& msg);
 
 	/// <summary>
 	/// 主逻辑线程（控制台界面线程）调用
 	/// </summary>
 	/// <param name="msg"></param>
-	static void OnRecv(MyMsgQueue* pThis, const MsgLogin& msg);
-	static void OnRecv(MyMsgQueue* pThis, const MsgMove& msg);
+	static void OnRecv(MyMsgQueue &refThis, const MsgLogin& msg);
+	static void OnRecv(MyMsgQueue& refThis, const MsgMove& msg);
+	static void OnRecv(MyMsgQueue& refThis, const MsgSay& msg);
 	/// <summary>
 	/// 工作线程中（单线程）调用
 	/// </summary>
@@ -95,6 +103,7 @@ private:
 	/// </summary>
 	std::deque<MsgLogin> m_queueLogin;
 	std::deque<MsgMove> m_queueMove;
+	std::deque<MsgSay> m_queueSay;
 
 	/// <summary>
 	/// 弱引用，不要销毁

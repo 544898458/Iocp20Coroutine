@@ -22,44 +22,20 @@ void MyMsgQueue::Process()
 	{
 	case MsgId::Invalid_0://没有消息可处理
 		return;
-	case MsgId::Login:
-	{
-		//std::lock_guard lock(this->m_mutex);
-		//const auto msg = this->m_queueLogin.front();
-		//this->m_queueLogin.pop_front();
-		//OnRecv(msg);
-		this->m_MsgQueue.OnRecv(this->m_queueLogin, this, OnRecv);
-	}
-	break;
-	case MsgId::Move:
-	{
-		/*std::lock_guard lock(this->m_mutex);
-		const auto msg = this->m_queueMove.front();
-		this->m_queueMove.pop_front();
-		OnRecv(msg);*/
-		this->m_MsgQueue.OnRecv(this->m_queueMove, this, OnRecv);
-	}
-	break;
+	case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, OnRecv);break;
+	case MsgId::Move:this->m_MsgQueue.OnRecv(this->m_queueMove, *this, OnRecv);break;
+	case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, OnRecv); break;
 	default:
+		LOG(ERROR) << "msgId:" <<  msgId;
+		assert(false);
 		break;
 	}
 }
 
-void MyMsgQueue::Push(const MsgLogin& msg)
-{
-	//std::lock_guard lock(this->m_mutex);
-	//m_queueLogin.push_back(msg);
-	//m_queueMsgId.push_back(Login);
-	m_MsgQueue.Push(msg, m_queueLogin);
-}
+void MyMsgQueue::Push(const MsgLogin& msg){	m_MsgQueue.Push(msg, m_queueLogin);}
+void MyMsgQueue::Push(const MsgMove& msg) { m_MsgQueue.Push(msg, m_queueMove); }
+void MyMsgQueue::Push(const MsgSay& msg) { m_MsgQueue.Push(msg, m_queueSay); }
 
-void MyMsgQueue::Push(const MsgMove& msg)
-{
-	//std::lock_guard lock(this->m_mutex);
-	//m_queueMove.push_back(msg);
-	//m_queueMsgId.push_back(Move);
-	m_MsgQueue.Push(msg, m_queueMove);
-}
 std::string GbkToUtf8(const char* src_str)
 {
 	int len = MultiByteToWideChar(CP_ACP, 0, src_str, -1, NULL, 0);
@@ -124,7 +100,7 @@ std::string Utf8ToGbk(const std::string& str)
 #endif
 }
 
-void MyMsgQueue::OnRecv(MyMsgQueue* pThis, const MsgLogin& msg)
+void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 {
 	auto utf8Name = Utf8ToGbk(msg.name);
 	//printf("准备广播%s",utf8Name.c_str());
@@ -137,28 +113,28 @@ void MyMsgQueue::OnRecv(MyMsgQueue* pThis, const MsgLogin& msg)
 	//const auto strBroadcast = "[" + utf8Name + "]进来了";
 	MsgLoginRet ret;
 	ret.nickName = GbkToUtf8(utf8Name.c_str());// strBroadcast.c_str());
-	ret.entityId = (uint64_t)&pThis->m_pSession->m_entity;
-	pThis->m_pSession->m_entity.m_nickName = utf8Name;
-	pThis->m_pSession->m_pServer->m_Sessions.Broadcast(ret);
+	ret.entityId = (uint64_t)&refThis.m_pSession->m_entity;
+	refThis.m_pSession->m_entity.m_nickName = utf8Name;
+	refThis.m_pSession->m_pServer->m_Sessions.Broadcast(ret);
 
-	for (const auto pENtity : pThis->m_pSession->m_pServer->m_space.setEntity)
+	for (const auto pENtity : refThis.m_pSession->m_pServer->m_space.setEntity)
 	{
-		if (pENtity == &pThis->m_pSession->m_entity)
+		if (pENtity == & refThis.m_pSession->m_entity)
 			continue;
 
-		ret.nickName = GbkToUtf8(pThis->m_pSession->m_entity.m_nickName.c_str());
+		ret.nickName = GbkToUtf8(refThis.m_pSession->m_entity.m_nickName.c_str());
 		ret.entityId = (uint64_t)pENtity;
-		pThis->m_pSession->Send(ret);
+		refThis.m_pSession->Send(ret);
 	}
 }
 
-void MyMsgQueue::OnRecv(MyMsgQueue* pThis, const MsgMove& msg)
+void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgMove& msg)
 {
 	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
-	auto pServer = pThis->m_pSession->m_pServer;
-	pThis->m_pSession->m_entity.ReplaceCo(	//替换协程
+	auto pServer = refThis.m_pSession->m_pServer;
+	refThis.m_pSession->m_entity.ReplaceCo(	//替换协程
 		[targetX, targetZ, pServer](Entity* pEntity, float& x, float& z, std::function<void()>& funCancel)->CoTask<int>
 		{
 			KeepCancel kc(funCancel);
@@ -188,5 +164,11 @@ void MyMsgQueue::OnRecv(MyMsgQueue* pThis, const MsgMove& msg)
 				pLocalServer->m_Sessions.Broadcast(MsgNotifyPos(pEntity, x, z));
 			}
 		});
-	pThis->m_pSession->m_entity.m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
+	refThis.m_pSession->m_entity.m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
+}
+
+void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgSay& msg)
+{
+	auto utf8Content = Utf8ToGbk(msg.content);
+	LOG(INFO) << "收到聊天:" << utf8Content;
 }

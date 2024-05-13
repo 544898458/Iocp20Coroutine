@@ -94,7 +94,14 @@ void MySession::OnRecvWsPack(const char buf[], const int len)
 		pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
 	}
 	break;
+	case MsgId::Say:
+	{
+		const auto msg = obj.as<MsgSay>();
+		pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
+	}
+	break;
 	default:
+		LOG(ERROR) << "Ã»´¦ÀímsgId:" << msgId;
 		assert(false);
 		break;
 	}
