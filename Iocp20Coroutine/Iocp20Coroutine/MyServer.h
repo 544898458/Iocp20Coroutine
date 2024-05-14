@@ -17,6 +17,6 @@ public:
 	void Update();
 
 	Space m_space;
-	Sessions<MySession> m_Sessions;
+	Sessions< WebSocketSession< MySession> > m_Sessions;
 
 };

@@ -55,8 +55,12 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 	return TRUE;
 }
 
+Iocp::Server<WorldServer> g_worldSvr;
 
-
+void SendToWorldSvr(const MsgSay& msg)
+{
+	g_worldSvr.m_Server.m_Sessions.Broadcast(msg);
+}
 ///*
 int main(void)
 {
@@ -88,9 +92,9 @@ int main(void)
 	accept.Init<WebSocketSession<MySession>>(12345);
 	Iocp::ThreadPool::Add(accept.GetIocp());
 
-	Iocp::Server<WorldServer> worldSvr;
-	worldSvr.Init<WorldSession>(12346);
+	g_worldSvr.Init<WorldSession>(12346);
 	Iocp::ThreadPool::Add(accept.GetIocp());
+	Iocp::ThreadPool::Add(g_worldSvr.GetIocp());
 
 
 	Iocp::ThreadPool::Init();

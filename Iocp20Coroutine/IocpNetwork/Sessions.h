@@ -7,7 +7,7 @@ template<class T_Session>
 class Sessions
 {
 public:
-	using Session = Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session> >;
+	using Session = Iocp::SessionSocketCompeletionKey<T_Session>;
 	/// <summary>
 	/// 向所有连接广播消息
 	/// </summary>
@@ -19,7 +19,7 @@ public:
 		std::lock_guard lock(m_setSessionMutex);
 		for (auto p : m_setSession)
 		{
-			p->Session.m_Session.Send(msg);
+			p->Session.Send(msg);
 		}
 	}
 	template<typename T_Function> void Update(T_Function const& functionLockUpdate);

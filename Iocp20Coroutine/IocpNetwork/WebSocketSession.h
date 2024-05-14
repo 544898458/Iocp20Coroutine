@@ -150,7 +150,11 @@ public:
 	{
 		m_webSocketEndpoint->Send(buf, len);
 	}
-
+	template<class T>
+	void Send(const T& ref)
+	{
+		m_Session.Send(ref);
+	}
 	/// <summary>
 	/// ¿ªÔ´WebSocket¿â
 	/// </summary>

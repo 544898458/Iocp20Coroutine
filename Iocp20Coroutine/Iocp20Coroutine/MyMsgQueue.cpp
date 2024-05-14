@@ -171,4 +171,6 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgSay& msg)
 {
 	auto utf8Content = Utf8ToGbk(msg.content);
 	LOG(INFO) << "ÊÕµ½ÁÄÌì:" << utf8Content;
+	void SendToWorldSvr(const MsgSay & msg);
+	SendToWorldSvr(msg);
 }

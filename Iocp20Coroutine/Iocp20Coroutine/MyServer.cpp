@@ -14,8 +14,8 @@ template<typename T_Function>
 void Sessions<T_Session>::Update(T_Function const& functionLockUpdate)
 {
 	std::lock_guard lock(m_setSessionMutex);
-	std::set<MyServer::Session*> setDelete;
-	for (auto p : m_setSession)
+	std::set<Session*> setDelete;
+	for (Session* p : m_setSession)
 	{
 		p->Session.m_Session.m_msgQueue.Process();
 		if (p->Finished())

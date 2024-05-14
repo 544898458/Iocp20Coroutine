@@ -8,5 +8,7 @@ public:
 	void OnDestroy();
 	using CompeletionKeySession = Iocp::SessionSocketCompeletionKey<WorldSession>;
 	void OnInit(CompeletionKeySession& refSession, WorldServer&);
+	template<class T>
+	void Send(const T& ref);
 };
 
