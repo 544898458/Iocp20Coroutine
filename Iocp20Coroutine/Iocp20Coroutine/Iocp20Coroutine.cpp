@@ -55,11 +55,10 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 	return TRUE;
 }
 
-Iocp::Server<WorldServer> g_worldSvr;
-
+std::unique_ptr<Iocp::Server<WorldServer> > g_worldSvr;// (Iocp::ThreadPool::GetIocp());
 void SendToWorldSvr(const MsgSay& msg)
 {
-	g_worldSvr.m_Server.m_Sessions.Broadcast(msg);
+	g_worldSvr->m_Server.m_Sessions.Broadcast(msg);
 }
 ///*
 int main(void)
@@ -86,18 +85,19 @@ int main(void)
 	LOG(INFO) << "GameSvr已启动";
 
 	SetConsoleCtrlHandler(fun, TRUE);
-	
-	Iocp::Server<MyServer> accept;
+	Iocp::ThreadPool::Init();
+	Iocp::Server<MyServer> accept(Iocp::ThreadPool::GetIocp());
+	g_worldSvr.reset( new Iocp::Server<WorldServer>(Iocp::ThreadPool::GetIocp()) );
+
 	Iocp::Server<MyServer>::WsaStartup();
 	accept.Init<WebSocketSession<MySession>>(12345);
-	Iocp::ThreadPool::Add(accept.GetIocp());
+	//Iocp::ThreadPool::Add(accept.GetIocp());
 
-	g_worldSvr.Init<WorldSession>(12346);
-	Iocp::ThreadPool::Add(accept.GetIocp());
-	Iocp::ThreadPool::Add(g_worldSvr.GetIocp());
+	g_worldSvr->Init<WorldSession>(12346);
+	//Iocp::ThreadPool::Add(g_worldSvr.GetIocp());
 
 
-	Iocp::ThreadPool::Init();
+	
 	//m_space.mapEntity[0] = new Entity(-5,m_space, Patrol);
 	//m_space.mapEntity[1] = new Entity(5, m_space, TraceEnemy);
 	//主逻辑工作线程

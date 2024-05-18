@@ -4,4 +4,5 @@ namespace Iocp::ThreadPool
 {
 	void Init();
 	bool Add(HANDLE hIocp);
+	const HANDLE& GetIocp();
 }

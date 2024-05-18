@@ -3,7 +3,7 @@
 #include <set>
 namespace Iocp::ThreadPool
 {
-	std::set<HANDLE> g_setHandle;
+	//std::set<HANDLE> g_setHandle;
 
 	static bool NetworkThreadProcOneIocp(HANDLE port)
 	{
@@ -13,7 +13,7 @@ namespace Iocp::ThreadPool
 
 		//pCompletionKey对应一个socket，lpOverlapped对应一次事件
 
-		LOG(INFO) << "准备调用GetQueuedCompletionStatus返回port=" << port << ",GetCurrentThreadId=" << GetCurrentThreadId();
+		LOG(INFO) << "等GetQueuedCompletionStatus返回,port=" << port << ",GetCurrentThreadId=" << GetCurrentThreadId();
 		BOOL bFlag = GetQueuedCompletionStatus(port, &number_of_bytes, (PULONG_PTR)&pCompletionKey, &lpOverlapped, INFINITE);//没完成就会卡在这里，正常
 		int lastErr = GetLastError();//可能是Socket强制关闭
 		LOG(INFO) << "GetQueuedCompletionStatus返回lastErr=" << lastErr << ",GetCurrentThreadId=" << GetCurrentThreadId();
@@ -47,27 +47,42 @@ namespace Iocp::ThreadPool
 
 		return true;
 	}
+	static HANDLE m_hIocp = nullptr;
 
 	static void NetworkThreadProc()
 	{
 		while (true) //还没做退出功能
 		{
-			for (auto iter = g_setHandle.begin(); iter != g_setHandle.end(); ++iter)
+			//for (auto iter = g_setHandle.begin(); iter != g_setHandle.end(); ++iter)
 			{
-				if (NetworkThreadProcOneIocp(*iter))
+				if (NetworkThreadProcOneIocp(m_hIocp))
 					continue;
 
-				iter = g_setHandle.erase(iter);
+				//iter = g_setHandle.erase(iter);
 			}
 		}
 	}
-	bool Add(HANDLE hIocp)
-	{
-		const auto ret = g_setHandle.insert(hIocp);
-		return ret.second;
-	}
+	//bool Add(HANDLE hIocp)
+	//{
+	//	const auto ret = g_setHandle.insert(hIocp);
+	//	LOG(INFO) << "Add,hIocp=" << hIocp << ",ret=" << ret.second << ",GetCurrentThreadId=" << GetCurrentThreadId();
+	//	return ret.second;
+	//}
+	
 	void ThreadPool::Init()
 	{
+		//创建完成端口	创建一个I/O完成端口对象，用它面向任意数量的套接字句柄，管理多个I/O请求。要做到这一点，需要调用CreateCompletionPort函数。
+		m_hIocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+		if (0 == m_hIocp)
+		{
+			int a = GetLastError();
+			LOG(INFO) << a;
+			//closesocket(m_socketAccept);
+			//清理网络库
+			//WSACleanup();
+			return ;
+		}
+
 		//创建线程数量有了
 		SYSTEM_INFO system_processors_count;
 		GetSystemInfo(&system_processors_count);
@@ -90,4 +105,5 @@ namespace Iocp::ThreadPool
 			//this->vecThread.push_back(hThread);
 		}
 	}
+	const HANDLE& GetIocp(){ return m_hIocp; }
 }

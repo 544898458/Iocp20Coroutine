@@ -2,7 +2,7 @@
 #include <Winsock2.h>
 #include<type_traits>
 #include"SessionSocketCompeletionKey.h"
-namespace Iocp 
+namespace Iocp
 {
 	/// <summary>
 	/// Server不需要T_Session，所以这里不能有T_Session成员变量
@@ -13,25 +13,29 @@ namespace Iocp
 	class Server
 	{
 	public:
+		Server(const HANDLE& hIocp) :m_hIocp(hIocp)
+		{
+
+		}
 		static bool WsaStartup();
 		template<class T_Session>
-			requires requires(Iocp::SessionSocketCompeletionKey<T_Session>& refCompletetionKeySession, T_Session &refSession, T_Server &refServer)
+			requires requires(Iocp::SessionSocketCompeletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
 		{
 			//requires std::is_function_v<decltype(T_Session::OnRecv)>;
-			requires std::is_same_v<int,decltype(refSession.OnRecv(refCompletetionKeySession, (const char*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
-			
-			//requires std::is_function_v<decltype(T_Session::OnDestroy)>;
-			requires std::is_same_v<void,decltype(refSession.OnDestroy())>;//void OnDestroy();
+				requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletetionKeySession, (const char*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
+
+		//requires std::is_function_v<decltype(T_Session::OnDestroy)>;
+			requires std::is_same_v<void, decltype(refSession.OnDestroy())>;//void OnDestroy();
 			requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
 		}
 		bool Init(const uint16_t usPort);
 		void Stop();
-		void Connect(const wchar_t *szIp, const wchar_t* szPort);
-		HANDLE GetIocp()const { return m_hIocp; }
+		void Connect(const wchar_t* szIp, const wchar_t* szPort);
+
 		T_Server m_Server;
-	
+
 	private:
-		SOCKET m_socketAccept=NULL;
-		HANDLE m_hIocp = NULL;
+		SOCKET m_socketAccept = NULL;
+		const HANDLE& m_hIocp;
 	};
 }

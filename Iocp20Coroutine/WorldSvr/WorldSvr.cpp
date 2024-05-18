@@ -6,6 +6,7 @@
 #include "../IocpNetwork/ServerTemplate.h"
 #include "../IocpNetwork/ListenSocketCompeletionKeyTemplate.h"
 #include "../IocpNetwork/SessionSocketCompeletionKeyTemplate.h"
+#include "../IocpNetwork/ThreadPool.h"
 #include "../CoRoutine/CoTimer.h"
 #include <glog/logging.h>
 #include <msgpack.hpp>
@@ -110,7 +111,8 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 
 int main()
 {
-	Iocp::Server<WorldClient> accept;
+	Iocp::ThreadPool::Init();
+	Iocp::Server<WorldClient> accept(Iocp::ThreadPool::GetIocp());
 	accept.WsaStartup();
 	accept.Init<WorldClientSession>(12346);
 	accept.Connect( L"127.0.0.1", L"12345");

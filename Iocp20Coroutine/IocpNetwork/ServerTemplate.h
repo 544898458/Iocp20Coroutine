@@ -34,17 +34,7 @@ bool Iocp::Server<T_Server>::Init(const uint16_t usPort)
 	}
 
 	//auto pListenCompleteKey = new ListenSocketCompeletionKey<T_Session>(this->socketAccept);
-	//创建完成端口	创建一个I/O完成端口对象，用它面向任意数量的套接字句柄，管理多个I/O请求。要做到这一点，需要调用CreateCompletionPort函数。
-	this->m_hIocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
-	if (0 == m_hIocp)
-	{
-		int a = GetLastError();
-		LOG(INFO) << a;
-		closesocket(m_socketAccept);
-		//清理网络库
-		//WSACleanup();
-		return false;
-	}
+
 	//绑定
 	const auto iocp = CreateIoCompletionPort((HANDLE)m_socketAccept, m_hIocp, (ULONG_PTR)0, 0);
 	if (iocp != m_hIocp)
