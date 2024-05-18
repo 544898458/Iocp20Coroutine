@@ -37,7 +37,7 @@ namespace Iocp {
 		return;
 	}
 	template<class T_Session>
-	void SessionSocketCompeletionKey<T_Session>::Send(const char buf[], int len)
+	void SessionSocketCompeletionKey<T_Session>::Send(const void* buf, int len)
 	{
 		if (this->sendOverlapped.coTask.Finished())
 			return;

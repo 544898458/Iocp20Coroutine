@@ -14,7 +14,7 @@ namespace Iocp {
 		}
 		virtual ~SessionSocketCompeletionKey();
 		void StartCoRoutine();
-		void Send(const char buf[], int len);
+		void Send(const void* buf, int len);
 		bool Finished();
 		T_Session Session;
 

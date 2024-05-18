@@ -15,7 +15,7 @@ class ByteQueue
 	friend class ByteQueueRecv;
 public:
 	ByteQueue();
-	bool Enqueue(const char* buf, const int len);
+	bool Enqueue(const void* buf, const int len);
 	//void DeQueue(char* buf, int &len);
 	//int Size();
 private:

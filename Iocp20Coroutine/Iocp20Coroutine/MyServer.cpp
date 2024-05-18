@@ -9,29 +9,6 @@ template Iocp::Server<MyServer>;
 template bool Iocp::Server<MyServer>::Init<WebSocketSession<MySession> >(const uint16_t);
 template void Iocp::ListenSocketCompeletionKey::StartCoRoutine<WebSocketSession<MySession>, MyServer >(HANDLE hIocp, SOCKET socketListen, MyServer&);
 
-template<class T_Session>
-template<typename T_Function>
-void Sessions<T_Session>::Update(T_Function const& functionLockUpdate)
-{
-	std::lock_guard lock(m_setSessionMutex);
-	std::set<Session*> setDelete;
-	for (Session* p : m_setSession)
-	{
-		p->Session.m_Session.m_msgQueue.Process();
-		if (p->Finished())
-			setDelete.insert(p);
-	}
-	for (auto p : setDelete)
-	{
-		p->Session.OnDestroy();
-		delete p;
-		LOG(INFO) << "ÒÑÉ¾³ý¶ÔÏó,GetCurrentThreadId=" << GetCurrentThreadId();
-
-	}
-	functionLockUpdate();
-}
-
-
 void MyServer::OnAdd(Session&)
 {
 }

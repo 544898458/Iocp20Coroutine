@@ -1,15 +1,5 @@
 #include "Sessions.h"
-
-#define CHECK_PTR( PTR ) \
-{\
-	auto* p = PTR;\
-	assert(nullptr != p);\
-	if (nullptr == p) \
-	{\
-		LOG(INFO) << #PTR "ÊÇnullptr";\
-		return;\
-	}\
-}
+#include "../LogStrategy/StrategyLog.h"
 
 template<class T_Session>
 template<typename T_Function>

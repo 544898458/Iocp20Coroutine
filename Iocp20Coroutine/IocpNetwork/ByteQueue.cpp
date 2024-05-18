@@ -3,11 +3,11 @@
 ByteQueue::ByteQueue()
 {
 }
-bool ByteQueue::Enqueue(const char* buf, const int len)
+bool ByteQueue::Enqueue(const void* buf, const int len)
 {
 	std::lock_guard lock(mutex);
 
-	this->queue.insert(this->queue.end(), buf, buf + len);
+	this->queue.insert(this->queue.end(), (const char*)buf, (const char*)buf + len);
 	return true;
 }
 

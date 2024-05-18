@@ -116,18 +116,8 @@ void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer& server
 			m_entity.Init(5, m_pServer->m_space, TraceEnemy, this);
 			m_pServer->m_space.setEntity.insert(&m_entity);			
 		});
-	/*
-	std::lock_guard lock(m_pServer->m_Sessions.m_setSessionMutex);
-
-	m_entity.Init(5, m_pServer->m_space, TraceEnemy, this);
-	m_pWsSession = pWsSession;
-	m_pServer->m_space.setEntity.insert(&m_entity);
-	m_pServer->m_Sessions.m_setSession.insert(pWsSession->m_pSession);
-	//#include <glog/logging.h>
-	LOG(INFO) << "Ìí¼ÓSession£¬Ê£Óà" << m_pServer->m_Sessions.m_setSession.size();
-	*/
-
 }
+
 void MySession::OnDestroy()
 {
 	m_entity.OnDestroy();
@@ -137,14 +127,6 @@ void MySession::OnDestroy()
 		});
 
 	m_pServer = nullptr;//²»ÓÃ¼ÓËø
-	/*
-	std::lock_guard lock(m_pServer->m_Sessions.m_setSessionMutex);
-	m_pServer->m_Sessions.m_setSession.erase(this->m_pWsSession->m_pSession);
-	LOG(INFO) << "É¾³ýSession£¬Ê£Óà" << m_pServer->m_Sessions.m_setSession.size();
-
-	m_pServer->m_space.setEntity.erase(&m_entity);
-	m_pServer = nullptr;
-	*/
 }
 template void MySession::Send(const MsgLoginRet&);
 template void MySession::Send(const MsgNotifyPos&);
