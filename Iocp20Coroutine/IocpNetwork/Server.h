@@ -30,7 +30,7 @@ namespace Iocp
 		}
 		bool Init(const uint16_t usPort);
 		void Stop();
-		void Connect(const wchar_t* szIp, const wchar_t* szPort);
+		bool Connect(const wchar_t* szIp, const wchar_t* szPort);
 
 		T_Server m_Server;
 

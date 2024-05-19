@@ -140,8 +140,8 @@ void Iocp::Server< T_Server>::Stop()
 }
 
 template<class T_Server>
-void Iocp::Server<T_Server>::Connect(const wchar_t* szIp, const wchar_t* szPort)
+bool Iocp::Server<T_Server>::Connect(const wchar_t* szIp, const wchar_t* szPort)
 {
 	auto client = new Client();
-	client->Connect(szIp, szPort, m_hIocp);
+	return client->Connect(szIp, szPort, m_hIocp);
 }

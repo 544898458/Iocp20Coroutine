@@ -2,7 +2,7 @@
 
 namespace Iocp
 {
-	void Client::Connect(const wchar_t* szIp, const wchar_t* szPort, HANDLE hIocp)
+	bool Client::Connect(const wchar_t* szIp, const wchar_t* szPort, HANDLE hIocp)
 	{
 		auto socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 		SOCKADDR_STORAGE LocalAddr = { 0 };
@@ -15,5 +15,6 @@ namespace Iocp
 			(SOCKADDR*)&RemoteAddr,
 			NULL,
 			NULL);
+		return bSuccess;
 	}
 }

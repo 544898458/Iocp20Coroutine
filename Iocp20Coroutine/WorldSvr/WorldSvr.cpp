@@ -114,8 +114,8 @@ int main()
 	Iocp::ThreadPool::Init();
 	Iocp::Server<WorldClient> accept(Iocp::ThreadPool::GetIocp());
 	accept.WsaStartup();
-	accept.Init<WorldClientSession>(12346);
-	accept.Connect( L"127.0.0.1", L"12345");
+	//accept.Init<WorldClientSession>(12346);
+	accept.Connect( L"127.0.0.1", L"12346");
 	while (g_running)
 	{
 		Sleep(100);
