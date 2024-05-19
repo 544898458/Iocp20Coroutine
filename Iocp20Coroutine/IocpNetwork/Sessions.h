@@ -17,6 +17,7 @@ public:
 	void Broadcast(const T& msg)
 	{
 		std::lock_guard lock(m_setSessionMutex);
+		LOG(INFO) << "向" << m_setSession.size() << "个连接广播";
 		for (auto p : m_setSession)
 		{
 			p->Session.Send(msg);
