@@ -21,15 +21,19 @@ namespace Iocp
 		template<class T_Session>
 			requires requires(Iocp::SessionSocketCompeletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
 		{
-			//requires std::is_function_v<decltype(T_Session::OnRecv)>;
-				requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletetionKeySession, (const char*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
-
-		//requires std::is_function_v<decltype(T_Session::OnDestroy)>;
+			requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletetionKeySession, (const void*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
 			requires std::is_same_v<void, decltype(refSession.OnDestroy())>;//void OnDestroy();
 			requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
 		}
 		bool Init(const uint16_t usPort);
 		void Stop();
+		template<class T_Session>
+		//	requires requires(Iocp::SessionSocketCompeletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
+		//{
+		//	requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletetionKeySession, (const char*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
+		//	requires std::is_same_v<void, decltype(refSession.OnDestroy())>;//void OnDestroy();
+		//	requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
+		//}
 		bool Connect(const wchar_t* szIp, const wchar_t* szPort);
 
 		T_Server m_Server;

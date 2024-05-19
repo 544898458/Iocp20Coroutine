@@ -1,10 +1,11 @@
 #include "Client.h"
+#include <assert.h>
 
 namespace Iocp
 {
-	bool Client::Connect(const wchar_t* szIp, const wchar_t* szPort, HANDLE hIocp)
+	SOCKET Client::Connect(const wchar_t* szIp, const wchar_t* szPort, HANDLE hIocp)
 	{
-		auto socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+		const auto socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 		SOCKADDR_STORAGE LocalAddr = { 0 };
 		SOCKADDR_STORAGE RemoteAddr = { 0 };
 		DWORD dwLocalAddr = sizeof(LocalAddr);
@@ -15,6 +16,7 @@ namespace Iocp
 			(SOCKADDR*)&RemoteAddr,
 			NULL,
 			NULL);
-		return bSuccess;
+		assert(bSuccess);
+		return socket;
 	}
 }

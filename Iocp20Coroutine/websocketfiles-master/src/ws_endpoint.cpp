@@ -61,9 +61,9 @@ int32_t WebSocketEndpoint<T_Callback, T_Data>::process(const char* readbuf, int3
 	return from_wire(readbuf, size);
 }
 template<class T_Callback, class T_Data>
-int32_t WebSocketEndpoint<T_Callback, T_Data>::from_wire(const char* readbuf, int32_t size)
+int32_t WebSocketEndpoint<T_Callback, T_Data>::from_wire(const void* readbuf, int32_t size)
 {
-	fromwire_buf_.append(readbuf, size);
+	fromwire_buf_.append((const char*)readbuf, size);
 	LOG(INFO) << "WebSocketEndpoint - set fromwire_buf, current length:" << fromwire_buf_.length() << std::endl;
 	while (true)
 	{
@@ -100,7 +100,7 @@ int32_t WebSocketEndpoint<T_Callback, T_Data>::from_wire(const char* readbuf, in
 	return 0;
 }
 template<class T_Callback, class T_Data>
-int32_t WebSocketEndpoint<T_Callback, T_Data>::to_wire(const char* writebuf, int64_t size)
+int32_t WebSocketEndpoint<T_Callback, T_Data>::to_wire(const void* writebuf, int64_t size)
 {
 	//networklayer_->toWire(writebuf,size);
 	if (nt_write_cb_ == NULL || nt_work_data_ == NULL || writebuf == NULL || size <= 0)
@@ -114,7 +114,7 @@ int32_t WebSocketEndpoint<T_Callback, T_Data>::to_wire(const char* writebuf, int
 		return size;
 	}
 
-	nt_work_data_->Send(const_cast<char*>(writebuf), (int)size);// , nt_work_data_);
+	nt_work_data_->Send(writebuf, (int)size);// , nt_work_data_);
 	return 0;
 }
 template<class T_Callback, class T_Data>

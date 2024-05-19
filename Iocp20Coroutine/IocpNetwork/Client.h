@@ -8,6 +8,6 @@ namespace Iocp
 	class Client
 	{
 	public:
-		bool Connect(const wchar_t* szIp, const wchar_t* szPort, HANDLE hIocp);
+		SOCKET Connect(const wchar_t* szIp, const wchar_t* szPort, HANDLE hIocp);
 	};
 }

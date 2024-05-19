@@ -1,5 +1,6 @@
 #include "Server.h"
 #include "ListenSocketCompeletionKey.h"
+#include "SessionSocketCompeletionKey.h"
 #include "Client.h"
 /// <summary>
 /// 
@@ -10,11 +11,7 @@ template<class T_Server>
 template<class T_Session>
 	requires requires(Iocp::SessionSocketCompeletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
 	{
-		//std::is_function_v<decltype(T_Session::OnInit)>;
-		//requires std::is_function_v<decltype(T_Session::OnRecv)>;
-		requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletetionKeySession, (const char*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
-
-		//requires std::is_function_v<decltype(T_Session::OnDestroy)>;
+		requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletetionKeySession, (const void*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
 		requires std::is_same_v<void, decltype(refSession.OnDestroy())>;//void OnDestroy();
 		requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
 	}
@@ -140,8 +137,37 @@ void Iocp::Server< T_Server>::Stop()
 }
 
 template<class T_Server>
+template<class T_Session>
+//	requires requires(Iocp::SessionSocketCompeletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
+//{
+//	requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletetionKeySession, (const char*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
+//	requires std::is_same_v<void, decltype(refSession.OnDestroy())>;//void OnDestroy();
+//	requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
+//}
 bool Iocp::Server<T_Server>::Connect(const wchar_t* szIp, const wchar_t* szPort)
 {
-	auto client = new Client();
-	return client->Connect(szIp, szPort, m_hIocp);
+	//auto client = new Client();
+	//auto socket = client->Connect(szIp, szPort, m_hIocp);
+	//if (socket == 0) 
+	//{
+	//	LOG(ERROR) << "";// std::wstring(szIp) << ":" << std::wstring(szPort);
+	//	return false;
+	//}
+	////绑定
+	//const auto iocp = CreateIoCompletionPort((HANDLE)socket, m_hIocp, (ULONG_PTR)0, 0);
+	//if (iocp != m_hIocp)
+	//{
+	//	int a = GetLastError();
+	//	LOG(INFO) << "完成端口绑定socket失败" << a;
+
+	//	CloseHandle(iocp);
+	//	closesocket(socket);
+	//	//清理网络库
+	//	WSACleanup();
+	//	return false;
+	//}
+
+	//auto pNewCompleteKey = new Iocp::ws Iocp::SessionSocketCompeletionKey<T_Session>(socket);
+	//pNewCompleteKey->StartCoRoutine();
+	return true;
 }

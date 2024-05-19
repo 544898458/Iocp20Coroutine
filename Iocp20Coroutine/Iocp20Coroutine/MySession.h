@@ -8,8 +8,8 @@ class MySession
 {
 public:
 	MySession();
-	void OnRecvWsPack(const char buf[], const int len);
-	void OnInit(WebSocketSession<MySession>* pWsSession, MyServer &server);
+	void OnRecvWsPack(const void* buf, const int len);
+	void OnInit(WebSocketSession<MySession>& refWsSession, MyServer &server);
 	void OnDestroy();
 	template<class T>
 	void Send(const T& ref);

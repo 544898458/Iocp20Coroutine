@@ -93,7 +93,7 @@ int main(void)
 	accept.Init<WebSocketSession<MySession>>(12345);
 	//Iocp::ThreadPool::Add(accept.GetIocp());
 
-	g_worldSvr->Init<WorldSession>(12346);
+	g_worldSvr->Init<WebSocketSession<WorldSession>>(12346);
 	//Iocp::ThreadPool::Add(g_worldSvr.GetIocp());
 
 

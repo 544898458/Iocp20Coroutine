@@ -19,7 +19,9 @@
 //std::set<Iocp::SessionSocketCompeletionKey<MySession>*> g_setSession;
 //template<MySession> std::mutex g_setSessionMutex;
 template Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> >;
-
+template class WebSocketSession<MySession>;
+template void WebSocketSession<MySession>::OnInit<MyServer>(Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> >& refSession, MyServer& server);
+template class WebSocketEndpoint<MySession, Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> > >;
 
 template<class T>
 void MySession::Send(const T& ref)
@@ -72,9 +74,9 @@ CoTask<int> TraceEnemy(Entity* pEntity, float& x, float& z, std::function<void()
 MySession::MySession() : m_msgQueue(this)
 {
 }
-void MySession::OnRecvWsPack(const char buf[], const int len)
+void MySession::OnRecvWsPack(const void *buf, const int len)
 {
-	msgpack::object_handle oh = msgpack::unpack(buf, len);//没判断越界，要加try
+	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
 	const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
 	LOG(INFO) << obj;
@@ -106,12 +108,12 @@ void MySession::OnRecvWsPack(const char buf[], const int len)
 		break;
 	}
 }
-void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer& server)
+void MySession::OnInit(WebSocketSession<MySession>& refWsSession, MyServer& server)
 {
-	server.m_Sessions.AddSession(pWsSession->m_pSession, [this, pWsSession, &server]()
+	server.m_Sessions.AddSession(refWsSession.m_pSession, [this, &refWsSession, &server]()
 		{
 			m_pServer = &server;
-			m_pWsSession = pWsSession;
+			m_pWsSession = &refWsSession;
 
 			m_entity.Init(5, m_pServer->m_space, TraceEnemy, this);
 			m_pServer->m_space.setEntity.insert(&m_entity);			
@@ -134,6 +136,3 @@ template void MySession::Send(const MsgChangeSkeleAnim&);
 
 
 
-template class WebSocketSession<MySession>;
-template void WebSocketSession<MySession>::OnInit<MyServer>(Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> >& refSession, MyServer& server);
-template class WebSocketEndpoint<MySession, Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> > >;

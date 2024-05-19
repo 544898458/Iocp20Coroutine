@@ -8,10 +8,10 @@ void WebSocketSession<T_Session>::OnInit(Iocp::SessionSocketCompeletionKey<WebSo
 	m_webSocketEndpoint.reset(new MyWebSocketEndpoint<T_Session, Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session> > >(&this->m_Session, &refSession));
 
 	m_pSession = &refSession;
-	this->m_Session.OnInit(this, server);
+	this->m_Session.OnInit(*this, server);
 }
 template<class T_Session>
-int WebSocketSession< T_Session>::OnRecv(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession, const char buf[], int len)
+int WebSocketSession< T_Session>::OnRecv(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession, const void* buf, int len)
 {
 	m_webSocketEndpoint->from_wire(buf, len);
 	return len;

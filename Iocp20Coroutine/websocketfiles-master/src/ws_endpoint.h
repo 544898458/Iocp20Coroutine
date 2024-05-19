@@ -52,7 +52,7 @@ public:
     virtual int32_t process(const char * readbuf, int32_t size, T_Callback *write_cb, T_Data* work_data);
 
     // receive data from wire until we get an entire handshake or frame data packet
-    virtual int32_t from_wire(const char * readbuf, int32_t size);
+    virtual int32_t from_wire(const void * readbuf, int32_t size);
 
     // try to find and parse a websocket packet
     virtual int64_t parse_packet(ByteBuffer& input);
@@ -65,7 +65,7 @@ public:
     virtual int32_t user_defined_process(WebSocketPacket& packet, ByteBuffer& frame_payload);
 
     // send data to wire 
-    virtual int32_t to_wire(const char * writebuf, int64_t size);
+    virtual int32_t to_wire(const void * writebuf, int64_t size);
 
 private:
     bool ws_handshake_completed_;

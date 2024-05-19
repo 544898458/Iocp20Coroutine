@@ -92,7 +92,7 @@ public:
 	/// 发送一个WebSocket数据包到客户端
 	/// </summary>
 	/// <param name="ref"></param>
-	void Send(const char buf[], const int len)
+	void Send(const void *buf, const int len)
 	{
 		//WebSocketPacket wspacket;
 		//// set FIN and opcode
@@ -141,12 +141,12 @@ public:
 	/// <param name="buf"></param>
 	/// <param name="len"></param>
 	/// <returns></returns>
-	int OnRecv(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession, const char buf[], int len);
+	int OnRecv(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession, const void* buf, int len);
 	/// <summary>
 /// 从全局连接set里删除连接，从全局Space里删除实体
 /// </summary>
 	void OnDestroy();
-	void Send(const char buf[], const int len)
+	void Send(const void *buf, const int len)
 	{
 		m_webSocketEndpoint->Send(buf, len);
 	}

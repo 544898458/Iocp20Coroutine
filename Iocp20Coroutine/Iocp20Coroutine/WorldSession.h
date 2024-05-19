@@ -1,12 +1,13 @@
 #pragma once
 #include"../IocpNetwork/SessionSocketCompeletionKey.h"
 #include "../LogStrategy/StrategyLog.h"
+#include "../IocpNetwork/WebSocketSession.h"
 class WorldServer;
 class WorldSession
 {
 public:
-	using CompeletionKeySession = Iocp::SessionSocketCompeletionKey<WorldSession>;
-	int OnRecv(CompeletionKeySession& refSession, const char buf[], int len);
+	using CompeletionKeySession = WebSocketSession<WorldSession>;
+	int OnRecvWsPack(const void *buf, int len);
 	void OnDestroy();
 	void OnInit(CompeletionKeySession& refSession, WorldServer&);
 	template<class T>
@@ -14,7 +15,9 @@ public:
 	{
 		//普通结构序列化，无压缩无加密
 		CHECK_PTR(m_pSession);
-		m_pSession->Send(&ref, sizeof(ref));
+		constexpr uint16_t usSize = sizeof(ref);
+		m_pSession->Send(&usSize, sizeof(usSize));
+		m_pSession->Send(&ref, usSize);
 		LOG(INFO) << typeid(T).name();
 	}
 	CompeletionKeySession* m_pSession = nullptr;
