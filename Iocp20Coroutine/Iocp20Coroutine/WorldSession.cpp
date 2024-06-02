@@ -2,22 +2,22 @@
 #include "../IocpNetwork/SessionSocketCompeletionKeyTemplate.h"
 #include "../IocpNetwork/SessionsTemplate.h"
 #include "WorldServer.h"
-#include "../IocpNetwork/WebSocketSessionTemplate.h"
+//#include "../IocpNetwork/WebSocketSessionTemplate.h"
 #include "../websocketfiles-master/src/ws_endpoint.cpp"
 
-template Iocp::SessionSocketCompeletionKey<WebSocketSession<WorldSession>>;
-template class WebSocketSession<WorldSession>;
-template void WebSocketSession<WorldSession>::OnInit<WorldServer>(Iocp::SessionSocketCompeletionKey<WebSocketSession<WorldSession> >& refSession, WorldServer& server);
-template class WebSocketEndpoint<WorldSession, Iocp::SessionSocketCompeletionKey<WebSocketSession<WorldSession> > >;
+template Iocp::SessionSocketCompeletionKey<WorldSession>;
+//template class WebSocketSession<WorldSession>;
+//template void WebSocketSession<WorldSession>::OnInit<WorldServer>(Iocp::SessionSocketCompeletionKey<WebSocketSession<WorldSession> >& refSession, WorldServer& server);
+//template class WebSocketEndpoint<WorldSession, Iocp::SessionSocketCompeletionKey<WebSocketSession<WorldSession> > >;
 
-int WorldSession::OnRecvWsPack(const void* buf, int len)
+int WorldSession::OnRecv(CompeletionKeySession&, const void* buf, int len)
 {
 	return 0;
 }
 
 void WorldSession::OnInit(CompeletionKeySession& refSession, WorldServer& refServer)
 {
-	refServer.m_Sessions.AddSession(refSession.m_pSession, [this, &refSession, &refServer]()
+	refServer.m_Sessions.AddSession(&refSession, [this, &refSession, &refServer]()
 		{
 			LOG(INFO) << "WorldSvrÒÑÁ¬ÉÏ";
 			//m_pServer = &server;

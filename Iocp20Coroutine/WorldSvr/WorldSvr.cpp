@@ -10,6 +10,7 @@
 #include "../CoRoutine/CoTimer.h"
 #include <glog/logging.h>
 #include <msgpack.hpp>
+#include "../Iocp20Coroutine/MyMsgQueue.h"
 
 enum MsgId;
 class WorldClient;
@@ -54,22 +55,14 @@ public:
 		const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
 		LOG(INFO) << obj;
 		
-		//auto pSessionSocketCompeletionKey = this->m_pWsSession->m_pSession;
-		//switch (msgId)
-		//{
-		//case MsgId::Login:
-		//{
-		//	const auto msg = obj.as<MsgLogin>();
-		//	pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
-		//}
-		//break;
-		//case MsgId::Move:
-		//{
-		//	const auto msg = obj.as<MsgMove>();
-		//	pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
-		//}
-		//break;
-		//}
+		switch (msgId)
+		{
+		case MsgId::Say:
+		{
+			const auto msg = obj.as<MsgSay>();
+		}
+		break;
+		}
 	}
 	void OnDestroy()
 	{
@@ -88,7 +81,7 @@ public:
 
 
 template Iocp::Server<WorldClient>;
-template bool Iocp::Server<WorldClient>::Init<WorldClientSession>(const uint16_t);
+//template bool Iocp::Server<WorldClient>::Init<WorldClientSession>(const uint16_t);
 template void Iocp::ListenSocketCompeletionKey::StartCoRoutine<WorldClientSession, WorldClient >(HANDLE hIocp, SOCKET socketListen, WorldClient&);
 template Iocp::SessionSocketCompeletionKey<WorldClientSession>;
 BOOL g_running = TRUE;
