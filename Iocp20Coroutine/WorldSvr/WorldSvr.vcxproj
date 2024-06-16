@@ -164,6 +164,9 @@
     <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\IocpNetwork\StrConv.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\IocpNetwork\ThreadPool.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -188,6 +191,7 @@
     <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKey.h" />
     <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKeyTemplate.h" />
     <ClInclude Include="..\IocpNetwork\SocketCompeletionKey.h" />
+    <ClInclude Include="..\IocpNetwork\StrConv.h" />
     <ClInclude Include="..\IocpNetwork\ThreadPool.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>

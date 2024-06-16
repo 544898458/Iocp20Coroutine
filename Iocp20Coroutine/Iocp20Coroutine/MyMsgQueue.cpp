@@ -6,6 +6,7 @@
 #include "../CoRoutine/CoTimer.h"
 #include "MyServer.h"
 #include "../IocpNetwork/MsgQueueTemplate.h"
+#include "../IocpNetwork/StrConv.h"
 
 void MyMsgQueue::Process()
 {
@@ -36,73 +37,9 @@ void MyMsgQueue::Push(const MsgLogin& msg){	m_MsgQueue.Push(msg, m_queueLogin);}
 void MyMsgQueue::Push(const MsgMove& msg) { m_MsgQueue.Push(msg, m_queueMove); }
 void MyMsgQueue::Push(const MsgSay& msg) { m_MsgQueue.Push(msg, m_queueSay); }
 
-std::string GbkToUtf8(const char* src_str)
-{
-	int len = MultiByteToWideChar(CP_ACP, 0, src_str, -1, NULL, 0);
-	wchar_t* wstr = new wchar_t[len + 1];
-	memset(wstr, 0, len + 1);
-	MultiByteToWideChar(CP_ACP, 0, src_str, -1, wstr, len);
-	len = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
-	char* str = new char[len + 1];
-	memset(str, 0, len + 1);
-	WideCharToMultiByte(CP_UTF8, 0, wstr, -1, str, len, NULL, NULL);
-	auto strTemp = str;
-	if (wstr) delete[] wstr;
-	if (str) delete[] str;
-	return strTemp;
-}
-std::string Utf8ToGbk(const std::string& str)
-{
-#if defined(_WIN32) || defined(_MSC_VER) || defined(WIN64) 
-	// calculate length
-	int len = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, NULL, 0);
-	wchar_t* wsGbk = new wchar_t[len + 1ull];
-	// set to '\0'
-	memset(wsGbk, 0, len + 1ull);
-	MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, wsGbk, len);
-	len = WideCharToMultiByte(CP_ACP, 0, wsGbk, -1, NULL, 0, NULL, NULL);
-	char* csGbk = new char[len + 1ull];
-	memset(csGbk, 0, len + 1ull);
-	WideCharToMultiByte(CP_ACP, 0, wsGbk, -1, csGbk, len, NULL, NULL);
-	std::string res(csGbk);
-
-	if (wsGbk)
-	{
-		delete[] wsGbk;
-	}
-
-	if (csGbk)
-	{
-		delete[] csGbk;
-	}
-
-	return res;
-#elif defined(__linux__) || defined(__GNUC__)
-	size_t len = str.size() * 2 + 1;
-	char* temp = new char[len];
-	if (EncodingConvert("utf-8", "gb2312", const_cast<char*>(str.c_str()),
-		str.size(), temp, len) >= 0)
-	{
-		std::string res;
-		res.append(temp);
-		delete[] temp;
-		return res;
-	}
-	else
-	{
-		delete[] temp;
-		return str;
-	}
-
-#else
-	std::cerr << "Unhandled operating system." << std::endl;
-	return str;
-#endif
-}
-
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 {
-	auto utf8Name = Utf8ToGbk(msg.name);
+	auto utf8Name = StrConv::Utf8ToGbk(msg.name);
 	//printf("准备广播%s",utf8Name.c_str());
 	/*for (auto p : g_set)
 	{
@@ -112,7 +49,7 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 	}*/
 	//const auto strBroadcast = "[" + utf8Name + "]进来了";
 	MsgLoginRet ret;
-	ret.nickName = GbkToUtf8(utf8Name.c_str());// strBroadcast.c_str());
+	ret.nickName = StrConv::GbkToUtf8(utf8Name.c_str());// strBroadcast.c_str());
 	ret.entityId = (uint64_t)&refThis.m_pSession->m_entity;
 	refThis.m_pSession->m_entity.m_nickName = utf8Name;
 	refThis.m_pSession->m_pServer->m_Sessions.Broadcast(ret);
@@ -122,7 +59,7 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 		if (pENtity == & refThis.m_pSession->m_entity)
 			continue;
 
-		ret.nickName = GbkToUtf8(refThis.m_pSession->m_entity.m_nickName.c_str());
+		ret.nickName = StrConv::GbkToUtf8(refThis.m_pSession->m_entity.m_nickName.c_str());
 		ret.entityId = (uint64_t)pENtity;
 		refThis.m_pSession->Send(ret);
 	}
@@ -169,7 +106,7 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgMove& msg)
 
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgSay& msg)
 {
-	auto utf8Content = Utf8ToGbk(msg.content);
+	auto utf8Content = StrConv::Utf8ToGbk(msg.content);
 	LOG(INFO) << "收到聊天:" << utf8Content;
 	void SendToWorldSvr(const MsgSay & msg);
 	SendToWorldSvr(msg);

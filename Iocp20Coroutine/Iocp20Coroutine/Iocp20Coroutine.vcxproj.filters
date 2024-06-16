@@ -105,6 +105,9 @@
     <ClCompile Include="WorldSession.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\IocpNetwork\StrConv.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -207,6 +210,9 @@
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\SessionsTemplate.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\StrConv.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
   </ItemGroup>

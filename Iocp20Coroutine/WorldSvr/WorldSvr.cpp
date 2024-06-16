@@ -11,6 +11,7 @@
 #include <glog/logging.h>
 #include <msgpack.hpp>
 #include "../Iocp20Coroutine/MyMsgQueue.h"
+#include "../IocpNetwork/StrConv.h"
 
 enum MsgId;
 class WorldClient;
@@ -60,6 +61,7 @@ public:
 		case MsgId::Say:
 		{
 			const auto msg = obj.as<MsgSay>();
+			LOG(INFO) << StrConv::Utf8ToGbk(msg.content);
 		}
 		break;
 		}

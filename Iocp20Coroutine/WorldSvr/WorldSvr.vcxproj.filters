@@ -54,6 +54,9 @@
     <ClCompile Include="..\IocpNetwork\ThreadPool.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
+    <ClCompile Include="..\IocpNetwork\StrConv.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -96,6 +99,9 @@
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\ThreadPool.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\StrConv.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
   </ItemGroup>
