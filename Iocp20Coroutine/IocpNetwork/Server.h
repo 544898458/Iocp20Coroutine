@@ -34,10 +34,9 @@ namespace Iocp
 		//	requires std::is_same_v<void, decltype(refSession.OnDestroy())>;//void OnDestroy();
 		//	requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
 		//}
-		bool Connect(const wchar_t* szIp, const wchar_t* szPort);
+		Iocp::SessionSocketCompeletionKey<T_Session>* Connect(const wchar_t* szIp, const wchar_t* szPort);
 
 		T_Server m_Server;
-
 	private:
 		SOCKET m_socketAccept = NULL;
 		const HANDLE& m_hIocp;

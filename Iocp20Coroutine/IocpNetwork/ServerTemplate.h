@@ -144,14 +144,14 @@ template<class T_Session>
 //	requires std::is_same_v<void, decltype(refSession.OnDestroy())>;//void OnDestroy();
 //	requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
 //}
-bool Iocp::Server<T_Server>::Connect(const wchar_t* szIp, const wchar_t* szPort)
+Iocp::SessionSocketCompeletionKey<T_Session>* Iocp::Server<T_Server>::Connect(const wchar_t* szIp, const wchar_t* szPort)
 {
 	auto client = new Client();
 	auto socket = client->Connect(szIp, szPort, m_hIocp);
 	if (socket == 0) 
 	{
 		LOG(ERROR) << "";// std::wstring(szIp) << ":" << std::wstring(szPort);
-		return false;
+		return nullptr;
 	}
 	//°ó¶¨
 	const auto iocp = CreateIoCompletionPort((HANDLE)socket, m_hIocp, (ULONG_PTR)0, 0);
@@ -164,10 +164,10 @@ bool Iocp::Server<T_Server>::Connect(const wchar_t* szIp, const wchar_t* szPort)
 		closesocket(socket);
 		//ÇåÀíÍøÂç¿â
 		WSACleanup();
-		return false;
+		return nullptr;
 	}
 
 	auto pNewCompleteKey = new Iocp::SessionSocketCompeletionKey<T_Session>(socket);
 	pNewCompleteKey->StartCoRoutine();
-	return true;
+	return pNewCompleteKey;
 }

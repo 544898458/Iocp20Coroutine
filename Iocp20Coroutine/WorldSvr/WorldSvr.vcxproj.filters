@@ -57,6 +57,12 @@
     <ClCompile Include="..\IocpNetwork\StrConv.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
+    <ClCompile Include="WorldServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldSession.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -103,6 +109,12 @@
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\StrConv.h">
       <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldSession.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

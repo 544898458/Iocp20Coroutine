@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "WorldSession.h"
 #include "../IocpNetwork/SessionSocketCompeletionKeyTemplate.h"
 #include "../IocpNetwork/SessionsTemplate.h"

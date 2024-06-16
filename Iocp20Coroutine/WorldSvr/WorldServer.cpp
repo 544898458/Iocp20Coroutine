@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "WorldServer.h"
 #include "../IocpNetwork/ServerTemplate.h"
 #include "WorldSession.h"

@@ -9,9 +9,8 @@
 #include "Entity.h"
 #include "MyServer.h"
 #include "MySession.h"
-#include "WorldServer.h"
-#include "WorldSession.h"
 #include <glog/logging.h>
+#include "WorldClient.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")
@@ -55,10 +54,11 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 	return TRUE;
 }
 
-std::unique_ptr<Iocp::Server<WorldServer> > g_worldSvr;// (Iocp::ThreadPool::GetIocp());
+std::unique_ptr<Iocp::Server<WorldClient> > g_worldSvr;// (Iocp::ThreadPool::GetIocp());
 void SendToWorldSvr(const MsgSay& msg)
 {
-	g_worldSvr->m_Server.m_Sessions.Broadcast(msg);
+	//g_worldSvr->m_Server.m_Sessions.Broadcast(msg);
+	//g_worldSvr->m_pClientSession->Send(msg);
 }
 ///*
 int main(void)
@@ -87,13 +87,16 @@ int main(void)
 	SetConsoleCtrlHandler(fun, TRUE);
 	Iocp::ThreadPool::Init();
 	Iocp::Server<MyServer> accept(Iocp::ThreadPool::GetIocp());
-	g_worldSvr.reset( new Iocp::Server<WorldServer>(Iocp::ThreadPool::GetIocp()) );
+	//g_worldSvr.reset( new Iocp::Server<WorldServer>(Iocp::ThreadPool::GetIocp()) );
 
 	Iocp::Server<MyServer>::WsaStartup();
 	accept.Init<WebSocketSession<MySession>>(12345);
 	//Iocp::ThreadPool::Add(accept.GetIocp());
 
-	g_worldSvr->Init<WorldSession>(12346);
+	//g_worldSvr->Init<WorldSession>(12346);
+	g_worldSvr.reset(new Iocp::Server<WorldClient>(Iocp::ThreadPool::GetIocp()));
+	g_worldSvr->Connect<WorldClientSession>(L"127.0.0.1", L"12346");
+
 	//Iocp::ThreadPool::Add(g_worldSvr.GetIocp());
 
 

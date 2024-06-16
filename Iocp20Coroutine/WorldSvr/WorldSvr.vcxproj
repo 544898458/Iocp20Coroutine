@@ -176,6 +176,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="WorldServer.cpp" />
+    <ClCompile Include="WorldSession.cpp" />
     <ClCompile Include="WorldSvr.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +196,8 @@
     <ClInclude Include="..\IocpNetwork\StrConv.h" />
     <ClInclude Include="..\IocpNetwork\ThreadPool.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="WorldServer.h" />
+    <ClInclude Include="WorldSession.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
