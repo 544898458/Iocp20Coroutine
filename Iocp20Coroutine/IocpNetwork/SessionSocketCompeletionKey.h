@@ -3,7 +3,8 @@
 #include<WinSock2.h>
 #include <set>
 #include "ByteQueue.h"
-namespace Iocp {
+namespace Iocp 
+{
 	template<class T_Session>
 	class SessionSocketCompeletionKey :public SocketCompeletionKey
 	{
@@ -33,4 +34,27 @@ namespace Iocp {
 		bool sendFinish = false;
 		bool recvFinish = false;
 	};
+
+	static std::tuple< const void*, int > OnRecv2(const void* buf, int len)
+	{
+		uint16_t usPackLen(0);
+		const auto sizeofPackLen = sizeof(usPackLen);
+		if (sizeofPackLen > len)
+			return std::make_tuple(nullptr, 0);
+
+		usPackLen = *(uint16_t*)buf;
+		if (usPackLen > 8192)
+		{
+			LOG(ERROR) << "外挂,跳过数据包len=" << len;
+			return std::make_tuple(nullptr, len);
+		}
+		if (usPackLen + sizeofPackLen > len)
+		{
+			LOG(INFO) << "希望接收" << usPackLen << "+" << sizeofPackLen << "字节,现已收到" << len << "字节,下次还要接着收";
+			return std::make_tuple(nullptr, 0);
+		}
+
+		//OnRecvPack((const void*)buf + sizeofPackLen, len - sizeofPackLen);
+		return std::make_tuple((const char*)buf + sizeofPackLen, len);
+	}
 }

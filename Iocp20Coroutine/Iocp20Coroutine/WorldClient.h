@@ -25,22 +25,15 @@ public:
 	/// <returns>返回已处理的字节数，这些数据将立刻从接受缓冲中删除</returns>
 	int OnRecv(Iocp::SessionSocketCompeletionKey<WorldClientSession>& refSession, const void* buf, int len)
 	{
-		uint16_t usPackLen(0);
-		const auto sizeofPackLen = sizeof(usPackLen);
-		if (sizeofPackLen > len)
-			return 0;
-
-		usPackLen = *(uint16_t*)buf;
-		if (usPackLen > 8192)
+		const void* bufPack(nullptr);
+		int lenPack(0);
+		std::tie(bufPack, lenPack) = Iocp::OnRecv2(buf, len);
+		if (lenPack > 0 && nullptr != bufPack)
 		{
-			LOG(ERROR) << "跳过数据包len=" << len;
-			return len;
+			OnRecvPack(bufPack, lenPack);
 		}
-		if (usPackLen + sizeofPackLen > len)
-			return 0;
 
-		OnRecvPack((const char*)buf + sizeofPackLen, len - sizeofPackLen);
-		return len;
+		return lenPack;
 	}
 	void OnRecvPack(const void* buf, int len)
 	{

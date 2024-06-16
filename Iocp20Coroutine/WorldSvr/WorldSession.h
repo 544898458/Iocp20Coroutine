@@ -14,6 +14,11 @@ public:
 	template<class T>
 	void Send(const T& ref) 
 	{
+		Send2(ref);
+	}
+	template<class T>
+	static void Send2(const T& ref)
+	{
 		//普通结构序列化，无压缩无加密
 		CHECK_PTR(m_pSession);
 		std::stringstream buffer;
@@ -34,5 +39,7 @@ public:
 		LOG(INFO) << typeid(T).name();
 	}
 	CompeletionKeySession* m_pSession = nullptr;
+private:
+	void OnRecvPack(const void* buf, int len);
 };
 

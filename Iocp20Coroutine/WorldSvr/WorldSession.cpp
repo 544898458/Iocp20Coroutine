@@ -5,6 +5,8 @@
 #include "WorldServer.h"
 //#include "../IocpNetwork/WebSocketSessionTemplate.h"
 #include "../websocketfiles-master/src/ws_endpoint.cpp"
+#include "../Iocp20Coroutine/MyMsgQueue.h"
+#include "../IocpNetwork/StrConv.h"
 
 template Iocp::SessionSocketCompeletionKey<WorldSession>;
 //template class WebSocketSession<WorldSession>;
@@ -13,9 +15,34 @@ template Iocp::SessionSocketCompeletionKey<WorldSession>;
 
 int WorldSession::OnRecv(CompeletionKeySession&, const void* buf, int len)
 {
-	return 0;
+	const void* bufPack(nullptr);
+	int lenPack(0);
+	std::tie(bufPack, lenPack) = Iocp::OnRecv2(buf, len);
+	if (lenPack > 0 && nullptr != bufPack)
+	{
+		OnRecvPack(bufPack, lenPack);
+	}
+
+	return lenPack;
 }
 
+void WorldSession::OnRecvPack(const void* buf, int len)
+{
+	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
+	msgpack::object obj = oh.get();
+	const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
+	LOG(INFO) << obj;
+
+	switch (msgId)
+	{
+	case MsgId::Say:
+	{
+		const auto msg = obj.as<MsgSay>();
+		LOG(INFO) << StrConv::Utf8ToGbk(msg.content);
+	}
+	break;
+	}
+}
 void WorldSession::OnInit(CompeletionKeySession& refSession, WorldServer& refServer)
 {
 	refServer.m_Sessions.AddSession(&refSession, [this, &refSession, &refServer]()
