@@ -18,7 +18,6 @@ namespace Iocp
 		void Send(const void* buf, int len);
 		bool Finished();
 		T_Session Session;
-
 	private:
 		CoTask<int> PostSend(Overlapped& pOverlapped);
 		CoTask<int> PostRecv(Overlapped& pOverlapped);

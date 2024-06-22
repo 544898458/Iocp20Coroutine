@@ -47,7 +47,7 @@ public:
 		case MsgId::Say:
 		{
 			const auto msg = obj.as<MsgSay>();
-			LOG(INFO) << StrConv::Utf8ToGbk(msg.content);
+			LOG(INFO) << "WorldSvr·¢À´ÁÄÌì:" << StrConv::Utf8ToGbk(msg.content);
 		}
 		break;
 		}

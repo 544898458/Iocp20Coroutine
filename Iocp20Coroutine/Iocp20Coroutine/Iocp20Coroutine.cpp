@@ -11,7 +11,7 @@
 #include "MySession.h"
 #include <glog/logging.h>
 #include "WorldClient.h"
-
+#include "../IocpNetwork/MsgPack.h"
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")
 
@@ -55,10 +55,12 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 }
 
 std::unique_ptr<Iocp::Server<WorldClient> > g_worldSvr;// (Iocp::ThreadPool::GetIocp());
+std::unique_ptr<Iocp::SessionSocketCompeletionKey<WorldClientSession>> g_ConnectToWorldSvr;
 void SendToWorldSvr(const MsgSay& msg)
 {
 	//g_worldSvr->m_Server.m_Sessions.Broadcast(msg);
 	//g_worldSvr->m_pClientSession->Send(msg);
+	MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); });
 }
 ///*
 int main(void)
@@ -95,7 +97,7 @@ int main(void)
 
 	//g_worldSvr->Init<WorldSession>(12346);
 	g_worldSvr.reset(new Iocp::Server<WorldClient>(Iocp::ThreadPool::GetIocp()));
-	g_worldSvr->Connect<WorldClientSession>(L"127.0.0.1", L"12346");
+	g_ConnectToWorldSvr.reset( g_worldSvr->Connect<WorldClientSession>(L"127.0.0.1", L"12346") );
 
 	//Iocp::ThreadPool::Add(g_worldSvr.GetIocp());
 

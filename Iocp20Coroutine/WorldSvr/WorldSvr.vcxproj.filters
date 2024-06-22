@@ -116,5 +116,8 @@
     <ClInclude Include="WorldSession.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\IocpNetwork\MsgPack.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

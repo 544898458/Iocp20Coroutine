@@ -38,7 +38,8 @@ void WorldSession::OnRecvPack(const void* buf, int len)
 	case MsgId::Say:
 	{
 		const auto msg = obj.as<MsgSay>();
-		LOG(INFO) << StrConv::Utf8ToGbk(msg.content);
+		LOG(INFO) << "GameSvr发来聊天" << StrConv::Utf8ToGbk(msg.content);
+		this->m_pServer->m_Sessions.Broadcast(msg);
 	}
 	break;
 	}
@@ -47,8 +48,8 @@ void WorldSession::OnInit(CompeletionKeySession& refSession, WorldServer& refSer
 {
 	refServer.m_Sessions.AddSession(&refSession, [this, &refSession, &refServer]()
 		{
-			LOG(INFO) << "WorldSvr已连上";
-			//m_pServer = &server;
+			LOG(INFO) << "GameSvr已连上";
+			m_pServer = &refServer;
 			m_pSession = &refSession;
 
 			//m_entity.Init(5, m_pServer->m_space, TraceEnemy, this);

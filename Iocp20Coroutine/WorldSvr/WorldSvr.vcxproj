@@ -187,6 +187,7 @@
     <ClInclude Include="..\IocpNetwork\Client.h" />
     <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKey.h" />
     <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKeyTemplate.h" />
+    <ClInclude Include="..\IocpNetwork\MsgPack.h" />
     <ClInclude Include="..\IocpNetwork\Overlapped.h" />
     <ClInclude Include="..\IocpNetwork\Server.h" />
     <ClInclude Include="..\IocpNetwork\ServerTemplate.h" />
