@@ -11,9 +11,9 @@ class WorldClient;
 class WorldClientSession
 {
 public:
-	void OnInit(Iocp::SessionSocketCompeletionKey<WorldClientSession>& session, WorldClient&)
+	void OnInit(Iocp::SessionSocketCompeletionKey<WorldClientSession>& session, WorldClient& refWorldClient)
 	{
-
+		m_pWorldClient = &refWorldClient;
 	}
 
 	/// <summary>
@@ -35,27 +35,12 @@ public:
 
 		return lenPack;
 	}
-	void OnRecvPack(const void* buf, int len)
-	{
-		msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
-		msgpack::object obj = oh.get();
-		const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
-		LOG(INFO) << obj;
-
-		switch (msgId)
-		{
-		case MsgId::Say:
-		{
-			const auto msg = obj.as<MsgSay>();
-			LOG(INFO) << "WorldSvr发来聊天:" << StrConv::Utf8ToGbk(msg.content);
-		}
-		break;
-		}
-	}
+	void OnRecvPack(const void* buf, int len);
 	void OnDestroy()
 	{
 
 	}
+	WorldClient* m_pWorldClient = nullptr;
 };
 class WorldClient
 {
@@ -64,5 +49,5 @@ public:
 	{
 
 	}
-
+	static std::function<void(MsgSay const&)> m_funBroadcast;
 };

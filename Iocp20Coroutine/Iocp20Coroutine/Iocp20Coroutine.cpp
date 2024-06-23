@@ -98,6 +98,7 @@ int main(void)
 	//g_worldSvr->Init<WorldSession>(12346);
 	g_worldSvr.reset(new Iocp::Server<WorldClient>(Iocp::ThreadPool::GetIocp()));
 	g_ConnectToWorldSvr.reset( g_worldSvr->Connect<WorldClientSession>(L"127.0.0.1", L"12346") );
+	WorldClient::m_funBroadcast = [&accept](const MsgSay& msg) {accept.m_Server.m_Sessions.Broadcast(msg); };
 
 	//Iocp::ThreadPool::Add(g_worldSvr.GetIocp());
 

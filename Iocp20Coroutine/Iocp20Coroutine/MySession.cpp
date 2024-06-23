@@ -133,6 +133,7 @@ void MySession::OnDestroy()
 template void MySession::Send(const MsgLoginRet&);
 template void MySession::Send(const MsgNotifyPos&);
 template void MySession::Send(const MsgChangeSkeleAnim&);
+template void MySession::Send(const MsgSay&);
 
 
 
