@@ -7,6 +7,7 @@
 #include "MyServer.h"
 #include "../IocpNetwork/MsgQueueTemplate.h"
 #include "../IocpNetwork/StrConv.h"
+#include "AiCo.h"
 
 void MyMsgQueue::Process()
 {
@@ -48,6 +49,15 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 		p->Send(ret);
 	}*/
 	//const auto strBroadcast = "[" + utf8Name + "]进来了";
+	if (msg.name.empty())
+	{
+		MsgSay msg;
+		msg.content = StrConv::GbkToUtf8("请输入名字");
+		auto gbk = StrConv::Utf8ToGbk(msg.content);
+		refThis.m_pSession->Send(msg);
+		return;
+	}
+
 	MsgLoginRet ret;
 	ret.nickName = StrConv::GbkToUtf8(utf8Name.c_str());// strBroadcast.c_str());
 	ret.entityId = (uint64_t)&refThis.m_pSession->m_entity;
@@ -74,32 +84,7 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgMove& msg)
 	refThis.m_pSession->m_entity.ReplaceCo(	//替换协程
 		[targetX, targetZ, pServer](Entity* pEntity, float& x, float& z, std::function<void()>& funCancel)->CoTask<int>
 		{
-			KeepCancel kc(funCancel);
-			const auto localTargetX = targetX;
-			const auto localTargetZ = targetZ;
-			auto pLocalServer = pServer;
-			pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "run"));
-
-			while (true)
-			{
-				if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
-				{
-					LOG(INFO) << "走向" << localTargetX << "," << localTargetZ << "的协程取消了";
-					co_return 0;
-				}
-
-				const auto step = 0.5f;
-				if (std::abs(localTargetX - x) < step && std::abs(localTargetZ - z) < step) {
-					LOG(INFO) << "已走到" << localTargetX << "," << localTargetZ << "附近，协程正常退出";
-					pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));
-					co_return 0;
-				}
-
-				x += localTargetX < x ? -step : step;
-				z += localTargetZ < z ? -step : step;
-
-				pLocalServer->m_Sessions.Broadcast(MsgNotifyPos(pEntity, x, z));
-			}
+			return AiCo::WalkToPos(pEntity, x, z, targetX, targetX, pServer, funCancel);
 		});
 	refThis.m_pSession->m_entity.m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 }

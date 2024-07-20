@@ -33,13 +33,13 @@ struct MsgMove
 {
 	MsgId id;
 	float x;
-	float y;
 	float z;
-	MSGPACK_DEFINE(id, x, y, z);
+	MSGPACK_DEFINE(id, x, z);
 };
+
 struct MsgSay
 {
-	MsgId id;
+	MsgId id = MsgId::Say;
 	std::string content;
 	MSGPACK_DEFINE(id, content);
 };
@@ -53,12 +53,13 @@ struct MsgLoginRet
 
 struct MsgNotifyPos
 {
-	MsgNotifyPos(Entity* p, float argX, float argZ) :entityId((uint64_t)p), x(argX), z(argZ) {}
+	MsgNotifyPos(Entity* p, float argX, float argZ, int argHp) :entityId((uint64_t)p), x(argX), z(argZ),hp(argHp) {}
 	MsgId msgId = NotifyPos;
 	uint64_t entityId;
 	float x;
 	float z;
-	MSGPACK_DEFINE(msgId, entityId, x, z);
+	int hp;
+	MSGPACK_DEFINE(msgId, entityId, x, z, hp);
 };
 struct MsgChangeSkeleAnim
 {

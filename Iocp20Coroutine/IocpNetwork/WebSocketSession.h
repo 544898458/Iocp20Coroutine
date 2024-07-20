@@ -61,33 +61,11 @@ public:
 			break;
 		}
 
-		//auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession>>*>(this->nt_work_data_);
-		//pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
 		this->nt_write_cb_->OnRecvWsPack(frame_payload.bytes(), frame_payload.length());
-		/*
-		msgpack::object_handle oh = msgpack::unpack(frame_payload.bytes(), frame_payload.length());//没判断越界，要加try
-		msgpack::object obj = oh.get();
-		const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
-		LOG(INFO) << obj;
-		auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompeletionKey<WebSocketSession>*>(this->nt_work_data_);
-		switch (msgId)
-		{
-		case MsgId::Login:
-		{
-			const auto msg = obj.as<MsgLogin>();
-			pSessionSocketCompeletionKey->Session.m_msgQueue.Push(msg);
-		}
-		break;
-		case MsgId::Move:
-		{
-			const auto msg = obj.as<MsgMove>();
-			pSessionSocketCompeletionKey->Session.m_msgQueue.Push(msg);
-		}
-		break;
-		}
-		*/
+
 		return 0;
 	}
+
 	/// <summary>
 	/// 发送一个WebSocket数据包到客户端
 	/// </summary>

@@ -15,6 +15,8 @@
 #include "Space.h"
 #include "../CoRoutine/CoTimer.h"
 #include "MyServer.h"
+#include "AiCo.h"
+
 //template<MySession>
 //std::set<Iocp::SessionSocketCompeletionKey<MySession>*> g_setSession;
 //template<MySession> std::mutex g_setSessionMutex;
@@ -47,29 +49,6 @@ void MySession::Send(const T& ref)
 }
 
 
-CoTask<int> TraceEnemy(Entity* pEntity, float& x, float& z, std::function<void()>& funCancel)
-{
-	KeepCancel kc(funCancel);
-	bool stop = false;
-	funCancel = [&stop]() {stop = true; };
-	while (true)
-	{
-		if (co_await CoTimer::WaitNextUpdate(funCancel))
-		{
-			LOG(INFO) << "调用者手动取消了协程TraceEnemy";
-			co_return 0;
-		}
-		if (stop)
-		{
-
-			LOG(INFO) << "TraceEnemy协程正常退出";
-			co_return 0;
-		}
-		x -= 0.01f;
-
-		pEntity->m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(pEntity, x, z));
-	}
-}
 
 MySession::MySession() : m_msgQueue(this)
 {
@@ -90,7 +69,7 @@ void MySession::OnRecvWsPack(const void *buf, const int len)
 		pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
 	}
 	break;
-	case MsgId::Move:
+	case MsgId::Move://
 	{
 		const auto msg = obj.as<MsgMove>();
 		pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
@@ -115,7 +94,7 @@ void MySession::OnInit(WebSocketSession<MySession>& refWsSession, MyServer& serv
 			m_pServer = &server;
 			m_pWsSession = &refWsSession;
 
-			m_entity.Init(5, m_pServer->m_space, TraceEnemy, this);
+			m_entity.Init(5, m_pServer->m_space, AiCo::Idle, this);
 			m_pServer->m_space.setEntity.insert(&m_entity);			
 		});
 }

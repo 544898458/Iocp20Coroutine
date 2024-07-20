@@ -3,6 +3,7 @@
 #include "Space.h"
 #include "../CoRoutine/CoTimer.h"
 #include "MyServer.h"
+#include "AiCo.h"
 
 using namespace std;
 Entity::Entity() :Id((uint64_t)this)
@@ -36,38 +37,7 @@ void Entity::ReplaceCo(std::function< CoTask<int>(Entity*, float&, float&, std::
 	m_coWalk = fun(this, this->m_Pos.x, this->m_Pos.z, m_cancel);
 }
 
-CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, std::function<void()>& cancel)
-{
-	KeepCancel kc(cancel);
-
-	pEntity->m_pSession->m_pServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "attack"));//播放攻击动作
-
-	if (co_await CoTimer::Wait(3000ms, cancel))//等3秒	前摇
-		co_return 0;//协程取消
-
-	pDefencer->Hurt(1);//第一次让对方伤1点生命
-
-	if (co_await CoTimer::Wait(500ms, cancel))//等0.5秒
-		co_return 0;//协程取消
-
-	pDefencer->Hurt(3);//第二次让对方伤3点生命
-
-	if (co_await CoTimer::Wait(500ms, cancel))//等0.5秒
-		co_return 0;//协程取消
-
-	pDefencer->Hurt(10);//第三次让对方伤10点生命
-
-	if (co_await CoTimer::Wait(3000ms, cancel))//等3秒	后摇
-		co_return 0;//协程取消
-
-	pEntity->m_pSession->m_pServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));//播放休闲待机动作
-
-	if (co_await CoTimer::Wait(5000ms, cancel))//等5秒	公共冷却
-		co_return 0;//协程取消
-
-	co_return 0;//协程正常退出
-}
-
+//主线程单线程执行
 void Entity::Update()
 {
 	if (!m_coAttack.Finished())
@@ -78,9 +48,10 @@ void Entity::Update()
 	{
 		return;//表示不允许打断
 	}
+
 	for (const auto pENtity : m_space->setEntity)
 	{
-		if (pENtity == this)
+		if (pENtity == this)//查找敌人，所有其他人都是敌人
 			continue;
 
 		//m_coStop = true;
@@ -93,7 +64,7 @@ void Entity::Update()
 		}
 		//m_coStop = false;
 
-		m_coAttack = Attack(this, this, this->m_Pos.x, this->m_Pos.z, m_cancel);
+		m_coAttack = AiCo::Attack(this, pENtity, this->m_Pos.x, this->m_Pos.z, m_cancel);
 		m_coAttack.Run();
 		return;
 	}
