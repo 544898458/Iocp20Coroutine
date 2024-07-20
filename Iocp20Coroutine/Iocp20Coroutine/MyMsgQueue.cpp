@@ -81,12 +81,7 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgMove& msg)
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
 	auto pServer = refThis.m_pSession->m_pServer;
-	refThis.m_pSession->m_entity.ReplaceCo(	//替换协程
-		[targetX, targetZ, pServer](Entity* pEntity, float& x, float& z, std::function<void()>& funCancel)->CoTask<int>
-		{
-			return AiCo::WalkToPos(pEntity, x, z, targetX, targetX, pServer, funCancel);
-		});
-	refThis.m_pSession->m_entity.m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
+	refThis.m_pSession->m_entity.WalkToPos(targetX, targetZ, pServer);
 }
 
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgSay& msg)

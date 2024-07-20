@@ -4,6 +4,7 @@
 #include "../CoRoutine/CoTimer.h"
 #include "MyServer.h"
 #include "AiCo.h"
+#include <cmath>
 
 using namespace std;
 Entity::Entity() :Id((uint64_t)this)
@@ -21,22 +22,25 @@ void Entity::Init(float x, Space& space, std::function< CoTask<int>(Entity*, flo
 
 }
 
-void Entity::ReplaceCo(std::function< CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun)
+void Entity::WalkToPos(const float targetX, const float targetZ, MyServer* pServer)
 {
 	//m_coStop = true;
-	if (m_cancel)
-		m_cancel();
-	else if (!m_coWalk.Finished() || !m_coAttack.Finished())
-	{
-		LOG(ERROR) << "协程没结束，却提前清空了m_cancel";
-	}
+
+	TryCancel();
+
 	m_coWalk.Run();
 	assert(m_coWalk.Finished());//20240205
 	assert(m_coAttack.Finished());//20240205
 	/*m_coStop = false;*/
-	m_coWalk = fun(this, this->m_Pos.x, this->m_Pos.z, m_cancel);
+	m_coWalk = AiCo::WalkToPos(this, this->m_Pos.x, this->m_Pos.z, targetX, targetZ, pServer, m_cancel);
+	m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 }
 
+bool Entity::DistanceLessEqual(Entity* pEntity, float fDistance)
+{
+	const float fExponent = 2.0f;
+	return std::pow(this->m_Pos.x - pEntity->m_Pos.x, fExponent) + std::pow(this->m_Pos.z - pEntity->m_Pos.z, fExponent) <= std::pow(fDistance, fExponent);
+}
 //主线程单线程执行
 void Entity::Update()
 {
@@ -49,24 +53,30 @@ void Entity::Update()
 		return;//表示不允许打断
 	}
 
-	for (const auto pENtity : m_space->setEntity)
+	for (const auto pEntity : m_space->setEntity)
 	{
-		if (pENtity == this)//查找敌人，所有其他人都是敌人
+		if (pEntity == this)//查找敌人，所有其他人都是敌人
 			continue;
 
-		//m_coStop = true;
-		TryCancel();
-
-		m_coWalk.Run();
-		if (!m_coWalk.Finished())//20240205
+		if (DistanceLessEqual(pEntity, this->m_fAttackDistance))
 		{
-			LOG(ERROR) << "协程取消失败";
+			TryCancel();
+			
+			m_coAttack = AiCo::Attack(this, pEntity, m_cancel);
+			m_coAttack.Run();
+			return;
 		}
-		//m_coStop = false;
+		else
+		{
+			TryCancel();
 
-		m_coAttack = AiCo::Attack(this, pENtity, this->m_Pos.x, this->m_Pos.z, m_cancel);
-		m_coAttack.Run();
-		return;
+			//m_coWalk.Run();
+			assert(m_coWalk.Finished());//20240205
+			assert(m_coAttack.Finished());//20240205
+			/*m_coStop = false;*/
+			m_coWalk = AiCo::WalkToTarget(this, pEntity, this->m_pSession->m_pServer, m_cancel);
+			m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
+		}
 	}
 }
 
@@ -80,7 +90,15 @@ void Entity::TryCancel()
 	else
 	{
 		LOG(WARNING) << "m_cancel是空的";
+		if (!m_coWalk.Finished() || !m_coAttack.Finished())
+		{
+			LOG(ERROR) << "协程没结束，却提前清空了m_cancel";
+		}
 	}
+
+	assert(m_coWalk.Finished());//20240205
+	assert(m_coAttack.Finished());//20240205
+
 }
 
 void Entity::OnDestroy()

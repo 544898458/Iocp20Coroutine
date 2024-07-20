@@ -16,13 +16,13 @@ namespace AiCo
 		{
 			if (co_await CoTimer::WaitNextUpdate(funCancel))
 			{
-				LOG(INFO) << "调用者手动取消了协程TraceEnemy";
+				LOG(INFO) << "调用者手动取消了协程Idle";
 				co_return 0;
 			}
 			if (stop)
 			{
 
-				LOG(INFO) << "TraceEnemy协程正常退出";
+				LOG(INFO) << "Idle协程正常退出";
 				co_return 0;
 			}
 			//x -= 0.1f;
@@ -32,7 +32,7 @@ namespace AiCo
 	}
 
 
-	CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, float& x, float& z, std::function<void()>& cancel)
+	CoTask<int> Attack(Entity* pEntity, Entity* pDefencer, std::function<void()>& cancel)
 	{
 		using namespace std;
 		KeepCancel kc(cancel);
@@ -94,5 +94,34 @@ namespace AiCo
 			pLocalServer->m_Sessions.Broadcast(MsgNotifyPos(pEntity, x, z, pEntity->m_hp));
 		}
 		LOG(INFO) << "走向目标协程结束:" << targetX << "," << targetX;
+	}
+	CoTask<int> WalkToTarget(Entity* pThis, Entity* pEntity, MyServer* pServer, std::function<void()>& funCancel)
+	{
+		KeepCancel kc(funCancel);
+		auto pLocalServer = pServer;
+		pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "run"));
+
+		while (true)
+		{
+			if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
+			{
+				LOG(INFO) << "走向" << pEntity->m_nickName << "的协程取消了";
+				co_return 0;
+			}
+
+			if (pThis->DistanceLessEqual(pEntity, pThis->m_fAttackDistance))
+			{
+				LOG(INFO) << "已走到" << pEntity->m_nickName << "附近，协程正常退出";
+				pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));
+				co_return 0;
+			}
+
+			const auto step = 0.5f;
+			pThis->m_Pos.x += pEntity->m_Pos.x < pThis->m_Pos.x ? -step : step;
+			pThis->m_Pos.z += pEntity->m_Pos.z< pThis->m_Pos.z ? -step : step;
+
+			pLocalServer->m_Sessions.Broadcast(MsgNotifyPos(pThis, pThis->m_Pos.x, pThis->m_Pos.z, pEntity->m_hp));
+		}
+		LOG(INFO) << "走向目标协程结束:" << pThis->m_Pos.x << "," << pThis->m_Pos.z;
 	}
 }
