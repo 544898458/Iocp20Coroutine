@@ -19,6 +19,7 @@ public:
 	bool DistanceLessEqual(Entity* pEntity, float fDistance);
 	void OnDestroy();
 	Position m_Pos;
+	int m_eulerAnglesY = 0;
 	CoTask<int> m_coWalk;
 	CoTask<int> m_coAttack;
 	//std::function<void()> m_cancelAttack;
@@ -32,3 +33,16 @@ private:
 	Space *m_space;
 	
 };
+//x,y就是坐标系中的坐标，如（4，4）答案就是45°
+inline float CalculateAngle(float x, float y)
+{
+	auto angleRad = std::atan2(x, y); // 计算弧度
+	double angleDeg = angleRad * 180.0f / 3.14159265f; // 将弧度转换为度
+	return angleDeg; // 返回角度
+}
+
+inline float CalculateAngle(Position from, Position to)
+{
+	return CalculateAngle(to.x - from.x, to.z - from.z);
+}
+

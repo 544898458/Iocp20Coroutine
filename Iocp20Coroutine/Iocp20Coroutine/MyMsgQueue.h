@@ -53,13 +53,15 @@ struct MsgLoginRet
 
 struct MsgNotifyPos
 {
-	MsgNotifyPos(Entity* p, float argX, float argZ, int argHp) :entityId((uint64_t)p), x(argX), z(argZ),hp(argHp) {}
+	MsgNotifyPos(Entity* p, float argX, float argZ, int argEulerAnglesY, int argHp) :
+		entityId((uint64_t)p), x(argX), z(argZ), eulerAnglesY(argEulerAnglesY),hp(argHp) {}
 	MsgId msgId = NotifyPos;
 	uint64_t entityId;
 	float x;
 	float z;
+	int eulerAnglesY;
 	int hp;
-	MSGPACK_DEFINE(msgId, entityId, x, z, hp);
+	MSGPACK_DEFINE(msgId, entityId, x, z, eulerAnglesY, hp);
 };
 struct MsgChangeSkeleAnim
 {

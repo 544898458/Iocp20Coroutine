@@ -27,7 +27,7 @@ namespace AiCo
 			}
 			//x -= 0.1f;
 
-			pEntity->m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(pEntity, x, z, pEntity->m_hp));
+			pEntity->m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(pEntity, x, z, pEntity->m_eulerAnglesY, pEntity->m_hp));
 		}
 	}
 
@@ -65,13 +65,13 @@ namespace AiCo
 		co_return 0;//协程正常退出
 	}
 
-	CoTask<int>WalkToPos(Entity* pEntity, float& x, float& z, const float targetX, const float targetZ, MyServer *pServer, std::function<void()>& funCancel)
+	CoTask<int>WalkToPos(Entity* pThis, float& x, float& z, const float targetX, const float targetZ, MyServer *pServer, std::function<void()>& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		const auto localTargetX = targetX;
 		const auto localTargetZ = targetZ;
 		auto pLocalServer = pServer;
-		pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "run"));
+		pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pThis, "run"));
 
 		while (true)
 		{
@@ -84,17 +84,26 @@ namespace AiCo
 			const auto step = 0.5f;
 			if (std::abs(localTargetX - x) < step && std::abs(localTargetZ - z) < step) {
 				LOG(INFO) << "已走到" << localTargetX << "," << localTargetZ << "附近，协程正常退出";
-				pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));
+				pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pThis, "idle"));
 				co_return 0;
 			}
+			const auto oldPos = pThis->m_Pos;
+			if (std::abs(localTargetX - x) >= step)
+			{
+				x += localTargetX < x ? -step : step;
+			}
 
-			x += localTargetX < x ? -step : step;
-			z += localTargetZ < z ? -step : step;
+			if (std::abs(localTargetZ - z) >= step)
+			{
+				z += localTargetZ < z ? -step : step;
+			}
 
-			pLocalServer->m_Sessions.Broadcast(MsgNotifyPos(pEntity, x, z, pEntity->m_hp));
+			pThis->m_eulerAnglesY = CalculateAngle(oldPos, pThis->m_Pos);
+			pLocalServer->m_Sessions.Broadcast(MsgNotifyPos(pThis, x, z, pThis->m_eulerAnglesY, pThis->m_hp));
 		}
 		LOG(INFO) << "走向目标协程结束:" << targetX << "," << targetX;
 	}
+
 	CoTask<int> WalkToTarget(Entity* pThis, Entity* pEntity, MyServer* pServer, std::function<void()>& funCancel)
 	{
 		KeepCancel kc(funCancel);
@@ -117,10 +126,13 @@ namespace AiCo
 			}
 
 			const auto step = 0.5f;
+			const auto oldPos = pThis->m_Pos;
 			pThis->m_Pos.x += pEntity->m_Pos.x < pThis->m_Pos.x ? -step : step;
 			pThis->m_Pos.z += pEntity->m_Pos.z< pThis->m_Pos.z ? -step : step;
 
-			pLocalServer->m_Sessions.Broadcast(MsgNotifyPos(pThis, pThis->m_Pos.x, pThis->m_Pos.z, pEntity->m_hp));
+			pThis->m_eulerAnglesY = CalculateAngle(oldPos, pThis->m_Pos);
+
+			pLocalServer->m_Sessions.Broadcast(MsgNotifyPos(pThis, pThis->m_Pos.x, pThis->m_Pos.z, pThis->m_eulerAnglesY, pEntity->m_hp));
 		}
 		LOG(INFO) << "走向目标协程结束:" << pThis->m_Pos.x << "," << pThis->m_Pos.z;
 	}
