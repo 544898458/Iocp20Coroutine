@@ -65,11 +65,12 @@ struct MsgNotifyPos
 };
 struct MsgChangeSkeleAnim
 {
-	MsgChangeSkeleAnim(Entity* p, std::string name) :entityId((uint64_t)p), clipName(name) {}
+	MsgChangeSkeleAnim(Entity* p, std::string name, bool loop=true) :entityId((uint64_t)p), loop(loop), clipName(name) {}
 	MsgId msgId = ChangeSkeleAnim;
 	uint64_t entityId;
+	bool loop;
 	std::string clipName;
-	MSGPACK_DEFINE(msgId, entityId, clipName);
+	MSGPACK_DEFINE(msgId, entityId, loop, clipName);
 };
 
 class MySession;

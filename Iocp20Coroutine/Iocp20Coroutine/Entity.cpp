@@ -24,6 +24,10 @@ void Entity::Init(float x, Space& space, std::function< CoTask<int>(Entity*, flo
 
 void Entity::WalkToPos(const float targetX, const float targetZ, MyServer* pServer)
 {
+	if (IsDead())
+	{
+		return;
+	}
 	//m_coStop = true;
 
 	TryCancel();
@@ -41,6 +45,20 @@ bool Entity::DistanceLessEqual(Entity* pEntity, float fDistance)
 	const float fExponent = 2.0f;
 	return std::pow(this->m_Pos.x - pEntity->m_Pos.x, fExponent) + std::pow(this->m_Pos.z - pEntity->m_Pos.z, fExponent) <= std::pow(fDistance, fExponent);
 }
+
+void Entity::Hurt(int hp)
+{
+	CHECK_GE(hp, 0);
+	if (IsDead())
+		return;
+
+	this->m_hp -= hp;
+	if (IsDead())
+	{
+		this->m_pSession->m_pServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(this, "died", false));//播放死亡动作
+	}
+}
+
 //主线程单线程执行
 void Entity::Update()
 {
@@ -51,6 +69,11 @@ void Entity::Update()
 	if (!m_coWalk.Finished())
 	{
 		return;//表示不允许打断
+	}
+
+	if (IsDead())
+	{
+		return;
 	}
 
 	for (const auto pEntity : m_space->setEntity)

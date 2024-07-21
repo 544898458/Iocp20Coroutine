@@ -15,7 +15,8 @@ public:
 	void WalkToPos(const float targetX, const float targetZ, MyServer* pServer);
 	void Update();
 	void TryCancel();
-	void Hurt(int) {}
+	void Hurt(int);
+	bool IsDead()const { return m_hp <= 0; }
 	bool DistanceLessEqual(Entity* pEntity, float fDistance);
 	void OnDestroy();
 	Position m_Pos;

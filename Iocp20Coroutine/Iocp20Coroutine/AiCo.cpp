@@ -36,28 +36,52 @@ namespace AiCo
 	{
 		using namespace std;
 		KeepCancel kc(cancel);
+		
+		if (pEntity->IsDead())
+			co_return 0;//自己死亡
 
 		pEntity->m_pSession->m_pServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "attack"));//播放攻击动作
 
 		if (co_await CoTimer::Wait(3000ms, cancel))//等3秒	前摇
 			co_return 0;//协程取消
 
+		if (pEntity->IsDead())
+			co_return 0;//自己死亡
+
+		if(pDefencer->IsDead())
+			co_return 0;//目标死亡
+
 		pDefencer->Hurt(1);//第一次让对方伤1点生命
 
 		if (co_await CoTimer::Wait(500ms, cancel))//等0.5秒
 			co_return 0;//协程取消
+
+		if (pEntity->IsDead())
+			co_return 0;//自己死亡
+
+		if (pDefencer->IsDead())
+			co_return 0;//目标死亡
 
 		pDefencer->Hurt(3);//第二次让对方伤3点生命
 
 		if (co_await CoTimer::Wait(500ms, cancel))//等0.5秒
 			co_return 0;//协程取消
 
+		if (pEntity->IsDead())
+			co_return 0;//自己死亡
+
+		if (pDefencer->IsDead())
+			co_return 0;//目标死亡
+
 		pDefencer->Hurt(10);//第三次让对方伤10点生命
 
 		if (co_await CoTimer::Wait(3000ms, cancel))//等3秒	后摇
 			co_return 0;//协程取消
 
-		pEntity->m_pSession->m_pServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));//播放休闲待机动作
+		if (!pEntity->IsDead())
+		{
+			pEntity->m_pSession->m_pServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));//播放休闲待机动作
+		}
 
 		if (co_await CoTimer::Wait(5000ms, cancel))//等5秒	公共冷却
 			co_return 0;//协程取消
