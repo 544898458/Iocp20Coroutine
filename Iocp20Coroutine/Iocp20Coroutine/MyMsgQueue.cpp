@@ -53,7 +53,15 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 	{
 		MsgSay msg;
 		msg.content = StrConv::GbkToUtf8("ÇëÊäÈëÃû×Ö");
-		auto gbk = StrConv::Utf8ToGbk(msg.content);
+		//auto gbk = StrConv::Utf8ToGbk(msg.content);
+		refThis.m_pSession->Send(msg);
+		return;
+	}
+	if (!refThis.m_pSession->m_entity.m_nickName.empty())
+	{
+		MsgSay msg;
+		msg.content = StrConv::GbkToUtf8("²»ÄÜÖØ¸´µÇÂ¼");
+		//auto gbk = StrConv::Utf8ToGbk(msg.content);
 		refThis.m_pSession->Send(msg);
 		return;
 	}
