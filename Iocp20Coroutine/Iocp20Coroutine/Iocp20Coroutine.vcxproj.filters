@@ -108,6 +108,12 @@
     <ClCompile Include="AiCo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerSystem.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerComponent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -120,9 +126,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MyServer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Entity.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\Iocp20Coroutine.h">
@@ -213,6 +216,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="AiCo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerSystem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerComponent.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

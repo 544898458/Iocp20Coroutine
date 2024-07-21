@@ -3,6 +3,7 @@
 #include "../CoRoutine/CoTimer.h"
 #include "MySession.h"
 #include "MyServer.h"
+#include "PlayerSystem.h"
 
 namespace AiCo
 {
@@ -26,8 +27,8 @@ namespace AiCo
 				co_return 0;
 			}
 			//x -= 0.1f;
-
-			pEntity->m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(pEntity, x, z, pEntity->m_eulerAnglesY, pEntity->m_hp));
+			if(pEntity->m_spPlayer)
+				pEntity->m_spPlayer->m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(pEntity, x, z, pEntity->m_eulerAnglesY, pEntity->m_hp));
 		}
 	}
 
@@ -43,7 +44,7 @@ namespace AiCo
 		if (pDefencer->IsDead())
 			co_return 0;//目标死亡
 
-		pThis->m_pSession->m_pServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pThis, "attack"));//播放攻击动作
+		pThis->Broadcast(MsgChangeSkeleAnim(pThis, "attack"));//播放攻击动作
 
 		if (co_await CoTimer::Wait(3000ms, cancel))//等3秒	前摇
 			co_return 0;//协程取消
@@ -83,11 +84,8 @@ namespace AiCo
 
 		if (!pThis->IsDead())
 		{
-			pThis->m_pSession->m_pServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pThis, "idle"));//播放休闲待机动作
+			pThis->Broadcast(MsgChangeSkeleAnim(pThis, "idle"));//播放休闲待机动作
 		}
-
-		if (co_await CoTimer::Wait(5000ms, cancel))//等5秒	公共冷却
-			co_return 0;//协程取消
 
 		co_return 0;//协程正常退出
 	}
@@ -98,7 +96,7 @@ namespace AiCo
 		const auto localTargetX = targetX;
 		const auto localTargetZ = targetZ;
 		auto pLocalServer = pServer;
-		pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pThis, "run"));
+		pThis->Broadcast(MsgChangeSkeleAnim(pThis, "run"));
 
 		while (true)
 		{

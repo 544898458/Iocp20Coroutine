@@ -2,7 +2,7 @@
 #include "../CoRoutine/CoTask.h"
 #include <functional>
 #include "MyMsgQueue.h"
-
+#include "PlayerComponent.h"
 class Space;
 class MySession;
 class MyServer;
@@ -19,6 +19,8 @@ public:
 	bool IsDead()const { return m_hp <= 0; }
 	bool DistanceLessEqual(Entity* pEntity, float fDistance);
 	void OnDestroy();
+	template<class T>
+	void Broadcast(const T& msg);
 	Position m_Pos;
 	int m_eulerAnglesY = 0;
 	CoTask<int> m_coWalk;
@@ -29,7 +31,7 @@ public:
 	int m_hp = 20;
 	const float m_fAttackDistance = 5.0f;
 	std::string m_nickName;
-	MySession* m_pSession = nullptr;
+	std::shared_ptr<PlayerComponent> m_spPlayer;
 private:
 	Space *m_space;
 	

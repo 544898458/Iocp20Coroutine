@@ -24,17 +24,17 @@ void MyMsgQueue::Process()
 	{
 	case MsgId::Invalid_0://没有消息可处理
 		return;
-	case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, OnRecv);break;
-	case MsgId::Move:this->m_MsgQueue.OnRecv(this->m_queueMove, *this, OnRecv);break;
+	case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, OnRecv); break;
+	case MsgId::Move:this->m_MsgQueue.OnRecv(this->m_queueMove, *this, OnRecv); break;
 	case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, OnRecv); break;
 	default:
-		LOG(ERROR) << "msgId:" <<  msgId;
+		LOG(ERROR) << "msgId:" << msgId;
 		assert(false);
 		break;
 	}
 }
 
-void MyMsgQueue::Push(const MsgLogin& msg){	m_MsgQueue.Push(msg, m_queueLogin);}
+void MyMsgQueue::Push(const MsgLogin& msg) { m_MsgQueue.Push(msg, m_queueLogin); }
 void MyMsgQueue::Push(const MsgMove& msg) { m_MsgQueue.Push(msg, m_queueMove); }
 void MyMsgQueue::Push(const MsgSay& msg) { m_MsgQueue.Push(msg, m_queueSay); }
 
@@ -65,16 +65,28 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 		refThis.m_pSession->Send(msg);
 		return;
 	}
+	for (const auto pENtity : refThis.m_pSession->m_pServer->m_space.setEntity)
+	{
+		if (pENtity == &refThis.m_pSession->m_entity)
+			continue;
+
+		if (pENtity->m_nickName == utf8Name)
+		{
+			LOG(WARNING) << "重复登录" << utf8Name;
+			//主动断线还没做
+			return;
+		}
+	}
 
 	MsgLoginRet ret;
 	ret.nickName = StrConv::GbkToUtf8(utf8Name.c_str());// strBroadcast.c_str());
 	ret.entityId = (uint64_t)&refThis.m_pSession->m_entity;
 	refThis.m_pSession->m_entity.m_nickName = utf8Name;
-	refThis.m_pSession->m_pServer->m_Sessions.Broadcast(ret);
+	refThis.m_pSession->m_entity.Broadcast(ret);
 
 	for (const auto pENtity : refThis.m_pSession->m_pServer->m_space.setEntity)
 	{
-		if (pENtity == & refThis.m_pSession->m_entity)
+		if (pENtity == &refThis.m_pSession->m_entity)
 			continue;
 
 		ret.nickName = StrConv::GbkToUtf8(refThis.m_pSession->m_entity.m_nickName.c_str());

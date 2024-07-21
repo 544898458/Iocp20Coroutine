@@ -12,9 +12,10 @@
 #include <glog/logging.h>
 #include "WorldClient.h"
 #include "../IocpNetwork/MsgPack.h"
+#include "AiCo.h"
+
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")
-
 
 #pragma comment(lib, "glog.lib")
 
@@ -103,9 +104,10 @@ int main(void)
 	//Iocp::ThreadPool::Add(g_worldSvr.GetIocp());
 
 
-	
-	//m_space.mapEntity[0] = new Entity(-5,m_space, Patrol);
-	//m_space.mapEntity[1] = new Entity(5, m_space, TraceEnemy);
+	Entity entityMonster;
+	entityMonster.Init(-5, accept.m_Server.m_space, AiCo::Idle, nullptr);
+	accept.m_Server.m_space.setEntity.insert(&entityMonster);
+
 	//主逻辑工作线程
 	while (g_running)
 	{

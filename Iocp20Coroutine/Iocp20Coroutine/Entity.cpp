@@ -13,7 +13,11 @@ Entity::Entity() :Id((uint64_t)this)
 }
 void Entity::Init(float x, Space& space, std::function< CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun, MySession* pSession)
 {
-	m_pSession = pSession;
+	if (nullptr != pSession)
+	{
+		m_spPlayer = std::make_shared<PlayerComponent>();
+		m_spPlayer->m_pSession = pSession;
+	}
 	m_space = &space;
 
 	this->m_Pos.x = x;
@@ -54,10 +58,10 @@ void Entity::Hurt(int hp)
 
 	this->m_hp -= hp;
 
-	this->m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(this, this->m_Pos.x, this->m_Pos.z, this->m_eulerAnglesY, this->m_hp));
+	this->Broadcast(MsgNotifyPos(this, this->m_Pos.x, this->m_Pos.z, this->m_eulerAnglesY, this->m_hp));
 	if (IsDead())
 	{
-		this->m_pSession->m_pServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(this, "died", false));//播放死亡动作
+		this->Broadcast(MsgChangeSkeleAnim(this, "died", false));//播放死亡动作
 	}
 }
 
@@ -102,7 +106,7 @@ void Entity::Update()
 			assert(m_coWalk.Finished());//20240205
 			assert(m_coAttack.Finished());//20240205
 			/*m_coStop = false;*/
-			m_coWalk = AiCo::WalkToTarget(this, pEntity, this->m_pSession->m_pServer, m_cancel);
+			m_coWalk = AiCo::WalkToTarget(this, pEntity, this->m_space->m_pServer, m_cancel);
 			m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 		}
 	}
@@ -134,3 +138,11 @@ void Entity::OnDestroy()
 	LOG(INFO) << "调用Entity::OnDestroy";
 	TryCancel();
 }
+
+template<class T>
+void Entity::Broadcast(const T& msg)
+{
+	m_space->m_pServer->m_Sessions.Broadcast(msg);
+}
+
+template void Entity::Broadcast(const MsgLoginRet& msg);

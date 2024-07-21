@@ -10,7 +10,7 @@ class MyServer
 public:
 	MyServer(const MyServer&) = delete;
 	MyServer(MyServer&&) = delete;
-	MyServer() {}
+	MyServer():m_space(this) {}
 	using Session = Iocp::SessionSocketCompeletionKey<WebSocketSession< MySession> >;
 	void OnAdd(Session&);
 	void OnDel();
