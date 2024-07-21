@@ -53,6 +53,8 @@ void Entity::Hurt(int hp)
 		return;
 
 	this->m_hp -= hp;
+
+	this->m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(this, this->m_Pos.x, this->m_Pos.z, this->m_eulerAnglesY, this->m_hp));
 	if (IsDead())
 	{
 		this->m_pSession->m_pServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(this, "died", false));//播放死亡动作
@@ -79,6 +81,9 @@ void Entity::Update()
 	for (const auto pEntity : m_space->setEntity)
 	{
 		if (pEntity == this)//查找敌人，所有其他人都是敌人
+			continue;
+
+		if(pEntity->IsDead())
 			continue;
 
 		if (DistanceLessEqual(pEntity, this->m_fAttackDistance))
