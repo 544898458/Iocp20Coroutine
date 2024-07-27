@@ -5,12 +5,12 @@
 
 namespace StrConv
 {
-	std::string GbkToUtf8(const char* src_str)
+	std::string GbkToUtf8(const std::string& src_str)
 	{
-		const auto needWideCount = MultiByteToWideChar(CP_ACP, 0, src_str, -1, NULL, 0);//如果成功，则返回写入 到 lpWideCharStr 指示的缓冲区的字符数。 如果函数成功且 cchWideChar 为 0，则返回值是 lpWideCharStr 指示的缓冲区所需的大小（以字符为单位）。
+		const auto needWideCount = MultiByteToWideChar(CP_ACP, 0, src_str.c_str(), -1, NULL, 0);//如果成功，则返回写入 到 lpWideCharStr 指示的缓冲区的字符数。 如果函数成功且 cchWideChar 为 0，则返回值是 lpWideCharStr 指示的缓冲区所需的大小（以字符为单位）。
 		std::wstring wStr;
 		wStr.resize(needWideCount);
-		const auto writtenWideCount = MultiByteToWideChar(CP_ACP, 0, src_str, -1, (LPWSTR)wStr.c_str(), needWideCount);
+		const auto writtenWideCount = MultiByteToWideChar(CP_ACP, 0, src_str.c_str(), -1, (LPWSTR)wStr.c_str(), needWideCount);
 		assert(writtenWideCount == needWideCount);
 
 		const auto needCharCount = WideCharToMultiByte(CP_UTF8, 0, (LPWSTR)wStr.c_str(), -1, NULL, 0, NULL, NULL);

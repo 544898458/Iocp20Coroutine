@@ -78,19 +78,17 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 		}
 	}
 
-	MsgLoginRet ret;
-	ret.nickName = StrConv::GbkToUtf8(utf8Name.c_str());// strBroadcast.c_str());
-	ret.entityId = (uint64_t)&refThis.m_pSession->m_entity;
-	refThis.m_pSession->m_entity.m_nickName = utf8Name;
-	refThis.m_pSession->m_entity.Broadcast(ret);
-
-	for (const auto pENtity : refThis.m_pSession->m_pServer->m_space.setEntity)
 	{
-		if (pENtity == &refThis.m_pSession->m_entity)
+		MsgLoginRet ret((uint64_t)&refThis.m_pSession->m_entity, StrConv::GbkToUtf8(utf8Name), refThis.m_pSession->m_entity.m_strPrefabName);
+		refThis.m_pSession->m_entity.Broadcast(ret);
+	}
+
+	for (const auto pEntity : refThis.m_pSession->m_pServer->m_space.setEntity)
+	{
+		if (pEntity == &refThis.m_pSession->m_entity)
 			continue;
 
-		ret.nickName = StrConv::GbkToUtf8(refThis.m_pSession->m_entity.m_nickName.c_str());
-		ret.entityId = (uint64_t)pENtity;
+		MsgLoginRet ret((uint64_t)pEntity, StrConv::GbkToUtf8(pEntity->m_nickName), pEntity->m_strPrefabName);
 		refThis.m_pSession->Send(ret);
 	}
 }

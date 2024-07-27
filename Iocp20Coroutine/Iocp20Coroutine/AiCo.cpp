@@ -4,6 +4,7 @@
 #include "MySession.h"
 #include "MyServer.h"
 #include "PlayerSystem.h"
+#include "PlayerComponent.h"
 
 namespace AiCo
 {

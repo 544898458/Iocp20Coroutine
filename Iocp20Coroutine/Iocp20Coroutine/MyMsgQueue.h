@@ -45,16 +45,19 @@ struct MsgSay
 };
 struct MsgLoginRet
 {
+	MsgLoginRet(uint64_t entityId, std::string nickName, std::string prefabName) 
+		:entityId(entityId), nickName(nickName), prefabName(prefabName){}
 	MsgId id = LoginRet;
 	uint64_t entityId;
 	std::string nickName;
-	MSGPACK_DEFINE(id, entityId, nickName);
+	std::string prefabName;
+	MSGPACK_DEFINE(id, entityId, nickName, prefabName);
 };
 
 struct MsgNotifyPos
 {
-	MsgNotifyPos(Entity* p, float argX, float argZ, int argEulerAnglesY, int argHp) :
-		entityId((uint64_t)p), x(argX), z(argZ), eulerAnglesY(argEulerAnglesY),hp(argHp) {}
+	MsgNotifyPos(Entity* p, float x, float z, int eulerAnglesY, int hp) :
+		entityId((uint64_t)p), x(x), z(z), eulerAnglesY(eulerAnglesY),hp(hp) {}
 	MsgId msgId = NotifyPos;
 	uint64_t entityId;
 	float x;

@@ -5,19 +5,18 @@
 #include "MyServer.h"
 #include "AiCo.h"
 #include <cmath>
+#include "PlayerComponent.h"
 
 using namespace std;
 Entity::Entity() :Id((uint64_t)this)
 {
 
 }
-void Entity::Init(float x, Space& space, std::function< CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun, MySession* pSession)
+
+void Entity::Init(float x, Space& space, std::function< CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun, const std::string &strPrefabName)
 {
-	if (nullptr != pSession)
-	{
-		m_spPlayer = std::make_shared<PlayerComponent>();
-		m_spPlayer->m_pSession = pSession;
-	}
+	m_strPrefabName = strPrefabName;
+
 	m_space = &space;
 
 	this->m_Pos.x = x;
@@ -137,6 +136,16 @@ void Entity::OnDestroy()
 {
 	LOG(INFO) << "µ÷ÓÃEntity::OnDestroy";
 	TryCancel();
+}
+
+void Entity::AddComponent(MySession* pSession)
+{
+	CHECK_NOTNULL(pSession);
+	if (nullptr == pSession)
+		return;
+	
+	m_spPlayer = std::make_shared<PlayerComponent>();
+	m_spPlayer->m_pSession = pSession;
 }
 
 template<class T>

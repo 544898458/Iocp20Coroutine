@@ -105,7 +105,8 @@ int main(void)
 
 
 	Entity entityMonster;
-	entityMonster.Init(-5, accept.m_Server.m_space, AiCo::Idle, nullptr);
+	entityMonster.Init(-5, accept.m_Server.m_space, AiCo::Idle, "altman-red");
+	entityMonster.m_nickName = "怪";
 	accept.m_Server.m_space.setEntity.insert(&entityMonster);
 
 	//主逻辑工作线程
