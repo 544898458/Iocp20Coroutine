@@ -39,6 +39,8 @@ struct MsgMove
 
 struct MsgSay
 {
+	MsgSay(const std::string &strContent):content(strContent){}
+	MsgSay() {}
 	MsgId id = MsgId::Say;
 	std::string content;
 	MSGPACK_DEFINE(id, content);

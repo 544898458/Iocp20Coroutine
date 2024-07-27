@@ -106,6 +106,8 @@ int main(void)
 
 	Entity entityMonster;
 	entityMonster.Init(-5, accept.m_Server.m_space, "altman-red");
+	entityMonster.m_f警戒距离 = 20;
+	entityMonster.m_f移动速度 = 0.1f;
 	entityMonster.m_nickName = "怪";
 	accept.m_Server.m_space.setEntity.insert(&entityMonster);
 

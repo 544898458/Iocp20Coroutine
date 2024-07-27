@@ -30,7 +30,9 @@ public:
 	std::function<void()> m_cancel;
 	const uint64_t Id;
 	int m_hp = 20;
-	const float m_fAttackDistance = 5.0f;
+	float m_f警戒距离 = 30;
+	float m_f移动速度 = 0.5f;//每帧多少米
+	const float m_f攻击距离 = 5.0f;
 	std::string m_nickName;
 	std::string m_strPrefabName;
 

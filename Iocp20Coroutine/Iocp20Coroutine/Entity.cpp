@@ -7,6 +7,7 @@
 #include <cmath>
 #include "PlayerComponent.h"
 #include "AiCo.h"
+#include "../IocpNetwork/StrConv.h"
 
 using namespace std;
 Entity::Entity() :Id((uint64_t)this)
@@ -30,6 +31,9 @@ void Entity::WalkToPos(const float targetX, const float targetZ, MyServer* pServ
 {
 	if (IsDead())
 	{
+		if (m_spPlayer)
+			m_spPlayer->m_pSession->Send(MsgSay(StrConv::GbkToUtf8("自己阵亡,不能走")));
+
 		return;
 	}
 	//m_coStop = true;
@@ -90,7 +94,7 @@ void Entity::Update()
 		if(pEntity->IsDead())
 			continue;
 
-		if (DistanceLessEqual(pEntity, this->m_fAttackDistance))
+		if (DistanceLessEqual(pEntity, this->m_f攻击距离))
 		{
 			TryCancel();
 			
@@ -98,7 +102,7 @@ void Entity::Update()
 			m_coAttack.Run();
 			return;
 		}
-		else
+		else if(DistanceLessEqual(pEntity, this->m_f警戒距离))
 		{
 			TryCancel();
 

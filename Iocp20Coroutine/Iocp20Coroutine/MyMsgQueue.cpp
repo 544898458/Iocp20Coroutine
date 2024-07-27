@@ -52,18 +52,12 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 	//const auto strBroadcast = "[" + utf8Name + "]进来了";
 	if (msg.name.empty())
 	{
-		MsgSay msg;
-		msg.content = StrConv::GbkToUtf8("请输入名字");
-		//auto gbk = StrConv::Utf8ToGbk(msg.content);
-		refThis.m_pSession->Send(msg);
+		refThis.m_pSession->Send(MsgSay(StrConv::GbkToUtf8("请输入名字")));
 		return;
 	}
 	if (!refThis.m_pSession->m_entity.m_nickName.empty())
 	{
-		MsgSay msg;
-		msg.content = StrConv::GbkToUtf8("不能重复登录");
-		//auto gbk = StrConv::Utf8ToGbk(msg.content);
-		refThis.m_pSession->Send(msg);
+		refThis.m_pSession->Send(MsgSay(StrConv::GbkToUtf8("不能重复登录")));
 		return;
 	}
 	for (const auto pENtity : refThis.m_pSession->m_pServer->m_space.setEntity)
