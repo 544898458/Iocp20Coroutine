@@ -56,8 +56,7 @@ struct MsgLoginRet
 
 struct MsgNotifyPos
 {
-	MsgNotifyPos(Entity* p, float x, float z, int eulerAnglesY, int hp) :
-		entityId((uint64_t)p), x(x), z(z), eulerAnglesY(eulerAnglesY),hp(hp) {}
+	MsgNotifyPos(Entity* p);
 	MsgId msgId = NotifyPos;
 	uint64_t entityId;
 	float x;

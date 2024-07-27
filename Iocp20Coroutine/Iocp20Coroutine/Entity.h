@@ -11,7 +11,7 @@ class Entity
 {
 public:
 	Entity();
-	void Init(float x, Space& m_space, std::function< CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun, const std::string& strPrefabName);
+	void Init(float x, Space& m_space, const std::string& strPrefabName);
 	void WalkToPos(const float targetX, const float targetZ, MyServer* pServer);
 	void Update();
 	void TryCancel();
@@ -24,6 +24,7 @@ public:
 	Position m_Pos;
 	int m_eulerAnglesY = 0;
 	CoTask<int> m_coWalk;
+	CoTask<int> m_coIdle;
 	CoTask<int> m_coAttack;
 	//std::function<void()> m_cancelAttack;
 	std::function<void()> m_cancel;

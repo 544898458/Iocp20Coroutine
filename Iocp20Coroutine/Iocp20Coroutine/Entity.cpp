@@ -6,6 +6,7 @@
 #include "AiCo.h"
 #include <cmath>
 #include "PlayerComponent.h"
+#include "AiCo.h"
 
 using namespace std;
 Entity::Entity() :Id((uint64_t)this)
@@ -13,15 +14,15 @@ Entity::Entity() :Id((uint64_t)this)
 
 }
 
-void Entity::Init(float x, Space& space, std::function< CoTask<int>(Entity*, float&, float&, std::function<void()>&)> fun, const std::string &strPrefabName)
+void Entity::Init(float x, Space& space, const std::string &strPrefabName)
 {
 	m_strPrefabName = strPrefabName;
 
 	m_space = &space;
 
 	this->m_Pos.x = x;
-	m_coWalk = fun(this, this->m_Pos.x, this->m_Pos.z, m_cancel);
-	m_coWalk.Run();
+	m_coIdle = AiCo::Idle(this, this->m_Pos.x, this->m_Pos.z, m_cancel);
+	m_coIdle.Run();
 
 }
 
@@ -57,7 +58,7 @@ void Entity::Hurt(int hp)
 
 	this->m_hp -= hp;
 
-	this->Broadcast(MsgNotifyPos(this, this->m_Pos.x, this->m_Pos.z, this->m_eulerAnglesY, this->m_hp));
+	this->Broadcast(MsgNotifyPos(this));
 	if (IsDead())
 	{
 		this->Broadcast(MsgChangeSkeleAnim(this, "died", false));//播放死亡动作
@@ -121,7 +122,7 @@ void Entity::TryCancel()
 	else
 	{
 		LOG(WARNING) << "m_cancel是空的";
-		if (!m_coWalk.Finished() || !m_coAttack.Finished())
+		if (!m_coWalk.Finished() || !m_coAttack.Finished() || !m_coIdle.Finished() )
 		{
 			LOG(ERROR) << "协程没结束，却提前清空了m_cancel";
 		}

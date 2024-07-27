@@ -8,6 +8,7 @@
 #include "../IocpNetwork/MsgQueueTemplate.h"
 #include "../IocpNetwork/StrConv.h"
 #include "AiCo.h"
+#include "Entity.h"
 
 void MyMsgQueue::Process()
 {
@@ -80,7 +81,7 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 
 	{
 		MsgLoginRet ret((uint64_t)&refThis.m_pSession->m_entity, StrConv::GbkToUtf8(utf8Name), refThis.m_pSession->m_entity.m_strPrefabName);
-		refThis.m_pSession->m_entity.Broadcast(ret);
+		refThis.m_pSession->m_entity.Broadcast(ret);//自己广播给别人
 	}
 
 	for (const auto pEntity : refThis.m_pSession->m_pServer->m_space.setEntity)
@@ -88,8 +89,8 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 		if (pEntity == &refThis.m_pSession->m_entity)
 			continue;
 
-		MsgLoginRet ret((uint64_t)pEntity, StrConv::GbkToUtf8(pEntity->m_nickName), pEntity->m_strPrefabName);
-		refThis.m_pSession->Send(ret);
+		refThis.m_pSession->Send(MsgLoginRet((uint64_t)pEntity, StrConv::GbkToUtf8(pEntity->m_nickName), pEntity->m_strPrefabName));//别人发给自己
+		refThis.m_pSession->m_entity.Broadcast(MsgNotifyPos(&refThis.m_pSession->m_entity));//别人发给自己
 	}
 }
 
@@ -109,3 +110,6 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgSay& msg)
 	void SendToWorldSvr(const MsgSay & msg);
 	SendToWorldSvr(msg);
 }
+
+MsgNotifyPos::MsgNotifyPos(Entity* p) :	entityId((uint64_t)p), x(p->m_Pos.x), z(p->m_Pos.z), eulerAnglesY(p->m_eulerAnglesY), hp(p->m_hp)
+{}

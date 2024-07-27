@@ -29,7 +29,7 @@ namespace AiCo
 			}
 			//x -= 0.1f;
 			if(pEntity->m_spPlayer)
-				pEntity->m_spPlayer->m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(pEntity, x, z, pEntity->m_eulerAnglesY, pEntity->m_hp));
+				pEntity->m_spPlayer->m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(pEntity));
 		}
 	}
 
@@ -106,6 +106,11 @@ namespace AiCo
 				LOG(INFO) << "走向" << localTargetX << "," << localTargetZ << "的协程取消了";
 				co_return 0;
 			}
+			if (pThis->IsDead())
+			{
+				LOG(INFO) << "自己阵亡，走向" << localTargetX << "," << localTargetZ << "的协程取消了";
+				co_return 0;
+			}
 
 			const auto step = 0.5f;
 			if (std::abs(localTargetX - x) < step && std::abs(localTargetZ - z) < step) {
@@ -125,7 +130,7 @@ namespace AiCo
 			}
 
 			pThis->m_eulerAnglesY = CalculateAngle(oldPos, pThis->m_Pos);
-			pLocalServer->m_Sessions.Broadcast(MsgNotifyPos(pThis, x, z, pThis->m_eulerAnglesY, pThis->m_hp));
+			pLocalServer->m_Sessions.Broadcast(MsgNotifyPos(pThis));
 		}
 		LOG(INFO) << "走向目标协程结束:" << targetX << "," << targetX;
 	}
@@ -158,7 +163,7 @@ namespace AiCo
 
 			pThis->m_eulerAnglesY = CalculateAngle(oldPos, pThis->m_Pos);
 
-			pLocalServer->m_Sessions.Broadcast(MsgNotifyPos(pThis, pThis->m_Pos.x, pThis->m_Pos.z, pThis->m_eulerAnglesY, pEntity->m_hp));
+			pLocalServer->m_Sessions.Broadcast(MsgNotifyPos(pThis));
 		}
 		LOG(INFO) << "走向目标协程结束:" << pThis->m_Pos.x << "," << pThis->m_Pos.z;
 	}

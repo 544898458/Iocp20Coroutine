@@ -94,7 +94,7 @@ void MySession::OnInit(WebSocketSession<MySession>& refWsSession, MyServer& serv
 			m_pServer = &server;
 			m_pWsSession = &refWsSession;
 
-			m_entity.Init(5, m_pServer->m_space, AiCo::Idle, "altman-blue");
+			m_entity.Init(5, m_pServer->m_space, "altman-blue");
 			m_entity.AddComponent(this);
 			m_pServer->m_space.setEntity.insert(&m_entity);			
 		});
