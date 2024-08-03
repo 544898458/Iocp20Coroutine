@@ -16,13 +16,13 @@ Entity::Entity() :Id((uint64_t)this)
 
 }
 
-void Entity::Init(float x, Space& space, const std::string &strPrefabName)
+void Entity::Init(const Position& pos, Space& space, const std::string &strPrefabName)
 {
 	m_strPrefabName = strPrefabName;
 
 	m_space = &space;
 
-	this->m_Pos.x = x;
+	this->m_Pos = pos;
 	m_coIdle = AiCo::Idle(shared_from_this(), this->m_Pos.x, this->m_Pos.z, m_cancel);
 	m_coIdle.Run();
 
@@ -95,6 +95,9 @@ void Entity::Update()
 		if(spEntity->IsDead())
 			continue;
 
+		if (!spEntity->IsEnemy(*this))
+			continue;
+
 		if (DistanceLessEqual(*spEntity, this->m_f攻击距离))
 		{
 			TryCancel();
@@ -115,6 +118,18 @@ void Entity::Update()
 			m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 		}
 	}
+}
+
+bool Entity::IsEnemy(const Entity& refEntity)
+{
+	if (!m_spPlayer && !refEntity.m_spPlayer)
+		return false;//都是怪
+
+	if (!m_spPlayer || !refEntity.m_spPlayer)
+		return true;//有一个是怪
+
+	//都是玩家单位
+	return m_spPlayer->m_pSession != refEntity.m_spPlayer->m_pSession;
 }
 
 void Entity::TryCancel()

@@ -62,6 +62,11 @@ void MySession::PushMsg(const msgpack::object& obj)
 	const auto msg = obj.as<T>();
 	this->m_pWsSession->m_pSession->Session.m_Session.m_msgQueue.Push(msg);
 }
+/// <summary>
+/// 网络线程，多线程
+/// </summary>
+/// <param name="buf"></param>
+/// <param name="len"></param>
 void MySession::OnRecvWsPack(const void* buf, const int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
@@ -72,32 +77,18 @@ void MySession::OnRecvWsPack(const void* buf, const int len)
 	auto pSessionSocketCompeletionKey = this->m_pWsSession->m_pSession;
 	switch (msgId)
 	{
-	case MsgId::Login:
-	{
-		PushMsg<MsgLogin>(obj);
-	}
-	break;
-	case MsgId::Move://
-	{
-		PushMsg<MsgMove>(obj);
-	}
-	break;
-	case MsgId::Say:
-	{
-		PushMsg<MsgSay>(obj);
-	}
-	break;
-	case MsgId::SelectRoles:
-	{
-		PushMsg<MsgSelectRoles>(obj);
-	}
-	break;
+	case MsgId::Login:PushMsg<MsgLogin>(obj);break;
+	case MsgId::Move:PushMsg<MsgMove>(obj);break;
+	case MsgId::Say:PushMsg<MsgSay>(obj);break;
+	case MsgId::SelectRoles:PushMsg<MsgSelectRoles>(obj);break;
+	case MsgId::AddRole:PushMsg<MsgAddRole>(obj); break;
 	default:
 		LOG(ERROR) << "没处理msgId:" << msgId;
 		assert(false);
 		break;
 	}
 }
+
 void MySession::OnInit(WebSocketSession<MySession>& refWsSession, MyServer& server)
 {
 	server.m_Sessions.AddSession(refWsSession.m_pSession, [this, &refWsSession, &server]()
@@ -127,6 +118,6 @@ template void MySession::Send(const MsgLoginRet&);
 template void MySession::Send(const MsgNotifyPos&);
 template void MySession::Send(const MsgChangeSkeleAnim&);
 template void MySession::Send(const MsgSay&);
-
+//template void MySession::Send(const MsgAddRole);
 
 

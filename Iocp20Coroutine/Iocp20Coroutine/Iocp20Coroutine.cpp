@@ -106,7 +106,7 @@ int main(void)
 
 
 	SpEntity spEntityMonster = std::make_shared<Entity>();
-	spEntityMonster->Init(-5, accept.m_Server.m_space, "altman-red");
+	spEntityMonster->Init({ -30.0 }, accept.m_Server.m_space, "altman-red");
 	spEntityMonster->m_f警戒距离 = 20;
 	spEntityMonster->m_f移动速度 = 0.1f;
 	accept.m_Server.m_space.setEntity.insert(spEntityMonster);

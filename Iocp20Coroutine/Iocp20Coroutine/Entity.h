@@ -7,12 +7,12 @@ class Space;
 class MySession;
 class MyServer;
 class PlayerComponent;
-class Entity :protected std::enable_shared_from_this<Entity>
+class Entity :public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
 public:
 	Entity();
 	Entity(const Entity&) = delete;
-	void Init(float x, Space& m_space, const std::string& strPrefabName);
+	void Init(const Position& pos, Space& m_space, const std::string& strPrefabName);
 	void WalkToPos(const Position& posTarget, MyServer* pServer);
 	void Update();
 	void TryCancel();
@@ -21,8 +21,8 @@ public:
 	bool DistanceLessEqual(const Entity& refEntity, float fDistance);
 	void OnDestroy();
 	const std::string& NickName();
-	template<class T>
-	void Broadcast(const T& msg);
+	template<class T> void Broadcast(const T& msg);
+	bool IsEnemy(const Entity& refEntity);
 	Position m_Pos;
 	int m_eulerAnglesY = 0;
 	CoTask<int> m_coWalk;

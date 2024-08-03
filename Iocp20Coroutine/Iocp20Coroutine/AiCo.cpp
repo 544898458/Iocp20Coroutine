@@ -13,8 +13,6 @@ namespace AiCo
 	CoTask<int> Idle(SpEntity spEntity, float& x, float& z, std::function<void()>& funCancel)
 	{
 		KeepCancel kc(funCancel);
-		bool stop = false;
-		funCancel = [&stop]() {stop = true; };
 		while (true)
 		{
 			if (co_await CoTimer::WaitNextUpdate(funCancel))
@@ -22,15 +20,6 @@ namespace AiCo
 				LOG(INFO) << "调用者手动取消了协程Idle";
 				co_return 0;
 			}
-			if (stop)
-			{
-
-				LOG(INFO) << "Idle协程正常退出";
-				co_return 0;
-			}
-			//x -= 0.1f;
-			if (spEntity->m_spPlayer)
-				spEntity->m_spPlayer->m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(*spEntity));
 		}
 	}
 

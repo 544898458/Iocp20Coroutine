@@ -35,21 +35,27 @@ template<> std::deque<MsgLogin>& MyMsgQueue::GetQueue() { return m_queueLogin; }
 template<> std::deque<MsgMove>& MyMsgQueue::GetQueue() { return m_queueMove; }
 template<> std::deque<MsgSay>& MyMsgQueue::GetQueue() { return m_queueSay; }
 template<> std::deque<MsgSelectRoles>& MyMsgQueue::GetQueue() { return m_queueSelectRoles; }
+template<> std::deque<MsgAddRole>& MyMsgQueue::GetQueue() { return m_queueAddRole; }
 template<class T> void MyMsgQueue::Push(const T& msg) { m_MsgQueue.Push(msg, GetQueue<T>()); }
+template void MyMsgQueue::Push(const MsgLogin& msg);
+template void MyMsgQueue::Push(const MsgMove& msg);
+template void MyMsgQueue::Push(const MsgSay& msg);
+template void MyMsgQueue::Push(const MsgSelectRoles& msg);
+template void MyMsgQueue::Push(const MsgLogin& msg);
+template void MyMsgQueue::Push(const MsgAddRole& msg);
 
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgAddRole& msg)
 {
 	auto spNewEntity = std::make_shared<Entity>();
 	refThis.m_pSession->m_vecSpEntity.push_back(spNewEntity);
-	spNewEntity->Init(5, refThis.m_pSession->m_pServer->m_space, "altman-blue");
+	spNewEntity->Init({ 30,30 }, refThis.m_pSession->m_pServer->m_space, "altman-blue");
 	spNewEntity->AddComponent(refThis.m_pSession);
 	refThis.m_pSession->m_pServer->m_space.setEntity.insert(spNewEntity);
 
-	{
-		MsgLoginRet ret((uint64_t)spNewEntity.get(), StrConv::GbkToUtf8(refThis.m_pSession->m_nickName), spNewEntity->m_strPrefabName);
-		spNewEntity->Broadcast(ret);//自己广播给别人
-	}
+	spNewEntity->Broadcast(MsgLoginRet((uint64_t)spNewEntity.get(), StrConv::GbkToUtf8(refThis.m_pSession->m_nickName), spNewEntity->m_strPrefabName));//自己广播给别人
+	spNewEntity->Broadcast(MsgNotifyPos(*spNewEntity));
 }
+
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 {
 	auto utf8Name = msg.name;
@@ -74,7 +80,7 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 	}
 
 	refThis.m_pSession->m_nickName = gbkName;
-	
+
 	//for (const auto pENtity : refThis.m_pSession->m_pServer->m_space.setEntity)
 	//{
 	//	if (pENtity == &refThis.m_pSession->m_entity)
@@ -89,19 +95,10 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 	//}
 
 
-	for (const auto &spEntity : refThis.m_pSession->m_pServer->m_space.setEntity)
+	for (const auto& spEntity : refThis.m_pSession->m_pServer->m_space.setEntity)//别人发给自己
 	{
-		if (!spEntity->m_spPlayer)
-			continue;
-
-		if (refThis.m_pSession == spEntity->m_spPlayer->m_pSession)
-			continue;
-
-		refThis.m_pSession->Send(MsgLoginRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->NickName()), spEntity->m_strPrefabName));//别人发给自己
-		for (auto spEntity : spEntity->m_spPlayer->m_pSession->m_vecSpEntity)
-		{
-			refThis.m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(*spEntity));//别人发给自己
-		}
+		refThis.m_pSession->Send(MsgLoginRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->NickName()), spEntity->m_strPrefabName));
+		refThis.m_pSession->Send(MsgNotifyPos(*spEntity));
 	}
 }
 
@@ -115,7 +112,7 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgMove& msg)
 	for (const auto id : refThis.m_pSession->m_vecSelectedEntity)
 	{
 		Entity* pEntity = (Entity*)id;
-		const auto &refVecSpEntity = refThis.m_pSession->m_vecSpEntity;
+		const auto& refVecSpEntity = refThis.m_pSession->m_vecSpEntity;
 		if (refVecSpEntity.end() == std::find_if(refVecSpEntity.begin(), refVecSpEntity.end(), [pEntity](const auto& sp) {return sp.get() == pEntity; }))
 		{
 			LOG(ERROR) << id << "不是自己的单位，不能移动";
@@ -144,9 +141,3 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgSelectRoles& msg)
 
 MsgNotifyPos::MsgNotifyPos(Entity& ref) : entityId((uint64_t)&ref), x(ref.m_Pos.x), z(ref.m_Pos.z), eulerAnglesY(ref.m_eulerAnglesY), hp(ref.m_hp)
 {}
-
-template void MyMsgQueue::Push(const MsgLogin& msg);
-template void MyMsgQueue::Push(const MsgMove& msg);
-template void MyMsgQueue::Push(const MsgSay& msg);
-template void MyMsgQueue::Push(const MsgSelectRoles& msg);
-template void MyMsgQueue::Push(const MsgLogin& msg);
