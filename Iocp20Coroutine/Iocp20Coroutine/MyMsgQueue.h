@@ -23,6 +23,7 @@ enum MsgId
 	ChangeSkeleAnim,
 	Say,
 	SelectRoles,
+	AddRole,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -32,6 +33,12 @@ struct MsgLogin
 	std::string name;
 	std::string pwd;
 	MSGPACK_DEFINE(id, name, pwd);
+};
+
+struct MsgAddRole
+{
+	MsgId id;
+	MSGPACK_DEFINE(id);
 };
 
 struct MsgMove
@@ -118,6 +125,7 @@ public:
 	static void OnRecv(MyMsgQueue& refThis, const MsgMove& msg);
 	static void OnRecv(MyMsgQueue& refThis, const MsgSay& msg);
 	static void OnRecv(MyMsgQueue& refThis, const MsgSelectRoles& msg);
+	static void OnRecv(MyMsgQueue& refThis, const MsgAddRole& msg);
 	/// <summary>
 	/// 工作线程中（单线程）调用
 	/// </summary>
@@ -132,6 +140,7 @@ private:
 	std::deque<MsgMove> m_queueMove;
 	std::deque<MsgSay> m_queueSay;
 	std::deque<MsgSelectRoles> m_queueSelectRoles;
+	std::deque<MsgAddRole> m_queueAddRole;
 	/// <summary>
 	/// 弱引用，不要销毁
 	/// </summary>

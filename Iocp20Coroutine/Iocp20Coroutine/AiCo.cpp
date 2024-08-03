@@ -154,17 +154,17 @@ namespace AiCo
 		{
 			if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
 			{
-				LOG(INFO) << "走向" << spTarget->m_nickName << "的协程取消了";
+				LOG(INFO) << "走向" << spTarget << "的协程取消了";
 				co_return 0;
 			}
 			if (!spThis->DistanceLessEqual(*spTarget, spThis->m_f警戒距离))
 			{
-				LOG(INFO) << "离开自己的警戒距离" << spTarget->m_nickName << "的协程取消了";
+				LOG(INFO) << "离开自己的警戒距离" << spTarget << "的协程取消了";
 				co_return 0;
 			}
 			if (spThis->DistanceLessEqual(*spTarget, spThis->m_f攻击距离))
 			{
-				LOG(INFO) << "已走到" << spTarget->m_nickName << "附近，协程正常退出";
+				LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
 				pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(*spTarget, "idle"));
 				co_return 0;
 			}

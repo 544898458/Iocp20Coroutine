@@ -144,6 +144,14 @@ void Entity::OnDestroy()
 	TryCancel();
 }
 
+const std::string& Entity::NickName()
+{
+	if (m_spPlayer)
+		return m_spPlayer->m_pSession->m_nickName;
+
+	return "นึ";
+}
+
 void Entity::AddComponent(MySession* pSession)
 {
 	CHECK_NOTNULL(pSession);

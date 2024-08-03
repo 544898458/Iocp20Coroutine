@@ -2,6 +2,12 @@
 
 #include "MsgQueue.h"
 
+/// <summary>
+/// 网络线程，多线程
+/// </summary>
+/// <typeparam name="T_Msg"></typeparam>
+/// <param name="msg"></param>
+/// <param name="queue"></param>
 template<class T_Msg>
 void MsgQueue::Push(const T_Msg& msg, std::deque<T_Msg>& queue)
 {
@@ -10,6 +16,14 @@ void MsgQueue::Push(const T_Msg& msg, std::deque<T_Msg>& queue)
 	this->m_queueMsgId.push_back(msg.id);
 }
 
+/// <summary>
+/// 主线程，单线程
+/// </summary>
+/// <typeparam name="T_Sub"></typeparam>
+/// <typeparam name="T_Msg"></typeparam>
+/// <param name="queue"></param>
+/// <param name="refSub"></param>
+/// <param name="funOnRecv"></param>
 template<class T_Sub, class T_Msg>
 void MsgQueue::OnRecv(std::deque<T_Msg>& queue, T_Sub& refSub, void (*funOnRecv)(T_Sub& refSub, const T_Msg&))
 {

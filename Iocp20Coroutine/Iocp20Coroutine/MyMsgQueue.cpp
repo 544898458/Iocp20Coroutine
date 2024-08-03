@@ -12,17 +12,10 @@
 #include "Entity.h"
 #include "PlayerComponent.h"
 
+//主线程，单线程
 void MyMsgQueue::Process()
 {
-	MsgId msgId = this->m_MsgQueue.PopMsg();
-	//{
-	//	std::lock_guard lock(this->m_MsgQueue.m_mutex);
-	//	if (this->m_MsgQueue.m_queueMsgId.empty())
-	//		return;
-
-	//	msgId = this->m_MsgQueue.m_queueMsgId.front();
-	//	this->m_MsgQueue.m_queueMsgId.pop_front();
-	//}
+	const MsgId msgId = this->m_MsgQueue.PopMsg();
 	switch (msgId)
 	{
 	case MsgId::Invalid_0://没有消息可处理
@@ -31,6 +24,7 @@ void MyMsgQueue::Process()
 	case MsgId::Move:this->m_MsgQueue.OnRecv(this->m_queueMove, *this, OnRecv); break;
 	case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, OnRecv); break;
 	case MsgId::SelectRoles:this->m_MsgQueue.OnRecv(this->m_queueSelectRoles, *this, OnRecv); break;
+	case MsgId::AddRole:this->m_MsgQueue.OnRecv(this->m_queueAddRole, *this, OnRecv); break;
 	default:
 		LOG(ERROR) << "msgId:" << msgId;
 		assert(false);
@@ -41,11 +35,21 @@ template<> std::deque<MsgLogin>& MyMsgQueue::GetQueue() { return m_queueLogin; }
 template<> std::deque<MsgMove>& MyMsgQueue::GetQueue() { return m_queueMove; }
 template<> std::deque<MsgSay>& MyMsgQueue::GetQueue() { return m_queueSay; }
 template<> std::deque<MsgSelectRoles>& MyMsgQueue::GetQueue() { return m_queueSelectRoles; }
-template<class T>
-void MyMsgQueue::Push(const T& msg) { m_MsgQueue.Push(msg, GetQueue<T>()); }
-//void MyMsgQueue::Push(const MsgMove& msg) { m_MsgQueue.Push(msg, m_queueMove); }
-//void MyMsgQueue::Push(const MsgSay& msg) { m_MsgQueue.Push(msg, m_queueSay); }
+template<class T> void MyMsgQueue::Push(const T& msg) { m_MsgQueue.Push(msg, GetQueue<T>()); }
 
+void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgAddRole& msg)
+{
+	auto spNewEntity = std::make_shared<Entity>();
+	refThis.m_pSession->m_vecSpEntity.push_back(spNewEntity);
+	spNewEntity->Init(5, refThis.m_pSession->m_pServer->m_space, "altman-blue");
+	spNewEntity->AddComponent(refThis.m_pSession);
+	refThis.m_pSession->m_pServer->m_space.setEntity.insert(spNewEntity);
+
+	{
+		MsgLoginRet ret((uint64_t)spNewEntity.get(), StrConv::GbkToUtf8(refThis.m_pSession->m_nickName), spNewEntity->m_strPrefabName);
+		spNewEntity->Broadcast(ret);//自己广播给别人
+	}
+}
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 {
 	auto utf8Name = msg.name;
@@ -69,12 +73,8 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 		return;
 	}
 
-	auto spNewEntity = std::make_shared<Entity>();
-	refThis.m_pSession->m_vecSpEntity.push_back(spNewEntity);
-	spNewEntity->Init(5, refThis.m_pSession->m_pServer->m_space, "altman-blue");
-	spNewEntity->AddComponent(refThis.m_pSession);
-	spNewEntity->m_nickName = gbkName;
-	refThis.m_pSession->m_pServer->m_space.setEntity.insert(spNewEntity);
+	refThis.m_pSession->m_nickName = gbkName;
+	
 	//for (const auto pENtity : refThis.m_pSession->m_pServer->m_space.setEntity)
 	//{
 	//	if (pENtity == &refThis.m_pSession->m_entity)
@@ -88,10 +88,6 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 	//	}
 	//}
 
-	{
-		MsgLoginRet ret((uint64_t)spNewEntity.get(), utf8Name, spNewEntity->m_strPrefabName);
-		spNewEntity->Broadcast(ret);//自己广播给别人
-	}
 
 	for (const auto &spEntity : refThis.m_pSession->m_pServer->m_space.setEntity)
 	{
@@ -101,10 +97,10 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 		if (refThis.m_pSession == spEntity->m_spPlayer->m_pSession)
 			continue;
 
-		refThis.m_pSession->Send(MsgLoginRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->m_nickName), spEntity->m_strPrefabName));//别人发给自己
+		refThis.m_pSession->Send(MsgLoginRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->NickName()), spEntity->m_strPrefabName));//别人发给自己
 		for (auto spEntity : spEntity->m_spPlayer->m_pSession->m_vecSpEntity)
 		{
-			spNewEntity->Broadcast(MsgNotifyPos(*spEntity));//别人发给自己
+			refThis.m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(*spEntity));//别人发给自己
 		}
 	}
 }

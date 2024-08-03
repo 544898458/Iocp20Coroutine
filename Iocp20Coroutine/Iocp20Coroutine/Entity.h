@@ -20,6 +20,7 @@ public:
 	bool IsDead()const { return m_hp <= 0; }
 	bool DistanceLessEqual(const Entity& refEntity, float fDistance);
 	void OnDestroy();
+	const std::string& NickName();
 	template<class T>
 	void Broadcast(const T& msg);
 	Position m_Pos;
@@ -34,7 +35,7 @@ public:
 	float m_f警戒距离 = 30;
 	float m_f移动速度 = 0.5f;//每帧多少米
 	const float m_f攻击距离 = 5.0f;
-	std::string m_nickName;
+	
 	std::string m_strPrefabName;
 
 	//静态ECS，没有基类向子类转型

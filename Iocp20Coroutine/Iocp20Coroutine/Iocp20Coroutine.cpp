@@ -109,7 +109,6 @@ int main(void)
 	spEntityMonster->Init(-5, accept.m_Server.m_space, "altman-red");
 	spEntityMonster->m_f警戒距离 = 20;
 	spEntityMonster->m_f移动速度 = 0.1f;
-	spEntityMonster->m_nickName = "怪";
 	accept.m_Server.m_space.setEntity.insert(spEntityMonster);
 
 	//主逻辑工作线程

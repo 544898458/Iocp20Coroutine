@@ -23,6 +23,7 @@ public:
 	MyMsgQueue m_msgQueue;
 	MyServer* m_pServer = nullptr;
 	std::vector<uint64_t> m_vecSelectedEntity;
+	std::string m_nickName;
 private:
 	template<class T>
 	void PushMsg(const msgpack::object& obj);
