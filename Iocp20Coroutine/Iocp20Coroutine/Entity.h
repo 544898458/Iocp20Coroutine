@@ -39,7 +39,7 @@ public:
 	//静态ECS，没有基类向子类转型
 	void AddComponent(MySession* pSession);
 	std::shared_ptr<PlayerComponent> m_spPlayer;
-private:
+//private:
 	Space *m_space;
 	
 };

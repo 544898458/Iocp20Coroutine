@@ -99,7 +99,19 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgMove& msg)
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
 	auto pServer = refThis.m_pSession->m_pServer;
-	refThis.m_pSession->m_entity.WalkToPos(targetX, targetZ, pServer);
+	//refThis.m_pSession->m_entity.WalkToPos(targetX, targetZ, pServer);
+	for (const auto id : refThis.m_pSession->m_vecSelectedEntities) 
+	{
+		Entity* pEntity = (Entity*)id;
+		if (refThis.m_pSession->m_entity.m_space->setEntity.end() == refThis.m_pSession->m_entity.m_space->setEntity.find(pEntity))
+		{
+			LOG(ERROR) << id << "已离开，不能移动";
+			continue;
+		}
+
+		pEntity->WalkToPos(targetX, targetZ, pServer);
+
+	}
 }
 
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgSay& msg)
@@ -113,6 +125,8 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgSay& msg)
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgSelectRoles& msg)
 {
 	LOG(INFO) << "收到选择:" << msg.ids.size();
+	refThis.m_pSession->m_vecSelectedEntities.clear();
+	std::transform(msg.ids.begin(), msg.ids.end(), std::back_inserter(refThis.m_pSession->m_vecSelectedEntities), [](const double& id) {return uint64_t(id); });
 }
 
 MsgNotifyPos::MsgNotifyPos(Entity* p) :	entityId((uint64_t)p), x(p->m_Pos.x), z(p->m_Pos.z), eulerAnglesY(p->m_eulerAnglesY), hp(p->m_hp)
