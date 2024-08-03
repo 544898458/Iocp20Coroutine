@@ -28,16 +28,21 @@ void MyMsgQueue::Process()
 	case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, OnRecv); break;
 	case MsgId::Move:this->m_MsgQueue.OnRecv(this->m_queueMove, *this, OnRecv); break;
 	case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, OnRecv); break;
+	case MsgId::SelectRoles:this->m_MsgQueue.OnRecv(this->m_queueSelectRoles, *this, OnRecv); break;
 	default:
 		LOG(ERROR) << "msgId:" << msgId;
 		assert(false);
 		break;
 	}
 }
-
-void MyMsgQueue::Push(const MsgLogin& msg) { m_MsgQueue.Push(msg, m_queueLogin); }
-void MyMsgQueue::Push(const MsgMove& msg) { m_MsgQueue.Push(msg, m_queueMove); }
-void MyMsgQueue::Push(const MsgSay& msg) { m_MsgQueue.Push(msg, m_queueSay); }
+template<> std::deque<MsgLogin>& MyMsgQueue::GetQueue(){return m_queueLogin;}
+template<> std::deque<MsgMove>& MyMsgQueue::GetQueue() { return m_queueMove; }
+template<> std::deque<MsgSay>& MyMsgQueue::GetQueue() { return m_queueSay; }
+template<> std::deque<MsgSelectRoles>& MyMsgQueue::GetQueue() { return m_queueSelectRoles; }
+template<class T>
+void MyMsgQueue::Push(const T& msg) { m_MsgQueue.Push(msg, GetQueue<T>()); }
+//void MyMsgQueue::Push(const MsgMove& msg) { m_MsgQueue.Push(msg, m_queueMove); }
+//void MyMsgQueue::Push(const MsgSay& msg) { m_MsgQueue.Push(msg, m_queueSay); }
 
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 {
@@ -105,5 +110,16 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgSay& msg)
 	SendToWorldSvr(msg);
 }
 
+void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgSelectRoles& msg)
+{
+	LOG(INFO) << "ÊÕµ½Ñ¡Ôñ:" << msg.ids.size();
+}
+
 MsgNotifyPos::MsgNotifyPos(Entity* p) :	entityId((uint64_t)p), x(p->m_Pos.x), z(p->m_Pos.z), eulerAnglesY(p->m_eulerAnglesY), hp(p->m_hp)
 {}
+
+template void MyMsgQueue::Push(const MsgLogin& msg);
+template void MyMsgQueue::Push(const MsgMove& msg);
+template void MyMsgQueue::Push(const MsgSay& msg);
+template void MyMsgQueue::Push(const MsgSelectRoles& msg);
+template void MyMsgQueue::Push(const MsgLogin& msg);

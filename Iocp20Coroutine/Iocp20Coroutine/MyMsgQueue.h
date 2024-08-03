@@ -18,6 +18,7 @@ enum MsgId
 	NotifyPos,
 	ChangeSkeleAnim,
 	Say,
+	SelectRoles,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -45,6 +46,15 @@ struct MsgSay
 	std::string content;
 	MSGPACK_DEFINE(id, content);
 };
+
+struct MsgSelectRoles
+{
+	MsgSelectRoles() {}
+	MsgId id = MsgId::Say;
+	std::vector<double> ids;//TypeScript只有FLOAT64,没有POSITIVE_INTEGER和NEGATIVE_INTEGER
+	MSGPACK_DEFINE(id,ids);
+};
+
 struct MsgLoginRet
 {
 	MsgLoginRet(uint64_t entityId, std::string nickName, std::string prefabName) 
@@ -90,9 +100,11 @@ public:
 	/// 网络线程中（多线程）调用
 	/// </summary>
 	/// <param name="msg"></param>
-	void Push(const MsgLogin& msg);
-	void Push(const MsgMove& msg);
-	void Push(const MsgSay& msg);
+	template<class T>
+	void Push(const T& msg);
+	//void Push(const MsgLogin& msg);
+	//void Push(const MsgMove& msg);
+	//void Push(const MsgSay& msg);
 
 	/// <summary>
 	/// 主逻辑线程（控制台界面线程）调用
@@ -101,18 +113,21 @@ public:
 	static void OnRecv(MyMsgQueue &refThis, const MsgLogin& msg);
 	static void OnRecv(MyMsgQueue& refThis, const MsgMove& msg);
 	static void OnRecv(MyMsgQueue& refThis, const MsgSay& msg);
+	static void OnRecv(MyMsgQueue& refThis, const MsgSelectRoles& msg);
 	/// <summary>
 	/// 工作线程中（单线程）调用
 	/// </summary>
 	void Process();
 private:
+	template<class T>
+	std::deque<T> &GetQueue();
 	/// <summary>
 	/// 这里保存的都是解析后的消息明文
 	/// </summary>
 	std::deque<MsgLogin> m_queueLogin;
 	std::deque<MsgMove> m_queueMove;
 	std::deque<MsgSay> m_queueSay;
-
+	std::deque<MsgSelectRoles> m_queueSelectRoles;
 	/// <summary>
 	/// 弱引用，不要销毁
 	/// </summary>

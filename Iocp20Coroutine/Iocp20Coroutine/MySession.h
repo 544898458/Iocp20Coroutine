@@ -23,5 +23,7 @@ public:
 	MyMsgQueue m_msgQueue;
 	MyServer* m_pServer = nullptr;
 private:
+	template<class T>
+	void PushMsg(const msgpack::object& obj);
 	WebSocketSession<MySession>* m_pWsSession = nullptr;
 };

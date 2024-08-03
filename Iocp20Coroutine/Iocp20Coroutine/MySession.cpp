@@ -53,7 +53,14 @@ void MySession::Send(const T& ref)
 MySession::MySession() : m_msgQueue(this)
 {
 }
-void MySession::OnRecvWsPack(const void *buf, const int len)
+
+template<class T>
+void MySession::PushMsg(const msgpack::object& obj)
+{
+	const auto msg = obj.as<T>();
+	this->m_pWsSession->m_pSession->Session.m_Session.m_msgQueue.Push(msg);
+}
+void MySession::OnRecvWsPack(const void* buf, const int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
@@ -65,20 +72,22 @@ void MySession::OnRecvWsPack(const void *buf, const int len)
 	{
 	case MsgId::Login:
 	{
-		const auto msg = obj.as<MsgLogin>();
-		pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
+		PushMsg<MsgLogin>(obj);
 	}
 	break;
 	case MsgId::Move://
 	{
-		const auto msg = obj.as<MsgMove>();
-		pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
+		PushMsg<MsgMove>(obj);
 	}
 	break;
 	case MsgId::Say:
 	{
-		const auto msg = obj.as<MsgSay>();
-		pSessionSocketCompeletionKey->Session.m_Session.m_msgQueue.Push(msg);
+		PushMsg<MsgSay>(obj);
+	}
+	break;
+	case MsgId::SelectRoles:
+	{
+		PushMsg<MsgSelectRoles>(obj);
 	}
 	break;
 	default:
@@ -96,7 +105,7 @@ void MySession::OnInit(WebSocketSession<MySession>& refWsSession, MyServer& serv
 
 			m_entity.Init(5, m_pServer->m_space, "altman-blue");
 			m_entity.AddComponent(this);
-			m_pServer->m_space.setEntity.insert(&m_entity);			
+			m_pServer->m_space.setEntity.insert(&m_entity);
 		});
 }
 
