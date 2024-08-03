@@ -41,6 +41,6 @@ void MyServer::Update()
 }
 
 
-template void Sessions<MySession>::Broadcast<MsgLoginRet >(const MsgLoginRet&);
+template void Sessions<MySession>::Broadcast<MsgAddRoleRet >(const MsgAddRoleRet&);
 template void Sessions<MySession>::Broadcast<MsgNotifyPos>(const MsgNotifyPos&);
 template void Sessions<MySession>::Broadcast<MsgChangeSkeleAnim>(const MsgChangeSkeleAnim&);

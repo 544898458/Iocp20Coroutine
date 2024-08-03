@@ -18,6 +18,7 @@ public:
 	void TryCancel();
 	void Hurt(int);
 	bool IsDead()const { return m_hp <= 0; }
+	bool NeedDelete()const { return m_bNeedDelete; }
 	bool DistanceLessEqual(const Entity& refEntity, float fDistance);
 	void OnDestroy();
 	const std::string& NickName();
@@ -28,9 +29,11 @@ public:
 	CoTask<int> m_coWalk;
 	CoTask<int> m_coIdle;
 	CoTask<int> m_coAttack;
+	CoTask<int> m_coWaitDelete;
 	//std::function<void()> m_cancelAttack;
 	std::function<void()> m_cancel;
 	const uint64_t Id;
+	bool m_bNeedDelete = false;
 	int m_hp = 20;
 	float m_f警戒距离 = 30;
 	float m_f移动速度 = 0.5f;//每帧多少米

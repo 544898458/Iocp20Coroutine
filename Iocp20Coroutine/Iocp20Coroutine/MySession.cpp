@@ -114,10 +114,22 @@ void MySession::OnDestroy()
 
 	m_pServer = nullptr;//≤ª”√º”À¯
 }
-template void MySession::Send(const MsgLoginRet&);
+
+void MySession::Erase(SpEntity spEntity)
+{
+	if (!m_vecSpEntity.contains(spEntity))
+	{
+		LOG(WARNING) << "ERR";
+		return;
+	}
+	
+	m_vecSpEntity.erase(spEntity);
+}
+
+template void MySession::Send(const MsgAddRoleRet&);
 template void MySession::Send(const MsgNotifyPos&);
 template void MySession::Send(const MsgChangeSkeleAnim&);
 template void MySession::Send(const MsgSay&);
-//template void MySession::Send(const MsgAddRole);
+template void MySession::Send(const MsgDelRoleRet&);
 
 

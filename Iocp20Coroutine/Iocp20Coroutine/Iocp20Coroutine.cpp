@@ -105,11 +105,13 @@ int main(void)
 	//Iocp::ThreadPool::Add(g_worldSvr.GetIocp());
 
 
-	SpEntity spEntityMonster = std::make_shared<Entity>();
-	spEntityMonster->Init({ -30.0 }, accept.m_Server.m_space, "altman-red");
-	spEntityMonster->m_f警戒距离 = 20;
-	spEntityMonster->m_f移动速度 = 0.1f;
-	accept.m_Server.m_space.setEntity.insert(spEntityMonster);
+	{
+		SpEntity spEntityMonster = std::make_shared<Entity>();
+		spEntityMonster->Init({ -30.0 }, accept.m_Server.m_space, "altman-red");
+		spEntityMonster->m_f警戒距离 = 20;
+		spEntityMonster->m_f移动速度 = 0.1f;
+		accept.m_Server.m_space.setEntity.insert(spEntityMonster);
+	}
 
 	//主逻辑工作线程
 	while (g_running)

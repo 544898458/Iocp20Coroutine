@@ -18,12 +18,13 @@ enum MsgId
 	Invalid_0,
 	Login,
 	Move,
-	LoginRet,
+	AddRoleRet,
 	NotifyPos,
 	ChangeSkeleAnim,
 	Say,
 	SelectRoles,
 	AddRole,
+	DelRoleRet
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -66,15 +67,23 @@ struct MsgSelectRoles
 	MSGPACK_DEFINE(id,ids);
 };
 
-struct MsgLoginRet
+struct MsgAddRoleRet
 {
-	MsgLoginRet(uint64_t entityId, std::string nickName, std::string prefabName) 
+	MsgAddRoleRet(uint64_t entityId, std::string nickName, std::string prefabName) 
 		:entityId(entityId), nickName(nickName), prefabName(prefabName){}
-	MsgId id = LoginRet;
+	MsgId id = AddRoleRet;
 	uint64_t entityId;
 	std::string nickName;
 	std::string prefabName;
 	MSGPACK_DEFINE(id, entityId, nickName, prefabName);
+};
+
+struct MsgDelRoleRet
+{
+	MsgDelRoleRet(uint64_t entityId):entityId(entityId){}
+	MsgId id = DelRoleRet;
+	uint64_t entityId;
+	MSGPACK_DEFINE(id, entityId);
 };
 
 struct MsgNotifyPos

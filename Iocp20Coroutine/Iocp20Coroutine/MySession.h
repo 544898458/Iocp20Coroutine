@@ -11,12 +11,13 @@ public:
 	void OnRecvWsPack(const void* buf, const int len);
 	void OnInit(WebSocketSession<MySession>& refWsSession, MyServer& server);
 	void OnDestroy();
+	void Erase(SpEntity spEntity);
 	template<class T>
 	void Send(const T& ref);
 	/// <summary>
 	/// 加入Space空间的实体（玩家角色）
 	/// </summary>
-	std::vector<SpEntity> m_vecSpEntity;
+	std::set<SpEntity> m_vecSpEntity;
 	/// <summary>
 	/// 解析后的消息队列，解析消息在完成端口线程，处理消息在主线程（控制台界面线程）
 	/// </summary>

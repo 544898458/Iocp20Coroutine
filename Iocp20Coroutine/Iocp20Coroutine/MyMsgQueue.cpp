@@ -47,12 +47,12 @@ template void MyMsgQueue::Push(const MsgAddRole& msg);
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgAddRole& msg)
 {
 	auto spNewEntity = std::make_shared<Entity>();
-	refThis.m_pSession->m_vecSpEntity.push_back(spNewEntity);
+	refThis.m_pSession->m_vecSpEntity.insert(spNewEntity);
 	spNewEntity->Init({ 30,30 }, refThis.m_pSession->m_pServer->m_space, "altman-blue");
 	spNewEntity->AddComponent(refThis.m_pSession);
 	refThis.m_pSession->m_pServer->m_space.setEntity.insert(spNewEntity);
 
-	spNewEntity->Broadcast(MsgLoginRet((uint64_t)spNewEntity.get(), StrConv::GbkToUtf8(refThis.m_pSession->m_nickName), spNewEntity->m_strPrefabName));//自己广播给别人
+	spNewEntity->Broadcast(MsgAddRoleRet((uint64_t)spNewEntity.get(), StrConv::GbkToUtf8(refThis.m_pSession->m_nickName), spNewEntity->m_strPrefabName));//自己广播给别人
 	spNewEntity->Broadcast(MsgNotifyPos(*spNewEntity));
 }
 
@@ -97,7 +97,7 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 
 	for (const auto& spEntity : refThis.m_pSession->m_pServer->m_space.setEntity)//别人发给自己
 	{
-		refThis.m_pSession->Send(MsgLoginRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->NickName()), spEntity->m_strPrefabName));
+		refThis.m_pSession->Send(MsgAddRoleRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->NickName()), spEntity->m_strPrefabName));
 		refThis.m_pSession->Send(MsgNotifyPos(*spEntity));
 	}
 }

@@ -39,19 +39,22 @@ template<typename T_Function>
 void Sessions<T_Session>::Update(T_Function const& functionLockUpdate)
 {
 	std::lock_guard lock(m_setSessionMutex);
-	std::set<Session*> setDelete;
-	for (Session* p : m_setSession)
+	for (auto iter = m_setSession.begin(); iter != m_setSession.end(); )
 	{
+		Session* p = *iter;
 		p->Session.m_Session.m_msgQueue.Process();
-		if (p->Finished())
-			setDelete.insert(p);
-	}
-	for (auto p : setDelete)
-	{
+
+		if (!p->Finished())
+		{
+			++iter;
+			continue;
+		}
+
 		p->Session.OnDestroy();
 		delete p;
 		LOG(INFO) << "ÒÑÉ¾³ý¶ÔÏó,GetCurrentThreadId=" << GetCurrentThreadId();
-
+		iter = m_setSession.erase(iter);
 	}
+
 	functionLockUpdate();
 }

@@ -102,7 +102,7 @@ namespace AiCo
 
 		return true;
 	}
-	CoTask<int>WalkToPos(SpEntity spThis, float& x, float& z, const Position& posTarget, MyServer* pServer, std::function<void()>& funCancel)
+	CoTask<int>WalkToPos(SpEntity spThis, const Position& posTarget, MyServer* pServer, std::function<void()>& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		const auto localTarget = posTarget;
@@ -163,5 +163,16 @@ namespace AiCo
 			}
 		}
 		LOG(INFO) << "走向目标协程结束:" << spThis->m_Pos;
+	}
+	CoTask<int> WaitDelete(SpEntity spThis, std::function<void()>& funCancel)
+	{
+		KeepCancel kc(funCancel);
+		using namespace std;
+		if (co_await CoTimer::Wait(3s,funCancel))//服务器主工作线程大循环，每次循环触发一次
+		{
+			LOG(INFO) << "协程取消了";
+		}
+		spThis->m_bNeedDelete = true;
+		co_return 0;
 	}
 }

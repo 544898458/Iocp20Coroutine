@@ -45,7 +45,7 @@ void Entity::WalkToPos(const Position &posTarget, MyServer* pServer)
 	assert(m_coWalk.Finished());//20240205
 	assert(m_coAttack.Finished());//20240205
 	/*m_coStop = false;*/
-	m_coWalk = AiCo::WalkToPos(shared_from_this(), this->m_Pos.x, this->m_Pos.z, posTarget, pServer, m_cancel);
+	m_coWalk = AiCo::WalkToPos(shared_from_this(), posTarget, pServer, m_cancel);
 	m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 }
 
@@ -67,6 +67,8 @@ void Entity::Hurt(int hp)
 	if (IsDead())
 	{
 		this->Broadcast(MsgChangeSkeleAnim(*this, "died", false));//播放死亡动作
+		m_coWaitDelete = AiCo::WaitDelete(shared_from_this(), m_cancel);
+		m_coWaitDelete.Run();
 	}
 }
 
@@ -116,7 +118,22 @@ void Entity::Update()
 			/*m_coStop = false;*/
 			m_coWalk = AiCo::WalkToTarget(shared_from_this(), spEntity, this->m_space->m_pServer, m_cancel);
 			m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
+			return;
 		}
+	}
+
+	if (!m_spPlayer)//怪
+	{
+		TryCancel();
+		assert(m_coWalk.Finished());//20240205
+		assert(m_coAttack.Finished());//20240205
+
+		auto posTarget = m_Pos;
+		posTarget.x += std::rand() % 11 - 5;//随即走
+		posTarget.z += std::rand() % 11 - 5;
+		m_coWalk = AiCo::WalkToPos(shared_from_this(), posTarget, this->m_space->m_pServer, m_cancel);
+		m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
+
 	}
 }
 
@@ -183,4 +200,5 @@ void Entity::Broadcast(const T& msg)
 	m_space->m_pServer->m_Sessions.Broadcast(msg);
 }
 
-template void Entity::Broadcast(const MsgLoginRet& msg);
+template void Entity::Broadcast(const MsgAddRoleRet& msg);
+template void Entity::Broadcast(const MsgDelRoleRet& msg);

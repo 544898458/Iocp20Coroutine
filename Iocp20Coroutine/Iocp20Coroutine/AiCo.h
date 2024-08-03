@@ -9,7 +9,8 @@ namespace AiCo
 	//其它的同步函数都可以直接传 Entity&
 	CoTask<int> Attack(SpEntity spEntity, SpEntity spDefencer, std::function<void()>& cancel);
 	CoTask<int> Idle(SpEntity spEntity, float& x, float& z, std::function<void()>& funCancel);
-	CoTask<int> WalkToPos(SpEntity spThis, float& x, float& z, const Position &posTarget, MyServer *pServer, std::function<void()>& funCancel);
+	CoTask<int> WalkToPos(SpEntity spThis, const Position &posTarget, MyServer *pServer, std::function<void()>& funCancel);
 	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spEntity, MyServer* pServer, std::function<void()>& funCancel);
+	CoTask<int> WaitDelete(SpEntity spThis, std::function<void()>& funCancel);
 };
 
