@@ -111,6 +111,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,19 +135,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\CoRoutine\CoTask.cpp" />
-    <ClCompile Include="..\CoRoutine\CoTimer.cpp" />
-    <ClCompile Include="..\IocpNetwork\Client.cpp" />
-    <ClCompile Include="..\IocpNetwork\MsgQueue.cpp" />
+    <ClCompile Include="..\CoRoutine\CoTask.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\CoRoutine\CoTimer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\Client.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\MsgQueue.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\IocpNetwork\StrConv.cpp" />
-    <ClCompile Include="..\IocpNetwork\ThreadPool.cpp" />
+    <ClCompile Include="..\IocpNetwork\ThreadPool.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="AiCo.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Iocp20Coroutine.cpp" />
-    <ClCompile Include="..\IocpNetwork\ByteQueue.cpp" />
-    <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp" />
+    <ClCompile Include="..\IocpNetwork\ByteQueue.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PlayerSystem.cpp" />
+    <ClCompile Include="StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="WorldClient.cpp" />
     <ClInclude Include="..\CoRoutine\CoTimer.h" />
     <ClInclude Include="..\IocpNetwork\Client.h" />
@@ -157,15 +175,21 @@
     <ClInclude Include="..\IocpNetwork\SessionsTemplate.h" />
     <ClInclude Include="..\IocpNetwork\StrConv.h" />
     <ClInclude Include="..\IocpNetwork\ThreadPool.h" />
-    <ClCompile Include="..\IocpNetwork\Overlapped.cpp" />
-    <ClCompile Include="..\IocpNetwork\Server.cpp" />
+    <ClCompile Include="..\IocpNetwork\Overlapped.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\Server.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClInclude Include="..\IocpNetwork\ServerTemplate.h">
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKeyTemplate.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp" />
+    <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClInclude Include="..\IocpNetwork\WebSocketSessionTemplate.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -189,6 +213,8 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PlayerSystem.h" />
+    <ClInclude Include="SpEntity.h" />
+    <ClInclude Include="StdAfx.h" />
     <ClInclude Include="WorldClient.h" />
   </ItemGroup>
   <ItemGroup>

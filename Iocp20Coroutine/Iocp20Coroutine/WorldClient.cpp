@@ -1,3 +1,4 @@
+#include "StdAfx.h"
 #include "WorldClient.h"
 
 template Iocp::Server<WorldClient>;

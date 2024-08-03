@@ -1,3 +1,4 @@
+#include "StdAfx.h"
 #include "Entity.h"
 #include "MySession.h"
 #include "Space.h"
@@ -22,12 +23,12 @@ void Entity::Init(float x, Space& space, const std::string &strPrefabName)
 	m_space = &space;
 
 	this->m_Pos.x = x;
-	m_coIdle = AiCo::Idle(this, this->m_Pos.x, this->m_Pos.z, m_cancel);
+	m_coIdle = AiCo::Idle(shared_from_this(), this->m_Pos.x, this->m_Pos.z, m_cancel);
 	m_coIdle.Run();
 
 }
 
-void Entity::WalkToPos(const float targetX, const float targetZ, MyServer* pServer)
+void Entity::WalkToPos(const Position &posTarget, MyServer* pServer)
 {
 	if (IsDead())
 	{
@@ -44,14 +45,14 @@ void Entity::WalkToPos(const float targetX, const float targetZ, MyServer* pServ
 	assert(m_coWalk.Finished());//20240205
 	assert(m_coAttack.Finished());//20240205
 	/*m_coStop = false;*/
-	m_coWalk = AiCo::WalkToPos(this, this->m_Pos.x, this->m_Pos.z, targetX, targetZ, pServer, m_cancel);
+	m_coWalk = AiCo::WalkToPos(shared_from_this(), this->m_Pos.x, this->m_Pos.z, posTarget, pServer, m_cancel);
 	m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 }
 
-bool Entity::DistanceLessEqual(Entity* pEntity, float fDistance)
+bool Entity::DistanceLessEqual(const Entity& refEntity, float fDistance)
 {
 	const float fExponent = 2.0f;
-	return std::pow(this->m_Pos.x - pEntity->m_Pos.x, fExponent) + std::pow(this->m_Pos.z - pEntity->m_Pos.z, fExponent) <= std::pow(fDistance, fExponent);
+	return std::pow(this->m_Pos.x - refEntity.m_Pos.x, fExponent) + std::pow(this->m_Pos.z - refEntity.m_Pos.z, fExponent) <= std::pow(fDistance, fExponent);
 }
 
 void Entity::Hurt(int hp)
@@ -62,10 +63,10 @@ void Entity::Hurt(int hp)
 
 	this->m_hp -= hp;
 
-	this->Broadcast(MsgNotifyPos(this));
+	this->Broadcast(MsgNotifyPos(*this));
 	if (IsDead())
 	{
-		this->Broadcast(MsgChangeSkeleAnim(this, "died", false));//播放死亡动作
+		this->Broadcast(MsgChangeSkeleAnim(*this, "died", false));//播放死亡动作
 	}
 }
 
@@ -86,23 +87,23 @@ void Entity::Update()
 		return;
 	}
 
-	for (const auto pEntity : m_space->setEntity)
+	for (const auto &spEntity : m_space->setEntity)
 	{
-		if (pEntity == this)//查找敌人，所有其他人都是敌人
+		if (spEntity.get() == this)//查找敌人，所有其他人都是敌人
 			continue;
 
-		if(pEntity->IsDead())
+		if(spEntity->IsDead())
 			continue;
 
-		if (DistanceLessEqual(pEntity, this->m_f攻击距离))
+		if (DistanceLessEqual(*spEntity, this->m_f攻击距离))
 		{
 			TryCancel();
 			
-			m_coAttack = AiCo::Attack(this, pEntity, m_cancel);
+			m_coAttack = AiCo::Attack(this->shared_from_this(), spEntity, m_cancel);
 			m_coAttack.Run();
 			return;
 		}
-		else if(DistanceLessEqual(pEntity, this->m_f警戒距离))
+		else if(DistanceLessEqual(*spEntity, this->m_f警戒距离))
 		{
 			TryCancel();
 
@@ -110,7 +111,7 @@ void Entity::Update()
 			assert(m_coWalk.Finished());//20240205
 			assert(m_coAttack.Finished());//20240205
 			/*m_coStop = false;*/
-			m_coWalk = AiCo::WalkToTarget(this, pEntity, this->m_space->m_pServer, m_cancel);
+			m_coWalk = AiCo::WalkToTarget(shared_from_this(), spEntity, this->m_space->m_pServer, m_cancel);
 			m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 		}
 	}

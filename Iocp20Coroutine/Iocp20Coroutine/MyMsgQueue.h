@@ -8,7 +8,11 @@ struct Position
 	float x;
 	float z;
 };
-
+template <class _Traits>
+std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const Position& _ref)
+{
+	return _Ostr << "(" << _ref.x << "," << _ref.z << ")";
+}
 enum MsgId
 {
 	Invalid_0,
@@ -68,7 +72,7 @@ struct MsgLoginRet
 
 struct MsgNotifyPos
 {
-	MsgNotifyPos(Entity* p);
+	MsgNotifyPos(Entity &ref);
 	MsgId msgId = NotifyPos;
 	uint64_t entityId;
 	float x;
@@ -79,7 +83,7 @@ struct MsgNotifyPos
 };
 struct MsgChangeSkeleAnim
 {
-	MsgChangeSkeleAnim(Entity* p, std::string name, bool loop=true) :entityId((uint64_t)p), loop(loop), clipName(name) {}
+	MsgChangeSkeleAnim(Entity& ref, std::string name, bool loop=true) :entityId((uint64_t)&ref), loop(loop), clipName(name) {}
 	MsgId msgId = ChangeSkeleAnim;
 	uint64_t entityId;
 	bool loop;

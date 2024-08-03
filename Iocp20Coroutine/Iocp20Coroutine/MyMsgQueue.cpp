@@ -1,3 +1,4 @@
+#include "StdAfx.h"
 #include <glog/logging.h>
 #include <cstdlib>
 #include "MyMsgQueue.h"
@@ -9,6 +10,7 @@
 #include "../IocpNetwork/StrConv.h"
 #include "AiCo.h"
 #include "Entity.h"
+#include "PlayerComponent.h"
 
 void MyMsgQueue::Process()
 {
@@ -35,7 +37,7 @@ void MyMsgQueue::Process()
 		break;
 	}
 }
-template<> std::deque<MsgLogin>& MyMsgQueue::GetQueue(){return m_queueLogin;}
+template<> std::deque<MsgLogin>& MyMsgQueue::GetQueue() { return m_queueLogin; }
 template<> std::deque<MsgMove>& MyMsgQueue::GetQueue() { return m_queueMove; }
 template<> std::deque<MsgSay>& MyMsgQueue::GetQueue() { return m_queueSay; }
 template<> std::deque<MsgSelectRoles>& MyMsgQueue::GetQueue() { return m_queueSelectRoles; }
@@ -46,7 +48,8 @@ void MyMsgQueue::Push(const T& msg) { m_MsgQueue.Push(msg, GetQueue<T>()); }
 
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 {
-	auto utf8Name = StrConv::Utf8ToGbk(msg.name);
+	auto utf8Name = msg.name;
+	auto gbkName = StrConv::Utf8ToGbk(msg.name);
 	//printf("准备广播%s",utf8Name.c_str());
 	/*for (auto p : g_set)
 	{
@@ -60,36 +63,49 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
 		refThis.m_pSession->Send(MsgSay(StrConv::GbkToUtf8("请输入名字")));
 		return;
 	}
-	if (!refThis.m_pSession->m_entity.m_nickName.empty())
+	if (!refThis.m_pSession->m_vecSpEntity.empty())
 	{
 		refThis.m_pSession->Send(MsgSay(StrConv::GbkToUtf8("不能重复登录")));
 		return;
 	}
-	for (const auto pENtity : refThis.m_pSession->m_pServer->m_space.setEntity)
+
+	auto spNewEntity = std::make_shared<Entity>();
+	refThis.m_pSession->m_vecSpEntity.push_back(spNewEntity);
+	spNewEntity->Init(5, refThis.m_pSession->m_pServer->m_space, "altman-blue");
+	spNewEntity->AddComponent(refThis.m_pSession);
+	spNewEntity->m_nickName = gbkName;
+	refThis.m_pSession->m_pServer->m_space.setEntity.insert(spNewEntity);
+	//for (const auto pENtity : refThis.m_pSession->m_pServer->m_space.setEntity)
+	//{
+	//	if (pENtity == &refThis.m_pSession->m_entity)
+	//		continue;
+
+	//	if (pENtity->m_nickName == utf8Name)
+	//	{
+	//		LOG(WARNING) << "重复登录" << utf8Name;
+	//		//主动断线还没做
+	//		return;
+	//	}
+	//}
+
 	{
-		if (pENtity == &refThis.m_pSession->m_entity)
+		MsgLoginRet ret((uint64_t)spNewEntity.get(), utf8Name, spNewEntity->m_strPrefabName);
+		spNewEntity->Broadcast(ret);//自己广播给别人
+	}
+
+	for (const auto &spEntity : refThis.m_pSession->m_pServer->m_space.setEntity)
+	{
+		if (!spEntity->m_spPlayer)
 			continue;
 
-		if (pENtity->m_nickName == utf8Name)
+		if (refThis.m_pSession == spEntity->m_spPlayer->m_pSession)
+			continue;
+
+		refThis.m_pSession->Send(MsgLoginRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->m_nickName), spEntity->m_strPrefabName));//别人发给自己
+		for (auto spEntity : spEntity->m_spPlayer->m_pSession->m_vecSpEntity)
 		{
-			LOG(WARNING) << "重复登录" << utf8Name;
-			//主动断线还没做
-			return;
+			spNewEntity->Broadcast(MsgNotifyPos(*spEntity));//别人发给自己
 		}
-	}
-
-	{
-		MsgLoginRet ret((uint64_t)&refThis.m_pSession->m_entity, StrConv::GbkToUtf8(utf8Name), refThis.m_pSession->m_entity.m_strPrefabName);
-		refThis.m_pSession->m_entity.Broadcast(ret);//自己广播给别人
-	}
-
-	for (const auto pEntity : refThis.m_pSession->m_pServer->m_space.setEntity)
-	{
-		if (pEntity == &refThis.m_pSession->m_entity)
-			continue;
-
-		refThis.m_pSession->Send(MsgLoginRet((uint64_t)pEntity, StrConv::GbkToUtf8(pEntity->m_nickName), pEntity->m_strPrefabName));//别人发给自己
-		refThis.m_pSession->m_entity.Broadcast(MsgNotifyPos(&refThis.m_pSession->m_entity));//别人发给自己
 	}
 }
 
@@ -100,16 +116,17 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgMove& msg)
 	const auto targetZ = msg.z;
 	auto pServer = refThis.m_pSession->m_pServer;
 	//refThis.m_pSession->m_entity.WalkToPos(targetX, targetZ, pServer);
-	for (const auto id : refThis.m_pSession->m_vecSelectedEntities) 
+	for (const auto id : refThis.m_pSession->m_vecSelectedEntity)
 	{
 		Entity* pEntity = (Entity*)id;
-		if (refThis.m_pSession->m_entity.m_space->setEntity.end() == refThis.m_pSession->m_entity.m_space->setEntity.find(pEntity))
+		const auto &refVecSpEntity = refThis.m_pSession->m_vecSpEntity;
+		if (refVecSpEntity.end() == std::find_if(refVecSpEntity.begin(), refVecSpEntity.end(), [pEntity](const auto& sp) {return sp.get() == pEntity; }))
 		{
-			LOG(ERROR) << id << "已离开，不能移动";
+			LOG(ERROR) << id << "不是自己的单位，不能移动";
 			continue;
 		}
 
-		pEntity->WalkToPos(targetX, targetZ, pServer);
+		pEntity->WalkToPos(Position(targetX, targetZ), pServer);
 
 	}
 }
@@ -125,11 +142,11 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgSay& msg)
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgSelectRoles& msg)
 {
 	LOG(INFO) << "收到选择:" << msg.ids.size();
-	refThis.m_pSession->m_vecSelectedEntities.clear();
-	std::transform(msg.ids.begin(), msg.ids.end(), std::back_inserter(refThis.m_pSession->m_vecSelectedEntities), [](const double& id) {return uint64_t(id); });
+	refThis.m_pSession->m_vecSelectedEntity.clear();
+	std::transform(msg.ids.begin(), msg.ids.end(), std::back_inserter(refThis.m_pSession->m_vecSelectedEntity), [](const double& id) {return uint64_t(id); });
 }
 
-MsgNotifyPos::MsgNotifyPos(Entity* p) :	entityId((uint64_t)p), x(p->m_Pos.x), z(p->m_Pos.z), eulerAnglesY(p->m_eulerAnglesY), hp(p->m_hp)
+MsgNotifyPos::MsgNotifyPos(Entity& ref) : entityId((uint64_t)&ref), x(ref.m_Pos.x), z(ref.m_Pos.z), eulerAnglesY(ref.m_eulerAnglesY), hp(ref.m_hp)
 {}
 
 template void MyMsgQueue::Push(const MsgLogin& msg);

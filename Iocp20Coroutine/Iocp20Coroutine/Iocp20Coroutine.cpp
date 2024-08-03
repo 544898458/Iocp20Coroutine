@@ -1,4 +1,5 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+﻿#include "StdAfx.h"
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <vld.h>
 #include <string.h>
@@ -104,12 +105,12 @@ int main(void)
 	//Iocp::ThreadPool::Add(g_worldSvr.GetIocp());
 
 
-	Entity entityMonster;
-	entityMonster.Init(-5, accept.m_Server.m_space, "altman-red");
-	entityMonster.m_f警戒距离 = 20;
-	entityMonster.m_f移动速度 = 0.1f;
-	entityMonster.m_nickName = "怪";
-	accept.m_Server.m_space.setEntity.insert(&entityMonster);
+	SpEntity spEntityMonster = std::make_shared<Entity>();
+	spEntityMonster->Init(-5, accept.m_Server.m_space, "altman-red");
+	spEntityMonster->m_f警戒距离 = 20;
+	spEntityMonster->m_f移动速度 = 0.1f;
+	spEntityMonster->m_nickName = "怪";
+	accept.m_Server.m_space.setEntity.insert(spEntityMonster);
 
 	//主逻辑工作线程
 	while (g_running)

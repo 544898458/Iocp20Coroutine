@@ -1,3 +1,4 @@
+#include "StdAfx.h"
 #include "AiCo.h"
 #include "Entity.h"
 #include "../CoRoutine/CoTimer.h"
@@ -9,7 +10,7 @@
 namespace AiCo
 {
 
-	CoTask<int> Idle(Entity* pEntity, float& x, float& z, std::function<void()>& funCancel)
+	CoTask<int> Idle(SpEntity spEntity, float& x, float& z, std::function<void()>& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		bool stop = false;
@@ -28,23 +29,23 @@ namespace AiCo
 				co_return 0;
 			}
 			//x -= 0.1f;
-			if (pEntity->m_spPlayer)
-				pEntity->m_spPlayer->m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(pEntity));
+			if (spEntity->m_spPlayer)
+				spEntity->m_spPlayer->m_pSession->m_pServer->m_Sessions.Broadcast(MsgNotifyPos(*spEntity));
 		}
 	}
 
 
-	CoTask<int> Attack(Entity* pThis, Entity* pDefencer, std::function<void()>& cancel)
+	CoTask<int> Attack(SpEntity spThis, SpEntity spDefencer, std::function<void()>& cancel)
 	{
 		KeepCancel kc(cancel);
 
-		if (pThis->IsDead())
+		if (spThis->IsDead())
 			co_return 0;//自己死亡
 
-		if (pDefencer->IsDead())
+		if (spDefencer->IsDead())
 			co_return 0;//目标死亡
 
-		pThis->Broadcast(MsgChangeSkeleAnim(pThis, "attack"));//播放攻击动作
+		spThis->Broadcast(MsgChangeSkeleAnim(*spThis, "attack"));//播放攻击动作
 
 		using namespace std;
 
@@ -61,39 +62,39 @@ namespace AiCo
 			if (co_await CoTimer::Wait(std::get<0>(wait_hurt), cancel))//等x秒	前摇
 				co_return 0;//协程取消
 
-			if (pThis->IsDead())
+			if (spThis->IsDead())
 				co_return 0;//自己死亡，协程取消
 
-			if (!pThis->DistanceLessEqual(pDefencer, pThis->m_f攻击距离))
+			if (!spThis->DistanceLessEqual(*spDefencer, spThis->m_f攻击距离))
 				break;//要执行后摇
 
-			if (pDefencer->IsDead())
+			if (spDefencer->IsDead())
 				break;//要执行后摇
 
-			pDefencer->Hurt(std::get<1>(wait_hurt));//第n次让对方伤1
+			spDefencer->Hurt(std::get<1>(wait_hurt));//第n次让对方伤1
 		}
 
 		if (co_await CoTimer::Wait(3000ms, cancel))//等3秒	后摇
 			co_return 0;//协程取消
 
-		if (!pThis->IsDead())
+		if (!spThis->IsDead())
 		{
-			pThis->Broadcast(MsgChangeSkeleAnim(pThis, "idle"));//播放休闲待机动作
+			spThis->Broadcast(MsgChangeSkeleAnim(*spThis, "idle"));//播放休闲待机动作
 		}
 
 		co_return 0;//协程正常退出
 	}
-	bool MoveStep(Entity* pThis, const Position localTarget)
+	bool MoveStep(Entity &refThis, const Position localTarget)
 	{
-		const float step = pThis->m_f移动速度;
-		const auto oldPos = pThis->m_Pos;//复制对象，不是引用
-		float& x = pThis->m_Pos.x;
-		float& z = pThis->m_Pos.z;
+		const float step = refThis.m_f移动速度;
+		const auto oldPos = refThis.m_Pos;//复制对象，不是引用
+		float& x = refThis.m_Pos.x;
+		float& z = refThis.m_Pos.z;
 
 		if (std::abs(localTarget.x - x) < step && std::abs(localTarget.z - z) < step) 
 		{
 			LOG(INFO) << "已走到" << localTarget.x << "," << localTarget.z << "附近，协程正常退出";
-			pThis->Broadcast(MsgChangeSkeleAnim(pThis, "idle"));
+			refThis.Broadcast(MsgChangeSkeleAnim(refThis, "idle"));
 			return false;
 		}
 		
@@ -107,72 +108,71 @@ namespace AiCo
 			z += localTarget.z < z ? -step : step;
 		}
 
-		pThis->m_eulerAnglesY = CalculateAngle(oldPos, pThis->m_Pos);
-		pThis->Broadcast(MsgNotifyPos(pThis));
+		refThis.m_eulerAnglesY = CalculateAngle(oldPos, refThis.m_Pos);
+		refThis.Broadcast(MsgNotifyPos(refThis));
 
 		return true;
 	}
-	CoTask<int>WalkToPos(Entity* pThis, float& x, float& z, const float targetX, const float targetZ, MyServer* pServer, std::function<void()>& funCancel)
+	CoTask<int>WalkToPos(SpEntity spThis, float& x, float& z, const Position& posTarget, MyServer* pServer, std::function<void()>& funCancel)
 	{
 		KeepCancel kc(funCancel);
-		const auto localTargetX = targetX;
-		const auto localTargetZ = targetZ;
+		const auto localTarget = posTarget;
 		auto pLocalServer = pServer;
-		pThis->Broadcast(MsgChangeSkeleAnim(pThis, "run"));
+		spThis->Broadcast(MsgChangeSkeleAnim(*spThis, "run"));
 
 		while (true)
 		{
 			if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
 			{
-				LOG(INFO) << "走向" << localTargetX << "," << localTargetZ << "的协程取消了";
+				LOG(INFO) << "走向" << localTarget << "的协程取消了";
 				co_return 0;
 			}
-			if (pThis->IsDead())
+			if (spThis->IsDead())
 			{
-				LOG(INFO) << "自己阵亡，走向" << localTargetX << "," << localTargetZ << "的协程取消了";
-				if (pThis->m_spPlayer)
-					pThis->m_spPlayer->m_pSession->Send(MsgSay(StrConv::GbkToUtf8("自己阵亡")));
+				LOG(INFO) << "自己阵亡，走向" << localTarget << "的协程取消了";
+				if (spThis->m_spPlayer)
+					spThis->m_spPlayer->m_pSession->Send(MsgSay(StrConv::GbkToUtf8("自己阵亡")));
 
 				co_return 0;
 			}
 
-			if (!MoveStep(pThis, Position(localTargetX, localTargetZ)))
+			if (!MoveStep(*spThis, localTarget))
 			{
 				co_return 0;
 			}
 		}
-		LOG(INFO) << "走向目标协程结束:" << targetX << "," << targetX;
+		LOG(INFO) << "走向目标协程结束:" << posTarget;
 	}
 
-	CoTask<int> WalkToTarget(Entity* pThis, Entity* pEntity, MyServer* pServer, std::function<void()>& funCancel)
+	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spTarget, MyServer* pServer, std::function<void()>& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		auto pLocalServer = pServer;
-		pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "run"));
+		pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(*spTarget, "run"));
 
 		while (true)
 		{
 			if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
 			{
-				LOG(INFO) << "走向" << pEntity->m_nickName << "的协程取消了";
+				LOG(INFO) << "走向" << spTarget->m_nickName << "的协程取消了";
 				co_return 0;
 			}
-			if (!pThis->DistanceLessEqual(pEntity, pThis->m_f警戒距离))
+			if (!spThis->DistanceLessEqual(*spTarget, spThis->m_f警戒距离))
 			{
-				LOG(INFO) << "离开自己的警戒距离" << pEntity->m_nickName << "的协程取消了";
+				LOG(INFO) << "离开自己的警戒距离" << spTarget->m_nickName << "的协程取消了";
 				co_return 0;
 			}
-			if (pThis->DistanceLessEqual(pEntity, pThis->m_f攻击距离))
+			if (spThis->DistanceLessEqual(*spTarget, spThis->m_f攻击距离))
 			{
-				LOG(INFO) << "已走到" << pEntity->m_nickName << "附近，协程正常退出";
-				pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(pEntity, "idle"));
+				LOG(INFO) << "已走到" << spTarget->m_nickName << "附近，协程正常退出";
+				pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(*spTarget, "idle"));
 				co_return 0;
 			}
-			if (!MoveStep(pThis, pEntity->m_Pos))
+			if (!MoveStep(*spThis, spTarget->m_Pos))
 			{
 				co_return 0;
 			}
 		}
-		LOG(INFO) << "走向目标协程结束:" << pThis->m_Pos.x << "," << pThis->m_Pos.z;
+		LOG(INFO) << "走向目标协程结束:" << spThis->m_Pos;
 	}
 }

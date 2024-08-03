@@ -1,6 +1,7 @@
 #pragma once
 #include <set>
-class Entity;
+#include "SpEntity.h"
+
 class MyServer;
 /// <summary>
 /// Go”Ô—‘GoWorldøÚº‹Space/Entity£¨œ‡µ±”⁄C#”Ô—‘ETøÚº‹Scene/Unit
@@ -9,7 +10,7 @@ class Space
 {
 public:
 	Space(MyServer* pServer) :m_pServer(pServer) {}
-	std::set<Entity*> setEntity;
+	std::set<SpEntity> setEntity;
 	void Update();
 	MyServer * const m_pServer;
 };

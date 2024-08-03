@@ -1,3 +1,4 @@
+#include "StdAfx.h"
 #include <glog/logging.h>
 
 //#include "IocpNetwork/ListenSocketCompeletionKey.cpp"
@@ -16,6 +17,7 @@
 #include "../CoRoutine/CoTimer.h"
 #include "MyServer.h"
 #include "AiCo.h"
+#include "Entity.h"
 
 //template<MySession>
 //std::set<Iocp::SessionSocketCompeletionKey<MySession>*> g_setSession;
@@ -102,19 +104,21 @@ void MySession::OnInit(WebSocketSession<MySession>& refWsSession, MyServer& serv
 		{
 			m_pServer = &server;
 			m_pWsSession = &refWsSession;
-
-			m_entity.Init(5, m_pServer->m_space, "altman-blue");
-			m_entity.AddComponent(this);
-			m_pServer->m_space.setEntity.insert(&m_entity);
 		});
 }
 
 void MySession::OnDestroy()
 {
-	m_entity.OnDestroy();
+	for (auto sp : m_vecSpEntity)
+	{
+		m_pServer->m_space.setEntity.erase(sp);
+
+		sp->OnDestroy();
+	}
+	m_vecSpEntity.clear();
+
 	m_pServer->m_Sessions.DeleteSession(this->m_pWsSession->m_pSession, [this]()
 		{
-			m_pServer->m_space.setEntity.erase(&m_entity);
 		});
 
 	m_pServer = nullptr;//≤ª”√º”À¯

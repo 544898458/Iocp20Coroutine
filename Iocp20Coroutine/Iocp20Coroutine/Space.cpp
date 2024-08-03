@@ -1,3 +1,4 @@
+#include "StdAfx.h"
 #include "Space.h"
 #include "Entity.h"
 

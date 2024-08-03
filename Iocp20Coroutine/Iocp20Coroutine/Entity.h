@@ -7,17 +7,18 @@ class Space;
 class MySession;
 class MyServer;
 class PlayerComponent;
-class Entity
+class Entity :protected std::enable_shared_from_this<Entity>
 {
 public:
 	Entity();
+	Entity(const Entity&) = delete;
 	void Init(float x, Space& m_space, const std::string& strPrefabName);
-	void WalkToPos(const float targetX, const float targetZ, MyServer* pServer);
+	void WalkToPos(const Position& posTarget, MyServer* pServer);
 	void Update();
 	void TryCancel();
 	void Hurt(int);
 	bool IsDead()const { return m_hp <= 0; }
-	bool DistanceLessEqual(Entity* pEntity, float fDistance);
+	bool DistanceLessEqual(const Entity& refEntity, float fDistance);
 	void OnDestroy();
 	template<class T>
 	void Broadcast(const T& msg);
@@ -39,19 +40,19 @@ public:
 	//静态ECS，没有基类向子类转型
 	void AddComponent(MySession* pSession);
 	std::shared_ptr<PlayerComponent> m_spPlayer;
-//private:
-	Space *m_space;
-	
+	//private:
+	Space* m_space;
 };
+
 //x,y就是坐标系中的坐标，如（4，4）答案就是45°
-inline float CalculateAngle(float x, float y)
+inline int CalculateAngle(float x, float y)
 {
 	auto angleRad = std::atan2(x, y); // 计算弧度
-	double angleDeg = angleRad * 180.0f / 3.14159265f; // 将弧度转换为度
-	return angleDeg; // 返回角度
+	auto angleDeg = angleRad * 180.0f / 3.14159265f; // 将弧度转换为角度
+	return (int)angleDeg; // 返回角度
 }
 
-inline float CalculateAngle(Position from, Position to)
+inline int CalculateAngle(Position from, Position to)
 {
 	return CalculateAngle(to.x - from.x, to.z - from.z);
 }
