@@ -60,7 +60,7 @@ namespace CoTimer
 		//std::function<void()> old = cancel;
 		cancel = [sn]()
 			{
-				LOG(INFO) << "WaitNextUpdate取消" << sn;
+				//LOG(INFO) << "WaitNextUpdate取消" << sn;
 				g_NextUpdate[sn].Cancel();
 				g_NextUpdate.erase(sn);
 				//cancel = old;

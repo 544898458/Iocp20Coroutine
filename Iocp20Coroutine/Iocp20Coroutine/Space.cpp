@@ -6,7 +6,7 @@
 
 void Space::Update()
 {
-	for (auto iter = setEntity.begin() ; iter!= setEntity.end() ; )
+	for (auto iter = setEntity.begin(); iter != setEntity.end(); )
 	{
 		auto spEntity = *iter;
 		spEntity->Update();
@@ -24,7 +24,7 @@ void Space::Update()
 			spEntity->m_spPlayer->m_pSession->Erase(spEntity);
 		}
 
-		LOG(INFO) << "删除对象,pEntity=" << spEntity;
+		LOG(INFO) << "删除对象," << spEntity->NickName() << ",pEntity=" << spEntity;
 		iter = setEntity.erase(iter);
 	}
 }

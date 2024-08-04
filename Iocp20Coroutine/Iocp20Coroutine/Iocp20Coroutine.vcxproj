@@ -209,7 +209,9 @@
     <ClCompile Include="..\websocketfiles-master\src\sha1_portable.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\string_helper.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\ws_endpoint.cpp" />
-    <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp" />
+    <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClInclude Include="AiCo.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="MonsterComponent.h" />

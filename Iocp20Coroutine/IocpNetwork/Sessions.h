@@ -20,7 +20,7 @@ public:
 		if (m_setSession.empty())
 			return;
 
-		LOG(INFO) << "向" << m_setSession.size() << "个连接广播";
+		//LOG(INFO) << "向" << m_setSession.size() << "个连接广播";
 		for (auto p : m_setSession)
 		{
 			p->Session.Send(msg);

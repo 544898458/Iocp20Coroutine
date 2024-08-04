@@ -57,7 +57,7 @@ void Entity::Hurt(int hp)
 	if (IsDead())
 	{
 		this->Broadcast(MsgChangeSkeleAnim(*this, "died", false));//播放死亡动作
-		m_coWaitDelete = AiCo::WaitDelete(shared_from_this(), m_cancel);
+		m_coWaitDelete = AiCo::WaitDelete(shared_from_this(), m_cancelDelete);
 		m_coWaitDelete.Run();
 	}
 }
@@ -143,15 +143,16 @@ void Entity::TryCancel()
 {
 	if (m_cancel)
 	{
-		LOG(INFO) << "调用m_cancel";
+		//LOG(INFO) << "调用m_cancel";
 		m_cancel();
 	}
 	else
 	{
-		LOG(INFO) << "m_cancel是空的，没有取消的协程";
+		//LOG(INFO) << "m_cancel是空的，没有要取消的协程";
 		if (!m_coWalk.Finished() || !m_coAttack.Finished() || (m_spMonster && !m_spMonster->m_coIdle.Finished()))
 		{
 			LOG(ERROR) << "协程没结束，却提前清空了m_cancel";
+			assert(false);
 		}
 	}
 
@@ -164,6 +165,8 @@ void Entity::OnDestroy()
 {
 	LOG(INFO) << "调用Entity::OnDestroy";
 	TryCancel();
+	if (m_cancelDelete)
+		m_cancelDelete();
 }
 
 const std::string& Entity::NickName()

@@ -17,7 +17,7 @@ namespace AiCo
 		{
 			if (co_await CoTimer::WaitNextUpdate(funCancel))
 			{
-				LOG(INFO) << "调用者手动取消了协程Idle";
+				//LOG(INFO) << "调用者手动取消了协程Idle";
 				co_return 0;
 			}
 		}
@@ -82,7 +82,7 @@ namespace AiCo
 
 		if (std::abs(localTarget.x - x) < step && std::abs(localTarget.z - z) < step) 
 		{
-			LOG(INFO) << "已走到" << localTarget.x << "," << localTarget.z << "附近，协程正常退出";
+			//LOG(INFO) << "已走到" << localTarget.x << "," << localTarget.z << "附近，协程正常退出";
 			refThis.Broadcast(MsgChangeSkeleAnim(refThis, "idle"));
 			return false;
 		}
@@ -153,7 +153,7 @@ namespace AiCo
 			}
 			if (spThis->DistanceLessEqual(*spTarget, spThis->m_f攻击距离))
 			{
-				LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
+				//LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
 				pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(*spTarget, "idle"));
 				co_return 0;
 			}
@@ -170,7 +170,7 @@ namespace AiCo
 		using namespace std;
 		if (co_await CoTimer::Wait(3s,funCancel))//服务器主工作线程大循环，每次循环触发一次
 		{
-			LOG(INFO) << "协程取消了";
+			LOG(INFO) << "WaitDelete协程取消了";
 		}
 		spThis->m_bNeedDelete = true;
 		co_return 0;

@@ -173,7 +173,7 @@ public:
 	}
 	void Revert()
 	{
-		LOG(INFO) << "Revert" ;
+		//LOG(INFO) << "Revert" ;
 		refFunCancel = funCancelOld;
 		funCancelOld = nullptr;
 	}

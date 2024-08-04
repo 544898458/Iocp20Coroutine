@@ -261,8 +261,8 @@ int32_t WebSocketPacket::pack_dataframe(ByteBuffer &output)
 		char value = 0;
 		// save masking key
 		output.append((char *)masking_key_, 4);
-		LOG(INFO)  << "WebSocketPacket: send data with header size: " << output.length()
-				  << " payload size:" << payload_length_ << std::endl;
+		//LOG(INFO)  << "WebSocketPacket: send data with header size: " << output.length()
+		//		  << " payload size:" << payload_length_ << std::endl;
 		for (uint64_t i = 0; i < payload_length_; i++)
 		{
 			payload_.read_bytes_x(&value, 1);
@@ -272,8 +272,8 @@ int32_t WebSocketPacket::pack_dataframe(ByteBuffer &output)
 	}
 	else
 	{
-		LOG(INFO)  << "WebSocketPacket: send data with header size: " << output.length()
-				  << " payload size:" << payload_length_ << std::endl<<std::endl;
+		//LOG(INFO)  << "WebSocketPacket: send data with header size: " << output.length()
+		//		  << " payload size:" << payload_length_ << std::endl<<std::endl;
 		output.append(payload_.bytes(), payload_.length());
 	}
 
