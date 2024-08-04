@@ -277,3 +277,5 @@ private:
 	KeepCancel m_Kc;
 	std::coroutine_handle<> m_hAwaiter;
 };
+
+typedef std::function<void()> FunCancel;

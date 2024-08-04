@@ -108,9 +108,9 @@ void MySession::OnDestroy()
 	}
 	m_vecSpEntity.clear();
 
-	m_pServer->m_Sessions.DeleteSession(this->m_pWsSession->m_pSession, [this]()
+	/*m_pServer->m_Sessions.DeleteSession(this->m_pWsSession->m_pSession, [this]()
 		{
-		});
+		});*/
 
 	m_pServer = nullptr;//²»ÓÃ¼ÓËø
 }

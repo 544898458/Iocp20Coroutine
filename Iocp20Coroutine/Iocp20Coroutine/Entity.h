@@ -7,12 +7,12 @@ class Space;
 class MySession;
 class MyServer;
 class PlayerComponent;
+class MonsterComponent;
 class Entity :public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
 public:
-	Entity();
+	Entity(const Position& pos, Space& m_space, const std::string& strPrefabName);
 	Entity(const Entity&) = delete;
-	void Init(const Position& pos, Space& m_space, const std::string& strPrefabName);
 	void WalkToPos(const Position& posTarget, MyServer* pServer);
 	void Update();
 	void TryCancel();
@@ -22,12 +22,12 @@ public:
 	bool DistanceLessEqual(const Entity& refEntity, float fDistance);
 	void OnDestroy();
 	const std::string& NickName();
+	void BroadcastEnter();
 	template<class T> void Broadcast(const T& msg);
 	bool IsEnemy(const Entity& refEntity);
 	Position m_Pos;
 	int m_eulerAnglesY = 0;
 	CoTask<int> m_coWalk;
-	CoTask<int> m_coIdle;
 	CoTask<int> m_coAttack;
 	CoTask<int> m_coWaitDelete;
 	//std::function<void()> m_cancelAttack;
@@ -42,10 +42,12 @@ public:
 	std::string m_strPrefabName;
 
 	//静态ECS，没有基类向子类转型
-	void AddComponent(MySession* pSession);
+	void AddComponentPlayer(MySession* pSession);
+	void AddComponentMonster();
 	std::shared_ptr<PlayerComponent> m_spPlayer;
+	std::shared_ptr<MonsterComponent> m_spMonster;
 	//private:
-	Space* m_space;
+	Space& m_space;
 };
 
 //x,y就是坐标系中的坐标，如（4，4）答案就是45°

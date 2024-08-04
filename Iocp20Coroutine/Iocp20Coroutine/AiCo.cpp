@@ -10,7 +10,7 @@
 namespace AiCo
 {
 
-	CoTask<int> Idle(SpEntity spEntity, float& x, float& z, std::function<void()>& funCancel)
+	CoTask<int> Idle(SpEntity spEntity, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		while (true)
@@ -24,7 +24,7 @@ namespace AiCo
 	}
 
 
-	CoTask<int> Attack(SpEntity spThis, SpEntity spDefencer, std::function<void()>& cancel)
+	CoTask<int> Attack(SpEntity spThis, SpEntity spDefencer, FunCancel& cancel)
 	{
 		KeepCancel kc(cancel);
 
@@ -102,7 +102,7 @@ namespace AiCo
 
 		return true;
 	}
-	CoTask<int>WalkToPos(SpEntity spThis, const Position& posTarget, MyServer* pServer, std::function<void()>& funCancel)
+	CoTask<int>WalkToPos(SpEntity spThis, const Position& posTarget, MyServer* pServer, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		const auto localTarget = posTarget;
@@ -133,7 +133,7 @@ namespace AiCo
 		LOG(INFO) << "走向目标协程结束:" << posTarget;
 	}
 
-	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spTarget, MyServer* pServer, std::function<void()>& funCancel)
+	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spTarget, MyServer* pServer, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		auto pLocalServer = pServer;
@@ -164,7 +164,7 @@ namespace AiCo
 		}
 		LOG(INFO) << "走向目标协程结束:" << spThis->m_Pos;
 	}
-	CoTask<int> WaitDelete(SpEntity spThis, std::function<void()>& funCancel)
+	CoTask<int> WaitDelete(SpEntity spThis, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
@@ -173,6 +173,23 @@ namespace AiCo
 			LOG(INFO) << "协程取消了";
 		}
 		spThis->m_bNeedDelete = true;
+		co_return 0;
+	}
+	CoTask<int> SpawnMonster(Space& refSpace, FunCancel& funCancel)
+	{
+		KeepCancel kc(funCancel);
+		using namespace std;
+
+		while (!co_await CoTimer::Wait(3s, funCancel))
+		{
+			SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string& >({ -30.0 }, refSpace, "altman-red");
+			spEntityMonster->AddComponentMonster();
+			spEntityMonster->m_f警戒距离 = 20;
+			spEntityMonster->m_f移动速度 = 0.2f;
+			refSpace.setEntity.insert(spEntityMonster);
+			spEntityMonster->BroadcastEnter();
+		}
+		LOG(INFO) << "停止刷怪协程";
 		co_return 0;
 	}
 }

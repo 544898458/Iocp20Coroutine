@@ -102,17 +102,10 @@ int main(void)
 	g_ConnectToWorldSvr.reset( g_worldSvr->Connect<WorldClientSession>(L"127.0.0.1", L"12346") );
 	WorldClient::m_funBroadcast = [&accept](const MsgSay& msg) {accept.m_Server.m_Sessions.Broadcast(msg); };
 
-	//Iocp::ThreadPool::Add(g_worldSvr.GetIocp());
 
-
-	{
-		SpEntity spEntityMonster = std::make_shared<Entity>();
-		spEntityMonster->Init({ -30.0 }, accept.m_Server.m_space, "altman-red");
-		spEntityMonster->m_f警戒距离 = 20;
-		spEntityMonster->m_f移动速度 = 0.1f;
-		accept.m_Server.m_space.setEntity.insert(spEntityMonster);
-	}
-
+	FunCancel funCancelSpawnMonster;
+	auto coSpawnMonster = AiCo::SpawnMonster(accept.m_Server.m_space, funCancelSpawnMonster);
+	coSpawnMonster.Run();
 	//主逻辑工作线程
 	while (g_running)
 	{
@@ -120,6 +113,10 @@ int main(void)
 		accept.m_Server.Update();
 		CoTimer::Update();
 	}
+	
+	if (funCancelSpawnMonster)
+		funCancelSpawnMonster();
+
 	accept.Stop();
 	LOG(INFO) << "正常退出,GetCurrentThreadId=" << GetCurrentThreadId();
 	Sleep(3000);

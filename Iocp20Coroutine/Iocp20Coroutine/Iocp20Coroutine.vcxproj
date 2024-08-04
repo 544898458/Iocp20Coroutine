@@ -160,6 +160,7 @@
     <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="MonsterComponent.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PlayerSystem.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -211,6 +212,7 @@
     <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp" />
     <ClInclude Include="AiCo.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="MonsterComponent.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PlayerSystem.h" />
     <ClInclude Include="SpEntity.h" />

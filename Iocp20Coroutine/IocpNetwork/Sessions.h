@@ -17,6 +17,9 @@ public:
 	void Broadcast(const T& msg)
 	{
 		std::lock_guard lock(m_setSessionMutex);
+		if (m_setSession.empty())
+			return;
+
 		LOG(INFO) << "向" << m_setSession.size() << "个连接广播";
 		for (auto p : m_setSession)
 		{
@@ -25,7 +28,7 @@ public:
 	}
 	template<typename T_Function> void Update(T_Function const& functionLockUpdate);
 	template<typename T_Function> void AddSession(Session* pSession, T_Function const& functionLock);
-	template<typename T_Function> void DeleteSession(Session* pSession, T_Function const& functionLock);
+	//template<typename T_Function> void DeleteSession(Session* pSession, T_Function const& functionLock);
 private:
 	std::set<Session*> m_setSession;
 	/// <summary>
@@ -52,8 +55,8 @@ void Sessions<T_Session>::Update(T_Function const& functionLockUpdate)
 
 		p->Session.OnDestroy();
 		delete p;
-		LOG(INFO) << "已删除对象,GetCurrentThreadId=" << GetCurrentThreadId();
 		iter = m_setSession.erase(iter);
+		LOG(INFO) << "删除Session，剩余" << m_setSession.size();
 	}
 
 	functionLockUpdate();

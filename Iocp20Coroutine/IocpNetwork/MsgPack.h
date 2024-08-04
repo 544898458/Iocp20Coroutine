@@ -17,9 +17,10 @@ namespace MsgPack
 		//wspacket.pack_dataframe(output);
 		//send to client
 		//this->to_wire(output.bytes(), output.length());
-		const uint16_t usSize = str.size();
+		CHECK_GE_VOID(UINT16_MAX,str.size());
+		const uint16_t usSize = (uint16_t)str.size();
 		refFun(&usSize, sizeof(usSize));
-		refFun(str.data(), str.size());
+		refFun(str.data(), usSize);
 		LOG(INFO) << typeid(T).name();
 	}
 };

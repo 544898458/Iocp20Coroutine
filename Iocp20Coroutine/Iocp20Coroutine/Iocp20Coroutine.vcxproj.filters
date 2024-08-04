@@ -117,6 +117,9 @@
     <ClCompile Include="StdAfx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="MonsterComponent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -234,6 +237,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="StdAfx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterComponent.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

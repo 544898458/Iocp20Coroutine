@@ -9,26 +9,16 @@
 #include "PlayerComponent.h"
 #include "AiCo.h"
 #include "../IocpNetwork/StrConv.h"
+#include "MonsterComponent.h"
 
 using namespace std;
-Entity::Entity() :Id((uint64_t)this)
-{
 
+Entity::Entity(const Position& pos, Space& space, const std::string& strPrefabName) :
+	Id((uint64_t)this), m_strPrefabName(strPrefabName), m_space(space), m_Pos(pos)
+{
 }
 
-void Entity::Init(const Position& pos, Space& space, const std::string &strPrefabName)
-{
-	m_strPrefabName = strPrefabName;
-
-	m_space = &space;
-
-	this->m_Pos = pos;
-	m_coIdle = AiCo::Idle(shared_from_this(), this->m_Pos.x, this->m_Pos.z, m_cancel);
-	m_coIdle.Run();
-
-}
-
-void Entity::WalkToPos(const Position &posTarget, MyServer* pServer)
+void Entity::WalkToPos(const Position& posTarget, MyServer* pServer)
 {
 	if (IsDead())
 	{
@@ -89,12 +79,12 @@ void Entity::Update()
 		return;
 	}
 
-	for (const auto &spEntity : m_space->setEntity)
+	for (const auto& spEntity : m_space.setEntity)
 	{
 		if (spEntity.get() == this)//查找敌人，所有其他人都是敌人
 			continue;
 
-		if(spEntity->IsDead())
+		if (spEntity->IsDead())
 			continue;
 
 		if (!spEntity->IsEnemy(*this))
@@ -103,12 +93,12 @@ void Entity::Update()
 		if (DistanceLessEqual(*spEntity, this->m_f攻击距离))
 		{
 			TryCancel();
-			
+
 			m_coAttack = AiCo::Attack(this->shared_from_this(), spEntity, m_cancel);
 			m_coAttack.Run();
 			return;
 		}
-		else if(DistanceLessEqual(*spEntity, this->m_f警戒距离))
+		else if (DistanceLessEqual(*spEntity, this->m_f警戒距离))
 		{
 			TryCancel();
 
@@ -116,7 +106,7 @@ void Entity::Update()
 			assert(m_coWalk.Finished());//20240205
 			assert(m_coAttack.Finished());//20240205
 			/*m_coStop = false;*/
-			m_coWalk = AiCo::WalkToTarget(shared_from_this(), spEntity, this->m_space->m_pServer, m_cancel);
+			m_coWalk = AiCo::WalkToTarget(shared_from_this(), spEntity, this->m_space.m_pServer, m_cancel);
 			m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 			return;
 		}
@@ -131,7 +121,7 @@ void Entity::Update()
 		auto posTarget = m_Pos;
 		posTarget.x += std::rand() % 11 - 5;//随即走
 		posTarget.z += std::rand() % 11 - 5;
-		m_coWalk = AiCo::WalkToPos(shared_from_this(), posTarget, this->m_space->m_pServer, m_cancel);
+		m_coWalk = AiCo::WalkToPos(shared_from_this(), posTarget, this->m_space.m_pServer, m_cancel);
 		m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 
 	}
@@ -158,8 +148,8 @@ void Entity::TryCancel()
 	}
 	else
 	{
-		LOG(WARNING) << "m_cancel是空的";
-		if (!m_coWalk.Finished() || !m_coAttack.Finished() || !m_coIdle.Finished() )
+		LOG(INFO) << "m_cancel是空的，没有取消的协程";
+		if (!m_coWalk.Finished() || !m_coAttack.Finished() || (m_spMonster && !m_spMonster->m_coIdle.Finished()))
 		{
 			LOG(ERROR) << "协程没结束，却提前清空了m_cancel";
 		}
@@ -181,23 +171,21 @@ const std::string& Entity::NickName()
 	if (m_spPlayer)
 		return m_spPlayer->m_pSession->m_nickName;
 
-	return "怪";
+	static const std::string str怪("怪");
+	return str怪;
 }
 
-void Entity::AddComponent(MySession* pSession)
+
+void Entity::BroadcastEnter()
 {
-	CHECK_NOTNULL(pSession);
-	if (nullptr == pSession)
-		return;
-	
-	m_spPlayer = std::make_shared<PlayerComponent>();
-	m_spPlayer->m_pSession = pSession;
+	Broadcast(MsgAddRoleRet((uint64_t)this, StrConv::GbkToUtf8(NickName()), m_strPrefabName));//自己广播给别人
+	Broadcast(MsgNotifyPos(*this));
 }
 
 template<class T>
 void Entity::Broadcast(const T& msg)
 {
-	m_space->m_pServer->m_Sessions.Broadcast(msg);
+	m_space.m_pServer->m_Sessions.Broadcast(msg);
 }
 
 template void Entity::Broadcast(const MsgAddRoleRet& msg);
