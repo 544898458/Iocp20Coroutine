@@ -105,7 +105,7 @@ namespace AiCo
 	CoTask<int>WalkToPos(SpEntity spThis, const Position& posTarget, MyServer* pServer, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
-		const auto localTarget = posTarget;
+		const auto posLocalTarget = posTarget;
 		auto pLocalServer = pServer;
 		spThis->Broadcast(MsgChangeSkeleAnim(*spThis, "run"));
 
@@ -113,19 +113,19 @@ namespace AiCo
 		{
 			if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
 			{
-				LOG(INFO) << "走向" << localTarget << "的协程取消了";
+				LOG(INFO) << "走向" << posLocalTarget << "的协程取消了";
 				co_return 0;
 			}
 			if (spThis->IsDead())
 			{
-				LOG(INFO) << "自己阵亡，走向" << localTarget << "的协程取消了";
+				LOG(INFO) << "自己阵亡，走向" << posLocalTarget << "的协程取消了";
 				if (spThis->m_spPlayer)
 					spThis->m_spPlayer->m_pSession->Send(MsgSay(StrConv::GbkToUtf8("自己阵亡")));
 
 				co_return 0;
 			}
 
-			if (!MoveStep(*spThis, localTarget))
+			if (!MoveStep(*spThis, posLocalTarget))
 			{
 				co_return 0;
 			}
@@ -144,6 +144,14 @@ namespace AiCo
 			if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
 			{
 				LOG(INFO) << "走向" << spTarget << "的协程取消了";
+				co_return 0;
+			}
+			if (spThis->IsDead())
+			{
+				LOG(INFO) << "自己阵亡，走向[" << spTarget->NickName() << "]的协程取消了";
+				if (spThis->m_spPlayer)
+					spThis->m_spPlayer->m_pSession->Send(MsgSay(StrConv::GbkToUtf8("自己阵亡")));
+
 				co_return 0;
 			}
 			if (!spThis->DistanceLessEqual(*spTarget, spThis->m_f警戒距离))
@@ -180,7 +188,7 @@ namespace AiCo
 		KeepCancel kc(funCancel);
 		using namespace std;
 
-		while (!co_await CoTimer::Wait(3s, funCancel))
+		while (!co_await CoTimer::Wait(100ms, funCancel))
 		{
 			SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string& >({ -30.0 }, refSpace, "altman-red");
 			spEntityMonster->AddComponentMonster();

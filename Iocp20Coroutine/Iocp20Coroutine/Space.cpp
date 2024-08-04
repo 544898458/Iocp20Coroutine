@@ -24,7 +24,7 @@ void Space::Update()
 			spEntity->m_spPlayer->m_pSession->Erase(spEntity);
 		}
 
-		LOG(INFO) << "É¾³ý¶ÔÏó," << spEntity->NickName() << ",pEntity=" << spEntity;
+		LOG(INFO) << "É¾³ý¶ÔÏó," << spEntity->NickName() << ",pEntity=" << spEntity << ",É¾³ýÇ°Ê£Óà" << setEntity.size();
 		iter = setEntity.erase(iter);
 	}
 }

@@ -29,7 +29,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 		LOG(WARNING) << "不能点右上角X关闭，可能有数据没保存";
 		//delete g_Accept;
 		//g_Accept = nullptr;
-		
+
 		//释放所有socket
 		//CloseHandle(hPort);
 		//Clear();
@@ -75,7 +75,7 @@ int main(void)
 
 	auto* pMemoryLeak = malloc(123);//测试内存泄漏
 	const char sz[] = "Memory Leak Test.Nei Cun Xie Lou Jian Ce.This is not a real Defect.Zhe Bu Shi Yi Ge Zhen De Que Xian.";
-	memcpy(pMemoryLeak, sz,sizeof(sz));
+	memcpy(pMemoryLeak, sz, sizeof(sz));
 	pMemoryLeak = nullptr;
 
 	FLAGS_alsologtostderr = true;//是否将日志输出到文件和stderr
@@ -99,21 +99,41 @@ int main(void)
 
 	//g_worldSvr->Init<WorldSession>(12346);
 	g_worldSvr.reset(new Iocp::Server<WorldClient>(Iocp::ThreadPool::GetIocp()));
-	g_ConnectToWorldSvr.reset( g_worldSvr->Connect<WorldClientSession>(L"127.0.0.1", L"12346") );
+	g_ConnectToWorldSvr.reset(g_worldSvr->Connect<WorldClientSession>(L"127.0.0.1", L"12346"));
 	WorldClient::m_funBroadcast = [&accept](const MsgSay& msg) {accept.m_Server.m_Sessions.Broadcast(msg); };
 
 
 	FunCancel funCancelSpawnMonster;
 	auto coSpawnMonster = AiCo::SpawnMonster(accept.m_Server.m_space, funCancelSpawnMonster);
 	coSpawnMonster.Run();
+
 	//主逻辑工作线程
+	using namespace std;
+	std::chrono::system_clock::time_point timeLast = std::chrono::system_clock::now();
+	
+	std::chrono::milliseconds msSleep = 100ms;
+	const std::chrono::milliseconds ms10Frame= 1s;
+	int i = 0;
 	while (g_running)
 	{
-		Sleep(100);
+		++i;
+		if (i >= 10)
+		{
+			i = 0;
+			auto duration = std::chrono::system_clock::now() - timeLast;
+			if (duration > ms10Frame)
+			{
+				if (msSleep > 0ms)
+					--msSleep;
+			}
+			else
+				++msSleep;
+		}
+		std::this_thread::sleep_for(msSleep);
 		accept.m_Server.Update();
 		CoTimer::Update();
 	}
-	
+
 	if (funCancelSpawnMonster)
 		funCancelSpawnMonster();
 
