@@ -5,7 +5,7 @@
 class WorldServer
 {
 public:
-	using CompeletionKeySession = Iocp::SessionSocketCompeletionKey<WorldSession>;
+	using CompeletionKeySession = Iocp::SessionSocketCompletionKey<WorldSession>;
 	void OnAdd(CompeletionKeySession&);
 	Sessions< WorldSession > m_Sessions;
 };

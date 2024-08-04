@@ -157,7 +157,7 @@
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp">
+    <ClCompile Include="..\IocpNetwork\ListenSocketCompletionKey.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="MonsterComponent.cpp" />
@@ -169,7 +169,7 @@
     <ClCompile Include="WorldClient.cpp" />
     <ClInclude Include="..\CoRoutine\CoTimer.h" />
     <ClInclude Include="..\IocpNetwork\Client.h" />
-    <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKeyTemplate.h" />
+    <ClInclude Include="..\IocpNetwork\ListenSocketCompletionKeyTemplate.h" />
     <ClInclude Include="..\IocpNetwork\MsgQueue.h" />
     <ClInclude Include="..\IocpNetwork\MsgQueueTemplate.h" />
     <ClInclude Include="..\IocpNetwork\Sessions.h" />
@@ -185,7 +185,7 @@
     <ClInclude Include="..\IocpNetwork\ServerTemplate.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKeyTemplate.h">
+    <ClInclude Include="..\IocpNetwork\SessionSocketCompletionKeyTemplate.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp">
@@ -223,10 +223,10 @@
     <ClInclude Include="..\CoRoutine\CoTask.h" />
     <ClInclude Include="..\Iocp20Coroutine.h" />
     <ClInclude Include="..\IocpNetwork\ByteQueue.h" />
-    <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKey.h" />
+    <ClInclude Include="..\IocpNetwork\ListenSocketCompletionKey.h" />
     <ClInclude Include="..\IocpNetwork\Overlapped.h" />
     <ClInclude Include="..\IocpNetwork\Server.h" />
-    <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKey.h" />
+    <ClInclude Include="..\IocpNetwork\SessionSocketCompletionKey.h" />
     <ClInclude Include="..\IocpNetwork\SocketCompeletionKey.h" />
     <ClInclude Include="..\IocpNetwork\WebSocketSession.h" />
     <ClInclude Include="..\LogStrategy\StrategyLog.h" />

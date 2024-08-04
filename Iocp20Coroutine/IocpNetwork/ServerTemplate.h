@@ -1,6 +1,6 @@
 #include "Server.h"
-#include "ListenSocketCompeletionKey.h"
-#include "SessionSocketCompeletionKey.h"
+#include "ListenSocketCompletionKey.h"
+#include "SessionSocketCompletionKey.h"
 #include "Client.h"
 /// <summary>
 /// 
@@ -9,11 +9,11 @@
 /// <returns></returns>
 template<class T_Server>
 template<class T_Session>
-	requires requires(Iocp::SessionSocketCompeletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
+	requires requires(Iocp::SessionSocketCompletionKey<T_Session>& refCompletionKeySession, T_Session& refSession, T_Server& refServer)
 	{
-		requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletetionKeySession, (const void*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
+		requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletionKeySession, (const void*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompletionKey<WorldSession>& refSession, const char buf[], int len)
 		requires std::is_same_v<void, decltype(refSession.OnDestroy())>;//void OnDestroy();
-		requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
+		requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletionKeySession))>;//void OnAdd(Iocp::SessionSocketCompletionKey<WorldSession>& session)
 	}
 bool Iocp::Server<T_Server>::Init(const uint16_t usPort)
 {
@@ -30,7 +30,7 @@ bool Iocp::Server<T_Server>::Init(const uint16_t usPort)
 		return false;
 	}
 
-	//auto pListenCompleteKey = new ListenSocketCompeletionKey<T_Session>(this->socketAccept);
+	//auto pListenCompleteKey = new ListenSocketCompletionKey<T_Session>(this->socketAccept);
 
 	//°ó¶¨
 	const auto iocp = CreateIoCompletionPort((HANDLE)m_socketAccept, m_hIocp, (ULONG_PTR)0, 0);
@@ -84,7 +84,7 @@ bool Iocp::Server<T_Server>::Init(const uint16_t usPort)
 	}
 
 	//if ( !
-	ListenSocketCompeletionKey::StartCoRoutine<T_Session, T_Server>(m_hIocp, m_socketAccept, m_Server);
+	ListenSocketCompletionKey::StartCoRoutine<T_Session, T_Server>(m_hIocp, m_socketAccept, m_Server);
 	//)
 //{
 //	//Clear();
@@ -138,13 +138,13 @@ void Iocp::Server< T_Server>::Stop()
 
 template<class T_Server>
 template<class T_Session>
-//	requires requires(Iocp::SessionSocketCompeletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
+//	requires requires(Iocp::SessionSocketCompletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
 //{
-//	requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletetionKeySession, (const char*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
+//	requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletetionKeySession, (const char*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompletionKey<WorldSession>& refSession, const char buf[], int len)
 //	requires std::is_same_v<void, decltype(refSession.OnDestroy())>;//void OnDestroy();
-//	requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
+//	requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompletionKey<WorldSession>& session)
 //}
-Iocp::SessionSocketCompeletionKey<T_Session>* Iocp::Server<T_Server>::Connect(const wchar_t* szIp, const wchar_t* szPort)
+Iocp::SessionSocketCompletionKey<T_Session>* Iocp::Server<T_Server>::Connect(const wchar_t* szIp, const wchar_t* szPort)
 {
 	auto client = new Client();
 	auto socket = client->Connect(szIp, szPort, m_hIocp);
@@ -167,7 +167,7 @@ Iocp::SessionSocketCompeletionKey<T_Session>* Iocp::Server<T_Server>::Connect(co
 		return nullptr;
 	}
 
-	auto pNewCompleteKey = new Iocp::SessionSocketCompeletionKey<T_Session>(socket);
+	auto pNewCompleteKey = new Iocp::SessionSocketCompletionKey<T_Session>(socket);
 	pNewCompleteKey->StartCoRoutine();
 	return pNewCompleteKey;
 }

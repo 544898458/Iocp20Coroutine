@@ -57,7 +57,7 @@
     <ClCompile Include="..\CoRoutine\CoTimer.cpp">
       <Filter>CoRoutine</Filter>
     </ClCompile>
-    <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp">
+    <ClCompile Include="..\IocpNetwork\ListenSocketCompletionKey.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp">
@@ -146,13 +146,13 @@
     <ClInclude Include="..\CoRoutine\CoTimer.h">
       <Filter>CoRoutine</Filter>
     </ClInclude>
-    <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKey.h">
+    <ClInclude Include="..\IocpNetwork\ListenSocketCompletionKey.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\ByteQueue.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKey.h">
+    <ClInclude Include="..\IocpNetwork\SessionSocketCompletionKey.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\ServerTemplate.h">
@@ -164,7 +164,7 @@
     <ClInclude Include="..\IocpNetwork\Overlapped.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKeyTemplate.h">
+    <ClInclude Include="..\IocpNetwork\SessionSocketCompletionKeyTemplate.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\WebSocketSessionTemplate.h">
@@ -206,7 +206,7 @@
     <ClInclude Include="..\IocpNetwork\ThreadPool.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
+    <ClInclude Include="..\IocpNetwork\ListenSocketCompletionKeyTemplate.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\Sessions.h">

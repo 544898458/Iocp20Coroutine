@@ -1,16 +1,16 @@
 #include <glog/logging.h>
-#include "ListenSocketCompeletionKey.h"
-#include "SessionSocketCompeletionKey.h"
+#include "ListenSocketCompletionKey.h"
+#include "SessionSocketCompletionKey.h"
 
 
 namespace Iocp {
 
 	template<class T_Session,class T_Server>
-		requires requires(Iocp::SessionSocketCompeletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
+		requires requires(Iocp::SessionSocketCompletionKey<T_Session>& refCompletionKeySession, T_Session& refSession, T_Server& refServer)
 	{
-		requires std::is_same_v<void, decltype(refSession.OnInit(refCompletetionKeySession, refServer))>;//void OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
+		requires std::is_same_v<void, decltype(refSession.OnInit(refCompletionKeySession, refServer))>;//void OnInit(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
 	}
-	void ListenSocketCompeletionKey::StartCoRoutine( HANDLE hIocp,SOCKET socketListen, T_Server &refServer)
+	void ListenSocketCompletionKey::StartCoRoutine( HANDLE hIocp,SOCKET socketListen, T_Server &refServer)
 	{
 		auto pAcceptOverlapped = new Overlapped();
 		pAcceptOverlapped->needDeleteMe = true;
@@ -24,7 +24,7 @@ namespace Iocp {
 	//{
 	//	requires std::is_same_v<void, decltype(refSession.OnInit(&refSession, refServer))>;//void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer& server)
 	//}
-	CoTask<int> ListenSocketCompeletionKey::PostAccept(Overlapped* pAcceptOverlapped,HANDLE hIocp, SOCKET socketListen, T_Server& refServer)
+	CoTask<int> ListenSocketCompletionKey::PostAccept(Overlapped* pAcceptOverlapped,HANDLE hIocp, SOCKET socketListen, T_Server& refServer)
 	{
 		while (true)
 		{
@@ -66,7 +66,7 @@ namespace Iocp {
 			}
 
 			//绑定到完成端口
-			auto pNewCompleteKey = new SessionSocketCompeletionKey<T_Session>(pAcceptOverlapped->socket);
+			auto pNewCompleteKey = new SessionSocketCompletionKey<T_Session>(pAcceptOverlapped->socket);
 			pNewCompleteKey->Session.OnInit(*pNewCompleteKey,refServer);//回调用户自定义函数
 			refServer.OnAdd(*pNewCompleteKey);
 			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)pAcceptOverlapped->socket, hIocp, (ULONG_PTR)pNewCompleteKey, 0);

@@ -27,9 +27,6 @@
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\IocpNetwork\ListenSocketCompeletionKey.cpp">
-      <Filter>IocpNetwork</Filter>
-    </ClCompile>
     <ClCompile Include="..\IocpNetwork\Overlapped.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
@@ -63,16 +60,13 @@
     <ClCompile Include="WorldSession.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\IocpNetwork\ListenSocketCompletionKey.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKey.h">
-      <Filter>IocpNetwork</Filter>
-    </ClInclude>
-    <ClInclude Include="..\IocpNetwork\ListenSocketCompeletionKeyTemplate.h">
-      <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\Overlapped.h">
       <Filter>IocpNetwork</Filter>
@@ -83,16 +77,10 @@
     <ClInclude Include="..\IocpNetwork\ServerTemplate.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKey.h">
-      <Filter>IocpNetwork</Filter>
-    </ClInclude>
     <ClInclude Include="..\IocpNetwork\SocketCompeletionKey.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\ByteQueue.h">
-      <Filter>IocpNetwork</Filter>
-    </ClInclude>
-    <ClInclude Include="..\IocpNetwork\SessionSocketCompeletionKeyTemplate.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoTask.h">
@@ -117,6 +105,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\MsgPack.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\ListenSocketCompletionKey.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\SessionSocketCompletionKey.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\SessionSocketCompletionKeyTemplate.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
   </ItemGroup>

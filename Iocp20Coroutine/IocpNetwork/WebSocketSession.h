@@ -1,12 +1,13 @@
 #pragma once
 #include <glog/logging.h>
 #include "../websocketfiles-master/src/ws_endpoint.h"
-#include "SessionSocketCompeletionKey.h"
+#include "SessionSocketCompletionKey.h"
 
 
 //void net_write_cb(char* buf, int64_t size, void* wd)
 //{
-//	static_cast<Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> >*>(wd)->Send(buf, size);
+//	static_cast<Iocp::
+// <WebSocketSession<MySession> >*>(wd)->Send(buf, size);
 //}
 /// <summary>
 /// https://github.com/basson099/websocketfiles
@@ -111,7 +112,7 @@ public:
 	//WebSocketSession();
 	virtual ~WebSocketSession() {}
 	template<class T_Server>
-	void OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
+	void OnInit(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
 	/// <summary>
 	/// 用户自定义函数，这里是纯数据，连封包概念都没有，封包是WebSocket协议负责的工作
 	/// </summary>
@@ -119,7 +120,7 @@ public:
 	/// <param name="buf"></param>
 	/// <param name="len"></param>
 	/// <returns></returns>
-	int OnRecv(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession, const void* buf, int len);
+	int OnRecv(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, const void* buf, int len);
 	/// <summary>
 /// 从全局连接set里删除连接，从全局Space里删除实体
 /// </summary>
@@ -136,9 +137,9 @@ public:
 	/// <summary>
 	/// 开源WebSocket库
 	/// </summary>
-	std::unique_ptr<MyWebSocketEndpoint<T_Session, Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>>> m_webSocketEndpoint;
+	std::unique_ptr<MyWebSocketEndpoint<T_Session, Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>>> m_webSocketEndpoint;
 	T_Session m_Session;
-	Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>* m_pSession;
+	Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>* m_pSession;
 private:
 
 

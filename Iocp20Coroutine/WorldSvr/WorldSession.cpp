@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "WorldSession.h"
-#include "../IocpNetwork/SessionSocketCompeletionKeyTemplate.h"
+#include "../IocpNetwork/SessionSocketCompletionKeyTemplate.h"
 #include "../IocpNetwork/SessionsTemplate.h"
 #include "WorldServer.h"
 //#include "../IocpNetwork/WebSocketSessionTemplate.h"
@@ -8,10 +8,10 @@
 #include "../Iocp20Coroutine/MyMsgQueue.h"
 #include "../IocpNetwork/StrConv.h"
 
-template Iocp::SessionSocketCompeletionKey<WorldSession>;
+template Iocp::SessionSocketCompletionKey<WorldSession>;
 //template class WebSocketSession<WorldSession>;
-//template void WebSocketSession<WorldSession>::OnInit<WorldServer>(Iocp::SessionSocketCompeletionKey<WebSocketSession<WorldSession> >& refSession, WorldServer& server);
-//template class WebSocketEndpoint<WorldSession, Iocp::SessionSocketCompeletionKey<WebSocketSession<WorldSession> > >;
+//template void WebSocketSession<WorldSession>::OnInit<WorldServer>(Iocp::SessionSocketCompletionKey<WebSocketSession<WorldSession> >& refSession, WorldServer& server);
+//template class WebSocketEndpoint<WorldSession, Iocp::SessionSocketCompletionKey<WebSocketSession<WorldSession> > >;
 
 int WorldSession::OnRecv(CompeletionKeySession&, const void* buf, int len)
 {

@@ -57,7 +57,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 }
 
 std::unique_ptr<Iocp::Server<WorldClient> > g_worldSvr;// (Iocp::ThreadPool::GetIocp());
-std::unique_ptr<Iocp::SessionSocketCompeletionKey<WorldClientSession>> g_ConnectToWorldSvr;
+std::unique_ptr<Iocp::SessionSocketCompletionKey<WorldClientSession>> g_ConnectToWorldSvr;
 void SendToWorldSvr(const MsgSay& msg)
 {
 	//g_worldSvr->m_Server.m_Sessions.Broadcast(msg);

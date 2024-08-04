@@ -1,5 +1,5 @@
 #pragma once
-#include"../IocpNetwork/SessionSocketCompeletionKey.h"
+#include"../IocpNetwork/SessionSocketCompletionKey.h"
 #include "../LogStrategy/StrategyLog.h"
 #include "../IocpNetwork/WebSocketSession.h"
 #include <msgpack.hpp>
@@ -8,7 +8,7 @@ class WorldServer;
 class WorldSession
 {
 public:
-	using CompeletionKeySession = Iocp::SessionSocketCompeletionKey < WorldSession >;
+	using CompeletionKeySession = Iocp::SessionSocketCompletionKey < WorldSession >;
 	int OnRecv(CompeletionKeySession&, const void* buf, int len);
 	void OnDestroy();
 	void OnInit(CompeletionKeySession& refSession, WorldServer&);

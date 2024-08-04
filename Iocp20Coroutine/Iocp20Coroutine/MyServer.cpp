@@ -3,12 +3,12 @@
 #include "../IocpNetwork/Server.h"
 #include "../IocpNetwork/ServerTemplate.h"
 #include "MySession.h"
-#include "../IocpNetwork/ListenSocketCompeletionKeyTemplate.h"
+#include "../IocpNetwork/ListenSocketCompletionKeyTemplate.h"
 #include "../IocpNetwork/SessionsTemplate.h"
 
 template Iocp::Server<MyServer>;
 template bool Iocp::Server<MyServer>::Init<WebSocketSession<MySession> >(const uint16_t);
-template void Iocp::ListenSocketCompeletionKey::StartCoRoutine<WebSocketSession<MySession>, MyServer >(HANDLE hIocp, SOCKET socketListen, MyServer&);
+template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WebSocketSession<MySession>, MyServer >(HANDLE hIocp, SOCKET socketListen, MyServer&);
 
 void MyServer::OnAdd(Session&)
 {

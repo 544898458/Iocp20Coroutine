@@ -6,6 +6,6 @@
 #include <mswsock.h>
 #include <winnt.h>
 #include "Server.h"
-#include "./ListenSocketCompeletionKey.h"
+#include "ListenSocketCompletionKey.h"
 #pragma comment(lib,"ws2_32.lib")
 

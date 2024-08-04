@@ -1,17 +1,17 @@
 #pragma once
-#include"SessionSocketCompeletionKey.h"
+#include"SessionSocketCompletionKey.h"
 namespace Iocp {
-	class ListenSocketCompeletionKey //:public SocketCompeletionKey
+	class ListenSocketCompletionKey //:public SocketCompeletionKey
 	{
 	public:
-		//ListenSocketCompeletionKey(SOCKET s) :SocketCompeletionKey(s)
+		//ListenSocketCompletionKey(SOCKET s) :SocketCompeletionKey(s)
 		//{
 
 		//}
 		template<class T_Session, class T_Server >
-			requires requires(Iocp::SessionSocketCompeletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
+			requires requires(Iocp::SessionSocketCompletionKey<T_Session>& refCompletionKeySession, T_Session& refSession, T_Server& refServer)
 		{
-			requires std::is_same_v<void, decltype(refSession.OnInit(refCompletetionKeySession, refServer))>;//void OnInit(Iocp::SessionSocketCompeletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
+			requires std::is_same_v<void, decltype(refSession.OnInit(refCompletionKeySession, refServer))>;//void OnInit(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
 		}
 		static void StartCoRoutine(HANDLE hIocp, SOCKET socketListen, T_Server& refServer);
 		//Overlapped acceptOverlapped;

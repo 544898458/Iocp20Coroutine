@@ -3,8 +3,8 @@
 
 template Iocp::Server<WorldClient>;
 //template bool Iocp::Server<WorldClient>::Init<WorldClientSession>(const uint16_t);
-template void Iocp::ListenSocketCompeletionKey::StartCoRoutine<WorldClientSession, WorldClient >(HANDLE hIocp, SOCKET socketListen, WorldClient&);
-template Iocp::SessionSocketCompeletionKey<WorldClientSession>;
+template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WorldClientSession, WorldClient >(HANDLE hIocp, SOCKET socketListen, WorldClient&);
+template Iocp::SessionSocketCompletionKey<WorldClientSession>;
 std::function<void(MsgSay const&)> WorldClient::m_funBroadcast;
 
 void WorldClientSession::OnRecvPack(const void* buf, int len)

@@ -1,7 +1,7 @@
 #pragma once
 #include <Winsock2.h>
 #include<type_traits>
-#include"SessionSocketCompeletionKey.h"
+#include"SessionSocketCompletionKey.h"
 namespace Iocp
 {
 	/// <summary>
@@ -19,22 +19,22 @@ namespace Iocp
 		}
 		static bool WsaStartup();
 		template<class T_Session>
-			requires requires(Iocp::SessionSocketCompeletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
+			requires requires(Iocp::SessionSocketCompletionKey<T_Session>& refCompletionKeySession, T_Session& refSession, T_Server& refServer)
 		{
-			requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletetionKeySession, (const void*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
+			requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletionKeySession, (const void*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompletionKey<WorldSession>& refSession, const char buf[], int len)
 			requires std::is_same_v<void, decltype(refSession.OnDestroy())>;//void OnDestroy();
-			requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
+			requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletionKeySession))>;//void OnAdd(Iocp::SessionSocketCompletionKey<WorldSession>& session)
 		}
 		bool Init(const uint16_t usPort);
 		void Stop();
 		template<class T_Session>
-		//	requires requires(Iocp::SessionSocketCompeletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
+		//	requires requires(Iocp::SessionSocketCompletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
 		//{
-		//	requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletetionKeySession, (const char*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompeletionKey<WorldSession>& refSession, const char buf[], int len)
+		//	requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletetionKeySession, (const char*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompletionKey<WorldSession>& refSession, const char buf[], int len)
 		//	requires std::is_same_v<void, decltype(refSession.OnDestroy())>;//void OnDestroy();
-		//	requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompeletionKey<WorldSession>& session)
+		//	requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompletionKey<WorldSession>& session)
 		//}
-		Iocp::SessionSocketCompeletionKey<T_Session>* Connect(const wchar_t* szIp, const wchar_t* szPort);
+		Iocp::SessionSocketCompletionKey<T_Session>* Connect(const wchar_t* szIp, const wchar_t* szPort);
 
 		T_Server m_Server;
 	private:

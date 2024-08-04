@@ -1,7 +1,7 @@
 #pragma once
 #include "../IocpNetwork/ServerTemplate.h"
-#include "../IocpNetwork/ListenSocketCompeletionKeyTemplate.h"
-#include "../IocpNetwork/SessionSocketCompeletionKeyTemplate.h"
+#include "../IocpNetwork/ListenSocketCompletionKeyTemplate.h"
+#include "../IocpNetwork/SessionSocketCompletionKeyTemplate.h"
 #include <msgpack.hpp>
 #include "MyMsgQueue.h"
 #include "../IocpNetwork/StrConv.h"
@@ -11,7 +11,7 @@ class WorldClient;
 class WorldClientSession
 {
 public:
-	void OnInit(Iocp::SessionSocketCompeletionKey<WorldClientSession>& session, WorldClient& refWorldClient)
+	void OnInit(Iocp::SessionSocketCompletionKey<WorldClientSession>& session, WorldClient& refWorldClient)
 	{
 		m_pWorldClient = &refWorldClient;
 	}
@@ -23,7 +23,7 @@ public:
 	/// <param name="buf"></param>
 	/// <param name="len"></param>
 	/// <returns>返回已处理的字节数，这些数据将立刻从接受缓冲中删除</returns>
-	int OnRecv(Iocp::SessionSocketCompeletionKey<WorldClientSession>& refSession, const void* buf, int len)
+	int OnRecv(Iocp::SessionSocketCompletionKey<WorldClientSession>& refSession, const void* buf, int len)
 	{
 		const void* bufPack(nullptr);
 		int lenPack(0);
@@ -45,7 +45,7 @@ public:
 class WorldClient
 {
 public:
-	void OnAdd(Iocp::SessionSocketCompeletionKey<WorldClientSession>& session)
+	void OnAdd(Iocp::SessionSocketCompletionKey<WorldClientSession>& session)
 	{
 
 	}

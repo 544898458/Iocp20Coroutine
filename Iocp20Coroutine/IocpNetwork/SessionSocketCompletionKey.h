@@ -6,14 +6,14 @@
 namespace Iocp 
 {
 	template<class T_Session>
-	class SessionSocketCompeletionKey :public SocketCompeletionKey
+	class SessionSocketCompletionKey :public SocketCompeletionKey
 	{
 	public:
-		SessionSocketCompeletionKey(SOCKET s) :SocketCompeletionKey(s)
+		SessionSocketCompletionKey(SOCKET s) :SocketCompeletionKey(s)
 		{
 
 		}
-		virtual ~SessionSocketCompeletionKey();
+		virtual ~SessionSocketCompletionKey();
 		void StartCoRoutine();
 		void Send(const void* buf, int len);
 		bool Finished();

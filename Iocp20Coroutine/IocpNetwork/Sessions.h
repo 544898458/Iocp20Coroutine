@@ -7,7 +7,7 @@ template<class T_Session>
 class Sessions
 {
 public:
-	using Session = Iocp::SessionSocketCompeletionKey<T_Session>;
+	using Session = Iocp::SessionSocketCompletionKey<T_Session>;
 	/// <summary>
 	/// 向所有连接广播消息
 	/// </summary>

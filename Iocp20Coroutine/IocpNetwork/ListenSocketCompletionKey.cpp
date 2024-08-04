@@ -1,9 +1,9 @@
 #include <glog/logging.h>
-#include "ListenSocketCompeletionKey.h"
+#include "ListenSocketCompletionKey.h"
 
 namespace Iocp 
 {
-	std::tuple<bool, bool> ListenSocketCompeletionKey::AcceptEx(Overlapped* pAcceptOverlapped, SOCKET socketListen)
+	std::tuple<bool, bool> ListenSocketCompletionKey::AcceptEx(Overlapped* pAcceptOverlapped, SOCKET socketListen)
 	{
 		char str2[1];// = new char[1024];// = { 0 };
 		DWORD dwRecvcount = 0;
@@ -46,7 +46,7 @@ namespace Iocp
 
 		return std::make_tuple(false, false);
 	}
-	//std::tuple<bool, bool> ListenSocketCompeletionKey::AcceptEx(Overlapped* pAcceptOverlapped, SOCKET socketListen)
+	//std::tuple<bool, bool> ListenSocketCompletionKey::AcceptEx(Overlapped* pAcceptOverlapped, SOCKET socketListen)
 	//{
 	//	char str2[1];// = new char[1024];// = { 0 };
 	//	DWORD dwRecvcount = 0;

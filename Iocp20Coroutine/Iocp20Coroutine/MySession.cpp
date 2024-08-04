@@ -1,8 +1,8 @@
 #include "StdAfx.h"
 #include <glog/logging.h>
 
-//#include "IocpNetwork/ListenSocketCompeletionKey.cpp"
-#include "../IocpNetwork/SessionSocketCompeletionKeyTemplate.h"
+//#include "IocpNetwork/ListenSocketCompletionKey.cpp"
+#include "../IocpNetwork/SessionSocketCompletionKeyTemplate.h"
 #include "../websocketfiles-master/src/ws_endpoint.cpp"
 #include "../IocpNetwork/WebSocketSessionTemplate.h"
 #include "../IocpNetwork/SessionsTemplate.h"
@@ -20,12 +20,12 @@
 #include "Entity.h"
 
 //template<MySession>
-//std::set<Iocp::SessionSocketCompeletionKey<MySession>*> g_setSession;
+//std::set<Iocp::SessionSocketCompletionKey<MySession>*> g_setSession;
 //template<MySession> std::mutex g_setSessionMutex;
-template Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> >;
+template Iocp::SessionSocketCompletionKey<WebSocketSession<MySession> >;
 template class WebSocketSession<MySession>;
-template void WebSocketSession<MySession>::OnInit<MyServer>(Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> >& refSession, MyServer& server);
-template class WebSocketEndpoint<MySession, Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession> > >;
+template void WebSocketSession<MySession>::OnInit<MyServer>(Iocp::SessionSocketCompletionKey<WebSocketSession<MySession> >& refSession, MyServer& server);
+template class WebSocketEndpoint<MySession, Iocp::SessionSocketCompletionKey<WebSocketSession<MySession> > >;
 
 template<class T>
 void MySession::Send(const T& ref)
@@ -73,7 +73,7 @@ void MySession::OnRecvWsPack(const void* buf, const int len)
 	msgpack::object obj = oh.get();
 	const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
 	LOG(INFO) << obj;
-	//auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompeletionKey<WebSocketSession<MySession>>*>(this->nt_work_data_);
+	//auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompletionKey<WebSocketSession<MySession>>*>(this->nt_work_data_);
 	auto pSessionSocketCompeletionKey = this->m_pWsSession->m_pSession;
 	switch (msgId)
 	{
