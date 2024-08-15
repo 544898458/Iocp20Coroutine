@@ -39,12 +39,16 @@ void Entity::WalkToPos(const Position& posTarget, MyServer* pServer)
 	m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 }
 
+const float fExponent = 2.0f;
 bool Entity::DistanceLessEqual(const Entity& refEntity, float fDistance)
 {
-	const float fExponent = 2.0f;
-	return std::pow(this->m_Pos.x - refEntity.m_Pos.x, fExponent) + std::pow(this->m_Pos.z - refEntity.m_Pos.z, fExponent) <= std::pow(fDistance, fExponent);
+	return this->DistancePow2(refEntity) <= std::pow(fDistance, fExponent);
 }
 
+float Entity::DistancePow2(const Entity& refEntity)const
+{
+	return std::pow(this->m_Pos.x - refEntity.m_Pos.x, fExponent) + std::pow(this->m_Pos.z - refEntity.m_Pos.z, fExponent);
+}
 void Entity::Hurt(int hp)
 {
 	CHECK_GE(hp, 0);
@@ -79,16 +83,21 @@ void Entity::Update()
 		return;
 	}
 
-	for (const auto& spEntity : m_space.setEntity)
+	std::vector<SpEntity> vecEnemy;
+	std::copy_if(m_space.setEntity.begin(), m_space.setEntity.end(), std::back_inserter(vecEnemy), [this](const SpEntity& sp)
+		{
+			return sp.get() != this && !sp->IsDead() && sp->IsEnemy(*this);
+		});
+
+	auto iterMin = std::min_element(vecEnemy.begin(), vecEnemy.end(), [this](const SpEntity& sp1, const SpEntity& sp2)
+		{
+			return this->DistancePow2(*sp1) < this->DistancePow2(*sp2);
+		});
+
+	if (iterMin != vecEnemy.end())
 	{
-		if (spEntity.get() == this)//查找敌人，所有其他人都是敌人
-			continue;
 
-		if (spEntity->IsDead())
-			continue;
-
-		if (!spEntity->IsEnemy(*this))
-			continue;
+		const auto& spEntity = *iterMin;
 
 		if (DistanceLessEqual(*spEntity, this->m_f攻击距离))
 		{
