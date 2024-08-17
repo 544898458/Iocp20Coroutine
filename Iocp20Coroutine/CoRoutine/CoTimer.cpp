@@ -12,6 +12,13 @@ namespace CoTimer
 
 	std::multimap<std::chrono::steady_clock::time_point, CoAwaiterBool > g_multiTimer;
 	std::map<long, CoAwaiterBool> g_NextUpdate;
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="milli"></param>
+	/// <param name="cancel"></param>
+	/// <returns>true表示中途取消</returns>
 	CoAwaiterBool& Wait(const std::chrono::milliseconds& milli, FunCancel& cancel)
 	{
 		//g_multiTimer.insert({ std::chrono::steady_clock::now() + milli,Wait2() });
@@ -29,7 +36,7 @@ namespace CoTimer
 				{
 					if (iter->second.Sn() == sn)
 					{
-						iter->second.Run(false);//迭代器失效
+						iter->second.Run(true);//迭代器失效
 						break;
 						//g_multiTimer.erase(iter);
 					}
@@ -48,6 +55,11 @@ namespace CoTimer
 			};
 		return iter->second;
 	}
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="cancel"></param>
+	/// <returns>true表示中途取消</returns>
 	CoAwaiterBool& WaitNextUpdate(FunCancel &cancel)
 	{
 
@@ -67,7 +79,7 @@ namespace CoTimer
 					assert(false);
 					return;
 				}
-				itFind->second.Run(false);
+				itFind->second.Run(true);
 				g_NextUpdate.erase(sn);
 				//cancel = old;
 			};
@@ -88,7 +100,7 @@ namespace CoTimer
 				assert(false);
 				return;
 			}
-			itFind->second.Run(true);
+			itFind->second.Run(false);
 			g_NextUpdate.erase(sn);
 		}
 		
@@ -100,7 +112,7 @@ namespace CoTimer
 			if (kv.first > now)
 				return;
 
-			kv.second.Run(true);
+			kv.second.Run(false);
 			//assert(kv.second.Finished());
 			g_multiTimer.erase(kv.first);
 		}

@@ -43,19 +43,19 @@ void WorldSession::OnRecvPack(const void* buf, int len)
 	switch (msgId)
 	{
 	case MsgId::Say:
-		{
-			const auto msg = obj.as<MsgSay>();
-			LOG(INFO) << "GameSvr发来聊天" << StrConv::Utf8ToGbk(msg.content);
-			this->m_pServer->m_Sessions.Broadcast(msg);
-		}
-		break;
+	{
+		const auto msg = obj.as<MsgSay>();
+		LOG(INFO) << "GameSvr发来聊天" << StrConv::Utf8ToGbk(msg.content);
+		this->m_pServer->m_Sessions.Broadcast(msg);
+	}
+	break;
 	case MsgId::ConsumeMoney:
-		{
+	{
 		const auto msg = obj.as<MsgConsumeMoney>();
 		LOG(INFO) << "GameSvr请求扣钱" << msg.consumeMoney;
-		this->Send<MsgConsumeMoneyResponce>({.rpcSnId=msg.rpcSnId});
-		}
-		break;
+		this->Send<MsgConsumeMoneyResponce>({ .rpcSnId = msg.rpcSnId,.finalMoney = 5 });
+	}
+	break;
 	default:
 		LOG(WARNING) << "没处理GameSvr发来的消息:" << msgId;
 		break;

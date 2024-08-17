@@ -58,7 +58,7 @@ CoTask<int> MyMsgQueue::CoAddRole()
 {
 	void SendToWorldSvr(const MsgConsumeMoney & msg);
 	MsgConsumeMoneyResponce responce = co_await CoRpc<MsgConsumeMoneyResponce>::Send<MsgConsumeMoney>({ .consumeMoney = 3 }, SendToWorldSvr);//以同步编程的方式，向另一个服务器发送请求并等待返回
-
+	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 30,30 }, m_pSession->m_pServer->m_space, "altman-blue");
 	spNewEntity->AddComponentPlayer(m_pSession);
 	m_pSession->m_vecSpEntity.insert(spNewEntity);//自己控制的单位
