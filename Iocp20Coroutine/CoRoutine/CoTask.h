@@ -189,11 +189,10 @@ public:
 	bool m_autoRevert;
 };
 
-
+template<class T_Result>
 struct CoAwaiter
 {
-	static FunCancel funEmpty;
-	CoAwaiter(bool initSn = false, FunCancel& cancel = funEmpty) :m_Canceled(false), m_Kc(cancel,false)
+	CoAwaiter(bool initSn , FunCancel& cancel ) : m_Kc(cancel,false)
 	{
 		if (initSn)
 			m_sn = GenSn();
@@ -217,7 +216,7 @@ struct CoAwaiter
 	//    await_ready:准备好了没有。
 	//    await_suspend:停不停止。 
 	//    await_resume:好了做什么。
-	bool await_resume() const noexcept
+	T_Result await_resume() const noexcept
 	{
 		return m_Canceled;
 	}
@@ -264,18 +263,16 @@ struct CoAwaiter
 		other.m_sn = 0;
 		m_Canceled = other.m_Canceled;
 	}
-	void Cancel()
+	void Run(const T_Result &result) 
 	{
-		m_Canceled = true;
-		m_hAwaiter.resume();
-	}
-	void Run() 
-	{
+		m_Canceled = result;
 		m_hAwaiter.resume();
 	}
 private:
 	long m_sn;
-	bool m_Canceled;
+	T_Result m_Canceled;
 	KeepCancel m_Kc;
 	std::coroutine_handle<> m_hAwaiter;
 };
+
+typedef CoAwaiter<bool> CoAwaiterBool;

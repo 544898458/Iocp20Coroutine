@@ -42,7 +42,7 @@ void WorldClientMsgQueue::OnRecv(WorldClientMsgQueue& refThis, const MsgSay& msg
 void WorldClientMsgQueue::OnRecv(WorldClientMsgQueue& refThis, const MsgConsumeMoneyResponce& msg)
 {
 	LOG(INFO) << "WorldSvr发来扣钱结果,rpcSnId=" << msg.rpcSnId;
-	CoRpc::OnRecvResponce(msg);
+	CoRpc<MsgConsumeMoneyResponce>::OnRecvResponce(msg);
 }
 
 template<class T>

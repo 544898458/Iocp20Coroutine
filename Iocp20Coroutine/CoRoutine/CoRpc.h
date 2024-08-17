@@ -6,25 +6,22 @@
 /// <summary>
 /// 要求在主线程单线程中调用
 /// </summary>
-namespace CoRpc
+template<class T_Responce>
+class CoRpc
 {
-	extern int g_rpcSnId;
-	extern std::map<int, CoAwaiter> g_mapRpc;
-	extern std::map<int, FunCancel> g_mapRpcCancel;
-
-	template<class T_Req, class T_Responce>
-	CoAwaiter& Send(T_Req&& req, const std::function<void(const T_Req&)>& funSend)
+public:
+	template<class T_Req>
+	static CoAwaiter<T_Responce>& Send(T_Req&& req, const std::function<void(const T_Req&)>& funSend)
 	{
 		++g_rpcSnId;
 		req.rpcSnId = g_rpcSnId;
 		funSend(req);
 		auto iterCancel = g_mapRpcCancel.insert({ g_rpcSnId, FunCancel() });
-		auto iter = g_mapRpc.insert({ g_rpcSnId, CoAwaiter(true, iterCancel.first->second) });
+		auto iter = g_mapRpc.insert({ g_rpcSnId, CoAwaiter<T_Responce>(true, iterCancel.first->second) });
 		return iter.first->second;
 	}
 
-	template<class T_Responce>
-	void OnRecvResponce(const T_Responce& req)
+	static void OnRecvResponce(const T_Responce& req)
 	{
 		g_mapRpcCancel.erase(req.rpcSnId);
 		auto iterFind = g_mapRpc.find(req.rpcSnId);
@@ -35,8 +32,19 @@ namespace CoRpc
 			return;
 		}
 
-		iterFind->second.Run();
+		iterFind->second.Run(req);
 		g_mapRpc.erase(iterFind);
 	}
+private:
+	static int g_rpcSnId;
+	static std::map<int, CoAwaiter<T_Responce>> g_mapRpc;
+	static std::map<int, FunCancel> g_mapRpcCancel;
 
 };
+
+template<class T_Responce>
+int CoRpc<T_Responce>::g_rpcSnId = 0;
+template<class T_Responce>
+std::map<int, CoAwaiter<T_Responce>> CoRpc<T_Responce>::g_mapRpc;
+template<class T_Responce>
+std::map<int, FunCancel> CoRpc<T_Responce>::g_mapRpcCancel;

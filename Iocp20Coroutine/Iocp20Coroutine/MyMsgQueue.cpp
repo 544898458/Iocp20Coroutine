@@ -57,7 +57,7 @@ void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgAddRole& msg)
 CoTask<int> MyMsgQueue::CoAddRole()
 {
 	void SendToWorldSvr(const MsgConsumeMoney & msg);
-	co_await CoRpc::Send<MsgConsumeMoney, MsgConsumeMoneyResponce>({ .consumeMoney = 3 }, SendToWorldSvr);
+	MsgConsumeMoneyResponce responce = co_await CoRpc<MsgConsumeMoneyResponce>::Send<MsgConsumeMoney>({ .consumeMoney = 3 }, SendToWorldSvr);//以同步编程的方式，向另一个服务器发送请求并等待返回
 
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 30,30 }, m_pSession->m_pServer->m_space, "altman-blue");
 	spNewEntity->AddComponentPlayer(m_pSession);
@@ -65,6 +65,7 @@ CoTask<int> MyMsgQueue::CoAddRole()
 	m_pSession->m_pServer->m_space.setEntity.insert(spNewEntity);//全地图单位
 
 	spNewEntity->BroadcastEnter();
+	co_return 0;
 }
 
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgLogin& msg)
