@@ -1,6 +1,8 @@
 #pragma once
 #include <msgpack.hpp>
 #include "../IocpNetwork/MsgQueue.h"
+#include "../CoRoutine/CoTask.h"
+
 class Entity;
 
 struct Position
@@ -24,7 +26,8 @@ enum MsgId
 	Say,
 	SelectRoles,
 	AddRole,
-	DelRoleRet
+	DelRoleRet,
+	ComsumeMoney,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -42,6 +45,24 @@ struct MsgAddRole
 	MSGPACK_DEFINE(id);
 };
 
+struct MsgComsumeMoney
+{
+	MsgId id = ComsumeMoney;
+	int rpcSnId;
+	uint32_t consumeMoney;
+	MSGPACK_DEFINE(id, rpcSnId, consumeMoney);
+};
+
+struct MsgComsumeMoneyResponce
+{
+	MsgId id;
+	int rpcSnId;
+	int error;
+	uint32_t consumeMoney;
+	uint32_t finalMoney;
+	MSGPACK_DEFINE(id, rpcSnId, error, consumeMoney, finalMoney);
+};
+
 struct MsgMove
 {
 	MsgId id;
@@ -52,7 +73,7 @@ struct MsgMove
 
 struct MsgSay
 {
-	MsgSay(const std::string &strContent):content(strContent){}
+	MsgSay(const std::string& strContent) :content(strContent) {}
 	MsgSay() {}
 	MsgId id = MsgId::Say;
 	std::string content;
@@ -64,13 +85,13 @@ struct MsgSelectRoles
 	MsgSelectRoles() {}
 	MsgId id = MsgId::Say;
 	std::vector<double> ids;//TypeScript只有FLOAT64,没有POSITIVE_INTEGER和NEGATIVE_INTEGER
-	MSGPACK_DEFINE(id,ids);
+	MSGPACK_DEFINE(id, ids);
 };
 
 struct MsgAddRoleRet
 {
-	MsgAddRoleRet(uint64_t entityId, std::string nickName, std::string prefabName) 
-		:entityId(entityId), nickName(nickName), prefabName(prefabName){}
+	MsgAddRoleRet(uint64_t entityId, std::string nickName, std::string prefabName)
+		:entityId(entityId), nickName(nickName), prefabName(prefabName) {}
 	MsgId id = AddRoleRet;
 	uint64_t entityId;
 	std::string nickName;
@@ -80,7 +101,7 @@ struct MsgAddRoleRet
 
 struct MsgDelRoleRet
 {
-	MsgDelRoleRet(uint64_t entityId):entityId(entityId){}
+	MsgDelRoleRet(uint64_t entityId) :entityId(entityId) {}
 	MsgId id = DelRoleRet;
 	uint64_t entityId;
 	MSGPACK_DEFINE(id, entityId);
@@ -88,7 +109,7 @@ struct MsgDelRoleRet
 
 struct MsgNotifyPos
 {
-	MsgNotifyPos(Entity &ref);
+	MsgNotifyPos(Entity& ref);
 	MsgId msgId = NotifyPos;
 	uint64_t entityId;
 	float x;
@@ -99,7 +120,7 @@ struct MsgNotifyPos
 };
 struct MsgChangeSkeleAnim
 {
-	MsgChangeSkeleAnim(Entity& ref, std::string name, bool loop=true) :entityId((uint64_t)&ref), loop(loop), clipName(name) {}
+	MsgChangeSkeleAnim(Entity& ref, std::string name, bool loop = true) :entityId((uint64_t)&ref), loop(loop), clipName(name) {}
 	MsgId msgId = ChangeSkeleAnim;
 	uint64_t entityId;
 	bool loop;
@@ -130,7 +151,7 @@ public:
 	/// 主逻辑线程（控制台界面线程）调用
 	/// </summary>
 	/// <param name="msg"></param>
-	static void OnRecv(MyMsgQueue &refThis, const MsgLogin& msg);
+	static void OnRecv(MyMsgQueue& refThis, const MsgLogin& msg);
 	static void OnRecv(MyMsgQueue& refThis, const MsgMove& msg);
 	static void OnRecv(MyMsgQueue& refThis, const MsgSay& msg);
 	static void OnRecv(MyMsgQueue& refThis, const MsgSelectRoles& msg);
@@ -139,9 +160,10 @@ public:
 	/// 工作线程中（单线程）调用
 	/// </summary>
 	void Process();
+	CoTask<int> CoAddRole();
 private:
 	template<class T>
-	std::deque<T> &GetQueue();
+	std::deque<T>& GetQueue();
 	/// <summary>
 	/// 这里保存的都是解析后的消息明文
 	/// </summary>

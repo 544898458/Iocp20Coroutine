@@ -1,8 +1,15 @@
 #pragma once
 namespace MsgPack
 {
-	template<class T,typename FUN>
-	static void SendMsgpack(const T& ref, const FUN &refFun)
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <typeparam name="T_Msg">此消息用MsgPack序列化</typeparam>
+	/// <typeparam name="FUN"></typeparam>
+	/// <param name="ref"></param>
+	/// <param name="refFun"></param>
+	template<class T_Msg,typename FUN>
+	static void SendMsgpack(const T_Msg& ref, const FUN &refFun)
 	{
 		//普通结构序列化，无压缩无加密
 		std::stringstream buffer;
@@ -21,7 +28,7 @@ namespace MsgPack
 		const uint16_t usSize = (uint16_t)str.size();
 		refFun(&usSize, sizeof(usSize));
 		refFun(str.data(), usSize);
-		LOG(INFO) << typeid(T).name();
+		LOG(INFO) << typeid(T_Msg).name();
 	}
 };
 

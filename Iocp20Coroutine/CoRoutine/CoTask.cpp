@@ -1,2 +1,2 @@
 #include "CoTask.h"
-std::function<void()> CoAwaiter::funEmpty;
+FunCancel CoAwaiter::funEmpty;

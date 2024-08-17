@@ -31,8 +31,8 @@ public:
 	CoTask<int> m_coWalk;
 	CoTask<int> m_coAttack;
 	CoTask<int> m_coWaitDelete;
-	std::function<void()> m_cancelDelete;
-	std::function<void()> m_cancel;
+	FunCancel m_cancelDelete;
+	FunCancel m_cancel;
 	const uint64_t Id;
 	bool m_bNeedDelete = false;
 	int m_hp = 20;

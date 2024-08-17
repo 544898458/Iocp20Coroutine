@@ -11,6 +11,7 @@
 #include "AiCo.h"
 #include "Entity.h"
 #include "PlayerComponent.h"
+#include "../CoRoutine/CoRpc.h"
 
 //主线程，单线程
 void MyMsgQueue::Process()
@@ -46,10 +47,17 @@ template void MyMsgQueue::Push(const MsgAddRole& msg);
 
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgAddRole& msg)
 {
-	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 30,30 }, refThis.m_pSession->m_pServer->m_space, "altman-blue");
-	spNewEntity->AddComponentPlayer(refThis.m_pSession);
-	refThis.m_pSession->m_vecSpEntity.insert(spNewEntity);//自己控制的单位
-	refThis.m_pSession->m_pServer->m_space.setEntity.insert(spNewEntity);//全地图单位
+	refThis.CoAddRole().Run();//启动协程，先去WorldSvr扣钱后加一个新单位
+}
+CoTask<int> MyMsgQueue::CoAddRole()
+{
+	void SendToWorldSvr(const MsgComsumeMoney & msg);
+	co_await CoRpc::Send<MsgComsumeMoney, MsgComsumeMoneyResponce>({ .consumeMoney = 3 }, SendToWorldSvr);
+
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 30,30 }, m_pSession->m_pServer->m_space, "altman-blue");
+	spNewEntity->AddComponentPlayer(m_pSession);
+	m_pSession->m_vecSpEntity.insert(spNewEntity);//自己控制的单位
+	m_pSession->m_pServer->m_space.setEntity.insert(spNewEntity);//全地图单位
 
 	spNewEntity->BroadcastEnter();
 }

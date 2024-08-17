@@ -6,6 +6,8 @@
 #include<mutex>
 #include<functional>
 
+typedef std::function<void()> FunCancel;
+
 /// <summary>
 /// 方便实现协程，没有任何具体逻辑，没有线程，没有网络
 /// 命名参考C#的ETTask或UniTask，C++20协程标准采用的是微软方案，因此命名也使用C#名字
@@ -163,7 +165,7 @@ public:
 class KeepCancel
 {
 public:
-	KeepCancel(std::function<void()>& old,bool autoRevert=true) :funCancelOld(old), refFunCancel(old), m_autoRevert(autoRevert)
+	KeepCancel(FunCancel& old,bool autoRevert=true) :funCancelOld(old), refFunCancel(old), m_autoRevert(autoRevert)
 	{
 	}
 	~KeepCancel() 
@@ -177,8 +179,8 @@ public:
 		refFunCancel = funCancelOld;
 		funCancelOld = nullptr;
 	}
-	std::function<void()> funCancelOld;
-	std::function<void()>& refFunCancel;
+	FunCancel funCancelOld;
+	FunCancel& refFunCancel;
 	void operator=(const KeepCancel& other) 
 	{
 		funCancelOld = refFunCancel = other.refFunCancel;
@@ -190,8 +192,8 @@ public:
 
 struct CoAwaiter
 {
-	static std::function<void()> funEmpty;
-	CoAwaiter(bool initSn = false, std::function<void()>& cancel = funEmpty) :m_Canceled(false), m_Kc(cancel,false)
+	static FunCancel funEmpty;
+	CoAwaiter(bool initSn = false, FunCancel& cancel = funEmpty) :m_Canceled(false), m_Kc(cancel,false)
 	{
 		if (initSn)
 			m_sn = GenSn();
@@ -277,5 +279,3 @@ private:
 	KeepCancel m_Kc;
 	std::coroutine_handle<> m_hAwaiter;
 };
-
-typedef std::function<void()> FunCancel;

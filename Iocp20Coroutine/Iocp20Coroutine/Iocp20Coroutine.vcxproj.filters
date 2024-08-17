@@ -120,6 +120,9 @@
     <ClCompile Include="MonsterComponent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\CoRoutine\CoRpc.cpp">
+      <Filter>CoRoutine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="MonsterComponent.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CoRoutine\CoRpc.h">
+      <Filter>CoRoutine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

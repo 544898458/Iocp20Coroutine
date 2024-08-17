@@ -12,7 +12,7 @@ namespace CoTimer
 
 	std::multimap<std::chrono::steady_clock::time_point, CoAwaiter > g_multiTimer;
 	std::map<long, CoAwaiter> g_NextUpdate;
-	CoAwaiter& Wait(const std::chrono::milliseconds& milli, std::function<void()>& cancel)
+	CoAwaiter& Wait(const std::chrono::milliseconds& milli, FunCancel& cancel)
 	{
 		//g_multiTimer.insert({ std::chrono::steady_clock::now() + milli,Wait2() });
 		//co_await(*g_multiTimer.begin()).second;
@@ -20,7 +20,7 @@ namespace CoTimer
 		const auto time = std::chrono::steady_clock::now() + milli;
 		auto iter = g_multiTimer.insert({ time ,CoAwaiter(true, cancel) });
 		const auto sn = iter->second.Sn();
-		//std::function<void()> old = cancel;
+		//FunCancel old = cancel;
 		cancel = [time, sn]()
 			{
 				LOG(INFO) << "Wait取消" << sn;
@@ -48,7 +48,7 @@ namespace CoTimer
 			};
 		return iter->second;
 	}
-	CoAwaiter& WaitNextUpdate(std::function<void()> &cancel)
+	CoAwaiter& WaitNextUpdate(FunCancel &cancel)
 	{
 
 		//g_multiTimer.insert({ std::chrono::steady_clock::now() + milli,Wait2() });
@@ -57,7 +57,7 @@ namespace CoTimer
 		auto ret = CoAwaiter(true, cancel);
 		g_NextUpdate[ret.Sn()] = ret;
 		const auto sn = ret.Sn();
-		//std::function<void()> old = cancel;
+		//FunCancel old = cancel;
 		cancel = [sn]()
 			{
 				//LOG(INFO) << "WaitNextUpdate取消" << sn;
