@@ -47,12 +47,17 @@ template void MyMsgQueue::Push(const MsgAddRole& msg);
 
 void MyMsgQueue::OnRecv(MyMsgQueue& refThis, const MsgAddRole& msg)
 {
-	refThis.CoAddRole().Run();//启动协程，先去WorldSvr扣钱后加一个新单位
+	//前一个没结束就会内存泄漏
+	refThis.m_coRpc = refThis.CoAddRole();//启动协程，先去WorldSvr扣钱后加一个新单位
+	refThis.m_coRpc.Run();
 }
+
+
+
 CoTask<int> MyMsgQueue::CoAddRole()
 {
-	void SendToWorldSvr(const MsgComsumeMoney & msg);
-	co_await CoRpc::Send<MsgComsumeMoney, MsgComsumeMoneyResponce>({ .consumeMoney = 3 }, SendToWorldSvr);
+	void SendToWorldSvr(const MsgConsumeMoney & msg);
+	co_await CoRpc::Send<MsgConsumeMoney, MsgConsumeMoneyResponce>({ .consumeMoney = 3 }, SendToWorldSvr);
 
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 30,30 }, m_pSession->m_pServer->m_space, "altman-blue");
 	spNewEntity->AddComponentPlayer(m_pSession);

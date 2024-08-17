@@ -27,7 +27,8 @@ enum MsgId
 	SelectRoles,
 	AddRole,
 	DelRoleRet,
-	ComsumeMoney,
+	ConsumeMoney,
+	ConsumeMoneyResponce,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -45,17 +46,17 @@ struct MsgAddRole
 	MSGPACK_DEFINE(id);
 };
 
-struct MsgComsumeMoney
+struct MsgConsumeMoney
 {
-	MsgId id = ComsumeMoney;
+	MsgId id = ConsumeMoney;
 	int rpcSnId;
 	uint32_t consumeMoney;
 	MSGPACK_DEFINE(id, rpcSnId, consumeMoney);
 };
 
-struct MsgComsumeMoneyResponce
+struct MsgConsumeMoneyResponce
 {
-	MsgId id;
+	MsgId id = ConsumeMoneyResponce;
 	int rpcSnId;
 	int error;
 	uint32_t consumeMoney;
@@ -130,6 +131,7 @@ struct MsgChangeSkeleAnim
 
 class MySession;
 
+
 class MyMsgQueue
 {
 public:
@@ -143,10 +145,13 @@ public:
 	/// <param name="msg"></param>
 	template<class T>
 	void Push(const T& msg);
-	//void Push(const MsgLogin& msg);
-	//void Push(const MsgMove& msg);
-	//void Push(const MsgSay& msg);
 
+	/// <summary>
+	/// 工作线程中（单线程）调用
+	/// </summary>
+	void Process();
+	CoTask<int> m_coRpc;
+private:
 	/// <summary>
 	/// 主逻辑线程（控制台界面线程）调用
 	/// </summary>
@@ -156,12 +161,8 @@ public:
 	static void OnRecv(MyMsgQueue& refThis, const MsgSay& msg);
 	static void OnRecv(MyMsgQueue& refThis, const MsgSelectRoles& msg);
 	static void OnRecv(MyMsgQueue& refThis, const MsgAddRole& msg);
-	/// <summary>
-	/// 工作线程中（单线程）调用
-	/// </summary>
-	void Process();
+
 	CoTask<int> CoAddRole();
-private:
 	template<class T>
 	std::deque<T>& GetQueue();
 	/// <summary>
@@ -172,6 +173,7 @@ private:
 	std::deque<MsgSay> m_queueSay;
 	std::deque<MsgSelectRoles> m_queueSelectRoles;
 	std::deque<MsgAddRole> m_queueAddRole;
+
 	/// <summary>
 	/// 弱引用，不要销毁
 	/// </summary>

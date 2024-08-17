@@ -60,7 +60,7 @@ std::unique_ptr<Iocp::Server<WorldClient> > g_worldSvr;// (Iocp::ThreadPool::Get
 std::unique_ptr<Iocp::SessionSocketCompletionKey<WorldClientSession>> g_ConnectToWorldSvr;
 
 void SendToWorldSvr(const MsgSay& msg){MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); });}
-void SendToWorldSvr(const MsgComsumeMoney& msg) { MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); }); }
+void SendToWorldSvr(const MsgConsumeMoney& msg) { MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); }); }
 
 ///*
 int main(void)
@@ -129,6 +129,7 @@ int main(void)
 		}
 		std::this_thread::sleep_for(msSleep);
 		accept.m_Server.Update();
+		g_ConnectToWorldSvr->Session.m_MsgQueue.Process();
 		CoTimer::Update();
 	}
 

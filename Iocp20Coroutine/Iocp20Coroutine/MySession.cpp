@@ -60,7 +60,7 @@ template<class T>
 void MySession::PushMsg(const msgpack::object& obj)
 {
 	const auto msg = obj.as<T>();
-	this->m_pWsSession->m_pSession->Session.m_Session.m_msgQueue.Push(msg);
+	m_msgQueue.Push(msg);
 }
 /// <summary>
 /// 网络线程，多线程

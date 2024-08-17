@@ -13,6 +13,13 @@ template Iocp::SessionSocketCompletionKey<WorldSession>;
 //template void WebSocketSession<WorldSession>::OnInit<WorldServer>(Iocp::SessionSocketCompletionKey<WebSocketSession<WorldSession> >& refSession, WorldServer& server);
 //template class WebSocketEndpoint<WorldSession, Iocp::SessionSocketCompletionKey<WebSocketSession<WorldSession> > >;
 
+/// <summary>
+/// 这是网络线程
+/// </summary>
+/// <param name=""></param>
+/// <param name="buf"></param>
+/// <param name="len"></param>
+/// <returns></returns>
 int WorldSession::OnRecv(CompeletionKeySession&, const void* buf, int len)
 {
 	const void* bufPack(nullptr);
@@ -36,12 +43,22 @@ void WorldSession::OnRecvPack(const void* buf, int len)
 	switch (msgId)
 	{
 	case MsgId::Say:
-	{
-		const auto msg = obj.as<MsgSay>();
-		LOG(INFO) << "GameSvr发来聊天" << StrConv::Utf8ToGbk(msg.content);
-		this->m_pServer->m_Sessions.Broadcast(msg);
-	}
-	break;
+		{
+			const auto msg = obj.as<MsgSay>();
+			LOG(INFO) << "GameSvr发来聊天" << StrConv::Utf8ToGbk(msg.content);
+			this->m_pServer->m_Sessions.Broadcast(msg);
+		}
+		break;
+	case MsgId::ConsumeMoney:
+		{
+		const auto msg = obj.as<MsgConsumeMoney>();
+		LOG(INFO) << "GameSvr请求扣钱" << msg.consumeMoney;
+		this->Send<MsgConsumeMoneyResponce>({.rpcSnId=msg.rpcSnId});
+		}
+		break;
+	default:
+		LOG(WARNING) << "没处理GameSvr发来的消息:" << msgId;
+		break;
 	}
 }
 void WorldSession::OnInit(CompeletionKeySession& refSession, WorldServer& refServer)
