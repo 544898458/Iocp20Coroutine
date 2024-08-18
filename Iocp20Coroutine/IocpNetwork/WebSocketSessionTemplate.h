@@ -2,6 +2,11 @@
 
 template<class T_Session>
 template<class T_Server>
+	requires requires(WebSocketSession<T_Session>& refWsSesson, T_Session& refSession, T_Server& server)
+{
+	//refSession.OnRecvWsPack((const char[])0, (const int )0	);
+	refSession.OnInit(refWsSesson, server);
+}
 void WebSocketSession<T_Session>::OnInit(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session> >& refSession, T_Server&server)
 {
 	//std::lock_guard lock(g_setSessionMutex<WebSocketSession<T_Session> >);

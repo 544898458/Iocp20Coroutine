@@ -248,6 +248,12 @@
     <ClInclude Include="MyMsgQueue.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\IocpNetwork\MsgQueueMsgPack.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\MsgQueueMsgPackTemplate.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\websocketfiles-master\src\string_helper.inl">

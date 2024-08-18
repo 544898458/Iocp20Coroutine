@@ -20,7 +20,7 @@
 #include "Entity.h"
 #include "../CoRoutine/CoRpc.h"
 #include "../IocpNetwork/StrConv.h"
-#include "../IocpNetwork/MsgQueueTemplate.h"
+#include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 
 //template<MySession>
 //std::set<Iocp::SessionSocketCompletionKey<MySession>*> g_setSession;
@@ -53,12 +53,6 @@ void MySession::Send(const T& ref)
 	this->m_pWsSession->Send(output.bytes(), output.length());
 }
 
-template<class T>
-void MySession::PushMsg(const msgpack::object& obj)
-{
-	const auto msg = obj.as<T>();
-	m_MsgQueue.Push(msg, GetQueue<T>());
-}
 /// <summary>
 /// 网络线程，多线程
 /// </summary>
@@ -74,11 +68,11 @@ void MySession::OnRecvWsPack(const void* buf, const int len)
 	auto pSessionSocketCompeletionKey = this->m_pWsSession->m_pSession;
 	switch (msgId)
 	{
-	case MsgId::Login:PushMsg<MsgLogin>(obj);break;
-	case MsgId::Move:PushMsg<MsgMove>(obj);break;
-	case MsgId::Say:PushMsg<MsgSay>(obj);break;
-	case MsgId::SelectRoles:PushMsg<MsgSelectRoles>(obj);break;
-	case MsgId::AddRole:PushMsg<MsgAddRole>(obj); break;
+	case MsgId::Login:m_MsgQueue.PushMsg<MsgLogin>(*this,obj);break;
+	case MsgId::Move:m_MsgQueue.PushMsg<MsgMove>(*this, obj);break;
+	case MsgId::Say:m_MsgQueue.PushMsg<MsgSay >(*this, obj); break;
+	case MsgId::SelectRoles:m_MsgQueue.PushMsg<MsgSelectRoles>(*this, obj);break;
+	case MsgId::AddRole:m_MsgQueue.PushMsg<MsgAddRole>(*this, obj); break;
 	default:
 		LOG(ERROR) << "没处理msgId:" << msgId;
 		assert(false);

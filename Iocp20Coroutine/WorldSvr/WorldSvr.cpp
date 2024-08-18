@@ -44,7 +44,7 @@ int main()
 	while (g_running)
 	{
 		Sleep(100);
-		//accept.m_Server.Update();
+		accept.m_Server.m_Sessions.Update([]() {}); ;
 		CoTimer::Update();
 	}
 	accept.Stop();

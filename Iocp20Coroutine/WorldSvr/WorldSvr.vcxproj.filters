@@ -63,6 +63,9 @@
     <ClCompile Include="..\IocpNetwork\ListenSocketCompletionKey.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
+    <ClCompile Include="..\IocpNetwork\MsgQueue.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -114,6 +117,15 @@
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\SessionSocketCompletionKeyTemplate.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\MsgQueueMsgPack.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\MsgQueueMsgPackTemplate.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\MsgQueue.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "WorldClient.h"
 #include "../CoRoutine/CoRpc.h"
-#include "../IocpNetwork/MsgQueueTemplate.h"
+#include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 
 template Iocp::Server<WorldClient>;
 //template bool Iocp::Server<WorldClient>::Init<WorldClientSession>(const uint16_t);
@@ -47,18 +47,6 @@ void WorldClientSession::OnRecv(const MsgConsumeMoneyResponce& msg)
 	CoRpc<MsgConsumeMoneyResponce>::OnRecvResponce(msg);
 }
 
-/// <summary>
-/// 网络线程（多线程）调用
-/// </summary>
-/// <typeparam name="T"></typeparam>
-/// <param name="obj"></param>
-template<class T>
-void WorldClientSession::PushMsg(const msgpack::object& obj)
-{
-	const auto msg = obj.as<T>();
-	m_MsgQueue.Push(msg, GetQueue<T>());
-}
-
 
 template<> std::deque<MsgSay>& WorldClientSession::GetQueue() { return m_queueSay; }
 template<> std::deque<MsgConsumeMoneyResponce>& WorldClientSession::GetQueue() { return m_queueConsumeMoneyResponce; }
@@ -78,8 +66,8 @@ void WorldClientSession::OnRecvPack(const void* buf, int len)
 
 	switch (msgId)
 	{
-	case MsgId::Say:PushMsg<MsgSay>(obj);break;
-	case MsgId::ConsumeMoneyResponce:PushMsg<MsgConsumeMoneyResponce>(obj);break;
+	case MsgId::Say:m_MsgQueue.PushMsg<MsgSay>(*this,obj);break;
+	case MsgId::ConsumeMoneyResponce:m_MsgQueue.PushMsg<MsgConsumeMoneyResponce>(*this, obj);break;
 	default:
 		LOG(WARNING) << "ERR:" << msgId;
 		break;

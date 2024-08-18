@@ -72,9 +72,14 @@ int32_t WebSocketEndpoint<T_Callback, T_Data>::from_wire(const void* readbuf, in
 		{ // for next one
 			// clear used data
 			int64_t n_used = fromwire_buf_.getoft();
-			LOG(INFO) << "WebSocketEndpoint - fromwire_buf: used data:" << n_used << " nrcv:" << nrcv
-				<< " length:" << fromwire_buf_.length() << std::endl;
-			fromwire_buf_.erase(nrcv);
+			/*LOG(INFO) << "WebSocketEndpoint - fromwire_buf: used data:" << n_used << " nrcv:" << nrcv
+				<< " length:" << fromwire_buf_.length() << std::endl;*/
+			if (nrcv >= (std::numeric_limits<int>::max)())
+			{
+				LOG(ERROR) << "WebSocketEndpoint - fromwire_buf: used data:" << n_used << " nrcv:" << nrcv
+					<< " length:" << fromwire_buf_.length() << std::endl;
+			}
+			fromwire_buf_.erase((int)nrcv);
 			fromwire_buf_.resetoft();
 			if (fromwire_buf_.length() == 0)
 			{

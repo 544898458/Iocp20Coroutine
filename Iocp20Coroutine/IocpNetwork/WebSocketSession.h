@@ -14,7 +14,12 @@
 /// https://blog.csdn.net/qq_39540028/article/details/104493049
 /// 此开源库才几百行，就能把原有在C++在TCP服务器快速改成WebSocket服务器
 /// </summary>
+
 template<class T_Callback, class T_Data>
+	requires requires(T_Callback& cb)
+{
+	cb.OnRecvWsPack(nullptr, 0);
+}
 class MyWebSocketEndpoint :public WebSocketEndpoint< T_Callback, T_Data>
 {
 public:
@@ -71,7 +76,7 @@ public:
 	/// 发送一个WebSocket数据包到客户端
 	/// </summary>
 	/// <param name="ref"></param>
-	void Send(const void *buf, const int len)
+	void Send(const void* buf, const int len)
 	{
 		//WebSocketPacket wspacket;
 		//// set FIN and opcode
@@ -99,10 +104,6 @@ public:
 /// 对应一个网络连接
 /// </summary>
 template<class T_Session>
-//requires requires(T_Session& refSession)
-//{
-//	refSession.OnRecvWsPack((const char[])0, (const int )0	);
-//}
 class WebSocketSession
 {
 public:
@@ -112,6 +113,11 @@ public:
 	//WebSocketSession();
 	virtual ~WebSocketSession() {}
 	template<class T_Server>
+		requires requires(WebSocketSession<T_Session>& refWsSesson, T_Session& refSession, T_Server &server)
+	{
+		//refSession.OnRecvWsPack((const char[])0, (const int )0	);
+		refSession.OnInit(refWsSesson, server);
+	}
 	void OnInit(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
 	/// <summary>
 	/// 用户自定义函数，这里是纯数据，连封包概念都没有，封包是WebSocket协议负责的工作
@@ -125,7 +131,7 @@ public:
 /// 从全局连接set里删除连接，从全局Space里删除实体
 /// </summary>
 	void OnDestroy();
-	void Send(const void *buf, const int len)
+	void Send(const void* buf, const int len)
 	{
 		m_webSocketEndpoint->Send(buf, len);
 	}
@@ -134,6 +140,8 @@ public:
 	{
 		m_Session.Send(ref);
 	}
+	void Process() { m_Session.Process(); }
+
 	/// <summary>
 	/// 开源WebSocket库
 	/// </summary>

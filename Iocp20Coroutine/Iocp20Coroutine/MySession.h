@@ -2,13 +2,24 @@
 #include "MyMsgQueue.h"
 #include "SpEntity.h"
 #include "../IocpNetwork/WebSocketSession.h"
+#include "../IocpNetwork/MsgQueueMsgPack.h"
 
 class MyServer;
 class MySession
 {
 public:
-	//MySession();
+	/// <summary>
+	/// WebSocket收到一个完整二进制包
+	/// </summary>
+	/// <param name="buf"></param>
+	/// <param name="len"></param>
 	void OnRecvWsPack(const void* buf, const int len);
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="refWsSession"></param>
+	/// <param name="server"></param>
 	void OnInit(WebSocketSession<MySession>& refWsSession, MyServer& server);
 	void OnDestroy();
 	void Erase(SpEntity spEntity);
@@ -22,6 +33,9 @@ public:
 	MyServer* m_pServer = nullptr;
 	std::vector<uint64_t> m_vecSelectedEntity;
 	std::string m_nickName;
+
+	template<class T>
+	std::deque<T>& GetQueue();
 
 	/// <summary>
 	/// 工作线程中（单线程）调用
@@ -40,8 +54,7 @@ private:
 	void OnRecv(const MsgAddRole& msg);
 
 	CoTask<int> CoAddRole();
-	template<class T>
-	std::deque<T>& GetQueue();
+	
 	/// <summary>
 	/// 这里保存的都是解析后的消息明文
 	/// </summary>
@@ -51,9 +64,7 @@ private:
 	std::deque<MsgSelectRoles> m_queueSelectRoles;
 	std::deque<MsgAddRole> m_queueAddRole;
 
-	MsgQueue m_MsgQueue;
+	MsgQueueMsgPack<MySession> m_MsgQueue;
 private:
-	template<class T>
-	void PushMsg(const msgpack::object& obj);
 	WebSocketSession<MySession>* m_pWsSession = nullptr;
 };

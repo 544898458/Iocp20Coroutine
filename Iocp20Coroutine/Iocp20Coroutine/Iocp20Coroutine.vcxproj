@@ -150,6 +150,10 @@
     <ClCompile Include="..\IocpNetwork\MsgQueue.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClInclude Include="..\IocpNetwork\MsgQueueMsgPackTemplate.h">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClCompile Include="..\IocpNetwork\StrConv.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -177,6 +181,7 @@
     <ClInclude Include="..\IocpNetwork\Client.h" />
     <ClInclude Include="..\IocpNetwork\ListenSocketCompletionKeyTemplate.h" />
     <ClInclude Include="..\IocpNetwork\MsgQueue.h" />
+    <ClInclude Include="..\IocpNetwork\MsgQueueMsgPack.h" />
     <ClInclude Include="..\IocpNetwork\MsgQueueTemplate.h" />
     <ClInclude Include="..\IocpNetwork\Sessions.h" />
     <ClInclude Include="..\IocpNetwork\SessionsTemplate.h" />

@@ -5,6 +5,7 @@
 #include <msgpack.hpp>
 #include "MyMsgQueue.h"
 #include "../IocpNetwork/StrConv.h"
+#include "../IocpNetwork/MsgQueueMsgPack.h"
 
 enum MsgId;
 class WorldClient;
@@ -43,13 +44,7 @@ public:
 	{
 
 	}
-	/// <summary>
-	/// 网络线程（多线程）调用
-	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	/// <param name="obj"></param>
-	template<class T> void PushMsg(const msgpack::object& obj);
-
+	
 	WorldClient* m_pWorldClient = nullptr;
 	Iocp::SessionSocketCompletionKey<WorldClientSession> *m_pSession = nullptr;
 	
@@ -57,6 +52,7 @@ public:
 	/// 工作线程中（单线程）调用
 	/// </summary>
 	void Process();
+	template<class T> std::deque<T>& GetQueue();
 private:
 	/// <summary>
 	/// 主逻辑线程（控制台界面线程）调用
@@ -65,14 +61,13 @@ private:
 	void OnRecv(const MsgSay& msg);
 	void OnRecv(const MsgConsumeMoneyResponce& msg);
 
-	template<class T>
-	std::deque<T>& GetQueue();
+	
 	/// <summary>
 	/// 这里保存的都是解析后的消息明文,反序列化在网络线程，处理明文消息在逻辑线程
 	/// </summary>
 	std::deque<MsgSay> m_queueSay;
 	std::deque<MsgConsumeMoneyResponce> m_queueConsumeMoneyResponce;
-	MsgQueue m_MsgQueue;
+	MsgQueueMsgPack<WorldClientSession> m_MsgQueue;
 };
 class WorldClient
 {

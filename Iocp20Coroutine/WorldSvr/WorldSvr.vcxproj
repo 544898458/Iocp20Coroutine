@@ -155,6 +155,9 @@
     <ClCompile Include="..\IocpNetwork\ListenSocketCompletionKey.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\IocpNetwork\MsgQueue.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\IocpNetwork\Overlapped.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -187,6 +190,9 @@
     <ClInclude Include="..\IocpNetwork\Client.h" />
     <ClInclude Include="..\IocpNetwork\ListenSocketCompletionKey.h" />
     <ClInclude Include="..\IocpNetwork\MsgPack.h" />
+    <ClInclude Include="..\IocpNetwork\MsgQueue.h" />
+    <ClInclude Include="..\IocpNetwork\MsgQueueMsgPack.h" />
+    <ClInclude Include="..\IocpNetwork\MsgQueueMsgPackTemplate.h" />
     <ClInclude Include="..\IocpNetwork\Overlapped.h" />
     <ClInclude Include="..\IocpNetwork\Server.h" />
     <ClInclude Include="..\IocpNetwork\ServerTemplate.h" />
