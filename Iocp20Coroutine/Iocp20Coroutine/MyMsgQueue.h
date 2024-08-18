@@ -28,7 +28,8 @@ enum MsgId
 	AddRole,
 	DelRoleRet,
 	ConsumeMoney,
-	ConsumeMoneyResponce,
+	ChangeMoneyResponce,
+	AddBuilding,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -46,21 +47,29 @@ struct MsgAddRole
 	MSGPACK_DEFINE(id);
 };
 
-struct MsgConsumeMoney
+struct MsgAddBuilding
+{
+	MsgId id;
+	MSGPACK_DEFINE(id);
+};
+
+struct MsgChangeMoney
 {
 	MsgId id = ConsumeMoney;
 	int rpcSnId;
-	uint32_t consumeMoney;
-	MSGPACK_DEFINE(id, rpcSnId, consumeMoney);
+	bool addMoney;
+	uint32_t changeMoney;
+	std::string nickName;
+	MSGPACK_DEFINE(id, rpcSnId, addMoney, changeMoney, nickName);
 };
 
-struct MsgConsumeMoneyResponce
+struct MsgChangeMoneyResponce
 {
-	MsgId id = ConsumeMoneyResponce;
+	MsgId id = ChangeMoneyResponce;
 	int rpcSnId;
-	int error;
+	int error = 0;
 	uint32_t consumeMoney;
-	uint32_t finalMoney;
+	int32_t finalMoney;
 	MSGPACK_DEFINE(id, rpcSnId, error, consumeMoney, finalMoney);
 };
 

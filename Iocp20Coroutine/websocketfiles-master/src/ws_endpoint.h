@@ -65,7 +65,7 @@ public:
     virtual int32_t user_defined_process(WebSocketPacket& packet, ByteBuffer& frame_payload);
 
     // send data to wire 
-    virtual int32_t to_wire(const void * writebuf, int64_t size);
+    int32_t to_wire(const void * writebuf, int32_t size);
 
 private:
     bool ws_handshake_completed_;

@@ -27,10 +27,12 @@ public:
 private:
 	void OnRecvPack(const void* buf, int len);
 	void OnRecv(const MsgSay& msg);
-	void OnRecv(const MsgConsumeMoney& msg);
+	void OnRecv(const MsgChangeMoney& msg);
 
 	MsgQueueMsgPack<WorldSession> m_MsgQueue;
 	std::deque<MsgSay> m_queueSay;
-	std::deque<MsgConsumeMoney> m_queueConsumeMoney;
+	std::deque<MsgChangeMoney> m_queueConsumeMoney;
+
+	std::map<std::string, int> m_mapMoney;
 };
 

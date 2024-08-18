@@ -11,12 +11,12 @@ public:
 	MyServer(const MyServer&) = delete;
 	MyServer(MyServer&&) = delete;
 	MyServer():m_space(this) {}
-	using Session = Iocp::SessionSocketCompletionKey<WebSocketSession< MySession> >;
+	using Session = Iocp::SessionSocketCompletionKey<WebSocketSession< GameSvrSession> >;
 	void OnAdd(Session&);
 	void OnDel();
 	void Update();
 
 	Space m_space;
-	Sessions< WebSocketSession< MySession> > m_Sessions;
+	Sessions< WebSocketSession< GameSvrSession> > m_Sessions;
 
 };

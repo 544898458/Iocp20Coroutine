@@ -20,7 +20,7 @@ void WorldClientSession::Process()
 	case MsgId::Invalid_0://没有消息可处理
 		return;
 	case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldClientSession::OnRecv); break;
-	case MsgId::ConsumeMoneyResponce:this->m_MsgQueue.OnRecv(this->m_queueConsumeMoneyResponce, *this, &WorldClientSession::OnRecv); break;
+	case MsgId::ChangeMoneyResponce:this->m_MsgQueue.OnRecv(this->m_queueConsumeMoneyResponce, *this, &WorldClientSession::OnRecv); break;
 	default:
 		LOG(ERROR) << "msgId:" << msgId;
 		assert(false);
@@ -41,15 +41,15 @@ void WorldClientSession::OnRecv(const MsgSay& msg)
 /// </summary>
 /// <param name="refThis"></param>
 /// <param name="msg"></param>
-void WorldClientSession::OnRecv(const MsgConsumeMoneyResponce& msg)
+void WorldClientSession::OnRecv(const MsgChangeMoneyResponce& msg)
 {
 	LOG(INFO) << "WorldSvr发来扣钱结果,rpcSnId=" << msg.rpcSnId;
-	CoRpc<MsgConsumeMoneyResponce>::OnRecvResponce(msg);
+	CoRpc<MsgChangeMoneyResponce>::OnRecvResponce(msg);
 }
 
 
 template<> std::deque<MsgSay>& WorldClientSession::GetQueue() { return m_queueSay; }
-template<> std::deque<MsgConsumeMoneyResponce>& WorldClientSession::GetQueue() { return m_queueConsumeMoneyResponce; }
+template<> std::deque<MsgChangeMoneyResponce>& WorldClientSession::GetQueue() { return m_queueConsumeMoneyResponce; }
 
 
 /// <summary>
@@ -67,7 +67,7 @@ void WorldClientSession::OnRecvPack(const void* buf, int len)
 	switch (msgId)
 	{
 	case MsgId::Say:m_MsgQueue.PushMsg<MsgSay>(*this,obj);break;
-	case MsgId::ConsumeMoneyResponce:m_MsgQueue.PushMsg<MsgConsumeMoneyResponce>(*this, obj);break;
+	case MsgId::ChangeMoneyResponce:m_MsgQueue.PushMsg<MsgChangeMoneyResponce>(*this, obj);break;
 	default:
 		LOG(WARNING) << "ERR:" << msgId;
 		break;

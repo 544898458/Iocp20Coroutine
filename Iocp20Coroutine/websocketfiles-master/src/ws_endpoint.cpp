@@ -67,11 +67,11 @@ int32_t WebSocketEndpoint<T_Callback, T_Data>::from_wire(const void* readbuf, in
 	LOG(INFO) << "WebSocketEndpoint - set fromwire_buf, current length:" << fromwire_buf_.length() << std::endl;
 	while (true)
 	{
-		int64_t nrcv = parse_packet(fromwire_buf_);
+		const auto nrcv = parse_packet(fromwire_buf_);
 		if (nrcv > 0)
 		{ // for next one
 			// clear used data
-			int64_t n_used = fromwire_buf_.getoft();
+			const auto n_used = fromwire_buf_.getoft();
 			/*LOG(INFO) << "WebSocketEndpoint - fromwire_buf: used data:" << n_used << " nrcv:" << nrcv
 				<< " length:" << fromwire_buf_.length() << std::endl;*/
 			if (nrcv >= (std::numeric_limits<int>::max)())
@@ -83,7 +83,7 @@ int32_t WebSocketEndpoint<T_Callback, T_Data>::from_wire(const void* readbuf, in
 			fromwire_buf_.resetoft();
 			if (fromwire_buf_.length() == 0)
 			{
-				return nrcv;
+				return (int32_t)nrcv;
 			}
 			else
 			{
@@ -105,7 +105,7 @@ int32_t WebSocketEndpoint<T_Callback, T_Data>::from_wire(const void* readbuf, in
 	return 0;
 }
 template<class T_Callback, class T_Data>
-int32_t WebSocketEndpoint<T_Callback, T_Data>::to_wire(const void* writebuf, int64_t size)
+int32_t WebSocketEndpoint<T_Callback, T_Data>::to_wire(const void* writebuf, int32_t size)
 {
 	//networklayer_->toWire(writebuf,size);
 	if (nt_write_cb_ == NULL || nt_work_data_ == NULL || writebuf == NULL || size <= 0)

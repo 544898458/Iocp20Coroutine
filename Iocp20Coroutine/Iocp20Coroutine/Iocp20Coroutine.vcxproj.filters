@@ -123,6 +123,9 @@
     <ClCompile Include="MyMsgQueue.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="BuildingComponent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\MsgQueueMsgPackTemplate.h">
       <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildingComponent.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

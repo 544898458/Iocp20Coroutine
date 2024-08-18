@@ -59,14 +59,14 @@ private:
 	/// </summary>
 	/// <param name="msg"></param>
 	void OnRecv(const MsgSay& msg);
-	void OnRecv(const MsgConsumeMoneyResponce& msg);
+	void OnRecv(const MsgChangeMoneyResponce& msg);
 
 	
 	/// <summary>
 	/// 这里保存的都是解析后的消息明文,反序列化在网络线程，处理明文消息在逻辑线程
 	/// </summary>
 	std::deque<MsgSay> m_queueSay;
-	std::deque<MsgConsumeMoneyResponce> m_queueConsumeMoneyResponce;
+	std::deque<MsgChangeMoneyResponce> m_queueConsumeMoneyResponce;
 	MsgQueueMsgPack<WorldClientSession> m_MsgQueue;
 };
 class WorldClient

@@ -66,7 +66,7 @@ void WorldSession::OnRecvPack(const void* buf, int len)
 	switch (msgId)
 	{
 	case MsgId::Say:m_MsgQueue.PushMsg<MsgSay>(*this, obj); break;
-	case MsgId::ConsumeMoney:m_MsgQueue.PushMsg<MsgConsumeMoney>(*this, obj); break;
+	case MsgId::ConsumeMoney:m_MsgQueue.PushMsg<MsgChangeMoney>(*this, obj); break;
 	default:
 		LOG(WARNING) << "没处理GameSvr发来的消息:" << msgId;
 		break;
@@ -80,14 +80,40 @@ void WorldSession::OnRecv(const MsgSay& msg)
 
 }
 
-void WorldSession::OnRecv(const MsgConsumeMoney& msg)
+void WorldSession::OnRecv(const MsgChangeMoney& msg)
 {
-	LOG(INFO) << "GameSvr请求扣钱" << msg.consumeMoney;
-	this->Send<MsgConsumeMoneyResponce>({ .rpcSnId = msg.rpcSnId,.finalMoney = 5 });
+	LOG(INFO) << "GameSvr请求扣钱" << msg.changeMoney;
+	auto& refMoney = m_mapMoney[msg.nickName];
+	MsgChangeMoneyResponce msgResponce = {.rpcSnId = msg.rpcSnId};
+	assert(0 <= refMoney);
+	if (msg.addMoney)
+	{
+		if (std::numeric_limits< std::decay<decltype(refMoney)>::type>::max() - refMoney < msg.changeMoney)
+		{
+			msgResponce.error = -1;
+		}
+		else
+		{
+			refMoney += msg.changeMoney;
+		}
+	}
+	else 
+	{
+		if (refMoney < msg.changeMoney)
+		{
+			msgResponce.error = -2;
+		}
+		else
+		{
+			refMoney -= msg.changeMoney;
+		}
+	}
+	msgResponce.finalMoney = refMoney;
+	this->Send(msgResponce);
 }
 
 template<> std::deque<MsgSay>& WorldSession::GetQueue() { return m_queueSay; }
-template<> std::deque<MsgConsumeMoney>& WorldSession::GetQueue() { return m_queueConsumeMoney; }
+template<> std::deque<MsgChangeMoney>& WorldSession::GetQueue() { return m_queueConsumeMoney; }
 
 void WorldSession::OnInit(CompeletionKeySession& refSession, WorldServer& refServer)
 {

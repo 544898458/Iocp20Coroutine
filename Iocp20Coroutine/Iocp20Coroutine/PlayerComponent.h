@@ -1,7 +1,7 @@
 #pragma once
-class MySession;
+class GameSvrSession;
 class PlayerComponent
 {
 public:
-	MySession* m_pSession = nullptr;
+	GameSvrSession* m_pSession = nullptr;
 };

@@ -161,6 +161,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="AiCo.cpp" />
+    <ClCompile Include="BuildingComponent.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Iocp20Coroutine.cpp" />
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp">
@@ -234,6 +235,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClInclude Include="AiCo.h" />
+    <ClInclude Include="BuildingComponent.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="MonsterComponent.h" />
     <ClInclude Include="PlayerComponent.h" />

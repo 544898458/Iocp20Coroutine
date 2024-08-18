@@ -6,7 +6,6 @@
 void Entity::AddComponentMonster()
 {
 	m_spMonster = std::make_shared<MonsterComponent, Entity&>(*this);
-	
 }
 
 MonsterComponent::MonsterComponent(Entity& refEntity)

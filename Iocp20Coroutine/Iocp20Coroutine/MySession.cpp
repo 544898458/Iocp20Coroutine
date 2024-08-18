@@ -25,13 +25,13 @@
 //template<MySession>
 //std::set<Iocp::SessionSocketCompletionKey<MySession>*> g_setSession;
 //template<MySession> std::mutex g_setSessionMutex;
-template Iocp::SessionSocketCompletionKey<WebSocketSession<MySession> >;
-template class WebSocketSession<MySession>;
-template void WebSocketSession<MySession>::OnInit<MyServer>(Iocp::SessionSocketCompletionKey<WebSocketSession<MySession> >& refSession, MyServer& server);
-template class WebSocketEndpoint<MySession, Iocp::SessionSocketCompletionKey<WebSocketSession<MySession> > >;
+template Iocp::SessionSocketCompletionKey<WebSocketSession<GameSvrSession> >;
+template class WebSocketSession<GameSvrSession>;
+template void WebSocketSession<GameSvrSession>::OnInit<MyServer>(Iocp::SessionSocketCompletionKey<WebSocketSession<GameSvrSession> >& refSession, MyServer& server);
+template class WebSocketEndpoint<GameSvrSession, Iocp::SessionSocketCompletionKey<WebSocketSession<GameSvrSession> > >;
 
 template<class T>
-void MySession::Send(const T& ref)
+void GameSvrSession::Send(const T& ref)
 {
 	WebSocketPacket wspacket;
 	// set FIN and opcode
@@ -58,7 +58,7 @@ void MySession::Send(const T& ref)
 /// </summary>
 /// <param name="buf"></param>
 /// <param name="len"></param>
-void MySession::OnRecvWsPack(const void* buf, const int len)
+void GameSvrSession::OnRecvWsPack(const void* buf, const int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
@@ -80,7 +80,7 @@ void MySession::OnRecvWsPack(const void* buf, const int len)
 	}
 }
 
-void MySession::OnInit(WebSocketSession<MySession>& refWsSession, MyServer& server)
+void GameSvrSession::OnInit(WebSocketSession<GameSvrSession>& refWsSession, MyServer& server)
 {
 	server.m_Sessions.AddSession(refWsSession.m_pSession, [this, &refWsSession, &server]()
 		{
@@ -89,7 +89,7 @@ void MySession::OnInit(WebSocketSession<MySession>& refWsSession, MyServer& serv
 		});
 }
 
-void MySession::OnDestroy()
+void GameSvrSession::OnDestroy()
 {
 	for (auto sp : m_vecSpEntity)
 	{
@@ -106,7 +106,7 @@ void MySession::OnDestroy()
 	m_pServer = nullptr;//不用加锁
 }
 
-void MySession::Erase(SpEntity spEntity)
+void GameSvrSession::Erase(SpEntity spEntity)
 {
 	if (!m_vecSpEntity.contains(spEntity))
 	{
@@ -117,54 +117,94 @@ void MySession::Erase(SpEntity spEntity)
 	m_vecSpEntity.erase(spEntity);
 }
 
-template void MySession::Send(const MsgAddRoleRet&);
-template void MySession::Send(const MsgNotifyPos&);
-template void MySession::Send(const MsgChangeSkeleAnim&);
-template void MySession::Send(const MsgSay&);
-template void MySession::Send(const MsgDelRoleRet&);
+template void GameSvrSession::Send(const MsgAddRoleRet&);
+template void GameSvrSession::Send(const MsgNotifyPos&);
+template void GameSvrSession::Send(const MsgChangeSkeleAnim&);
+template void GameSvrSession::Send(const MsgSay&);
+template void GameSvrSession::Send(const MsgDelRoleRet&);
 
 
 
 //主线程，单线程
-void MySession::Process()
+void GameSvrSession::Process()
 {
 	const MsgId msgId = this->m_MsgQueue.PopMsg();
 	switch (msgId)
 	{
 	case MsgId::Invalid_0://没有消息可处理
 		return;
-	case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &MySession::OnRecv); break;
-	case MsgId::Move:this->m_MsgQueue.OnRecv(this->m_queueMove, *this, &MySession::OnRecv); break;
-	case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &MySession::OnRecv); break;
-	case MsgId::SelectRoles:this->m_MsgQueue.OnRecv(this->m_queueSelectRoles, *this, &MySession::OnRecv); break;
-	case MsgId::AddRole:this->m_MsgQueue.OnRecv(this->m_queueAddRole, *this, &MySession::OnRecv); break;
+	case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &GameSvrSession::OnRecv); break;
+	case MsgId::Move:this->m_MsgQueue.OnRecv(this->m_queueMove, *this, &GameSvrSession::OnRecv); break;
+	case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &GameSvrSession::OnRecv); break;
+	case MsgId::SelectRoles:this->m_MsgQueue.OnRecv(this->m_queueSelectRoles, *this, &GameSvrSession::OnRecv); break;
+	case MsgId::AddRole:this->m_MsgQueue.OnRecv(this->m_queueAddRole, *this, &GameSvrSession::OnRecv); break;
+	case MsgId::AddBuilding:this->m_MsgQueue.OnRecv(this->m_queueAddBuilding, *this, &GameSvrSession::OnRecv); break;
 	default:
 		LOG(ERROR) << "msgId:" << msgId;
 		assert(false);
 		break;
 	}
 }
-template<> std::deque<MsgLogin>& MySession::GetQueue() { return m_queueLogin; }
-template<> std::deque<MsgMove>& MySession::GetQueue() { return m_queueMove; }
-template<> std::deque<MsgSay>& MySession::GetQueue() { return m_queueSay; }
-template<> std::deque<MsgSelectRoles>& MySession::GetQueue() { return m_queueSelectRoles; }
-template<> std::deque<MsgAddRole>& MySession::GetQueue() { return m_queueAddRole; }
+template<> std::deque<MsgLogin>& GameSvrSession::GetQueue() { return m_queueLogin; }
+template<> std::deque<MsgMove>& GameSvrSession::GetQueue() { return m_queueMove; }
+template<> std::deque<MsgSay>& GameSvrSession::GetQueue() { return m_queueSay; }
+template<> std::deque<MsgSelectRoles>& GameSvrSession::GetQueue() { return m_queueSelectRoles; }
+template<> std::deque<MsgAddRole>& GameSvrSession::GetQueue() { return m_queueAddRole; }
 
-void MySession::OnRecv(const MsgAddRole& msg)
+void GameSvrSession::OnRecv(const MsgAddRole& msg)
 {
-	//前一个没结束就会内存泄漏
+	if (!m_coRpc.Finished())
+	{
+		LOG(WARNING) << "m_coRpc前一个协程还没结束";
+		return;
+	}
 	m_coRpc = CoAddRole();//启动协程，先去WorldSvr扣钱后加一个新单位
 	m_coRpc.Run();
 }
 
-
-
-CoTask<int> MySession::CoAddRole()
+void SendToWorldSvr(const MsgChangeMoney& msg);
+void GameSvrSession::OnRecv(const MsgAddBuilding& msg)
 {
-	void SendToWorldSvr(const MsgConsumeMoney & msg);
-	MsgConsumeMoneyResponce responce = co_await CoRpc<MsgConsumeMoneyResponce>::Send<MsgConsumeMoney>({ .consumeMoney = 3 }, SendToWorldSvr);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	if (!m_coRpc.Finished())
+	{
+		LOG(WARNING) << "m_coRpc前一个协程还没结束";
+		return;
+	}
+	m_coRpc = CoAddBuilding();//启动协程，先去WorldSvr扣钱后加一个新单位
+	m_coRpc.Run();
+}
+
+CoTask<int> GameSvrSession::CoAddBuilding()
+{
+	MsgChangeMoneyResponce responce = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 10 }, SendToWorldSvr);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 0,30 }, m_pServer->m_space, "house_type19");
+	if (0 != responce.error)
+	{
+		LOG(WARNING) << "扣钱失败";
+		co_return 0;
+	}
+	spNewEntity->AddComponentPlayer(this);
+	spNewEntity->AddComponentBuilding();
+	m_vecSpEntity.insert(spNewEntity);//自己控制的单位
+	m_pServer->m_space.setEntity.insert(spNewEntity);//全地图单位
+
+	spNewEntity->BroadcastEnter();
+	co_return 0;
+}
+
+
+
+CoTask<int> GameSvrSession::CoAddRole()
+{
+	MsgChangeMoneyResponce responce = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 3 }, SendToWorldSvr);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 30,30 }, m_pServer->m_space, "altman-blue");
+	if (0 != responce.error)
+	{
+		LOG(WARNING) << "扣钱失败";
+		co_return 0;
+	}
 	spNewEntity->AddComponentPlayer(this);
 	m_vecSpEntity.insert(spNewEntity);//自己控制的单位
 	m_pServer->m_space.setEntity.insert(spNewEntity);//全地图单位
@@ -173,7 +213,7 @@ CoTask<int> MySession::CoAddRole()
 	co_return 0;
 }
 
-void MySession::OnRecv(const MsgLogin& msg)
+void GameSvrSession::OnRecv(const MsgLogin& msg)
 {
 	auto utf8Name = msg.name;
 	auto gbkName = StrConv::Utf8ToGbk(msg.name);
@@ -219,7 +259,7 @@ void MySession::OnRecv(const MsgLogin& msg)
 	}
 }
 
-void MySession::OnRecv(const MsgMove& msg)
+void GameSvrSession::OnRecv(const MsgMove& msg)
 {
 	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
 	const auto targetX = msg.x;
@@ -241,7 +281,7 @@ void MySession::OnRecv(const MsgMove& msg)
 	}
 }
 
-void MySession::OnRecv(const MsgSay& msg)
+void GameSvrSession::OnRecv(const MsgSay& msg)
 {
 	auto utf8Content = StrConv::Utf8ToGbk(msg.content);
 	LOG(INFO) << "收到聊天:" << utf8Content;
@@ -249,7 +289,7 @@ void MySession::OnRecv(const MsgSay& msg)
 	SendToWorldSvr(msg);
 }
 
-void MySession::OnRecv(const MsgSelectRoles& msg)
+void GameSvrSession::OnRecv(const MsgSelectRoles& msg)
 {
 	LOG(INFO) << "收到选择:" << msg.ids.size();
 	m_vecSelectedEntity.clear();

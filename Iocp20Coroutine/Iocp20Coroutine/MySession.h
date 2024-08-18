@@ -5,7 +5,7 @@
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 
 class MyServer;
-class MySession
+class GameSvrSession
 {
 public:
 	/// <summary>
@@ -20,7 +20,7 @@ public:
 	/// </summary>
 	/// <param name="refWsSession"></param>
 	/// <param name="server"></param>
-	void OnInit(WebSocketSession<MySession>& refWsSession, MyServer& server);
+	void OnInit(WebSocketSession<GameSvrSession>& refWsSession, MyServer& server);
 	void OnDestroy();
 	void Erase(SpEntity spEntity);
 	template<class T>
@@ -52,9 +52,10 @@ private:
 	void OnRecv(const MsgSay& msg);
 	void OnRecv(const MsgSelectRoles& msg);
 	void OnRecv(const MsgAddRole& msg);
+	void OnRecv(const MsgAddBuilding& msg);
 
 	CoTask<int> CoAddRole();
-	
+	CoTask<int> CoAddBuilding();
 	/// <summary>
 	/// 这里保存的都是解析后的消息明文
 	/// </summary>
@@ -63,8 +64,9 @@ private:
 	std::deque<MsgSay> m_queueSay;
 	std::deque<MsgSelectRoles> m_queueSelectRoles;
 	std::deque<MsgAddRole> m_queueAddRole;
+	std::deque<MsgAddBuilding> m_queueAddBuilding;
 
-	MsgQueueMsgPack<MySession> m_MsgQueue;
+	MsgQueueMsgPack<GameSvrSession> m_MsgQueue;
 private:
-	WebSocketSession<MySession>* m_pWsSession = nullptr;
+	WebSocketSession<GameSvrSession>* m_pWsSession = nullptr;
 };

@@ -7,8 +7,8 @@
 #include "../IocpNetwork/SessionsTemplate.h"
 
 template Iocp::Server<MyServer>;
-template bool Iocp::Server<MyServer>::Init<WebSocketSession<MySession> >(const uint16_t);
-template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WebSocketSession<MySession>, MyServer >(HANDLE hIocp, SOCKET socketListen, MyServer&);
+template bool Iocp::Server<MyServer>::Init<WebSocketSession<GameSvrSession> >(const uint16_t);
+template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WebSocketSession<GameSvrSession>, MyServer >(HANDLE hIocp, SOCKET socketListen, MyServer&);
 
 void MyServer::OnAdd(Session&)
 {
@@ -41,6 +41,6 @@ void MyServer::Update()
 }
 
 
-template void Sessions<MySession>::Broadcast<MsgAddRoleRet >(const MsgAddRoleRet&);
-template void Sessions<MySession>::Broadcast<MsgNotifyPos>(const MsgNotifyPos&);
-template void Sessions<MySession>::Broadcast<MsgChangeSkeleAnim>(const MsgChangeSkeleAnim&);
+template void Sessions<GameSvrSession>::Broadcast<MsgAddRoleRet >(const MsgAddRoleRet&);
+template void Sessions<GameSvrSession>::Broadcast<MsgNotifyPos>(const MsgNotifyPos&);
+template void Sessions<GameSvrSession>::Broadcast<MsgChangeSkeleAnim>(const MsgChangeSkeleAnim&);

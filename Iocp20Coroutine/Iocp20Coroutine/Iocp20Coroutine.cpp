@@ -60,7 +60,7 @@ std::unique_ptr<Iocp::Server<WorldClient> > g_worldSvr;// (Iocp::ThreadPool::Get
 std::unique_ptr<Iocp::SessionSocketCompletionKey<WorldClientSession>> g_ConnectToWorldSvr;
 
 void SendToWorldSvr(const MsgSay& msg){MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); });}
-void SendToWorldSvr(const MsgConsumeMoney& msg) { MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); }); }
+void SendToWorldSvr(const MsgChangeMoney& msg) { MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); }); }
 
 ///*
 int main(void)
@@ -92,7 +92,7 @@ int main(void)
 	//g_worldSvr.reset( new Iocp::Server<WorldServer>(Iocp::ThreadPool::GetIocp()) );
 
 	Iocp::Server<MyServer>::WsaStartup();
-	accept.Init<WebSocketSession<MySession>>(12345);
+	accept.Init<WebSocketSession<GameSvrSession>>(12345);
 	//Iocp::ThreadPool::Add(accept.GetIocp());
 
 	//g_worldSvr->Init<WorldSession>(12346);

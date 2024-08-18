@@ -2,7 +2,7 @@
 #include "PlayerComponent.h"
 #include "Entity.h"
 
-void Entity::AddComponentPlayer(MySession* pSession)
+void Entity::AddComponentPlayer(GameSvrSession* pSession)
 {
 	CHECK_NOTNULL(pSession);
 	if (nullptr == pSession)

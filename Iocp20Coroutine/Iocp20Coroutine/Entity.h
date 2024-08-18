@@ -4,10 +4,11 @@
 #include "MyMsgQueue.h"
 //#include "PlayerComponent.h"
 class Space;
-class MySession;
+class GameSvrSession;
 class MyServer;
 class PlayerComponent;
 class MonsterComponent;
+class BuildingComponent;
 class Entity :public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
 public:
@@ -42,11 +43,13 @@ public:
 
 	std::string m_strPrefabName;
 
-	//静态ECS，没有基类向子类转型
-	void AddComponentPlayer(MySession* pSession);
+	//静态ECS，没有基类强转子类
+	void AddComponentPlayer(GameSvrSession* pSession);
 	void AddComponentMonster();
+	void AddComponentBuilding();
 	std::shared_ptr<PlayerComponent> m_spPlayer;
 	std::shared_ptr<MonsterComponent> m_spMonster;
+	std::shared_ptr<BuildingComponent> m_spBuilding;
 	//private:
 	Space& m_space;
 };
