@@ -73,6 +73,7 @@ void GameSvrSession::OnRecvWsPack(const void* buf, const int len)
 	case MsgId::Say:m_MsgQueue.PushMsg<MsgSay >(*this, obj); break;
 	case MsgId::SelectRoles:m_MsgQueue.PushMsg<MsgSelectRoles>(*this, obj);break;
 	case MsgId::AddRole:m_MsgQueue.PushMsg<MsgAddRole>(*this, obj); break;
+	case MsgId::AddBuilding:m_MsgQueue.PushMsg<MsgAddBuilding>(*this, obj); break;
 	default:
 		LOG(ERROR) << "没处理msgId:" << msgId;
 		assert(false);
@@ -150,6 +151,7 @@ template<> std::deque<MsgMove>& GameSvrSession::GetQueue() { return m_queueMove;
 template<> std::deque<MsgSay>& GameSvrSession::GetQueue() { return m_queueSay; }
 template<> std::deque<MsgSelectRoles>& GameSvrSession::GetQueue() { return m_queueSelectRoles; }
 template<> std::deque<MsgAddRole>& GameSvrSession::GetQueue() { return m_queueAddRole; }
+template<> std::deque<MsgAddBuilding>& GameSvrSession::GetQueue() { return m_queueAddBuilding; }
 
 void GameSvrSession::OnRecv(const MsgAddRole& msg)
 {
@@ -176,12 +178,12 @@ void GameSvrSession::OnRecv(const MsgAddBuilding& msg)
 
 CoTask<int> GameSvrSession::CoAddBuilding()
 {
-	MsgChangeMoneyResponce responce = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 10 }, SendToWorldSvr);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	MsgChangeMoneyResponce responce = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 0 }, SendToWorldSvr);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 0,30 }, m_pServer->m_space, "house_type19");
 	if (0 != responce.error)
 	{
-		LOG(WARNING) << "扣钱失败";
+		LOG(WARNING) << "扣钱失败,error=" << responce.error;
 		co_return 0;
 	}
 	spNewEntity->AddComponentPlayer(this);
