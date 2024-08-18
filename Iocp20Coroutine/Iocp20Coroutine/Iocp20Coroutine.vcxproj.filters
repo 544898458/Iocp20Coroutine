@@ -30,9 +30,6 @@
     <ClCompile Include="MySession.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MyMsgQueue.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Space.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -123,6 +120,9 @@
     <ClCompile Include="..\CoRoutine\CoRpc.cpp">
       <Filter>CoRoutine</Filter>
     </ClCompile>
+    <ClCompile Include="MyMsgQueue.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -138,9 +138,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\Iocp20Coroutine.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyMsgQueue.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoTask.h">
@@ -247,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoRpc.h">
       <Filter>CoRoutine</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMsgQueue.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

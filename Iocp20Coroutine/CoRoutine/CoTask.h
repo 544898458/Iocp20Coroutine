@@ -216,6 +216,14 @@ struct CoAwaiter
 	//    await_ready:准备好了没有。
 	//    await_suspend:停不停止。 
 	//    await_resume:好了做什么。
+
+	
+
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns>co_await本对象的返回值</returns>
 	T_Result await_resume() const noexcept
 	{
 		return m_Canceled;

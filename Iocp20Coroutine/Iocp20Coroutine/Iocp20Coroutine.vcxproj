@@ -150,7 +150,9 @@
     <ClCompile Include="..\IocpNetwork\MsgQueue.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\IocpNetwork\StrConv.cpp" />
+    <ClCompile Include="..\IocpNetwork\StrConv.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\IocpNetwork\ThreadPool.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -198,7 +200,9 @@
     <ClInclude Include="..\IocpNetwork\WebSocketSessionTemplate.h">
       <FileType>CppCode</FileType>
     </ClInclude>
-    <ClCompile Include="..\LogStrategy\StrategyLog.cpp" />
+    <ClCompile Include="..\LogStrategy\StrategyLog.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="mainGpp.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -206,13 +210,21 @@
     <ClCompile Include="MyServer.cpp" />
     <ClCompile Include="MySession.cpp" />
     <ClCompile Include="Space.cpp" />
-    <ClCompile Include="..\websocketfiles-master\src\base64.cpp" />
+    <ClCompile Include="..\websocketfiles-master\src\base64.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\websocketfiles-master\src\main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\websocketfiles-master\src\sha1_portable.cpp" />
-    <ClCompile Include="..\websocketfiles-master\src\string_helper.cpp" />
-    <ClCompile Include="..\websocketfiles-master\src\ws_endpoint.cpp" />
+    <ClCompile Include="..\websocketfiles-master\src\sha1_portable.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\websocketfiles-master\src\string_helper.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\websocketfiles-master\src\ws_endpoint.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

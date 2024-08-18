@@ -129,7 +129,7 @@ int main(void)
 		}
 		std::this_thread::sleep_for(msSleep);
 		accept.m_Server.Update();
-		g_ConnectToWorldSvr->Session.m_MsgQueue.Process();
+		g_ConnectToWorldSvr->Session.Process();
 		CoTimer::Update();
 	}
 

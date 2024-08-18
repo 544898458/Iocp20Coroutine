@@ -9,43 +9,6 @@
 enum MsgId;
 class WorldClient;
 
-class WorldClientMsgQueue
-{
-public:
-	WorldClientMsgQueue()
-	{
-	}
-
-	/// <summary>
-	/// 网络线程中（多线程）调用
-	/// </summary>
-	/// <param name="msg"></param>
-	template<class T>
-	void Push(const T& msg);
-
-	/// <summary>
-	/// 工作线程中（单线程）调用
-	/// </summary>
-	void Process();
-	WorldClient* m_pWorldClient = nullptr;
-private:
-	/// <summary>
-	/// 主逻辑线程（控制台界面线程）调用
-	/// </summary>
-	/// <param name="msg"></param>
-	static void OnRecv(WorldClientMsgQueue& refThis, const MsgSay& msg);
-	static void OnRecv(WorldClientMsgQueue& refThis, const MsgConsumeMoneyResponce& msg);
-	
-	template<class T>
-	std::deque<T>& GetQueue();
-	/// <summary>
-	/// 这里保存的都是解析后的消息明文,反序列化在网络线程，处理明文消息在逻辑线程
-	/// </summary>
-	std::deque<MsgSay> m_queueSay;
-	std::deque<MsgConsumeMoneyResponce> m_queueConsumeMoneyResponce;
-	MsgQueue m_MsgQueue;
-	
-};
 class WorldClientSession
 {
 public:
@@ -53,11 +16,11 @@ public:
 	{
 		m_pWorldClient = &refWorldClient;
 		m_pSession = &session;
-		session.Session.m_MsgQueue.m_pWorldClient = &refWorldClient;
+		//session.Session.m_MsgQueue.m_pWorldClient = &refWorldClient;
 	}
 
 	/// <summary>
-	///
+	/// 网络线程（多线程）调用
 	/// </summary>
 	/// <param name="refSession"></param>
 	/// <param name="buf"></param>
@@ -80,15 +43,36 @@ public:
 	{
 
 	}
-	template<class T>
-	void PushMsg(const msgpack::object& obj);
+	/// <summary>
+	/// 网络线程（多线程）调用
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="obj"></param>
+	template<class T> void PushMsg(const msgpack::object& obj);
 
 	WorldClient* m_pWorldClient = nullptr;
 	Iocp::SessionSocketCompletionKey<WorldClientSession> *m_pSession = nullptr;
+	
 	/// <summary>
-	/// 解析后的消息队列，解析消息在完成端口线程，处理消息在主线程（控制台界面线程）
+	/// 工作线程中（单线程）调用
 	/// </summary>
-	WorldClientMsgQueue m_MsgQueue;
+	void Process();
+private:
+	/// <summary>
+	/// 主逻辑线程（控制台界面线程）调用
+	/// </summary>
+	/// <param name="msg"></param>
+	void OnRecv(const MsgSay& msg);
+	void OnRecv(const MsgConsumeMoneyResponce& msg);
+
+	template<class T>
+	std::deque<T>& GetQueue();
+	/// <summary>
+	/// 这里保存的都是解析后的消息明文,反序列化在网络线程，处理明文消息在逻辑线程
+	/// </summary>
+	std::deque<MsgSay> m_queueSay;
+	std::deque<MsgConsumeMoneyResponce> m_queueConsumeMoneyResponce;
+	MsgQueue m_MsgQueue;
 };
 class WorldClient
 {

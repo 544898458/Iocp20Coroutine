@@ -45,7 +45,7 @@ void Sessions<T_Session>::Update(T_Function const& functionLockUpdate)
 	for (auto iter = m_setSession.begin(); iter != m_setSession.end(); )
 	{
 		Session* p = *iter;
-		p->Session.m_Session.m_msgQueue.Process();
+		p->Session.m_Session.Process();
 
 		if (!p->Finished())
 		{

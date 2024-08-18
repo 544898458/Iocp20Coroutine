@@ -10,7 +10,6 @@
 #include "../CoRoutine/CoTimer.h"
 #include <glog/logging.h>
 #include <msgpack.hpp>
-#include "../Iocp20Coroutine/MyMsgQueue.h"
 #include "../IocpNetwork/StrConv.h"
 #include "WorldServer.h"
 #include "WorldSession.h"

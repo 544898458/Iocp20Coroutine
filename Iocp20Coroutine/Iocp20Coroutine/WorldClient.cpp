@@ -9,16 +9,18 @@ template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WorldClientSession
 template Iocp::SessionSocketCompletionKey<WorldClientSession>;
 std::function<void(MsgSay const&)> WorldClient::m_funBroadcast;
 
-//主线程，单线程
-void WorldClientMsgQueue::Process()
+/// <summary>
+/// 主线程，单线程
+/// </summary>
+void WorldClientSession::Process()
 {
 	const MsgId msgId = this->m_MsgQueue.PopMsg();
 	switch (msgId)
 	{
 	case MsgId::Invalid_0://没有消息可处理
 		return;
-	case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, OnRecv); break;
-	case MsgId::ConsumeMoneyResponce:this->m_MsgQueue.OnRecv(this->m_queueConsumeMoneyResponce, *this, OnRecv); break;
+	case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldClientSession::OnRecv); break;
+	case MsgId::ConsumeMoneyResponce:this->m_MsgQueue.OnRecv(this->m_queueConsumeMoneyResponce, *this, &WorldClientSession::OnRecv); break;
 	default:
 		LOG(ERROR) << "msgId:" << msgId;
 		assert(false);
@@ -27,11 +29,11 @@ void WorldClientMsgQueue::Process()
 }
 
 
-void WorldClientMsgQueue::OnRecv(WorldClientMsgQueue& refThis, const MsgSay& msg)
+void WorldClientSession::OnRecv(const MsgSay& msg)
 {
 	LOG(INFO) << "WorldSvr发来聊天:" << StrConv::Utf8ToGbk(msg.content);
 
-	refThis.m_pWorldClient->m_funBroadcast(msg);
+	m_pWorldClient->m_funBroadcast(msg);
 }
 
 /// <summary>
@@ -39,29 +41,31 @@ void WorldClientMsgQueue::OnRecv(WorldClientMsgQueue& refThis, const MsgSay& msg
 /// </summary>
 /// <param name="refThis"></param>
 /// <param name="msg"></param>
-void WorldClientMsgQueue::OnRecv(WorldClientMsgQueue& refThis, const MsgConsumeMoneyResponce& msg)
+void WorldClientSession::OnRecv(const MsgConsumeMoneyResponce& msg)
 {
 	LOG(INFO) << "WorldSvr发来扣钱结果,rpcSnId=" << msg.rpcSnId;
 	CoRpc<MsgConsumeMoneyResponce>::OnRecvResponce(msg);
 }
 
+/// <summary>
+/// 网络线程（多线程）调用
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="obj"></param>
 template<class T>
 void WorldClientSession::PushMsg(const msgpack::object& obj)
 {
 	const auto msg = obj.as<T>();
-	m_MsgQueue.Push(msg);
+	m_MsgQueue.Push(msg, GetQueue<T>());
 }
 
 
-template<> std::deque<MsgSay>& WorldClientMsgQueue::GetQueue() { return m_queueSay; }
-template<> std::deque<MsgConsumeMoneyResponce>& WorldClientMsgQueue::GetQueue() { return m_queueConsumeMoneyResponce; }
-template<class T> void WorldClientMsgQueue::Push(const T& msg) { m_MsgQueue.Push(msg, GetQueue<T>()); }
-template void WorldClientMsgQueue::Push(const MsgSay& msg);
-template void WorldClientMsgQueue::Push(const MsgConsumeMoneyResponce& msg);
+template<> std::deque<MsgSay>& WorldClientSession::GetQueue() { return m_queueSay; }
+template<> std::deque<MsgConsumeMoneyResponce>& WorldClientSession::GetQueue() { return m_queueConsumeMoneyResponce; }
 
 
 /// <summary>
-/// 这是网络线程
+/// 网络线程（多线程）调用
 /// </summary>
 /// <param name="buf"></param>
 /// <param name="len"></param>
@@ -74,19 +78,8 @@ void WorldClientSession::OnRecvPack(const void* buf, int len)
 
 	switch (msgId)
 	{
-	case MsgId::Say:
-	{
-		PushMsg<MsgSay>(obj);
-
-	}
-	break;
-	case MsgId::ConsumeMoneyResponce:
-	{
-		PushMsg<MsgConsumeMoneyResponce>(obj);
-
-
-	}
-	break;
+	case MsgId::Say:PushMsg<MsgSay>(obj);break;
+	case MsgId::ConsumeMoneyResponce:PushMsg<MsgConsumeMoneyResponce>(obj);break;
 	default:
 		LOG(WARNING) << "ERR:" << msgId;
 		break;
