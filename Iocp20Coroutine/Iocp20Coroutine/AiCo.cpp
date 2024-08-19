@@ -102,11 +102,10 @@ namespace AiCo
 
 		return true;
 	}
-	CoTask<int>WalkToPos(SpEntity spThis, const Position& posTarget, MyServer* pServer, FunCancel& funCancel)
+	CoTask<int>WalkToPos(SpEntity spThis, const Position& posTarget, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		const auto posLocalTarget = posTarget;
-		auto pLocalServer = pServer;
 		spThis->Broadcast(MsgChangeSkeleAnim(*spThis, "run"));
 
 		while (true)
@@ -191,10 +190,11 @@ namespace AiCo
 		while (!co_await CoTimer::Wait(100ms, funCancel))
 		{
 			SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string& >({ -30.0 }, refSpace, "altman-red");
+			spEntityMonster->AddComponentAttack();
 			spEntityMonster->AddComponentMonster();
 			spEntityMonster->m_f¾¯½ä¾àÀë = 20;
 			spEntityMonster->m_fÒÆ¶¯ËÙ¶È = 0.2f;
-			refSpace.setEntity.insert(spEntityMonster);
+			refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster});
 			spEntityMonster->BroadcastEnter();
 		}
 		LOG(INFO) << "Í£Ö¹Ë¢¹ÖÐ­³Ì";

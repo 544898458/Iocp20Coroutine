@@ -1,5 +1,5 @@
 #pragma once
-#include <set>
+#include <map>
 #include "SpEntity.h"
 
 class MyServer;
@@ -10,7 +10,7 @@ class Space
 {
 public:
 	Space(MyServer* pServer) :m_pServer(pServer) {}
-	std::set<SpEntity> setEntity;
+	std::map<int64_t,SpEntity> m_mapEntity;
 	void Update();
 	MyServer * const m_pServer;
 };

@@ -11,7 +11,7 @@ namespace AiCo
 	//协程中的全局对象也可以直接穿引用，不用智能指针
 	CoTask<int> Attack(SpEntity spEntity, SpEntity spDefencer, FunCancel& cancel);
 	CoTask<int> Idle(SpEntity spEntity, FunCancel& funCancel);
-	CoTask<int> WalkToPos(SpEntity spThis, const Position &posTarget, MyServer *pServer, FunCancel& funCancel);
+	CoTask<int> WalkToPos(SpEntity spThis, const Position &posTarget, FunCancel& funCancel);
 	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spEntity, MyServer* pServer, FunCancel& funCancel);
 	CoTask<int> WaitDelete(SpEntity spThis, FunCancel& funCancel);
 	CoTask<int> SpawnMonster(Space& refSpace, FunCancel& funCancel);

@@ -21,7 +21,7 @@
 #include "../CoRoutine/CoRpc.h"
 #include "../IocpNetwork/StrConv.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
-
+#include "AttackComponent.h"
 //template<MySession>
 //std::set<Iocp::SessionSocketCompletionKey<MySession>*> g_setSession;
 //template<MySession> std::mutex g_setSessionMutex;
@@ -68,10 +68,10 @@ void GameSvrSession::OnRecvWsPack(const void* buf, const int len)
 	auto pSessionSocketCompeletionKey = this->m_pWsSession->m_pSession;
 	switch (msgId)
 	{
-	case MsgId::Login:m_MsgQueue.PushMsg<MsgLogin>(*this,obj);break;
-	case MsgId::Move:m_MsgQueue.PushMsg<MsgMove>(*this, obj);break;
+	case MsgId::Login:m_MsgQueue.PushMsg<MsgLogin>(*this, obj); break;
+	case MsgId::Move:m_MsgQueue.PushMsg<MsgMove>(*this, obj); break;
 	case MsgId::Say:m_MsgQueue.PushMsg<MsgSay >(*this, obj); break;
-	case MsgId::SelectRoles:m_MsgQueue.PushMsg<MsgSelectRoles>(*this, obj);break;
+	case MsgId::SelectRoles:m_MsgQueue.PushMsg<MsgSelectRoles>(*this, obj); break;
 	case MsgId::AddRole:m_MsgQueue.PushMsg<MsgAddRole>(*this, obj); break;
 	case MsgId::AddBuilding:m_MsgQueue.PushMsg<MsgAddBuilding>(*this, obj); break;
 	default:
@@ -94,7 +94,7 @@ void GameSvrSession::OnDestroy()
 {
 	for (auto sp : m_vecSpEntity)
 	{
-		m_pServer->m_space.setEntity.erase(sp);
+		m_pServer->m_space.m_mapEntity.erase((int64_t)sp.get());
 
 		sp->OnDestroy();
 	}
@@ -114,7 +114,7 @@ void GameSvrSession::Erase(SpEntity spEntity)
 		LOG(WARNING) << "ERR";
 		return;
 	}
-	
+
 	m_vecSpEntity.erase(spEntity);
 }
 
@@ -186,10 +186,11 @@ CoTask<int> GameSvrSession::CoAddBuilding()
 		LOG(WARNING) << "扣钱失败,error=" << responce.error;
 		co_return 0;
 	}
+	spNewEntity->AddComponentAttack();
 	spNewEntity->AddComponentPlayer(this);
 	spNewEntity->AddComponentBuilding();
 	m_vecSpEntity.insert(spNewEntity);//自己控制的单位
-	m_pServer->m_space.setEntity.insert(spNewEntity);//全地图单位
+	m_pServer->m_space.m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 	spNewEntity->BroadcastEnter();
 	co_return 0;
@@ -209,7 +210,7 @@ CoTask<int> GameSvrSession::CoAddRole()
 	}
 	spNewEntity->AddComponentPlayer(this);
 	m_vecSpEntity.insert(spNewEntity);//自己控制的单位
-	m_pServer->m_space.setEntity.insert(spNewEntity);//全地图单位
+	m_pServer->m_space.m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 	spNewEntity->BroadcastEnter();
 	co_return 0;
@@ -254,8 +255,9 @@ void GameSvrSession::OnRecv(const MsgLogin& msg)
 	//}
 
 
-	for (const auto& spEntity : m_pServer->m_space.setEntity)//别人发给自己
+	for (const auto& pair : m_pServer->m_space.m_mapEntity)//别人发给自己
 	{
+		auto& spEntity = pair.second;
 		Send(MsgAddRoleRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->NickName()), spEntity->m_strPrefabName));
 		Send(MsgNotifyPos(*spEntity));
 	}
@@ -270,15 +272,22 @@ void GameSvrSession::OnRecv(const MsgMove& msg)
 	//refThis.m_pSession->m_entity.WalkToPos(targetX, targetZ, pServer);
 	for (const auto id : m_vecSelectedEntity)
 	{
-		Entity* pEntity = (Entity*)id;
-		const auto& refVecSpEntity = m_vecSpEntity;
-		if (refVecSpEntity.end() == std::find_if(refVecSpEntity.begin(), refVecSpEntity.end(), [pEntity](const auto& sp) {return sp.get() == pEntity; }))
+		auto itFind = m_pServer->m_space.m_mapEntity.find(id);
+		if (itFind == m_pServer->m_space.m_mapEntity.end())
+		{
+			LOG(ERROR) << "ERR";
+			assert(false);
+			continue;
+		}
+		auto& spEntity = itFind->second;
+		if (m_vecSpEntity.end() == std::find_if(m_vecSpEntity.begin(), m_vecSpEntity.end(), [&spEntity](const auto& sp) {return sp == spEntity; }))
 		{
 			LOG(ERROR) << id << "不是自己的单位，不能移动";
 			continue;
 		}
 
-		pEntity->WalkToPos(Position(targetX, targetZ), pServer);
+		if(spEntity->m_spAttack)
+			spEntity->m_spAttack->WalkToPos(*spEntity.get(), Position(targetX, targetZ));
 
 	}
 }

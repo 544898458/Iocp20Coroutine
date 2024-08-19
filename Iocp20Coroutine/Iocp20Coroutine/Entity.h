@@ -9,14 +9,13 @@ class MyServer;
 class PlayerComponent;
 class MonsterComponent;
 class BuildingComponent;
+class AttackComponent;
 class Entity :public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
 public:
 	Entity(const Position& pos, Space& m_space, const std::string& strPrefabName);
 	Entity(const Entity&) = delete;
-	void WalkToPos(const Position& posTarget, MyServer* pServer);
 	void Update();
-	void TryCancel();
 	void Hurt(int);
 	bool IsDead()const { return m_hp <= 0; }
 	bool NeedDelete()const { return m_bNeedDelete; }
@@ -29,11 +28,9 @@ public:
 	bool IsEnemy(const Entity& refEntity);
 	Position m_Pos;
 	int m_eulerAnglesY = 0;
-	CoTask<int> m_coWalk;
-	CoTask<int> m_coAttack;
 	CoTask<int> m_coWaitDelete;
 	FunCancel m_cancelDelete;
-	FunCancel m_cancel;
+	
 	const uint64_t Id;
 	bool m_bNeedDelete = false;
 	int m_hp = 20;
@@ -45,9 +42,11 @@ public:
 
 	//静态ECS，没有基类强转子类
 	void AddComponentPlayer(GameSvrSession* pSession);
+	void AddComponentAttack();
 	void AddComponentMonster();
 	void AddComponentBuilding();
 	std::shared_ptr<PlayerComponent> m_spPlayer;
+	std::shared_ptr<AttackComponent> m_spAttack;
 	std::shared_ptr<MonsterComponent> m_spMonster;
 	std::shared_ptr<BuildingComponent> m_spBuilding;
 	//private:

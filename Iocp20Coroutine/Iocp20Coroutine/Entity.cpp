@@ -10,33 +10,13 @@
 #include "AiCo.h"
 #include "../IocpNetwork/StrConv.h"
 #include "MonsterComponent.h"
+#include "AttackComponent.h"
 
 using namespace std;
 
 Entity::Entity(const Position& pos, Space& space, const std::string& strPrefabName) :
 	Id((uint64_t)this), m_strPrefabName(strPrefabName), m_space(space), m_Pos(pos)
 {
-}
-
-void Entity::WalkToPos(const Position& posTarget, MyServer* pServer)
-{
-	if (IsDead())
-	{
-		if (m_spPlayer)
-			m_spPlayer->m_pSession->Send(MsgSay(StrConv::GbkToUtf8("自己阵亡,不能走")));
-
-		return;
-	}
-	//m_coStop = true;
-
-	TryCancel();
-
-	m_coWalk.Run();
-	assert(m_coWalk.Finished());//20240205
-	assert(m_coAttack.Finished());//20240205
-	/*m_coStop = false;*/
-	m_coWalk = AiCo::WalkToPos(shared_from_this(), posTarget, pServer, m_cancel);
-	m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 }
 
 const float fExponent = 2.0f;
@@ -69,71 +49,8 @@ void Entity::Hurt(int hp)
 //主线程单线程执行
 void Entity::Update()
 {
-	if (!m_coAttack.Finished())
-	{
-		return;//表示不允许打断
-	}
-	if (!m_coWalk.Finished())
-	{
-		return;//表示不允许打断
-	}
-
-	if (IsDead())
-	{
-		return;
-	}
-
-	std::vector<SpEntity> vecEnemy;
-	std::copy_if(m_space.setEntity.begin(), m_space.setEntity.end(), std::back_inserter(vecEnemy), [this](const SpEntity& sp)
-		{
-			return sp.get() != this && !sp->IsDead() && sp->IsEnemy(*this);
-		});
-
-	auto iterMin = std::min_element(vecEnemy.begin(), vecEnemy.end(), [this](const SpEntity& sp1, const SpEntity& sp2)
-		{
-			return this->DistancePow2(*sp1) < this->DistancePow2(*sp2);
-		});
-
-	if (iterMin != vecEnemy.end())
-	{
-
-		const auto& spEntity = *iterMin;
-
-		if (DistanceLessEqual(*spEntity, this->m_f攻击距离))
-		{
-			TryCancel();
-
-			m_coAttack = AiCo::Attack(this->shared_from_this(), spEntity, m_cancel);
-			m_coAttack.Run();
-			return;
-		}
-		else if (DistanceLessEqual(*spEntity, this->m_f警戒距离))
-		{
-			TryCancel();
-
-			//m_coWalk.Run();
-			assert(m_coWalk.Finished());//20240205
-			assert(m_coAttack.Finished());//20240205
-			/*m_coStop = false;*/
-			m_coWalk = AiCo::WalkToTarget(shared_from_this(), spEntity, this->m_space.m_pServer, m_cancel);
-			m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
-			return;
-		}
-	}
-
-	if (!m_spPlayer)//怪
-	{
-		TryCancel();
-		assert(m_coWalk.Finished());//20240205
-		assert(m_coAttack.Finished());//20240205
-
-		auto posTarget = m_Pos;
-		posTarget.x += std::rand() % 11 - 5;//随即走
-		posTarget.z += std::rand() % 11 - 5;
-		m_coWalk = AiCo::WalkToPos(shared_from_this(), posTarget, this->m_space.m_pServer, m_cancel);
-		m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
-
-	}
+	if (m_spAttack)
+		m_spAttack->Update(*this);
 }
 
 bool Entity::IsEnemy(const Entity& refEntity)
@@ -148,32 +65,13 @@ bool Entity::IsEnemy(const Entity& refEntity)
 	return m_spPlayer->m_pSession != refEntity.m_spPlayer->m_pSession;
 }
 
-void Entity::TryCancel()
-{
-	if (m_cancel)
-	{
-		//LOG(INFO) << "调用m_cancel";
-		m_cancel();
-	}
-	else
-	{
-		//LOG(INFO) << "m_cancel是空的，没有要取消的协程";
-		if (!m_coWalk.Finished() || !m_coAttack.Finished() || (m_spMonster && !m_spMonster->m_coIdle.Finished()))
-		{
-			LOG(ERROR) << "协程没结束，却提前清空了m_cancel";
-			assert(false);
-		}
-	}
-
-	assert(m_coWalk.Finished());//20240205
-	assert(m_coAttack.Finished());//20240205
-
-}
 
 void Entity::OnDestroy()
 {
 	LOG(INFO) << "调用Entity::OnDestroy";
-	TryCancel();
+	if( m_spAttack)
+		m_spAttack->TryCancel(*this);
+
 	if (m_cancelDelete)
 		m_cancelDelete();
 }
