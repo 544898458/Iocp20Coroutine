@@ -118,14 +118,6 @@ void GameSvrSession::Erase(SpEntity spEntity)
 	m_vecSpEntity.erase(spEntity);
 }
 
-template void GameSvrSession::Send(const MsgAddRoleRet&);
-template void GameSvrSession::Send(const MsgNotifyPos&);
-template void GameSvrSession::Send(const MsgChangeSkeleAnim&);
-template void GameSvrSession::Send(const MsgSay&);
-template void GameSvrSession::Send(const MsgDelRoleRet&);
-
-
-
 //主线程，单线程
 void GameSvrSession::Process()
 {
@@ -178,7 +170,7 @@ void GameSvrSession::OnRecv(const MsgAddBuilding& msg)
 
 CoTask<int> GameSvrSession::CoAddBuilding()
 {
-	MsgChangeMoneyResponce responce = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 0 }, SendToWorldSvr);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	MsgChangeMoneyResponce responce = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 0 }, SendToWorldSvr, m_funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 0,30 }, m_pServer->m_space, "house_type19");
 	if (0 != responce.error)
@@ -200,7 +192,7 @@ CoTask<int> GameSvrSession::CoAddBuilding()
 
 CoTask<int> GameSvrSession::CoAddRole()
 {
-	MsgChangeMoneyResponce responce = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 3 }, SendToWorldSvr);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	MsgChangeMoneyResponce responce = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 3 }, SendToWorldSvr, m_funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 30,30 }, m_pServer->m_space, "altman-blue");
 	if (0 != responce.error)
@@ -306,3 +298,10 @@ void GameSvrSession::OnRecv(const MsgSelectRoles& msg)
 	m_vecSelectedEntity.clear();
 	std::transform(msg.ids.begin(), msg.ids.end(), std::back_inserter(m_vecSelectedEntity), [](const double& id) {return uint64_t(id); });
 }
+
+template void GameSvrSession::Send(const MsgAddRoleRet&);
+template void GameSvrSession::Send(const MsgNotifyPos&);
+template void GameSvrSession::Send(const MsgChangeSkeleAnim&);
+template void GameSvrSession::Send(const MsgSay&);
+template void GameSvrSession::Send(const MsgDelRoleRet&);
+template void GameSvrSession::Send(const MsgNotifyMoney&);

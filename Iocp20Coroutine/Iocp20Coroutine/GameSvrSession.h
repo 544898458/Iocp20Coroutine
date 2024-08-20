@@ -42,6 +42,7 @@ public:
 	/// </summary>
 	void Process();
 	CoTask<int> m_coRpc;
+	FunCancel m_funCancel;
 private:
 	/// <summary>
 	/// 主逻辑线程（控制台界面线程）调用

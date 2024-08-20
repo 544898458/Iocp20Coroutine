@@ -30,6 +30,7 @@ enum MsgId
 	ConsumeMoney,
 	ChangeMoneyResponce,
 	AddBuilding,
+	NotifyeMoney,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -58,7 +59,7 @@ struct MsgChangeMoney
 	MsgId id = ConsumeMoney;
 	int rpcSnId;
 	bool addMoney;
-	uint32_t changeMoney;
+	int32_t changeMoney;
 	std::string nickName;
 	MSGPACK_DEFINE(id, rpcSnId, addMoney, changeMoney, nickName);
 };
@@ -71,6 +72,13 @@ struct MsgChangeMoneyResponce
 	uint32_t consumeMoney;
 	int32_t finalMoney;
 	MSGPACK_DEFINE(id, rpcSnId, error, consumeMoney, finalMoney);
+};
+
+struct MsgNotifyMoney
+{
+	MsgId id = NotifyeMoney;
+	int32_t finalMoney;
+	MSGPACK_DEFINE(id, finalMoney);
 };
 
 struct MsgMove

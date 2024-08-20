@@ -2,14 +2,17 @@
 #include "AiCo.h"
 #include "Entity.h"
 #include "../CoRoutine/CoTimer.h"
+#include "../CoRoutine/CoRpc.h"
 #include "GameSvrSession.h"
 #include "MyServer.h"
 #include "PlayerSystem.h"
 #include "PlayerComponent.h"
 #include "../IocpNetwork/StrConv.h"
+
+void SendToWorldSvr(const MsgChangeMoney& msg);
+
 namespace AiCo
 {
-
 	CoTask<int> Idle(SpEntity spEntity, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
@@ -73,20 +76,20 @@ namespace AiCo
 
 		co_return 0;//协程正常退出
 	}
-	bool MoveStep(Entity &refThis, const Position localTarget)
+	bool MoveStep(Entity& refThis, const Position localTarget)
 	{
 		const float step = refThis.m_f移动速度;
 		const auto oldPos = refThis.m_Pos;//复制对象，不是引用
 		float& x = refThis.m_Pos.x;
 		float& z = refThis.m_Pos.z;
 
-		if (std::abs(localTarget.x - x) < step && std::abs(localTarget.z - z) < step) 
+		if (std::abs(localTarget.x - x) < step && std::abs(localTarget.z - z) < step)
 		{
 			//LOG(INFO) << "已走到" << localTarget.x << "," << localTarget.z << "附近，协程正常退出";
 			refThis.Broadcast(MsgChangeSkeleAnim(refThis, "idle"));
 			return false;
 		}
-		
+
 		if (std::abs(localTarget.x - x) >= step)
 		{
 			x += localTarget.x < x ? -step : step;
@@ -175,7 +178,7 @@ namespace AiCo
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
-		if (co_await CoTimer::Wait(3s,funCancel))//服务器主工作线程大循环，每次循环触发一次
+		if (co_await CoTimer::Wait(3s, funCancel))//服务器主工作线程大循环，每次循环触发一次
 		{
 			LOG(INFO) << "WaitDelete协程取消了";
 		}
@@ -194,10 +197,38 @@ namespace AiCo
 			spEntityMonster->AddComponentMonster();
 			spEntityMonster->m_f警戒距离 = 20;
 			spEntityMonster->m_f移动速度 = 0.2f;
-			refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster});
+			refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster });
 			spEntityMonster->BroadcastEnter();
 		}
 		LOG(INFO) << "停止刷怪协程";
+		co_return 0;
+	}
+
+	CoTask<MsgChangeMoneyResponce> ChangeMoney(SpEntity spThis, int changeMoney, FunCancel& funCancel)
+	{
+		KeepCancel kc(funCancel);
+		using namespace std;
+
+		auto responce = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .addMoney = true,.changeMoney = changeMoney }, SendToWorldSvr, funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
+		LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
+
+		if (spThis->m_spPlayer)
+			spThis->m_spPlayer->m_pSession->Send(MsgNotifyMoney{ .finalMoney = responce.finalMoney });
+
+		co_return responce;
+	}
+
+	CoTask<int> AddMoney(SpEntity spThis, FunCancel& funCancel)
+	{
+		KeepCancel kc(funCancel);
+		using namespace std;
+
+		while (!co_await CoTimer::Wait(3s, funCancel))
+		{
+			MsgChangeMoneyResponce responce = co_await ChangeMoney(spThis, 10, funCancel);
+			LOG(INFO) << "ChangeMoney返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
+		}
+
 		co_return 0;
 	}
 }

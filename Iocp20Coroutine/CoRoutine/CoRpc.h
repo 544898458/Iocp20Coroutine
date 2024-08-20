@@ -11,12 +11,12 @@ class CoRpc
 {
 public:
 	template<class T_Req>
-	static CoAwaiter<T_Responce>& Send(T_Req&& req, const std::function<void(const T_Req&)>& funSend)
+	static CoAwaiter<T_Responce>& Send(T_Req&& req, const std::function<void(const T_Req&)>& funSend, FunCancel& funCancel)
 	{
 		++g_rpcSnId;
 		req.rpcSnId = g_rpcSnId;
 		funSend(req);
-		auto iterCancel = g_mapRpcCancel.insert({ g_rpcSnId, FunCancel() });
+		auto iterCancel = g_mapRpcCancel.insert({ g_rpcSnId, funCancel });
 		auto iter = g_mapRpc.insert({ g_rpcSnId, CoAwaiter<T_Responce>(true, iterCancel.first->second) });
 		return iter.first->second;
 	}
@@ -38,7 +38,7 @@ public:
 private:
 	static int g_rpcSnId;
 	static std::map<int, CoAwaiter<T_Responce>> g_mapRpc;
-	static std::map<int, FunCancel> g_mapRpcCancel;
+	static std::map<int, FunCancel&> g_mapRpcCancel;
 
 };
 
@@ -47,4 +47,4 @@ int CoRpc<T_Responce>::g_rpcSnId = 0;
 template<class T_Responce>
 std::map<int, CoAwaiter<T_Responce>> CoRpc<T_Responce>::g_mapRpc;
 template<class T_Responce>
-std::map<int, FunCancel> CoRpc<T_Responce>::g_mapRpcCancel;
+std::map<int, FunCancel&> CoRpc<T_Responce>::g_mapRpcCancel;

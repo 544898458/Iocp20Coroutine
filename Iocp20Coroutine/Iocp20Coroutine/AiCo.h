@@ -15,5 +15,6 @@ namespace AiCo
 	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spEntity, GameSvr* pServer, FunCancel& funCancel);
 	CoTask<int> WaitDelete(SpEntity spThis, FunCancel& funCancel);
 	CoTask<int> SpawnMonster(Space& refSpace, FunCancel& funCancel);
+	CoTask<int> AddMoney(SpEntity spThis, FunCancel& funCancel);
 };
 

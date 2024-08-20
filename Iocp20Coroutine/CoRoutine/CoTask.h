@@ -35,15 +35,43 @@ public:
 		/// </summary>
 		/// <returns></returns>
 		auto initial_suspend() { return std::suspend_always{}; }
-
+		struct final_awaiter
+		{
+			constexpr bool await_ready() noexcept
+			{
+				//LOG(INFO) << "in final_awaiter.await_ready";
+				return false;
+			}
+			void await_resume() noexcept
+			{
+				LOG(ERROR) << "in final_awaiter.await_resume";
+				assert(false);
+			}
+			std::coroutine_handle<>
+				await_suspend(std::coroutine_handle<promise_type> h) noexcept
+			{
+				//LOG(INFO) << "in final_awaiter.await_suspend";
+				if (auto previous = h.promise().previous; previous)
+				{
+					LOG(INFO) << "in final_awaiter.await_suspend.previous";
+					return previous;
+				}
+				else
+				{
+					//LOG(INFO) << "in final_awaiter.await_suspend.noop_coroutine";
+					return std::noop_coroutine();
+				}
+			}
+			std::coroutine_handle<> coro;
+		};
 		/// <summary>
 		/// 协程结束前执行
 		/// 如果改成suspend_never就问题很多，不知道为什么
 		/// </summary>
 		/// <returns></returns>
-		auto final_suspend() noexcept
+		final_awaiter final_suspend() noexcept
 		{
-			return std::suspend_always{};
+			return {};
 		}
 		/// <summary>
 		/// 出现未经处理的异常时执行
@@ -55,7 +83,7 @@ public:
 			//return std::terminate(); 
 			LOG(WARNING) << "unhandled_exception";
 		}
-		// co_return 时执行，return_void跟return_value二选一
+		// co_return 时执行，return_void跟return_value二选一，协程的返回值
 		//void return_void() {}
 		void return_value(T v) { value = v; }
 
@@ -67,6 +95,11 @@ public:
 			this->value = value;
 			return std::suspend_always{};
 		}
+		/// <summary>
+		/// 自己作为可等待对象
+		/// </summary>
+		std::coroutine_handle<> previous = nullptr;
+
 	};
 
 	//const std::chrono::duration<int, std::milli> length = 1000ms;
@@ -123,10 +156,36 @@ public:
 
 		return m_hCoroutine.done();
 	}
+	/// <summary>
+	/// 同时也是Awaiter
+	/// </summary>
+	/// <returns></returns>
+	constexpr bool await_ready() const noexcept { return false; }
+	/// <summary>
+	/// 同时也是Awaiter
+	/// </summary>
+	/// <returns>co_await本对象的返回值,返回的就是协程co_return的值</returns>
+	T await_resume() const noexcept
+	{
+		return this->m_hCoroutine.promise().value;
+	}
+	/// <summary>
+	/// 同时也是Awaiter
+	/// </summary>
+	/// <param name="h"></param>
+	constexpr auto await_suspend(std::coroutine_handle<void> h) noexcept
+	{
+		//auto t = std::jthread([h, l = length] {
+		//	std::this_thread::sleep_for(l);
+		//h.resume();
+		//	});
+		m_hCoroutine.promise().previous = h;
+		return m_hCoroutine;
+	}
 private:
 	std::mutex m_mutex;
 	/// <summary>
-	/// 唯一的成员变量
+	/// 自己作为协程
 	/// </summary>
 	handle m_hCoroutine = nullptr;
 	CoTask(handle handle) :m_hCoroutine(handle) {}
@@ -226,7 +285,7 @@ struct CoAwaiter
 	/// <returns>co_await本对象的返回值</returns>
 	T_Result await_resume() const noexcept
 	{
-		return m_Canceled;
+		return m_Result;
 	}
 	constexpr bool await_ready() const noexcept { return false; }
 	constexpr void await_suspend(std::coroutine_handle<> h) noexcept
@@ -248,7 +307,7 @@ struct CoAwaiter
 		m_sn = other.m_sn;
 		//other.m_hAwaiter = nullptr;
 		//other.m_sn = 0;
-		m_Canceled = other.m_Canceled;
+		m_Result = other.m_Result;
 		m_Kc = other.m_Kc;
 	}
 	CoAwaiter(CoAwaiter&& other) noexcept :m_Kc(other.m_Kc.refFunCancel, false)
@@ -269,16 +328,16 @@ struct CoAwaiter
 		m_sn = other.m_sn;
 		other.m_hAwaiter = nullptr;
 		other.m_sn = 0;
-		m_Canceled = other.m_Canceled;
+		m_Result = other.m_Result;
 	}
 	void Run(const T_Result &result) 
 	{
-		m_Canceled = result;
+		m_Result = result;
 		m_hAwaiter.resume();
 	}
 private:
 	long m_sn;
-	T_Result m_Canceled;
+	T_Result m_Result;//可等待对象的返回值
 	KeepCancel m_Kc;
 	std::coroutine_handle<> m_hAwaiter;
 };
