@@ -4,7 +4,7 @@
 #include "../IocpNetwork/WebSocketSession.h"
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 
-class MyServer;
+class GameSvr;
 class GameSvrSession
 {
 public:
@@ -20,7 +20,7 @@ public:
 	/// </summary>
 	/// <param name="refWsSession"></param>
 	/// <param name="server"></param>
-	void OnInit(WebSocketSession<GameSvrSession>& refWsSession, MyServer& server);
+	void OnInit(WebSocketSession<GameSvrSession>& refWsSession, GameSvr& server);
 	void OnDestroy();
 	void Erase(SpEntity spEntity);
 	template<class T>
@@ -30,7 +30,7 @@ public:
 	/// </summary>
 	std::set<SpEntity> m_vecSpEntity;
 	
-	MyServer* m_pServer = nullptr;
+	GameSvr* m_pServer = nullptr;
 	std::vector<uint64_t> m_vecSelectedEntity;
 	std::string m_nickName;
 

@@ -4,7 +4,7 @@
 #include "PlayerComponent.h"
 #include "MonsterComponent.h"
 #include "../IocpNetwork/StrConv.h"
-#include "MySession.h"
+#include "GameSvrSession.h"
 #include "AiCo.h"
 #include "Space.h"
 

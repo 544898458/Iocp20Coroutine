@@ -2,22 +2,22 @@
 #include "MyServer.h"
 #include "../IocpNetwork/Server.h"
 #include "../IocpNetwork/ServerTemplate.h"
-#include "MySession.h"
+#include "GameSvrSession.h"
 #include "../IocpNetwork/ListenSocketCompletionKeyTemplate.h"
 #include "../IocpNetwork/SessionsTemplate.h"
 
-template Iocp::Server<MyServer>;
-template bool Iocp::Server<MyServer>::Init<WebSocketSession<GameSvrSession> >(const uint16_t);
-template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WebSocketSession<GameSvrSession>, MyServer >(HANDLE hIocp, SOCKET socketListen, MyServer&);
+template Iocp::Server<GameSvr>;
+template bool Iocp::Server<GameSvr>::Init<WebSocketSession<GameSvrSession> >(const uint16_t);
+template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WebSocketSession<GameSvrSession>, GameSvr >(HANDLE hIocp, SOCKET socketListen, GameSvr&);
 
-void MyServer::OnAdd(Session&)
+void GameSvr::OnAdd(Session&)
 {
 }
 
-void MyServer::OnDel()
+void GameSvr::OnDel()
 {
 }
-void MyServer::Update()
+void GameSvr::Update()
 {
 	m_Sessions.Update([this](){m_space.Update();});
 	/*

@@ -2,7 +2,7 @@
 #include "Space.h"
 #include "Entity.h"
 #include "PlayerComponent.h"
-#include "MySession.h"
+#include "GameSvrSession.h"
 
 void Space::Update()
 {

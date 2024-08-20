@@ -5,7 +5,7 @@
 //#include "PlayerComponent.h"
 class Space;
 class GameSvrSession;
-class MyServer;
+class GameSvr;
 class PlayerComponent;
 class MonsterComponent;
 class BuildingComponent;

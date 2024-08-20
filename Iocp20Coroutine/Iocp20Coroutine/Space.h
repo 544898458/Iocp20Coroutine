@@ -2,15 +2,15 @@
 #include <map>
 #include "SpEntity.h"
 
-class MyServer;
+class GameSvr;
 /// <summary>
 /// Go”Ô—‘GoWorldøÚº‹Space/Entity£¨œ‡µ±”⁄C#”Ô—‘ETøÚº‹Scene/Unit
 /// </summary>
 class Space
 {
 public:
-	Space(MyServer* pServer) :m_pServer(pServer) {}
+	Space(GameSvr* pServer) :m_pServer(pServer) {}
 	std::map<int64_t,SpEntity> m_mapEntity;
 	void Update();
-	MyServer * const m_pServer;
+	GameSvr * const m_pServer;
 };

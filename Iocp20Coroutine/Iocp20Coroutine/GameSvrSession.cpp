@@ -6,7 +6,7 @@
 #include "../websocketfiles-master/src/ws_endpoint.cpp"
 #include "../IocpNetwork/WebSocketSessionTemplate.h"
 #include "../IocpNetwork/SessionsTemplate.h"
-#include "MySession.h"
+#include "GameSvrSession.h"
 
 //#include <iostream>
 #include <cassert>
@@ -27,7 +27,7 @@
 //template<MySession> std::mutex g_setSessionMutex;
 template Iocp::SessionSocketCompletionKey<WebSocketSession<GameSvrSession> >;
 template class WebSocketSession<GameSvrSession>;
-template void WebSocketSession<GameSvrSession>::OnInit<MyServer>(Iocp::SessionSocketCompletionKey<WebSocketSession<GameSvrSession> >& refSession, MyServer& server);
+template void WebSocketSession<GameSvrSession>::OnInit<GameSvr>(Iocp::SessionSocketCompletionKey<WebSocketSession<GameSvrSession> >& refSession, GameSvr& server);
 template class WebSocketEndpoint<GameSvrSession, Iocp::SessionSocketCompletionKey<WebSocketSession<GameSvrSession> > >;
 
 template<class T>
@@ -81,7 +81,7 @@ void GameSvrSession::OnRecvWsPack(const void* buf, const int len)
 	}
 }
 
-void GameSvrSession::OnInit(WebSocketSession<GameSvrSession>& refWsSession, MyServer& server)
+void GameSvrSession::OnInit(WebSocketSession<GameSvrSession>& refWsSession, GameSvr& server)
 {
 	server.m_Sessions.AddSession(refWsSession.m_pSession, [this, &refWsSession, &server]()
 		{
@@ -186,7 +186,7 @@ CoTask<int> GameSvrSession::CoAddBuilding()
 		LOG(WARNING) << "扣钱失败,error=" << responce.error;
 		co_return 0;
 	}
-	spNewEntity->AddComponentAttack();
+	//spNewEntity->AddComponentAttack();
 	spNewEntity->AddComponentPlayer(this);
 	spNewEntity->AddComponentBuilding();
 	m_vecSpEntity.insert(spNewEntity);//自己控制的单位

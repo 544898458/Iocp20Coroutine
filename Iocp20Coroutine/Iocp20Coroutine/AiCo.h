@@ -1,7 +1,7 @@
 #pragma once
 #include "../CoRoutine/CoTask.h"
 #include "SpEntity.h"
-class MyServer;
+class GameSvr;
 struct Position;
 class Space;
 namespace AiCo
@@ -12,7 +12,7 @@ namespace AiCo
 	CoTask<int> Attack(SpEntity spEntity, SpEntity spDefencer, FunCancel& cancel);
 	CoTask<int> Idle(SpEntity spEntity, FunCancel& funCancel);
 	CoTask<int> WalkToPos(SpEntity spThis, const Position &posTarget, FunCancel& funCancel);
-	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spEntity, MyServer* pServer, FunCancel& funCancel);
+	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spEntity, GameSvr* pServer, FunCancel& funCancel);
 	CoTask<int> WaitDelete(SpEntity spThis, FunCancel& funCancel);
 	CoTask<int> SpawnMonster(Space& refSpace, FunCancel& funCancel);
 };

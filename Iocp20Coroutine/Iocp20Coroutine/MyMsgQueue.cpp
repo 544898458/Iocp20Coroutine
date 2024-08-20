@@ -2,7 +2,7 @@
 #include <glog/logging.h>
 #include <cstdlib>
 #include "MyMsgQueue.h"
-#include "MySession.h"
+#include "GameSvrSession.h"
 #include "Space.h"
 #include "../CoRoutine/CoTimer.h"
 #include "MyServer.h"

@@ -9,7 +9,7 @@
 #include "Space.h"
 #include "Entity.h"
 #include "MyServer.h"
-#include "MySession.h"
+#include "GameSvrSession.h"
 #include <glog/logging.h>
 #include "WorldClient.h"
 #include "../IocpNetwork/MsgPack.h"
@@ -88,10 +88,10 @@ int main(void)
 
 	SetConsoleCtrlHandler(fun, TRUE);
 	Iocp::ThreadPool::Init();
-	Iocp::Server<MyServer> accept(Iocp::ThreadPool::GetIocp());
+	Iocp::Server<GameSvr> accept(Iocp::ThreadPool::GetIocp());
 	//g_worldSvr.reset( new Iocp::Server<WorldServer>(Iocp::ThreadPool::GetIocp()) );
 
-	Iocp::Server<MyServer>::WsaStartup();
+	Iocp::Server<GameSvr>::WsaStartup();
 	accept.Init<WebSocketSession<GameSvrSession>>(12345);
 	//Iocp::ThreadPool::Add(accept.GetIocp());
 

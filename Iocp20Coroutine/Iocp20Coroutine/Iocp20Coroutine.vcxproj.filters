@@ -27,9 +27,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MySession.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Space.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -129,12 +126,12 @@
     <ClCompile Include="AttackComponent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="GameSvrSession.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MySession.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Space.h">
@@ -264,6 +261,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="AttackComponent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSvrSession.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

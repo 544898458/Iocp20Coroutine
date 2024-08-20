@@ -1,16 +1,16 @@
 #pragma once
 #include "../IocpNetwork/Server.h"
 #include "../IocpNetwork/SessionSocketCompletionKey.h"
-#include "MySession.h"
+#include "GameSvrSession.h"
 #include "Space.h"
 #include "../IocpNetwork/Sessions.h"
 
-class MyServer
+class GameSvr
 {
 public:
-	MyServer(const MyServer&) = delete;
-	MyServer(MyServer&&) = delete;
-	MyServer():m_space(this) {}
+	GameSvr(const GameSvr&) = delete;
+	GameSvr(GameSvr&&) = delete;
+	GameSvr():m_space(this) {}
 	using Session = Iocp::SessionSocketCompletionKey<WebSocketSession< GameSvrSession> >;
 	void OnAdd(Session&);
 	void OnDel();

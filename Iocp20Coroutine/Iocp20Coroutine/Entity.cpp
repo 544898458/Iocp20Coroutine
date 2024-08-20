@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "Entity.h"
-#include "MySession.h"
+#include "GameSvrSession.h"
 #include "Space.h"
 #include "../CoRoutine/CoTimer.h"
 #include "MyServer.h"

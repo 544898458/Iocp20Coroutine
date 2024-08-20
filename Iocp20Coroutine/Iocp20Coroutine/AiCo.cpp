@@ -2,7 +2,7 @@
 #include "AiCo.h"
 #include "Entity.h"
 #include "../CoRoutine/CoTimer.h"
-#include "MySession.h"
+#include "GameSvrSession.h"
 #include "MyServer.h"
 #include "PlayerSystem.h"
 #include "PlayerComponent.h"
@@ -132,7 +132,7 @@ namespace AiCo
 		LOG(INFO) << "走向目标协程结束:" << posTarget;
 	}
 
-	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spTarget, MyServer* pServer, FunCancel& funCancel)
+	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spTarget, GameSvr* pServer, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		auto pLocalServer = pServer;
