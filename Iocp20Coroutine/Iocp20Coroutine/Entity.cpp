@@ -11,6 +11,7 @@
 #include "../IocpNetwork/StrConv.h"
 #include "MonsterComponent.h"
 #include "AttackComponent.h"
+#include "BuildingComponent.h"
 
 using namespace std;
 
@@ -71,6 +72,9 @@ void Entity::OnDestroy()
 	LOG(INFO) << "µ÷ÓÃEntity::OnDestroy";
 	if( m_spAttack)
 		m_spAttack->TryCancel(*this);
+
+	if (m_spBuilding)
+		m_spBuilding->TryCancel(*this);
 
 	if (m_cancelDelete)
 		m_cancelDelete();

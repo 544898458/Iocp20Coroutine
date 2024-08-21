@@ -44,7 +44,7 @@ void WorldClientSession::OnRecv(const MsgSay& msg)
 void WorldClientSession::OnRecv(const MsgChangeMoneyResponce& msg)
 {
 	LOG(INFO) << "WorldSvr发来扣钱结果,rpcSnId=" << msg.rpcSnId;
-	CoRpc<MsgChangeMoneyResponce>::OnRecvResponce(msg);
+	CoRpc<MsgChangeMoneyResponce>::OnRecvResponce(false,msg);
 }
 
 

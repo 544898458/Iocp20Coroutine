@@ -170,7 +170,8 @@ void GameSvrSession::OnRecv(const MsgAddBuilding& msg)
 
 CoTask<int> GameSvrSession::CoAddBuilding()
 {
-	MsgChangeMoneyResponce responce = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 0 }, SendToWorldSvr, m_funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 0 }, SendToWorldSvr, m_funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	const MsgChangeMoneyResponce &responce = std::get<1>(tuple);
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 0,30 }, m_pServer->m_space, "house_type19");
 	if (0 != responce.error)
@@ -192,7 +193,8 @@ CoTask<int> GameSvrSession::CoAddBuilding()
 
 CoTask<int> GameSvrSession::CoAddRole()
 {
-	MsgChangeMoneyResponce responce = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 3 }, SendToWorldSvr, m_funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 3 }, SendToWorldSvr, m_funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	MsgChangeMoneyResponce responce = std::get<1>(tuple);
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 30,30 }, m_pServer->m_space, "altman-blue");
 	if (0 != responce.error)
