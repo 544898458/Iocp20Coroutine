@@ -37,7 +37,7 @@ bool Iocp::Server<T_Server>::Init(const uint16_t usPort)
 	if (iocp != m_hIocp)
 	{
 		int a = GetLastError();
-		LOG(INFO) << "完成端口绑定socket失败" << a;
+		LOG(WARNING) << "完成端口绑定socket失败" << a;
 
 		CloseHandle(iocp);
 		closesocket(m_socketAccept);
@@ -61,7 +61,7 @@ bool Iocp::Server<T_Server>::Init(const uint16_t usPort)
 		switch (a) {
 		case WSAEADDRNOTAVAIL:szErr = "The requested address is not valid in its context.在其上下文中，该请求的地址无效。"; break;
 		}
-		LOG(INFO) << "a=" << a << "," << szErr;
+		LOG(WARNING) << "a=" << a << "," << szErr;
 
 
 		//释放
@@ -74,7 +74,8 @@ bool Iocp::Server<T_Server>::Init(const uint16_t usPort)
 	if (SOCKET_ERROR == listen(m_socketAccept, SOMAXCONN))
 	{
 		//出错了
-		int a = WSAGetLastError();
+		int err = WSAGetLastError();
+		LOG(WARNING) << "err=" << err;
 		//释放
 		CloseHandle(iocp);
 		closesocket(m_socketAccept);
@@ -131,6 +132,7 @@ bool Iocp::Server< T_Server>::WsaStartup()
 template<class T_Server>
 void Iocp::Server< T_Server>::Stop()
 {
+	LOG(INFO) << "m_socketAccept=" << this->m_socketAccept;
 	closesocket(this->m_socketAccept);
 	this->m_socketAccept = NULL;
 	CloseHandle(this->m_hIocp);
@@ -158,7 +160,7 @@ Iocp::SessionSocketCompletionKey<T_Session>* Iocp::Server<T_Server>::Connect(con
 	if (iocp != m_hIocp)
 	{
 		int a = GetLastError();
-		LOG(INFO) << "完成端口绑定socket失败" << a;
+		LOG(WARNING) << "完成端口绑定socket失败" << a;
 
 		CloseHandle(iocp);
 		closesocket(socket);

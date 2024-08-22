@@ -11,7 +11,7 @@ void Entity::AddComponentBuilding()
 
 BuildingComponent::BuildingComponent(Entity& refEntity)
 {
-	m_coAddMoney = AiCo::AddMoney(refEntity.shared_from_this(), m_cancel);
+	m_coAddMoney = AiCo::AddMoney(refEntity, m_cancel);
 	m_coAddMoney.Run();
 }
 

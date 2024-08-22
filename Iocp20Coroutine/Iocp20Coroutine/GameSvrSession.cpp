@@ -98,6 +98,7 @@ void GameSvrSession::OnDestroy()
 
 		sp->OnDestroy();
 	}
+	LOG(INFO) << "m_mapEntity.size=" << m_pServer->m_space.m_mapEntity.size();
 	m_vecSpEntity.clear();
 
 	/*m_pServer->m_Sessions.DeleteSession(this->m_pWsSession->m_pSession, [this]()
@@ -171,9 +172,9 @@ void GameSvrSession::OnRecv(const MsgAddBuilding& msg)
 CoTask<int> GameSvrSession::CoAddBuilding()
 {
 	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 0 }, SendToWorldSvr, m_funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
-	const MsgChangeMoneyResponce &responce = std::get<1>(tuple);
+	const MsgChangeMoneyResponce& responce = std::get<1>(tuple);
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
-	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 0,30 }, m_pServer->m_space, "house_type19");
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 0,float(std::rand() % 50) }, m_pServer->m_space, "house_type19");
 	if (0 != responce.error)
 	{
 		LOG(WARNING) << "扣钱失败,error=" << responce.error;
@@ -280,7 +281,7 @@ void GameSvrSession::OnRecv(const MsgMove& msg)
 			continue;
 		}
 
-		if(spEntity->m_spAttack)
+		if (spEntity->m_spAttack)
 			spEntity->m_spAttack->WalkToPos(*spEntity.get(), Position(targetX, targetZ));
 
 	}

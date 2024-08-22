@@ -16,8 +16,8 @@ public:
 		auto iterFind = g_mapRpc.find(req.rpcSnId);
 		if (iterFind == g_mapRpc.end())
 		{
-			LOG(ERROR) << "ERR";
-			assert(false);
+			LOG(WARNING) << req.rpcSnId << "rpc收到回应时，协程已取消";
+			//assert(false);
 			return;
 		}
 
@@ -34,9 +34,10 @@ public:
 		funSend(req);
 		auto iterCancel = g_mapRpcCancel.insert({ g_rpcSnId, funCancel });
 		auto iter = g_mapRpc.insert({ g_rpcSnId, CoAwaiter< std::tuple<bool, T_Responce>>({true, iterCancel.first->second}) });
-		funCancel = []()
+		const int rpcSnId = g_rpcSnId;
+		funCancel = [rpcSnId]()
 			{
-				OnRecvResponce(true, {});
+				OnRecvResponce(true, { .rpcSnId = rpcSnId });
 			};
 		return iter.first->second;
 	}

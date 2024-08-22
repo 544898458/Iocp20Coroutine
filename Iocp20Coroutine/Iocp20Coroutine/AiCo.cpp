@@ -204,30 +204,40 @@ namespace AiCo
 		co_return 0;
 	}
 
-	CoTask<std::tuple<bool,MsgChangeMoneyResponce>> ChangeMoney(WpEntity wpThis, int changeMoney, FunCancel& funCancel)
+	CoTask<std::tuple<bool,MsgChangeMoneyResponce>> ChangeMoney(Entity &refThis, int changeMoney, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
 
 		auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .addMoney = true,.changeMoney = changeMoney }, SendToWorldSvr, funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
-		auto &responce = std::get<1>(tuple);
+		const auto& responce = std::get<1>(tuple);
+		if (std::get<0>(tuple))
+		{
+			LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
+			co_return tuple;
+		}
+		
 		LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 
-		if (!wpThis.expired())
-			wpThis.lock()->m_spPlayer->m_pSession->Send(MsgNotifyMoney{.finalMoney = responce.finalMoney});
+		refThis.m_spPlayer->m_pSession->Send(MsgNotifyMoney{.finalMoney = responce.finalMoney});
 
 		co_return tuple;
 	}
 
-	CoTask<int> AddMoney(SpEntity spThis, FunCancel& funCancel)
+	CoTask<int> AddMoney(Entity& refThis, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
 
-		while (!co_await CoTimer::Wait(3s, funCancel))
+		while (!co_await CoTimer::Wait(100ms, funCancel))
 		{
-			auto tuple = co_await ChangeMoney(spThis, 10, funCancel);
-			MsgChangeMoneyResponce& responce = std::get<1>(tuple);
+			auto tuple = co_await ChangeMoney(refThis, 10, funCancel);
+			const auto& responce = std::get<1>(tuple);
+			if (std::get<0>(tuple))
+			{
+				LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
+				co_return 0;
+			}
 			LOG(INFO) << "ChangeMoney返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 		}
 

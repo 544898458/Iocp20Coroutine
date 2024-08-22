@@ -44,9 +44,9 @@ namespace Iocp {
 
 			if (async)
 			{
-				LOG(INFO) << "准备异步等待重叠AcceptEx完成\n";
+				LOG(INFO) << "准备异步等待重叠AcceptEx完成,socket=" << pAcceptOverlapped->socket;
 				co_yield 0;
-				LOG(INFO) << ("异步重叠AcceptEx完成\n");
+				LOG(INFO) << "异步重叠AcceptEx完成,socket=" << pAcceptOverlapped->socket;
 			}
 
 			if (!pAcceptOverlapped->GetQueuedCompletionStatusReturn)
@@ -72,8 +72,8 @@ namespace Iocp {
 			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)pAcceptOverlapped->socket, hIocp, (ULONG_PTR)pNewCompleteKey, 0);
 			if (hPort1 != hIocp)
 			{
-				int a = GetLastError();
-				LOG(INFO) << "连上来的Socket关联到完成端口失败，Error=" << a;
+				const int err = GetLastError();
+				LOG(ERROR) << "连上来的Socket关联到完成端口失败，Error=" << err;
 				//closesocket(pKey->socket);// all_socks[count]);
 				delete pNewCompleteKey;
 				co_return 0;

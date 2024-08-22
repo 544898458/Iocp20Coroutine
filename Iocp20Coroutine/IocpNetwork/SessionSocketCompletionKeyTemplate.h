@@ -70,7 +70,7 @@ namespace Iocp {
 			LOG(INFO) << "已异步等到WSARecv结果,numberOfBytesTransferred=" << pOverlapped.numberOfBytesTransferred << ",GetLastErrorReturn=" << pOverlapped.GetLastErrorReturn;
 			if (0 == pOverlapped.numberOfBytesTransferred)
 			{
-				LOG(INFO) << ("numberOfBytesTransferred==0可能断网了,不再调用WSARecv\n");
+				LOG(WARNING) << ("numberOfBytesTransferred==0可能断网了,不再调用WSARecv\n");
 				CloseSocket();
 				//delete pOverlapped;
 				break;
@@ -116,9 +116,9 @@ namespace Iocp {
 				//<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len
 				//<< ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn;
 			co_yield 0;
-			//LOG(INFO) << "已异步等到WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
-			//	<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len << ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn
-			//	<< ",GetThreadId=" << GetCurrentThreadId();
+			LOG(INFO) << "已异步等到WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
+				<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len << ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn
+				<< ",GetThreadId=" << GetCurrentThreadId();
 
 			if (!overlapped.callSend)
 			{
@@ -129,7 +129,7 @@ namespace Iocp {
 
 			if (0 == overlapped.numberOfBytesTransferred && overlapped.GetLastErrorReturn != ERROR_IO_PENDING)
 			{
-				LOG(INFO) << ("numberOfBytesTransferred==0可能断网了,不再调用WSASend,pOverlapped.GetLastErrorReturn=%d,GetThreadId=%d\n", overlapped.GetLastErrorReturn, GetCurrentThreadId());
+				LOG(WARNING) << ("numberOfBytesTransferred==0可能断网了,不再调用WSASend,pOverlapped.GetLastErrorReturn=%d,GetThreadId=%d\n", overlapped.GetLastErrorReturn, GetCurrentThreadId());
 				CloseSocket();
 				//delete pOverlapped;
 				break;
@@ -187,8 +187,12 @@ namespace Iocp {
 			case WSAECONNABORTED:
 				LOG(WARNING) << "An established connection was aborted by the software in your host machine.";
 				break;
+			case WSAENOTSOCK:
+				LOG(WARNING) << "An operation was attempted on something that is not a socket.";
+				break;
+
 			}
-			LOG(INFO) << "WSARecv重叠的操作未成功启动，并且不会发生完成指示。" << err;
+			LOG(INFO) << "WSARecv重叠的操作未成功启动，并且不会发生完成指示。err=" << err << ",Socket=" << Socket();
 			return false;// 任何其他错误代码都指示重叠的操作未成功启动，并且不会发生完成指示。
 		}
 
@@ -221,19 +225,31 @@ namespace Iocp {
 		//refOverlapped.numberOfBytesTransferred = dwSendCount;
 		if (0 == sendRet)
 		{
-			//LOG(INFO) << "WSASend重叠的操作成功启动，WSAGetLastError=" << err;
+			LOG(INFO) << "WSASend重叠的操作成功启动，已经完成,WSAGetLastError=" << err
+				<< ",Socket=" << Socket() << ",wsabuf.len=" << refOverlapped.wsabuf.len << ",numberOfBytesTransferred=" << refOverlapped..numberOfBytesTransferred;
 			return std::make_tuple(true, true);//如果未发生任何错误，并且发送操作已立即完成， 则 WSASend 返回零。 在这种情况下，一旦调用线程处于可警报状态，就已计划调用完成例程。
 		}
 		if (SOCKET_ERROR != sendRet ||
 			ERROR_IO_PENDING != err)
 		{
-			LOG(INFO) << "WSASend重叠的操作未成功启动，并且不会发生完成指示。" << refOverlapped.GetLastErrorReturn;
+			LOG(WARNING) << "WSASend重叠的操作未成功启动，并且不会发生完成指示。GetLastErrorReturn =" << refOverlapped.GetLastErrorReturn << ",err=" << err
+				<< ",Socket=" << Socket() << ",wsabuf.len=" << refOverlapped.wsabuf.len;
+			switch (err)
+			{
+			case WSAENOTSOCK:
+				LOG(WARNING) << "An operation was attempted on something that is not a socket.";
+				break;
+			case WSAECONNABORTED:
+				LOG(WARNING) << "An established connection was aborted by the software in your host machine.";
+				break;
+			}
 			closesocket(Socket());
 			return std::make_tuple(false, true);// 任何其他错误代码都指示重叠的操作未成功启动，并且不会发生完成指示。
 		}
 
 		// 否则，将返回 值 SOCKET_ERROR ，并且可以通过调用 WSAGetLastError 来检索特定的错误代码。 
 		// 错误代码 WSA_IO_PENDING 指示重叠操作已成功启动，稍后将指示完成。 
+		LOG(INFO) << "WSASend重叠的操作成功启动，WSAGetLastError=" << err;
 		return std::make_tuple(true, true);
 	}
 }
