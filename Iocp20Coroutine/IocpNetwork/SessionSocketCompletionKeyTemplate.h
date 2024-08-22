@@ -118,7 +118,7 @@ namespace Iocp {
 			co_yield 0;
 			LOG(INFO) << "已异步等到WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
 				<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len << ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn
-				<< ",GetThreadId=" << GetCurrentThreadId();
+				<< ",Socket=" << Socket();
 
 			if (!overlapped.callSend)
 			{
@@ -226,7 +226,7 @@ namespace Iocp {
 		if (0 == sendRet)
 		{
 			LOG(INFO) << "WSASend重叠的操作成功启动，已经完成,WSAGetLastError=" << err
-				<< ",Socket=" << Socket() << ",wsabuf.len=" << refOverlapped.wsabuf.len << ",numberOfBytesTransferred=" << refOverlapped..numberOfBytesTransferred;
+				<< ",Socket=" << Socket() << ",wsabuf.len=" << refOverlapped.wsabuf.len << ",numberOfBytesTransferred=" << refOverlapped.numberOfBytesTransferred;
 			return std::make_tuple(true, true);//如果未发生任何错误，并且发送操作已立即完成， 则 WSASend 返回零。 在这种情况下，一旦调用线程处于可警报状态，就已计划调用完成例程。
 		}
 		if (SOCKET_ERROR != sendRet ||
