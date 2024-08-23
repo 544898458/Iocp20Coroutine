@@ -63,17 +63,16 @@ public:
 
     // user defined process
     virtual int32_t user_defined_process(WebSocketPacket& packet, ByteBuffer& frame_payload);
-
+	virtual void onHandShakeCompleted() = 0;
     // send data to wire 
     int32_t to_wire(const void * writebuf, int32_t size);
-
+    
 private:
-    bool ws_handshake_completed_;
-
     ByteBuffer fromwire_buf_;
     ByteBuffer message_data_;
 
 protected:
+    bool ws_handshake_completed_;
     T_Data* nt_work_data_;
     T_Callback* nt_write_cb_;
 

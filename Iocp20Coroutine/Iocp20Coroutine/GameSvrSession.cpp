@@ -33,6 +33,11 @@ template class WebSocketEndpoint<GameSvrSession, Iocp::SessionSocketCompletionKe
 template<class T>
 void GameSvrSession::Send(const T& ref)
 {
+	if (!m_bLoginOk)
+	{
+		LOG(WARNING) << "还没登录，不能向他发数据";
+		return;
+	}
 	WebSocketPacket wspacket;
 	// set FIN and opcode
 	wspacket.set_fin(1);
@@ -235,7 +240,7 @@ void GameSvrSession::OnRecv(const MsgLogin& msg)
 	}
 
 	m_nickName = gbkName;
-
+	m_bLoginOk = true;
 	//for (const auto pENtity : refThis.m_pSession->m_pServer->m_space.setEntity)
 	//{
 	//	if (pENtity == &refThis.m_pSession->m_entity)
@@ -250,9 +255,8 @@ void GameSvrSession::OnRecv(const MsgLogin& msg)
 	//}
 
 
-	for (const auto& pair : m_pServer->m_space.m_mapEntity)//别人发给自己
+	for (const auto& [id,spEntity]: m_pServer->m_space.m_mapEntity)//别人发给自己
 	{
-		auto& spEntity = pair.second;
 		Send(MsgAddRoleRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->NickName()), spEntity->m_strPrefabName));
 		Send(MsgNotifyPos(*spEntity));
 	}

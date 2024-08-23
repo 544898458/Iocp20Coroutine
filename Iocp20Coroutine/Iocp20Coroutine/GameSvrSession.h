@@ -43,6 +43,7 @@ public:
 	void Process();
 	CoTask<int> m_coRpc;
 	FunCancel m_funCancel;
+	bool m_bLoginOk = false;
 private:
 	/// <summary>
 	/// 主逻辑线程（控制台界面线程）调用

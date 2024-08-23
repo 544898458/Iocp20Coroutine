@@ -2,7 +2,7 @@
 #include <glog/logging.h>
 #include "../websocketfiles-master/src/ws_endpoint.h"
 #include "SessionSocketCompletionKey.h"
-
+#include <deque>
 
 //void net_write_cb(char* buf, int64_t size, void* wd)
 //{
@@ -78,6 +78,11 @@ public:
 	/// <param name="ref"></param>
 	void Send(const void* buf, const int len)
 	{
+		if (0 >= len)
+		{
+			LOG(WARNING) << "len = 0";
+			return;
+		}
 		//WebSocketPacket wspacket;
 		//// set FIN and opcode
 		//wspacket.set_fin(1);
@@ -96,8 +101,35 @@ public:
 		//wspacket.pack_dataframe(output);
 		// send to client
 		//this->to_wire(output.bytes(), output.length());
+		if (!this->ws_handshake_completed_)
+		{
+			std::lock_guard lock(m_mutexQueueSendBuf);
+			std::vector<char> sendBuf;
+			sendBuf.resize(len);//可能换内存
+			const char* begin = (char*)buf;
+			std::copy(begin, begin + len, &sendBuf[0]);//memcpy替换
+			m_queueSendBuf.push_back(sendBuf);
+
+			LOG(INFO) << "WebSocket 还没握手,缓存len=" << len << ",m_queueSendBuf.size=" << m_queueSendBuf.size();
+			return;
+		}
 		this->to_wire(buf, len);
 	}
+	virtual void onHandShakeCompleted()override
+	{
+		std::lock_guard lock(m_mutexQueueSendBuf);
+		while (!m_queueSendBuf.empty())
+		{
+			auto& sendBuf = m_queueSendBuf.front();
+			const auto buf = &sendBuf[0];
+			const auto len = sendBuf.size();
+			LOG(INFO) << "WebSocket 握手成功,发缓存包len=" << len << ",m_queueSendBuf.size=" << m_queueSendBuf.size();
+			this->to_wire(buf, len);
+			m_queueSendBuf.pop_front();
+		}
+	}
+	std::mutex m_mutexQueueSendBuf;
+	std::deque<std::vector<char>> m_queueSendBuf;
 };
 
 /// <summary>
@@ -113,7 +145,7 @@ public:
 	//WebSocketSession();
 	virtual ~WebSocketSession() {}
 	template<class T_Server>
-		requires requires(WebSocketSession<T_Session>& refWsSesson, T_Session& refSession, T_Server &server)
+		requires requires(WebSocketSession<T_Session>& refWsSesson, T_Session& refSession, T_Server& server)
 	{
 		//refSession.OnRecvWsPack((const char[])0, (const int )0	);
 		refSession.OnInit(refWsSesson, server);
