@@ -17,14 +17,13 @@ void Space::Update()
 			continue;
 		}
 
-		spEntity->Broadcast(MsgDelRoleRet((uint64_t)spEntity.get()));
-
 		if (spEntity->m_spPlayer)
 		{
 			spEntity->m_spPlayer->m_pSession->Erase(spEntity);
 		}
 
 		LOG(INFO) << "É¾³ý¶ÔÏó," << spEntity->NickName() << ",pEntity=" << spEntity << ",É¾³ýÇ°Ê£Óà" << m_mapEntity.size();
+		spEntity->OnDestroy();
 		iter = m_mapEntity.erase(iter);
 	}
 }

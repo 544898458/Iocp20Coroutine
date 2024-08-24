@@ -32,26 +32,18 @@ namespace CoTimer
 			{
 				LOG(INFO) << "Wait取消" << sn;
 				auto pair = g_multiTimer.equal_range(time);
-				for (auto iter = pair.first; iter != pair.second; ++iter)
+				for (auto iter = pair.first; iter != pair.second; )
 				{
-					if (iter->second.Sn() == sn)
+					if (iter->second.Sn() != sn)
 					{
-						iter->second.Run(true);//迭代器失效
-						break;
-						//g_multiTimer.erase(iter);
+						++iter;
+						continue;
 					}
+
+					iter->second.Run(true);//迭代器失效
+					//break;
+					iter = g_multiTimer.erase(iter);
 				}
-				//再次回复迭代器删除
-				pair = g_multiTimer.equal_range(time);
-				for (auto iter = pair.first; iter != pair.second; ++iter)
-				{
-					if (iter->second.Sn() == sn)
-					{
-						g_multiTimer.erase(iter);//迭代器失效
-						break;	
-					}
-				}
-				//cancel = old;
 			};
 		return iter->second;
 	}
@@ -60,7 +52,7 @@ namespace CoTimer
 	/// </summary>
 	/// <param name="cancel"></param>
 	/// <returns>true表示中途取消</returns>
-	CoAwaiterBool& WaitNextUpdate(FunCancel &cancel)
+	CoAwaiterBool& WaitNextUpdate(FunCancel& cancel)
 	{
 
 		//g_multiTimer.insert({ std::chrono::steady_clock::now() + milli,Wait2() });
@@ -102,7 +94,7 @@ namespace CoTimer
 			itFind->second.Run(false);
 			g_NextUpdate.erase(sn);
 		}
-		
+
 		const auto now = std::chrono::steady_clock::now();
 		while (!g_multiTimer.empty())
 		{

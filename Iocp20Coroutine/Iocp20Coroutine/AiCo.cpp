@@ -235,7 +235,7 @@ namespace AiCo
 			const auto& responce = std::get<1>(tuple);
 			if (std::get<0>(tuple))
 			{
-				LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
+				LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney << ",rpcSn=" << responce.rpcSnId;
 				co_return 0;
 			}
 			//LOG(INFO) << "ChangeMoney返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;

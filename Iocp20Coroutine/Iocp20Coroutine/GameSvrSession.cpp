@@ -240,16 +240,16 @@ CoTask<int> GameSvrSession::CoAddBuilding()
 CoTask<int> GameSvrSession::CoAddRole()
 {
 	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());
-	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 3 }, SendToWorldSvr, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
-	MsgChangeMoneyResponce responce = std::get<1>(tuple);
+	const auto [stop, responce]= co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 3 }, SendToWorldSvr, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
-	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 30,30 }, m_pServer->m_space, "altman-blue");
-	if (0 != responce.error)
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ float(std::rand()%30),30 }, m_pServer->m_space, "altman-blue");
+	if (stop)
 	{
 		LOG(WARNING) << "扣钱失败";
 		co_return 0;
 	}
 	spNewEntity->AddComponentPlayer(this);
+	spNewEntity->AddComponentAttack();
 	m_vecSpEntity.insert(spNewEntity);//自己控制的单位
 	m_pServer->m_space.m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 

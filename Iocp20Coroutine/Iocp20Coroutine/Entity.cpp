@@ -70,6 +70,8 @@ bool Entity::IsEnemy(const Entity& refEntity)
 void Entity::OnDestroy()
 {
 	LOG(INFO) << "µ÷ÓÃEntity::OnDestroy";
+	Broadcast(MsgDelRoleRet((uint64_t)this));
+
 	if( m_spAttack)
 		m_spAttack->TryCancel(*this);
 
