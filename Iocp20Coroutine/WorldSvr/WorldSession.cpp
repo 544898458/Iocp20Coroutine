@@ -24,9 +24,7 @@ template class MsgQueueMsgPack<WorldSession>;
 /// <returns></returns>
 int WorldSession::OnRecv(CompeletionKeySession&, const void* buf, int len)
 {
-	const void* bufPack(nullptr);
-	int lenPack(0);
-	std::tie(bufPack, lenPack) = Iocp::OnRecv2(buf, len);
+	const auto&& [bufPack, lenPack] = Iocp::OnRecv2(buf, len);
 	if (lenPack > 0 && nullptr != bufPack)
 	{
 		OnRecvPack(bufPack, lenPack);

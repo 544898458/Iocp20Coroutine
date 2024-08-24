@@ -4,7 +4,7 @@
 //#include "IocpNetwork/ListenSocketCompletionKey.cpp"
 #include "../IocpNetwork/SessionSocketCompletionKeyTemplate.h"
 #include "../websocketfiles-master/src/ws_endpoint.cpp"
-#include "../IocpNetwork/WebSocketSessionTemplate.h"
+//#include "../IocpNetwork/WebSocketSessionTemplate.h"
 #include "../IocpNetwork/SessionsTemplate.h"
 #include "GameSvrSession.h"
 
@@ -22,40 +22,50 @@
 #include "../IocpNetwork/StrConv.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 #include "AttackComponent.h"
+#include "../IocpNetwork/MsgPack.h"
 //template<MySession>
 //std::set<Iocp::SessionSocketCompletionKey<MySession>*> g_setSession;
 //template<MySession> std::mutex g_setSessionMutex;
-template Iocp::SessionSocketCompletionKey<WebSocketSession<GameSvrSession> >;
-template class WebSocketSession<GameSvrSession>;
-template void WebSocketSession<GameSvrSession>::OnInit<GameSvr>(Iocp::SessionSocketCompletionKey<WebSocketSession<GameSvrSession> >& refSession, GameSvr& server);
-template class WebSocketEndpoint<GameSvrSession, Iocp::SessionSocketCompletionKey<WebSocketSession<GameSvrSession> > >;
+template Iocp::SessionSocketCompletionKey<GameSvrSession>;
+//template class WebSocketSession<GameSvrSession>;
+//template void WebSocketSession<GameSvrSession>::OnInit<GameSvr>(Iocp::SessionSocketCompletionKey<WebSocketSession<GameSvrSession> >& refSession, GameSvr& server);
+//template class WebSocketEndpoint<GameSvrSession, Iocp::SessionSocketCompletionKey<WebSocketSession<GameSvrSession> > >;
 
 template<class T>
 void GameSvrSession::Send(const T& ref)
 {
-	if (!m_bLoginOk)
-	{
-		LOG(WARNING) << "还没登录，不能向他发数据,T:" << typeid(T).name();
-		return;
-	}
-	WebSocketPacket wspacket;
-	// set FIN and opcode
-	wspacket.set_fin(1);
-	wspacket.set_opcode(0x02);// packet.get_opcode());
+	MsgPack::SendMsgpack(ref, [this](const void* buf, int len) 
+		{
+			MsgGate转发 msg(buf, len, 0);
+			MsgPack::SendMsgpack(msg, [this](const void* buf, int len)
+				{
+					this->m_pWsSession->Send(buf, len);
+				});
+			
+		});
+	//if (!m_bLoginOk)
+	//{
+	//	LOG(WARNING) << "还没登录，不能向他发数据,T:" << typeid(T).name();
+	//	return;
+	//}
+	//WebSocketPacket wspacket;
+	//// set FIN and opcode
+	//wspacket.set_fin(1);
+	//wspacket.set_opcode(0x02);// packet.get_opcode());
 
-	std::stringstream buffer;
-	msgpack::pack(buffer, ref);
-	buffer.seekg(0);
+	//std::stringstream buffer;
+	//msgpack::pack(buffer, ref);
+	//buffer.seekg(0);
 
-	// deserialize the buffer into msgpack::object instance.
-	std::string str(buffer.str());
-	wspacket.set_payload(str.data(), str.size());
-	ByteBuffer output;
-	// pack a websocket data frame
-	wspacket.pack_dataframe(output);
-	//send to client
-	//this->to_wire(output.bytes(), output.length());
-	this->m_pWsSession->Send(output.bytes(), output.length());
+	//// deserialize the buffer into msgpack::object instance.
+	//std::string str(buffer.str());
+	//wspacket.set_payload(str.data(), str.size());
+	//ByteBuffer output;
+	//// pack a websocket data frame
+	//wspacket.pack_dataframe(output);
+	////send to client
+	////this->to_wire(output.bytes(), output.length());
+	//this->m_pWsSession->Send(output.bytes(), output.length());
 }
 
 /// <summary>
@@ -63,14 +73,25 @@ void GameSvrSession::Send(const T& ref)
 /// </summary>
 /// <param name="buf"></param>
 /// <param name="len"></param>
-void GameSvrSession::OnRecvWsPack(const void* buf, const int len)
+int GameSvrSession::OnRecv(WebSocketGameSession&, const void* buf, const int len)
+{
+	const auto&& [bufPack, lenPack] = Iocp::OnRecv2(buf, len);
+	if (lenPack > 0 && nullptr != bufPack)
+	{
+		OnRecvPack(bufPack, lenPack);
+	}
+
+	return lenPack;
+}
+
+void GameSvrSession::OnRecvPack(const void* buf, const int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
 	const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
 	LOG(INFO) << obj;
 	//auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompletionKey<WebSocketSession<MySession>>*>(this->nt_work_data_);
-	auto pSessionSocketCompeletionKey = this->m_pWsSession->m_pSession;
+	//auto pSessionSocketCompeletionKey = this->m_pWsSession;
 	switch (msgId)
 	{
 	case MsgId::Login:m_MsgQueue.PushMsg<MsgLogin>(*this, obj); break;
@@ -79,6 +100,7 @@ void GameSvrSession::OnRecvWsPack(const void* buf, const int len)
 	case MsgId::SelectRoles:m_MsgQueue.PushMsg<MsgSelectRoles>(*this, obj); break;
 	case MsgId::AddRole:m_MsgQueue.PushMsg<MsgAddRole>(*this, obj); break;
 	case MsgId::AddBuilding:m_MsgQueue.PushMsg<MsgAddBuilding>(*this, obj); break;
+	case MsgId::Gate转发:m_MsgQueue.PushMsg<MsgGate转发>(*this, obj); break;
 	default:
 		LOG(ERROR) << "没处理msgId:" << msgId;
 		assert(false);
@@ -86,9 +108,9 @@ void GameSvrSession::OnRecvWsPack(const void* buf, const int len)
 	}
 }
 
-void GameSvrSession::OnInit(WebSocketSession<GameSvrSession>& refWsSession, GameSvr& server)
+void GameSvrSession::OnInit(WebSocketGameSession& refWsSession, GameSvr& server)
 {
-	server.m_Sessions.AddSession(refWsSession.m_pSession, [this, &refWsSession, &server]()
+	server.m_Sessions.AddSession(&refWsSession, [this, &refWsSession, &server]()
 		{
 			m_pServer = &server;
 			m_pWsSession = &refWsSession;
@@ -167,6 +189,7 @@ void GameSvrSession::Process()
 	case MsgId::SelectRoles:this->m_MsgQueue.OnRecv(this->m_queueSelectRoles, *this, &GameSvrSession::OnRecv); break;
 	case MsgId::AddRole:this->m_MsgQueue.OnRecv(this->m_queueAddRole, *this, &GameSvrSession::OnRecv); break;
 	case MsgId::AddBuilding:this->m_MsgQueue.OnRecv(this->m_queueAddBuilding, *this, &GameSvrSession::OnRecv); break;
+	case MsgId::Gate转发:this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &GameSvrSession::OnRecv); break;
 	default:
 		LOG(ERROR) << "msgId:" << msgId;
 		assert(false);
@@ -179,6 +202,7 @@ template<> std::deque<MsgSay>& GameSvrSession::GetQueue() { return m_queueSay; }
 template<> std::deque<MsgSelectRoles>& GameSvrSession::GetQueue() { return m_queueSelectRoles; }
 template<> std::deque<MsgAddRole>& GameSvrSession::GetQueue() { return m_queueAddRole; }
 template<> std::deque<MsgAddBuilding>& GameSvrSession::GetQueue() { return m_queueAddBuilding; }
+template<> std::deque<MsgGate转发>& GameSvrSession::GetQueue() { return m_queueGate转发; }
 
 void GameSvrSession::OnRecv(const MsgAddRole& msg)
 {
@@ -345,6 +369,45 @@ void GameSvrSession::OnRecv(const MsgSelectRoles& msg)
 	LOG(INFO) << "收到选择:" << msg.ids.size();
 	m_vecSelectedEntity.clear();
 	std::transform(msg.ids.begin(), msg.ids.end(), std::back_inserter(m_vecSelectedEntity), [](const double& id) {return uint64_t(id); });
+}
+template<class T_Msg>
+void GameSvrSession::RecvMsg(msgpack::object &obj)
+{
+	const auto msg = obj.as<T_Msg>();
+	OnRecv(msg);
+}
+void GameSvrSession::OnRecv(const MsgGate转发 & msg)
+{
+	if (msg.vecByte.empty())
+	{
+		LOG(ERROR) << "ERR";
+		assert(false);
+		return;
+	}
+	
+	msgpack::object_handle oh = msgpack::unpack((const char*)&msg.vecByte[0], msg.vecByte.size());//没判断越界，要加try
+	msgpack::object obj = oh.get();
+	const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
+	LOG(INFO) << obj;
+	//auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompletionKey<WebSocketSession<MySession>>*>(this->nt_work_data_);
+	//auto pSessionSocketCompeletionKey = this->m_pWsSession;
+	switch (msgId)
+	{
+	case MsgId::Login:RecvMsg<MsgLogin>(obj); break;
+	case MsgId::Move:RecvMsg<MsgMove>(obj); break;
+	case MsgId::Say:RecvMsg<MsgSay >(obj); break;
+	case MsgId::SelectRoles:RecvMsg<MsgSelectRoles>(obj); break;
+	case MsgId::AddRole:RecvMsg<MsgAddRole>(obj); break;
+	case MsgId::AddBuilding:RecvMsg<MsgAddBuilding>(obj); break;
+	case MsgId::Gate转发:
+		LOG(ERROR) << "不能再转发" ;
+		assert(false);
+		break;
+	default:
+		LOG(ERROR) << "没处理msgId:" << msgId;
+		assert(false);
+		break;
+	}
 }
 
 template void GameSvrSession::Send(const MsgAddRoleRet&);

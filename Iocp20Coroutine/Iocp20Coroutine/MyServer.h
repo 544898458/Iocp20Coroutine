@@ -11,12 +11,12 @@ public:
 	GameSvr(const GameSvr&) = delete;
 	GameSvr(GameSvr&&) = delete;
 	GameSvr():m_space(this) {}
-	using Session = Iocp::SessionSocketCompletionKey<WebSocketSession< GameSvrSession> >;
+	using Session = Iocp::SessionSocketCompletionKey<GameSvrSession>;
 	void OnAdd(Session&);
 	void OnDel();
 	void Update();
 
 	Space m_space;
-	Sessions< WebSocketSession< GameSvrSession> > m_Sessions;
+	Sessions<GameSvrSession> m_Sessions;
 
 };

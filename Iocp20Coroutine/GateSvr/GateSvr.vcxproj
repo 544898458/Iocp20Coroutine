@@ -142,6 +142,11 @@
     <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp" />
     <ClCompile Include="..\IocpNetwork\StrConv.cpp" />
     <ClCompile Include="..\IocpNetwork\ThreadPool.cpp" />
+    <ClCompile Include="..\websocketfiles-master\src\base64.cpp" />
+    <ClCompile Include="..\websocketfiles-master\src\sha1_portable.cpp" />
+    <ClCompile Include="..\websocketfiles-master\src\string_helper.cpp" />
+    <ClCompile Include="..\websocketfiles-master\src\ws_endpoint.cpp" />
+    <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp" />
     <ClCompile Include="GameClientSession.cpp" />
     <ClCompile Include="GateServer.cpp" />
     <ClCompile Include="GateSession.cpp" />
@@ -169,9 +174,17 @@
     <ClInclude Include="..\IocpNetwork\ThreadPool.h" />
     <ClInclude Include="..\IocpNetwork\WebSocketSession.h" />
     <ClInclude Include="..\IocpNetwork\WebSocketSessionTemplate.h" />
+    <ClInclude Include="..\websocketfiles-master\src\base64.h" />
+    <ClInclude Include="..\websocketfiles-master\src\sha1.h" />
+    <ClInclude Include="..\websocketfiles-master\src\string_helper.h" />
+    <ClInclude Include="..\websocketfiles-master\src\ws_endpoint.h" />
+    <ClInclude Include="..\websocketfiles-master\src\ws_packet.h" />
     <ClInclude Include="GameClientSession.h" />
     <ClInclude Include="GateServer.h" />
     <ClInclude Include="GateSession.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\websocketfiles-master\src\string_helper.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

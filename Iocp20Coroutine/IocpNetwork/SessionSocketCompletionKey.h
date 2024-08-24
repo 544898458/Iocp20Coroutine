@@ -13,7 +13,7 @@ namespace Iocp
 	class SessionSocketCompletionKey :public SocketCompeletionKey
 	{
 	public:
-		SessionSocketCompletionKey(SOCKET s) :SocketCompeletionKey(s)
+		SessionSocketCompletionKey(SOCKET s) :SocketCompeletionKey(s), Session(*this)
 		{
 
 		}

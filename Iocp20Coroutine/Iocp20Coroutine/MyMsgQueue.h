@@ -31,6 +31,7 @@ enum MsgId
 	ChangeMoneyResponce,
 	AddBuilding,
 	NotifyeMoney,
+	Gate转发,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -144,4 +145,21 @@ struct MsgChangeSkeleAnim
 	bool loop;
 	std::string clipName;
 	MSGPACK_DEFINE(msgId, entityId, loop, clipName);
+};
+
+struct MsgGate转发
+{
+	MsgGate转发() 
+	{
+
+	}
+	MsgGate转发(const void* buf, int len, uint64_t uGateClientSessionId) :vecByte(len), gateClientSessionId(uGateClientSessionId)
+	{
+		uint8_t* pBegin = (uint8_t*)buf;
+		std::copy(pBegin, pBegin + len, vecByte.begin());
+	}
+	MsgId id = Gate转发;
+	uint64_t gateClientSessionId;
+	std::vector<uint8_t> vecByte;
+	MSGPACK_DEFINE(id, vecByte);
 };

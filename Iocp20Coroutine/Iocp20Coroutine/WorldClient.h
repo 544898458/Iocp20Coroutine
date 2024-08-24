@@ -13,7 +13,9 @@ class WorldClient;
 class WorldClientSession
 {
 public:
-	void OnInit(Iocp::SessionSocketCompletionKey<WorldClientSession>& session, WorldClient& refWorldClient)
+	using Session = Iocp::SessionSocketCompletionKey<WorldClientSession>;
+	WorldClientSession(Session&) {}
+	void OnInit(Session& session, WorldClient& refWorldClient)
 	{
 		m_pWorldClient = &refWorldClient;
 		m_pSession = &session;

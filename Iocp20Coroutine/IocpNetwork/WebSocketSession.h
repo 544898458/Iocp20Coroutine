@@ -136,9 +136,15 @@ public:
 /// 对应一个网络连接
 /// </summary>
 template<class T_Session>
+//	requires requires(T_Session& refSession)
+//{
+//	refSession.Process();
+//}
 class WebSocketSession
 {
 public:
+	using Session = Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>;
+	WebSocketSession(Session&):m_Session(*this){}
 	/// <summary>
 	/// 构造函数和OnInit会紧挨着调用，初始化代码可以随便找个地方写，只要能编译通过，效果就完全相同
 	/// </summary>
@@ -150,7 +156,7 @@ public:
 		//refSession.OnRecvWsPack((const char[])0, (const int )0	);
 		refSession.OnInit(refWsSesson, server);
 	}
-	void OnInit(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
+	void OnInit(Session& refSession, T_Server&);
 	/// <summary>
 	/// 用户自定义函数，这里是纯数据，连封包概念都没有，封包是WebSocket协议负责的工作
 	/// </summary>
@@ -158,7 +164,7 @@ public:
 	/// <param name="buf"></param>
 	/// <param name="len"></param>
 	/// <returns></returns>
-	int OnRecv(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, const void* buf, int len);
+	int OnRecv(Session& refSession, const void* buf, int len);
 	/// <summary>
 /// 从全局连接set里删除连接，从全局Space里删除实体
 /// </summary>

@@ -8,6 +8,7 @@ class Sessions
 {
 public:
 	using Session = Iocp::SessionSocketCompletionKey<T_Session>;
+	
 	/// <summary>
 	/// 向所有连接广播消息
 	/// </summary>

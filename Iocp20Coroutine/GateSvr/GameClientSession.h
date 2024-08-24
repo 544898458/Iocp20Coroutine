@@ -1,8 +1,20 @@
 #pragma once
 #include "../IocpNetwork/SessionSocketCompletionKey.h"
+#include "../IocpNetwork/MsgPack.h"
+
 class GameClientSession
 {
 public:
-	int OnRecv(Iocp::SessionSocketCompletionKey<GameClientSession>& refSession, const void* buf, int len);
+	using CompletetionKeySession = Iocp::SessionSocketCompletionKey<GameClientSession>;
+	GameClientSession(CompletetionKeySession& refSession):m_refSession(refSession){}
+	int OnRecv(CompletetionKeySession& refSession, const void* buf, int len);
+	template<class T>
+	void Send(const T& ref)
+	{
+		MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_refSession.Send(buf, len); });
+	}
+private:
+	void OnRecvPack(const void* buf, const int len);
+	CompletetionKeySession &m_refSession;
 };
 

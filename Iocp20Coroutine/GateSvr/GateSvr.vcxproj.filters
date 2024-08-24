@@ -16,6 +16,9 @@
     <Filter Include="IocpNetwork">
       <UniqueIdentifier>{01e47966-5cbe-49f3-95cb-2708734e9028}</UniqueIdentifier>
     </Filter>
+    <Filter Include="web_socket">
+      <UniqueIdentifier>{94a0a2ad-76a1-4efc-bd8a-d176b64a8e6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GateSvr.cpp">
@@ -59,6 +62,21 @@
     </ClCompile>
     <ClCompile Include="GameClientSession.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocketfiles-master\src\base64.cpp">
+      <Filter>web_socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocketfiles-master\src\sha1_portable.cpp">
+      <Filter>web_socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocketfiles-master\src\string_helper.cpp">
+      <Filter>web_socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocketfiles-master\src\ws_endpoint.cpp">
+      <Filter>web_socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp">
+      <Filter>web_socket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -134,5 +152,25 @@
     <ClInclude Include="GameClientSession.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\websocketfiles-master\src\base64.h">
+      <Filter>web_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocketfiles-master\src\sha1.h">
+      <Filter>web_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocketfiles-master\src\string_helper.h">
+      <Filter>web_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocketfiles-master\src\ws_endpoint.h">
+      <Filter>web_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocketfiles-master\src\ws_packet.h">
+      <Filter>web_socket</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\websocketfiles-master\src\string_helper.inl">
+      <Filter>web_socket</Filter>
+    </None>
   </ItemGroup>
 </Project>

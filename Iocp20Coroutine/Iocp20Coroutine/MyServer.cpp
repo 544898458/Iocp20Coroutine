@@ -1,14 +1,14 @@
 #include "StdAfx.h"
 #include "MyServer.h"
-#include "../IocpNetwork/Server.h"
+//#include "../IocpNetwork/Server.h"
 #include "../IocpNetwork/ServerTemplate.h"
 #include "GameSvrSession.h"
 #include "../IocpNetwork/ListenSocketCompletionKeyTemplate.h"
-#include "../IocpNetwork/SessionsTemplate.h"
+//#include "../IocpNetwork/SessionsTemplate.h"
 
-template Iocp::Server<GameSvr>;
-template bool Iocp::Server<GameSvr>::Init<WebSocketSession<GameSvrSession> >(const uint16_t);
-template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WebSocketSession<GameSvrSession>, GameSvr >(HANDLE hIocp, SOCKET socketListen, GameSvr&);
+template class Iocp::Server<GameSvr>;
+template bool Iocp::Server<GameSvr>::Init<GameSvrSession>(const uint16_t);
+template void Iocp::ListenSocketCompletionKey::StartCoRoutine<GameSvrSession, GameSvr >(HANDLE hIocp, SOCKET socketListen, GameSvr&);
 
 void GameSvr::OnAdd(Session&)
 {

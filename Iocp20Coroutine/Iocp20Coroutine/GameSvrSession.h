@@ -1,26 +1,30 @@
 #pragma once
 #include "MyMsgQueue.h"
 #include "SpEntity.h"
-#include "../IocpNetwork/WebSocketSession.h"
+//#include "../IocpNetwork/WebSocketSession.h"
 #include "../IocpNetwork/MsgQueueMsgPack.h"
+#include "../IocpNetwork/SessionSocketCompletionKey.h"
 
 class GameSvr;
 class GameSvrSession
 {
 public:
+	//using WebSocketGameSession = WebSocketSession<GameSvrSession>;
+	using WebSocketGameSession = Iocp::SessionSocketCompletionKey<GameSvrSession>;
+	GameSvrSession(WebSocketGameSession& refWsSession) {}
+
 	/// <summary>
 	/// WebSocket收到一个完整二进制包
 	/// </summary>
 	/// <param name="buf"></param>
 	/// <param name="len"></param>
-	void OnRecvWsPack(const void* buf, const int len);
-
+	int OnRecv(WebSocketGameSession&,const void* buf, const int len);
 	/// <summary>
 	/// 
 	/// </summary>
 	/// <param name="refWsSession"></param>
 	/// <param name="server"></param>
-	void OnInit(WebSocketSession<GameSvrSession>& refWsSession, GameSvr& server);
+	void OnInit(WebSocketGameSession& refWsSession, GameSvr& server);
 	void OnDestroy();
 	void Erase(SpEntity spEntity);
 	template<class T>
@@ -45,6 +49,7 @@ public:
 	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;
 	bool m_bLoginOk = false;
 private:
+	void OnRecvPack(const void* buf, const int len);
 	/// <summary>
 	/// 主逻辑线程（控制台界面线程）调用
 	/// </summary>
@@ -55,6 +60,9 @@ private:
 	void OnRecv(const MsgSelectRoles& msg);
 	void OnRecv(const MsgAddRole& msg);
 	void OnRecv(const MsgAddBuilding& msg);
+	void OnRecv(const MsgGate转发& msg);
+	template<class T_Msg> void RecvMsg(msgpack::object& obj);
+
 
 	CoTask<int> CoAddRole();
 	CoTask<int> CoAddBuilding();
@@ -67,8 +75,9 @@ private:
 	std::deque<MsgSelectRoles> m_queueSelectRoles;
 	std::deque<MsgAddRole> m_queueAddRole;
 	std::deque<MsgAddBuilding> m_queueAddBuilding;
+	std::deque<MsgGate转发> m_queueGate转发;
 
 	MsgQueueMsgPack<GameSvrSession> m_MsgQueue;
 private:
-	WebSocketSession<GameSvrSession>* m_pWsSession = nullptr;
+	WebSocketGameSession* m_pWsSession = nullptr;
 };

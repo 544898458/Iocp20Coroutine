@@ -92,7 +92,7 @@ int main(void)
 	//g_worldSvr.reset( new Iocp::Server<WorldServer>(Iocp::ThreadPool::GetIocp()) );
 
 	Iocp::Server<GameSvr>::WsaStartup();
-	accept.Init<WebSocketSession<GameSvrSession>>(12345);
+	accept.Init<GameSvrSession>(12345);
 	//Iocp::ThreadPool::Add(accept.GetIocp());
 
 	//g_worldSvr->Init<WorldSession>(12346);
