@@ -11,6 +11,11 @@ void Entity::AddComponentBuilding()
 
 BuildingComponent::BuildingComponent(Entity& refEntity)
 {
+	if (!m_coAddMoney.Finished())
+	{
+		LOG(INFO) << "前一个造建筑协程还没返回";
+		return;
+	}
 	m_coAddMoney = AiCo::AddMoney(refEntity, m_cancel);
 	m_coAddMoney.Run();
 }
@@ -21,6 +26,7 @@ void BuildingComponent::TryCancel(Entity& refEntity)
 	{
 		//LOG(INFO) << "调用m_cancel";
 		m_cancel();
+		assert(m_coAddMoney.Finished());
 	}
 	else
 	{

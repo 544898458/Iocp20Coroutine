@@ -29,7 +29,7 @@ public:
 	/// 加入Space空间的实体（玩家角色）
 	/// </summary>
 	std::set<SpEntity> m_vecSpEntity;
-	
+
 	GameSvr* m_pServer = nullptr;
 	std::vector<uint64_t> m_vecSelectedEntity;
 	std::string m_nickName;
@@ -41,8 +41,8 @@ public:
 	/// 工作线程中（单线程）调用
 	/// </summary>
 	void Process();
-	std::vector<CoTask<int>> m_vecCoRpc;
-	FunCancel m_funCancel;
+	std::vector<CoTask<int>>	m_vecCoRpc;
+	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;
 	bool m_bLoginOk = false;
 private:
 	/// <summary>

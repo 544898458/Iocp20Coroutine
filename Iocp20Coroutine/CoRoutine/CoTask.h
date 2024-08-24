@@ -224,37 +224,51 @@ public:
 class KeepCancel
 {
 public:
-	KeepCancel(FunCancel& old,bool autoRevert=true) :funCancelOld(old), refFunCancel(old), m_autoRevert(autoRevert)
+	KeepCancel(FunCancel& old, bool autoRevert = true) :funCancelOld(old), refFunCancel(old), m_autoRevert(autoRevert)
 	{
 	}
-	~KeepCancel() 
+	~KeepCancel()
 	{
-		if (m_autoRevert)
-			Revert();
+		Revert();
 	}
+	//KeepCancel(KeepCancel& other)=delete;
+	KeepCancel(KeepCancel&& other)noexcept :refFunCancel(other.refFunCancel), funCancelOld(other.funCancelOld), m_autoRevert(other.m_autoRevert)
+	{
+		other.m_autoRevert = false;
+		other.funCancelOld = nullptr;
+	}
+	void operator =(KeepCancel&& other) = delete;
 	void Revert()
 	{
+		if (!m_autoRevert)
+		{
+			return;
+		}
 		//LOG(INFO) << "Revert" ;
 		refFunCancel = funCancelOld;
 		funCancelOld = nullptr;
+		m_autoRevert = false;
 	}
 	FunCancel funCancelOld;
 	FunCancel& refFunCancel;
-	void operator=(const KeepCancel& other) 
-	{
-		funCancelOld = refFunCancel = other.refFunCancel;
-		m_autoRevert = other.m_autoRevert;
-	}
+	void operator=(const KeepCancel& other) = delete;
+	//{
+	//	funCancelOld = refFunCancel = other.refFunCancel;
+	//	m_autoRevert = other.m_autoRevert;
+	//}
 	bool m_autoRevert;
 };
 
 template<class T_Result>
 struct CoAwaiter
 {
-	CoAwaiter(bool initSn , FunCancel& cancel ) : m_Kc(cancel,false)
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="initSn">用引用可以防止传bool进去</param>
+	CoAwaiter(const long& initSn, FunCancel& cancel) : m_Kc(cancel, true)
 	{
-		if (initSn)
-			m_sn = GenSn();
+		m_sn = initSn;
 	}
 
 	static long GenSn()
@@ -276,7 +290,7 @@ struct CoAwaiter
 	//    await_suspend:停不停止。 
 	//    await_resume:好了做什么。
 
-	
+
 
 
 	/// <summary>
@@ -296,43 +310,38 @@ struct CoAwaiter
 		//	});
 		m_hAwaiter = h;
 	}
-	
-	CoAwaiter(const CoAwaiter& other):m_Kc(other.m_Kc.refFunCancel,false)
+
+	CoAwaiter(const CoAwaiter& other) = delete;// :m_Kc(other.m_Kc.refFunCancel, false)
+	//{
+	//	CopyFrom(other);
+	//}
+	//void CopyFrom(const CoAwaiter& other)
+	//{
+	//	m_hAwaiter = other.m_hAwaiter;
+	//	m_sn = other.m_sn;
+	//	//other.m_hAwaiter = nullptr;
+	//	//other.m_sn = 0;
+	//	m_Result = other.m_Result;
+	//	m_Kc = other.m_Kc;
+	//}
+	CoAwaiter(CoAwaiter&& other) noexcept :m_Kc(std::forward<KeepCancel&&>(other.m_Kc)), m_sn(other.m_sn), m_hAwaiter(other.m_hAwaiter), m_Result(other.m_Result)
 	{
-		CopyFrom(other);
-	}
-	void CopyFrom(const CoAwaiter& other)
-	{
-		m_hAwaiter = other.m_hAwaiter;
-		m_sn = other.m_sn;
-		//other.m_hAwaiter = nullptr;
-		//other.m_sn = 0;
-		m_Result = other.m_Result;
-		m_Kc = other.m_Kc;
-	}
-	CoAwaiter(CoAwaiter&& other) noexcept :m_Kc(other.m_Kc.refFunCancel, false)
-	{
-		MoveFrom(other);
-	}
-	void operator =(CoAwaiter&& other)noexcept
-	{
-		MoveFrom(other);
-	}
-	void operator =(const CoAwaiter& other)noexcept
-	{
-		CopyFrom(other);
-	}
-	void MoveFrom(CoAwaiter& other)noexcept
-	{
-		m_hAwaiter = other.m_hAwaiter;
-		m_sn = other.m_sn;
 		other.m_hAwaiter = nullptr;
 		other.m_sn = 0;
-		m_Result = other.m_Result;
 	}
-	void Run(const T_Result &result) 
+	void operator =(CoAwaiter&& other)noexcept = delete;
+	//{
+	//	MoveFrom(other);
+	//}
+	void operator =(const CoAwaiter& other)noexcept = delete;
+	//{
+	//	CopyFrom(other);
+	//}
+
+	void Run(const T_Result& result)
 	{
 		m_Result = result;
+		m_Kc.Revert();
 		m_hAwaiter.resume();
 	}
 private:

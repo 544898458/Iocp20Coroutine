@@ -106,6 +106,13 @@ void GameSvrSession::OnDestroy()
 	LOG(INFO) << "m_mapEntity.size=" << m_pServer->m_space.m_mapEntity.size();
 	m_vecSpEntity.clear();
 
+	for (auto& sp : m_vecFunCancel)
+	{
+		auto& fun = *sp;
+		if (fun)
+			fun();
+	}
+	m_vecFunCancel.clear();
 	/*m_pServer->m_Sessions.DeleteSession(this->m_pWsSession->m_pSession, [this]()
 		{
 		});*/
@@ -127,6 +134,19 @@ void GameSvrSession::Erase(SpEntity spEntity)
 //主线程，单线程
 void GameSvrSession::Process()
 {
+
+	{
+		const auto oldSize = m_vecFunCancel.size();
+		std::erase_if(m_vecFunCancel, [](std::shared_ptr<FunCancel>& sp)->bool 
+			{
+				return !(*sp).operator bool();
+			});
+		const auto newSize = m_vecFunCancel.size();
+		if (oldSize != newSize)
+		{
+			LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
+		}
+	}
 	{
 		const auto oldSize = m_vecCoRpc.size();
 		std::erase_if(m_vecCoRpc, [](CoTask<int>& refCo)->bool {return refCo.Finished(); });
@@ -195,7 +215,8 @@ void GameSvrSession::OnRecv(const MsgAddBuilding& msg)
 
 CoTask<int> GameSvrSession::CoAddBuilding()
 {
-	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 0 }, SendToWorldSvr, m_funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());//不能存对象，扩容可能导致引用和指针失效
+	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 0 }, SendToWorldSvr, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	const MsgChangeMoneyResponce& responce = std::get<1>(tuple);
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 0,float(std::rand() % 50) }, m_pServer->m_space, "house_type19");
@@ -218,7 +239,8 @@ CoTask<int> GameSvrSession::CoAddBuilding()
 
 CoTask<int> GameSvrSession::CoAddRole()
 {
-	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 3 }, SendToWorldSvr, m_funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());
+	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 3 }, SendToWorldSvr, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	MsgChangeMoneyResponce responce = std::get<1>(tuple);
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 30,30 }, m_pServer->m_space, "altman-blue");

@@ -25,8 +25,8 @@ namespace CoTimer
 		//co_await(*g_multiTimer.begin()).second;
 		//co_await Wait2();
 		const auto time = std::chrono::steady_clock::now() + milli;
-		auto iter = g_multiTimer.insert({ time ,CoAwaiterBool(true, cancel) });
-		const auto sn = iter->second.Sn();
+		const auto sn = CoAwaiterBool::GenSn();
+		auto iter = g_multiTimer.insert({ time ,CoAwaiterBool(sn, cancel) });
 		//FunCancel old = cancel;
 		cancel = [time, sn]()
 			{
@@ -66,9 +66,8 @@ namespace CoTimer
 		//g_multiTimer.insert({ std::chrono::steady_clock::now() + milli,Wait2() });
 		//co_await(*g_multiTimer.begin()).second;
 		//co_await Wait2();
-		auto ret = CoAwaiterBool(true, cancel);
-		auto pair = g_NextUpdate.insert({ ret.Sn(),ret });
-		const auto sn = ret.Sn();
+		const auto sn = CoAwaiterBool::GenSn();
+		auto pair = g_NextUpdate.insert({ sn,CoAwaiterBool(sn, cancel) });
 		//FunCancel old = cancel;
 		cancel = [sn]()
 			{
