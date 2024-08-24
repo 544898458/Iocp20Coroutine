@@ -49,7 +49,7 @@ namespace Iocp
 		}
 		if (usPackLen + sizeofPackLen > len)
 		{
-			LOG(INFO) << "希望接收" << usPackLen << "+" << sizeofPackLen << "字节,现已收到" << len << "字节,下次还要接着收";
+			//LOG(INFO) << "希望接收" << usPackLen << "+" << sizeofPackLen << "字节,现已收到" << len << "字节,下次还要接着收";
 			return std::make_tuple(nullptr, 0);
 		}
 

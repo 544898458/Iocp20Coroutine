@@ -53,7 +53,7 @@ public:
 				//LOG(INFO) << "in final_awaiter.await_suspend";
 				if (auto previous = h.promise().previous; previous)
 				{
-					LOG(INFO) << "in final_awaiter.await_suspend.previous";
+					//LOG(INFO) << "in final_awaiter.await_suspend.previous";
 					return previous;
 				}
 				else

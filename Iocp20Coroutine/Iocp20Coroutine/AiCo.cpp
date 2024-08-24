@@ -217,7 +217,7 @@ namespace AiCo
 			co_return tuple;
 		}
 		
-		LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
+		//LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 
 		refThis.m_spPlayer->m_pSession->Send(MsgNotifyMoney{.finalMoney = responce.finalMoney});
 
@@ -238,7 +238,7 @@ namespace AiCo
 				LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 				co_return 0;
 			}
-			LOG(INFO) << "ChangeMoney返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
+			//LOG(INFO) << "ChangeMoney返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 		}
 
 		co_return 0;

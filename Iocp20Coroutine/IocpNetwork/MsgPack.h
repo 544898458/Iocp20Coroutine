@@ -28,7 +28,7 @@ namespace MsgPack
 		const uint16_t usSize = (uint16_t)str.size();
 		refFun(&usSize, sizeof(usSize));
 		refFun(str.data(), usSize);
-		LOG(INFO) << typeid(T_Msg).name();
+		//LOG(INFO) << typeid(T_Msg).name();
 	}
 };
 

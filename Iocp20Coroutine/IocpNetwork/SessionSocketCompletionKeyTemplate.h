@@ -65,9 +65,9 @@ namespace Iocp {
 				break;
 			}
 
-			LOG(INFO) << ("\n准备异步等待WSARecv结果\n");
+			//LOG(INFO) << ("\n准备异步等待WSARecv结果\n");
 			co_yield 0;
-			LOG(INFO) << "已异步等到WSARecv结果,numberOfBytesTransferred=" << pOverlapped.numberOfBytesTransferred << ",GetLastErrorReturn=" << pOverlapped.GetLastErrorReturn;
+			//LOG(INFO) << "已异步等到WSARecv结果,numberOfBytesTransferred=" << pOverlapped.numberOfBytesTransferred << ",GetLastErrorReturn=" << pOverlapped.GetLastErrorReturn;
 			if (0 == pOverlapped.numberOfBytesTransferred)
 			{
 				LOG(WARNING) << ("numberOfBytesTransferred==0可能断网了,不再调用WSARecv\n");

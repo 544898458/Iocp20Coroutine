@@ -35,7 +35,7 @@ void GameSvrSession::Send(const T& ref)
 {
 	if (!m_bLoginOk)
 	{
-		LOG(WARNING) << "还没登录，不能向他发数据";
+		LOG(WARNING) << "还没登录，不能向他发数据,T:" << typeid(T).name();
 		return;
 	}
 	WebSocketPacket wspacket;
@@ -127,6 +127,15 @@ void GameSvrSession::Erase(SpEntity spEntity)
 //主线程，单线程
 void GameSvrSession::Process()
 {
+	{
+		const auto oldSize = m_vecCoRpc.size();
+		std::erase_if(m_vecCoRpc, [](CoTask<int>& refCo)->bool {return refCo.Finished(); });
+		const auto newSize = m_vecCoRpc.size();
+		if (oldSize != newSize)
+		{
+			LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
+		}
+	}
 	const MsgId msgId = this->m_MsgQueue.PopMsg();
 	switch (msgId)
 	{
@@ -153,25 +162,35 @@ template<> std::deque<MsgAddBuilding>& GameSvrSession::GetQueue() { return m_que
 
 void GameSvrSession::OnRecv(const MsgAddRole& msg)
 {
-	if (!m_coRpc.Finished())
+	//if (!m_coRpc.Finished())
+	//{
+	//	LOG(WARNING) << "m_coRpc前一个协程还没结束";
+	//	return;
+	//}
+	auto iterNew = m_vecCoRpc.insert(m_vecCoRpc.end(), CoAddRole());
+	if (iterNew == m_vecCoRpc.end())
 	{
-		LOG(WARNING) << "m_coRpc前一个协程还没结束";
+		LOG(ERROR) << "err";
 		return;
 	}
-	m_coRpc = CoAddRole();//启动协程，先去WorldSvr扣钱后加一个新单位
-	m_coRpc.Run();
+	iterNew->Run();
 }
 
 void SendToWorldSvr(const MsgChangeMoney& msg);
 void GameSvrSession::OnRecv(const MsgAddBuilding& msg)
 {
-	if (!m_coRpc.Finished())
+	//if (!m_coRpc.Finished())
+	//{
+	//	LOG(WARNING) << "m_coRpc前一个协程还没结束";
+	//	return;
+	//}
+	auto iterNew = m_vecCoRpc.insert(m_vecCoRpc.end(), CoAddBuilding());
+	if (iterNew == m_vecCoRpc.end())
 	{
-		LOG(WARNING) << "m_coRpc前一个协程还没结束";
+		LOG(ERROR) << "err";
 		return;
 	}
-	m_coRpc = CoAddBuilding();//启动协程，先去WorldSvr扣钱后加一个新单位
-	m_coRpc.Run();
+	iterNew->Run();
 }
 
 CoTask<int> GameSvrSession::CoAddBuilding()

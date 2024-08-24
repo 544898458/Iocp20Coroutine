@@ -41,7 +41,7 @@ public:
 	/// 工作线程中（单线程）调用
 	/// </summary>
 	void Process();
-	CoTask<int> m_coRpc;
+	std::vector<CoTask<int>> m_vecCoRpc;
 	FunCancel m_funCancel;
 	bool m_bLoginOk = false;
 private:

@@ -127,7 +127,9 @@ int main(void)
 			else
 				++msSleep;
 		}
-		std::this_thread::sleep_for(msSleep);
+		if(msSleep>0ms)
+			std::this_thread::sleep_for(msSleep);
+
 		accept.m_Server.Update();
 		g_ConnectToWorldSvr->Session.Process();
 		CoTimer::Update();

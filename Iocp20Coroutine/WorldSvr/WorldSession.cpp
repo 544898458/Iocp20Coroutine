@@ -61,7 +61,7 @@ void WorldSession::OnRecvPack(const void* buf, int len)
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
 	const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
-	LOG(INFO) << obj;
+	//LOG(INFO) << obj;
 
 	switch (msgId)
 	{
@@ -82,7 +82,7 @@ void WorldSession::OnRecv(const MsgSay& msg)
 
 void WorldSession::OnRecv(const MsgChangeMoney& msg)
 {
-	LOG(INFO) << "GameSvr请求扣钱" << msg.changeMoney;
+	//LOG(INFO) << "GameSvr请求扣钱" << msg.changeMoney;
 	auto& refMoney = m_mapMoney[msg.nickName];
 	MsgChangeMoneyResponce msgResponce = {.rpcSnId = msg.rpcSnId};
 	assert(0 <= refMoney);

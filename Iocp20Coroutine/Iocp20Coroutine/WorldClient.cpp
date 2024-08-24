@@ -43,7 +43,7 @@ void WorldClientSession::OnRecv(const MsgSay& msg)
 /// <param name="msg"></param>
 void WorldClientSession::OnRecv(const MsgChangeMoneyResponce& msg)
 {
-	LOG(INFO) << "WorldSvr发来扣钱结果,rpcSnId=" << msg.rpcSnId;
+	//LOG(INFO) << "WorldSvr发来扣钱结果,rpcSnId=" << msg.rpcSnId;
 	CoRpc<MsgChangeMoneyResponce>::OnRecvResponce(false,msg);
 }
 
@@ -62,7 +62,7 @@ void WorldClientSession::OnRecvPack(const void* buf, int len)
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
 	const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
-	LOG(INFO) << obj;
+	//LOG(INFO) << obj;
 
 	switch (msgId)
 	{
