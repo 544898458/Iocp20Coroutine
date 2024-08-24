@@ -3,7 +3,7 @@
 
 namespace Iocp
 {
-	SOCKET Client::Connect(const wchar_t* szIp, const wchar_t* szPort, HANDLE hIocp)
+	SOCKET Client::Connect(const wchar_t* szIp, const wchar_t* szPort)
 	{
 		const auto socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 		SOCKADDR_STORAGE LocalAddr = { 0 };

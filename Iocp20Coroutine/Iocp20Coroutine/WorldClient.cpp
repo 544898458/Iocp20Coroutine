@@ -3,7 +3,7 @@
 #include "../CoRoutine/CoRpc.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 
-template Iocp::Server<WorldClient>;
+//template Iocp::Server<WorldClient>;
 //template bool Iocp::Server<WorldClient>::Init<WorldClientSession>(const uint16_t);
 template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WorldClientSession, WorldClient >(HANDLE hIocp, SOCKET socketListen, WorldClient&);
 template Iocp::SessionSocketCompletionKey<WorldClientSession>;

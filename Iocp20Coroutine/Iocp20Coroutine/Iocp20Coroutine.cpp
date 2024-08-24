@@ -56,7 +56,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 	return TRUE;
 }
 
-std::unique_ptr<Iocp::Server<WorldClient> > g_worldSvr;// (Iocp::ThreadPool::GetIocp());
+//std::unique_ptr<Iocp::Server<WorldClient> > g_worldSvr;// (Iocp::ThreadPool::GetIocp());
 std::unique_ptr<Iocp::SessionSocketCompletionKey<WorldClientSession>> g_ConnectToWorldSvr;
 
 void SendToWorldSvr(const MsgSay& msg){MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); });}
@@ -96,8 +96,8 @@ int main(void)
 	//Iocp::ThreadPool::Add(accept.GetIocp());
 
 	//g_worldSvr->Init<WorldSession>(12346);
-	g_worldSvr.reset(new Iocp::Server<WorldClient>(Iocp::ThreadPool::GetIocp()));
-	g_ConnectToWorldSvr.reset(g_worldSvr->Connect<WorldClientSession>(L"127.0.0.1", L"12346"));
+	//g_worldSvr.reset(new Iocp::Server<WorldClient>(Iocp::ThreadPool::GetIocp()));
+	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<WorldClientSession>(L"127.0.0.1", L"12346", Iocp::ThreadPool::GetIocp()));
 	WorldClient::m_funBroadcast = [&accept](const MsgSay& msg) {accept.m_Server.m_Sessions.Broadcast(msg); };
 
 

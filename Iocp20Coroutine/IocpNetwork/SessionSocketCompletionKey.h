@@ -6,6 +6,10 @@
 namespace Iocp 
 {
 	template<class T_Session>
+	//requires requires(T_Session &refSession, Iocp::SessionSocketCompletionKey<T_Session> &refSessionSocketCompletionKey)
+	//{
+	//	requires std::is_same_v<int, decltype(refSession.OnRecv(refSessionSocketCompletionKey, (const void*)0, (int)0))>;
+	//}
 	class SessionSocketCompletionKey :public SocketCompeletionKey
 	{
 	public:

@@ -27,14 +27,7 @@ namespace Iocp
 		}
 		bool Init(const uint16_t usPort);
 		void Stop();
-		template<class T_Session>
-		//	requires requires(Iocp::SessionSocketCompletionKey<T_Session>& refCompletetionKeySession, T_Session& refSession, T_Server& refServer)
-		//{
-		//	requires std::is_same_v<int, decltype(refSession.OnRecv(refCompletetionKeySession, (const char*)nullptr, 0))>;//int OnRecv(Iocp::SessionSocketCompletionKey<WorldSession>& refSession, const char buf[], int len)
-		//	requires std::is_same_v<void, decltype(refSession.OnDestroy())>;//void OnDestroy();
-		//	requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompletionKey<WorldSession>& session)
-		//}
-		Iocp::SessionSocketCompletionKey<T_Session>* Connect(const wchar_t* szIp, const wchar_t* szPort);
+		
 
 		T_Server m_Server;
 	private:

@@ -1,4 +1,7 @@
 #pragma once
+#include <sstream>
+#include <msgpack.hpp>
+#include "../LogStrategy/StrategyLog.h"
 namespace MsgPack
 {
 	/// <summary>
