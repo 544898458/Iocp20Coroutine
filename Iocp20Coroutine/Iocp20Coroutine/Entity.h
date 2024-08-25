@@ -10,6 +10,7 @@ class PlayerComponent;
 class MonsterComponent;
 class BuildingComponent;
 class AttackComponent;
+class PlayerGateSession;
 class Entity :public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
 public:
@@ -41,10 +42,10 @@ public:
 	std::string m_strPrefabName;
 
 	//静态ECS，没有基类强转子类
-	void AddComponentPlayer(GameSvrSession* pSession);
+	void AddComponentPlayer(PlayerGateSession& refSession);
 	void AddComponentAttack();
 	void AddComponentMonster();
-	void AddComponentBuilding();
+	void AddComponentBuilding(PlayerGateSession& refSession);
 	std::shared_ptr<PlayerComponent> m_spPlayer;
 	std::shared_ptr<AttackComponent> m_spAttack;
 	std::shared_ptr<MonsterComponent> m_spMonster;

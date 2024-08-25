@@ -7,6 +7,7 @@
 #include "GameSvrSession.h"
 #include "AiCo.h"
 #include "Space.h"
+#include "PlayerGateSession.h"
 
 void Entity::AddComponentAttack()
 {
@@ -18,7 +19,7 @@ void AttackComponent::WalkToPos(Entity& refEntity, const Position& posTarget)
 	if (refEntity.IsDead())
 	{
 		if (refEntity.m_spPlayer)
-			refEntity.m_spPlayer->m_pSession->Send(MsgSay(StrConv::GbkToUtf8("自己阵亡,不能走")));
+			refEntity.m_spPlayer->m_refSession.Send(MsgSay(StrConv::GbkToUtf8("自己阵亡,不能走")));
 
 		return;
 	}

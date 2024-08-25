@@ -324,7 +324,7 @@ struct CoAwaiter
 	//	m_Result = other.m_Result;
 	//	m_Kc = other.m_Kc;
 	//}
-	CoAwaiter(CoAwaiter&& other) noexcept :m_Kc(std::forward<KeepCancel&&>(other.m_Kc)), m_sn(other.m_sn), m_hAwaiter(other.m_hAwaiter), m_Result(other.m_Result)
+	CoAwaiter(CoAwaiter&& other) noexcept :m_Kc(std::move(other.m_Kc)), m_sn(other.m_sn), m_hAwaiter(other.m_hAwaiter), m_Result(other.m_Result)
 	{
 		other.m_hAwaiter = nullptr;
 		other.m_sn = 0;

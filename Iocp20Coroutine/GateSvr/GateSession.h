@@ -19,8 +19,7 @@ public:
 	void OnRecvWsPack(const void* buf, const int len);
 	void OnDestroy();
 	void OnInit(CompeletionKeySession& refSession, GateServer&);
-	template<class T>
-	std::deque<T>& GetQueue();
+	template<class T> std::deque<T>& GetQueue();
 	/// <summary>
 	/// 工作线程中（单线程）调用
 	/// </summary>

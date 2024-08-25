@@ -12,6 +12,7 @@
 #include "MonsterComponent.h"
 #include "AttackComponent.h"
 #include "BuildingComponent.h"
+#include "PlayerGateSession.h"
 
 using namespace std;
 
@@ -63,7 +64,7 @@ bool Entity::IsEnemy(const Entity& refEntity)
 		return true;//有一个是怪
 
 	//都是玩家单位
-	return m_spPlayer->m_pSession != refEntity.m_spPlayer->m_pSession;
+	return &m_spPlayer->m_refSession != &refEntity.m_spPlayer->m_refSession;
 }
 
 
@@ -85,7 +86,7 @@ void Entity::OnDestroy()
 const std::string& Entity::NickName()
 {
 	if (m_spPlayer)
-		return m_spPlayer->m_pSession->m_nickName;
+		return m_spPlayer->m_refSession.NickName();
 
 	static const std::string str怪("怪");
 	return str怪;

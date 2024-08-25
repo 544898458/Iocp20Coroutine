@@ -4,19 +4,19 @@
 #include "../CoRoutine/CoRpc.h"
 #include "AiCo.h"
 
-void Entity::AddComponentBuilding()
+void Entity::AddComponentBuilding(PlayerGateSession& refSession)
 {
-	m_spBuilding = std::make_shared<BuildingComponent, Entity&>(*this);
+	m_spBuilding = std::make_shared<BuildingComponent, PlayerGateSession&>(refSession);
 }
 
-BuildingComponent::BuildingComponent(Entity& refEntity)
+BuildingComponent::BuildingComponent( PlayerGateSession & refSession)
 {
 	if (!m_coAddMoney.Finished())
 	{
 		LOG(INFO) << "前一个造建筑协程还没返回";
 		return;
 	}
-	m_coAddMoney = AiCo::AddMoney(refEntity, m_cancel);
+	m_coAddMoney = AiCo::AddMoney(refSession, m_cancel);
 	m_coAddMoney.Run();
 }
 

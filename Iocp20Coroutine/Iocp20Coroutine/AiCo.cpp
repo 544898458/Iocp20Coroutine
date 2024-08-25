@@ -8,6 +8,7 @@
 #include "PlayerSystem.h"
 #include "PlayerComponent.h"
 #include "../IocpNetwork/StrConv.h"
+#include "PlayerGateSession.h"
 
 void SendToWorldSvr(const MsgChangeMoney& msg);
 
@@ -122,7 +123,7 @@ namespace AiCo
 			{
 				LOG(INFO) << "自己阵亡，走向" << posLocalTarget << "的协程取消了";
 				if (spThis->m_spPlayer)
-					spThis->m_spPlayer->m_pSession->Send(MsgSay(StrConv::GbkToUtf8("自己阵亡")));
+					spThis->m_spPlayer->m_refSession.Send(MsgSay(StrConv::GbkToUtf8("自己阵亡")));
 
 				co_return 0;
 			}
@@ -152,7 +153,7 @@ namespace AiCo
 			{
 				LOG(INFO) << "自己阵亡，走向[" << spTarget->NickName() << "]的协程取消了";
 				if (spThis->m_spPlayer)
-					spThis->m_spPlayer->m_pSession->Send(MsgSay(StrConv::GbkToUtf8("自己阵亡")));
+					spThis->m_spPlayer->m_refSession.Send(MsgSay(StrConv::GbkToUtf8("自己阵亡")));
 
 				co_return 0;
 			}
@@ -204,7 +205,7 @@ namespace AiCo
 		co_return 0;
 	}
 
-	CoTask<std::tuple<bool,MsgChangeMoneyResponce>> ChangeMoney(Entity &refThis, int changeMoney, FunCancel& funCancel)
+	CoTask<std::tuple<bool,MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession &refSession, int changeMoney, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
@@ -219,19 +220,19 @@ namespace AiCo
 		
 		//LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 
-		refThis.m_spPlayer->m_pSession->Send(MsgNotifyMoney{.finalMoney = responce.finalMoney});
+		refSession.Send(MsgNotifyMoney{.finalMoney = responce.finalMoney});
 
 		co_return tuple;
 	}
 
-	CoTask<int> AddMoney(Entity& refThis, FunCancel& funCancel)
+	CoTask<int> AddMoney(PlayerGateSession& refSession, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
 
 		while (!co_await CoTimer::Wait(100ms, funCancel))
 		{
-			auto tuple = co_await ChangeMoney(refThis, 10, funCancel);
+			auto tuple = co_await ChangeMoney(refSession, 10, funCancel);
 			const auto& responce = std::get<1>(tuple);
 			if (std::get<0>(tuple))
 			{

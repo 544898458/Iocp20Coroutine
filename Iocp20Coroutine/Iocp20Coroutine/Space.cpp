@@ -19,7 +19,7 @@ void Space::Update()
 
 		if (spEntity->m_spPlayer)
 		{
-			spEntity->m_spPlayer->m_pSession->Erase(spEntity);
+			spEntity->m_spPlayer->m_refSession.Erase(spEntity);
 		}
 
 		LOG(INFO) << "É¾³ý¶ÔÏó," << spEntity->NickName() << ",pEntity=" << spEntity << ",É¾³ýÇ°Ê£Óà" << m_mapEntity.size();
