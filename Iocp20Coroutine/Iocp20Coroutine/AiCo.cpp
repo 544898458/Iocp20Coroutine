@@ -199,6 +199,7 @@ namespace AiCo
 			spEntityMonster->m_f警戒距离 = 20;
 			spEntityMonster->m_f移动速度 = 0.2f;
 			refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster });
+			LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 			spEntityMonster->BroadcastEnter();
 		}
 		LOG(INFO) << "停止刷怪协程";

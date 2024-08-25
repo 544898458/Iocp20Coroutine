@@ -14,17 +14,21 @@ std::function<void(MsgSay const&)> WorldClient::m_funBroadcast;
 /// </summary>
 void WorldClientSession::Process()
 {
-	const MsgId msgId = this->m_MsgQueue.PopMsg();
-	switch (msgId)
+	while (true)
 	{
-	case MsgId::Invalid_0://没有消息可处理
-		return;
-	case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldClientSession::OnRecv); break;
-	case MsgId::ChangeMoneyResponce:this->m_MsgQueue.OnRecv(this->m_queueConsumeMoneyResponce, *this, &WorldClientSession::OnRecv); break;
-	default:
-		LOG(ERROR) << "msgId:" << msgId;
-		assert(false);
-		break;
+		const MsgId msgId = this->m_MsgQueue.PopMsg();
+		if (MsgId::Invalid_0 == msgId)//没有消息可处理
+			break;
+
+		switch (msgId)
+		{
+		case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldClientSession::OnRecv); break;
+		case MsgId::ChangeMoneyResponce:this->m_MsgQueue.OnRecv(this->m_queueConsumeMoneyResponce, *this, &WorldClientSession::OnRecv); break;
+		default:
+			LOG(ERROR) << "msgId:" << msgId;
+			assert(false);
+			break;
+		}
 	}
 }
 
@@ -51,6 +55,20 @@ void WorldClientSession::OnRecv(const MsgChangeMoneyResponce& msg)
 template<> std::deque<MsgSay>& WorldClientSession::GetQueue() { return m_queueSay; }
 template<> std::deque<MsgChangeMoneyResponce>& WorldClientSession::GetQueue() { return m_queueConsumeMoneyResponce; }
 
+
+
+/// <summary>
+/// 网络线程（多线程）调用
+/// </summary>
+/// <param name="refSession"></param>
+/// <param name="buf"></param>
+/// <param name="len"></param>
+/// <returns>返回已处理的字节数，这些数据将立刻从接受缓冲中删除</returns>
+
+inline int WorldClientSession::OnRecv(Iocp::SessionSocketCompletionKey<WorldClientSession>& refSession, const void* buf, int len)
+{
+	return Iocp::OnRecv3(buf, len, *this, &WorldClientSession::OnRecvPack);
+}
 
 /// <summary>
 /// 网络线程（多线程）调用

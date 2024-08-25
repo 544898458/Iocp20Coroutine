@@ -29,18 +29,7 @@ public:
 	/// <param name="buf"></param>
 	/// <param name="len"></param>
 	/// <returns>返回已处理的字节数，这些数据将立刻从接受缓冲中删除</returns>
-	int OnRecv(Iocp::SessionSocketCompletionKey<WorldClientSession>& refSession, const void* buf, int len)
-	{
-		const void* bufPack(nullptr);
-		int lenPack(0);
-		std::tie(bufPack, lenPack) = Iocp::OnRecv2(buf, len);
-		if (lenPack > 0 && nullptr != bufPack)
-		{
-			OnRecvPack(bufPack, lenPack);
-		}
-
-		return lenPack;
-	}
+	int OnRecv(Iocp::SessionSocketCompletionKey<WorldClientSession>& refSession, const void* buf, int len);
 	void OnRecvPack(const void* buf, int len);
 	void OnDestroy()
 	{

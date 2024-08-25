@@ -14,38 +14,17 @@
 template<class T>
 void PlayerGateSession::Send(const T& ref)
 {
-	MsgPack::SendMsgpack(ref, [this](const void* buf, int len)
+	std::stringstream buffer;
+	msgpack::pack(buffer, ref);
+	buffer.seekg(0);
+
+	std::string str(buffer.str());
+	CHECK_GE_VOID(UINT16_MAX, str.size());
+	MsgGate转发 msg(str.data(), (int)str.size(),m_idPlayerGateSession );
+	MsgPack::SendMsgpack(msg, [this](const void* buf, int len)
 		{
-			/*		MsgGate转发 msg(buf, len, );
-					MsgPack::SendMsgpack(msg, [this](const void* buf, int len)
-						{
-							this->m_pWsSession->Send(buf, len);
-						});*/
-
+			this->m_refSession.SendToGate(buf, len);
 		});
-	//if (!m_bLoginOk)
-	//{
-	//	LOG(WARNING) << "还没登录，不能向他发数据,T:" << typeid(T).name();
-	//	return;
-	//}
-	//WebSocketPacket wspacket;
-	//// set FIN and opcode
-	//wspacket.set_fin(1);
-	//wspacket.set_opcode(0x02);// packet.get_opcode());
-
-	//std::stringstream buffer;
-	//msgpack::pack(buffer, ref);
-	//buffer.seekg(0);
-
-	//// deserialize the buffer into msgpack::object instance.
-	//std::string str(buffer.str());
-	//wspacket.set_payload(str.data(), str.size());
-	//ByteBuffer output;
-	//// pack a websocket data frame
-	//wspacket.pack_dataframe(output);
-	////send to client
-	////this->to_wire(output.bytes(), output.length());
-	//this->m_pWsSession->Send(output.bytes(), output.length());
 }
 
 
@@ -317,12 +296,15 @@ void PlayerGateSession::Process()
 			LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
 		}
 	}
+	
+	while (true)
 	{
 		const MsgId msgId = this->m_MsgQueue.PopMsg();
+		if (MsgId::Invalid_0 == msgId)//没有消息可处理
+			break;
+
 		switch (msgId)
 		{
-		case MsgId::Invalid_0://没有消息可处理
-			return;
 		case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &PlayerGateSession::OnRecv); break;
 		case MsgId::Move:this->m_MsgQueue.OnRecv(this->m_queueMove, *this, &PlayerGateSession::OnRecv); break;
 		case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &PlayerGateSession::OnRecv); break;

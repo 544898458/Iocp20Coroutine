@@ -39,13 +39,7 @@ template Iocp::SessionSocketCompletionKey<GameSvrSession>;
 /// <param name="len"></param>
 int GameSvrSession::OnRecv(WebSocketGameSession&, const void* buf, const int len)
 {
-	const auto&& [bufPack, lenPack] = Iocp::OnRecv2(buf, len);
-	if (lenPack > 0 && nullptr != bufPack)
-	{
-		OnRecvPack(bufPack, lenPack);
-	}
-
-	return lenPack;
+	return Iocp::OnRecv3(buf, len, *this, &GameSvrSession::OnRecvPack);
 }
 
 void GameSvrSession::OnRecvPack(const void* buf, const int len)
@@ -87,6 +81,22 @@ void GameSvrSession::OnDestroy()
 //主线程，单线程
 void GameSvrSession::Process()
 {
+	while (true)
+	{
+		const MsgId msgId = this->m_MsgQueue.PopMsg();
+		if (MsgId::Invalid_0 == msgId)//没有消息可处理
+			break;
+
+		switch (msgId)
+		{
+		case MsgId::Gate转发:this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &GameSvrSession::OnRecv); break;
+		default:
+			LOG(ERROR) << "msgId:" << msgId;
+			assert(false);
+			break;
+		}
+	}
+
 	for (auto& pair : m_mapPlayerGateSession)
 	{
 		pair.second.Process();
@@ -112,7 +122,7 @@ void GameSvrSession::OnRecv(const MsgGate转发& msg)
 	auto iter = m_mapPlayerGateSession.find(msg.gateClientSessionId);
 	if (m_mapPlayerGateSession.end() == iter)
 	{
-		auto pair = m_mapPlayerGateSession.insert({ msg.gateClientSessionId, PlayerGateSession(*this) });
+		auto pair = m_mapPlayerGateSession.insert({ msg.gateClientSessionId, PlayerGateSession(*this,msg.gateClientSessionId) });
 		if (!pair.second)
 		{
 			LOG(ERROR) << "ERR";

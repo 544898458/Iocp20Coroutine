@@ -83,24 +83,7 @@ public:
 			LOG(WARNING) << "len = 0";
 			return;
 		}
-		//WebSocketPacket wspacket;
-		//// set FIN and opcode
-		//wspacket.set_fin(1);
-		//wspacket.set_opcode(0x02);// packet.get_opcode());
-		// set payload data
 
-		//std::stringstream buffer;
-		//msgpack::pack(buffer, ref);
-		//buffer.seekg(0);
-
-		//// deserialize the buffer into msgpack::object instance.
-		//std::string str(buffer.str());
-		//wspacket.set_payload(str.data(), str.size());
-		//ByteBuffer output;
-		//// pack a websocket data frame
-		//wspacket.pack_dataframe(output);
-		// send to client
-		//this->to_wire(output.bytes(), output.length());
 		if (!this->ws_handshake_completed_)
 		{
 			std::lock_guard lock(m_mutexQueueSendBuf);
@@ -113,7 +96,18 @@ public:
 			LOG(INFO) << "WebSocket 还没握手,缓存len=" << len << ",m_queueSendBuf.size=" << m_queueSendBuf.size();
 			return;
 		}
-		this->to_wire(buf, len);
+
+		WebSocketPacket wspacket;
+		// set FIN and opcode
+		wspacket.set_fin(1);
+		wspacket.set_opcode(0x02);// packet.get_opcode());
+		//set payload data
+		wspacket.set_payload((char*)buf, len);
+		ByteBuffer output;
+		// pack a websocket data frame
+		wspacket.pack_dataframe(output);
+		//send to client
+		this->to_wire(output.bytes(), output.length());
 	}
 	virtual void onHandShakeCompleted()override
 	{
@@ -144,7 +138,7 @@ class WebSocketSession
 {
 public:
 	using Session = Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>;
-	WebSocketSession(Session&):m_Session(*this){}
+	WebSocketSession(Session&) :m_Session(*this) {}
 	/// <summary>
 	/// 构造函数和OnInit会紧挨着调用，初始化代码可以随便找个地方写，只要能编译通过，效果就完全相同
 	/// </summary>

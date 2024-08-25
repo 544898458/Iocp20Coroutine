@@ -9,12 +9,12 @@ class Space;
 class PlayerGateSession
 {
 public:
-	PlayerGateSession(GameSvrSession& ref) :m_refSession(ref)
+	PlayerGateSession(GameSvrSession& ref,const uint64_t idPlayerGateSession) :m_refSession(ref),m_idPlayerGateSession(idPlayerGateSession)
 	{
 
 	}
 	PlayerGateSession(const PlayerGateSession&) = delete;
-	PlayerGateSession(PlayerGateSession&& ref)noexcept :m_refSession(ref.m_refSession)
+	PlayerGateSession(PlayerGateSession&& ref)noexcept :m_refSession(ref.m_refSession), m_idPlayerGateSession(ref.m_idPlayerGateSession)
 	{
 
 	}
@@ -58,6 +58,7 @@ private:
 /// </summary>
 	std::set<SpEntity> m_vecSpEntity;
 	GameSvrSession& m_refSession;
+	const uint64_t m_idPlayerGateSession;
 
 	std::vector<uint64_t> m_vecSelectedEntity;
 	std::string m_nickName;

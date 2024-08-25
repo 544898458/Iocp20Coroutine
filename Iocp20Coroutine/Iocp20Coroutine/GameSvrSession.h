@@ -35,6 +35,10 @@ public:
 			pair.second.Send(ref);
 		}
 	}
+	void SendToGate(const void* buf, const int len)
+	{
+		m_pWsSession->Send(buf, len);
+	}
 	GameSvr* m_pServer = nullptr;
 
 	template<class T>

@@ -40,7 +40,10 @@ namespace Iocp {
 	void SessionSocketCompletionKey<T_Session>::Send(const void* buf, int len)
 	{
 		if (this->sendOverlapped.coTask.Finished())
+		{
+			LOG(WARNING) << "Sending Failed";
 			return;
+		}
 
 		this->sendBuf.queue.Enqueue(buf, len);
 		this->sendOverlapped.coTask.Run2(this->sendOverlapped.callSend);
@@ -75,9 +78,11 @@ namespace Iocp {
 				//delete pOverlapped;
 				break;
 			}
-			char* buf(nullptr);
-			int len(0);
-			std::tie(buf, len) = this->recvBuf.Complete(pOverlapped.numberOfBytesTransferred);
+			const auto [buf, len] = this->recvBuf.Complete(pOverlapped.numberOfBytesTransferred);
+			if (len % 1000 == 0)
+			{
+				LOG(WARNING) << "待处理数据" << len;
+			}
 			this->recvBuf.PopFront(this->Session.OnRecv(*this, buf, len));//回调用户自定义函数，这里是纯数据，连封包概念都没有，封包是WebSocket协议负责的工作
 		}
 		{

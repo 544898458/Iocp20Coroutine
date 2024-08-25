@@ -2,6 +2,8 @@
 #include <sstream>
 #include <msgpack.hpp>
 #include "../LogStrategy/StrategyLog.h"
+#include "ByteQueue.h"
+
 namespace MsgPack
 {
 	/// <summary>
@@ -29,8 +31,13 @@ namespace MsgPack
 		//this->to_wire(output.bytes(), output.length());
 		CHECK_GE_VOID(UINT16_MAX,str.size());
 		const uint16_t usSize = (uint16_t)str.size();
-		refFun(&usSize, sizeof(usSize));
-		refFun(str.data(), usSize);
+		ByteQueueSend sendBuff;
+		sendBuff.queue.Enqueue(&usSize, sizeof(usSize));
+		sendBuff.queue.Enqueue(str.data(), usSize);
+		const auto&& [bufAll,lenAll] = sendBuff.BuildSendBuf();
+		refFun(bufAll, lenAll);
+		//refFun(&usSize, sizeof(usSize));
+		//refFun(str.data(), usSize);
 		//LOG(INFO) << typeid(T_Msg).name();
 	}
 };

@@ -24,28 +24,27 @@ template class MsgQueueMsgPack<WorldSession>;
 /// <returns></returns>
 int WorldSession::OnRecv(CompeletionKeySession&, const void* buf, int len)
 {
-	const auto&& [bufPack, lenPack] = Iocp::OnRecv2(buf, len);
-	if (lenPack > 0 && nullptr != bufPack)
-	{
-		OnRecvPack(bufPack, lenPack);
-	}
-
-	return lenPack;
+	return Iocp::OnRecv3(buf, len, *this, &WorldSession::OnRecvPack);
 }
 
 void WorldSession::Process()
 {
-	const MsgId msgId = this->m_MsgQueue.PopMsg();
-	switch (msgId)
+	while (true)
 	{
-	case MsgId::Invalid_0://没有消息可处理
-		return;
-	case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldSession::OnRecv); break;
-	case MsgId::ConsumeMoney:this->m_MsgQueue.OnRecv(this->m_queueConsumeMoney, *this, &WorldSession::OnRecv); break;
-	default:
-		LOG(ERROR) << "msgId:" << msgId;
-		assert(false);
-		break;
+		const MsgId msgId = this->m_MsgQueue.PopMsg();
+		if (MsgId::Invalid_0 == msgId)//没有消息可处理
+			break;
+		switch (msgId)
+		{
+		case MsgId::Invalid_0://没有消息可处理
+			return;
+		case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldSession::OnRecv); break;
+		case MsgId::ConsumeMoney:this->m_MsgQueue.OnRecv(this->m_queueConsumeMoney, *this, &WorldSession::OnRecv); break;
+		default:
+			LOG(ERROR) << "msgId:" << msgId;
+			assert(false);
+			break;
+		}
 	}
 }
 

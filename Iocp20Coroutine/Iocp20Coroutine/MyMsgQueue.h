@@ -161,5 +161,5 @@ struct MsgGate转发
 	MsgId id = Gate转发;
 	uint64_t gateClientSessionId;
 	std::vector<uint8_t> vecByte;
-	MSGPACK_DEFINE(id, vecByte);
+	MSGPACK_DEFINE(id, gateClientSessionId, vecByte);
 };
