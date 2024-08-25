@@ -51,6 +51,6 @@ Iocp::SessionSocketCompletionKey<T_Session>* Iocp::Client::Connect(const wchar_t
 	}
 
 	auto pNewCompleteKey = new Iocp::SessionSocketCompletionKey<T_Session>(socket);
-	pNewCompleteKey->StartCoRoutine();
+	pNewCompleteKey->StartCoRoutine(m_hIocp);
 	return pNewCompleteKey;
 }

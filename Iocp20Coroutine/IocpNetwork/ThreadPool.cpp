@@ -86,7 +86,7 @@ namespace Iocp::ThreadPool
 		//创建线程数量有了
 		SYSTEM_INFO system_processors_count;
 		GetSystemInfo(&system_processors_count);
-		auto process_count = system_processors_count.dwNumberOfProcessors;
+		auto process_count = 1;//多线程有问题,send那里 system_processors_count.dwNumberOfProcessors;
 		for (decltype(process_count) i = 0; i < process_count; i++)
 		{
 			//auto hThread = CreateThread(NULL, 0, NetworkThreadProc, pListenCompleteKey->hIocp, 0, NULL);

@@ -124,17 +124,17 @@ public:
 	/// Send专用
 	/// </summary>
 	/// <param name="send"></param>
-	void Run2(const bool& send)
-	{
-		std::lock_guard lock(m_mutex);
-		if (send)
-			return;
-		if (!m_hCoroutine)
-			return;
+	//void Run2(const bool& send)
+	//{
+	//	std::lock_guard lock(m_mutex);
+	//	if (send)
+	//		return;
+	//	if (!m_hCoroutine)
+	//		return;
 
-		m_hCoroutine.resume();
-		TryClear();
-	}
+	//	m_hCoroutine.resume();
+	//	TryClear();
+	//}
 	void TryClear()
 	{
 		if (m_hCoroutine.done())
@@ -182,8 +182,9 @@ public:
 		m_hCoroutine.promise().previous = h;
 		return m_hCoroutine;
 	}
-private:
 	std::mutex m_mutex;
+private:
+	
 	/// <summary>
 	/// 自己作为协程
 	/// </summary>

@@ -18,7 +18,7 @@ namespace Iocp
 
 		}
 		virtual ~SessionSocketCompletionKey();
-		void StartCoRoutine();
+		void StartCoRoutine(HANDLE hIocp);
 		void Send(const void* buf, int len);
 		bool Finished();
 		T_Session Session;
@@ -33,9 +33,12 @@ namespace Iocp
 		ByteQueueRecv recvBuf;
 		Overlapped sendOverlapped;
 		Overlapped recvOverlapped;
+		std::atomic_bool atomicWaitingSendResult = false;
 		std::mutex lockFinish;
 		bool sendFinish = false;
 		bool recvFinish = false;
+		int maxSendQueue = 0;
+		HANDLE m_hIocp;
 	};
 
 	static std::tuple< const void*, int, int > OnRecv2(const void* buf, int len)

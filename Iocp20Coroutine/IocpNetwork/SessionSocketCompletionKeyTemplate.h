@@ -18,8 +18,9 @@ namespace Iocp {
 	//	return false;
 	//}
 	template<class T_Session>
-	void SessionSocketCompletionKey<T_Session>::StartCoRoutine()
+	void SessionSocketCompletionKey<T_Session>::StartCoRoutine(HANDLE hIocp)
 	{
+		m_hIocp = hIocp;
 		{
 			//auto pOverlapped = new MyOverlapped();
 			//PostSend(pOverlapped);
@@ -46,7 +47,16 @@ namespace Iocp {
 		}
 
 		this->sendBuf.queue.Enqueue(buf, len);
-		this->sendOverlapped.coTask.Run2(this->sendOverlapped.callSend);
+		{
+			//this->sendOverlapped.coTask.Run2(this->sendOverlapped.callSend);//不能在这里调用，这是主线程，应该通过完成端口通知
+
+			//std::lock_guard lock(this->sendOverlapped.coTask.m_mutex);
+
+			if (!this->atomicWaitingSendResult.load())
+			{
+				PostQueuedCompletionStatus(m_hIocp, 0, (ULONG_PTR)nullptr, &sendOverlapped.overlapped);
+			}
+		}
 	}
 	template<class T_Session>
 	bool SessionSocketCompletionKey<T_Session>::Finished()
@@ -55,12 +65,12 @@ namespace Iocp {
 		return recvFinish && sendFinish;
 	}
 	template<class T_Session>
-	CoTask<int> SessionSocketCompletionKey<T_Session>::PostRecv(Overlapped& pOverlapped)
+	CoTask<int> SessionSocketCompletionKey<T_Session>::PostRecv(Overlapped& overlapped)
 	{
 		LOG(INFO) << "调用PostRecv,this=" << this << ",ThreadId=" << GetCurrentThreadId();
 		while (true)
 		{
-			if (!WSARecv(pOverlapped))
+			if (!WSARecv(overlapped))
 			{
 				LOG(WARNING) << ("可能断网了,不再调用WSARecv\n");
 				CloseSocket();
@@ -69,19 +79,23 @@ namespace Iocp {
 			}
 
 			//LOG(INFO) << ("\n准备异步等待WSARecv结果\n");
-			co_yield 0;
+			const bool isResult = co_await overlapped.WaitSendResult();
 			//LOG(INFO) << "已异步等到WSARecv结果,numberOfBytesTransferred=" << pOverlapped.numberOfBytesTransferred << ",GetLastErrorReturn=" << pOverlapped.GetLastErrorReturn;
-			if (0 == pOverlapped.numberOfBytesTransferred)
+			if (0 == overlapped.numberOfBytesTransferred)
 			{
 				LOG(WARNING) << ("numberOfBytesTransferred==0可能断网了,不再调用WSARecv\n");
 				CloseSocket();
 				//delete pOverlapped;
 				break;
 			}
-			const auto [buf, len] = this->recvBuf.Complete(pOverlapped.numberOfBytesTransferred);
-			if (len % 1000 == 0)
+			const auto [buf, len] = this->recvBuf.Complete(overlapped.numberOfBytesTransferred);
+			if (this->maxSendQueue < len)
 			{
-				LOG(WARNING) << "待处理数据" << len;
+				this->maxSendQueue = len;
+				//if (len % 1000 == 0)
+				{
+					LOG(INFO) << "待处理数据" << len;
+				}
 			}
 			this->recvBuf.PopFront(this->Session.OnRecv(*this, buf, len));//回调用户自定义函数，这里是纯数据，连封包概念都没有，封包是WebSocket协议负责的工作
 		}
@@ -99,6 +113,7 @@ namespace Iocp {
 		LOG(INFO) << "PostRecv协程结束,GetCurrentThreadId=" << GetCurrentThreadId();
 		co_return 0;
 	}
+	
 	template<class T_Session>
 	CoTask<int> SessionSocketCompletionKey<T_Session>::PostSend(Overlapped& overlapped)
 	{
@@ -112,24 +127,42 @@ namespace Iocp {
 				//delete pOverlapped;
 				break;
 			}
-			//if (overlapped.callSend)
-			//	LOG(INFO) << "准备异步等待WSASend结果";
-			//else
-			//	LOG(INFO) << "等有数据再发WSASend" ;
-
+			if (overlapped.callSend)
+			{
+				LOG(INFO) << "准备异步等待WSASend结果";
+				atomicWaitingSendResult.store(true);
+			}
+			else
+			{
+				LOG(INFO) << "等有数据再发WSASend";
+				atomicWaitingSendResult.store(false);
+			}
 			//LOG(INFO) << "开始异步等WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
 				//<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len
 				//<< ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn;
-			co_yield 0;
+			//co_yield 0;
+			if (overlapped.callSend)
+			{
+				while (overlapped.callSend)
+				{
+					if( co_await overlapped.WaitSendResult() )
+						break;
+				}
+
+			}
+			else
+			{
+				//LOG(INFO) << ("有数据了，准备发WSASend\n");
+				const auto isResult = co_await overlapped.WaitSendResult();
+				assert(!isResult);
+				continue;
+			}
 			//LOG(INFO) << "已异步等到WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
 			//	<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len << ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn
 			//	<< ",Socket=" << Socket();
 
-			if (!overlapped.callSend)
-			{
-				//LOG(INFO) << ("有数据了，准备发WSASend\n");
-				continue;
-			}
+
+			
 
 
 			if (0 == overlapped.numberOfBytesTransferred && overlapped.GetLastErrorReturn != ERROR_IO_PENDING)
@@ -145,7 +178,7 @@ namespace Iocp {
 			//}
 
 			this->sendBuf.Complete(overlapped.numberOfBytesTransferred);
-			overlapped.callSend = true;
+			assert(overlapped.callSend);
 		}
 
 		//if (!this->recvOverlapped.coTask.Finished())
@@ -207,7 +240,7 @@ namespace Iocp {
 	}
 
 	/// <summary>
-	/// 
+	/// WSASend
 	/// </summary>
 	/// <param name="refOverlapped"></param>
 	/// <param name="refSize"></param>

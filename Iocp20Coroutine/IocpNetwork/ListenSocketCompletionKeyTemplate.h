@@ -45,7 +45,8 @@ namespace Iocp {
 			if (async)
 			{
 				LOG(INFO) << "准备异步等待重叠AcceptEx完成,socket=" << pAcceptOverlapped->socket;
-				co_yield 0;
+				co_await pAcceptOverlapped->WaitSendResult();
+
 				LOG(INFO) << "异步重叠AcceptEx完成,socket=" << pAcceptOverlapped->socket;
 			}
 
@@ -78,7 +79,7 @@ namespace Iocp {
 				delete pNewCompleteKey;
 				co_return 0;
 			}
-			pNewCompleteKey->StartCoRoutine();
+			pNewCompleteKey->StartCoRoutine(hIocp);
 		}
 	}
 }

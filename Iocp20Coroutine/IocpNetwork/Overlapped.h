@@ -2,7 +2,7 @@
 #include <Winsock2.h>
 #include "../CoRoutine/CoTask.h"
 class SocketCompeletionKey;
-namespace Iocp 
+namespace Iocp
 {
 	//constexpr int MAX_SEND_COUNT = 2048;
 	/// <summary>
@@ -12,6 +12,7 @@ namespace Iocp
 	/// </summary>
 	struct Overlapped
 	{
+		Overlapped() :coAwait(0, funCancel) {}
 		//enum Op
 		//{
 		//	Accept,
@@ -29,7 +30,7 @@ namespace Iocp
 		BOOL GetQueuedCompletionStatusReturn;
 		int GetLastErrorReturn;
 		DWORD dwSendCount;
-		bool callSend;
+		bool callSend = false;
 		/// <summary>
 		/// 只在连接Socket(Session)里用到。监听Socket(Accept)不会用到
 		/// </summary>
@@ -40,9 +41,16 @@ namespace Iocp
 			this->numberOfBytesTransferred = number_of_bytes;
 			this->GetQueuedCompletionStatusReturn = bGetQueuedCompletionStatusReturn;
 			this->GetLastErrorReturn = lastErr;
-			this->coTask.Run();
+			//this->coTask.Run();
+			this->coAwait.Run(nullptr!=pKey);
+		}
+		CoAwaiterBool& WaitSendResult()
+		{
+			return coAwait;
 		}
 		CoTask<int> coTask;
-		bool needDeleteMe=false;
+		FunCancel funCancel;
+		CoAwaiterBool coAwait;
+		bool needDeleteMe = false;
 	};
 }
