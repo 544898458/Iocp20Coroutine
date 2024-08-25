@@ -33,7 +33,7 @@ namespace Iocp
 		ByteQueueRecv recvBuf;
 		Overlapped sendOverlapped;
 		Overlapped recvOverlapped;
-		std::atomic_bool atomicWaitingSendResult = false;
+		//std::atomic_bool atomicWaitingSendResult = false;
 		std::mutex lockFinish;
 		bool sendFinish = false;
 		bool recvFinish = false;

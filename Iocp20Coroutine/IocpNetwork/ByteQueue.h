@@ -17,7 +17,7 @@ public:
 	ByteQueue();
 	bool Enqueue(const void* buf, const int len);
 	//void DeQueue(char* buf, int &len);
-	//int Size();
+	bool Empty();
 private:
 	std::mutex mutex;
 
@@ -27,7 +27,7 @@ private:
 	/// 固定内存，发完才能修改，防止内存移动
 	/// </summary>
 	std::vector<char> buf;
-	std::vector<char>::iterator head ;
+	std::vector<char>::iterator head;
 };
 
 class ByteQueueSend

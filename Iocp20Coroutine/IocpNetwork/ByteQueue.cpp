@@ -11,6 +11,12 @@ bool ByteQueue::Enqueue(const void* buf, const int len)
 	return true;
 }
 
+bool ByteQueue::Empty()
+{
+	std::lock_guard lock(mutex);
+	return this->queue.empty();
+}
+
 //void ByteQueue::DeQueue(char* buf, int &len)
 //{
 //    len = std::min((int)this->mBuf.size(), len);

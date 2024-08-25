@@ -184,7 +184,7 @@ public:
 	}
 	std::mutex m_mutex;
 private:
-	
+
 	/// <summary>
 	/// 自己作为协程
 	/// </summary>
@@ -344,6 +344,11 @@ struct CoAwaiter
 		m_Result = result;
 		m_Kc.Revert();
 		m_hAwaiter.resume();
+	}
+	void Run2(const T_Result& result, std::mutex& mutex)
+	{
+		std::lock_guard lock(mutex);
+		Run(result);
 	}
 private:
 	long m_sn;

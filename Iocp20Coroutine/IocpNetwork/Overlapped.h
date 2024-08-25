@@ -42,7 +42,7 @@ namespace Iocp
 			this->GetQueuedCompletionStatusReturn = bGetQueuedCompletionStatusReturn;
 			this->GetLastErrorReturn = lastErr;
 			//this->coTask.Run();
-			this->coAwait.Run(nullptr!=pKey);
+			this->coAwait.Run2(nullptr!=pKey, this->coTask.m_mutex);
 		}
 		CoAwaiterBool& WaitSendResult()
 		{

@@ -37,6 +37,12 @@ namespace Iocp {
 		}
 		return;
 	}
+	/// <summary>
+	/// 必须在主线程（单线程）调用
+	/// </summary>
+	/// <typeparam name="T_Session"></typeparam>
+	/// <param name="buf"></param>
+	/// <param name="len"></param>
 	template<class T_Session>
 	void SessionSocketCompletionKey<T_Session>::Send(const void* buf, int len)
 	{
@@ -46,13 +52,15 @@ namespace Iocp {
 			return;
 		}
 
+		const auto oldEmpty = this->sendBuf.queue.Empty();
 		this->sendBuf.queue.Enqueue(buf, len);
 		{
 			//this->sendOverlapped.coTask.Run2(this->sendOverlapped.callSend);//不能在这里调用，这是主线程，应该通过完成端口通知
 
 			//std::lock_guard lock(this->sendOverlapped.coTask.m_mutex);
 
-			if (!this->atomicWaitingSendResult.load())
+			//if (!this->atomicWaitingSendResult.load())
+			if(oldEmpty)
 			{
 				PostQueuedCompletionStatus(m_hIocp, 0, (ULONG_PTR)nullptr, &sendOverlapped.overlapped);
 			}
@@ -129,41 +137,45 @@ namespace Iocp {
 			}
 			if (overlapped.callSend)
 			{
-				LOG(INFO) << "准备异步等待WSASend结果";
-				atomicWaitingSendResult.store(true);
+				LOG(INFO) << "开始异步等WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
+					<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len
+					<< ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn
+					<< ",Socket=" << Socket();
+					//atomicWaitingSendResult.store(true);
 			}
 			else
 			{
-				LOG(INFO) << "等有数据再发WSASend";
-				atomicWaitingSendResult.store(false);
+				LOG(INFO) << "等有数据再发WSASend"
+					<< ",Socket=" << Socket();
+				//atomicWaitingSendResult.store(false);
 			}
-			//LOG(INFO) << "开始异步等WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
-				//<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len
-				//<< ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn;
+			
 			//co_yield 0;
 			if (overlapped.callSend)
 			{
 				while (overlapped.callSend)
 				{
-					if( co_await overlapped.WaitSendResult() )
+					const auto isResult = co_await overlapped.WaitSendResult();
+					if(0 < overlapped.numberOfBytesTransferred || isResult)
 						break;
+
+					LOG(INFO) << "继续等Send结果"
+						<< ",Socket=" << Socket();
 				}
 
 			}
 			else
 			{
-				//LOG(INFO) << ("有数据了，准备发WSASend\n");
 				const auto isResult = co_await overlapped.WaitSendResult();
 				assert(!isResult);
+				LOG(INFO) << "有数据了，准备发WSASend"
+					<< ",Socket=" << Socket();
 				continue;
 			}
-			//LOG(INFO) << "已异步等到WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
-			//	<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len << ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn
-			//	<< ",Socket=" << Socket();
 
-
-			
-
+			LOG(INFO) << "已异步等到WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
+				<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len << ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn
+				<< ",Socket=" << Socket();
 
 			if (0 == overlapped.numberOfBytesTransferred && overlapped.GetLastErrorReturn != ERROR_IO_PENDING)
 			{
