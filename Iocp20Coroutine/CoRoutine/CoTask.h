@@ -109,7 +109,7 @@ public:
 	/// </summary>
 	void Run()
 	{
-		std::lock_guard lock(m_mutex);
+		//std::lock_guard lock(m_mutex);
 		if (FinishedNoLock())
 		{
 			LOG(INFO) << m_desc << "协程已结束，不再执行\n";
@@ -146,7 +146,7 @@ public:
 	}
 	bool Finished()
 	{
-		std::lock_guard lock(m_mutex);
+		//std::lock_guard lock(m_mutex);
 		return FinishedNoLock();
 	}
 	bool FinishedNoLock()

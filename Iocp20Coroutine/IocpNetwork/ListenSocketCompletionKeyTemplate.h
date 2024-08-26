@@ -24,7 +24,7 @@ namespace Iocp {
 	//{
 	//	requires std::is_same_v<void, decltype(refSession.OnInit(&refSession, refServer))>;//void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer& server)
 	//}
-	CoTask<int> ListenSocketCompletionKey::PostAccept(Overlapped* pAcceptOverlapped,HANDLE hIocp, SOCKET socketListen, T_Server& refServer)
+	CoTask<Overlapped::YieldReturn> ListenSocketCompletionKey::PostAccept(Overlapped* pAcceptOverlapped,HANDLE hIocp, SOCKET socketListen, T_Server& refServer)
 	{
 		while (true)
 		{
@@ -37,7 +37,7 @@ namespace Iocp {
 				LOG(WARNING) << "AcceptEx失败，停止Accept";
 				closesocket(pAcceptOverlapped->socket);
 				pAcceptOverlapped->socket = NULL;
-				co_return 0;
+				co_return Overlapped::Error;
 			}
 
 			LOG(INFO) << "AcceptEx成功";
@@ -45,8 +45,7 @@ namespace Iocp {
 			if (async)
 			{
 				LOG(INFO) << "准备异步等待重叠AcceptEx完成,socket=" << pAcceptOverlapped->socket;
-				co_await pAcceptOverlapped->WaitSendResult();
-
+				co_yield Overlapped::OK;
 				LOG(INFO) << "异步重叠AcceptEx完成,socket=" << pAcceptOverlapped->socket;
 			}
 
@@ -63,7 +62,7 @@ namespace Iocp {
 				}
 				closesocket(pAcceptOverlapped->socket);
 				pAcceptOverlapped->socket = NULL;
-				co_return 0;
+				co_return Overlapped::Error;
 			}
 
 			//绑定到完成端口
@@ -77,9 +76,10 @@ namespace Iocp {
 				LOG(ERROR) << "连上来的Socket关联到完成端口失败，Error=" << err;
 				//closesocket(pKey->socket);// all_socks[count]);
 				delete pNewCompleteKey;
-				co_return 0;
+				co_return Overlapped::OK;
 			}
 			pNewCompleteKey->StartCoRoutine(hIocp);
+			co_return Overlapped::OK;
 		}
 	}
 }

@@ -23,8 +23,8 @@ namespace Iocp
 		bool Finished();
 		T_Session Session;
 	private:
-		CoTask<int> PostSend(Overlapped& pOverlapped);
-		CoTask<int> PostRecv(Overlapped& pOverlapped);
+		CoTask<Overlapped::YieldReturn> PostSend(Overlapped& pOverlapped);
+		CoTask<Overlapped::YieldReturn> PostRecv(Overlapped& pOverlapped);
 		std::tuple<bool, bool>  WSASend(Overlapped& pOverlapped);
 		bool WSARecv(Overlapped& pOverlapped);
 
@@ -32,8 +32,8 @@ namespace Iocp
 		ByteQueueSend sendBuf;
 		ByteQueueRecv recvBuf;
 		Overlapped sendOverlapped;
+		Overlapped notifySendOverlapped;
 		Overlapped recvOverlapped;
-		//std::atomic_bool atomicWaitingSendResult = false;
 		std::mutex lockFinish;
 		bool sendFinish = false;
 		bool recvFinish = false;

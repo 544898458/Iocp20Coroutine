@@ -21,7 +21,7 @@ namespace Iocp {
 		//{
 		//	requires std::is_same_v<void, decltype(refSession.OnInit(&refSession, refServer))>;//void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer& server)
 		//}
-		static CoTask<int> PostAccept(Overlapped* pAcceptOverlapped, HANDLE hIocp, SOCKET socketListen, T_Server& refServer);
+		static CoTask<Overlapped::YieldReturn> PostAccept(Overlapped* pAcceptOverlapped, HANDLE hIocp, SOCKET socketListen, T_Server& refServer);
 		static std::tuple<bool, bool> AcceptEx(Overlapped* pAcceptOverlapped, SOCKET socketListen);
 
 	};
