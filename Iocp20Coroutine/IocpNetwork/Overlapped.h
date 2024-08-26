@@ -75,8 +75,11 @@ namespace Iocp
 				}
 				return;
 			}
-
-			switch (this->coTask.GetValue())
+		}
+		void OnCompleteNotifySend(SocketCompeletionKey* pKey, const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
+		{
+			std::lock_guard lock(this->pCoTask->m_mutex);//能进这个锁，说明协程肯定是挂起状态
+			switch (this->pCoTask->GetValue())
 			{
 			case Sending:
 				LOG(INFO) << "正在发送";
