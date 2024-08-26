@@ -79,7 +79,10 @@ namespace Iocp {
 				co_return Overlapped::OK;
 			}
 			pNewCompleteKey->StartCoRoutine(hIocp);
-			co_return Overlapped::OK;
 		}
+
+
+		LOG(INFO) << "不可能执行到这里";
+		co_return Overlapped::OK;
 	}
 }

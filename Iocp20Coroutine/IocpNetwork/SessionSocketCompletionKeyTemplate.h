@@ -28,7 +28,8 @@ namespace Iocp {
 			sendOverlapped.OnComplete = &Overlapped::OnCompleteSend;
 			sendOverlapped.coTask = PostSend(sendOverlapped);
 			sendOverlapped.coTask.m_desc = "PostSend";
-			sendOverlapped.coTask.Run();
+			PostQueuedCompletionStatus(m_hIocp, 0, (ULONG_PTR)this, &notifySendOverlapped.overlapped);
+			//sendOverlapped.coTask.Run();
 		}
 		{
 			//pRecvOverlapped = new Overlapped();
