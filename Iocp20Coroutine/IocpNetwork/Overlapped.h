@@ -12,7 +12,7 @@ namespace Iocp
 	/// </summary>
 	struct Overlapped
 	{
-		Overlapped() :coAwait(0, funCancel), OnComplete(&Overlapped::OnCompleteNormal){}
+		Overlapped() :coAwait(0, funCancel), OnComplete(&Overlapped::OnCompleteNormal) {}
 		//enum Op
 		//{
 		//	Accept,
@@ -45,66 +45,90 @@ namespace Iocp
 		/// 发送停止
 		/// </summary>
 		std::atomic<SendState> atomicSendState = SendState_Sleep;
-		void (Overlapped::*OnComplete)(SocketCompeletionKey* pKey, const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr);
+		void (Overlapped::* OnComplete)(SocketCompeletionKey* pKey, const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr);
 		void OnCompleteSend(SocketCompeletionKey* pKey, const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
 		{
-			std::lock_guard lock(this->pCoTask->m_mutex);//能进这个锁，说明协程肯定是挂起状态
+			std::lock_guard lock(this->coTask.m_mutex);//能进这个锁，说明协程肯定是挂起状态
 
-			this->numberOfBytesTransferred = number_of_bytes;
-			this->GetQueuedCompletionStatusReturn = bGetQueuedCompletionStatusReturn;
-			this->GetLastErrorReturn = lastErr;
-			if (nullptr != this->pCoTask)//通知唤醒
-			{
-				{
-					SendState finalSendRunning = SendState_SendBeforeSleep;//如果正在停止，就恢复运行
-					const bool changed = atomicSendState.compare_exchange_strong(finalSendRunning, SendState_Sending);
-					return;
-				}
-
-				SendState finalSendRunning = SendState_Sleep;//如果已经睡眠，就立刻唤醒
-				const bool changed = atomicSendState.compare_exchange_strong(finalSendRunning, SendState_Sending);//先标记运行
-				if (changed)
-				{
-					LOG(INFO) << "唤醒沉睡的Send协程";
-					this->pCoTask->Run();
-				}
-				else
-				{
-					assert(Sending == finalSendRunning);
-					LOG(INFO) << "唤醒沉睡的Send协程已被其它操作唤醒";
-				}
-				return;
-			}
-		}
-		void OnCompleteNotifySend(SocketCompeletionKey* pKey, const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
-		{
-			std::lock_guard lock(this->pCoTask->m_mutex);//能进这个锁，说明协程肯定是挂起状态
-			switch (this->pCoTask->GetValue())
+			const auto yiledValue = this->coTask.GetValue();
+			switch (yiledValue)
 			{
 			case Sending:
 				LOG(INFO) << "正在发送";
 				break;
 			case SendStop:
 			{
+				auto finalSendState = SendState_SendBeforeSleep;
+				auto changed = this->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sleep);
+				if (changed)
 				{
-					auto finalSendState = SendState_Sending;
-					const bool changed = atomicSendState.compare_exchange_strong(finalSendState, SendState_SendBeforeSleep);//睡前再操作一次
-					if (changed)
-					{
-						LOG(INFO) << "Send协程沉睡前再试一次";
-						PostQueuedCompletionStatus(port, 0, (ULONG_PTR)pKey, &overlapped);
-						return;
-					}
+					LOG(INFO) << "Send协程沉睡前再试一次也结束了,协程进入睡眠状态";
+					return;
 				}
-				
+
+				finalSendState = SendState_Sending;
+				changed = this->atomicSendState.compare_exchange_strong(finalSendState, SendState_SendBeforeSleep);//睡前再操作一次
+				assert(changed);
+				if (!changed)
 				{
-					auto finalSendState = SendState_SendBeforeSleep;
-					const bool changed = atomicSendState.compare_exchange_strong(finalSendState, SendState_Sleep);//标记已停止
-					LOG(INFO) << "Send协程沉睡前再试一次也结束了";
+					LOG(INFO) << "error,changed=" << changed << ",finalSendState=" << finalSendState;
 				}
+
+				LOG(INFO) << "Send协程睡前再操作一次，changed=" << changed << ",finalSendState=" << finalSendState;
+
+				this->numberOfBytesTransferred = number_of_bytes;
+				this->GetQueuedCompletionStatusReturn = bGetQueuedCompletionStatusReturn;
+				this->GetLastErrorReturn = lastErr;
+				this->coTask.Run();
 			}
 			break;
 			default:
+				LOG(ERROR) << "yiledValue=" << yiledValue;
+				assert(false);
+				break;
+			}
+		}
+
+		void OnCompleteNotifySend(SocketCompeletionKey* pKey, const HANDLE port, const DWORD number_of_bytes, const BOOL bGetQueuedCompletionStatusReturn, const int lastErr)
+		{
+			std::lock_guard lock(this->pOverlapped->coTask.m_mutex);//能进这个锁，说明协程肯定是挂起状态
+
+			const auto yiledValue = this->pOverlapped->coTask.GetValue();
+			switch (yiledValue)
+			{
+				//case Sending:
+				//	LOG(INFO) << "正在发送";
+				//	break;
+			case SendStop:
+			{
+				auto finalSendState = SendState_Sleep;
+				auto changed = this->pOverlapped->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sending);//激活
+				if (changed)
+				{
+					LOG(INFO) << "激活沉睡的Send协程";
+					PostQueuedCompletionStatus(port, 0, (ULONG_PTR)pKey, &this->pOverlapped->overlapped);
+					return;
+				}
+
+				assert(finalSendState == SendState_SendBeforeSleep);
+				if (finalSendState != SendState_SendBeforeSleep)
+				{
+					LOG(ERROR) << "ERROR";
+					return;
+				}
+				changed = this->pOverlapped->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sending);//激活
+				assert(changed);
+				if (changed)
+				{
+					LOG(INFO) << "SendState_SendBeforeSleep,转,SendState_Sending";
+				}
+
+				LOG(ERROR) << "changed=" << changed << ",finalSendState=" << finalSendState;
+			}
+			break;
+			default:
+				LOG(ERROR) << "yiledValue=" << yiledValue;
+				assert(false);
 				break;
 			}
 
@@ -129,7 +153,7 @@ namespace Iocp
 			SendStop
 		};
 		CoTask<YieldReturn> coTask;
-		CoTask<YieldReturn>* pCoTask = nullptr;
+		Overlapped* pOverlapped = nullptr;
 		FunCancel funCancel;
 		CoAwaiterBool coAwait;
 		bool needDeleteMe = false;
