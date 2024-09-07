@@ -50,7 +50,15 @@ namespace Iocp
 		{
 			std::lock_guard lock(this->coTask.m_mutex);//能进这个锁，说明协程肯定是挂起状态
 
-			const auto yiledValue = this->coTask.GetValue();
+			this->numberOfBytesTransferred = number_of_bytes;
+			this->GetQueuedCompletionStatusReturn = bGetQueuedCompletionStatusReturn;
+			this->GetLastErrorReturn = lastErr;
+			if (this->coTask.Run())
+			{
+				LOG(INFO) << "协程结束";
+				return;
+			}
+			auto yiledValue = this->coTask.GetValue();
 			switch (yiledValue)
 			{
 			case Sending:
@@ -71,21 +79,18 @@ namespace Iocp
 				assert(changed);
 				if (!changed)
 				{
-					LOG(INFO) << "error,changed=" << changed << ",finalSendState=" << finalSendState;
+					LOG(ERROR) << "error,changed=" << changed << ",finalSendState=" << finalSendState;
+					return;
 				}
 
 				LOG(INFO) << "Send协程睡前再操作一次，changed=" << changed << ",finalSendState=" << finalSendState;
-
-				this->numberOfBytesTransferred = number_of_bytes;
-				this->GetQueuedCompletionStatusReturn = bGetQueuedCompletionStatusReturn;
-				this->GetLastErrorReturn = lastErr;
-				this->coTask.Run();
+				PostQueuedCompletionStatus(port, 0, (ULONG_PTR)pKey, &this->overlapped);
 			}
 			break;
 			default:
 				LOG(ERROR) << "yiledValue=" << yiledValue;
 				assert(false);
-				break;
+				return;// break;
 			}
 		}
 
@@ -96,9 +101,9 @@ namespace Iocp
 			const auto yiledValue = this->pOverlapped->coTask.GetValue();
 			switch (yiledValue)
 			{
-				//case Sending:
-				//	LOG(INFO) << "正在发送";
-				//	break;
+			case Sending:
+				LOG(INFO) << "正在发送，不用启动";
+				break;
 			case SendStop:
 			{
 				auto finalSendState = SendState_Sleep;
@@ -109,7 +114,11 @@ namespace Iocp
 					PostQueuedCompletionStatus(port, 0, (ULONG_PTR)pKey, &this->pOverlapped->overlapped);
 					return;
 				}
-
+				if (finalSendState == SendState_Sending)
+				{
+					LOG(INFO) << "Send协程正在等待发送结果";
+					return;
+				}
 				assert(finalSendState == SendState_SendBeforeSleep);
 				if (finalSendState != SendState_SendBeforeSleep)
 				{
@@ -121,6 +130,7 @@ namespace Iocp
 				if (changed)
 				{
 					LOG(INFO) << "SendState_SendBeforeSleep,转,SendState_Sending";
+					return;
 				}
 
 				LOG(ERROR) << "changed=" << changed << ",finalSendState=" << finalSendState;

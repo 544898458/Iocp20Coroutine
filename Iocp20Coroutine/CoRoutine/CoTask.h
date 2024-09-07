@@ -107,7 +107,7 @@ public:
 	/// <summary>
 	/// 继续执行协程函数代码执直到遇到yield挂起
 	/// </summary>
-	void Run()
+	bool Run()
 	{
 		//std::lock_guard lock(m_mutex);
 		if (FinishedNoLock())
@@ -118,7 +118,7 @@ public:
 		if (m_hCoroutine == nullptr)
 			return;
 		m_hCoroutine.resume();
-		TryClear();
+		return TryClear();
 	}
 	/// <summary>
 	/// Send专用
@@ -135,14 +135,16 @@ public:
 	//	m_hCoroutine.resume();
 	//	TryClear();
 	//}
-	void TryClear()
+	bool TryClear()
 	{
-		if (m_hCoroutine.done())
-		{
-			LOG(INFO) << m_desc << "协程已退出" << m_hCoroutine.address();
-			m_hCoroutine.destroy();
-			m_hCoroutine = nullptr;
-		}
+		if (!m_hCoroutine.done())
+			return;
+
+		LOG(INFO) << m_desc << "协程已退出" << m_hCoroutine.address();
+		m_hCoroutine.destroy();
+		m_hCoroutine = nullptr;
+
+		return true;
 	}
 	bool Finished()
 	{
