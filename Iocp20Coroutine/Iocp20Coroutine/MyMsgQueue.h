@@ -37,121 +37,136 @@ enum MsgId
 };
 MSGPACK_ADD_ENUM(MsgId);
 
+struct Msg
+{
+	void SetSn(uint32_t snParam) const
+	{
+		const_cast<Msg*>(this)->sn = snParam;
+	}
+	static MsgId GetMsgId(msgpack::object obj)
+	{
+		return (MsgId)obj.via.array.ptr[0].via.array.ptr[0].via.i64;//没判断越界，要加try
+	}
+	MsgId id;
+	uint32_t sn;
+	MSGPACK_DEFINE(id, sn);
+};
+
 struct MsgLogin
 {
-	MsgId id;
+	Msg msg;
 	std::string name;
 	std::string pwd;
-	MSGPACK_DEFINE(id, name, pwd);
+	MSGPACK_DEFINE(msg, name, pwd);
 };
 
 struct MsgAddRole
 {
-	MsgId id;
-	MSGPACK_DEFINE(id);
+	Msg msg;
+	MSGPACK_DEFINE(msg);
 };
 
 struct MsgAddBuilding
 {
-	MsgId id;
-	MSGPACK_DEFINE(id);
+	Msg msg;
+	MSGPACK_DEFINE(msg);
 };
 
 struct MsgChangeMoney
 {
-	MsgId id = ConsumeMoney;
+	Msg msg{ .id = ConsumeMoney };
 	int rpcSnId;
 	bool addMoney;
 	int32_t changeMoney;
 	std::string nickName;
-	MSGPACK_DEFINE(id, rpcSnId, addMoney, changeMoney, nickName);
+	MSGPACK_DEFINE(msg, rpcSnId, addMoney, changeMoney, nickName);
 };
 
 struct MsgChangeMoneyResponce
 {
-	MsgId id = ChangeMoneyResponce;
+	Msg msg{ .id = ChangeMoneyResponce };
 	int rpcSnId;
 	int error = 0;
 	uint32_t consumeMoney;
 	int32_t finalMoney;
-	MSGPACK_DEFINE(id, rpcSnId, error, consumeMoney, finalMoney);
+	MSGPACK_DEFINE(msg, rpcSnId, error, consumeMoney, finalMoney);
 };
 
 struct MsgNotifyMoney
 {
-	MsgId id = NotifyeMoney;
+	Msg msg{ .id = NotifyeMoney };
 	int32_t finalMoney;
-	MSGPACK_DEFINE(id, finalMoney);
+	MSGPACK_DEFINE(msg, finalMoney);
 };
 
 struct MsgMove
 {
-	MsgId id;
+	Msg msg;
 	float x;
 	float z;
-	MSGPACK_DEFINE(id, x, z);
+	MSGPACK_DEFINE(msg, x, z);
 };
 
 struct MsgSay
 {
 	MsgSay(const std::string& strContent) :content(strContent) {}
 	MsgSay() {}
-	MsgId id = MsgId::Say;
+	Msg msg{ .id = MsgId::Say };
 	std::string content;
-	MSGPACK_DEFINE(id, content);
+	MSGPACK_DEFINE(msg, content);
 };
 
 struct MsgSelectRoles
 {
 	MsgSelectRoles() {}
-	MsgId id = MsgId::Say;
+	Msg msg{ .id = MsgId::Say };
 	std::vector<double> ids;//TypeScript只有FLOAT64,没有POSITIVE_INTEGER和NEGATIVE_INTEGER
-	MSGPACK_DEFINE(id, ids);
+	MSGPACK_DEFINE(msg, ids);
 };
 
 struct MsgAddRoleRet
 {
 	MsgAddRoleRet(uint64_t entityId, std::string nickName, std::string prefabName)
 		:entityId(entityId), nickName(nickName), prefabName(prefabName) {}
-	MsgId id = AddRoleRet;
+	Msg msg{ .id = AddRoleRet };
 	uint64_t entityId;
 	std::string nickName;
 	std::string prefabName;
-	MSGPACK_DEFINE(id, entityId, nickName, prefabName);
+	MSGPACK_DEFINE(msg, entityId, nickName, prefabName);
 };
 
 struct MsgDelRoleRet
 {
 	MsgDelRoleRet(uint64_t entityId) :entityId(entityId) {}
-	MsgId id = DelRoleRet;
+	Msg msg{ .id = DelRoleRet };
 	uint64_t entityId;
-	MSGPACK_DEFINE(id, entityId);
+	MSGPACK_DEFINE(msg, entityId);
 };
 
 struct MsgNotifyPos
 {
 	MsgNotifyPos(Entity& ref);
-	MsgId msgId = NotifyPos;
+	Msg msg{ .id = NotifyPos };
 	uint64_t entityId;
 	float x;
 	float z;
 	int eulerAnglesY;
 	int hp;
-	MSGPACK_DEFINE(msgId, entityId, x, z, eulerAnglesY, hp);
+	MSGPACK_DEFINE(msg, entityId, x, z, eulerAnglesY, hp);
 };
 struct MsgChangeSkeleAnim
 {
 	MsgChangeSkeleAnim(Entity& ref, std::string name, bool loop = true) :entityId((uint64_t)&ref), loop(loop), clipName(name) {}
-	MsgId msgId = ChangeSkeleAnim;
+	Msg msg{ .id = ChangeSkeleAnim };
 	uint64_t entityId;
 	bool loop;
 	std::string clipName;
-	MSGPACK_DEFINE(msgId, entityId, loop, clipName);
+	MSGPACK_DEFINE(msg, entityId, loop, clipName);
 };
 
 struct MsgGate转发
 {
-	MsgGate转发() 
+	MsgGate转发()
 	{
 
 	}
@@ -160,23 +175,23 @@ struct MsgGate转发
 		uint8_t* pBegin = (uint8_t*)buf;
 		std::copy(pBegin, pBegin + len, vecByte.begin());
 	}
-	MsgId id = Gate转发;
+	Msg msg{ .id = Gate转发 };
 	uint64_t gateClientSessionId;
 	std::vector<uint8_t> vecByte;
-	MSGPACK_DEFINE(id, gateClientSessionId, vecByte);
+	MSGPACK_DEFINE(msg, gateClientSessionId, vecByte);
 };
 
 struct MsgGateAddSession
 {
-	MsgId id = GateAddSession;
+	Msg msg{ .id = GateAddSession };
 	uint64_t gateClientSessionId;
 	//IP地址
-	MSGPACK_DEFINE(id, gateClientSessionId);
+	MSGPACK_DEFINE(msg, gateClientSessionId);
 };
 
 struct MsgGateDeleteSession
 {
-	MsgId id = GateDeleteSession;
+	Msg msg{ .id = GateDeleteSession };
 	uint64_t gateClientSessionId;
-	MSGPACK_DEFINE(id, gateClientSessionId);
+	MSGPACK_DEFINE(msg, gateClientSessionId);
 };

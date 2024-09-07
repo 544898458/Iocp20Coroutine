@@ -9,7 +9,7 @@ class Space;
 class PlayerGateSession
 {
 public:
-	PlayerGateSession(GameSvrSession& ref,const uint64_t idPlayerGateSession) :m_refSession(ref),m_idPlayerGateSession(idPlayerGateSession)
+	PlayerGateSession(GameSvrSession& ref, const uint64_t idPlayerGateSession) :m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession)
 	{
 
 	}
@@ -62,6 +62,6 @@ private:
 
 	std::vector<uint64_t> m_vecSelectedEntity;
 	std::string m_nickName;
-
+	uint32_t m_snSend = 0;
 };
 

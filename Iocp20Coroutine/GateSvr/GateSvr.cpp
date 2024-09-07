@@ -35,7 +35,7 @@ void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
-	const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
+	const auto msgId = Msg::GetMsgId(obj);
 	//LOG(INFO) << obj;
 	if (msgId == MsgId::AddRoleRet)
 	{

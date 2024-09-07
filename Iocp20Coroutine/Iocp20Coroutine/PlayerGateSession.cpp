@@ -14,13 +14,16 @@
 template<class T>
 void PlayerGateSession::Send(const T& ref)
 {
+	++m_snSend;
+	ref.msg.SetSn(m_snSend);
+
 	std::stringstream buffer;
 	msgpack::pack(buffer, ref);
 	buffer.seekg(0);
 
 	std::string str(buffer.str());
 	CHECK_GE_VOID(UINT16_MAX, str.size());
-	MsgGate转发 msg(str.data(), (int)str.size(),m_idPlayerGateSession );
+	MsgGate转发 msg(str.data(), (int)str.size(), m_idPlayerGateSession);
 	MsgPack::SendMsgpack(msg, [this](const void* buf, int len)
 		{
 			this->m_refSession.SendToGate(buf, len);
@@ -296,7 +299,7 @@ void PlayerGateSession::Process()
 			LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
 		}
 	}
-	
+
 	while (true)
 	{
 		const MsgId msgId = this->m_MsgQueue.PopMsg();

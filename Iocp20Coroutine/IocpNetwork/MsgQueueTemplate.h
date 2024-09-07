@@ -13,7 +13,7 @@ void MsgQueue::Push(const T_Msg& msg, std::deque<T_Msg>& queue)
 {
 	std::lock_guard lock(this->m_mutex);
 	queue.push_back(msg);
-	this->m_queueMsgId.push_back(msg.id);
+	this->m_queueMsgId.push_back(msg.msg.id);
 }
 
 /// <summary>

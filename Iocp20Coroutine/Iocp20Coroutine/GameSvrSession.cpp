@@ -46,7 +46,7 @@ void GameSvrSession::OnRecvPack(const void* buf, const int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
-	const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
+	const auto msgId = Msg::GetMsgId(obj);
 	LOG(INFO) << obj;
 	//auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompletionKey<WebSocketSession<MySession>>*>(this->nt_work_data_);
 	//auto pSessionSocketCompeletionKey = this->m_pWsSession;
@@ -122,7 +122,7 @@ void GameSvrSession::OnRecv(const MsgGate转发& msg)
 
 	msgpack::object_handle oh = msgpack::unpack((const char*)&msg.vecByte[0], msg.vecByte.size());//没判断越界，要加try
 	msgpack::object obj = oh.get();
-	const auto msgId = (MsgId)obj.via.array.ptr[0].via.i64;//没判断越界，要加try
+	const auto msgId = Msg::GetMsgId(obj);
 	LOG(INFO) << obj;
 
 	auto iter = m_mapPlayerGateSession.find(msg.gateClientSessionId);

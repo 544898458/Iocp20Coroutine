@@ -28,7 +28,7 @@ public:
 	/// <param name="server"></param>
 	void OnInit(WebSocketGameSession& refWsSession, GameSvr& server);
 	void OnDestroy();
-	template<class T> void Send(const T& ref)
+	template<class T> void Send(T&& ref)
 	{
 		for (auto& pair : m_mapPlayerGateSession)
 		{
