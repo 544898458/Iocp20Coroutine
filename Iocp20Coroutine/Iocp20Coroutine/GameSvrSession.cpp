@@ -68,7 +68,7 @@ void GameSvrSession::OnInit(WebSocketGameSession& refWsSession, GameSvr& server)
 		{
 			m_pServer = &server;
 			m_pWsSession = &refWsSession;
-		});
+		}, (uint64_t)this);
 }
 
 void GameSvrSession::OnDestroy()

@@ -3,13 +3,14 @@
 
 template<class T_Session>
 template<typename T_Function>
-void Sessions<T_Session>::AddSession(Session* pSession, T_Function const& functionLock)
+void Sessions<T_Session>::AddSession(Session* pSession, T_Function const& functionLock, const uint64_t idSession)
 {
 	CHECK_NOTNULL_VOID(pSession);
 	std::lock_guard lock(m_setSessionMutex);
-	m_setSession.insert(pSession);
+	auto pair = m_mapSession.insert({ idSession, pSession });
+	
 	functionLock();
-	LOG(INFO) << "Ìí¼ÓSession£¬Ê£Óà" << m_setSession.size();
+	LOG(INFO) << "Ìí¼ÓSession£¬Ê£Óà" << m_mapSession.size();
 }
 //template<class T_Session>
 //template<typename T_Function>

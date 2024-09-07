@@ -122,7 +122,7 @@ void WorldSession::OnInit(CompeletionKeySession& refSession, WorldServer& refSer
 
 			//m_entity.Init(5, m_pServer->m_space, TraceEnemy, this);
 			//m_pServer->m_space.setEntity.insert(&m_entity);
-		});
+		},(uint64_t)this);
 }
 
 void WorldSession::OnDestroy()

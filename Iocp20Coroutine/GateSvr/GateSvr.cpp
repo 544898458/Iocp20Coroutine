@@ -13,6 +13,8 @@
 #include "GameClientSession.h"
 #include "../Iocp20Coroutine/MyMsgQueue.h"
 #include <memory>
+#include "../LogStrategy/StrategyLog.h"
+
 std::unique_ptr<Iocp::SessionSocketCompletionKey<GameClientSession>> g_ConnectToGameSvr;
 bool g_running(true);
 void SendToGameSvr(const void* buf, const int len, uint64_t gateSessionId)
@@ -42,9 +44,10 @@ void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 		LOG(INFO) << "AddRoleRet:" << n;
 	}
 
-	//g_upGateSvr->m_Server.m_Sessions.
-	auto pSession = (GateSession*)gateSessionId;
-	pSession->m_refSession.Send(buf, len);
+	auto pSession = g_upGateSvr->m_Server.m_Sessions.GetSession( gateSessionId);
+	//auto pSession = (GateSession*)gateSessionId;
+	CHECK_NOTNULL_VOID(pSession);
+	pSession->Session.m_Session.m_refSession.Send(buf, len);
 }
 int main()
 {

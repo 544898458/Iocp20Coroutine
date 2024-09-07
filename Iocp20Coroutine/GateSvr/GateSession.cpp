@@ -40,7 +40,7 @@ void GateSession::OnInit(CompeletionKeySession& refSession, GateServer& refServe
 			//m_pSession = &refSession;
 
 			SendToGameSvr<MsgGateAddSession>({ .gateClientSessionId = (uint64_t)this });
-		});
+		},(uint64_t)this);
 
 }
 

@@ -6,11 +6,9 @@ class StrategyLog
 
 #define CHECK_NOTNULL_VOID( PTR ) \
 {\
-	auto* p = PTR;\
-	assert(nullptr != p);\
-	CHECK_NOTNULL(p);\
-	if (nullptr == p) \
+	if (nullptr == (PTR)) \
 	{\
+		LOG(ERROR)<< #PTR << ",is null";\
 		return;\
 	}\
 }
