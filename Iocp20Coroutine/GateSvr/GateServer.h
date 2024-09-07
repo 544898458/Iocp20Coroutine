@@ -7,7 +7,7 @@ class GateServer
 public:
 	using CompeletionKeySession = Iocp::SessionSocketCompletionKey<GateSession::CompeletionKeySession>;
 	void OnAdd(CompeletionKeySession&);
-	Sessions<GateSession::CompeletionKeySession > m_Sessions;
+	Sessions<GateSession::CompeletionKeySession> m_Sessions;
 };
 
 

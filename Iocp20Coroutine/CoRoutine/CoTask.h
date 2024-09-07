@@ -113,10 +113,13 @@ public:
 		if (FinishedNoLock())
 		{
 			LOG(INFO) << m_desc << "协程已结束，不再执行\n";
-			return;
+			return true;
 		}
 		if (m_hCoroutine == nullptr)
-			return;
+		{
+			assert(false);
+			return true;
+		}
 		m_hCoroutine.resume();
 		return TryClear();
 	}
@@ -138,7 +141,7 @@ public:
 	bool TryClear()
 	{
 		if (!m_hCoroutine.done())
-			return;
+			return false;
 
 		LOG(INFO) << m_desc << "协程已退出" << m_hCoroutine.address();
 		m_hCoroutine.destroy();

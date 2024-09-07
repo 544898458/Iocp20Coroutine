@@ -62,7 +62,7 @@ namespace Iocp
 			switch (yiledValue)
 			{
 			case Sending:
-				LOG(INFO) << "正在发送";
+				//LOG(INFO) << "正在发送";
 				break;
 			case SendStop:
 			{
@@ -70,7 +70,7 @@ namespace Iocp
 				auto changed = this->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sleep);
 				if (changed)
 				{
-					LOG(INFO) << "Send协程沉睡前再试一次也结束了,协程进入睡眠状态";
+					//LOG(INFO) << "Send协程沉睡前再试一次也结束了,协程进入睡眠状态";
 					return;
 				}
 
@@ -83,7 +83,7 @@ namespace Iocp
 					return;
 				}
 
-				LOG(INFO) << "Send协程睡前再操作一次，changed=" << changed << ",finalSendState=" << finalSendState;
+				//LOG(INFO) << "Send协程睡前再操作一次，changed=" << changed << ",finalSendState=" << finalSendState;
 				PostQueuedCompletionStatus(port, 0, (ULONG_PTR)pKey, &this->overlapped);
 			}
 			break;
@@ -102,7 +102,7 @@ namespace Iocp
 			switch (yiledValue)
 			{
 			case Sending:
-				LOG(INFO) << "正在发送，不用启动";
+				//LOG(INFO) << "正在发送，不用启动";
 				break;
 			case SendStop:
 			{
@@ -110,13 +110,13 @@ namespace Iocp
 				auto changed = this->pOverlapped->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sending);//激活
 				if (changed)
 				{
-					LOG(INFO) << "激活沉睡的Send协程";
+					//LOG(INFO) << "激活沉睡的Send协程";
 					PostQueuedCompletionStatus(port, 0, (ULONG_PTR)pKey, &this->pOverlapped->overlapped);
 					return;
 				}
 				if (finalSendState == SendState_Sending)
 				{
-					LOG(INFO) << "Send协程正在等待发送结果";
+					//LOG(INFO) << "Send协程正在等待发送结果";
 					return;
 				}
 				assert(finalSendState == SendState_SendBeforeSleep);

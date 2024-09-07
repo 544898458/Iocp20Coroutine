@@ -53,6 +53,8 @@ void GameSvrSession::OnRecvPack(const void* buf, const int len)
 	switch (msgId)
 	{
 	case MsgId::Gate转发:m_MsgQueue.PushMsg<MsgGate转发>(*this, obj); break;
+	case MsgId::GateAddSession:m_MsgQueue.PushMsg<MsgGateAddSession>(*this, obj); break;
+	case MsgId::GateDeleteSession:m_MsgQueue.PushMsg<MsgGateDeleteSession>(*this, obj); break;
 	default:
 		LOG(ERROR) << "没处理msgId:" << msgId;
 		assert(false);
@@ -90,6 +92,8 @@ void GameSvrSession::Process()
 		switch (msgId)
 		{
 		case MsgId::Gate转发:this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &GameSvrSession::OnRecv); break;
+		case MsgId::GateAddSession:this->m_MsgQueue.OnRecv(this->m_queueGateAddSession, *this, &GameSvrSession::OnRecv); break;
+		case MsgId::GateDeleteSession:this->m_MsgQueue.OnRecv(this->m_queueGateDeleteSession, *this, &GameSvrSession::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
 			assert(false);
@@ -103,6 +107,8 @@ void GameSvrSession::Process()
 	}
 }
 template<> std::deque<MsgGate转发>& GameSvrSession::GetQueue() { return m_queueGate转发; }
+template<> std::deque<MsgGateAddSession>& GameSvrSession::GetQueue() { return m_queueGateAddSession; }
+template<> std::deque<MsgGateDeleteSession>& GameSvrSession::GetQueue() { return m_queueGateDeleteSession; }
 
 
 void GameSvrSession::OnRecv(const MsgGate转发& msg)
@@ -122,21 +128,45 @@ void GameSvrSession::OnRecv(const MsgGate转发& msg)
 	auto iter = m_mapPlayerGateSession.find(msg.gateClientSessionId);
 	if (m_mapPlayerGateSession.end() == iter)
 	{
-		auto pair = m_mapPlayerGateSession.insert({ msg.gateClientSessionId, PlayerGateSession(*this,msg.gateClientSessionId) });
-		if (!pair.second)
-		{
-			LOG(ERROR) << "ERR";
-			assert(false);
-			return;
-		}
-		iter = pair.first;
+		LOG(ERROR) << "ERR";
+		assert(false);
+		return;
 	}
-	if (m_mapPlayerGateSession.end() == iter)
+
+	auto& refPlayerGateSession = iter->second;
+	refPlayerGateSession.RecvMsg(msgId, obj);
+}
+
+void GameSvrSession::OnRecv(const MsgGateAddSession& msg)
+{
+	auto iterOld = m_mapPlayerGateSession.find(msg.gateClientSessionId);
+	if (m_mapPlayerGateSession.end() != iterOld)
+	{
+		LOG(ERROR) << "err";
+		assert(false);
+		m_mapPlayerGateSession.erase(iterOld);
+	}
+
+	auto pair = m_mapPlayerGateSession.insert({ msg.gateClientSessionId, PlayerGateSession(*this,msg.gateClientSessionId) });
+	if (!pair.second)
 	{
 		LOG(ERROR) << "ERR";
 		assert(false);
 		return;
 	}
-	auto& refPlayerGateSession = iter->second;
-	refPlayerGateSession.RecvMsg(msgId, obj);
+
+}
+
+void GameSvrSession::OnRecv(const MsgGateDeleteSession& msg)
+{
+	auto iterOld = m_mapPlayerGateSession.find(msg.gateClientSessionId);
+	if (m_mapPlayerGateSession.end() == iterOld)
+	{
+		LOG(ERROR) << "err";
+		assert(false);
+		return;
+	}
+
+	iterOld->second.OnDestroy(m_pServer->m_space);
+	m_mapPlayerGateSession.erase(iterOld);
 }

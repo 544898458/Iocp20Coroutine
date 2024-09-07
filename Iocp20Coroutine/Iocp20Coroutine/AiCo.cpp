@@ -199,29 +199,29 @@ namespace AiCo
 			spEntityMonster->m_f警戒距离 = 20;
 			spEntityMonster->m_f移动速度 = 0.2f;
 			refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster });
-			LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
+			//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 			spEntityMonster->BroadcastEnter();
 		}
 		LOG(INFO) << "停止刷怪协程";
 		co_return 0;
 	}
 
-	CoTask<std::tuple<bool,MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession &refSession, int changeMoney, FunCancel& funCancel)
+	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession& refSession, int changeMoney, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
 
-		auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .addMoney = true,.changeMoney = changeMoney }, SendToWorldSvr, funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
+		auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .addMoney = 0 < changeMoney ,.changeMoney = changeMoney }, SendToWorldSvr, funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
 		const auto& responce = std::get<1>(tuple);
 		if (std::get<0>(tuple))
 		{
 			LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 			co_return tuple;
 		}
-		
+
 		//LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 
-		refSession.Send(MsgNotifyMoney{.finalMoney = responce.finalMoney});
+		refSession.Send(MsgNotifyMoney{ .finalMoney = responce.finalMoney });
 
 		co_return tuple;
 	}

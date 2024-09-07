@@ -15,10 +15,19 @@
 #include <memory>
 std::unique_ptr<Iocp::SessionSocketCompletionKey<GameClientSession>> g_ConnectToGameSvr;
 bool g_running(true);
-void SendToGameSvr(const void* buf, const int len,uint64_t gateSessionId)
+void SendToGameSvr(const void* buf, const int len, uint64_t gateSessionId)
 {
 	g_ConnectToGameSvr->Session.Send(MsgGate转发(buf, len, gateSessionId));
 }
+
+template<class T>
+void SendToGameSvr(const T& refMsg)
+{
+	g_ConnectToGameSvr->Session.Send(refMsg);
+}
+template void SendToGameSvr(const MsgGateDeleteSession&);
+template void SendToGameSvr(const MsgGateAddSession&);
+
 std::unique_ptr<Iocp::Server<GateServer>> g_upGateSvr;
 void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 {
@@ -33,8 +42,9 @@ void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 		LOG(INFO) << "AddRoleRet:" << n;
 	}
 
+	//g_upGateSvr->m_Server.m_Sessions.
 	auto pSession = (GateSession*)gateSessionId;
-	pSession->m_refSession.Send(buf, len); 
+	pSession->m_refSession.Send(buf, len);
 }
 int main()
 {

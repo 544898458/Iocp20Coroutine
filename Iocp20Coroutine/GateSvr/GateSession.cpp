@@ -3,7 +3,9 @@
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 #include "../IocpNetwork/WebSocketSessionTemplate.h"
 #include "../websocketfiles-master/src/ws_endpoint.cpp"
-
+#include "../Iocp20Coroutine/MyMsgQueue.h"
+#include "GateServer.h"
+#include "../IocpNetwork/SessionsTemplate.h"
 
 template class Iocp::SessionSocketCompletionKey<GateSession::CompeletionKeySession>;
 template class MsgQueueMsgPack<GateSession::CompeletionKeySession>;
@@ -21,12 +23,25 @@ void GateSession::OnRecvWsPack(const void* buf, const int len)
 	SendToGameSvr(buf, len, (uint64_t)this);
 }
 
+template<class T>
+void SendToGameSvr(const T& refMsg);
+
 void GateSession::OnDestroy()
 {
+	SendToGameSvr<MsgGateDeleteSession>({ .gateClientSessionId = (uint64_t)this });
 }
 
-void GateSession::OnInit(CompeletionKeySession& refSession, GateServer&)
+void GateSession::OnInit(CompeletionKeySession& refSession, GateServer& refServer)
 {
+	refServer.m_Sessions.AddSession(refSession.m_pSession, [this, &refSession, &refServer]()
+		{
+			LOG(INFO) << "游戏客户端已连上";
+			//m_pServer = &refServer;
+			//m_pSession = &refSession;
+
+			SendToGameSvr<MsgGateAddSession>({ .gateClientSessionId = (uint64_t)this });
+		});
+
 }
 
 void GateSession::Process()

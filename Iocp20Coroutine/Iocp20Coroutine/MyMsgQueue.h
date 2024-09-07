@@ -32,6 +32,8 @@ enum MsgId
 	AddBuilding,
 	NotifyeMoney,
 	Gate转发,
+	GateAddSession,
+	GateDeleteSession,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -162,4 +164,19 @@ struct MsgGate转发
 	uint64_t gateClientSessionId;
 	std::vector<uint8_t> vecByte;
 	MSGPACK_DEFINE(id, gateClientSessionId, vecByte);
+};
+
+struct MsgGateAddSession
+{
+	MsgId id = GateAddSession;
+	uint64_t gateClientSessionId;
+	//IP地址
+	MSGPACK_DEFINE(id, gateClientSessionId);
+};
+
+struct MsgGateDeleteSession
+{
+	MsgId id = GateDeleteSession;
+	uint64_t gateClientSessionId;
+	MSGPACK_DEFINE(id, gateClientSessionId);
 };
