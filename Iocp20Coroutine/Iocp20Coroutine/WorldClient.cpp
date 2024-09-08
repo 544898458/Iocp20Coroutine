@@ -79,15 +79,15 @@ void WorldClientSession::OnRecvPack(const void* buf, int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
-	const auto msgId = Msg::GetMsgId(obj);
+	const auto msg = Msg::GetMsgId(obj);
 	//LOG(INFO) << obj;
 
-	switch (msgId)
+	switch (msg.id)
 	{
 	case MsgId::Say:m_MsgQueue.PushMsg<MsgSay>(*this,obj);break;
 	case MsgId::ChangeMoneyResponce:m_MsgQueue.PushMsg<MsgChangeMoneyResponce>(*this, obj);break;
 	default:
-		LOG(WARNING) << "ERR:" << msgId;
+		LOG(WARNING) << "ERR:" << msg.id;
 		break;
 	}
 }

@@ -57,15 +57,15 @@ void WorldSession::OnRecvPack(const void* buf, int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
-	const auto msgId = Msg::GetMsgId(obj);
+	const auto msg = Msg::GetMsgId(obj);
 	//LOG(INFO) << obj;
 
-	switch (msgId)
+	switch (msg.id)
 	{
 	case MsgId::Say:m_MsgQueue.PushMsg<MsgSay>(*this, obj); break;
 	case MsgId::ConsumeMoney:m_MsgQueue.PushMsg<MsgChangeMoney>(*this, obj); break;
 	default:
-		LOG(WARNING) << "没处理GameSvr发来的消息:" << msgId;
+		LOG(WARNING) << "没处理GameSvr发来的消息:" << msg.id;
 		break;
 	}
 }

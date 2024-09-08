@@ -1,4 +1,4 @@
-﻿//#include "pch.h"
+﻿#include "pch.h"
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "glog.lib")
 #pragma comment(lib, "Mswsock.lib")
@@ -17,34 +17,37 @@
 
 std::unique_ptr<Iocp::SessionSocketCompletionKey<GameClientSession>> g_ConnectToGameSvr;
 bool g_running(true);
-void SendToGameSvr(const void* buf, const int len, uint64_t gateSessionId)
+void SendToGameSvr(const void* buf, const int len, uint64_t gateSessionId)// , uint32_t sn)
 {
-	g_ConnectToGameSvr->Session.Send(MsgGate转发(buf, len, gateSessionId));
+	static uint32_t sn = 0;
+	++sn;
+	g_ConnectToGameSvr->Session.Send(MsgGate转发(buf, len, gateSessionId, sn));
 }
 
 template<class T>
-void SendToGameSvr(const T& refMsg)
+void SendToGameSvr(const T& refMsg)//, uint32_t snSend)
 {
+	//refMsg.msg.SetSn(snSend);
 	g_ConnectToGameSvr->Session.Send(refMsg);
 }
-template void SendToGameSvr(const MsgGateDeleteSession&);
-template void SendToGameSvr(const MsgGateAddSession&);
+template void SendToGameSvr(const MsgGateDeleteSession&);// , uint32_t);
+template void SendToGameSvr(const MsgGateAddSession&);// , uint32_t);
 
 std::unique_ptr<Iocp::Server<GateServer>> g_upGateSvr;
 void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
-	const auto msgId = Msg::GetMsgId(obj);
+	const auto msg = Msg::GetMsgId(obj);
 	//LOG(INFO) << obj;
-	if (msgId == MsgId::AddRoleRet)
+	if (msg.id == MsgId::AddRoleRet)
 	{
 		static int n = 0;
 		++n;
 		LOG(INFO) << "AddRoleRet:" << n;
 	}
 
-	auto pSession = g_upGateSvr->m_Server.m_Sessions.GetSession( gateSessionId);
+	auto pSession = g_upGateSvr->m_Server.m_Sessions.GetSession(gateSessionId);
 	//auto pSession = (GateSession*)gateSessionId;
 	CHECK_NOTNULL_VOID(pSession);
 	pSession->Session.m_Session.m_refSession.Send(buf, len);

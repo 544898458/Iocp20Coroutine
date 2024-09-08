@@ -81,6 +81,7 @@
 
 /* Base64 encoder/decoder. Originally Apache file ap_base64.c
  */
+#include "pch.h"
 
 #include <string.h>
 

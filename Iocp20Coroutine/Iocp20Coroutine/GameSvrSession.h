@@ -48,6 +48,7 @@ public:
 	/// 工作线程中（单线程）调用
 	/// </summary>
 	void Process();
+	uint32_t m_snRecv = 0;
 private:
 	void OnRecvPack(const void* buf, const int len);
 	void OnRecv(const MsgGate转发& msg);

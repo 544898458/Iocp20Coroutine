@@ -6,7 +6,7 @@ class GateSession
 {
 public:
 	using CompeletionKeySession = WebSocketSession<GateSession>;
-	GateSession(CompeletionKeySession&ref) :m_refSession(ref)
+	GateSession(CompeletionKeySession& ref) :m_refSession(ref)
 	{
 
 	}
@@ -25,5 +25,6 @@ public:
 	/// </summary>
 	void Process();
 	CompeletionKeySession& m_refSession;
+	//uint32_t m_snSend = 0;
 };
 

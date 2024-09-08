@@ -42,21 +42,28 @@ int GameSvrSession::OnRecv(WebSocketGameSession&, const void* buf, const int len
 	return Iocp::OnRecv3(buf, len, *this, &GameSvrSession::OnRecvPack);
 }
 
+/// <summary>
+/// 这是网络线程，多线程
+/// </summary>
+/// <param name="buf"></param>
+/// <param name="len"></param>
 void GameSvrSession::OnRecvPack(const void* buf, const int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
-	const auto msgId = Msg::GetMsgId(obj);
 	LOG(INFO) << obj;
+	const auto msg = Msg::GetMsgId(obj);
+	//++m_snRecv;
+	//assert(m_snRecv == msg.sn);
 	//auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompletionKey<WebSocketSession<MySession>>*>(this->nt_work_data_);
 	//auto pSessionSocketCompeletionKey = this->m_pWsSession;
-	switch (msgId)
+	switch (msg.id)
 	{
 	case MsgId::Gate转发:m_MsgQueue.PushMsg<MsgGate转发>(*this, obj); break;
 	case MsgId::GateAddSession:m_MsgQueue.PushMsg<MsgGateAddSession>(*this, obj); break;
 	case MsgId::GateDeleteSession:m_MsgQueue.PushMsg<MsgGateDeleteSession>(*this, obj); break;
 	default:
-		LOG(ERROR) << "没处理msgId:" << msgId;
+		LOG(ERROR) << "没处理msgId:" << msg.id;
 		assert(false);
 		break;
 	}
@@ -111,21 +118,21 @@ template<> std::deque<MsgGateAddSession>& GameSvrSession::GetQueue() { return m_
 template<> std::deque<MsgGateDeleteSession>& GameSvrSession::GetQueue() { return m_queueGateDeleteSession; }
 
 
-void GameSvrSession::OnRecv(const MsgGate转发& msg)
+void GameSvrSession::OnRecv(const MsgGate转发& msg转发)
 {
-	if (msg.vecByte.empty())
+	if (msg转发.vecByte.empty())
 	{
 		LOG(ERROR) << "ERR";
 		assert(false);
 		return;
 	}
 
-	msgpack::object_handle oh = msgpack::unpack((const char*)&msg.vecByte[0], msg.vecByte.size());//没判断越界，要加try
+	msgpack::object_handle oh = msgpack::unpack((const char*)&msg转发.vecByte[0], msg转发.vecByte.size());//没判断越界，要加try
 	msgpack::object obj = oh.get();
-	const auto msgId = Msg::GetMsgId(obj);
+	const auto msg = Msg::GetMsgId(obj);
 	LOG(INFO) << obj;
 
-	auto iter = m_mapPlayerGateSession.find(msg.gateClientSessionId);
+	auto iter = m_mapPlayerGateSession.find(msg转发.gateClientSessionId);
 	if (m_mapPlayerGateSession.end() == iter)
 	{
 		LOG(ERROR) << "ERR";
@@ -134,7 +141,7 @@ void GameSvrSession::OnRecv(const MsgGate转发& msg)
 	}
 
 	auto& refPlayerGateSession = iter->second;
-	refPlayerGateSession.RecvMsg(msgId, obj);
+	refPlayerGateSession.RecvMsg(msg.id, obj);
 }
 
 void GameSvrSession::OnRecv(const MsgGateAddSession& msg)

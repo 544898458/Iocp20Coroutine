@@ -25,6 +25,7 @@ public:
 	template<class T>
 	std::deque<T>& GetQueue();
 	void Process();
+	uint32_t m_snRecv = 0;
 private:
 	void OnRecvPack(const void* buf, int len);
 	void OnRecv(const MsgSay& msg);
@@ -35,5 +36,6 @@ private:
 	std::deque<MsgChangeMoney> m_queueConsumeMoney;
 
 	std::map<std::string, int> m_mapMoney;
+
 };
 

@@ -30,5 +30,7 @@ void MsgQueue::OnRecv(std::deque<T_Msg>& queue, T_Sub& refSub, void (T_Sub::*fun
 	std::lock_guard lock(this->m_mutex);
 	const auto msg = queue.front();
 	queue.pop_front();
+	++refSub.m_snRecv;
+	assert(refSub.m_snRecv == msg.msg.sn);
 	(refSub.*funOnRecv)(msg);
 }

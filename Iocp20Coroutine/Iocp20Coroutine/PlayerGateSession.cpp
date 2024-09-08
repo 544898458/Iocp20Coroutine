@@ -10,7 +10,11 @@
 #include "MyServer.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 
-
+/// <summary>
+/// GameSvr通过GateSvr透传给游戏客户端
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="ref"></param>
 template<class T>
 void PlayerGateSession::Send(const T& ref)
 {
@@ -23,7 +27,7 @@ void PlayerGateSession::Send(const T& ref)
 
 	std::string str(buffer.str());
 	CHECK_GE_VOID(UINT16_MAX, str.size());
-	MsgGate转发 msg(str.data(), (int)str.size(), m_idPlayerGateSession);
+	MsgGate转发 msg(str.data(), (int)str.size(), m_idPlayerGateSession, m_snSend);
 	MsgPack::SendMsgpack(msg, [this](const void* buf, int len)
 		{
 			this->m_refSession.SendToGate(buf, len);
@@ -67,12 +71,12 @@ void PlayerGateSession::Erase(SpEntity& spEntity)
 	m_vecSpEntity.erase(spEntity);
 }
 
-template<> std::deque<MsgLogin>& PlayerGateSession::GetQueue() { return m_queueLogin; }
-template<> std::deque<MsgMove>& PlayerGateSession::GetQueue() { return m_queueMove; }
-template<> std::deque<MsgSay>& PlayerGateSession::GetQueue() { return m_queueSay; }
-template<> std::deque<MsgSelectRoles>& PlayerGateSession::GetQueue() { return m_queueSelectRoles; }
-template<> std::deque<MsgAddRole>& PlayerGateSession::GetQueue() { return m_queueAddRole; }
-template<> std::deque<MsgAddBuilding>& PlayerGateSession::GetQueue() { return m_queueAddBuilding; }
+//template<> std::deque<MsgLogin>& PlayerGateSession::GetQueue() { return m_queueLogin; }
+//template<> std::deque<MsgMove>& PlayerGateSession::GetQueue() { return m_queueMove; }
+//template<> std::deque<MsgSay>& PlayerGateSession::GetQueue() { return m_queueSay; }
+//template<> std::deque<MsgSelectRoles>& PlayerGateSession::GetQueue() { return m_queueSelectRoles; }
+//template<> std::deque<MsgAddRole>& PlayerGateSession::GetQueue() { return m_queueAddRole; }
+//template<> std::deque<MsgAddBuilding>& PlayerGateSession::GetQueue() { return m_queueAddBuilding; }
 
 
 void PlayerGateSession::OnRecv(const MsgAddRole& msg)
@@ -300,25 +304,25 @@ void PlayerGateSession::Process()
 		}
 	}
 
-	while (true)
-	{
-		const MsgId msgId = this->m_MsgQueue.PopMsg();
-		if (MsgId::Invalid_0 == msgId)//没有消息可处理
-			break;
+	//while (true)
+	//{
+	//	const MsgId msgId = this->m_MsgQueue.PopMsg();
+	//	if (MsgId::Invalid_0 == msgId)//没有消息可处理
+	//		break;
 
-		switch (msgId)
-		{
-		case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &PlayerGateSession::OnRecv); break;
-		case MsgId::Move:this->m_MsgQueue.OnRecv(this->m_queueMove, *this, &PlayerGateSession::OnRecv); break;
-		case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &PlayerGateSession::OnRecv); break;
-		case MsgId::SelectRoles:this->m_MsgQueue.OnRecv(this->m_queueSelectRoles, *this, &PlayerGateSession::OnRecv); break;
-		case MsgId::AddRole:this->m_MsgQueue.OnRecv(this->m_queueAddRole, *this, &PlayerGateSession::OnRecv); break;
-		case MsgId::AddBuilding:this->m_MsgQueue.OnRecv(this->m_queueAddBuilding, *this, &PlayerGateSession::OnRecv); break;
-			//case MsgId::Gate转发:this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &OnRecv); break;
-		default:
-			LOG(ERROR) << "msgId:" << msgId;
-			assert(false);
-			break;
-		}
-	}
+	//	switch (msgId)
+	//	{
+	//	case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &PlayerGateSession::OnRecv); break;
+	//	case MsgId::Move:this->m_MsgQueue.OnRecv(this->m_queueMove, *this, &PlayerGateSession::OnRecv); break;
+	//	case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &PlayerGateSession::OnRecv); break;
+	//	case MsgId::SelectRoles:this->m_MsgQueue.OnRecv(this->m_queueSelectRoles, *this, &PlayerGateSession::OnRecv); break;
+	//	case MsgId::AddRole:this->m_MsgQueue.OnRecv(this->m_queueAddRole, *this, &PlayerGateSession::OnRecv); break;
+	//	case MsgId::AddBuilding:this->m_MsgQueue.OnRecv(this->m_queueAddBuilding, *this, &PlayerGateSession::OnRecv); break;
+	//		//case MsgId::Gate转发:this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &OnRecv); break;
+	//	default:
+	//		LOG(ERROR) << "msgId:" << msgId;
+	//		assert(false);
+	//		break;
+	//	}
+	//}
 }

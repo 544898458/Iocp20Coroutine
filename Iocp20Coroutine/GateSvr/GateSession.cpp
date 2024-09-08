@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "GateSession.h"
 #include "../IocpNetwork/SessionSocketCompletionKeyTemplate.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
@@ -17,18 +18,18 @@ template void WebSocketSession<GateSession>::OnInit<GateServer>(Iocp::SessionSoc
 //    return 0;
 //}
 
-void SendToGameSvr(const void* buf, const int len, uint64_t gateSessionId);
+void SendToGameSvr(const void* buf, const int len, uint64_t gateSessionId);// , uint32_t sn);
 void GateSession::OnRecvWsPack(const void* buf, const int len)
 {
-	SendToGameSvr(buf, len, (uint64_t)this);
+	SendToGameSvr(buf, len, (uint64_t)this);// , ++m_snSend);
 }
 
 template<class T>
-void SendToGameSvr(const T& refMsg);
+void SendToGameSvr(const T& refMsg);// , uint32_t snSend);
 
 void GateSession::OnDestroy()
 {
-	SendToGameSvr<MsgGateDeleteSession>({ .gateClientSessionId = (uint64_t)this });
+	SendToGameSvr<MsgGateDeleteSession>({ .gateClientSessionId = (uint64_t)this });// , ++m_snSend);
 }
 
 void GateSession::OnInit(CompeletionKeySession& refSession, GateServer& refServer)
@@ -39,8 +40,8 @@ void GateSession::OnInit(CompeletionKeySession& refSession, GateServer& refServe
 			//m_pServer = &refServer;
 			//m_pSession = &refSession;
 
-			SendToGameSvr<MsgGateAddSession>({ .gateClientSessionId = (uint64_t)this });
-		},(uint64_t)this);
+			SendToGameSvr<MsgGateAddSession>({ .gateClientSessionId = (uint64_t)this });// , ++m_snSend);
+		}, (uint64_t)this);
 
 }
 

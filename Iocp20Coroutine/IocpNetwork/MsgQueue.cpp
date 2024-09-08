@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "MsgQueue.h"
 
 MsgId MsgQueue::PopMsg()

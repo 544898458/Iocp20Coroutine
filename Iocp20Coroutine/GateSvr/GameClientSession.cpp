@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "GameClientSession.h"
 #include "../IocpNetwork/SessionSocketCompletionKeyTemplate.h"
 #include "../Iocp20Coroutine/MyMsgQueue.h"
@@ -22,11 +23,11 @@ void GameClientSession::OnRecvPack(const void* buf, const int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
-	const auto msgId = Msg::GetMsgId(obj);
+	const auto msg = Msg::GetMsgId(obj);
 	//LOG(INFO) << obj;
 	//auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompletionKey<WebSocketSession<MySession>>*>(this->nt_work_data_);
 	//auto pSessionSocketCompeletionKey = this->m_pWsSession;
-	switch (msgId)
+	switch (msg.id)
 	{
 		//case MsgId::Login:m_MsgQueue.PushMsg<MsgLogin>(*this, obj); break;
 		//case MsgId::Move:m_MsgQueue.PushMsg<MsgMove>(*this, obj); break;
@@ -47,7 +48,7 @@ void GameClientSession::OnRecvPack(const void* buf, const int len)
 	}
 	break;
 	default:
-		LOG(ERROR) << "没处理msgId:" << msgId;
+		LOG(ERROR) << "没处理msgId:" << msg.id;
 		assert(false);
 		break;
 	}

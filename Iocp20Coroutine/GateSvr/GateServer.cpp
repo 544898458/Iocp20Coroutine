@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "GateServer.h"
 #include "../IocpNetwork/ServerTemplate.h"
 #include "../IocpNetwork/ListenSocketCompletionKeyTemplate.h"

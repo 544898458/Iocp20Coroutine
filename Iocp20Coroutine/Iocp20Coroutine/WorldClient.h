@@ -44,6 +44,8 @@ public:
 	/// </summary>
 	void Process();
 	template<class T> std::deque<T>& GetQueue();
+	uint32_t m_snRecv = 0;
+
 private:
 	/// <summary>
 	/// 主逻辑线程（控制台界面线程）调用

@@ -43,12 +43,14 @@ struct Msg
 	{
 		const_cast<Msg*>(this)->sn = snParam;
 	}
-	static MsgId GetMsgId(msgpack::object obj)
+	static Msg GetMsgId(msgpack::object obj)
 	{
-		return (MsgId)obj.via.array.ptr[0].via.array.ptr[0].via.i64;//没判断越界，要加try
+		return obj.via.array.ptr[0].as<Msg>();
+		//return obj.as<Msg>();
+		//return (MsgId)obj.via.array.ptr[0].via.array.ptr[0].via.i64;//没判断越界，要加try
 	}
 	MsgId id;
-	uint32_t sn;
+	uint32_t sn;//可以用这个防伪造数据，比如用伪随机序列算法生成序列
 	MSGPACK_DEFINE(id, sn);
 };
 
@@ -170,8 +172,9 @@ struct MsgGate转发
 	{
 
 	}
-	MsgGate转发(const void* buf, int len, uint64_t uGateClientSessionId) :vecByte(len), gateClientSessionId(uGateClientSessionId)
+	MsgGate转发(const void* buf, int len, uint64_t uGateClientSessionId, uint32_t snParam) :vecByte(len), gateClientSessionId(uGateClientSessionId)
 	{
+		msg.sn = snParam;
 		uint8_t* pBegin = (uint8_t*)buf;
 		std::copy(pBegin, pBegin + len, vecByte.begin());
 	}
