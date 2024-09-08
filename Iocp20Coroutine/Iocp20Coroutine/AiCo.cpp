@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+#include "pch.h"
 #include "AiCo.h"
 #include "Entity.h"
 #include "../CoRoutine/CoTimer.h"

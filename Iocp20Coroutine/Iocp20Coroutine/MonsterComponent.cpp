@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.h"
 #include "MonsterComponent.h"
 #include "Entity.h"
 #include "AiCo.h"

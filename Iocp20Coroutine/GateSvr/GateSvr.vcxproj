@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)\glog\include;$(SolutionDir)\msgpack-c-cpp-2.1.2\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\glog\include;$(SolutionDir)\msgpack-c-cpp-2.1.2\include;$($(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\glog\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -109,6 +109,8 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLOG_NO_ABBREVIATED_SEVERITIES;GLOG_USE_GLOG_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,6 +153,9 @@
     <ClCompile Include="GateServer.cpp" />
     <ClCompile Include="GateSession.cpp" />
     <ClCompile Include="GateSvr.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\IocpNetwork\ByteQueue.h" />
@@ -182,6 +187,7 @@
     <ClInclude Include="GameClientSession.h" />
     <ClInclude Include="GateServer.h" />
     <ClInclude Include="GateSession.h" />
+    <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\websocketfiles-master\src\string_helper.inl" />

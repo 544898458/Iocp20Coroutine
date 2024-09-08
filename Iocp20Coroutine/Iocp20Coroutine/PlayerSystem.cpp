@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+#include "pch.h"
 #include "PlayerSystem.h"
 #include "PlayerComponent.h"
 #include "GameSvrSession.h"

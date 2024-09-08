@@ -1,4 +1,4 @@
-﻿#include "StdAfx.h"
+﻿#include "pch.h"
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <vld.h>

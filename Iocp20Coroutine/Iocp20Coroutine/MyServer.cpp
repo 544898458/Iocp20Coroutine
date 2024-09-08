@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+#include "pch.h"
 #include "MyServer.h"
 //#include "../IocpNetwork/Server.h"
 #include "../IocpNetwork/ServerTemplate.h"

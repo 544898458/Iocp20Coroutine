@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+#include "pch.h"
 #include "Space.h"
 #include "Entity.h"
 #include "PlayerComponent.h"

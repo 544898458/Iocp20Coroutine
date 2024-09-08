@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.h"
 #include "AttackComponent.h"
 #include "Entity.h"
 #include "PlayerComponent.h"

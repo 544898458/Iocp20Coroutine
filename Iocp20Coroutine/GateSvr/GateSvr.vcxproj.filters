@@ -78,6 +78,9 @@
     <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp">
       <Filter>web_socket</Filter>
     </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GateSession.h">
@@ -166,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="..\websocketfiles-master\src\ws_packet.h">
       <Filter>web_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

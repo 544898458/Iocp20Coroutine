@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.h"
 #include "BuildingComponent.h"
 #include "Entity.h"
 #include "../CoRoutine/CoRpc.h"

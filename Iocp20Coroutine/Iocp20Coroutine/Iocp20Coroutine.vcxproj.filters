@@ -108,9 +108,6 @@
     <ClCompile Include="PlayerComponent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="StdAfx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="MonsterComponent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -130,6 +127,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="PlayerGateSession.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -242,9 +242,6 @@
     <ClInclude Include="SpEntity.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="StdAfx.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="MonsterComponent.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -270,6 +267,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="PlayerGateSession.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

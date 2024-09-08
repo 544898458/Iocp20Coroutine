@@ -61,7 +61,7 @@ namespace Iocp
 		}
 
 		//OnRecvPack((const void*)buf + sizeofPackLen, len - sizeofPackLen);
-		return std::make_tuple((const char*)buf + sizeofPackLen, usPackLen, usPackLen + sizeofPackLen);
+		return std::make_tuple((const char*)buf + sizeofPackLen, usPackLen, usPackLen + (uint16_t)sizeofPackLen);
 	}
 	template<class T>
 	static int OnRecv3(const void* buf, const int len, T&ref, void (T::*OnRecvPack)(const void*, const int))

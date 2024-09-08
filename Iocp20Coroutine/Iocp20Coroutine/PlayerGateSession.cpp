@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.h"
 #include "PlayerGateSession.h"
 #include "Space.h"
 #include "Entity.h"
