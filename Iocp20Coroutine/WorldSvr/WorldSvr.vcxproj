@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\CoRoutine\CoDbTemplate.h" />
     <ClCompile Include="..\CoRoutine\CoTask.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -182,6 +183,7 @@
     <ClCompile Include="WorldSvr.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\CoRoutine\CoDb.h" />
     <ClInclude Include="..\CoRoutine\CoTask.h" />
     <ClInclude Include="..\CoRoutine\CoTimer.h" />
     <ClInclude Include="..\IocpNetwork\ByteQueue.h" />

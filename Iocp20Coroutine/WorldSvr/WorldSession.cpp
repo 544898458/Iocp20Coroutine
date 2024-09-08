@@ -8,6 +8,8 @@
 #include "../Iocp20Coroutine/MyMsgQueue.h"
 #include "../IocpNetwork/StrConv.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
+#include "../CoRoutine/CoDb.h"
+#include "../CoRoutine/CoDbTemplate.h"
 
 template class Iocp::SessionSocketCompletionKey<WorldSession>;
 template class MsgQueueMsgPack<WorldSession>;
@@ -76,12 +78,27 @@ void WorldSession::OnRecv(const MsgSay& msg)
 	this->m_pServer->m_Sessions.Broadcast(msg);
 
 }
-
+struct DbTest
+{
+	uint32_t id = 0;
+	int a;
+};
+CoDb<DbTest> g_TestSave;
+CoTask<int> Save()
+{
+	static FunCancel fun;
+	co_await g_TestSave.Save({ .id = 3,.a = 6 }, fun);
+	co_return 0;
+}
 void WorldSession::OnRecv(const MsgChangeMoney& msg)
 {
+	auto co = Save();
+	co.Run();
+	g_TestSave.DbThreadProcess();
+	g_TestSave.Process();
 	//LOG(INFO) << "GameSvrÇëÇó¿ÛÇ®" << msg.changeMoney;
 	auto& refMoney = m_mapMoney[msg.nickName];
-	MsgChangeMoneyResponce msgResponce = {.rpcSnId = msg.rpcSnId};
+	MsgChangeMoneyResponce msgResponce = { .rpcSnId = msg.rpcSnId };
 	assert(0 <= refMoney);
 	if (msg.addMoney)
 	{
@@ -94,7 +111,7 @@ void WorldSession::OnRecv(const MsgChangeMoney& msg)
 			refMoney += msg.changeMoney;
 		}
 	}
-	else 
+	else
 	{
 		if (refMoney < msg.changeMoney)
 		{
@@ -122,7 +139,7 @@ void WorldSession::OnInit(CompeletionKeySession& refSession, WorldServer& refSer
 
 			//m_entity.Init(5, m_pServer->m_space, TraceEnemy, this);
 			//m_pServer->m_space.setEntity.insert(&m_entity);
-		},(uint64_t)this);
+		}, (uint64_t)this);
 }
 
 void WorldSession::OnDestroy()

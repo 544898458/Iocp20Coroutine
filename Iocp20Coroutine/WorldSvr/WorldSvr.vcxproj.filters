@@ -128,5 +128,11 @@
     <ClInclude Include="..\IocpNetwork\MsgQueue.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
+    <ClInclude Include="..\CoRoutine\CoDb.h">
+      <Filter>CoRountine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CoRoutine\CoDbTemplate.h">
+      <Filter>CoRountine</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
