@@ -98,6 +98,11 @@ namespace Iocp
 		{
 			std::lock_guard lock(this->pOverlapped->coTask.m_mutex);//能进这个锁，说明协程肯定是挂起状态
 
+			if (this->pOverlapped->coTask.Finished())
+			{
+				LOG(WARNING) << "协程已结束，不能再激活发送协程,atomicSendState=" << this->pOverlapped->atomicSendState.load();
+				return;
+			}
 			const auto yiledValue = this->pOverlapped->coTask.GetValue();
 			switch (yiledValue)
 			{
