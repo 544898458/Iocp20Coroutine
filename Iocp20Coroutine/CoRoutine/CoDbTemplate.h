@@ -5,20 +5,38 @@
 #include <fstream>
 #include <iostream>
 
+
+
 template<class T>
 CoAwaiterBool& CoDb<T>::Save(const T& ref, FunCancel& cancel)
 {
+	std::lock_guard lock(m_mutexDequeSave);
+
 	const auto sn = CoAwaiterBool::GenSn();
-	this->m_dequeSave.push_back({ ref,CoAwaiterBool(sn, cancel) });
-	return std::get<1>(this->m_dequeSave.back());
+	this->m_dequeSave.push_back({ ref, CoAwaiterBool(sn, cancel) });
+	CoAwaiterBool& refRet = std::get<1>(this->m_dequeSave.back());
+	PostQueuedCompletionStatus(m_hIocp, 0, (ULONG_PTR)this, &m_Overlapped.overlapped);
+	return refRet;
 }
 
 template<class T>
 void CoDb<T>::DbThreadProcess()
 {
-	while (!this->m_dequeSave.empty())
+	std::deque<std::tuple<T, CoAwaiterBool>> dequeLocal;
+
 	{
-		auto&& [ref,coAwait] = this->m_dequeSave.front();
+		std::lock_guard lock(m_mutexDequeSave);
+		while (!m_dequeSave.empty())
+		{
+			auto&& [ref, coAwait] = this->m_dequeSave.front();
+			dequeLocal.push_back({ ref, std::forward<CoAwaiterBool&&>(coAwait) });
+			this->m_dequeSave.pop_front();
+		}
+	}
+
+	while (!dequeLocal.empty())
+	{
+		auto&& [ref, coAwait] = dequeLocal.front();
 		std::ostringstream oss;
 		oss << typeid(T).name() << "_" << ref.id << ".bin";
 		const auto& strFileName = oss.str();
@@ -27,10 +45,10 @@ void CoDb<T>::DbThreadProcess()
 		std::ofstream out(strFileName, std::ios::binary);
 
 		// 检查文件是否成功打开
-		if (!out) 
+		if (!out)
 		{
 			LOG(ERROR) << "无法打开文件" << strFileName;
-			this->m_dequeSave.pop_front();
+			dequeLocal.pop_front();
 			continue;
 		}
 
@@ -42,12 +60,33 @@ void CoDb<T>::DbThreadProcess()
 
 		//模拟写硬盘很卡
 		std::this_thread::sleep_for(std::chrono::seconds(1));
-		m_dequeResult.push_back( std::forward<CoAwaiterBool&&>(coAwait));
-		this->m_dequeSave.pop_front();
+		{
+			std::lock_guard lock(m_mutexDequeResult);
+			m_dequeResult.push_back(std::forward<CoAwaiterBool&&>(coAwait));
+		}
+		dequeLocal.pop_front();
 	}
 }
 
 template<class T>
 inline void CoDb<T>::Process()
 {
+	std::deque<CoAwaiterBool> dequeLocal;
+
+	{
+		std::lock_guard lock(m_mutexDequeResult);
+		while (!m_dequeResult.empty())
+		{
+			auto&& coAwait = m_dequeResult.front();
+			dequeLocal.push_back(std::forward<CoAwaiterBool&&>(coAwait));
+			this->m_dequeResult.pop_front();
+		}
+	}
+
+	while (!dequeLocal.empty())
+	{
+		auto&& coAwait = dequeLocal.front();
+		coAwait.Run(true);
+		dequeLocal.pop_front();
+	}
 }

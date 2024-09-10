@@ -78,12 +78,8 @@ void WorldSession::OnRecv(const MsgSay& msg)
 	this->m_pServer->m_Sessions.Broadcast(msg);
 
 }
-struct DbTest
-{
-	uint32_t id = 0;
-	int a;
-};
-CoDb<DbTest> g_TestSave;
+
+extern CoDb<DbTest> g_TestSave;
 CoTask<int> Save()
 {
 	static FunCancel fun;

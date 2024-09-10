@@ -54,12 +54,13 @@ void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 }
 int main()
 {
-	Iocp::ThreadPool::Init();
-	g_upGateSvr.reset(new Iocp::Server<GateServer>(Iocp::ThreadPool::GetIocp()));
+	Iocp::ThreadPool threadPoolNetwork; 
+	threadPoolNetwork.Init();
+	g_upGateSvr.reset(new Iocp::Server<GateServer>(threadPoolNetwork.GetIocp()));
 	g_upGateSvr->WsaStartup();
 	g_upGateSvr->Init<GateSession::CompeletionKeySession>(12348);
 
-	g_ConnectToGameSvr.reset(Iocp::Client::Connect<GameClientSession>(L"127.0.0.1", L"12345", Iocp::ThreadPool::GetIocp()));
+	g_ConnectToGameSvr.reset(Iocp::Client::Connect<GameClientSession>(L"127.0.0.1", L"12345", threadPoolNetwork.GetIocp()));
 
 
 	while (g_running)

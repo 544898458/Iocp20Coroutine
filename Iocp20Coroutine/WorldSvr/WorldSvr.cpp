@@ -13,7 +13,7 @@
 #include "../IocpNetwork/StrConv.h"
 #include "WorldServer.h"
 #include "WorldSession.h"
-
+#include "../CoRoutine/CoDb.h"
 
 BOOL g_running = TRUE;
 BOOL WINAPI fun(DWORD dwCtrlType)
@@ -33,11 +33,16 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 	return TRUE;
 }
 
+CoDb<DbTest> g_TestSave;
 int main()
 {
-	Iocp::ThreadPool::Init();
+	Iocp::ThreadPool threadPoolNetwork;
+	threadPoolNetwork.Init();
+	Iocp::ThreadPool threadPoolDb;
+	threadPoolDb.Init();
+	g_TestSave.Init(threadPoolNetwork.GetIocp());
 	//Iocp::Server<WorldClient> accept(Iocp::ThreadPool::GetIocp());
-	Iocp::Server<WorldServer> accept(Iocp::ThreadPool::GetIocp());
+	Iocp::Server<WorldServer> accept(threadPoolNetwork.GetIocp());
 	accept.WsaStartup();
 	accept.Init<WorldSession>(12346);
 	//accept.Connect<WorldClientSession>( L"127.0.0.1", L"12346");

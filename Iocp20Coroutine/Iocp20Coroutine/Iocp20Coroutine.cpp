@@ -88,8 +88,10 @@ int main(void)
 	LOG(INFO) << "GameSvr已启动";
 
 	SetConsoleCtrlHandler(fun, TRUE);
-	Iocp::ThreadPool::Init();
-	Iocp::Server<GameSvr> accept(Iocp::ThreadPool::GetIocp());
+	Iocp::ThreadPool threadPoolNetwork;
+	threadPoolNetwork.Init();
+
+	Iocp::Server<GameSvr> accept(threadPoolNetwork.GetIocp());
 	//g_worldSvr.reset( new Iocp::Server<WorldServer>(Iocp::ThreadPool::GetIocp()) );
 
 	Iocp::Server<GameSvr>::WsaStartup();
@@ -98,7 +100,7 @@ int main(void)
 
 	//g_worldSvr->Init<WorldSession>(12346);
 	//g_worldSvr.reset(new Iocp::Server<WorldClient>(Iocp::ThreadPool::GetIocp()));
-	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<WorldClientSession>(L"127.0.0.1", L"12346", Iocp::ThreadPool::GetIocp()));
+	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<WorldClientSession>(L"127.0.0.1", L"12346", threadPoolNetwork.GetIocp()));
 	WorldClient::m_funBroadcast = [&accept](const MsgSay& msg) {accept.m_Server.m_Sessions.Broadcast(msg); };
 
 

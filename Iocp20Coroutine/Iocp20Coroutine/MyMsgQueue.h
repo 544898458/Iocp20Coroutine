@@ -198,3 +198,9 @@ struct MsgGateDeleteSession
 	uint64_t gateClientSessionId;
 	MSGPACK_DEFINE(msg, gateClientSessionId);
 };
+
+struct DbTest
+{
+	uint32_t id = 0;
+	int a;
+};

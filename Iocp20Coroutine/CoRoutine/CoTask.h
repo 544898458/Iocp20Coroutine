@@ -279,8 +279,8 @@ struct CoAwaiter
 
 	static long GenSn()
 	{
-		static long sn = 0;
-		return ++sn;
+		static std::atomic<long> sn(0);
+		return sn.fetch_add(1);//关于fetch_add解释，原子替换当前的值为与参数几何相加后的值，表现为原子的post - increment操作：相加后，返回原始值。
 	}
 	long Sn()const { return m_sn; }
 	// await_ready告诉co_await准备好没有，如果返回false，
