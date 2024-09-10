@@ -125,8 +125,8 @@ namespace Iocp {
 	{
 		while (true)
 		{
-			bool needYield;
-			std::tie(needYield, overlapped.callSend) = WSASend(overlapped);
+			bool needYield(false), callSend(false);
+			std::tie(needYield, callSend) = WSASend(overlapped);
 			if (!needYield)
 			{
 				LOG(INFO) << ("可能断网了,不再调用WSASend");
@@ -141,12 +141,12 @@ namespace Iocp {
 			//LOG(INFO) << "开始异步等WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
 				//<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len
 				//<< ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn;
-			co_yield overlapped.callSend ? Overlapped::Sending : Overlapped::SendStop;
+			co_yield callSend ? Overlapped::Sending : Overlapped::SendStop;
 			//LOG(INFO) << "已异步等到WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
 			//	<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len << ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn
 			//	<< ",Socket=" << Socket();
 
-			if (!overlapped.callSend)
+			if (!callSend)
 			{
 				//LOG(INFO) << ("有数据了，准备发WSASend\n");
 				continue;
@@ -166,7 +166,7 @@ namespace Iocp {
 			//}
 
 			this->sendBuf.Complete(overlapped.numberOfBytesTransferred);
-			overlapped.callSend = true;
+			//overlapped.callSend = true;
 		}
 
 		//if (!this->recvOverlapped.coTask.Finished())

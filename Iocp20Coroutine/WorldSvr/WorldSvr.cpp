@@ -13,7 +13,7 @@
 #include "../IocpNetwork/StrConv.h"
 #include "WorldServer.h"
 #include "WorldSession.h"
-#include "../CoRoutine/CoDb.h"
+#include "../CoRoutine/CoDbTemplate.h"
 
 BOOL g_running = TRUE;
 BOOL WINAPI fun(DWORD dwCtrlType)
