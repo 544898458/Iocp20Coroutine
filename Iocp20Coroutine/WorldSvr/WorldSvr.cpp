@@ -34,6 +34,14 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 }
 
 CoDb<DbTest> g_TestSave;
+DbTest dt;
+FunCancel fc;
+
+CoTask<int> TestCoDb() 
+{
+	co_await g_TestSave.Save(dt, fc);
+	co_return 0;
+}
 int main()
 {
 	Iocp::ThreadPool threadPoolNetwork;
@@ -46,11 +54,14 @@ int main()
 	accept.WsaStartup();
 	accept.Init<WorldSession>(12346);
 	//accept.Connect<WorldClientSession>( L"127.0.0.1", L"12346");
+	auto co = TestCoDb();
+	co.Run();
 	while (g_running)
 	{
 		Sleep(100);
-		accept.m_Server.m_Sessions.Update([]() {}); ;
+		accept.m_Server.m_Sessions.Update([]() {});
 		CoTimer::Update();
+		g_TestSave.Process();
 	}
 	accept.Stop();
 	LOG(INFO) << "WorldSvr正常退出,GetCurrentThreadId=" << GetCurrentThreadId();

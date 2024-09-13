@@ -8,7 +8,7 @@
 
 
 template<class T>
-inline void CoDb<T>::Init(const HANDLE hIocp)
+void CoDb<T>::Init(const HANDLE hIocp)
 {
 	m_hIocp = hIocp;
 	m_OverlappedNotify.OnComplete = &Iocp::Overlapped::OnCompleteNotifySend;
@@ -17,7 +17,8 @@ inline void CoDb<T>::Init(const HANDLE hIocp)
 
 	m_OverlappedWork.OnComplete = &Iocp::Overlapped::OnCompleteSend;
 	m_OverlappedWork.coTask.m_desc = "DbWork";
-	m_OverlappedWork.coTask = CoDbDbThreadProcess(sendOverlapped);
+	m_OverlappedWork.coTask = CoDbDbThreadProcess(m_OverlappedWork);
+	m_OverlappedWork.coTask.Run();
 }
 
 template<class T>
@@ -32,71 +33,17 @@ CoAwaiterBool& CoDb<T>::Save(const T& ref, FunCancel& cancel)
 	return refRet;
 }
 
-CoTask<int> CoDbDbThreadProcess(Iocp::Overlapped&)
+template<class T>
+CoTask<Iocp::Overlapped::YieldReturn> CoDb<T>::CoDbDbThreadProcess(Iocp::Overlapped&)
 {
 	{
 		while (true)
 		{
-			bool needYield(false), callSend(false);
-			std::tie(needYield, callSend) = WSASend(overlapped);
-			if (!needYield)
-			{
-				LOG(INFO) << ("可能断网了,不再调用WSASend");
-				//delete pOverlapped;
-				break;
-			}
-			//if (overlapped.callSend)
-			//	LOG(INFO) << "准备异步等待WSASend结果";
-			//else
-			//	LOG(INFO) << "等有数据再发WSASend" ;
-
-			//LOG(INFO) << "开始异步等WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
-				//<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len
-				//<< ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn;
-			co_yield callSend ? Overlapped::Sending : Overlapped::SendStop;
-			//LOG(INFO) << "已异步等到WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
-			//	<< ",callSend=" << overlapped.callSend << ",wsabuf.len=" << overlapped.wsabuf.len << ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn
-			//	<< ",Socket=" << Socket();
-
-			if (!callSend)
-			{
-				//LOG(INFO) << ("有数据了，准备发WSASend\n");
-				continue;
-			}
-
-
-			if (0 == overlapped.numberOfBytesTransferred && overlapped.GetLastErrorReturn != ERROR_IO_PENDING)
-			{
-				LOG(WARNING) << ("numberOfBytesTransferred==0可能断网了,不再调用WSASend,pOverlapped.GetLastErrorReturn=%d,GetThreadId=%d\n", overlapped.GetLastErrorReturn, GetCurrentThreadId());
-				CloseSocket();
-				//delete pOverlapped;
-				break;
-			}
-			//if (pOverlapped.GetLastErrorReturn == ERROR_IO_PENDING) 
-			//{
-			//	printf("ERROR_IO_PENDING还没发完，下次还要接着发\n");
-			//}
-
-			this->sendBuf.Complete(overlapped.numberOfBytesTransferred);
-			//overlapped.callSend = true;
+			DbThreadProcess();
+			co_yield Iocp::Overlapped::SendStop;
 		}
 
-		//if (!this->recvOverlapped.coTask.Finished())
-
-		{
-			std::lock_guard lock(lockFinish);
-			sendFinish = true;
-			if (!recvFinish)
-			{
-				LOG(INFO) << "PostSend协程结束，但是recvOverlapped还没结束,GetCurrentThreadId=" << GetCurrentThreadId();
-				co_return Overlapped::Error;
-			}
-		}
-
-		//this->Session.OnDestroy();
-		//delete this;
-		LOG(INFO) << "PostSend协程结束,GetCurrentThreadId=" << GetCurrentThreadId();
-		co_return Overlapped::OK;
+		co_return Iocp::Overlapped::OK;
 	}
 }
 template<class T>
@@ -139,7 +86,7 @@ void CoDb<T>::DbThreadProcess()
 		out.close();
 
 		//模拟写硬盘很卡
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		std::this_thread::sleep_for(std::chrono::seconds(5));
 		{
 			std::lock_guard lock(m_mutexDequeResult);
 			m_dequeResult.push_back(std::forward<CoAwaiterBool&&>(coAwait));
