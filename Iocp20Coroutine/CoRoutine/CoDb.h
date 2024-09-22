@@ -15,7 +15,7 @@ public:
 	/// <param name="cancel"></param>
 	/// <returns></returns>
 	CoAwaiter<T>& Save(const T& ref, FunCancel& cancel);
-	CoAwaiter<T> Load(FunCancel& cancel);
+	CoAwaiter<T>& Load(const std::string nickName, FunCancel& cancel);
 	/// <summary>
 	/// 独立线程调用，很耗时的操作，真的操作数据库，也可能是读写文件，也可能是调用网上的云数据库的接口
 	/// </summary>
@@ -26,6 +26,7 @@ public:
 	/// </summary>
 	void Process();
 	void SaveInDbThread(const T& ref, CoAwaiter<T>& coAwait);
+	void LoadFromDbThread(const std::string nickName, CoAwaiter<T>& coAwait);
 	typedef std::function<void (CoAwaiter<T>&& coAwait)> DbFun;
 	std::deque<std::tuple<DbFun, CoAwaiter<T>>> m_dequeSave;
 	std::mutex m_mutexDequeSave;

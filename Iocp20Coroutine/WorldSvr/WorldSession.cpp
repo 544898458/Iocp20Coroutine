@@ -82,6 +82,7 @@ void WorldSession::OnRecv(const MsgSay& msg)
 extern CoDb<DbTest> g_TestSave;
 /// <summary>
 /// 注意协程里如果传局部变量的引用参数，要确保异步后局部变量仍存在，否则不要传引用
+/// 此代码在主线程（单线程）执行，所有协程都在主线程执行
 /// </summary>
 /// <param name="msg"></param>
 /// <returns></returns>
@@ -91,7 +92,7 @@ CoTask<int> WorldSession::Save(const MsgChangeMoney msg)
 	//LOG(INFO) << "GameSvr请求扣钱" << msg.changeMoney;
 	if (m_mapMoney.find(msg.nickName) == m_mapMoney.end())
 	{
-		DbTest loadDb = co_await g_TestSave.Load(fun);
+		DbTest loadDb = co_await g_TestSave.Load(msg.nickName, fun);
 		m_mapMoney.insert({ msg.nickName, loadDb });
 	}
 	auto& refDb = m_mapMoney[msg.nickName];
@@ -127,7 +128,11 @@ CoTask<int> WorldSession::Save(const MsgChangeMoney msg)
 }
 void WorldSession::OnRecv(const MsgChangeMoney& msg)
 {
-	assert(m_co.Finished());
+	if (!m_co.Finished())
+	{
+		this->Send<MsgChangeMoneyResponce>({ .rpcSnId = msg.rpcSnId , .error = 1 });
+		return;
+	}
 	m_co = Save(msg);
 	m_co.Run();
 }

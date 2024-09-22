@@ -44,7 +44,7 @@ void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 	{
 		static int n = 0;
 		++n;
-		LOG(INFO) << "AddRoleRet:" << n;
+		//LOG(INFO) << "AddRoleRet:" << n;
 	}
 
 	auto pSession = g_upGateSvr->m_Server.m_Sessions.GetSession(gateSessionId);

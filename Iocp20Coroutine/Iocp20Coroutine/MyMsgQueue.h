@@ -88,6 +88,9 @@ struct MsgChangeMoneyResponce
 {
 	Msg msg{ .id = ChangeMoneyResponce };
 	int rpcSnId;
+	/// <summary>
+	/// 1上一个DB协程还没结束
+	/// </summary>
 	int error = 0;
 	uint32_t consumeMoney;
 	int32_t finalMoney;
