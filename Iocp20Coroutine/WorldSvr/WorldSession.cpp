@@ -88,34 +88,40 @@ extern CoDb<DbTest> g_TestSave;
 CoTask<int> WorldSession::Save(const MsgChangeMoney msg)
 {
 	static FunCancel fun;
-	co_await g_TestSave.Save({ .id = 3,.a = 6 }, fun);
 	//LOG(INFO) << "GameSvrÇëÇó¿ÛÇ®" << msg.changeMoney;
-	auto& refMoney = m_mapMoney[msg.nickName];
+	if (m_mapMoney.find(msg.nickName) == m_mapMoney.end())
+	{
+		DbTest loadDb = co_await g_TestSave.Load(fun);
+		m_mapMoney.insert({ msg.nickName, loadDb });
+	}
+	auto& refDb = m_mapMoney[msg.nickName];
 	MsgChangeMoneyResponce msgResponce = { .rpcSnId = msg.rpcSnId };
-	assert(0 <= refMoney);
+	assert(0 <= refDb.money);
 	if (msg.addMoney)
 	{
-		if (std::numeric_limits< std::decay<decltype(refMoney)>::type>::max() - refMoney < msg.changeMoney)
+		if (std::numeric_limits< std::decay<decltype(refDb.money)>::type>::max() - refDb.money < msg.changeMoney)
 		{
 			msgResponce.error = -1;
 		}
 		else
 		{
-			refMoney += msg.changeMoney;
+			refDb.money += msg.changeMoney;
 		}
 	}
 	else
 	{
-		if (refMoney < msg.changeMoney)
+		if (refDb.money < msg.changeMoney)
 		{
 			msgResponce.error = -2;
 		}
 		else
 		{
-			refMoney -= msg.changeMoney;
+			refDb.money -= msg.changeMoney;
 		}
 	}
-	msgResponce.finalMoney = refMoney;
+	co_await g_TestSave.Save(refDb, fun);
+
+	msgResponce.finalMoney = refDb.money;
 	this->Send(msgResponce);
 	co_return 0;
 }

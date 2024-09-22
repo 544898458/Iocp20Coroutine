@@ -201,6 +201,7 @@ struct MsgGateDeleteSession
 
 struct DbTest
 {
-	uint32_t id = 0;
-	int a;
+	std::string nickName;
+	int32_t money = 0;
+	MSGPACK_DEFINE(nickName, money);
 };

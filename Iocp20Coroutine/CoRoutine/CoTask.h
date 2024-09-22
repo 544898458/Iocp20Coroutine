@@ -350,6 +350,18 @@ struct CoAwaiter
 		m_Kc.Revert();
 		m_hAwaiter.resume();
 	}
+	void SetResult(const T_Result& result)
+	{
+		m_Result = result;
+	}
+	/// <summary>
+	/// 在别的地方已经给m_Result赋值
+	/// </summary>
+	void Run()
+	{
+		m_Kc.Revert();
+		m_hAwaiter.resume();
+	}
 	void Run2(const T_Result& result, std::mutex& mutex)
 	{
 		std::lock_guard lock(mutex);
