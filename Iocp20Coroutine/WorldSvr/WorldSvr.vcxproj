@@ -151,9 +151,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\Client.cpp" />
-    <ClCompile Include="..\IocpNetwork\ListenSocketCompletionKey.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\ListenSocketCompletionKey.cpp" />
     <ClCompile Include="..\IocpNetwork\MsgQueue.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

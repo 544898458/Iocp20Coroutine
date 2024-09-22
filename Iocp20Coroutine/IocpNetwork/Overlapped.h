@@ -134,7 +134,7 @@ namespace Iocp
 				assert(changed);
 				if (changed)
 				{
-					LOG(INFO) << "SendState_SendBeforeSleep,ת,SendState_Sending";
+					//LOG(INFO) << "SendState_SendBeforeSleep,ת,SendState_Sending";
 					return;
 				}
 

@@ -10,7 +10,7 @@ void Sessions<T_Session>::AddSession(Session* pSession, T_Function const& functi
 	auto pair = m_mapSession.insert({ idSession, pSession });
 	
 	functionLock();
-	LOG(INFO) << "添加Session，剩余" << m_mapSession.size();
+	LOG(INFO) << "添加Session，添加后数量:" << m_mapSession.size();
 }
 //template<class T_Session>
 //template<typename T_Function>

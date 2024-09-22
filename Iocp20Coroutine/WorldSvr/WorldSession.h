@@ -16,8 +16,9 @@ public:
 	void OnDestroy();
 	void OnInit(CompeletionKeySession& refSession, WorldServer&);
 	template<class T>
-	void Send(const T& ref) 
+	void Send(const T& ref)
 	{
+		ref.msg.SetSn(++m_snSend);
 		MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_pSession->Send(buf, len); });
 	}
 	CompeletionKeySession* m_pSession = nullptr;
@@ -26,16 +27,18 @@ public:
 	std::deque<T>& GetQueue();
 	void Process();
 	uint32_t m_snRecv = 0;
+	uint32_t m_snSend = 0;
 private:
 	void OnRecvPack(const void* buf, int len);
 	void OnRecv(const MsgSay& msg);
 	void OnRecv(const MsgChangeMoney& msg);
+	CoTask<int> Save(const MsgChangeMoney msg);
 
 	MsgQueueMsgPack<WorldSession> m_MsgQueue;
 	std::deque<MsgSay> m_queueSay;
 	std::deque<MsgChangeMoney> m_queueConsumeMoney;
 
 	std::map<std::string, int> m_mapMoney;
-
+	CoTask<int> m_co;
 };
 

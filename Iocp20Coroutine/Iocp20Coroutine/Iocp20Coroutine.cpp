@@ -61,7 +61,11 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 std::unique_ptr<Iocp::SessionSocketCompletionKey<WorldClientSession>> g_ConnectToWorldSvr;
 
 void SendToWorldSvr(const MsgSay& msg){MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); });}
-void SendToWorldSvr(const MsgChangeMoney& msg) { MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); }); }
+void SendToWorldSvr(const MsgChangeMoney& msg) 
+{
+	msg.msg.SetSn(++g_ConnectToWorldSvr->m_snSend);
+	MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); }); 
+}
 
 ///*
 int main(void)

@@ -80,18 +80,15 @@ void WorldSession::OnRecv(const MsgSay& msg)
 }
 
 extern CoDb<DbTest> g_TestSave;
-CoTask<int> Save()
+/// <summary>
+/// 注意协程里如果传局部变量的引用参数，要确保异步后局部变量仍存在，否则不要传引用
+/// </summary>
+/// <param name="msg"></param>
+/// <returns></returns>
+CoTask<int> WorldSession::Save(const MsgChangeMoney msg)
 {
 	static FunCancel fun;
 	co_await g_TestSave.Save({ .id = 3,.a = 6 }, fun);
-	co_return 0;
-}
-void WorldSession::OnRecv(const MsgChangeMoney& msg)
-{
-	auto co = Save();
-	co.Run();
-	g_TestSave.DbThreadProcess();
-	g_TestSave.Process();
 	//LOG(INFO) << "GameSvr请求扣钱" << msg.changeMoney;
 	auto& refMoney = m_mapMoney[msg.nickName];
 	MsgChangeMoneyResponce msgResponce = { .rpcSnId = msg.rpcSnId };
@@ -120,6 +117,13 @@ void WorldSession::OnRecv(const MsgChangeMoney& msg)
 	}
 	msgResponce.finalMoney = refMoney;
 	this->Send(msgResponce);
+	co_return 0;
+}
+void WorldSession::OnRecv(const MsgChangeMoney& msg)
+{
+	assert(m_co.Finished());
+	m_co = Save(msg);
+	m_co.Run();
 }
 
 template<> std::deque<MsgSay>& WorldSession::GetQueue() { return m_queueSay; }

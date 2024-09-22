@@ -2,6 +2,9 @@
 #include "../IocpNetwork/SessionSocketCompletionKey.h"
 #include "../IocpNetwork/MsgPack.h"
 
+/// <summary>
+/// 自己是服务器，浏览器H5游戏客户端通过该WebSocket协议连上来的一个连接
+/// </summary>
 class GameClientSession
 {
 public:
