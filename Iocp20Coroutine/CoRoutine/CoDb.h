@@ -25,16 +25,19 @@ public:
 	/// 主线程（单线程）调用，得到数据库执行结果（执行协程下一句）
 	/// </summary>
 	void Process();
-	void SaveInDbThread(const T& ref, CoAwaiter<T>& coAwait);
-	void LoadFromDbThread(const std::string nickName, CoAwaiter<T>& coAwait);
-	typedef std::function<void (CoAwaiter<T>&& coAwait)> DbFun;
-	std::deque<std::tuple<DbFun, CoAwaiter<T>>> m_dequeSave;
+	using SpCoAwaiterT = std::shared_ptr<CoAwaiter<T>>;
+	void SaveInDbThread(const T& ref, SpCoAwaiterT& spCoAwaiter);
+	void LoadFromDbThread(const std::string nickName, SpCoAwaiterT& spCoAwait);
+	typedef std::function<void (SpCoAwaiterT& sp)> DbFun;
+	std::deque<std::tuple<DbFun, SpCoAwaiterT>> m_dequeSave;
 	std::mutex m_mutexDequeSave;
-
-	std::deque<CoAwaiter<T>> m_dequeResult;
+	
+	std::deque<SpCoAwaiterT> m_dequeResult;
 	std::mutex m_mutexDequeResult;
 	HANDLE m_hIocp = nullptr;
 	Iocp::Overlapped m_OverlappedWork;
 	Iocp::Overlapped m_OverlappedNotify;
+private:
+	CoAwaiter<T>& DoDb(DbFun funDb, FunCancel& cancel);
 };
 
