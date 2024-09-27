@@ -60,7 +60,7 @@ void CoDb<T>::LoadFromDbThread(const std::string nickName, SpCoAwaiterT& spCoAwa
 	}
 
 	//Ä£ÄâÐ´Ó²ÅÌºÜ¿¨
-	std::this_thread::sleep_for(std::chrono::seconds(5));
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 	{
 		spCoAwait->SetResult(objT);
 		std::lock_guard lock(m_mutexDequeResult);
@@ -111,9 +111,10 @@ void CoDb<T>::SaveInDbThread(const T& ref, SpCoAwaiterT& spCoAwait)
 };
 
 template<class T>
-CoAwaiter<T>& CoDb<T>::Save(const T& ref, FunCancel& cancel)
+CoAwaiterBool& CoDb<T>::Save(const T& ref, FunCancel& cancel)
 {
-	return DoDb([this, &ref](SpCoAwaiterT& sp) {this->SaveInDbThread(ref, sp); }, cancel);
+	co_await DoDb([this, &ref](SpCoAwaiterT& sp) {this->SaveInDbThread(ref, sp); }, cancel);
+	return true;
 }
 
 template<class T>
