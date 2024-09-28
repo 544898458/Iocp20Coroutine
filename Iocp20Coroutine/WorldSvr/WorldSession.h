@@ -18,23 +18,24 @@ public:
 	template<class T>
 	void Send(const T& ref)
 	{
-		ref.msg.SetSn(++m_snSend);
+		ref.msg.sn = (++m_snSend);
 		MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_pSession->Send(buf, len); });
 	}
 	CompeletionKeySession* m_pSession = nullptr;
 	WorldServer* m_pServer = nullptr;
-	template<class T>
-	std::deque<T>& GetQueue();
+	template<class T> std::deque<T>& GetQueue();
 	void Process();
 	uint32_t m_snRecv = 0;
 	uint32_t m_snSend = 0;
 private:
 	void OnRecvPack(const void* buf, int len);
+	void OnRecv(const MsgLogin& msg);
 	void OnRecv(const MsgSay& msg);
 	void OnRecv(const MsgChangeMoney& msg);
 	CoTask<int> Save(const MsgChangeMoney msg);
 
 	MsgQueueMsgPack<WorldSession> m_MsgQueue;
+	std::deque<MsgLogin> m_queueLogin;
 	std::deque<MsgSay> m_queueSay;
 	std::deque<MsgChangeMoney> m_queueConsumeMoney;
 

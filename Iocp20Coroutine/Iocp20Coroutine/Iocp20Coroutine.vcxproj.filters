@@ -39,9 +39,6 @@
     <ClCompile Include="Iocp20Coroutine.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MyServer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\websocketfiles-master\src\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -132,15 +129,15 @@
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="GameSvr.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Space.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MyServer.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\Iocp20Coroutine.h">
@@ -270,6 +267,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSvr.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

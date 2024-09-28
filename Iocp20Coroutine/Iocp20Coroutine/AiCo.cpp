@@ -4,7 +4,7 @@
 #include "../CoRoutine/CoTimer.h"
 #include "../CoRoutine/CoRpc.h"
 #include "GameSvrSession.h"
-#include "MyServer.h"
+#include "GameSvr.h"
 #include "PlayerSystem.h"
 #include "PlayerComponent.h"
 #include "../IocpNetwork/StrConv.h"
@@ -237,7 +237,7 @@ namespace AiCo
 			const auto& responce = std::get<1>(tuple);
 			if (std::get<0>(tuple))
 			{
-				LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney << ",rpcSn=" << responce.rpcSnId;
+				LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney << ",rpcSn=" << responce.msg.rpcSnId;
 				co_return 0;
 			}
 			//LOG(INFO) << "ChangeMoney返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;

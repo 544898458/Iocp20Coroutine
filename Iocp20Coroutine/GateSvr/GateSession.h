@@ -1,6 +1,8 @@
 #pragma once
 #include "../IocpNetwork/WebSocketSession.h"
 #include <deque>
+#include "../Iocp20Coroutine/MyMsgQueue.h"
+#include "../IocpNetwork/MsgQueueMsgPack.h"
 class GateServer;
 /// <summary>
 /// 自己是服务器，浏览器H5游戏客户端通过该WebSocket协议连上来的一个连接
@@ -20,14 +22,27 @@ public:
 	/// <param name="buf"></param>
 	/// <param name="len"></param>
 	void OnRecvWsPack(const void* buf, const int len);
+	
 	void OnDestroy();
 	void OnInit(CompeletionKeySession& refSession, GateServer&);
-	template<class T> std::deque<T>& GetQueue();
 	/// <summary>
 	/// 工作线程中（单线程）调用
 	/// </summary>
 	void Process();
+	template<class T> std::deque<T>& GetQueue();
 	CompeletionKeySession& m_refSession;
-	//uint32_t m_snSend = 0;
+	/// <summary>
+	/// 这里保存的都是解析后的消息明文,反序列化在网络线程，处理明文消息在逻辑线程
+	/// </summary>
+	std::deque<MsgLogin> m_queueLogin;
+	MsgQueueMsgPack<GateSession> m_MsgQueue;
+	uint32_t m_snRecv = 0;
+	bool m_bLoginOk = false;
+private:
+	void OnRecv(const MsgLogin& msg);
+	CoTask<int> CoLogin(MsgLogin msg, FunCancel& funCancel);
+
+	CoTask<int> m_coLogin;
+	FunCancel m_funCancelLogin;
 };
 

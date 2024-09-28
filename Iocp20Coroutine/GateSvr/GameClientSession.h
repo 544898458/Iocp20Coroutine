@@ -15,7 +15,7 @@ public:
 	void Send(const T& ref)
 	{
 		++m_snSend;
-		ref.msg.SetSn(m_snSend);
+		ref.msg.sn = (m_snSend);
 		MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_refSession.Send(buf, len); });
 	}
 private:

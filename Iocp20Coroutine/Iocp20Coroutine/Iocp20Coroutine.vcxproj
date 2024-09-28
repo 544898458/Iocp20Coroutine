@@ -163,6 +163,7 @@
     <ClCompile Include="AttackComponent.cpp" />
     <ClCompile Include="BuildingComponent.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="GameSvr.cpp" />
     <ClCompile Include="GameSvrSession.cpp" />
     <ClCompile Include="Iocp20Coroutine.cpp" />
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp">
@@ -213,7 +214,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="MyMsgQueue.cpp" />
-    <ClCompile Include="MyServer.cpp" />
     <ClCompile Include="Space.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\base64.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -237,6 +237,7 @@
     <ClInclude Include="AttackComponent.h" />
     <ClInclude Include="BuildingComponent.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="GameSvr.h" />
     <ClInclude Include="GameSvrSession.h" />
     <ClInclude Include="MonsterComponent.h" />
     <ClInclude Include="pch.h" />
@@ -258,7 +259,6 @@
     <ClInclude Include="..\IocpNetwork\WebSocketSession.h" />
     <ClInclude Include="..\LogStrategy\StrategyLog.h" />
     <ClInclude Include="MyMsgQueue.h" />
-    <ClInclude Include="MyServer.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Space.h" />
     <ClInclude Include="..\websocketfiles-master\src\base64.h" />

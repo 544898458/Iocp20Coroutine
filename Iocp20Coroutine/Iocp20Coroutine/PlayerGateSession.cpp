@@ -7,7 +7,7 @@
 #include "../CoRoutine/CoRpc.h"
 #include "AiCo.h"
 #include "AttackComponent.h"
-#include "MyServer.h"
+#include "GameSvr.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 
 /// <summary>
@@ -19,7 +19,7 @@ template<class T>
 void PlayerGateSession::Send(const T& ref)
 {
 	++m_snSend;
-	ref.msg.SetSn(m_snSend);
+	ref.msg.sn = (m_snSend);
 
 	std::stringstream buffer;
 	msgpack::pack(buffer, ref);
@@ -70,14 +70,6 @@ void PlayerGateSession::Erase(SpEntity& spEntity)
 
 	m_vecSpEntity.erase(spEntity);
 }
-
-//template<> std::deque<MsgLogin>& PlayerGateSession::GetQueue() { return m_queueLogin; }
-//template<> std::deque<MsgMove>& PlayerGateSession::GetQueue() { return m_queueMove; }
-//template<> std::deque<MsgSay>& PlayerGateSession::GetQueue() { return m_queueSay; }
-//template<> std::deque<MsgSelectRoles>& PlayerGateSession::GetQueue() { return m_queueSelectRoles; }
-//template<> std::deque<MsgAddRole>& PlayerGateSession::GetQueue() { return m_queueAddRole; }
-//template<> std::deque<MsgAddBuilding>& PlayerGateSession::GetQueue() { return m_queueAddBuilding; }
-
 
 void PlayerGateSession::OnRecv(const MsgAddRole& msg)
 {
@@ -192,8 +184,7 @@ void PlayerGateSession::OnRecv(const MsgLogin& msg)
 	//	}
 	//}
 
-
-	for (const auto& [id, spEntity] : m_refSession.m_pServer->m_space.m_mapEntity)//别人发给自己
+	for (const auto& [id, spEntity] : m_refSession.m_pServer->m_space.m_mapEntity)//所有地图上的实体发给自己
 	{
 		Send(MsgAddRoleRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->NickName()), spEntity->m_strPrefabName));
 		Send(MsgNotifyPos(*spEntity));

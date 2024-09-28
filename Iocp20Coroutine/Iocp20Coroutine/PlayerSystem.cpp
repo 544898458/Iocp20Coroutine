@@ -2,7 +2,7 @@
 #include "PlayerSystem.h"
 #include "PlayerComponent.h"
 #include "GameSvrSession.h"
-#include "MyServer.h"
+#include "GameSvr.h"
 
 namespace PlayerSystem 
 {

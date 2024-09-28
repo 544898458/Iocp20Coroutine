@@ -39,10 +39,10 @@ MSGPACK_ADD_ENUM(MsgId);
 
 struct Msg
 {
-	void SetSn(uint32_t snParam) const
-	{
-		const_cast<Msg*>(this)->sn = snParam;
-	}
+	//void SetSn(uint32_t snParam) const
+	//{
+	//	const_cast<Msg*>(this)->sn = snParam;
+	//}
 	static Msg GetMsgId(msgpack::object obj)
 	{
 		return obj.via.array.ptr[0].as<Msg>();
@@ -50,8 +50,10 @@ struct Msg
 		//return (MsgId)obj.via.array.ptr[0].via.array.ptr[0].via.i64;//没判断越界，要加try
 	}
 	MsgId id;
-	uint32_t sn;//可以用这个防伪造数据，比如用伪随机序列算法生成序列
-	MSGPACK_DEFINE(id, sn);
+	mutable uint32_t sn;//可以用这个防伪造数据，比如用伪随机序列算法生成序列
+	mutable uint32_t rpcSnId;
+
+	MSGPACK_DEFINE(id, sn, rpcSnId);
 };
 
 struct MsgLogin
@@ -60,6 +62,13 @@ struct MsgLogin
 	std::string name;
 	std::string pwd;
 	MSGPACK_DEFINE(msg, name, pwd);
+};
+
+struct MsgLoginResponce
+{
+	Msg msg = { .id = MsgId::Login };
+	int error = 0;
+	MSGPACK_DEFINE(msg, error);
 };
 
 struct MsgAddRole
@@ -77,24 +86,22 @@ struct MsgAddBuilding
 struct MsgChangeMoney
 {
 	Msg msg{ .id = ConsumeMoney };
-	int rpcSnId;
 	bool addMoney;
 	int32_t changeMoney;
 	std::string nickName;
-	MSGPACK_DEFINE(msg, rpcSnId, addMoney, changeMoney, nickName);
+	MSGPACK_DEFINE(msg, addMoney, changeMoney, nickName);
 };
 
 struct MsgChangeMoneyResponce
 {
 	Msg msg{ .id = ChangeMoneyResponce };
-	int rpcSnId;
 	/// <summary>
 	/// 1上一个DB协程还没结束
 	/// </summary>
 	int error = 0;
 	uint32_t consumeMoney;
 	int32_t finalMoney;
-	MSGPACK_DEFINE(msg, rpcSnId, error, consumeMoney, finalMoney);
+	MSGPACK_DEFINE(msg, error, consumeMoney, finalMoney);
 };
 
 struct MsgNotifyMoney

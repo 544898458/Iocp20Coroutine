@@ -111,10 +111,9 @@ void CoDb<T>::SaveInDbThread(const T& ref, SpCoAwaiterT& spCoAwait)
 };
 
 template<class T>
-CoAwaiterBool& CoDb<T>::Save(const T& ref, FunCancel& cancel)
+CoAwaiter<T>& CoDb<T>::Save(const T& ref, FunCancel& cancel)
 {
-	co_await DoDb([this, &ref](SpCoAwaiterT& sp) {this->SaveInDbThread(ref, sp); }, cancel);
-	return true;
+	return DoDb([this, &ref](SpCoAwaiterT& sp) {this->SaveInDbThread(ref, sp); }, cancel);
 }
 
 template<class T>

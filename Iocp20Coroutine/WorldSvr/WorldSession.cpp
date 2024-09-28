@@ -40,8 +40,9 @@ void WorldSession::Process()
 		{
 		case MsgId::Invalid_0://没有消息可处理
 			return;
-		case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldSession::OnRecv); break;
-		case MsgId::ConsumeMoney:this->m_MsgQueue.OnRecv(this->m_queueConsumeMoney, *this, &WorldSession::OnRecv); break;
+		case MsgId::Login:	this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &WorldSession::OnRecv); break;
+		case MsgId::Say:	this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldSession::OnRecv); break;
+		case MsgId::ConsumeMoney:	this->m_MsgQueue.OnRecv(this->m_queueConsumeMoney, *this, &WorldSession::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
 			assert(false);
@@ -64,6 +65,7 @@ void WorldSession::OnRecvPack(const void* buf, int len)
 
 	switch (msg.id)
 	{
+	case MsgId::Login:m_MsgQueue.PushMsg<MsgLogin>(*this, obj); break;
 	case MsgId::Say:m_MsgQueue.PushMsg<MsgSay>(*this, obj); break;
 	case MsgId::ConsumeMoney:m_MsgQueue.PushMsg<MsgChangeMoney>(*this, obj); break;
 	default:
@@ -96,7 +98,7 @@ CoTask<int> WorldSession::Save(const MsgChangeMoney msg)
 		m_mapMoney.insert({ msg.nickName, loadDb });
 	}
 	auto& refDb = m_mapMoney[msg.nickName];
-	MsgChangeMoneyResponce msgResponce = { .rpcSnId = msg.rpcSnId };
+	MsgChangeMoneyResponce msgResponce = { .msg = {.rpcSnId = msg.msg.rpcSnId} };
 	assert(0 <= refDb.money);
 	if (msg.addMoney)
 	{
@@ -130,15 +132,27 @@ void WorldSession::OnRecv(const MsgChangeMoney& msg)
 {
 	if (!m_co.Finished())
 	{
-		this->Send<MsgChangeMoneyResponce>({ .rpcSnId = msg.rpcSnId , .error = 1 });
+		this->Send<MsgChangeMoneyResponce>({ .msg = {.rpcSnId = msg.msg.rpcSnId }, .error = 1 });
 		return;
 	}
 	m_co = Save(msg);
 	m_co.Run();
 }
 
+void WorldSession::OnRecv(const MsgLogin& msg)
+{
+	//if (!m_co.Finished())
+	//{
+	//	this->Send<MsgChangeMoneyResponce>({ .msg = {.rpcSnId = msg.msg.rpcSnId }, .error = 1 });
+	//	return;
+	//}
+	//m_co = Save(msg);
+	//m_co.Run();
+}
+
 template<> std::deque<MsgSay>& WorldSession::GetQueue() { return m_queueSay; }
 template<> std::deque<MsgChangeMoney>& WorldSession::GetQueue() { return m_queueConsumeMoney; }
+template<> std::deque<MsgLogin>& WorldSession::GetQueue() { return m_queueLogin; }
 
 void WorldSession::OnInit(CompeletionKeySession& refSession, WorldServer& refServer)
 {

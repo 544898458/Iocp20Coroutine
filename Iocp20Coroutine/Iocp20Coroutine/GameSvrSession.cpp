@@ -15,7 +15,7 @@
 //#include "MsgQueue.h"
 #include "Space.h"
 #include "../CoRoutine/CoTimer.h"
-#include "MyServer.h"
+#include "GameSvr.h"
 #include "AiCo.h"
 #include "Entity.h"
 #include "../CoRoutine/CoRpc.h"
@@ -37,7 +37,7 @@ template Iocp::SessionSocketCompletionKey<GameSvrSession>;
 /// </summary>
 /// <param name="buf"></param>
 /// <param name="len"></param>
-int GameSvrSession::OnRecv(WebSocketGameSession&, const void* buf, const int len)
+int GameSvrSession::OnRecv(Session&, const void* buf, const int len)
 {
 	return Iocp::OnRecv3(buf, len, *this, &GameSvrSession::OnRecvPack);
 }
@@ -69,7 +69,7 @@ void GameSvrSession::OnRecvPack(const void* buf, const int len)
 	}
 }
 
-void GameSvrSession::OnInit(WebSocketGameSession& refWsSession, GameSvr& server)
+void GameSvrSession::OnInit(Session& refWsSession, GameSvr& server)
 {
 	server.m_Sessions.AddSession(&refWsSession, [this, &refWsSession, &server]()
 		{

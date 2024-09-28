@@ -37,3 +37,4 @@ enc_temp_folder
 *.txt
 *.enc
 *x64*
+*.bin

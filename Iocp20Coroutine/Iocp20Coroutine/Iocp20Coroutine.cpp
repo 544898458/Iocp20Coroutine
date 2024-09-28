@@ -8,7 +8,7 @@
 #include "../CoRoutine/CoTimer.h"
 #include "Space.h"
 #include "Entity.h"
-#include "MyServer.h"
+#include "GameSvr.h"
 #include "GameSvrSession.h"
 #include <glog/logging.h>
 #include "WorldClient.h"
@@ -63,7 +63,7 @@ std::unique_ptr<Iocp::SessionSocketCompletionKey<WorldClientSession>> g_ConnectT
 void SendToWorldSvr(const MsgSay& msg){MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); });}
 void SendToWorldSvr(const MsgChangeMoney& msg) 
 {
-	msg.msg.SetSn(++g_ConnectToWorldSvr->m_snSend);
+	msg.msg.sn = (++g_ConnectToWorldSvr->m_snSend);
 	MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); }); 
 }
 

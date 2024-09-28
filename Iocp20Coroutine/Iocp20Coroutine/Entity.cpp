@@ -3,7 +3,7 @@
 #include "GameSvrSession.h"
 #include "Space.h"
 #include "../CoRoutine/CoTimer.h"
-#include "MyServer.h"
+#include "GameSvr.h"
 #include "AiCo.h"
 #include <cmath>
 #include "PlayerComponent.h"

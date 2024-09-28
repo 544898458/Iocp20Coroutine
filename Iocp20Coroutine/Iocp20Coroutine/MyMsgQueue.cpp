@@ -5,7 +5,7 @@
 #include "GameSvrSession.h"
 #include "Space.h"
 #include "../CoRoutine/CoTimer.h"
-#include "MyServer.h"
+#include "GameSvr.h"
 #include "../IocpNetwork/MsgQueueTemplate.h"
 #include "../IocpNetwork/StrConv.h"
 #include "AiCo.h"

@@ -156,6 +156,7 @@
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="WorldClient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\IocpNetwork\ByteQueue.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="GateServer.h" />
     <ClInclude Include="GateSession.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="WorldClient.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\websocketfiles-master\src\string_helper.inl" />

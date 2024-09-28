@@ -12,21 +12,21 @@ class GameSvrSession
 {
 public:
 	//using WebSocketGameSession = WebSocketSession<GameSvrSession>;
-	using WebSocketGameSession = Iocp::SessionSocketCompletionKey<GameSvrSession>;
-	GameSvrSession(WebSocketGameSession& refWsSession) {}
+	using Session = Iocp::SessionSocketCompletionKey<GameSvrSession>;
+	GameSvrSession(Session& refWsSession) {}
 
 	/// <summary>
 	/// WebSocket收到一个完整二进制包
 	/// </summary>
 	/// <param name="buf"></param>
 	/// <param name="len"></param>
-	int OnRecv(WebSocketGameSession&, const void* buf, const int len);
+	int OnRecv(Session&, const void* buf, const int len);
 	/// <summary>
 	/// 
 	/// </summary>
 	/// <param name="refWsSession"></param>
 	/// <param name="server"></param>
-	void OnInit(WebSocketGameSession& refWsSession, GameSvr& server);
+	void OnInit(Session& refWsSession, GameSvr& server);
 	void OnDestroy();
 	template<class T> void Send(T&& ref)
 	{
@@ -65,5 +65,5 @@ private:
 	std::map<uint64_t, PlayerGateSession> m_mapPlayerGateSession;
 	MsgQueueMsgPack<GameSvrSession> m_MsgQueue;
 private:
-	WebSocketGameSession* m_pWsSession = nullptr;
+	Session* m_pWsSession = nullptr;
 };

@@ -34,14 +34,23 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 }
 
 CoDb<DbTest> g_TestSave;
-DbTest dt;
-FunCancel fc;
+/*
+架构
 
-//CoTask<int> TestCoDb() 
-//{
-//	co_await g_TestSave.Save(dt, fc);
-//	co_return 0;
-//}
+多个 GameSvr 一一→ 一个WorldSvr对应一个DB区
+
+多个 GateSvr ____↗
+
+多个 游戏客户端
+
+
+登录验证逻辑放哪里，
+GameSvr,GateSvr,WorldSvr都可以做，
+但是GameSvr是计算密集，功能越少越好
+所以只能在Gate和World选一个
+因为Gate有多个，同号踢人还要依赖World，所以现在放到WorldSvr
+*/
+
 int main()
 {
 	Iocp::ThreadPool threadPoolNetwork;

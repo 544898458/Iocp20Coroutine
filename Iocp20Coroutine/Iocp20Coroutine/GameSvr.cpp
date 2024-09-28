@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "MyServer.h"
+#include "GameSvr.h"
 //#include "../IocpNetwork/Server.h"
 #include "../IocpNetwork/ServerTemplate.h"
 #include "GameSvrSession.h"

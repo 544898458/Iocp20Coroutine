@@ -14,6 +14,7 @@
 #include "../Iocp20Coroutine/MyMsgQueue.h"
 #include <memory>
 #include "../LogStrategy/StrategyLog.h"
+#include "WorldClient.h"
 
 std::unique_ptr<Iocp::SessionSocketCompletionKey<GameClientSession>> g_ConnectToGameSvr;
 bool g_running(true);
@@ -32,6 +33,16 @@ void SendToGameSvr(const T& refMsg)//, uint32_t snSend)
 }
 template void SendToGameSvr(const MsgGateDeleteSession&);// , uint32_t);
 template void SendToGameSvr(const MsgGateAddSession&);// , uint32_t);
+
+std::unique_ptr<Iocp::SessionSocketCompletionKey<WorldClientSession>> g_ConnectToWorldSvr;
+
+template<class T>
+void SendToWorldSvr(const T& refMsg)
+{
+	g_ConnectToWorldSvr->Session.Send(refMsg);
+}
+template void SendToWorldSvr(const MsgLogin&);
+
 
 std::unique_ptr<Iocp::Server<GateServer>> g_upGateSvr;
 void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
@@ -52,6 +63,7 @@ void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 	CHECK_NOTNULL_VOID(pSession);
 	pSession->Session.m_Session.m_refSession.Send(buf, len);
 }
+
 int main()
 {
 	Iocp::ThreadPool threadPoolNetwork; 
@@ -61,12 +73,12 @@ int main()
 	g_upGateSvr->Init<GateSession::CompeletionKeySession>(12348);
 
 	g_ConnectToGameSvr.reset(Iocp::Client::Connect<GameClientSession>(L"127.0.0.1", L"12345", threadPoolNetwork.GetIocp()));
-
+	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<WorldClientSession>(L"127.0.0.1", L"12346", threadPoolNetwork.GetIocp()));
 
 	while (g_running)
 	{
 		Sleep(100);
-		g_upGateSvr->m_Server.m_Sessions.Update([]() {}); ;
+		g_upGateSvr->m_Server.m_Sessions.Update([]() {});
 		//CoTimer::Update();
 	}
 	g_upGateSvr->Stop();
