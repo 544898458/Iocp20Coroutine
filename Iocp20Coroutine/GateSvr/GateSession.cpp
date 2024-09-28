@@ -24,7 +24,7 @@ void GateSession::OnRecvWsPack(const void* buf, const int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
-	const auto msg = Msg::GetMsgId(obj);
+	const auto msg = MsgHead::GetMsgId(obj);
 	//LOG(INFO) << obj;
 
 	switch (msg.id)
@@ -51,12 +51,12 @@ void GateSession::OnRecv(const MsgLogin& msg)
 }
 
 template<class T>
-void SendToWorldSvr(const T& refMsg);// , uint32_t snSend);
+void SendToWorldSvr(const T& refMsg, const uint64_t gateSessionId);// , uint32_t snSend);
 
 CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel &funCancel)
 {
 	LOG(INFO) << "GameSvr发来登录";
-	co_await CoRpc<MsgLoginResponce>::Send<MsgLogin>(msg, &SendToWorldSvr<MsgLogin>, funCancel);
+	co_await CoRpc<MsgLoginResponce>::Send<MsgLogin>(msg, [this](const MsgLogin& msg) {SendToWorldSvr<MsgLogin>(msg, (uint64_t)this); }, funCancel);
 	co_return 0;
 }
 

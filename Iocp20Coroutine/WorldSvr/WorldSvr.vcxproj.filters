@@ -66,6 +66,9 @@
     <ClCompile Include="..\IocpNetwork\MsgQueue.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerGateSession.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -133,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoDbTemplate.h">
       <Filter>CoRountine</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerGateSession.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -37,15 +37,15 @@ enum MsgId
 };
 MSGPACK_ADD_ENUM(MsgId);
 
-struct Msg
+struct MsgHead
 {
 	//void SetSn(uint32_t snParam) const
 	//{
 	//	const_cast<Msg*>(this)->sn = snParam;
 	//}
-	static Msg GetMsgId(msgpack::object obj)
+	static MsgHead GetMsgId(msgpack::object obj)
 	{
-		return obj.via.array.ptr[0].as<Msg>();
+		return obj.via.array.ptr[0].as<MsgHead>();
 		//return obj.as<Msg>();
 		//return (MsgId)obj.via.array.ptr[0].via.array.ptr[0].via.i64;//没判断越界，要加try
 	}
@@ -58,7 +58,7 @@ struct Msg
 
 struct MsgLogin
 {
-	Msg msg;
+	MsgHead msg;
 	std::string name;
 	std::string pwd;
 	MSGPACK_DEFINE(msg, name, pwd);
@@ -66,26 +66,26 @@ struct MsgLogin
 
 struct MsgLoginResponce
 {
-	Msg msg = { .id = MsgId::Login };
+	MsgHead msg = { .id = MsgId::Login };
 	int error = 0;
 	MSGPACK_DEFINE(msg, error);
 };
 
 struct MsgAddRole
 {
-	Msg msg;
+	MsgHead msg;
 	MSGPACK_DEFINE(msg);
 };
 
 struct MsgAddBuilding
 {
-	Msg msg;
+	MsgHead msg;
 	MSGPACK_DEFINE(msg);
 };
 
 struct MsgChangeMoney
 {
-	Msg msg{ .id = ConsumeMoney };
+	MsgHead msg{ .id = ConsumeMoney };
 	bool addMoney;
 	int32_t changeMoney;
 	std::string nickName;
@@ -94,7 +94,7 @@ struct MsgChangeMoney
 
 struct MsgChangeMoneyResponce
 {
-	Msg msg{ .id = ChangeMoneyResponce };
+	MsgHead msg{ .id = ChangeMoneyResponce };
 	/// <summary>
 	/// 1上一个DB协程还没结束
 	/// </summary>
@@ -106,14 +106,14 @@ struct MsgChangeMoneyResponce
 
 struct MsgNotifyMoney
 {
-	Msg msg{ .id = NotifyeMoney };
+	MsgHead msg{ .id = NotifyeMoney };
 	int32_t finalMoney;
 	MSGPACK_DEFINE(msg, finalMoney);
 };
 
 struct MsgMove
 {
-	Msg msg;
+	MsgHead msg;
 	float x;
 	float z;
 	MSGPACK_DEFINE(msg, x, z);
@@ -123,7 +123,7 @@ struct MsgSay
 {
 	MsgSay(const std::string& strContent) :content(strContent) {}
 	MsgSay() {}
-	Msg msg{ .id = MsgId::Say };
+	MsgHead msg{ .id = MsgId::Say };
 	std::string content;
 	MSGPACK_DEFINE(msg, content);
 };
@@ -131,7 +131,7 @@ struct MsgSay
 struct MsgSelectRoles
 {
 	MsgSelectRoles() {}
-	Msg msg{ .id = MsgId::Say };
+	MsgHead msg{ .id = MsgId::Say };
 	std::vector<double> ids;//TypeScript只有FLOAT64,没有POSITIVE_INTEGER和NEGATIVE_INTEGER
 	MSGPACK_DEFINE(msg, ids);
 };
@@ -140,7 +140,7 @@ struct MsgAddRoleRet
 {
 	MsgAddRoleRet(uint64_t entityId, std::string nickName, std::string prefabName)
 		:entityId(entityId), nickName(nickName), prefabName(prefabName) {}
-	Msg msg{ .id = AddRoleRet };
+	MsgHead msg{ .id = AddRoleRet };
 	uint64_t entityId;
 	std::string nickName;
 	std::string prefabName;
@@ -150,7 +150,7 @@ struct MsgAddRoleRet
 struct MsgDelRoleRet
 {
 	MsgDelRoleRet(uint64_t entityId) :entityId(entityId) {}
-	Msg msg{ .id = DelRoleRet };
+	MsgHead msg{ .id = DelRoleRet };
 	uint64_t entityId;
 	MSGPACK_DEFINE(msg, entityId);
 };
@@ -158,7 +158,7 @@ struct MsgDelRoleRet
 struct MsgNotifyPos
 {
 	MsgNotifyPos(Entity& ref);
-	Msg msg{ .id = NotifyPos };
+	MsgHead msg{ .id = NotifyPos };
 	uint64_t entityId;
 	float x;
 	float z;
@@ -169,7 +169,7 @@ struct MsgNotifyPos
 struct MsgChangeSkeleAnim
 {
 	MsgChangeSkeleAnim(Entity& ref, std::string name, bool loop = true) :entityId((uint64_t)&ref), loop(loop), clipName(name) {}
-	Msg msg{ .id = ChangeSkeleAnim };
+	MsgHead msg{ .id = ChangeSkeleAnim };
 	uint64_t entityId;
 	bool loop;
 	std::string clipName;
@@ -188,7 +188,7 @@ struct MsgGate转发
 		uint8_t* pBegin = (uint8_t*)buf;
 		std::copy(pBegin, pBegin + len, vecByte.begin());
 	}
-	Msg msg{ .id = Gate转发 };
+	MsgHead msg{ .id = Gate转发 };
 	uint64_t gateClientSessionId;
 	std::vector<uint8_t> vecByte;
 	MSGPACK_DEFINE(msg, gateClientSessionId, vecByte);
@@ -196,7 +196,7 @@ struct MsgGate转发
 
 struct MsgGateAddSession
 {
-	Msg msg{ .id = GateAddSession };
+	MsgHead msg{ .id = GateAddSession };
 	uint64_t gateClientSessionId;
 	//IP地址
 	MSGPACK_DEFINE(msg, gateClientSessionId);
@@ -204,7 +204,7 @@ struct MsgGateAddSession
 
 struct MsgGateDeleteSession
 {
-	Msg msg{ .id = GateDeleteSession };
+	MsgHead msg{ .id = GateDeleteSession };
 	uint64_t gateClientSessionId;
 	MSGPACK_DEFINE(msg, gateClientSessionId);
 };

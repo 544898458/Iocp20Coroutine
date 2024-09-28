@@ -25,6 +25,11 @@ void SendToGameSvr(const void* buf, const int len, uint64_t gateSessionId)// , u
 	g_ConnectToGameSvr->Session.Send(MsgGate转发(buf, len, gateSessionId, sn));
 }
 
+/// <summary>
+/// 不需要转发的
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="refMsg"></param>
 template<class T>
 void SendToGameSvr(const T& refMsg)//, uint32_t snSend)
 {
@@ -37,11 +42,20 @@ template void SendToGameSvr(const MsgGateAddSession&);// , uint32_t);
 std::unique_ptr<Iocp::SessionSocketCompletionKey<WorldClientSession>> g_ConnectToWorldSvr;
 
 template<class T>
-void SendToWorldSvr(const T& refMsg)
+void SendToWorldSvr(const T& refMsg, const uint64_t gateSessionId)
 {
-	g_ConnectToWorldSvr->Session.Send(refMsg);
+	std::stringstream buffer;
+	msgpack::pack(buffer, refMsg);
+	buffer.seekg(0);
+
+	std::string str(buffer.str());
+	CHECK_GE_VOID(UINT16_MAX, str.size());
+
+	static uint32_t sn = 0;
+	++sn;
+	g_ConnectToGameSvr->Session.Send(MsgGate转发(str.data(), str.size(), gateSessionId, sn));
 }
-template void SendToWorldSvr(const MsgLogin&);
+template void SendToWorldSvr(const MsgLogin&, const uint64_t gateSessionId);
 
 
 std::unique_ptr<Iocp::Server<GateServer>> g_upGateSvr;
@@ -49,7 +63,7 @@ void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
-	const auto msg = Msg::GetMsgId(obj);
+	const auto msg = MsgHead::GetMsgId(obj);
 	//LOG(INFO) << obj;
 	if (msg.id == MsgId::AddRoleRet)
 	{
