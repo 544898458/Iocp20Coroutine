@@ -118,7 +118,7 @@ public:
 			const auto buf = &sendBuf[0];
 			const auto len = sendBuf.size();
 			LOG(INFO) << "WebSocket 握手成功,发缓存包len=" << len << ",m_queueSendBuf.size=" << m_queueSendBuf.size();
-			this->to_wire(buf, len);
+			this->to_wire(buf, (int)len);
 			m_queueSendBuf.pop_front();
 		}
 	}
