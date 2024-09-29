@@ -37,7 +37,7 @@ private:
 	CoTask<int> CoLogin(const MsgLogin msg, FunCancel& funCancel);
 	MsgQueueMsgPack<WorldSession> m_MsgQueue;
 	std::deque<MsgGate转发> m_queueGate转发;
-	std::deque<MsgLogin> m_queueLogin;
+	//std::deque<MsgLogin> m_queueLogin;
 	std::deque<MsgSay> m_queueSay;
 	std::deque<MsgChangeMoney> m_queueConsumeMoney;
 

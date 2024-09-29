@@ -2,7 +2,7 @@
 #include "WorldClient.h"
 #include "../CoRoutine/CoRpc.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
-
+#include "GateServer.h"
 //template Iocp::Server<WorldClient>;
 //template bool Iocp::Server<WorldClient>::Init<WorldClientSession>(const uint16_t);
 //template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WorldClientSession, WorldClient >(HANDLE hIocp, SOCKET socketListen, WorldClient&);
@@ -23,6 +23,7 @@ void WorldClientSession::Process()
 		switch (msgId)
 		{
 		case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &WorldClientSession::OnRecv); break;
+		case MsgId::Gate转发:this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &WorldClientSession::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
 			assert(false);
@@ -37,7 +38,29 @@ void WorldClientSession::OnRecv(const MsgLogin& msg)
 	
 }
 
+void WorldClientSession::OnRecv(const MsgGate转发& msg转发)
+{
+	if (msg转发.vecByte.empty())
+	{
+		LOG(ERROR) << "ERR";
+		assert(false);
+		return;
+	}
+
+	msgpack::object_handle oh = msgpack::unpack((const char*)&msg转发.vecByte[0], msg转发.vecByte.size());//没判断越界，要加try
+	msgpack::object obj = oh.get();
+	const auto msg = MsgHead::GetMsgId(obj);
+	LOG(INFO) << obj;
+	extern std::unique_ptr<Iocp::Server<GateServer>> g_upGateSvr;
+	auto pSession = g_upGateSvr->m_Server.m_Sessions.GetSession(msg转发.gateClientSessionId);
+	//auto pSession = (GateSession*)gateSessionId;
+	CHECK_NOTNULL_VOID(pSession);
+	
+	pSession->Session.m_Session.OnRecvWorldSvr(obj.as<MsgLoginResponce>());
+}
+
 template<> std::deque<MsgLogin>& WorldClientSession::GetQueue() { return m_queueLogin; }
+template<> std::deque<MsgGate转发>& WorldClientSession::GetQueue() { return m_queueGate转发; }
 
 /// <summary>
 /// 网络线程（多线程）调用
@@ -67,6 +90,7 @@ void WorldClientSession::OnRecvPack(const void* buf, int len)
 	switch (msg.id)
 	{
 	case MsgId::Login:	m_MsgQueue.PushMsg<MsgLogin>(*this,obj);break;
+	case MsgId::Gate转发:	m_MsgQueue.PushMsg<MsgGate转发>(*this, obj); break;
 	default:
 		LOG(WARNING) << "ERR:" << msg.id;
 		break;

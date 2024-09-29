@@ -10,18 +10,18 @@ template<class T_Responce>
 class CoRpc
 {
 public:
-	static void OnRecvResponce(bool stop, const T_Responce& req)
+	static void OnRecvResponce(bool stop, const T_Responce& responce)
 	{
 		//auto iterFindCancel = g_mapRpcCancel.find(req.rpcSnId);
-		auto iterFind = g_mapRpc.find(req.msg.rpcSnId);
+		auto iterFind = g_mapRpc.find(responce.msg.rpcSnId);
 		if (iterFind == g_mapRpc.end())
 		{
-			LOG(WARNING) << req.msg.rpcSnId << "rpc收到回应时，协程已取消";
+			LOG(WARNING) << responce.msg.rpcSnId << "rpc收到回应时，协程已取消";
 			//assert(false);
 			return;
 		}
 		//std::get<1>iterFind->second = iterFindCancel->second;//回复cancel
-		auto ret = std::make_tuple(stop, req);
+		auto ret = std::make_tuple(stop, responce);
 		iterFind->second.Run(ret);
 		g_mapRpc.erase(iterFind);
 	}

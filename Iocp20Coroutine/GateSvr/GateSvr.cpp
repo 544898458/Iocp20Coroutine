@@ -53,7 +53,7 @@ void SendToWorldSvr(const T& refMsg, const uint64_t gateSessionId)
 
 	static uint32_t sn = 0;
 	++sn;
-	g_ConnectToGameSvr->Session.Send(MsgGate转发(str.data(), str.size(), gateSessionId, sn));
+	g_ConnectToWorldSvr->Session.Send(MsgGate转发(str.data(), str.size(), gateSessionId, sn));
 }
 template void SendToWorldSvr(const MsgLogin&, const uint64_t gateSessionId);
 

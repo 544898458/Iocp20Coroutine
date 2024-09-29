@@ -81,6 +81,11 @@ void GateSession::OnInit(CompeletionKeySession& refSession, GateServer& refServe
 
 }
 
+void GateSession::OnRecvWorldSvr(const MsgLoginResponce& msg)
+{
+	CoRpc<MsgLoginResponce>::OnRecvResponce(false, msg);
+}
+
 void GateSession::Process()
 {
 	while (true)

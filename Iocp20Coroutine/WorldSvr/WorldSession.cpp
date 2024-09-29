@@ -67,7 +67,7 @@ void WorldSession::OnRecvPack(const void* buf, int len)
 
 	switch (msg.id)
 	{
-	//case MsgId::Login:m_MsgQueue.PushMsg<MsgLogin>(*this, obj); break;
+	case MsgId::Gate转发:m_MsgQueue.PushMsg<MsgGate转发>(*this, obj); break;
 	case MsgId::Say:m_MsgQueue.PushMsg<MsgSay>(*this, obj); break;
 	case MsgId::ConsumeMoney:m_MsgQueue.PushMsg<MsgChangeMoney>(*this, obj); break;
 	default:
@@ -184,7 +184,7 @@ void WorldSession::OnRecv(const MsgLogin& msg)
 
 template<> std::deque<MsgSay>& WorldSession::GetQueue() { return m_queueSay; }
 template<> std::deque<MsgChangeMoney>& WorldSession::GetQueue() { return m_queueConsumeMoney; }
-//template<> std::deque<MsgLogin>& WorldSession::GetQueue() { return m_queueLogin; }
+template<> std::deque<MsgGate转发>& WorldSession::GetQueue() { return m_queueGate转发; }
 
 void WorldSession::OnInit(CompeletionKeySession& refSession, WorldServer& refServer)
 {
