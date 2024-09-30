@@ -89,7 +89,7 @@ void PlayerGateSession_World::SendToGate转发(const T& refMsg)
 	MsgPack::SendMsgpack(refMsg, [this](const void* buf, int len)
 		{
 			m_refSession.Send(MsgGate转发(buf, len, m_idPlayerGateSession, ++m_snSend));
-		});
+		},false);
 }
 template<class T>
 void PlayerGateSession_World::SendToGame转发(const T& refMsg)
@@ -97,5 +97,5 @@ void PlayerGateSession_World::SendToGame转发(const T& refMsg)
 	MsgPack::SendMsgpack(refMsg, [this](const void* buf, int len)
 		{
 			//m_refSession.Send(MsgGate转发(buf, len, m_idPlayerGateSession, ++m_snSend));
-		});
+		},false);
 }

@@ -28,7 +28,7 @@ void PlayerGateSession_Game::Send(const T& ref)
 			{
 				this->m_refSession.SendToGate(buf转发, len转发);
 			});
-		});
+		},false);
 }
 
 

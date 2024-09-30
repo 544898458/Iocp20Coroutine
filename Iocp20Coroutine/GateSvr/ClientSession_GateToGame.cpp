@@ -1,15 +1,15 @@
 #include "pch.h"
-#include "GameClientSession.h"
+#include "ClientSession_GateToGame.h"
 #include "../IocpNetwork/SessionSocketCompletionKeyTemplate.h"
 #include "../Iocp20Coroutine/MyMsgQueue.h"
 
 //template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WorldClientSession, WorldClient >(HANDLE hIocp, SOCKET socketListen, WorldClient&);
-template Iocp::SessionSocketCompletionKey<GameClientSession>;
+template Iocp::SessionSocketCompletionKey<ClientSession_GateToGame>;
 //std::function<void(MsgSay const&)> WorldClient::m_funBroadcast;
 
-int GameClientSession::OnRecv(Iocp::SessionSocketCompletionKey<GameClientSession>& refSession, const void* buf, int len)
+int ClientSession_GateToGame::OnRecv(Iocp::SessionSocketCompletionKey<ClientSession_GateToGame>& refSession, const void* buf, int len)
 {
-	return Iocp::OnRecv3(buf, len, *this, &GameClientSession::OnRecvPack);
+	return Iocp::OnRecv3(buf, len, *this, &ClientSession_GateToGame::OnRecvPack);
 }
 
 void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId);
@@ -19,7 +19,7 @@ void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId);
 /// </summary>
 /// <param name="buf"></param>
 /// <param name="len"></param>
-void GameClientSession::OnRecvPack(const void* buf, const int len)
+void ClientSession_GateToGame::OnRecvPack(const void* buf, const int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
@@ -44,7 +44,7 @@ void GameClientSession::OnRecvPack(const void* buf, const int len)
 			assert(false);
 			return;
 		}
-		SendToGateClient(&msg.vecByte[0], msg.vecByte.size(), msg.gateClientSessionId);
+		SendToGateClient(&msg.vecByte[0], (int)msg.vecByte.size(), msg.gateClientSessionId);
 	}
 	break;
 	default:

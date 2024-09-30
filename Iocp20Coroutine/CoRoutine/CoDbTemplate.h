@@ -87,7 +87,7 @@ void CoDb<T>::SaveInDbThread(const T& ref, SpCoAwaiterT& spCoAwait)
 		return;
 	}
 
-	MsgPack::SendMsgpack(ref, [&out](const void* buf, int len) { out.write((const char*)buf, len); });
+	MsgPack::SendMsgpack(ref, [&out](const void* buf, int len) { out.write((const char*)buf, len); }, false);
 
 	// ¹Ø±ÕÎÄ¼þ
 	out.close();

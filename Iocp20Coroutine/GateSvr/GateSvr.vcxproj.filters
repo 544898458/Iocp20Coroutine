@@ -60,7 +60,7 @@
     <ClCompile Include="..\IocpNetwork\StrConv.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
-    <ClCompile Include="GameClientSession.cpp">
+    <ClCompile Include="ClientSession_GateToGame.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\websocketfiles-master\src\base64.cpp">
@@ -158,7 +158,7 @@
     <ClInclude Include="..\IocpNetwork\WebSocketSessionTemplate.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="GameClientSession.h">
+    <ClInclude Include="ClientSession_GateToGame.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\websocketfiles-master\src\base64.h">

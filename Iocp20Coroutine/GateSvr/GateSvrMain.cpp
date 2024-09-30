@@ -10,7 +10,7 @@
 //#include <glog/logging.h>
 //#include "../IocpNetwork/StrConv.h"
 #include "GateServer.h"
-#include "GameClientSession.h"
+#include "ClientSession_GateToGame.h"
 #include "../Iocp20Coroutine/MyMsgQueue.h"
 #include <memory>
 #include "../LogStrategy/StrategyLog.h"
@@ -18,7 +18,7 @@
 #include "../IocpNetwork/WsaStartUp.h"
 #include "../Iocp20Coroutine/AllPort.h"
 
-std::unique_ptr<Iocp::SessionSocketCompletionKey<GameClientSession>> g_ConnectToGameSvr;
+std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GateToGame>> g_ConnectToGameSvr;
 bool g_running(true);
 void SendToGameSvr(const void* buf, const int len, uint64_t gateSessionId)// , uint32_t sn)
 {
@@ -51,7 +51,7 @@ void SendToWorldSvr(const T& refMsg, const uint64_t gateSessionId)
 			static uint32_t sn = 0;
 			++sn;
 			g_ConnectToWorldSvr->Session.Send(MsgGate转发(buf, len, gateSessionId, sn));
-		});
+		},false);
 }
 template void SendToWorldSvr(const MsgLogin&, const uint64_t gateSessionId);
 
@@ -84,7 +84,7 @@ int main()
 	Iocp::WsaStartup();
 	g_upGateSvr->Init<GateSession::CompeletionKeySession>(PORT_GATESVR);
 
-	g_ConnectToGameSvr.reset(Iocp::Client::Connect<GameClientSession>(L"127.0.0.1", PORT_GAMESVR, threadPoolNetwork.GetIocp()));
+	g_ConnectToGameSvr.reset(Iocp::Client::Connect<ClientSession_GateToGame>(L"127.0.0.1", PORT_GAMESVR, threadPoolNetwork.GetIocp()));
 	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<ClientSession_GateToWorld>(L"127.0.0.1", PORT_WORLDSVR_ACCEPT_GATE, threadPoolNetwork.GetIocp()));
 
 	while (g_running)

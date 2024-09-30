@@ -150,7 +150,7 @@
     <ClCompile Include="..\websocketfiles-master\src\string_helper.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\ws_endpoint.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp" />
-    <ClCompile Include="GameClientSession.cpp" />
+    <ClCompile Include="ClientSession_GateToGame.cpp" />
     <ClCompile Include="GateServer.cpp" />
     <ClCompile Include="GateSession.cpp" />
     <ClCompile Include="GateSvrMain.cpp" />
@@ -187,7 +187,7 @@
     <ClInclude Include="..\websocketfiles-master\src\string_helper.h" />
     <ClInclude Include="..\websocketfiles-master\src\ws_endpoint.h" />
     <ClInclude Include="..\websocketfiles-master\src\ws_packet.h" />
-    <ClInclude Include="GameClientSession.h" />
+    <ClInclude Include="ClientSession_GateToGame.h" />
     <ClInclude Include="GateServer.h" />
     <ClInclude Include="GateSession.h" />
     <ClInclude Include="pch.h" />
