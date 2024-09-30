@@ -44,16 +44,12 @@ std::unique_ptr<Iocp::SessionSocketCompletionKey<WorldClientSession>> g_ConnectT
 template<class T>
 void SendToWorldSvr(const T& refMsg, const uint64_t gateSessionId)
 {
-	std::stringstream buffer;
-	msgpack::pack(buffer, refMsg);
-	buffer.seekg(0);
-
-	std::string str(buffer.str());
-	CHECK_GE_VOID(UINT16_MAX, str.size());
-
-	static uint32_t sn = 0;
-	++sn;
-	g_ConnectToWorldSvr->Session.Send(MsgGate转发(str.data(), str.size(), gateSessionId, sn));
+	MsgPack::SendMsgpack(refMsg, [gateSessionId](const void* buf, int len)
+		{
+			static uint32_t sn = 0;
+			++sn;
+			g_ConnectToWorldSvr->Session.Send(MsgGate转发(buf, len, gateSessionId, sn));
+		});
 }
 template void SendToWorldSvr(const MsgLogin&, const uint64_t gateSessionId);
 

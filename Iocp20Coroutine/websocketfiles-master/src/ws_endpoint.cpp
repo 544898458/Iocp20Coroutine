@@ -145,7 +145,7 @@ int64_t WebSocketEndpoint<T_Callback, T_Data>::parse_packet(ByteBuffer& input)
 
 		std::string hs_rsp;
 		wspacket.pack_handshake_rsp(hs_rsp);
-		to_wire(hs_rsp.c_str(), hs_rsp.length());
+		to_wire(hs_rsp.c_str(), (int)hs_rsp.length());
 		ws_handshake_completed_ = true;
 		onHandShakeCompleted();
 		LOG(INFO) << "WebsocketEndpont - handshake successful!";

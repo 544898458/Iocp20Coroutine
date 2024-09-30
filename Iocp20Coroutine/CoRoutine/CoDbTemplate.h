@@ -86,17 +86,7 @@ void CoDb<T>::SaveInDbThread(const T& ref, SpCoAwaiterT& spCoAwait)
 		return;
 	}
 
-	//msgpack序列化
-	std::stringstream buffer;
-	msgpack::pack(buffer, ref);
-	buffer.seekg(0);
-
-	// deserialize the buffer into msgpack::object instance.
-	std::string str(buffer.str());
-	CHECK_GE(UINT16_MAX, str.size());
-
-	// 写入数据
-	out.write(str.data(), str.size());
+	MsgPack::SendMsgpack(ref, [&out](const void* buf, int len) { out.write((const char*)buf, len); });
 
 	// 关闭文件
 	out.close();
