@@ -41,10 +41,9 @@ private:
 	std::deque<MsgSay> m_queueSay;
 	std::deque<MsgChangeMoney> m_queueConsumeMoney;
 
-	std::map<std::string, DbTest> m_mapMoney;
+	
 	CoTask<int> m_coChangeMoney;
 
 	CoTask<int> m_coLogin;
 	FunCancel m_funCancelLogin;
 };
-

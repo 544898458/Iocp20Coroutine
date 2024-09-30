@@ -9,8 +9,8 @@
 #include "../IocpNetwork/StrConv.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 #include "../CoRoutine/CoDb.h"
-#include "../CoRoutine/CoDbTemplate.h"
 #include "PlayerGateSession_World.h"
+#include "DbPlayer.h"
 
 template class Iocp::SessionSocketCompletionKey<WorldSession>;
 template class MsgQueueMsgPack<WorldSession>;
@@ -109,7 +109,7 @@ void WorldSession::OnRecv(const MsgGate转发& msg转发)
 	refPlayerGateSession.RecvMsg(msg.id, obj);
 }
 
-extern CoDb<DbTest> g_TestSave;
+extern CoDb<DbPlayer> g_TestSave;
 /// <summary>
 /// 注意协程里如果传局部变量的引用参数，要确保异步后局部变量仍存在，否则不要传引用
 /// 此代码在主线程（单线程）执行，所有协程都在主线程执行
@@ -118,14 +118,7 @@ extern CoDb<DbTest> g_TestSave;
 /// <returns></returns>
 CoTask<int> WorldSession::Save(const MsgChangeMoney msg)
 {
-	static FunCancel fun;
-	//LOG(INFO) << "GameSvr请求扣钱" << msg.changeMoney;
-	if (m_mapMoney.find(msg.nickName) == m_mapMoney.end())
-	{
-		DbTest loadDb = co_await g_TestSave.Load(msg.nickName, fun);
-		m_mapMoney.insert({ msg.nickName, loadDb });
-	}
-	auto& refDb = m_mapMoney[msg.nickName];
+	auto& refDb = * co_await DbPlayer::CoGet绝不返回空(msg.nickName);
 	MsgChangeMoneyResponce msgResponce = { .msg = {.rpcSnId = msg.msg.rpcSnId} };
 	assert(0 <= refDb.money);
 	if (msg.addMoney)
@@ -150,6 +143,7 @@ CoTask<int> WorldSession::Save(const MsgChangeMoney msg)
 			refDb.money -= msg.changeMoney;
 		}
 	}
+	static FunCancel fun;
 	co_await g_TestSave.Save(refDb, fun);
 
 	msgResponce.finalMoney = refDb.money;
@@ -175,7 +169,7 @@ void WorldSession::OnRecv(const MsgLogin& msg)
 {
 	if (!m_coLogin.Finished())
 	{
-		this->Send<MsgLoginResponce>({ .msg = {.rpcSnId = msg.msg.rpcSnId }, .error = 1 });
+		this->Send<MsgLoginResponce>({ .msg = {.rpcSnId = msg.msg.rpcSnId }, .error = MsgLoginResponce::Busy });
 		return;
 	}
 	m_coLogin = CoLogin(msg,m_funCancelLogin);

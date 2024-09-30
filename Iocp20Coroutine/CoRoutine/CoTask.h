@@ -18,7 +18,8 @@ class CoTask
 {
 public:
 	// 协程开始时，在协程的状态对象分配内存后，调用promise_type的构造函数
-	struct promise_type {
+	struct promise_type 
+	{
 		T value;
 		// 为协程的状态对象分配内存失败时
 		//static auto get_return_object_on_allocation_failure() { return CoTask{ nullptr }; }

@@ -34,14 +34,9 @@ private:
 /// </summary>
 /// <param name="msg"></param>
 	void OnRecv(const MsgLogin& msg);
-	void OnRecv(const MsgMove& msg);
-	void OnRecv(const MsgSay& msg);
-	void OnRecv(const MsgSelectRoles& msg);
-	void OnRecv(const MsgAddRole& msg);
-	void OnRecv(const MsgAddBuilding& msg);
+	CoTask<int> CoLogin(const MsgLogin msg);
 	
-	CoTask<int> CoAddRole();
-	CoTask<int> CoAddBuilding();
+	CoTask<int> m_coLogin;
 
 	std::vector<CoTask<int>>	m_vecCoRpc;
 	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;

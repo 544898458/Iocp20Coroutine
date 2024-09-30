@@ -4,6 +4,7 @@
 #include "../IocpNetwork/StrConv.h"
 #include "../CoRoutine/CoRpc.h"
 #include "WorldSession.h"
+#include "DbPlayer.h"
 //#include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 
 /// <summary>
@@ -36,15 +37,28 @@ void PlayerGateSession_World::OnDestroy()
 
 }
 
-void PlayerGateSession_World::OnRecv(const MsgLogin& msg)
+CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 {
 	auto utf8Name = msg.name;
 	auto gbkName = StrConv::Utf8ToGbk(msg.name);
+	auto& refDb = *co_await DbPlayer::CoGet绝不返回空(utf8Name);
 	MsgLoginResponce msgResponce = { .msg = {.rpcSnId = msg.msg.rpcSnId} };
+	if (refDb.pwd != msg.pwd)
+	{
+		msgResponce.error = MsgLoginResponce::PwdErr;
+	}
+	
 	MsgPack::SendMsgpack(msg, [this](const void* buf, int len)
 		{
 			m_refSession.Send(MsgGate转发(buf, len, m_idPlayerGateSession, ++m_snSend));
 		});
+	co_return 0;
+}
+void PlayerGateSession_World::OnRecv(const MsgLogin& msg)
+{
+	assert(m_coLogin.Finished());
+	m_coLogin = CoLogin(msg);
+	m_coLogin.Run();
 }
 
 template<class T_Msg>

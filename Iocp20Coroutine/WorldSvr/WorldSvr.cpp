@@ -14,6 +14,7 @@
 #include "WorldServer.h"
 #include "WorldSession.h"
 #include "../CoRoutine/CoDbTemplate.h"
+#include "DbPlayer.h"
 
 BOOL g_running = TRUE;
 BOOL WINAPI fun(DWORD dwCtrlType)
@@ -33,7 +34,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 	return TRUE;
 }
 
-CoDb<DbTest> g_TestSave;
+CoDb<DbPlayer> g_TestSave;
 /*
 架构
 
