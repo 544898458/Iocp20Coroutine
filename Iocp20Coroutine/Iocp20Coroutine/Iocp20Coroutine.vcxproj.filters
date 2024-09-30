@@ -93,7 +93,7 @@
     <ClCompile Include="..\IocpNetwork\StrConv.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
-    <ClCompile Include="WorldClient.cpp">
+    <ClCompile Include="ClientSession_GameToWorld.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="AiCo.cpp">
@@ -221,7 +221,7 @@
     <ClInclude Include="..\IocpNetwork\StrConv.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="WorldClient.h">
+    <ClInclude Include="ClientSession_GameToWorld.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="AiCo.h">

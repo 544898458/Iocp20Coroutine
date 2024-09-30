@@ -11,7 +11,7 @@
 #include "GameSvr.h"
 #include "GameSvrSession.h"
 #include <glog/logging.h>
-#include "WorldClient.h"
+#include "ClientSession_GameToWorld.h"
 #include "../IocpNetwork/MsgPack.h"
 #include "AiCo.h"
 #include "PlayerGateSession.h"

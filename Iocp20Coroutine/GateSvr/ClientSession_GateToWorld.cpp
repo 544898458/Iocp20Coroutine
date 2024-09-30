@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "WorldClient.h"
+#include "ClientSession_GateToWorld.h"
 #include "../CoRoutine/CoRpc.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 #include "GateServer.h"

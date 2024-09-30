@@ -14,7 +14,7 @@
 #include "../Iocp20Coroutine/MyMsgQueue.h"
 #include <memory>
 #include "../LogStrategy/StrategyLog.h"
-#include "WorldClient.h"
+#include "ClientSession_GateToWorld.h"
 
 std::unique_ptr<Iocp::SessionSocketCompletionKey<GameClientSession>> g_ConnectToGameSvr;
 bool g_running(true);

@@ -177,7 +177,7 @@
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PlayerGateSession.cpp" />
     <ClCompile Include="PlayerSystem.cpp" />
-    <ClCompile Include="WorldClient.cpp" />
+    <ClCompile Include="ClientSession_GameToWorld.cpp" />
     <ClInclude Include="..\CoRoutine\CoRpc.h" />
     <ClInclude Include="..\CoRoutine\CoTimer.h" />
     <ClInclude Include="..\IocpNetwork\Client.h" />
@@ -243,7 +243,7 @@
     <ClInclude Include="PlayerGateSession.h" />
     <ClInclude Include="PlayerSystem.h" />
     <ClInclude Include="SpEntity.h" />
-    <ClInclude Include="WorldClient.h" />
+    <ClInclude Include="ClientSession_GameToWorld.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CoRoutine\CoTask.h" />
