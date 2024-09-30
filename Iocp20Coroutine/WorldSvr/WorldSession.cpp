@@ -12,8 +12,8 @@
 #include "PlayerGateSession_World.h"
 #include "DbPlayer.h"
 
-template class Iocp::SessionSocketCompletionKey<WorldSession>;
-template class MsgQueueMsgPack<WorldSession>;
+template class Iocp::SessionSocketCompletionKey<WorldSessionFromGame>;
+template class MsgQueueMsgPack<WorldSessionFromGame>;
 //template class WebSocketSession<WorldSession>;
 //template void WebSocketSession<WorldSession>::OnInit<WorldServer>(Iocp::SessionSocketCompletionKey<WebSocketSession<WorldSession> >& refSession, WorldServer& server);
 //template class WebSocketEndpoint<WorldSession, Iocp::SessionSocketCompletionKey<WebSocketSession<WorldSession> > >;
@@ -25,12 +25,12 @@ template class MsgQueueMsgPack<WorldSession>;
 /// <param name="buf"></param>
 /// <param name="len"></param>
 /// <returns></returns>
-int WorldSession::OnRecv(CompeletionKeySession&, const void* buf, int len)
+int WorldSessionFromGame::OnRecv(CompeletionKeySession&, const void* buf, int len)
 {
-	return Iocp::OnRecv3(buf, len, *this, &WorldSession::OnRecvPack);
+	return Iocp::OnRecv3(buf, len, *this, &WorldSessionFromGame::OnRecvPack);
 }
 
-void WorldSession::Process()
+void WorldSessionFromGame::Process()
 {
 	while (true)
 	{
@@ -42,9 +42,9 @@ void WorldSession::Process()
 		case MsgId::Invalid_0://没有消息可处理
 			return;
 		//case MsgId::Login:	this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &WorldSession::OnRecv); break;
-		case MsgId::Gate转发:	this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &WorldSession::OnRecv); break;
-		case MsgId::Say:	this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldSession::OnRecv); break;
-		case MsgId::ConsumeMoney:	this->m_MsgQueue.OnRecv(this->m_queueConsumeMoney, *this, &WorldSession::OnRecv); break;
+		case MsgId::Gate转发:	this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &WorldSessionFromGame::OnRecv); break;
+		case MsgId::Say:	this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldSessionFromGame::OnRecv); break;
+		case MsgId::ConsumeMoney:	this->m_MsgQueue.OnRecv(this->m_queueConsumeMoney, *this, &WorldSessionFromGame::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
 			assert(false);
@@ -58,7 +58,7 @@ void WorldSession::Process()
 /// </summary>
 /// <param name="buf"></param>
 /// <param name="len"></param>
-void WorldSession::OnRecvPack(const void* buf, int len)
+void WorldSessionFromGame::OnRecvPack(const void* buf, int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
@@ -76,14 +76,16 @@ void WorldSession::OnRecvPack(const void* buf, int len)
 	}
 }
 
-void WorldSession::OnRecv(const MsgSay& msg)
+void WorldSessionFromGame::OnRecv(const MsgSay& msg)
 {
 	LOG(INFO) << "GameSvr发来聊天" << StrConv::Utf8ToGbk(msg.content);
 	this->m_pServer->m_Sessions.Broadcast(msg);
 
 }
+
 std::map<uint64_t,PlayerGateSession_World> g_mapPlayerGateSession;
-void WorldSession::OnRecv(const MsgGate转发& msg转发)
+
+void WorldSessionFromGame::OnRecv(const MsgGate转发& msg转发)
 {
 	if (msg转发.vecByte.empty())
 	{
@@ -116,7 +118,7 @@ extern CoDb<DbPlayer> g_TestSave;
 /// </summary>
 /// <param name="msg"></param>
 /// <returns></returns>
-CoTask<int> WorldSession::Save(const MsgChangeMoney msg)
+CoTask<int> WorldSessionFromGame::Save(const MsgChangeMoney msg)
 {
 	auto& refDb = * co_await DbPlayer::CoGet绝不返回空(msg.nickName);
 	MsgChangeMoneyResponce msgResponce = { .msg = {.rpcSnId = msg.msg.rpcSnId} };
@@ -150,11 +152,11 @@ CoTask<int> WorldSession::Save(const MsgChangeMoney msg)
 	this->Send(msgResponce);
 	co_return 0;
 }
-CoTask<int> WorldSession::CoLogin(const MsgLogin msg, FunCancel &funCancel)
+CoTask<int> WorldSessionFromGame::CoLogin(const MsgLogin msg, FunCancel &funCancel)
 {
 	co_return 0;
 }
-void WorldSession::OnRecv(const MsgChangeMoney& msg)
+void WorldSessionFromGame::OnRecv(const MsgChangeMoney& msg)
 {
 	if (!m_coChangeMoney.Finished())
 	{
@@ -165,7 +167,7 @@ void WorldSession::OnRecv(const MsgChangeMoney& msg)
 	m_coChangeMoney.Run();
 }
 
-void WorldSession::OnRecv(const MsgLogin& msg)
+void WorldSessionFromGame::OnRecv(const MsgLogin& msg)
 {
 	if (!m_coLogin.Finished())
 	{
@@ -176,11 +178,11 @@ void WorldSession::OnRecv(const MsgLogin& msg)
 	m_coChangeMoney.Run();
 }
 
-template<> std::deque<MsgSay>& WorldSession::GetQueue() { return m_queueSay; }
-template<> std::deque<MsgChangeMoney>& WorldSession::GetQueue() { return m_queueConsumeMoney; }
-template<> std::deque<MsgGate转发>& WorldSession::GetQueue() { return m_queueGate转发; }
+template<> std::deque<MsgSay>& WorldSessionFromGame::GetQueue() { return m_queueSay; }
+template<> std::deque<MsgChangeMoney>& WorldSessionFromGame::GetQueue() { return m_queueConsumeMoney; }
+template<> std::deque<MsgGate转发>& WorldSessionFromGame::GetQueue() { return m_queueGate转发; }
 
-void WorldSession::OnInit(CompeletionKeySession& refSession, WorldServer& refServer)
+void WorldSessionFromGame::OnInit(CompeletionKeySession& refSession, WorldServerAcceptGame& refServer)
 {
 	refServer.m_Sessions.AddSession(&refSession, [this, &refSession, &refServer]()
 		{
@@ -193,7 +195,7 @@ void WorldSession::OnInit(CompeletionKeySession& refSession, WorldServer& refSer
 		}, (uint64_t)this);
 }
 
-void WorldSession::OnDestroy()
+void WorldSessionFromGame::OnDestroy()
 {
 	//m_entity.OnDestroy();
 	//m_pServer->m_Sessions.DeleteSession(this->m_pWsSession->m_pSession, [this]()

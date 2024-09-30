@@ -2,7 +2,7 @@
 #include "../Iocp20Coroutine/MyMsgQueue.h"
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 #include <set>
-class WorldSession;
+class WorldSessionFromGame;
 
 /// <summary>
 /// 这个GameSvr里的对象，对应一个GateSvr对游戏客户端的连接
@@ -10,7 +10,7 @@ class WorldSession;
 class PlayerGateSession_World
 {
 public:
-	PlayerGateSession_World(WorldSession& ref, const uint64_t idPlayerGateSession) :m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession)
+	PlayerGateSession_World(WorldSessionFromGame& ref, const uint64_t idPlayerGateSession) :m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession)
 	{
 
 	}
@@ -22,9 +22,10 @@ public:
 	void RecvMsg(const MsgId idMsg, const msgpack::object& obj);
 	void Process();
 	void OnDestroy();
-	template<class T> void Send(const T& ref);
 	const std::string& NickName()const { return m_nickName; }
 
+	template<class T> void SendToGate转发(const T& refMsg);
+	template<class T> void SendToGame转发(const T& refMsg);
 	uint32_t m_snRecv = 0;
 
 private:
@@ -42,7 +43,7 @@ private:
 	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;
 	bool m_bLoginOk = false;
 
-	WorldSession& m_refSession;
+	WorldSessionFromGame& m_refSession;
 	const uint64_t m_idPlayerGateSession;
 
 	std::vector<uint64_t> m_vecSelectedEntity;

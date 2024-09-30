@@ -179,6 +179,7 @@
     </ClCompile>
     <ClCompile Include="PlayerGateSession_World.cpp" />
     <ClCompile Include="WorldServer.cpp" />
+    <ClCompile Include="WorldServerAcceptGate.cpp" />
     <ClCompile Include="WorldSession.cpp" />
     <ClCompile Include="WorldSvr.cpp" />
   </ItemGroup>
@@ -205,6 +206,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerGateSession_World.h" />
     <ClInclude Include="WorldServer.h" />
+    <ClInclude Include="WorldServerAcceptGate.h" />
     <ClInclude Include="WorldSession.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

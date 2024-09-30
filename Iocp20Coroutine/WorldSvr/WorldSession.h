@@ -6,15 +6,15 @@
 #include "../IocpNetwork/MsgPack.h"
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 #include "../Iocp20Coroutine/MyMsgQueue.h"
-class WorldServer;
-class WorldSession
+class WorldServerAcceptGame;
+class WorldSessionFromGame
 {
 public:
-	using CompeletionKeySession = Iocp::SessionSocketCompletionKey<WorldSession>;
-	WorldSession(CompeletionKeySession&) {}
+	using CompeletionKeySession = Iocp::SessionSocketCompletionKey<WorldSessionFromGame>;
+	WorldSessionFromGame(CompeletionKeySession&) {}
 	int OnRecv(CompeletionKeySession&, const void* buf, int len);
 	void OnDestroy();
-	void OnInit(CompeletionKeySession& refSession, WorldServer&);
+	void OnInit(CompeletionKeySession& refSession, WorldServerAcceptGame&);
 	template<class T>
 	void Send(const T& ref)
 	{
@@ -22,7 +22,7 @@ public:
 		MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_pSession->Send(buf, len); });
 	}
 	CompeletionKeySession* m_pSession = nullptr;
-	WorldServer* m_pServer = nullptr;
+	WorldServerAcceptGame* m_pServer = nullptr;
 	template<class T> std::deque<T>& GetQueue();
 	void Process();
 	uint32_t m_snRecv = 0;
@@ -35,7 +35,7 @@ private:
 	void OnRecv(const MsgGate转发& msg);
 	CoTask<int> Save(const MsgChangeMoney msg);
 	CoTask<int> CoLogin(const MsgLogin msg, FunCancel& funCancel);
-	MsgQueueMsgPack<WorldSession> m_MsgQueue;
+	MsgQueueMsgPack<WorldSessionFromGame> m_MsgQueue;
 	std::deque<MsgGate转发> m_queueGate转发;
 	//std::deque<MsgLogin> m_queueLogin;
 	std::deque<MsgSay> m_queueSay;

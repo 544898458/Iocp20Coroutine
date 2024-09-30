@@ -1,8 +1,8 @@
 #pragma once
 #include "WorldSession.h"
 #include "../IocpNetwork/Sessions.h"
-//#include "../IocpNetwork/WebSocketSession.h"
-class WorldServerAcceptGame
+
+class WorldServerAcceptGate
 {
 public:
 	using CompeletionKeySession = Iocp::SessionSocketCompletionKey<WorldSessionFromGame>;

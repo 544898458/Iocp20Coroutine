@@ -5,10 +5,10 @@
 #include "../IocpNetwork/ListenSocketCompletionKeyTemplate.h"
 //#include "../IocpNetwork/WebSocketSession.h"
 
-template Iocp::Server<WorldServer>;
-template bool Iocp::Server<WorldServer>::Init<WorldSession>(const uint16_t);
-template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WorldSession , WorldServer >(HANDLE hIocp, SOCKET socketListen, WorldServer&);
+template Iocp::Server<WorldServerAcceptGame>;
+template bool Iocp::Server<WorldServerAcceptGame>::Init<WorldSessionFromGame>(const uint16_t);
+template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WorldSessionFromGame , WorldServerAcceptGame >(HANDLE hIocp, SOCKET socketListen, WorldServerAcceptGame&);
 
-void WorldServer::OnAdd(CompeletionKeySession&)
+void WorldServerAcceptGame::OnAdd(CompeletionKeySession&)
 {
 }

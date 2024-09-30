@@ -60,9 +60,9 @@ int main()
 	threadPoolDb.Init();
 	g_TestSave.Init(threadPoolNetwork.GetIocp());
 	//Iocp::Server<WorldClient> accept(Iocp::ThreadPool::GetIocp());
-	Iocp::Server<WorldServer> accept(threadPoolNetwork.GetIocp());
+	Iocp::Server<WorldServerAcceptGame> accept(threadPoolNetwork.GetIocp());
 	accept.WsaStartup();
-	accept.Init<WorldSession>(12346);
+	accept.Init<WorldSessionFromGame>(12346);
 	//accept.Connect<WorldClientSession>( L"127.0.0.1", L"12346");
 	//auto co = TestCoDb();
 	//co.Run();

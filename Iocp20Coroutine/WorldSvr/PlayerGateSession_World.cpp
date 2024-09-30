@@ -5,31 +5,7 @@
 #include "../CoRoutine/CoRpc.h"
 #include "WorldSession.h"
 #include "DbPlayer.h"
-//#include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 
-/// <summary>
-/// GameSvr通过GateSvr透传给游戏客户端
-/// </summary>
-/// <typeparam name="T"></typeparam>
-/// <param name="ref"></param>
-template<class T>
-void PlayerGateSession_World::Send(const T& ref)
-{
-	//++m_snSend;
-	//ref.msg.sn = (m_snSend);
-
-	//std::stringstream buffer;
-	//msgpack::pack(buffer, ref);
-	//buffer.seekg(0);
-
-	//std::string str(buffer.str());
-	//CHECK_GE_VOID(UINT16_MAX, str.size());
-	//MsgGate转发 msg(str.data(), (int)str.size(), m_idPlayerGateSession, m_snSend);
-	//MsgPack::SendMsgpack(msg, [this](const void* buf, int len)
-	//	{
-	//		this->m_refSession.SendToGate(buf, len);
-	//	});
-}
 
 
 void PlayerGateSession_World::OnDestroy()
@@ -37,23 +13,44 @@ void PlayerGateSession_World::OnDestroy()
 
 }
 
+std::map<std::string, uint64_t> g_mapPlayerNickNameGateSessionId;
+extern std::map<uint64_t, PlayerGateSession_World> g_mapPlayerGateSession;
 CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 {
 	auto utf8Name = msg.name;
 	auto gbkName = StrConv::Utf8ToGbk(msg.name);
-	auto& refDb = *co_await DbPlayer::CoGet绝不返回空(utf8Name);
+	auto& refDb = *co_await DbPlayer::CoGet绝不返回空(gbkName);
 	MsgLoginResponce msgResponce = { .msg = {.rpcSnId = msg.msg.rpcSnId} };
 	if (refDb.pwd != msg.pwd)
 	{
 		msgResponce.error = MsgLoginResponce::PwdErr;
+		SendToGate转发(msgResponce);
+		co_return 0;
 	}
 	
-	MsgPack::SendMsgpack(msg, [this](const void* buf, int len)
+	//现在密码对了，看看要不要踢同号
+	auto itFindSessionId = g_mapPlayerNickNameGateSessionId.find(gbkName);
+	if (g_mapPlayerNickNameGateSessionId.end() != itFindSessionId)
+	{
+		auto idSessionId = itFindSessionId->second;
+		auto itFindSession = g_mapPlayerGateSession.find(idSessionId);
+		if (g_mapPlayerGateSession.end() == itFindSession)
 		{
-			m_refSession.Send(MsgGate转发(buf, len, m_idPlayerGateSession, ++m_snSend));
-		});
+			LOG(ERROR) << "idSessionI=" << idSessionId;
+			assert(false);
+			co_return 0;
+		}
+		
+		auto& refGateSession = itFindSession->second;
+		//通知GameSvr此Session是断线状态（不再接收消息）
+		
+	}
+	
+	//通知GateSvr继续登录流程
+	SendToGate转发(msgResponce);
 	co_return 0;
 }
+
 void PlayerGateSession_World::OnRecv(const MsgLogin& msg)
 {
 	assert(m_coLogin.Finished());
@@ -83,4 +80,22 @@ void PlayerGateSession_World::RecvMsg(const MsgId idMsg, const msgpack::object& 
 void PlayerGateSession_World::Process()
 {
 
+}
+
+
+template<class T>
+void PlayerGateSession_World::SendToGate转发(const T& refMsg)
+{
+	MsgPack::SendMsgpack(refMsg, [this](const void* buf, int len)
+		{
+			m_refSession.Send(MsgGate转发(buf, len, m_idPlayerGateSession, ++m_snSend));
+		});
+}
+template<class T>
+void PlayerGateSession_World::SendToGame转发(const T& refMsg)
+{
+	MsgPack::SendMsgpack(refMsg, [this](const void* buf, int len)
+		{
+			//m_refSession.Send(MsgGate转发(buf, len, m_idPlayerGateSession, ++m_snSend));
+		});
 }
