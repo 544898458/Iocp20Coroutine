@@ -278,6 +278,9 @@
     <ClInclude Include="..\IocpNetwork\WsaStartUp.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
+    <ClInclude Include="AllPort.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\websocketfiles-master\src\string_helper.inl">

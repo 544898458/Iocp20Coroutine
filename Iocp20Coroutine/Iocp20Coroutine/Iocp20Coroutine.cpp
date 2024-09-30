@@ -16,6 +16,7 @@
 #include "AiCo.h"
 #include "PlayerGateSession_Game.h"
 #include "../IocpNetwork/WsaStartUp.h"
+#include "AllPort.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")
@@ -100,12 +101,12 @@ int main(void)
 	//g_worldSvr.reset( new Iocp::Server<WorldServer>(Iocp::ThreadPool::GetIocp()) );
 
 	Iocp::WsaStartup();
-	accept.Init<GameSvrSession>(12345);
+	accept.Init<GameSvrSession>(PORT_GAMESVR);
 	//Iocp::ThreadPool::Add(accept.GetIocp());
 
 	//g_worldSvr->Init<WorldSession>(12346);
 	//g_worldSvr.reset(new Iocp::Server<WorldClient>(Iocp::ThreadPool::GetIocp()));
-	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<ClientSession_GameToWorld>(L"127.0.0.1", L"12346", threadPoolNetwork.GetIocp()));
+	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<ClientSession_GameToWorld>(L"127.0.0.1", PORT_WORLDSVR_ACCEPT_GAME , threadPoolNetwork.GetIocp()));
 	extern std::function<void(MsgSay const&)> m_funBroadcast;
 	m_funBroadcast = [&accept](const MsgSay& msg) {accept.m_Server.m_Sessions.Broadcast(msg); };
 

@@ -17,7 +17,7 @@
 #include "../CoRoutine/CoDbTemplate.h"
 #include "DbPlayer.h"
 #include "../IocpNetwork/WsaStartUp.h"
-
+#include "../Iocp20Coroutine/AllPort.h"
 BOOL g_running = TRUE;
 BOOL WINAPI fun(DWORD dwCtrlType)
 {
@@ -67,11 +67,9 @@ int main()
 	Iocp::Server<WorldSvrAcceptGame> acceptGame(threadPoolNetwork.GetIocp());
 	Iocp::Server<WorldSvrAcceptGate> acceptGate(threadPoolNetwork.GetIocp());
 	Iocp::WsaStartup();
-	acceptGame.Init<WorldSessionFromGame>(12346);
-	acceptGate.Init<WorldSessionFromGate>(12349);
-	//accept.Connect<WorldClientSession>( L"127.0.0.1", L"12346");
-	//auto co = TestCoDb();
-	//co.Run();
+	acceptGame.Init<WorldSessionFromGame>(PORT_WORLDSVR_ACCEPT_GAME);
+	acceptGate.Init<WorldSessionFromGate>(PORT_WORLDSVR_ACCEPT_GATE);
+	
 	while (g_running)
 	{
 		Sleep(100);

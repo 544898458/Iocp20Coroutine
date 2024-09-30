@@ -15,8 +15,8 @@ namespace Iocp
 		//	requires std::is_same_v<void, decltype(refSession.OnDestroy())>;//void OnDestroy();
 		//	requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompletionKey<WorldSession>& session)
 		//}
-		static Iocp::SessionSocketCompletionKey<T_Session>* Connect(const wchar_t* szIp, const wchar_t* szPort, HANDLE hIocp);
-		SOCKET Connect(const wchar_t* szIp, const wchar_t* szPort);
+		static Iocp::SessionSocketCompletionKey<T_Session>* Connect(const wchar_t* szIp, const uint32_t uPort, HANDLE hIocp);
+		SOCKET Connect(const wchar_t* szIp, const uint32_t wPort);
 	};
 }
 
@@ -27,10 +27,10 @@ template<class T_Session>
 //	requires std::is_same_v<void, decltype(refSession.OnDestroy())>;//void OnDestroy();
 //	requires std::is_same_v<void, decltype(refServer.OnAdd(refCompletetionKeySession))>;//void OnAdd(Iocp::SessionSocketCompletionKey<WorldSession>& session)
 //}
-Iocp::SessionSocketCompletionKey<T_Session>* Iocp::Client::Connect(const wchar_t* szIp, const wchar_t* szPort, HANDLE m_hIocp)
+Iocp::SessionSocketCompletionKey<T_Session>* Iocp::Client::Connect(const wchar_t* szIp, const uint32_t uPort, HANDLE m_hIocp)
 {
 	auto client = new Client();
-	auto socket = client->Connect(szIp, szPort);
+	auto socket = client->Connect(szIp, uPort);
 	if (socket == 0)
 	{
 		LOG(ERROR) << "";// std::wstring(szIp) << ":" << std::wstring(szPort);

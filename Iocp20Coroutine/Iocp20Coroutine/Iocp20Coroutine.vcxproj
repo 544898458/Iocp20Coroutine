@@ -161,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\WsaStartUp.cpp" />
     <ClCompile Include="AiCo.cpp" />
+    <ClInclude Include="AllPort.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
     <ClCompile Include="AttackComponent.cpp" />
     <ClCompile Include="BuildingComponent.cpp" />
     <ClCompile Include="Entity.cpp" />
