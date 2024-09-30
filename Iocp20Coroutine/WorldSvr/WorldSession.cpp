@@ -10,7 +10,7 @@
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 #include "../CoRoutine/CoDb.h"
 #include "../CoRoutine/CoDbTemplate.h"
-#include "PlayerGateSession.h"
+#include "PlayerGateSession_World.h"
 
 template class Iocp::SessionSocketCompletionKey<WorldSession>;
 template class MsgQueueMsgPack<WorldSession>;

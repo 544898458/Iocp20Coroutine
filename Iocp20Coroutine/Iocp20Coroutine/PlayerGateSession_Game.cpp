@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "PlayerGateSession.h"
+#include "PlayerGateSession_Game.h"
 #include "Space.h"
 #include "Entity.h"
 #include "../IocpNetwork/MsgPack.h"

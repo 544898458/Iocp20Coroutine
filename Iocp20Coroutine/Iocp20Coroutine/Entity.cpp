@@ -12,7 +12,7 @@
 #include "MonsterComponent.h"
 #include "AttackComponent.h"
 #include "BuildingComponent.h"
-#include "PlayerGateSession.h"
+#include "PlayerGateSession_Game.h"
 
 using namespace std;
 

@@ -8,7 +8,7 @@
 #include "PlayerSystem.h"
 #include "PlayerComponent.h"
 #include "../IocpNetwork/StrConv.h"
-#include "PlayerGateSession.h"
+#include "PlayerGateSession_Game.h"
 
 void SendToWorldSvr(const MsgChangeMoney& msg);
 

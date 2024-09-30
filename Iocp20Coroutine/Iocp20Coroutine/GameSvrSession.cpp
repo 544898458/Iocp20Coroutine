@@ -23,7 +23,7 @@
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 #include "AttackComponent.h"
 #include "../IocpNetwork/MsgPack.h"
-#include "PlayerGateSession.h"
+#include "PlayerGateSession_Game.h"
 //template<MySession>
 //std::set<Iocp::SessionSocketCompletionKey<MySession>*> g_setSession;
 //template<MySession> std::mutex g_setSessionMutex;

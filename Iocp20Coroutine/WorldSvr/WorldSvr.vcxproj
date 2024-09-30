@@ -176,7 +176,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="PlayerGateSession.cpp" />
+    <ClCompile Include="PlayerGateSession_World.cpp" />
     <ClCompile Include="WorldServer.cpp" />
     <ClCompile Include="WorldSession.cpp" />
     <ClCompile Include="WorldSvr.cpp" />
@@ -201,7 +201,7 @@
     <ClInclude Include="..\IocpNetwork\StrConv.h" />
     <ClInclude Include="..\IocpNetwork\ThreadPool.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="PlayerGateSession.h" />
+    <ClInclude Include="PlayerGateSession_World.h" />
     <ClInclude Include="WorldServer.h" />
     <ClInclude Include="WorldSession.h" />
   </ItemGroup>

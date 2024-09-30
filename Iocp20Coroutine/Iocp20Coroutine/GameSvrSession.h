@@ -4,7 +4,7 @@
 //#include "../IocpNetwork/WebSocketSession.h"
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 #include "../IocpNetwork/SessionSocketCompletionKey.h"
-#include "PlayerGateSession.h"
+#include "PlayerGateSession_Game.h"
 class GameSvr;
 class Space;
 

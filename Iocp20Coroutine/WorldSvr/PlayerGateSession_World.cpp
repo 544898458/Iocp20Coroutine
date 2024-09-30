@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "PlayerGateSession.h"
+#include "PlayerGateSession_World.h"
 #include "../IocpNetwork/MsgPack.h"
 #include "../IocpNetwork/StrConv.h"
 #include "../CoRoutine/CoRpc.h"

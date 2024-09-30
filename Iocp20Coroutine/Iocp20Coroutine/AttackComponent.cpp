@@ -7,7 +7,7 @@
 #include "GameSvrSession.h"
 #include "AiCo.h"
 #include "Space.h"
-#include "PlayerGateSession.h"
+#include "PlayerGateSession_Game.h"
 
 void Entity::AddComponentAttack()
 {

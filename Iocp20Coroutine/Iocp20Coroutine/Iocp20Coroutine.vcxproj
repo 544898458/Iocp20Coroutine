@@ -175,7 +175,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PlayerComponent.cpp" />
-    <ClCompile Include="PlayerGateSession.cpp" />
+    <ClCompile Include="PlayerGateSession_Game.cpp" />
     <ClCompile Include="PlayerSystem.cpp" />
     <ClCompile Include="ClientSession_GameToWorld.cpp" />
     <ClInclude Include="..\CoRoutine\CoRpc.h" />
@@ -240,7 +240,7 @@
     <ClInclude Include="MonsterComponent.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerComponent.h" />
-    <ClInclude Include="PlayerGateSession.h" />
+    <ClInclude Include="PlayerGateSession_Game.h" />
     <ClInclude Include="PlayerSystem.h" />
     <ClInclude Include="SpEntity.h" />
     <ClInclude Include="ClientSession_GameToWorld.h" />

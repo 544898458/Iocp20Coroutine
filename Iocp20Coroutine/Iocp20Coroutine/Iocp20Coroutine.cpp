@@ -14,7 +14,7 @@
 #include "ClientSession_GameToWorld.h"
 #include "../IocpNetwork/MsgPack.h"
 #include "AiCo.h"
-#include "PlayerGateSession.h"
+#include "PlayerGateSession_Game.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")

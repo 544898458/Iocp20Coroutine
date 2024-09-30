@@ -123,7 +123,7 @@
     <ClCompile Include="GameSvrSession.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerGateSession.cpp">
+    <ClCompile Include="PlayerGateSession_Game.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
@@ -263,7 +263,7 @@
     <ClInclude Include="GameSvrSession.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerGateSession.h">
+    <ClInclude Include="PlayerGateSession_Game.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">

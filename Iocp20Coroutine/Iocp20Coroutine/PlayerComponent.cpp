@@ -2,7 +2,7 @@
 #include "PlayerComponent.h"
 #include "Entity.h"
 #include "GameSvrSession.h"
-#include "PlayerGateSession.h"
+#include "PlayerGateSession_Game.h"
 
 void Entity::AddComponentPlayer(PlayerGateSession_Game &refSession)
 {
