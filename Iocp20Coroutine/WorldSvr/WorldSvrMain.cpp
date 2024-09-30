@@ -12,7 +12,8 @@
 #include <msgpack.hpp>
 #include "../IocpNetwork/StrConv.h"
 #include "WorldSvrAcceptGame.h"
-#include "WorldSession.h"
+#include "WorldSvrAcceptGate.h"
+#include "WorldSessionFromGame.h"
 #include "../CoRoutine/CoDbTemplate.h"
 #include "DbPlayer.h"
 #include "../IocpNetwork/WsaStartUp.h"
@@ -57,13 +58,17 @@ int main()
 {
 	Iocp::ThreadPool threadPoolNetwork;
 	threadPoolNetwork.Init();
+
 	Iocp::ThreadPool threadPoolDb;
 	threadPoolDb.Init();
+
 	g_TestSave.Init(threadPoolNetwork.GetIocp());
-	//Iocp::Server<WorldClient> accept(Iocp::ThreadPool::GetIocp());
+	
 	Iocp::Server<WorldSvrAcceptGame> acceptGame(threadPoolNetwork.GetIocp());
+	Iocp::Server<WorldSvrAcceptGate> acceptGate(threadPoolNetwork.GetIocp());
 	Iocp::WsaStartup();
 	acceptGame.Init<WorldSessionFromGame>(12346);
+	acceptGate.Init<WorldSessionFromGate>(12349);
 	//accept.Connect<WorldClientSession>( L"127.0.0.1", L"12346");
 	//auto co = TestCoDb();
 	//co.Run();

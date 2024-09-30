@@ -1,5 +1,5 @@
 #pragma once
-#include "WorldSession.h"
+#include "WorldSessionFromGame.h"
 #include "../IocpNetwork/Sessions.h"
 //#include "../IocpNetwork/WebSocketSession.h"
 class WorldSvrAcceptGame

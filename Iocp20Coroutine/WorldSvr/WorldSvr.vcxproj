@@ -179,9 +179,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PlayerGateSession_World.cpp" />
+    <ClCompile Include="WorldSessionFromGate.cpp" />
     <ClCompile Include="WorldSvrAcceptGame.cpp" />
     <ClCompile Include="WorldSvrAcceptGate.cpp" />
-    <ClCompile Include="WorldSession.cpp" />
+    <ClCompile Include="WorldSessionFromGame.cpp" />
     <ClCompile Include="WorldSvrMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -207,9 +208,10 @@
     <ClInclude Include="DbPlayer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerGateSession_World.h" />
+    <ClInclude Include="WorldSessionFromGate.h" />
     <ClInclude Include="WorldSvrAcceptGame.h" />
     <ClInclude Include="WorldSvrAcceptGate.h" />
-    <ClInclude Include="WorldSession.h" />
+    <ClInclude Include="WorldSessionFromGame.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,7 +3,7 @@
 #include "../IocpNetwork/MsgPack.h"
 #include "../IocpNetwork/StrConv.h"
 #include "../CoRoutine/CoRpc.h"
-#include "WorldSession.h"
+#include "WorldSessionFromGame.h"
 #include "DbPlayer.h"
 
 

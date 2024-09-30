@@ -57,7 +57,7 @@
     <ClCompile Include="WorldSvrAcceptGame.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="WorldSession.cpp">
+    <ClCompile Include="WorldSessionFromGame.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\ListenSocketCompletionKey.cpp">
@@ -77,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\WsaStartUp.cpp">
       <Filter>IocpNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldSessionFromGate.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,7 +119,7 @@
     <ClInclude Include="WorldSvrAcceptGame.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="WorldSession.h">
+    <ClInclude Include="WorldSessionFromGame.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\MsgPack.h">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\WsaStartUp.h">
       <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldSessionFromGate.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ class WorldSessionFromGame;
 class PlayerGateSession_World
 {
 public:
-	PlayerGateSession_World(WorldSessionFromGame& ref, const uint64_t idPlayerGateSession) :m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession)
+	PlayerGateSession_World(WorldSessionFromGate& ref, const uint64_t idPlayerGateSession) :m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession)
 	{
 
 	}
@@ -43,7 +43,7 @@ private:
 	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;
 	bool m_bLoginOk = false;
 
-	WorldSessionFromGame& m_refSession;
+	WorldSessionFromGate& m_refSession;
 	const uint64_t m_idPlayerGateSession;
 
 	std::vector<uint64_t> m_vecSelectedEntity;

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "WorldSvrAcceptGame.h"
 #include "../IocpNetwork/ServerTemplate.h"
-#include "WorldSession.h"
+#include "WorldSessionFromGame.h"
 #include "../IocpNetwork/ListenSocketCompletionKeyTemplate.h"
 //#include "../IocpNetwork/WebSocketSession.h"
 
