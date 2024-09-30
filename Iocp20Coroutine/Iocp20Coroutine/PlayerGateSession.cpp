@@ -16,7 +16,7 @@
 /// <typeparam name="T"></typeparam>
 /// <param name="ref"></param>
 template<class T>
-void PlayerGateSession::Send(const T& ref)
+void PlayerGateSession_Game::Send(const T& ref)
 {
 	++m_snSend;
 	ref.msg.sn = (m_snSend);
@@ -32,7 +32,7 @@ void PlayerGateSession::Send(const T& ref)
 }
 
 
-void PlayerGateSession::OnDestroy(Space& refSpace)
+void PlayerGateSession_Game::OnDestroy(Space& refSpace)
 {
 	for (auto sp : m_vecSpEntity)
 	{
@@ -57,7 +57,7 @@ void PlayerGateSession::OnDestroy(Space& refSpace)
 
 }
 
-void PlayerGateSession::Erase(SpEntity& spEntity)
+void PlayerGateSession_Game::Erase(SpEntity& spEntity)
 {
 	if (!m_vecSpEntity.contains(spEntity))
 	{
@@ -68,7 +68,7 @@ void PlayerGateSession::Erase(SpEntity& spEntity)
 	m_vecSpEntity.erase(spEntity);
 }
 
-void PlayerGateSession::OnRecv(const MsgAddRole& msg)
+void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 {
 	//if (!m_coRpc.Finished())
 	//{
@@ -85,7 +85,7 @@ void PlayerGateSession::OnRecv(const MsgAddRole& msg)
 }
 
 void SendToWorldSvr(const MsgChangeMoney& msg);
-void PlayerGateSession::OnRecv(const MsgAddBuilding& msg)
+void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 {
 	//if (!m_coRpc.Finished())
 	//{
@@ -101,7 +101,7 @@ void PlayerGateSession::OnRecv(const MsgAddBuilding& msg)
 	iterNew->Run();
 }
 
-CoTask<int> PlayerGateSession::CoAddBuilding()
+CoTask<int> PlayerGateSession_Game::CoAddBuilding()
 {
 	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());//不能存对象，扩容可能导致引用和指针失效
 	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 0 }, SendToWorldSvr, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
@@ -123,7 +123,7 @@ CoTask<int> PlayerGateSession::CoAddBuilding()
 	co_return 0;
 }
 
-CoTask<int> PlayerGateSession::CoAddRole()
+CoTask<int> PlayerGateSession_Game::CoAddRole()
 {
 	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());
 	const auto [stop, responce] = co_await AiCo::ChangeMoney(*this, -3, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
@@ -143,7 +143,7 @@ CoTask<int> PlayerGateSession::CoAddRole()
 	co_return 0;
 }
 
-void PlayerGateSession::OnRecv(const MsgLogin& msg)
+void PlayerGateSession_Game::OnRecv(const MsgLogin& msg)
 {
 	auto utf8Name = msg.name;
 	auto gbkName = StrConv::Utf8ToGbk(msg.name);
@@ -188,7 +188,7 @@ void PlayerGateSession::OnRecv(const MsgLogin& msg)
 	}
 }
 
-void PlayerGateSession::OnRecv(const MsgMove& msg)
+void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 {
 	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
 	const auto targetX = msg.x;
@@ -217,7 +217,7 @@ void PlayerGateSession::OnRecv(const MsgMove& msg)
 	}
 }
 
-void PlayerGateSession::OnRecv(const MsgSay& msg)
+void PlayerGateSession_Game::OnRecv(const MsgSay& msg)
 {
 	auto utf8Content = StrConv::Utf8ToGbk(msg.content);
 	LOG(INFO) << "收到聊天:" << utf8Content;
@@ -225,29 +225,29 @@ void PlayerGateSession::OnRecv(const MsgSay& msg)
 	SendToWorldSvr(msg);
 }
 
-void PlayerGateSession::OnRecv(const MsgSelectRoles& msg)
+void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
 {
 	LOG(INFO) << "收到选择:" << msg.ids.size();
 	m_vecSelectedEntity.clear();
 	std::transform(msg.ids.begin(), msg.ids.end(), std::back_inserter(m_vecSelectedEntity), [](const double& id) {return uint64_t(id); });
 }
 
-template void PlayerGateSession::Send(const MsgAddRoleRet&);
-template void PlayerGateSession::Send(const MsgNotifyPos&);
-template void PlayerGateSession::Send(const MsgChangeSkeleAnim&);
-template void PlayerGateSession::Send(const MsgSay&);
-template void PlayerGateSession::Send(const MsgDelRoleRet&);
-template void PlayerGateSession::Send(const MsgNotifyMoney&);
+template void PlayerGateSession_Game::Send(const MsgAddRoleRet&);
+template void PlayerGateSession_Game::Send(const MsgNotifyPos&);
+template void PlayerGateSession_Game::Send(const MsgChangeSkeleAnim&);
+template void PlayerGateSession_Game::Send(const MsgSay&);
+template void PlayerGateSession_Game::Send(const MsgDelRoleRet&);
+template void PlayerGateSession_Game::Send(const MsgNotifyMoney&);
 
 
 template<class T_Msg>
-void PlayerGateSession::RecvMsg(const msgpack::object& obj)
+void PlayerGateSession_Game::RecvMsg(const msgpack::object& obj)
 {
 	const auto msg = obj.as<T_Msg>();
 	OnRecv(msg);
 }
 
-void PlayerGateSession::RecvMsg(const MsgId idMsg, const msgpack::object& obj)
+void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& obj)
 {
 	switch (idMsg)
 	{
@@ -268,7 +268,7 @@ void PlayerGateSession::RecvMsg(const MsgId idMsg, const msgpack::object& obj)
 	}
 }
 
-void PlayerGateSession::Process()
+void PlayerGateSession_Game::Process()
 {
 	{
 		const auto oldSize = m_vecFunCancel.size();

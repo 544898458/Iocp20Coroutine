@@ -9,15 +9,15 @@ class Space;
 /// <summary>
 /// 这个GameSvr里的对象，对应一个GateSvr对游戏客户端的连接
 /// </summary>
-class PlayerGateSession
+class PlayerGateSession_Game
 {
 public:
-	PlayerGateSession(GameSvrSession& ref, const uint64_t idPlayerGateSession) :m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession)
+	PlayerGateSession_Game(GameSvrSession& ref, const uint64_t idPlayerGateSession) :m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession)
 	{
 
 	}
-	PlayerGateSession(const PlayerGateSession&) = delete;
-	PlayerGateSession(PlayerGateSession&& ref)noexcept :m_refSession(ref.m_refSession), m_idPlayerGateSession(ref.m_idPlayerGateSession)
+	PlayerGateSession_Game(const PlayerGateSession_Game&) = delete;
+	PlayerGateSession_Game(PlayerGateSession_Game&& ref)noexcept :m_refSession(ref.m_refSession), m_idPlayerGateSession(ref.m_idPlayerGateSession)
 	{
 
 	}

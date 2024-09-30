@@ -154,7 +154,7 @@ void GameSvrSession::OnRecv(const MsgGateAddSession& msg)
 		m_mapPlayerGateSession.erase(iterOld);
 	}
 
-	auto pair = m_mapPlayerGateSession.insert({ msg.gateClientSessionId, PlayerGateSession(*this,msg.gateClientSessionId) });
+	auto pair = m_mapPlayerGateSession.insert({ msg.gateClientSessionId, PlayerGateSession_Game(*this,msg.gateClientSessionId) });
 	if (!pair.second)
 	{
 		LOG(ERROR) << "ERR";

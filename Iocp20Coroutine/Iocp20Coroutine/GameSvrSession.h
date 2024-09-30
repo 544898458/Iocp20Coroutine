@@ -62,7 +62,7 @@ private:
 	std::deque<MsgGateAddSession> m_queueGateAddSession;
 	std::deque<MsgGateDeleteSession> m_queueGateDeleteSession;
 
-	std::map<uint64_t, PlayerGateSession> m_mapPlayerGateSession;
+	std::map<uint64_t, PlayerGateSession_Game> m_mapPlayerGateSession;
 	MsgQueueMsgPack<GameSvrSession> m_MsgQueue;
 private:
 	Session* m_pWsSession = nullptr;

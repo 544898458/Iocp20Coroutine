@@ -4,12 +4,12 @@
 #include "../CoRoutine/CoRpc.h"
 #include "AiCo.h"
 
-void Entity::AddComponentBuilding(PlayerGateSession& refSession)
+void Entity::AddComponentBuilding(PlayerGateSession_Game& refSession)
 {
-	m_spBuilding = std::make_shared<BuildingComponent, PlayerGateSession&>(refSession);
+	m_spBuilding = std::make_shared<BuildingComponent, PlayerGateSession_Game&>(refSession);
 }
 
-BuildingComponent::BuildingComponent( PlayerGateSession & refSession)
+BuildingComponent::BuildingComponent( PlayerGateSession_Game & refSession)
 {
 	if (!m_coAddMoney.Finished())
 	{

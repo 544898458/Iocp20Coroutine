@@ -12,7 +12,7 @@
 /// <typeparam name="T"></typeparam>
 /// <param name="ref"></param>
 template<class T>
-void PlayerGateSession::Send(const T& ref)
+void PlayerGateSession_World::Send(const T& ref)
 {
 	//++m_snSend;
 	//ref.msg.sn = (m_snSend);
@@ -31,12 +31,12 @@ void PlayerGateSession::Send(const T& ref)
 }
 
 
-void PlayerGateSession::OnDestroy()
+void PlayerGateSession_World::OnDestroy()
 {
 
 }
 
-void PlayerGateSession::OnRecv(const MsgLogin& msg)
+void PlayerGateSession_World::OnRecv(const MsgLogin& msg)
 {
 	auto utf8Name = msg.name;
 	auto gbkName = StrConv::Utf8ToGbk(msg.name);
@@ -48,13 +48,13 @@ void PlayerGateSession::OnRecv(const MsgLogin& msg)
 }
 
 template<class T_Msg>
-void PlayerGateSession::RecvMsg(const msgpack::object& obj)
+void PlayerGateSession_World::RecvMsg(const msgpack::object& obj)
 {
 	const auto msg = obj.as<T_Msg>();
 	OnRecv(msg);
 }
 
-void PlayerGateSession::RecvMsg(const MsgId idMsg, const msgpack::object& obj)
+void PlayerGateSession_World::RecvMsg(const MsgId idMsg, const msgpack::object& obj)
 {
 	switch (idMsg)
 	{
@@ -66,7 +66,7 @@ void PlayerGateSession::RecvMsg(const MsgId idMsg, const msgpack::object& obj)
 	}
 }
 
-void PlayerGateSession::Process()
+void PlayerGateSession_World::Process()
 {
 
 }

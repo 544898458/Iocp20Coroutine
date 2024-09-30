@@ -1,9 +1,9 @@
 #pragma once
 class GameSvrSession;
-class PlayerGateSession;
+class PlayerGateSession_Game;
 class PlayerComponent
 {
 public:
-	PlayerComponent(PlayerGateSession&ref):m_refSession(ref){}
-	PlayerGateSession &m_refSession ;
+	PlayerComponent(PlayerGateSession_Game&ref):m_refSession(ref){}
+	PlayerGateSession_Game &m_refSession ;
 };

@@ -6,7 +6,7 @@ struct Position;
 class Space;
 class GameSvrSession;
 struct MsgChangeMoneyResponce;
-class PlayerGateSession;
+class PlayerGateSession_Game;
 namespace AiCo
 {
 	//协程不会同步执行结束，所以Entity全都要用SpEntity，不能用引用，实参一进去立刻加引用计数
@@ -19,7 +19,7 @@ namespace AiCo
 	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spEntity, GameSvr* pServer, FunCancel& funCancel);
 	CoTask<int> WaitDelete(SpEntity spThis, FunCancel& funCancel);
 	CoTask<int> SpawnMonster(Space& refSpace, FunCancel& funCancel);
-	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession& refSession, int changeMoney, FunCancel& funCancel);
-	CoTask<int> AddMoney(PlayerGateSession& refSession, FunCancel& funCancel);
+	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, int changeMoney, FunCancel& funCancel);
+	CoTask<int> AddMoney(PlayerGateSession_Game& refSession, FunCancel& funCancel);
 };
 

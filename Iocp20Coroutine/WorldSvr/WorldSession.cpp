@@ -82,7 +82,7 @@ void WorldSession::OnRecv(const MsgSay& msg)
 	this->m_pServer->m_Sessions.Broadcast(msg);
 
 }
-std::map<uint64_t,PlayerGateSession> g_mapPlayerGateSession;
+std::map<uint64_t,PlayerGateSession_World> g_mapPlayerGateSession;
 void WorldSession::OnRecv(const MsgGate转发& msg转发)
 {
 	if (msg转发.vecByte.empty())
@@ -100,7 +100,7 @@ void WorldSession::OnRecv(const MsgGate转发& msg转发)
 	auto iter = g_mapPlayerGateSession.find(msg转发.gateClientSessionId);
 	if (g_mapPlayerGateSession.end() == iter)
 	{
-		auto pair = g_mapPlayerGateSession.insert({ msg转发.gateClientSessionId,PlayerGateSession(*this,msg转发.gateClientSessionId)});
+		auto pair = g_mapPlayerGateSession.insert({ msg转发.gateClientSessionId,PlayerGateSession_World(*this,msg转发.gateClientSessionId)});
 		iter = pair.first;
 	}
 

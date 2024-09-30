@@ -206,7 +206,7 @@ namespace AiCo
 		co_return 0;
 	}
 
-	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession& refSession, int changeMoney, FunCancel& funCancel)
+	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, int changeMoney, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
@@ -226,7 +226,7 @@ namespace AiCo
 		co_return tuple;
 	}
 
-	CoTask<int> AddMoney(PlayerGateSession& refSession, FunCancel& funCancel)
+	CoTask<int> AddMoney(PlayerGateSession_Game& refSession, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
