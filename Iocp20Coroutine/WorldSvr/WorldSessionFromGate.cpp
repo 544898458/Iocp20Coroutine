@@ -2,7 +2,7 @@
 #include "WorldSessionFromGate.h"
 #include "../IocpNetwork/SessionSocketCompletionKeyTemplate.h"
 #include "../IocpNetwork/SessionsTemplate.h"
-#include "WorldSvrAcceptGame.h"
+#include "WorldSvrAcceptGate.h"
 //#include "../IocpNetwork/WebSocketSessionTemplate.h"
 #include "../websocketfiles-master/src/ws_endpoint.cpp"
 #include "../Iocp20Coroutine/MyMsgQueue.h"
@@ -98,22 +98,6 @@ void WorldSessionFromGate::OnRecv(const MsgGate转发& msg转发)
 	auto& refPlayerGateSession = iter->second;
 	
 	refPlayerGateSession.RecvMsg(msg.id, obj);
-}
-
-extern CoDb<DbPlayer> g_TestSave;
-CoTask<int> WorldSessionFromGate::CoLogin(const MsgLogin msg, FunCancel &funCancel)
-{
-	co_return 0;
-}
-void WorldSessionFromGate::OnRecv(const MsgLogin& msg)
-{
-	if (!m_coLogin.Finished())
-	{
-		this->Send<MsgLoginResponce>({ .msg = {.rpcSnId = msg.msg.rpcSnId }, .error = MsgLoginResponce::Busy });
-		return;
-	}
-	m_coLogin = CoLogin(msg,m_funCancelLogin);
-	m_coLogin.Run();
 }
 
 template<> std::deque<MsgGate转发>& WorldSessionFromGate::GetQueue() { return m_queueGate转发; }

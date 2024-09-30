@@ -2,7 +2,7 @@
 #include "../Iocp20Coroutine/MyMsgQueue.h"
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 #include <set>
-class WorldSessionFromGame;
+class WorldSessionFromGate;
 
 /// <summary>
 /// 这个GameSvr里的对象，对应一个GateSvr对游戏客户端的连接

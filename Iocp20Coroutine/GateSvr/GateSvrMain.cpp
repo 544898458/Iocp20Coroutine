@@ -81,7 +81,7 @@ int main()
 	threadPoolNetwork.Init();
 	g_upGateSvr.reset(new Iocp::Server<GateServer>(threadPoolNetwork.GetIocp()));
 	Iocp::WsaStartup();
-	g_upGateSvr->Init<GateSession::CompeletionKeySession>(12348);
+	g_upGateSvr->Init<GateSession::CompeletionKeySession>(12349);
 
 	g_ConnectToGameSvr.reset(Iocp::Client::Connect<GameClientSession>(L"127.0.0.1", L"12345", threadPoolNetwork.GetIocp()));
 	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<ClientSession_GateToWorld>(L"127.0.0.1", L"12346", threadPoolNetwork.GetIocp()));

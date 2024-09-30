@@ -153,7 +153,7 @@
     <ClCompile Include="GameClientSession.cpp" />
     <ClCompile Include="GateServer.cpp" />
     <ClCompile Include="GateSession.cpp" />
-    <ClCompile Include="GateSvr.cpp" />
+    <ClCompile Include="GateSvrMain.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>

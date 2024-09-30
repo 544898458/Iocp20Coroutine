@@ -21,7 +21,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GateSvr.cpp">
+    <ClCompile Include="GateSvrMain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GateSession.cpp">

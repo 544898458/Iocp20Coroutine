@@ -6,7 +6,7 @@
 #include "../IocpNetwork/MsgPack.h"
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 #include "../Iocp20Coroutine/MyMsgQueue.h"
-class WorldSvrAcceptGame;
+class WorldSvrAcceptGate;
 class WorldSessionFromGate
 {
 public:
@@ -14,7 +14,7 @@ public:
 	WorldSessionFromGate(CompeletionKeySession&) {}
 	int OnRecv(CompeletionKeySession&, const void* buf, int len);
 	void OnDestroy();
-	void OnInit(CompeletionKeySession& refSession, WorldSvrAcceptGame&);
+	void OnInit(CompeletionKeySession& refSession, WorldSvrAcceptGate&);
 	template<class T>
 	void Send(const T& ref)
 	{
@@ -22,7 +22,7 @@ public:
 		MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_pSession->Send(buf, len); });
 	}
 	CompeletionKeySession* m_pSession = nullptr;
-	WorldSvrAcceptGame* m_pServer = nullptr;
+	WorldSvrAcceptGate* m_pServer = nullptr;
 	template<class T> std::deque<T>& GetQueue();
 	void Process();
 	uint32_t m_snRecv = 0;
@@ -30,7 +30,7 @@ public:
 private:
 	void OnRecvPack(const void* buf, int len);
 	void OnRecv(const MsgGate转发& msg);
-	CoTask<int> CoLogin(const MsgLogin msg, FunCancel& funCancel);
+	
 	MsgQueueMsgPack<WorldSessionFromGate> m_MsgQueue;
 	std::deque<MsgGate转发> m_queueGate转发;
 	

@@ -32,12 +32,11 @@ private:
 	void OnRecv(const MsgLogin& msg);
 	void OnRecv(const MsgSay& msg);
 	void OnRecv(const MsgChangeMoney& msg);
-	void OnRecv(const MsgGate转发& msg);
+	
 	CoTask<int> Save(const MsgChangeMoney msg);
 	CoTask<int> CoLogin(const MsgLogin msg, FunCancel& funCancel);
 	MsgQueueMsgPack<WorldSessionFromGame> m_MsgQueue;
-	std::deque<MsgGate转发> m_queueGate转发;
-	//std::deque<MsgLogin> m_queueLogin;
+	
 	std::deque<MsgSay> m_queueSay;
 	std::deque<MsgChangeMoney> m_queueConsumeMoney;
 

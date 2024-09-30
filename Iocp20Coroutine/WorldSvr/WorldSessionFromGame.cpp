@@ -42,7 +42,6 @@ void WorldSessionFromGame::Process()
 		case MsgId::Invalid_0://没有消息可处理
 			return;
 		//case MsgId::Login:	this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &WorldSession::OnRecv); break;
-		case MsgId::Gate转发:	this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &WorldSessionFromGame::OnRecv); break;
 		case MsgId::Say:	this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldSessionFromGame::OnRecv); break;
 		case MsgId::ConsumeMoney:	this->m_MsgQueue.OnRecv(this->m_queueConsumeMoney, *this, &WorldSessionFromGame::OnRecv); break;
 		default:
@@ -67,7 +66,6 @@ void WorldSessionFromGame::OnRecvPack(const void* buf, int len)
 
 	switch (msg.id)
 	{
-	case MsgId::Gate转发:m_MsgQueue.PushMsg<MsgGate转发>(*this, obj); break;
 	case MsgId::Say:m_MsgQueue.PushMsg<MsgSay>(*this, obj); break;
 	case MsgId::ConsumeMoney:m_MsgQueue.PushMsg<MsgChangeMoney>(*this, obj); break;
 	default:
@@ -81,34 +79,6 @@ void WorldSessionFromGame::OnRecv(const MsgSay& msg)
 	LOG(INFO) << "GameSvr发来聊天" << StrConv::Utf8ToGbk(msg.content);
 	this->m_pServer->m_Sessions.Broadcast(msg);
 
-}
-
-std::map<uint64_t,PlayerGateSession_World> g_mapPlayerGateSession;
-
-void WorldSessionFromGame::OnRecv(const MsgGate转发& msg转发)
-{
-	if (msg转发.vecByte.empty())
-	{
-		LOG(ERROR) << "ERR";
-		assert(false);
-		return;
-	}
-
-	msgpack::object_handle oh = msgpack::unpack((const char*)&msg转发.vecByte[0], msg转发.vecByte.size());//没判断越界，要加try
-	msgpack::object obj = oh.get();
-	const auto msg = MsgHead::GetMsgId(obj);
-	LOG(INFO) << obj;
-
-	auto iter = g_mapPlayerGateSession.find(msg转发.gateClientSessionId);
-	if (g_mapPlayerGateSession.end() == iter)
-	{
-		auto pair = g_mapPlayerGateSession.insert({ msg转发.gateClientSessionId,PlayerGateSession_World(*this,msg转发.gateClientSessionId)});
-		iter = pair.first;
-	}
-
-	auto& refPlayerGateSession = iter->second;
-	
-	refPlayerGateSession.RecvMsg(msg.id, obj);
 }
 
 extern CoDb<DbPlayer> g_TestSave;
@@ -180,7 +150,6 @@ void WorldSessionFromGame::OnRecv(const MsgLogin& msg)
 
 template<> std::deque<MsgSay>& WorldSessionFromGame::GetQueue() { return m_queueSay; }
 template<> std::deque<MsgChangeMoney>& WorldSessionFromGame::GetQueue() { return m_queueConsumeMoney; }
-template<> std::deque<MsgGate转发>& WorldSessionFromGame::GetQueue() { return m_queueGate转发; }
 
 void WorldSessionFromGame::OnInit(CompeletionKeySession& refSession, WorldSvrAcceptGame& refServer)
 {
