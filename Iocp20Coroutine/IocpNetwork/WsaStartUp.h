@@ -1,0 +1,4 @@
+namespace Iocp
+{
+	bool WsaStartup();
+}

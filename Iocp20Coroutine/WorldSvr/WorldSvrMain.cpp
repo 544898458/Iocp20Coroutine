@@ -15,6 +15,7 @@
 #include "WorldSession.h"
 #include "../CoRoutine/CoDbTemplate.h"
 #include "DbPlayer.h"
+#include "../IocpNetwork/WsaStartUp.h"
 
 BOOL g_running = TRUE;
 BOOL WINAPI fun(DWORD dwCtrlType)
@@ -60,19 +61,19 @@ int main()
 	threadPoolDb.Init();
 	g_TestSave.Init(threadPoolNetwork.GetIocp());
 	//Iocp::Server<WorldClient> accept(Iocp::ThreadPool::GetIocp());
-	Iocp::Server<WorldSvrAcceptGame> accept(threadPoolNetwork.GetIocp());
-	accept.WsaStartup();
-	accept.Init<WorldSessionFromGame>(12346);
+	Iocp::Server<WorldSvrAcceptGame> acceptGame(threadPoolNetwork.GetIocp());
+	Iocp::WsaStartup();
+	acceptGame.Init<WorldSessionFromGame>(12346);
 	//accept.Connect<WorldClientSession>( L"127.0.0.1", L"12346");
 	//auto co = TestCoDb();
 	//co.Run();
 	while (g_running)
 	{
 		Sleep(100);
-		accept.m_Server.m_Sessions.Update([]() {});
+		acceptGame.m_Server.m_Sessions.Update([]() {});
 		CoTimer::Update();
 		g_TestSave.Process();
 	}
-	accept.Stop();
+	acceptGame.Stop();
 	LOG(INFO) << "WorldSvr正常退出,GetCurrentThreadId=" << GetCurrentThreadId();
 }

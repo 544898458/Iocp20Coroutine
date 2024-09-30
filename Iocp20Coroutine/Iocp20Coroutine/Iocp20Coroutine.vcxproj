@@ -159,6 +159,7 @@
     <ClCompile Include="..\IocpNetwork\ThreadPool.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\IocpNetwork\WsaStartUp.cpp" />
     <ClCompile Include="AiCo.cpp" />
     <ClCompile Include="AttackComponent.cpp" />
     <ClCompile Include="BuildingComponent.cpp" />
@@ -231,6 +232,7 @@
     <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClInclude Include="..\IocpNetwork\WsaStartUp.h" />
     <ClInclude Include="AiCo.h" />
     <ClInclude Include="AttackComponent.h" />
     <ClInclude Include="BuildingComponent.h" />

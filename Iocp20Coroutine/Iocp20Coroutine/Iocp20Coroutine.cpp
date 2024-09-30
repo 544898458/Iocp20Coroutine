@@ -15,6 +15,7 @@
 #include "../IocpNetwork/MsgPack.h"
 #include "AiCo.h"
 #include "PlayerGateSession_Game.h"
+#include "../IocpNetwork/WsaStartUp.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")
@@ -98,7 +99,7 @@ int main(void)
 	Iocp::Server<GameSvr> accept(threadPoolNetwork.GetIocp());
 	//g_worldSvr.reset( new Iocp::Server<WorldServer>(Iocp::ThreadPool::GetIocp()) );
 
-	Iocp::Server<GameSvr>::WsaStartup();
+	Iocp::WsaStartup();
 	accept.Init<GameSvrSession>(12345);
 	//Iocp::ThreadPool::Add(accept.GetIocp());
 

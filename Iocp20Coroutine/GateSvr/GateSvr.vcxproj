@@ -144,6 +144,7 @@
     <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp" />
     <ClCompile Include="..\IocpNetwork\StrConv.cpp" />
     <ClCompile Include="..\IocpNetwork\ThreadPool.cpp" />
+    <ClCompile Include="..\IocpNetwork\WsaStartUp.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\base64.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\sha1_portable.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\string_helper.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="..\IocpNetwork\ThreadPool.h" />
     <ClInclude Include="..\IocpNetwork\WebSocketSession.h" />
     <ClInclude Include="..\IocpNetwork\WebSocketSessionTemplate.h" />
+    <ClInclude Include="..\IocpNetwork\WsaStartUp.h" />
     <ClInclude Include="..\websocketfiles-master\src\base64.h" />
     <ClInclude Include="..\websocketfiles-master\src\sha1.h" />
     <ClInclude Include="..\websocketfiles-master\src\string_helper.h" />

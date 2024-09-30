@@ -15,6 +15,7 @@
 #include <memory>
 #include "../LogStrategy/StrategyLog.h"
 #include "ClientSession_GateToWorld.h"
+#include "../IocpNetwork/WsaStartUp.h"
 
 std::unique_ptr<Iocp::SessionSocketCompletionKey<GameClientSession>> g_ConnectToGameSvr;
 bool g_running(true);
@@ -79,7 +80,7 @@ int main()
 	Iocp::ThreadPool threadPoolNetwork; 
 	threadPoolNetwork.Init();
 	g_upGateSvr.reset(new Iocp::Server<GateServer>(threadPoolNetwork.GetIocp()));
-	g_upGateSvr->WsaStartup();
+	Iocp::WsaStartup();
 	g_upGateSvr->Init<GateSession::CompeletionKeySession>(12348);
 
 	g_ConnectToGameSvr.reset(Iocp::Client::Connect<GameClientSession>(L"127.0.0.1", L"12345", threadPoolNetwork.GetIocp()));

@@ -17,7 +17,6 @@ namespace Iocp
 		{
 
 		}
-		static bool WsaStartup();
 		template<class T_Session>
 			requires requires(Iocp::SessionSocketCompletionKey<T_Session>& refCompletionKeySession, T_Session& refSession, T_Server& refServer)
 		{
