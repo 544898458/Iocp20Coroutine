@@ -9,13 +9,13 @@
 #include "../IocpNetwork/MsgPack.h"
 
 enum MsgId;
-class WorldClient;
+//class Client_GateToWorld;
 
-class WorldClientSession
+class ClientSession_GateToWorld
 {
 public:
-	using Session = Iocp::SessionSocketCompletionKey<WorldClientSession>;
-	WorldClientSession(Session& ref) :m_refSession(ref) {}
+	using Session = Iocp::SessionSocketCompletionKey<ClientSession_GateToWorld>;
+	ClientSession_GateToWorld(Session& ref) :m_refSession(ref) {}
 	//void OnInit(Session& session, WorldClient& refWorldClient)
 	//{
 	//	m_pWorldClient = &refWorldClient;
@@ -29,13 +29,13 @@ public:
 	/// <param name="buf"></param>
 	/// <param name="len"></param>
 	/// <returns>返回已处理的字节数，这些数据将立刻从接受缓冲中删除</returns>
-	int OnRecv(Iocp::SessionSocketCompletionKey<WorldClientSession>& refSession, const void* buf, int len);
+	int OnRecv(Iocp::SessionSocketCompletionKey<ClientSession_GateToWorld>& refSession, const void* buf, int len);
 	void OnDestroy()
 	{
 	}
 
-	WorldClient* m_pWorldClient = nullptr;
-	Iocp::SessionSocketCompletionKey<WorldClientSession>* m_pSession = nullptr;
+	//Client_GateToWorld* m_pWorldClient = nullptr;
+	Iocp::SessionSocketCompletionKey<ClientSession_GateToWorld>* m_pSession = nullptr;
 
 	/// <summary>
 	/// 工作线程中（单线程）调用
@@ -66,15 +66,15 @@ private:
 	/// </summary>
 	std::deque<MsgLogin> m_queueLogin;
 	std::deque<MsgGate转发> m_queueGate转发;
-	MsgQueueMsgPack<WorldClientSession> m_MsgQueue;
+	MsgQueueMsgPack<ClientSession_GateToWorld> m_MsgQueue;
 	Session& m_refSession;
 	uint32_t m_snSend = 0;
 };
-class WorldClient
-{
-public:
-	void OnAdd(Iocp::SessionSocketCompletionKey<WorldClientSession>& session)
-	{
-
-	}
-};
+//class Client_GateToWorld
+//{
+//public:
+//	void OnAdd(Iocp::SessionSocketCompletionKey<ClientSession_GateToWorld>& session)
+//	{
+//
+//	}
+//};

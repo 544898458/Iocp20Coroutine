@@ -6,13 +6,13 @@
 //template Iocp::Server<WorldClient>;
 //template bool Iocp::Server<WorldClient>::Init<WorldClientSession>(const uint16_t);
 //template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WorldClientSession, WorldClient >(HANDLE hIocp, SOCKET socketListen, WorldClient&);
-template Iocp::SessionSocketCompletionKey<WorldClientSession>;
+template Iocp::SessionSocketCompletionKey<ClientSession_GateToWorld>;
 //std::function<void(MsgSay const&)> WorldClient::m_funBroadcast;
 
 /// <summary>
 /// 主线程，单线程
 /// </summary>
-void WorldClientSession::Process()
+void ClientSession_GateToWorld::Process()
 {
 	while (true)
 	{
@@ -22,8 +22,8 @@ void WorldClientSession::Process()
 
 		switch (msgId)
 		{
-		case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &WorldClientSession::OnRecv); break;
-		case MsgId::Gate转发:this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &WorldClientSession::OnRecv); break;
+		case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &ClientSession_GateToWorld::OnRecv); break;
+		case MsgId::Gate转发:this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &ClientSession_GateToWorld::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
 			assert(false);
@@ -33,12 +33,12 @@ void WorldClientSession::Process()
 }
 
 
-void WorldClientSession::OnRecv(const MsgLogin& msg)
+void ClientSession_GateToWorld::OnRecv(const MsgLogin& msg)
 {
 	
 }
 
-void WorldClientSession::OnRecv(const MsgGate转发& msg转发)
+void ClientSession_GateToWorld::OnRecv(const MsgGate转发& msg转发)
 {
 	if (msg转发.vecByte.empty())
 	{
@@ -59,8 +59,8 @@ void WorldClientSession::OnRecv(const MsgGate转发& msg转发)
 	pSession->Session.m_Session.OnRecvWorldSvr(obj.as<MsgLoginResponce>());
 }
 
-template<> std::deque<MsgLogin>& WorldClientSession::GetQueue() { return m_queueLogin; }
-template<> std::deque<MsgGate转发>& WorldClientSession::GetQueue() { return m_queueGate转发; }
+template<> std::deque<MsgLogin>& ClientSession_GateToWorld::GetQueue() { return m_queueLogin; }
+template<> std::deque<MsgGate转发>& ClientSession_GateToWorld::GetQueue() { return m_queueGate转发; }
 
 /// <summary>
 /// 网络线程（多线程）调用
@@ -70,9 +70,9 @@ template<> std::deque<MsgGate转发>& WorldClientSession::GetQueue() { return m_qu
 /// <param name="len"></param>
 /// <returns>返回已处理的字节数，这些数据将立刻从接受缓冲中删除</returns>
 
-inline int WorldClientSession::OnRecv(Iocp::SessionSocketCompletionKey<WorldClientSession>& refSession, const void* buf, int len)
+inline int ClientSession_GateToWorld::OnRecv(Iocp::SessionSocketCompletionKey<ClientSession_GateToWorld>& refSession, const void* buf, int len)
 {
-	return Iocp::OnRecv3(buf, len, *this, &WorldClientSession::OnRecvPack);
+	return Iocp::OnRecv3(buf, len, *this, &ClientSession_GateToWorld::OnRecvPack);
 }
 
 /// <summary>
@@ -80,7 +80,7 @@ inline int WorldClientSession::OnRecv(Iocp::SessionSocketCompletionKey<WorldClie
 /// </summary>
 /// <param name="buf"></param>
 /// <param name="len"></param>
-void WorldClientSession::OnRecvPack(const void* buf, int len)
+void ClientSession_GateToWorld::OnRecvPack(const void* buf, int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();

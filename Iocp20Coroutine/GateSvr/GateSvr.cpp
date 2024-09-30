@@ -39,7 +39,7 @@ void SendToGameSvr(const T& refMsg)//, uint32_t snSend)
 template void SendToGameSvr(const MsgGateDeleteSession&);// , uint32_t);
 template void SendToGameSvr(const MsgGateAddSession&);// , uint32_t);
 
-std::unique_ptr<Iocp::SessionSocketCompletionKey<WorldClientSession>> g_ConnectToWorldSvr;
+std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GateToWorld>> g_ConnectToWorldSvr;
 
 template<class T>
 void SendToWorldSvr(const T& refMsg, const uint64_t gateSessionId)
@@ -83,7 +83,7 @@ int main()
 	g_upGateSvr->Init<GateSession::CompeletionKeySession>(12348);
 
 	g_ConnectToGameSvr.reset(Iocp::Client::Connect<GameClientSession>(L"127.0.0.1", L"12345", threadPoolNetwork.GetIocp()));
-	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<WorldClientSession>(L"127.0.0.1", L"12346", threadPoolNetwork.GetIocp()));
+	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<ClientSession_GateToWorld>(L"127.0.0.1", L"12346", threadPoolNetwork.GetIocp()));
 
 	while (g_running)
 	{

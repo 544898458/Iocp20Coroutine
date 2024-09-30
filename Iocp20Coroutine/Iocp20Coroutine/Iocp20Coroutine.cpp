@@ -58,7 +58,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 }
 
 //std::unique_ptr<Iocp::Server<WorldClient> > g_worldSvr;// (Iocp::ThreadPool::GetIocp());
-std::unique_ptr<Iocp::SessionSocketCompletionKey<WorldClientSession>> g_ConnectToWorldSvr;
+std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GameToWorld>> g_ConnectToWorldSvr;
 
 void SendToWorldSvr(const MsgSay& msg){MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); });}
 void SendToWorldSvr(const MsgChangeMoney& msg) 
@@ -104,8 +104,9 @@ int main(void)
 
 	//g_worldSvr->Init<WorldSession>(12346);
 	//g_worldSvr.reset(new Iocp::Server<WorldClient>(Iocp::ThreadPool::GetIocp()));
-	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<WorldClientSession>(L"127.0.0.1", L"12346", threadPoolNetwork.GetIocp()));
-	WorldClient::m_funBroadcast = [&accept](const MsgSay& msg) {accept.m_Server.m_Sessions.Broadcast(msg); };
+	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<ClientSession_GameToWorld>(L"127.0.0.1", L"12346", threadPoolNetwork.GetIocp()));
+	extern std::function<void(MsgSay const&)> m_funBroadcast;
+	m_funBroadcast = [&accept](const MsgSay& msg) {accept.m_Server.m_Sessions.Broadcast(msg); };
 
 
 	FunCancel funCancelSpawnMonster;

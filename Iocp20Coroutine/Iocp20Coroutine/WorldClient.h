@@ -8,13 +8,13 @@
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 
 enum MsgId;
-class WorldClient;
+//class Client_GateToWorld;
 
-class WorldClientSession
+class ClientSession_GameToWorld
 {
 public:
-	using Session = Iocp::SessionSocketCompletionKey<WorldClientSession>;
-	WorldClientSession(Session&) {}
+	using Session = Iocp::SessionSocketCompletionKey<ClientSession_GameToWorld>;
+	ClientSession_GameToWorld(Session&) {}
 	//void OnInit(Session& session, WorldClient& refWorldClient)
 	//{
 	//	m_pWorldClient = &refWorldClient;
@@ -28,15 +28,15 @@ public:
 	/// <param name="buf"></param>
 	/// <param name="len"></param>
 	/// <returns>返回已处理的字节数，这些数据将立刻从接受缓冲中删除</returns>
-	int OnRecv(Iocp::SessionSocketCompletionKey<WorldClientSession>& refSession, const void* buf, int len);
+	int OnRecv(Iocp::SessionSocketCompletionKey<ClientSession_GameToWorld>& refSession, const void* buf, int len);
 	void OnRecvPack(const void* buf, int len);
 	void OnDestroy()
 	{
 
 	}
 	
-	WorldClient* m_pWorldClient = nullptr;
-	Iocp::SessionSocketCompletionKey<WorldClientSession> *m_pSession = nullptr;
+	//Client_GateToWorld* m_pWorldClient = nullptr;
+	Iocp::SessionSocketCompletionKey<ClientSession_GameToWorld> *m_pSession = nullptr;
 	
 	/// <summary>
 	/// 工作线程中（单线程）调用
@@ -59,14 +59,14 @@ private:
 	/// </summary>
 	std::deque<MsgSay> m_queueSay;
 	std::deque<MsgChangeMoneyResponce> m_queueConsumeMoneyResponce;
-	MsgQueueMsgPack<WorldClientSession> m_MsgQueue;
+	MsgQueueMsgPack<ClientSession_GameToWorld> m_MsgQueue;
 };
-class WorldClient
-{
-public:
-	void OnAdd(Iocp::SessionSocketCompletionKey<WorldClientSession>& session)
-	{
-
-	}
-	static std::function<void(MsgSay const&)> m_funBroadcast;
-};
+//class Client_GateToWorld
+//{
+//public:
+//	void OnAdd(Iocp::SessionSocketCompletionKey<ClientSession_GameToWorld>& session)
+//	{
+//
+//	}
+//	static std::function<void(MsgSay const&)> m_funBroadcast;
+//};
