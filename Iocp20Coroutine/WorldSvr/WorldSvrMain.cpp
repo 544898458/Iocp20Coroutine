@@ -11,7 +11,7 @@
 #include <glog/logging.h>
 #include <msgpack.hpp>
 #include "../IocpNetwork/StrConv.h"
-#include "WorldServer.h"
+#include "WorldSvrAcceptGame.h"
 #include "WorldSession.h"
 #include "../CoRoutine/CoDbTemplate.h"
 #include "DbPlayer.h"
@@ -60,7 +60,7 @@ int main()
 	threadPoolDb.Init();
 	g_TestSave.Init(threadPoolNetwork.GetIocp());
 	//Iocp::Server<WorldClient> accept(Iocp::ThreadPool::GetIocp());
-	Iocp::Server<WorldServerAcceptGame> accept(threadPoolNetwork.GetIocp());
+	Iocp::Server<WorldSvrAcceptGame> accept(threadPoolNetwork.GetIocp());
 	accept.WsaStartup();
 	accept.Init<WorldSessionFromGame>(12346);
 	//accept.Connect<WorldClientSession>( L"127.0.0.1", L"12346");

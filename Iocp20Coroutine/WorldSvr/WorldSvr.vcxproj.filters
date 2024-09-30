@@ -21,7 +21,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="WorldSvr.cpp">
+    <ClCompile Include="WorldSvrMain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
@@ -54,7 +54,7 @@
     <ClCompile Include="..\IocpNetwork\StrConv.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
-    <ClCompile Include="WorldServer.cpp">
+    <ClCompile Include="WorldSvrAcceptGame.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="WorldSession.cpp">
@@ -72,7 +72,7 @@
     <ClCompile Include="DbPlayer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="WorldServerAcceptGate.cpp">
+    <ClCompile Include="WorldSvrAcceptGate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -110,7 +110,7 @@
     <ClInclude Include="..\IocpNetwork\StrConv.h">
       <Filter>IocpNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="WorldServer.h">
+    <ClInclude Include="WorldSvrAcceptGame.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="WorldSession.h">
@@ -149,7 +149,7 @@
     <ClInclude Include="DbPlayer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="WorldServerAcceptGate.h">
+    <ClInclude Include="WorldSvrAcceptGate.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

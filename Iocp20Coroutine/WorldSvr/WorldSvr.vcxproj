@@ -178,10 +178,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PlayerGateSession_World.cpp" />
-    <ClCompile Include="WorldServer.cpp" />
-    <ClCompile Include="WorldServerAcceptGate.cpp" />
+    <ClCompile Include="WorldSvrAcceptGame.cpp" />
+    <ClCompile Include="WorldSvrAcceptGate.cpp" />
     <ClCompile Include="WorldSession.cpp" />
-    <ClCompile Include="WorldSvr.cpp" />
+    <ClCompile Include="WorldSvrMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CoRoutine\CoDb.h" />
@@ -205,8 +205,8 @@
     <ClInclude Include="DbPlayer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerGateSession_World.h" />
-    <ClInclude Include="WorldServer.h" />
-    <ClInclude Include="WorldServerAcceptGate.h" />
+    <ClInclude Include="WorldSvrAcceptGame.h" />
+    <ClInclude Include="WorldSvrAcceptGate.h" />
     <ClInclude Include="WorldSession.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

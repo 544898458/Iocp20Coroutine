@@ -2,7 +2,7 @@
 #include "WorldSession.h"
 #include "../IocpNetwork/SessionSocketCompletionKeyTemplate.h"
 #include "../IocpNetwork/SessionsTemplate.h"
-#include "WorldServer.h"
+#include "WorldSvrAcceptGame.h"
 //#include "../IocpNetwork/WebSocketSessionTemplate.h"
 #include "../websocketfiles-master/src/ws_endpoint.cpp"
 #include "../Iocp20Coroutine/MyMsgQueue.h"
@@ -182,7 +182,7 @@ template<> std::deque<MsgSay>& WorldSessionFromGame::GetQueue() { return m_queue
 template<> std::deque<MsgChangeMoney>& WorldSessionFromGame::GetQueue() { return m_queueConsumeMoney; }
 template<> std::deque<MsgGate转发>& WorldSessionFromGame::GetQueue() { return m_queueGate转发; }
 
-void WorldSessionFromGame::OnInit(CompeletionKeySession& refSession, WorldServerAcceptGame& refServer)
+void WorldSessionFromGame::OnInit(CompeletionKeySession& refSession, WorldSvrAcceptGame& refServer)
 {
 	refServer.m_Sessions.AddSession(&refSession, [this, &refSession, &refServer]()
 		{

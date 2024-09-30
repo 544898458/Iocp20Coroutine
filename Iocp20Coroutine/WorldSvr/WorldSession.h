@@ -6,7 +6,7 @@
 #include "../IocpNetwork/MsgPack.h"
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 #include "../Iocp20Coroutine/MyMsgQueue.h"
-class WorldServerAcceptGame;
+class WorldSvrAcceptGame;
 class WorldSessionFromGame
 {
 public:
@@ -14,7 +14,7 @@ public:
 	WorldSessionFromGame(CompeletionKeySession&) {}
 	int OnRecv(CompeletionKeySession&, const void* buf, int len);
 	void OnDestroy();
-	void OnInit(CompeletionKeySession& refSession, WorldServerAcceptGame&);
+	void OnInit(CompeletionKeySession& refSession, WorldSvrAcceptGame&);
 	template<class T>
 	void Send(const T& ref)
 	{
@@ -22,7 +22,7 @@ public:
 		MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_pSession->Send(buf, len); });
 	}
 	CompeletionKeySession* m_pSession = nullptr;
-	WorldServerAcceptGame* m_pServer = nullptr;
+	WorldSvrAcceptGame* m_pServer = nullptr;
 	template<class T> std::deque<T>& GetQueue();
 	void Process();
 	uint32_t m_snRecv = 0;

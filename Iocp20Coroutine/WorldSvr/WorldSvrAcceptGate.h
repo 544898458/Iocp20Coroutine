@@ -2,7 +2,7 @@
 #include "WorldSession.h"
 #include "../IocpNetwork/Sessions.h"
 
-class WorldServerAcceptGate
+class WorldSvrAcceptGate
 {
 public:
 	using CompeletionKeySession = Iocp::SessionSocketCompletionKey<WorldSessionFromGame>;
