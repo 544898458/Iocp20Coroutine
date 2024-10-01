@@ -141,7 +141,7 @@ void WorldSessionFromGame::OnRecv(const MsgLogin& msg)
 {
 	if (!m_coLogin.Finished())
 	{
-		this->Send<MsgLoginResponce>({ .msg = {.rpcSnId = msg.msg.rpcSnId }, .error = MsgLoginResponce::Busy });
+		this->Send<MsgLoginResponce>({ .msg = {.rpcSnId = msg.msg.rpcSnId }, .result = MsgLoginResponce::Busy });
 		return;
 	}
 	m_coLogin = CoLogin(msg,m_funCancelLogin);

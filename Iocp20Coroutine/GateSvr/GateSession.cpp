@@ -55,16 +55,25 @@ template<class T> void SendToGameSvr(const T& refMsg);// , uint32_t snSend);
 
 CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 {
+	assert(!m_bLoginOk);
 	{
-		auto [ok, responce] = co_await CoRpc<MsgLoginResponce>::Send<MsgLogin>(msg, [this](const MsgLogin& msg) {SendToWorldSvr转发<MsgLogin>(msg, (uint64_t)this); }, funCancel);
-		LOG(INFO) << "WorldSvr返回登录结果ok=" << ok << ",error=" << responce.error;
-		m_bLoginOk = ok;
-		if (!ok)
+		auto [stop, responce] = co_await CoRpc<MsgLoginResponce>::Send<MsgLogin>(msg, [this](const MsgLogin& msg) {SendToWorldSvr转发<MsgLogin>(msg, (uint64_t)this); }, funCancel);
+		LOG(INFO) << "WorldSvr返回登录结果stop=" << stop << ",error=" << responce.result;
+		if (stop)
+		{
+			LOG(WARNING) << "协程停止";
+			co_return 0;
+		}
+
+		if (responce.result != MsgLoginResponce::OK)
 		{
 			//此处应该提示后断线
 			co_return 0;
 		}
+		m_bLoginOk = true;
+
 	}
+			
 	{
 		//登录GameSvr
 		SendToGameSvr<MsgGateAddSession>({ .gateClientSessionId = (uint64_t)this });// , ++m_snSend);

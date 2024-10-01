@@ -23,7 +23,7 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 	MsgLoginResponce msgResponce = { .msg = {.rpcSnId = msg.msg.rpcSnId} };
 	if (refDb.pwd != msg.pwd)
 	{
-		msgResponce.error = MsgLoginResponce::PwdErr;
+		msgResponce.result = MsgLoginResponce::PwdErr;
 		SendToGate×ª·¢(msgResponce);
 		co_return 0;
 	}

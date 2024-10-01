@@ -162,6 +162,7 @@ void GameSvrSession::OnRecv(const MsgGateAddSession& msg)
 		return;
 	}
 
+	pair.first->second.Init();
 }
 
 void GameSvrSession::OnRecv(const MsgGateDeleteSession& msg)

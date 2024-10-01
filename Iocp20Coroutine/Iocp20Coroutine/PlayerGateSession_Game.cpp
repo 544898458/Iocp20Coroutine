@@ -143,44 +143,8 @@ CoTask<int> PlayerGateSession_Game::CoAddRole()
 	co_return 0;
 }
 
-void PlayerGateSession_Game::OnRecv(const MsgLogin& msg)
+void PlayerGateSession_Game::Init()
 {
-	auto utf8Name = msg.name;
-	auto gbkName = StrConv::Utf8ToGbk(msg.name);
-	//printf("准备广播%s",utf8Name.c_str());
-	/*for (auto p : g_set)
-	{
-		const auto strBroadcast = "[" + utf8Name + "]进来了";
-		MsgLoginRet ret = { 223,GbkToUtf8(strBroadcast.c_str()) };
-		p->Send(ret);
-	}*/
-	//const auto strBroadcast = "[" + utf8Name + "]进来了";
-	if (msg.name.empty())
-	{
-		Send(MsgSay(StrConv::GbkToUtf8("请输入名字")));
-		return;
-	}
-	if (!m_vecSpEntity.empty())
-	{
-		Send(MsgSay(StrConv::GbkToUtf8("不能重复登录")));
-		return;
-	}
-
-	m_nickName = gbkName;
-	m_bLoginOk = true;
-	//for (const auto pENtity : refThis.m_pSession->m_pServer->m_space.setEntity)
-	//{
-	//	if (pENtity == &refThis.m_pSession->m_entity)
-	//		continue;
-
-	//	if (pENtity->m_nickName == utf8Name)
-	//	{
-	//		LOG(WARNING) << "重复登录" << utf8Name;
-	//		//主动断线还没做
-	//		return;
-	//	}
-	//}
-
 	for (const auto& [id, spEntity] : m_refSession.m_pServer->m_space.m_mapEntity)//所有地图上的实体发给自己
 	{
 		Send(MsgAddRoleRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->NickName()), spEntity->m_strPrefabName));
@@ -251,7 +215,6 @@ void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& o
 {
 	switch (idMsg)
 	{
-	case MsgId::Login:RecvMsg<MsgLogin>(obj); break;
 	case MsgId::Move:RecvMsg<MsgMove>(obj); break;
 	case MsgId::Say:RecvMsg<MsgSay >(obj); break;
 	case MsgId::SelectRoles:RecvMsg<MsgSelectRoles>(obj); break;

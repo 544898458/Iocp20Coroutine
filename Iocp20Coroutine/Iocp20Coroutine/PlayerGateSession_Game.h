@@ -27,6 +27,7 @@ public:
 	void Erase(SpEntity& spEntity);
 	template<class T> void Send(const T& ref);
 	const std::string& NickName()const { return m_nickName; }
+	void Init();
 
 	uint32_t m_snRecv = 0;
 
@@ -36,7 +37,6 @@ private:
 /// 主逻辑线程（控制台界面线程）调用
 /// </summary>
 /// <param name="msg"></param>
-	void OnRecv(const MsgLogin& msg);
 	void OnRecv(const MsgMove& msg);
 	void OnRecv(const MsgSay& msg);
 	void OnRecv(const MsgSelectRoles& msg);

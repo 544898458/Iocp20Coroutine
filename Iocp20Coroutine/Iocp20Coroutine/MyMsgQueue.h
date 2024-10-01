@@ -73,9 +73,9 @@ struct MsgLoginResponce
 		Busy,
 		PwdErr,
 	};
-	Error  error = OK;
+	Error  result = OK;
 
-	MSGPACK_DEFINE(msg, error);
+	MSGPACK_DEFINE(msg, result);
 };
 MSGPACK_ADD_ENUM(MsgLoginResponce::Error);
 
