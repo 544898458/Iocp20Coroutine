@@ -44,7 +44,7 @@ template void SendToGameSvr(const MsgGateAddSession&);// , uint32_t);
 std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GateToWorld>> g_ConnectToWorldSvr;
 
 template<class T>
-void SendToWorldSvr(const T& refMsg, const uint64_t gateSessionId)
+void SendToWorldSvr转发(const T& refMsg, const uint64_t gateSessionId)
 {
 	MsgPack::SendMsgpack(refMsg, [gateSessionId](const void* buf, int len)
 		{
@@ -53,7 +53,7 @@ void SendToWorldSvr(const T& refMsg, const uint64_t gateSessionId)
 			g_ConnectToWorldSvr->Session.Send(MsgGate转发(buf, len, gateSessionId, sn));
 		},false);
 }
-template void SendToWorldSvr(const MsgLogin&, const uint64_t gateSessionId);
+template void SendToWorldSvr转发(const MsgLogin&, const uint64_t gateSessionId);
 
 
 std::unique_ptr<Iocp::Server<GateServer>> g_upGateSvr;
@@ -75,7 +75,10 @@ void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 	auto pSession = g_upGateSvr->m_Server.m_Sessions.GetSession(gateSessionId);
 	//auto pSession = (GateSession*)gateSessionId;
 	CHECK_NOTNULL_VOID(pSession);
-	pSession->Session.m_Session.m_refSession.Send(buf, len);
+	if (pSession->Session.m_Session.m_bLoginOk)
+	{
+		pSession->Session.m_Session.m_refSession.Send(buf, len);
+	}
 }
 
 int main()

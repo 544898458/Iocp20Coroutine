@@ -35,13 +35,13 @@ void GateSession::OnRecvWsPack(const void* buf, const int len)
 		SendToGameSvr(buf, len, (uint64_t)this);// , ++m_snSend);
 		break;
 	}
-	
+
 }
 template<> std::deque<MsgLogin>& GateSession::GetQueue() { return m_queueLogin; }
 void GateSession::OnRecv(const MsgLogin& msg)
 {
-	LOG(INFO) << "GameSvr发来登录" ;
-	if (!m_coLogin.Finished()||m_bLoginOk)
+	LOG(INFO) << "GameSvr发来登录";
+	if (!m_coLogin.Finished() || m_bLoginOk)
 	{
 		LOG(ERROR) << "m_coLogin.Finished=" << m_coLogin.Finished() << ",m_bLoginOk=" << m_bLoginOk;
 		return;
@@ -50,20 +50,27 @@ void GateSession::OnRecv(const MsgLogin& msg)
 	m_coLogin.Run();
 }
 
-template<class T>
-void SendToWorldSvr(const T& refMsg, const uint64_t gateSessionId);// , uint32_t snSend);
+template<class T> void SendToWorldSvr转发(const T& refMsg, const uint64_t gateSessionId);// , uint32_t snSend);
+template<class T> void SendToGameSvr(const T& refMsg);// , uint32_t snSend);
 
-CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel &funCancel)
+CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 {
-	LOG(INFO) << "GameSvr发来登录";
-	auto [ok,responce] = co_await CoRpc<MsgLoginResponce>::Send<MsgLogin>(msg, [this](const MsgLogin& msg) {SendToWorldSvr<MsgLogin>(msg, (uint64_t)this); }, funCancel);
-	LOG(INFO) << "登录结果ok=" << ok << ",error=" , responce.error;
-	m_bLoginOk = ok;
+	{
+		auto [ok, responce] = co_await CoRpc<MsgLoginResponce>::Send<MsgLogin>(msg, [this](const MsgLogin& msg) {SendToWorldSvr转发<MsgLogin>(msg, (uint64_t)this); }, funCancel);
+		LOG(INFO) << "WorldSvr返回登录结果ok=" << ok << ",error=" << responce.error;
+		m_bLoginOk = ok;
+		if (!ok)
+		{
+			//此处应该提示后断线
+			co_return 0;
+		}
+	}
+	{
+		//登录GameSvr
+		SendToGameSvr<MsgGateAddSession>({ .gateClientSessionId = (uint64_t)this });// , ++m_snSend);
+	}
 	co_return 0;
 }
-
-template<class T>
-void SendToGameSvr(const T& refMsg);// , uint32_t snSend);
 
 void GateSession::OnDestroy()
 {
@@ -77,8 +84,6 @@ void GateSession::OnInit(CompeletionKeySession& refSession, GateServer& refServe
 			LOG(INFO) << "游戏客户端已连上";
 			//m_pServer = &refServer;
 			//m_pSession = &refSession;
-
-			SendToGameSvr<MsgGateAddSession>({ .gateClientSessionId = (uint64_t)this });// , ++m_snSend);
 		}, (uint64_t)this);
 
 }
