@@ -59,16 +59,18 @@ template void SendToWorldSvr(const MsgLogin&, const uint64_t gateSessionId);
 std::unique_ptr<Iocp::Server<GateServer>> g_upGateSvr;
 void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 {
-	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
-	msgpack::object obj = oh.get();
-	const auto msg = MsgHead::GetMsgId(obj);
-	//LOG(INFO) << obj;
-	if (msg.id == MsgId::AddRoleRet)
-	{
-		static int n = 0;
-		++n;
-		//LOG(INFO) << "AddRoleRet:" << n;
-	}
+	//{
+	//	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
+	//	msgpack::object obj = oh.get();
+	//	const auto msg = MsgHead::GetMsgId(obj);
+	//	//LOG(INFO) << obj;
+	//	if (msg.id == MsgId::AddRoleRet)
+	//	{
+	//		static int n = 0;
+	//		++n;
+	//		LOG(INFO) << "AddRoleRet:" << n;
+	//	}
+	//}
 
 	auto pSession = g_upGateSvr->m_Server.m_Sessions.GetSession(gateSessionId);
 	//auto pSession = (GateSession*)gateSessionId;

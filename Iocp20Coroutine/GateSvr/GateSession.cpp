@@ -58,6 +58,7 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel &funCancel)
 	LOG(INFO) << "GameSvr发来登录";
 	auto [ok,responce] = co_await CoRpc<MsgLoginResponce>::Send<MsgLogin>(msg, [this](const MsgLogin& msg) {SendToWorldSvr<MsgLogin>(msg, (uint64_t)this); }, funCancel);
 	LOG(INFO) << "登录结果ok=" << ok << ",error=" , responce.error;
+	m_bLoginOk = ok;
 	co_return 0;
 }
 

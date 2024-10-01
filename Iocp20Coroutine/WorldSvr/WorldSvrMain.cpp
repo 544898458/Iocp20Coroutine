@@ -36,7 +36,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 	return TRUE;
 }
 
-CoDb<DbPlayer> g_TestSave;
+CoDb<DbPlayer> g_CoDbPlayer;
 /*
 架构
 
@@ -62,7 +62,7 @@ int main()
 	Iocp::ThreadPool threadPoolDb;
 	threadPoolDb.Init();
 
-	g_TestSave.Init(threadPoolNetwork.GetIocp());
+	g_CoDbPlayer.Init(threadPoolNetwork.GetIocp());
 	
 	Iocp::Server<WorldSvrAcceptGame> acceptGame(threadPoolNetwork.GetIocp());
 	Iocp::Server<WorldSvrAcceptGate> acceptGate(threadPoolNetwork.GetIocp());
@@ -76,7 +76,7 @@ int main()
 		acceptGame.m_Server.m_Sessions.Update([]() {});
 		acceptGate.m_Server.m_Sessions.Update([]() {});
 		CoTimer::Update();
-		g_TestSave.Process();
+		g_CoDbPlayer.Process();
 	}
 	acceptGame.Stop();
 	LOG(INFO) << "WorldSvr正常退出,GetCurrentThreadId=" << GetCurrentThreadId();

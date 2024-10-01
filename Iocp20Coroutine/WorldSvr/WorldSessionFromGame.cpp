@@ -81,7 +81,7 @@ void WorldSessionFromGame::OnRecv(const MsgSay& msg)
 
 }
 
-extern CoDb<DbPlayer> g_TestSave;
+extern CoDb<DbPlayer> g_CoDbPlayer;
 /// <summary>
 /// 注意协程里如果传局部变量的引用参数，要确保异步后局部变量仍存在，否则不要传引用
 /// 此代码在主线程（单线程）执行，所有协程都在主线程执行
@@ -116,7 +116,7 @@ CoTask<int> WorldSessionFromGame::Save(const MsgChangeMoney msg)
 		}
 	}
 	static FunCancel fun;
-	co_await g_TestSave.Save(refDb, fun);
+	co_await g_CoDbPlayer.Save(refDb, fun);
 
 	msgResponce.finalMoney = refDb.money;
 	this->Send(msgResponce);
