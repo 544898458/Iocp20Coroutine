@@ -74,6 +74,7 @@ int main()
 	{
 		Sleep(100);
 		acceptGame.m_Server.m_Sessions.Update([]() {});
+		acceptGate.m_Server.m_Sessions.Update([]() {});
 		CoTimer::Update();
 		g_TestSave.Process();
 	}
