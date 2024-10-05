@@ -69,9 +69,6 @@
     <ClCompile Include="PlayerGateSession_World.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="DbPlayer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="WorldSvrAcceptGate.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -80,6 +77,12 @@
     </ClCompile>
     <ClCompile Include="WorldSessionFromGate.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CoRoutine\CoLock.cpp">
+      <Filter>CoRountine</Filter>
+    </ClCompile>
+    <ClCompile Include="DbPlayer.cpp">
+      <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="WorldSessionFromGate.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CoRoutine\CoLock.h">
+      <Filter>CoRountine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

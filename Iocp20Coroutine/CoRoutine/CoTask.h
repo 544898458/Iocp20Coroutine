@@ -308,7 +308,7 @@ struct CoAwaiter
 	{
 		return m_Result;
 	}
-	constexpr bool await_ready() const noexcept { return false; }
+	constexpr bool await_ready() const noexcept { return m_bAwaitReady; }
 	constexpr void await_suspend(std::coroutine_handle<> h) noexcept
 	{
 		//auto t = std::jthread([h, l = length] {
@@ -368,6 +368,7 @@ struct CoAwaiter
 		std::lock_guard lock(mutex);
 		Run(result);
 	}
+	bool m_bAwaitReady = false;
 private:
 	long m_sn;
 	T_Result m_Result;//可等待对象的返回值

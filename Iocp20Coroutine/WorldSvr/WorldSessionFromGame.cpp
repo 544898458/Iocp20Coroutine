@@ -11,6 +11,7 @@
 #include "../CoRoutine/CoDb.h"
 #include "PlayerGateSession_World.h"
 #include "DbPlayer.h"
+#include "../CoRoutine/CoLock.h"
 
 template class Iocp::SessionSocketCompletionKey<WorldSessionFromGame>;
 template class MsgQueueMsgPack<WorldSessionFromGame>;
@@ -90,6 +91,9 @@ extern CoDb<DbPlayer> g_CoDbPlayer;
 /// <returns></returns>
 CoTask<int> WorldSessionFromGame::CoChangeMoney(const MsgChangeMoney msg)
 {
+	static FunCancel funCancel;
+	CoLock lock;
+	co_await lock.Lock(msg.nickName, funCancel);
 	auto& refDb = * co_await DbPlayer::CoGet¾ø²»·µ»Ø¿Õ(msg.nickName);
 	MsgChangeMoneyResponce msgResponce;//{ .msg = {.rpcSnId = msg.msg.rpcSnId} };
 	msgResponce.msg.rpcSnId = msg.msg.rpcSnId;
@@ -119,7 +123,7 @@ CoTask<int> WorldSessionFromGame::CoChangeMoney(const MsgChangeMoney msg)
 		}
 	}
 	static FunCancel fun;
-	co_await g_CoDbPlayer.CoChangeMoney(refDb, fun);
+	co_await g_CoDbPlayer.CoSave(refDb, fun);
 
 	msgResponce.finalMoney = refDb.money;
 	this->Send(msgResponce);

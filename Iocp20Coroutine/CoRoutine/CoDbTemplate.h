@@ -64,7 +64,7 @@ void CoDb<T>::LoadFromDbThread(const std::string nickName, SpCoAwaiterT& spCoAwa
 	std::this_thread::sleep_for(std::chrono::seconds(1));
 	{
 		spCoAwait->SetResult(objT);
-		std::lock_guard lock(m_mutexDequeResult);
+				
 		m_dequeResult.push_back(spCoAwait);
 	}
 }
@@ -75,7 +75,7 @@ void CoDb<T>::SaveInDbThread(const T& ref, SpCoAwaiterT& spCoAwait)
 	std::ostringstream oss;
 	oss << typeid(T).name() << "_" << ref.nickName << ".bin";
 	const auto& strFileName = oss.str();
-
+			
 	// 打开文件
 	std::ofstream out(strFileName, std::ios::binary);
 
