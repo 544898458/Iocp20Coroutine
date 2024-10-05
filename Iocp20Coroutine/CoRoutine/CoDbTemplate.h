@@ -19,7 +19,7 @@ void CoDb<T>::Init(const HANDLE hIocp)
 	m_OverlappedWork.OnComplete = &Iocp::Overlapped::OnCompleteSend;
 	m_OverlappedWork.coTask.m_desc = "DbWork";
 	m_OverlappedWork.coTask = CoDbDbThreadProcess(m_OverlappedWork);
-	m_OverlappedWork.coTask.Run(false);
+	m_OverlappedWork.coTask.Run();
 }
 
 template<class T>

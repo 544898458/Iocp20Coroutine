@@ -109,7 +109,7 @@ public:
 	/// <summary>
 	/// 继续执行协程函数代码执直到遇到yield挂起
 	/// </summary>
-	bool Run(const bool bMainThread = true)
+	bool Run()
 	{
 		//std::lock_guard lock(m_mutex);
 		if (FinishedNoLock())
@@ -122,10 +122,10 @@ public:
 			assert(false);
 			return true;
 		}
-		if (bMainThread)
-		{
-			g_funRunCurrentCo = [this]() {this->Run(); };
-		}
+		//if (bMainThread)
+		//{
+		//	g_funRunCurrentCo = [this]() {this->Run(); };
+		//}
 		m_hCoroutine.resume();
 		return TryClear();
 	}
@@ -193,6 +193,12 @@ public:
 		m_hCoroutine.promise().previous = h;
 		return m_hCoroutine;
 	}
+	static void RunNew( CoTask &&co)
+	{
+		co.Run();
+		m_listCo.push_back(std::forward<CoTask&&>(co));
+	}
+	static std::list<CoTask> m_listCo;
 	std::mutex m_mutex;
 private:
 
@@ -231,6 +237,9 @@ public:
 	//bool MoveNext() const { return m_hCoroutine && (m_hCoroutine.resume(), !m_hCoroutine.done()); }
 	T GetValue() const { return m_hCoroutine.promise().value; }
 };
+template<typename T>
+std::list<CoTask<T>> CoTask<T>::m_listCo;
+
 
 
 class KeepCancel

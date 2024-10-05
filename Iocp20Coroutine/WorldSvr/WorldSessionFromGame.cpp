@@ -135,27 +135,26 @@ CoTask<int> WorldSessionFromGame::CoLogin(const MsgLogin msg, FunCancel &funCanc
 }
 void WorldSessionFromGame::OnRecv(const MsgChangeMoney& msg)
 {
-	if (!m_coChangeMoney.Finished())//某些操作应该串行排队
-	{
-		MsgChangeMoneyResponce msgResponce = { .error = 1 };
-		msgResponce.msg.rpcSnId = msg.msg.rpcSnId;
-		this->Send(msgResponce);
-		return;
-	}
-	m_coChangeMoney = CoChangeMoney(msg);
-	m_coChangeMoney.Run();
+	//if (!m_coChangeMoney.Finished())//某些操作应该串行排队
+	//{
+	//	MsgChangeMoneyResponce msgResponce = { .error = 1 };
+	//	msgResponce.msg.rpcSnId = msg.msg.rpcSnId;
+	//	this->Send(msgResponce);
+	//	return;
+	//}
+	CoTask<int>::RunNew( CoChangeMoney(msg) );
 }
-
-void WorldSessionFromGame::OnRecv(const MsgLogin& msg)
-{
-	if (!m_coLogin.Finished())
-	{
-		this->Send<MsgLoginResponce>({ .msg = {.rpcSnId = msg.msg.rpcSnId }, .result = MsgLoginResponce::Busy });
-		return;
-	}
-	m_coLogin = CoLogin(msg,m_funCancelLogin);
-	m_coChangeMoney.Run();
-}
+//
+//void WorldSessionFromGame::OnRecv(const MsgLogin& msg)
+//{
+//	if (!m_coLogin.Finished())
+//	{
+//		this->Send<MsgLoginResponce>({ .msg = {.rpcSnId = msg.msg.rpcSnId }, .result = MsgLoginResponce::Busy });
+//		return;
+//	}
+//	m_coLogin = CoLogin(msg,m_funCancelLogin);
+//	m_coChangeMoney.Run();
+//}
 
 template<> std::deque<MsgSay>& WorldSessionFromGame::GetQueue() { return m_queueSay; }
 template<> std::deque<MsgChangeMoney>& WorldSessionFromGame::GetQueue() { return m_queueConsumeMoney; }

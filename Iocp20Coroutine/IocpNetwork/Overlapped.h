@@ -53,7 +53,7 @@ namespace Iocp
 			this->numberOfBytesTransferred = number_of_bytes;
 			this->GetQueuedCompletionStatusReturn = bGetQueuedCompletionStatusReturn;
 			this->GetLastErrorReturn = lastErr;
-			if (this->coTask.Run(false))
+			if (this->coTask.Run())
 			{
 				LOG(INFO) << "Ð­³Ì½áÊø";
 				return;
@@ -154,7 +154,7 @@ namespace Iocp
 			this->numberOfBytesTransferred = number_of_bytes;
 			this->GetQueuedCompletionStatusReturn = bGetQueuedCompletionStatusReturn;
 			this->GetLastErrorReturn = lastErr;
-			this->coTask.Run(false);
+			this->coTask.Run();
 		}
 		CoAwaiterBool& WaitSendResult()
 		{

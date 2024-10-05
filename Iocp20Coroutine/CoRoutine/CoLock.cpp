@@ -3,35 +3,35 @@
 #include <map>
 #include <deque>
 #include <tuple>
-std::map<std::string, std::deque<std::tuple<CoAwaiterBool,FunRunCurrentCo>>> g_mapLock;
-FunRunCurrentCo g_funRunCurrentCo;
+std::map<std::string, std::deque<CoAwaiterBool>> g_mapLock;
+//FunRunCurrentCo g_funRunCurrentCo;
 
 CoLock::~CoLock()
 {
 	assert(!g_mapLock.empty());
 	auto iter = g_mapLock.find(m_strLockKey);
 	auto& refDeque = iter->second;
-
-	if (g_mapLock.size() > 1)
+	assert(!refDeque.empty());
+	refDeque.pop_back();
+	if (!refDeque.empty())
 	{
-		auto& [refAwaiter, refFun] = refDeque.back();
+		auto& refAwaiter = refDeque.back();
 		if (!refAwaiter.m_bAwaitReady)
 		{
-			refFun();
+			refAwaiter.Run();//refFun();
 		}
 	}
-	refDeque.pop_back();
+
 }
 
-CoAwaiterBool& CoLock::Lock(const std::string& strLockKey, FunCancel &funCancel)
+CoAwaiterBool& CoLock::Lock(const std::string& strLockKey, FunCancel& funCancel)
 {
 	m_strLockKey = strLockKey;
 	auto& refDeque = g_mapLock[strLockKey];
-	refDeque.push_front({ CoAwaiterBool(1, funCancel) , g_funRunCurrentCo});
-	std::tuple<CoAwaiterBool, FunRunCurrentCo> &refTuple = refDeque.front();
-	auto &[refAwaiter, _] = refTuple;
+	refDeque.push_front(CoAwaiterBool(1, funCancel));
+	auto& refAwaiter = refDeque.front();
 	refAwaiter.m_bAwaitReady = refDeque.size() == 1;
 	refAwaiter.SetResult(false);
 	return refAwaiter;
-	
+
 }

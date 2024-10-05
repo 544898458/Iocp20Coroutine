@@ -43,7 +43,7 @@ private:
 	std::deque<MsgChangeMoney> m_queueConsumeMoney;
 
 	
-	CoTask<int> m_coChangeMoney;
+	//CoTask<int> m_coChangeMoney;
 
 	CoTask<int> m_coLogin;
 	FunCancel m_funCancelLogin;
