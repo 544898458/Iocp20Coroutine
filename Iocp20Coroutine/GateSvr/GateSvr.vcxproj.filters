@@ -19,6 +19,9 @@
     <Filter Include="web_socket">
       <UniqueIdentifier>{94a0a2ad-76a1-4efc-bd8a-d176b64a8e6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CoRoutine">
+      <UniqueIdentifier>{6e1fd412-5353-486d-8c4b-0f5c23c61ab6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GateSvrMain.cpp">
@@ -86,6 +89,9 @@
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\WsaStartUp.cpp">
       <Filter>IocpNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CoRoutine\CoLock.cpp">
+      <Filter>CoRoutine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +190,9 @@
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\WsaStartUp.h">
       <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CoRoutine\CoLock.h">
+      <Filter>CoRoutine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

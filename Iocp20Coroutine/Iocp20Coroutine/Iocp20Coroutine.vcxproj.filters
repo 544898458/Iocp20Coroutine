@@ -135,6 +135,9 @@
     <ClCompile Include="..\IocpNetwork\WsaStartUp.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
+    <ClCompile Include="..\CoRoutine\CoLock.cpp">
+      <Filter>CoRoutine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -280,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="AllPort.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CoRoutine\CoLock.h">
+      <Filter>CoRoutine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

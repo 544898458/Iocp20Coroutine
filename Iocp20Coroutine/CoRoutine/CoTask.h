@@ -7,7 +7,8 @@
 #include<functional>
 
 typedef std::function<void()> FunCancel;
-
+typedef std::function<void()> FunRunCurrentCo;
+extern FunRunCurrentCo g_funRunCurrentCo;
 /// <summary>
 /// 方便实现协程，没有任何具体逻辑，没有线程，没有网络
 /// 命名参考C#的ETTask或UniTask，C++20协程标准采用的是微软方案，因此命名也使用C#名字
@@ -18,7 +19,7 @@ class CoTask
 {
 public:
 	// 协程开始时，在协程的状态对象分配内存后，调用promise_type的构造函数
-	struct promise_type 
+	struct promise_type
 	{
 		T value;
 		// 为协程的状态对象分配内存失败时
@@ -121,6 +122,7 @@ public:
 			assert(false);
 			return true;
 		}
+		g_funRunCurrentCo = [this]() {this->Run(); };
 		m_hCoroutine.resume();
 		return TryClear();
 	}

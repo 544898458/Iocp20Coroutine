@@ -12,10 +12,9 @@ public:
 	{
 
 	}
-	~CoLock() 
-	{
-
-	}
+	~CoLock();
 	CoAwaiterBool& Lock(const std::string& strLockKey, FunCancel& funCancel);
+private:
+	std::string m_strLockKey;
 };
 
