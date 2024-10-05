@@ -18,6 +18,8 @@ public:
 	template<class T>
 	void Send(const T& ref)
 	{
+		assert(ref.msg.id != MsgId::Invalid_0);
+
 		ref.msg.sn = (++m_snSend);
 		MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_pSession->Send(buf, len); });
 	}
@@ -33,7 +35,7 @@ private:
 	void OnRecv(const MsgSay& msg);
 	void OnRecv(const MsgChangeMoney& msg);
 	
-	CoTask<int> Save(const MsgChangeMoney msg);
+	CoTask<int> CoChangeMoney(const MsgChangeMoney msg);
 	CoTask<int> CoLogin(const MsgLogin msg, FunCancel& funCancel);
 	MsgQueueMsgPack<WorldSessionFromGame> m_MsgQueue;
 	

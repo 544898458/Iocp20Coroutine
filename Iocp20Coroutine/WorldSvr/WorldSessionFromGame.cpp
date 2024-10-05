@@ -88,11 +88,14 @@ extern CoDb<DbPlayer> g_CoDbPlayer;
 /// </summary>
 /// <param name="msg"></param>
 /// <returns></returns>
-CoTask<int> WorldSessionFromGame::Save(const MsgChangeMoney msg)
+CoTask<int> WorldSessionFromGame::CoChangeMoney(const MsgChangeMoney msg)
 {
 	auto& refDb = * co_await DbPlayer::CoGet绝不返回空(msg.nickName);
-	MsgChangeMoneyResponce msgResponce = { .msg = {.rpcSnId = msg.msg.rpcSnId} };
+	MsgChangeMoneyResponce msgResponce;//{ .msg = {.rpcSnId = msg.msg.rpcSnId} };
+	msgResponce.msg.rpcSnId = msg.msg.rpcSnId;
 	assert(0 <= refDb.money);
+	LOG(INFO) << "msg.addMoney=" << msg.addMoney << ",refDb.money=" << refDb.money;
+
 	if (msg.addMoney)
 	{
 		if (std::numeric_limits< std::decay<decltype(refDb.money)>::type>::max() - refDb.money < msg.changeMoney)
@@ -116,7 +119,7 @@ CoTask<int> WorldSessionFromGame::Save(const MsgChangeMoney msg)
 		}
 	}
 	static FunCancel fun;
-	co_await g_CoDbPlayer.Save(refDb, fun);
+	co_await g_CoDbPlayer.CoChangeMoney(refDb, fun);
 
 	msgResponce.finalMoney = refDb.money;
 	this->Send(msgResponce);
@@ -128,12 +131,14 @@ CoTask<int> WorldSessionFromGame::CoLogin(const MsgLogin msg, FunCancel &funCanc
 }
 void WorldSessionFromGame::OnRecv(const MsgChangeMoney& msg)
 {
-	if (!m_coChangeMoney.Finished())
+	if (!m_coChangeMoney.Finished())//某些操作应该串行排队
 	{
-		this->Send<MsgChangeMoneyResponce>({ .msg = {.rpcSnId = msg.msg.rpcSnId }, .error = 1 });
+		MsgChangeMoneyResponce msgResponce = { .error = 1 };
+		msgResponce.msg.rpcSnId = msg.msg.rpcSnId;
+		this->Send(msg);
 		return;
 	}
-	m_coChangeMoney = Save(msg);
+	m_coChangeMoney = CoChangeMoney(msg);
 	m_coChangeMoney.Run();
 }
 

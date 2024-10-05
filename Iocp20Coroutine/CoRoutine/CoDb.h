@@ -18,7 +18,7 @@ public:
 	/// <param name="ref"></param>
 	/// <param name="cancel"></param>
 	/// <returns></returns>
-	CoAwaiter<T>& Save(const T& ref, FunCancel& cancel);
+	CoAwaiter<T>& CoSave(const T& ref, FunCancel& cancel);
 	CoAwaiter<T>& Load(const std::string nickName, FunCancel& cancel);
 	/// <summary>
 	/// 主线程（单线程）调用，得到数据库执行结果（执行协程下一句）
