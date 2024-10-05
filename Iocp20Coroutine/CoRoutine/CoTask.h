@@ -109,7 +109,7 @@ public:
 	/// <summary>
 	/// 继续执行协程函数代码执直到遇到yield挂起
 	/// </summary>
-	bool Run()
+	bool Run(const bool bMainThread = true)
 	{
 		//std::lock_guard lock(m_mutex);
 		if (FinishedNoLock())
@@ -122,7 +122,10 @@ public:
 			assert(false);
 			return true;
 		}
-		g_funRunCurrentCo = [this]() {this->Run(); };
+		if (bMainThread)
+		{
+			g_funRunCurrentCo = [this]() {this->Run(); };
+		}
 		m_hCoroutine.resume();
 		return TryClear();
 	}

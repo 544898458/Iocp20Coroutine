@@ -139,7 +139,7 @@ void WorldSessionFromGame::OnRecv(const MsgChangeMoney& msg)
 	{
 		MsgChangeMoneyResponce msgResponce = { .error = 1 };
 		msgResponce.msg.rpcSnId = msg.msg.rpcSnId;
-		this->Send(msg);
+		this->Send(msgResponce);
 		return;
 	}
 	m_coChangeMoney = CoChangeMoney(msg);

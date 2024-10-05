@@ -8,10 +8,18 @@ FunRunCurrentCo g_funRunCurrentCo;
 
 CoLock::~CoLock()
 {
+	assert(!g_mapLock.empty());
 	auto iter = g_mapLock.find(m_strLockKey);
 	auto& refDeque = iter->second;
-	auto& [_, fun] = refDeque.back();
-	fun();
+
+	if (g_mapLock.size() > 1)
+	{
+		auto& [refAwaiter, refFun] = refDeque.back();
+		if (!refAwaiter.m_bAwaitReady)
+		{
+			refFun();
+		}
+	}
 	refDeque.pop_back();
 }
 
