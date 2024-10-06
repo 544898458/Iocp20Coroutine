@@ -172,7 +172,7 @@ public:
 	{
 		m_Session.Send(ref);
 	}
-	void Process() { m_Session.Process(); }
+	bool Process() { return m_Session.Process(); }
 
 	/// <summary>
 	/// ¿ªÔ´WebSocket¿â

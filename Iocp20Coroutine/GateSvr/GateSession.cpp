@@ -107,23 +107,23 @@ void GateSession::OnRecvWorldSvr(const MsgGateDeleteSession& msg)
 	m_refSession.m_refSession.CloseSocket();
 }
 
-
-void GateSession::Process()
+bool GateSession::Process()
 {
 	while (true)
 	{
 		const MsgId msgId = this->m_MsgQueue.PopMsg();
-		if (MsgId::Invalid_0 == msgId)//没有消息可处理
-			break;
 		switch (msgId)
 		{
 		case MsgId::Invalid_0://没有消息可处理
-			return;
-		case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &GateSession::OnRecv); break;
+			return true;
+		case MsgId::Login:return this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &GateSession::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
 			assert(false);
+			return false;
 			break;
 		}
+		assert(false);
 	}
+	return true;
 }

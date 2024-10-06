@@ -88,24 +88,24 @@ void GameSvrSession::OnDestroy()
 }
 
 //主线程，单线程
-void GameSvrSession::Process()
+bool GameSvrSession::Process()
 {
 	while (true)
 	{
 		const MsgId msgId = this->m_MsgQueue.PopMsg();
-		if (MsgId::Invalid_0 == msgId)//没有消息可处理
-			break;
-
 		switch (msgId)
 		{
-		case MsgId::Gate转发:this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &GameSvrSession::OnRecv); break;
-		case MsgId::GateAddSession:this->m_MsgQueue.OnRecv(this->m_queueGateAddSession, *this, &GameSvrSession::OnRecv); break;
-		case MsgId::GateDeleteSession:this->m_MsgQueue.OnRecv(this->m_queueGateDeleteSession, *this, &GameSvrSession::OnRecv); break;
+		case MsgId::Invalid_0:return true;//没有消息可处理
+		case MsgId::Gate转发:return this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &GameSvrSession::OnRecv); break;
+		case MsgId::GateAddSession:return this->m_MsgQueue.OnRecv(this->m_queueGateAddSession, *this, &GameSvrSession::OnRecv); break;
+		case MsgId::GateDeleteSession:return this->m_MsgQueue.OnRecv(this->m_queueGateDeleteSession, *this, &GameSvrSession::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
 			assert(false);
+			return false;
 			break;
 		}
+		assert(false);
 	}
 
 	for (auto& pair : m_mapPlayerGateSession)

@@ -30,7 +30,7 @@ public:
 	/// <summary>
 	/// 工作线程中（单线程）调用
 	/// </summary>
-	void Process();
+	bool Process();
 	template<class T> std::deque<T>& GetQueue();
 	CompeletionKeySession& m_refSession;
 	/// <summary>

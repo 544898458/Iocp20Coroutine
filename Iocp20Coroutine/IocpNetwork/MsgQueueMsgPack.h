@@ -13,9 +13,9 @@ public:
 	}
 	void PushMsg(T_Session& session, const msgpack::object& obj);
 	template<class T_Msg>
-	void OnRecv(std::deque<T_Msg>& queue, T_Session& session, void (T_Session::* funOnRecv)(const T_Msg&))
+	bool OnRecv(std::deque<T_Msg>& queue, T_Session& session, void (T_Session::* funOnRecv)(const T_Msg&))
 	{
-		m_MsgQueue.OnRecv(queue, session, funOnRecv);
+		return m_MsgQueue.OnRecv(queue, session, funOnRecv);
 	}
 
 private:

@@ -57,7 +57,8 @@ void Sessions<T_Session>::Update(T_Function const& functionLockUpdate)
 	for (auto iter = m_mapSession.begin(); iter != m_mapSession.end(); )
 	{
 		Session* p = iter->second;
-		p->Session.Process();
+		if (!p->Session.Process())
+			p->Session.m_refSession.CloseSocket();
 
 		if (!p->Finished())
 		{
