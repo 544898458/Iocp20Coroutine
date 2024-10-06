@@ -102,6 +102,12 @@ void GateSession::OnRecvWorldSvr(const MsgLoginResponce& msg)
 	CoRpc<MsgLoginResponce>::OnRecvResponce(false, msg);
 }
 
+void GateSession::OnRecvWorldSvr(const MsgGateDeleteSession& msg)
+{
+	
+}
+
+
 void GateSession::Process()
 {
 	while (true)

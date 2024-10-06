@@ -20,14 +20,15 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 	auto utf8Name = msg.name;
 	auto gbkName = StrConv::Utf8ToGbk(msg.name);
 	auto& refDb = *co_await DbPlayer::CoGet绝不返回空(gbkName);
-	MsgLoginResponce msgResponce = { .msg = {.rpcSnId = msg.msg.rpcSnId} };
+	MsgLoginResponce msgResponce;
+	msgResponce.msg.rpcSnId = msg.msg.rpcSnId;
 	if (refDb.pwd != msg.pwd)
 	{
 		msgResponce.result = MsgLoginResponce::PwdErr;
 		SendToGate转发(msgResponce);
 		co_return 0;
 	}
-	
+
 	//现在密码对了，看看要不要踢同号
 	auto itFindSessionId = g_mapPlayerNickNameGateSessionId.find(gbkName);
 	if (g_mapPlayerNickNameGateSessionId.end() != itFindSessionId)
@@ -40,12 +41,14 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 			assert(false);
 			co_return 0;
 		}
-		
+
 		auto& refGateSession = itFindSession->second;
 		//通知GameSvr此Session是断线状态（不再接收消息）
-		
+		SendToGate转发<MsgGateDeleteSession>({ .gateClientSessionId = m_idPlayerGateSession });
+
 	}
-	
+	g_mapPlayerNickNameGateSessionId.insert({ gbkName,m_idPlayerGateSession });
+
 	//通知GateSvr继续登录流程
 	SendToGate转发(msgResponce);
 	co_return 0;
@@ -89,7 +92,7 @@ void PlayerGateSession_World::SendToGate转发(const T& refMsg)
 	MsgPack::SendMsgpack(refMsg, [this](const void* buf, int len)
 		{
 			m_refSession.Send(MsgGate转发(buf, len, m_idPlayerGateSession, ++m_snSend));
-		},false);
+		}, false);
 }
 template<class T>
 void PlayerGateSession_World::SendToGame转发(const T& refMsg)
@@ -97,5 +100,5 @@ void PlayerGateSession_World::SendToGame转发(const T& refMsg)
 	MsgPack::SendMsgpack(refMsg, [this](const void* buf, int len)
 		{
 			//m_refSession.Send(MsgGate转发(buf, len, m_idPlayerGateSession, ++m_snSend));
-		},false);
+		}, false);
 }

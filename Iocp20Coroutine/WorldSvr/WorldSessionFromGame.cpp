@@ -42,7 +42,7 @@ void WorldSessionFromGame::Process()
 		{
 		case MsgId::Invalid_0://没有消息可处理
 			return;
-		//case MsgId::Login:	this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &WorldSession::OnRecv); break;
+			//case MsgId::Login:	this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &WorldSession::OnRecv); break;
 		case MsgId::Say:	this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldSessionFromGame::OnRecv); break;
 		case MsgId::ConsumeMoney:	this->m_MsgQueue.OnRecv(this->m_queueConsumeMoney, *this, &WorldSessionFromGame::OnRecv); break;
 		default:
@@ -94,7 +94,7 @@ CoTask<int> WorldSessionFromGame::CoChangeMoney(const MsgChangeMoney msg)
 	static FunCancel funCancel;
 	CoLock lock;
 	co_await lock.Lock(msg.nickName, funCancel);
-	auto& refDb = * co_await DbPlayer::CoGet绝不返回空(msg.nickName);
+	auto& refDb = *co_await DbPlayer::CoGet绝不返回空(msg.nickName);
 	MsgChangeMoneyResponce msgResponce;//{ .msg = {.rpcSnId = msg.msg.rpcSnId} };
 	msgResponce.msg.rpcSnId = msg.msg.rpcSnId;
 	assert(0 <= refDb.money);
@@ -129,10 +129,10 @@ CoTask<int> WorldSessionFromGame::CoChangeMoney(const MsgChangeMoney msg)
 	this->Send(msgResponce);
 	co_return 0;
 }
-CoTask<int> WorldSessionFromGame::CoLogin(const MsgLogin msg, FunCancel &funCancel)
-{
-	co_return 0;
-}
+//CoTask<int> WorldSessionFromGame::CoLogin(const MsgLogin msg, FunCancel& funCancel)
+//{
+//	co_return 0;
+//}
 void WorldSessionFromGame::OnRecv(const MsgChangeMoney& msg)
 {
 	//if (!m_coChangeMoney.Finished())//某些操作应该串行排队

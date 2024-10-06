@@ -3,11 +3,8 @@
 #include "../CoRoutine/CoRpc.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 #include "GateServer.h"
-//template Iocp::Server<WorldClient>;
-//template bool Iocp::Server<WorldClient>::Init<WorldClientSession>(const uint16_t);
-//template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WorldClientSession, WorldClient >(HANDLE hIocp, SOCKET socketListen, WorldClient&);
+
 template Iocp::SessionSocketCompletionKey<ClientSession_GateToWorld>;
-//std::function<void(MsgSay const&)> WorldClient::m_funBroadcast;
 
 /// <summary>
 /// 主线程，单线程
@@ -22,7 +19,7 @@ void ClientSession_GateToWorld::Process()
 
 		switch (msgId)
 		{
-		case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &ClientSession_GateToWorld::OnRecv); break;
+		case MsgId::GateDeleteSession:this->m_MsgQueue.OnRecv(this->m_queueGateDeleteSession, *this, &ClientSession_GateToWorld::OnRecv); break;
 		case MsgId::Gate转发:this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &ClientSession_GateToWorld::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
@@ -33,7 +30,7 @@ void ClientSession_GateToWorld::Process()
 }
 
 
-void ClientSession_GateToWorld::OnRecv(const MsgLogin& msg)
+void ClientSession_GateToWorld::OnRecv(const MsgGateDeleteSession& msg)
 {
 	
 }
@@ -55,11 +52,14 @@ void ClientSession_GateToWorld::OnRecv(const MsgGate转发& msg转发)
 	auto pSession = g_upGateSvr->m_Server.m_Sessions.GetSession(msg转发.gateClientSessionId);
 	//auto pSession = (GateSession*)gateSessionId;
 	CHECK_NOTNULL_VOID(pSession);
-	
-	pSession->Session.m_Session.OnRecvWorldSvr(obj.as<MsgLoginResponce>());
+	switch (msg.id)
+	{
+	case MsgId::Login:	pSession->Session.m_Session.OnRecvWorldSvr(obj.as<MsgLoginResponce>());	break;
+		case MsgId::GateDeleteSession:	pSession->Session.m_Session.OnRecvWorldSvr(obj.as<MsgGateDeleteSession>());	break;
+	}
 }
 
-template<> std::deque<MsgLogin>& ClientSession_GateToWorld::GetQueue() { return m_queueLogin; }
+template<> std::deque<MsgGateDeleteSession>& ClientSession_GateToWorld::GetQueue() { return m_queueGateDeleteSession; }
 template<> std::deque<MsgGate转发>& ClientSession_GateToWorld::GetQueue() { return m_queueGate转发; }
 
 /// <summary>
@@ -89,7 +89,7 @@ void ClientSession_GateToWorld::OnRecvPack(const void* buf, int len)
 
 	switch (msg.id)
 	{
-	case MsgId::Login:	m_MsgQueue.PushMsg<MsgLogin>(*this,obj);break;
+	case MsgId::GateDeleteSession:	m_MsgQueue.PushMsg<MsgGateDeleteSession>(*this,obj);break;
 	case MsgId::Gate转发:	m_MsgQueue.PushMsg<MsgGate转发>(*this, obj); break;
 	default:
 		LOG(WARNING) << "ERR:" << msg.id;

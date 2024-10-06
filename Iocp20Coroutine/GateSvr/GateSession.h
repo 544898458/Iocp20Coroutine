@@ -26,6 +26,7 @@ public:
 	void OnDestroy();
 	void OnInit(CompeletionKeySession& refSession, GateServer&);
 	void OnRecvWorldSvr(const MsgLoginResponce& msg);
+	void OnRecvWorldSvr(const MsgGateDeleteSession& msg);
 	/// <summary>
 	/// 工作线程中（单线程）调用
 	/// </summary>

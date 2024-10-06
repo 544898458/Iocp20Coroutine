@@ -55,7 +55,7 @@ private:
 	/// 主逻辑线程（控制台界面线程）调用
 	/// </summary>
 	/// <param name="msg"></param>
-	void OnRecv(const MsgLogin& msg);
+	void OnRecv(const MsgGateDeleteSession& msg);
 	void OnRecv(const MsgGate转发& msg);
 
 	void OnRecvPack(const void* buf, int len);
@@ -64,7 +64,7 @@ private:
 	/// <summary>
 	/// 这里保存的都是解析后的消息明文,反序列化在网络线程，处理明文消息在逻辑线程
 	/// </summary>
-	std::deque<MsgLogin> m_queueLogin;
+	std::deque<MsgGateDeleteSession> m_queueGateDeleteSession;
 	std::deque<MsgGate转发> m_queueGate转发;
 	MsgQueueMsgPack<ClientSession_GateToWorld> m_MsgQueue;
 	Session& m_refSession;
