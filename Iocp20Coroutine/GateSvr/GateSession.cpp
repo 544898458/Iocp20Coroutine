@@ -104,7 +104,7 @@ void GateSession::OnRecvWorldSvr(const MsgLoginResponce& msg)
 
 void GateSession::OnRecvWorldSvr(const MsgGateDeleteSession& msg)
 {
-	
+	m_refSession.m_refSession.CloseSocket();
 }
 
 

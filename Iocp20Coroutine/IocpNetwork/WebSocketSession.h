@@ -138,7 +138,7 @@ class WebSocketSession
 {
 public:
 	using Session = Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>;
-	WebSocketSession(Session&) :m_Session(*this) {}
+	WebSocketSession(Session&ref) :m_Session(*this), m_refSession(ref){}
 	/// <summary>
 	/// 构造函数和OnInit会紧挨着调用，初始化代码可以随便找个地方写，只要能编译通过，效果就完全相同
 	/// </summary>
@@ -178,6 +178,7 @@ public:
 	/// 开源WebSocket库
 	/// </summary>
 	std::unique_ptr<MyWebSocketEndpoint<T_Session, Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>>> m_webSocketEndpoint;
+	Session& m_refSession;
 	T_Session m_Session;
 	Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>* m_pSession;
 private:

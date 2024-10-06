@@ -23,9 +23,9 @@ public:
 	/// 连接Socket同时有两个重叠操作Recv和Accept
 	/// </summary>
 	//virtual void StartCoRoutine() = 0;
+	void CloseSocket();
 protected:
 	SOCKET Socket() const;
-	void CloseSocket();
 public:
 	HANDLE hIocp = nullptr;
 private:
