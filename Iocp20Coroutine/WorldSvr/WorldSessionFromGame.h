@@ -11,7 +11,7 @@ class WorldSessionFromGame
 {
 public:
 	using CompeletionKeySession = Iocp::SessionSocketCompletionKey<WorldSessionFromGame>;
-	WorldSessionFromGame(CompeletionKeySession&) {}
+	WorldSessionFromGame(CompeletionKeySession&ref):m_refSession(ref){}
 	int OnRecv(CompeletionKeySession&, const void* buf, int len);
 	void OnDestroy();
 	void OnInit(CompeletionKeySession& refSession, WorldSvrAcceptGame&);
@@ -26,9 +26,10 @@ public:
 	CompeletionKeySession* m_pSession = nullptr;
 	WorldSvrAcceptGame* m_pServer = nullptr;
 	template<class T> std::deque<T>& GetQueue();
-	void Process();
+	bool Process();
 	uint32_t m_snRecv = 0;
 	uint32_t m_snSend = 0;
+	CompeletionKeySession& m_refSession;
 private:
 	void OnRecvPack(const void* buf, int len);
 	void OnRecv(const MsgLogin& msg);

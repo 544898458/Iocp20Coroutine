@@ -13,7 +13,7 @@ class GameSvrSession
 public:
 	//using WebSocketGameSession = WebSocketSession<GameSvrSession>;
 	using Session = Iocp::SessionSocketCompletionKey<GameSvrSession>;
-	GameSvrSession(Session& refWsSession) {}
+	GameSvrSession(Session& ref):m_refSession(ref){}
 
 	/// <summary>
 	/// WebSocket收到一个完整二进制包
@@ -37,7 +37,7 @@ public:
 	}
 	void SendToGate(const void* buf, const int len)
 	{
-		m_pWsSession->Send(buf, len);
+		m_refSession.Send(buf, len);
 	}
 	GameSvr* m_pServer = nullptr;
 
@@ -47,8 +47,10 @@ public:
 	/// <summary>
 	/// 工作线程中（单线程）调用
 	/// </summary>
-	void Process();
+	bool Process();
 	uint32_t m_snRecv = 0;
+
+	Session& m_refSession;
 private:
 	void OnRecvPack(const void* buf, const int len);
 	void OnRecv(const MsgGate转发& msg);
@@ -64,6 +66,4 @@ private:
 
 	std::map<uint64_t, PlayerGateSession_Game> m_mapPlayerGateSession;
 	MsgQueueMsgPack<GameSvrSession> m_MsgQueue;
-private:
-	Session* m_pWsSession = nullptr;
 };

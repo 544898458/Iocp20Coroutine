@@ -30,25 +30,27 @@ int WorldSessionFromGate::OnRecv(CompeletionKeySession&, const void* buf, int le
 	return Iocp::OnRecv3(buf, len, *this, &WorldSessionFromGate::OnRecvPack);
 }
 
-void WorldSessionFromGate::Process()
+bool WorldSessionFromGate::Process()
 {
 	while (true)
 	{
 		const MsgId msgId = this->m_MsgQueue.PopMsg();
-		if (MsgId::Invalid_0 == msgId)//没有消息可处理
-			break;
 		switch (msgId)
 		{
 		case MsgId::Invalid_0://没有消息可处理
-			return;
+			return true;
 		//case MsgId::Login:	this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &WorldSession::OnRecv); break;
-		case MsgId::Gate转发:	this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &WorldSessionFromGate::OnRecv); break;
+		case MsgId::Gate转发:	return this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &WorldSessionFromGate::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
 			assert(false);
+			return false;
 			break;
 		}
 	}
+
+	assert(false);
+	return false;
 }
 
 /// <summary>

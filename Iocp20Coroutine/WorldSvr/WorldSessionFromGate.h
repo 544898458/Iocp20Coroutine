@@ -11,7 +11,7 @@ class WorldSessionFromGate
 {
 public:
 	using CompeletionKeySession = Iocp::SessionSocketCompletionKey<WorldSessionFromGate>;
-	WorldSessionFromGate(CompeletionKeySession&) {}
+	WorldSessionFromGate(CompeletionKeySession&ref):m_refSession(ref) {}
 	int OnRecv(CompeletionKeySession&, const void* buf, int len);
 	void OnDestroy();
 	void OnInit(CompeletionKeySession& refSession, WorldSvrAcceptGate&);
@@ -24,9 +24,11 @@ public:
 	CompeletionKeySession* m_pSession = nullptr;
 	WorldSvrAcceptGate* m_pServer = nullptr;
 	template<class T> std::deque<T>& GetQueue();
-	void Process();
+	bool Process();
 	uint32_t m_snRecv = 0;
 	uint32_t m_snSend = 0;
+
+	CompeletionKeySession& m_refSession;
 private:
 	void OnRecvPack(const void* buf, int len);
 	void OnRecv(const MsgGate×ª·¢& msg);

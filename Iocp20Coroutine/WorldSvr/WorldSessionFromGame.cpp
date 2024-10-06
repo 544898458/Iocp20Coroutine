@@ -31,26 +31,27 @@ int WorldSessionFromGame::OnRecv(CompeletionKeySession&, const void* buf, int le
 	return Iocp::OnRecv3(buf, len, *this, &WorldSessionFromGame::OnRecvPack);
 }
 
-void WorldSessionFromGame::Process()
+bool WorldSessionFromGame::Process()
 {
 	while (true)
 	{
 		const MsgId msgId = this->m_MsgQueue.PopMsg();
-		if (MsgId::Invalid_0 == msgId)//没有消息可处理
-			break;
 		switch (msgId)
 		{
 		case MsgId::Invalid_0://没有消息可处理
-			return;
+			return false;
 			//case MsgId::Login:	this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &WorldSession::OnRecv); break;
-		case MsgId::Say:	this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldSessionFromGame::OnRecv); break;
-		case MsgId::ConsumeMoney:	this->m_MsgQueue.OnRecv(this->m_queueConsumeMoney, *this, &WorldSessionFromGame::OnRecv); break;
+		case MsgId::Say:	return this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldSessionFromGame::OnRecv); break;
+		case MsgId::ConsumeMoney:	return this->m_MsgQueue.OnRecv(this->m_queueConsumeMoney, *this, &WorldSessionFromGame::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
 			assert(false);
+			return false;
 			break;
 		}
 	}
+	assert(false);
+	return false;
 }
 
 /// <summary>

@@ -74,7 +74,7 @@ void GameSvrSession::OnInit(Session& refWsSession, GameSvr& server)
 	server.m_Sessions.AddSession(&refWsSession, [this, &refWsSession, &server]()
 		{
 			m_pServer = &server;
-			m_pWsSession = &refWsSession;
+			//m_pWsSession = &refWsSession;
 		}, (uint64_t)this);
 }
 
@@ -112,6 +112,7 @@ bool GameSvrSession::Process()
 	{
 		pair.second.Process();
 	}
+	return true;
 }
 template<> std::deque<MsgGate转发>& GameSvrSession::GetQueue() { return m_queueGate转发; }
 template<> std::deque<MsgGateAddSession>& GameSvrSession::GetQueue() { return m_queueGateAddSession; }
