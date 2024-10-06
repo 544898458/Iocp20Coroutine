@@ -142,7 +142,7 @@ void WorldSessionFromGame::OnRecv(const MsgChangeMoney& msg)
 	//	this->Send(msgResponce);
 	//	return;
 	//}
-	CoTask<int>::RunNew( CoChangeMoney(msg) );
+	CoChangeMoney(msg).RunNew();
 }
 //
 //void WorldSessionFromGame::OnRecv(const MsgLogin& msg)

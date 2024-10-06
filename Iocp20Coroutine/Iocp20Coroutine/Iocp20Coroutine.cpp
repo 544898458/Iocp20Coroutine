@@ -143,6 +143,7 @@ int main(void)
 		accept.m_Server.Update();
 		g_ConnectToWorldSvr->Session.Process();
 		CoTimer::Update();
+		CoTask<int>::Process();
 	}
 
 	if (funCancelSpawnMonster)

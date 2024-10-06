@@ -39,8 +39,8 @@ private:
 	
 	CoTask<int> m_coLogin;
 
-	std::vector<CoTask<int>>	m_vecCoRpc;
-	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;
+	//std::vector<CoTask<int>>	m_vecCoRpc;
+	//std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;
 	bool m_bLoginOk = false;
 
 	WorldSessionFromGate& m_refSession;

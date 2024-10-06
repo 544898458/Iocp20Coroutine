@@ -1,3 +1,9 @@
+/*
+协程调度
+CoTask和CoAwaiter的区别：
+CoTask的返回值是co_return和co_yield的返回值，用于模拟迭代器MoveNext操作
+CoAwaiter的返回值是co_return的返回值，直接返回给上一层协程变量。
+*/
 #pragma once
 #include<glog/logging.h>
 #include<coroutine>
@@ -193,10 +199,24 @@ public:
 		m_hCoroutine.promise().previous = h;
 		return m_hCoroutine;
 	}
-	static void RunNew( CoTask &&co)
+	/// <summary>
+	/// 主线程(界面线程)所有的协程,如果是允许无限个相同协程并行的,启动都可以用这个,否则应该自己报错CoTask判断上一个协程是否结束
+	/// </summary>
+	void RunNew()
 	{
-		co.Run();
-		m_listCo.push_back(std::forward<CoTask&&>(co));
+		Run();
+		m_listCo.push_back(std::forward<CoTask&&>(*this));
+	}
+	static void Process()
+	{
+
+		const auto oldSize = m_listCo.size();
+		std::erase_if(m_listCo, [](CoTask& refCo)->bool {return refCo.Finished(); });
+		const auto newSize = m_listCo.size();
+		if (oldSize != newSize)
+		{
+			LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
+		}
 	}
 	static std::list<CoTask> m_listCo;
 	std::mutex m_mutex;

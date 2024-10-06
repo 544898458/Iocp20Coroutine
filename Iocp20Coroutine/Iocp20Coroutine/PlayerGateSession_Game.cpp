@@ -75,13 +75,14 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 	//	LOG(WARNING) << "m_coRpc前一个协程还没结束";
 	//	return;
 	//}
-	auto iterNew = m_vecCoRpc.insert(m_vecCoRpc.end(), CoAddRole());
-	if (iterNew == m_vecCoRpc.end())
-	{
-		LOG(ERROR) << "err";
-		return;
-	}
-	iterNew->Run();
+	//auto iterNew = m_vecCoRpc.insert(m_vecCoRpc.end(), CoAddRole());
+	//if (iterNew == m_vecCoRpc.end())
+	//{
+	//	LOG(ERROR) << "err";
+	//	return;
+	//}
+	//iterNew->Run();
+	CoAddRole().RunNew();
 }
 
 void SendToWorldSvr(const MsgChangeMoney& msg);
@@ -245,15 +246,15 @@ void PlayerGateSession_Game::Process()
 			LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
 		}
 	}
-	{
-		const auto oldSize = m_vecCoRpc.size();
-		std::erase_if(m_vecCoRpc, [](CoTask<int>& refCo)->bool {return refCo.Finished(); });
-		const auto newSize = m_vecCoRpc.size();
-		if (oldSize != newSize)
-		{
-			LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
-		}
-	}
+	//{
+	//	const auto oldSize = m_vecCoRpc.size();
+	//	std::erase_if(m_vecCoRpc, [](CoTask<int>& refCo)->bool {return refCo.Finished(); });
+	//	const auto newSize = m_vecCoRpc.size();
+	//	if (oldSize != newSize)
+	//	{
+	//		LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
+	//	}
+	//}
 
 	//while (true)
 	//{

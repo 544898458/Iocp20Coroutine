@@ -60,7 +60,7 @@ void CoDb<T>::LoadFromDbThread(const std::string nickName, SpCoAwaiterT& spCoAwa
 		//dequeLocal.pop_front();
 	}
 
-	//Ä£ÄâÐ´Ó²ÅÌºÜ¿¨
+	//Ä£Äâ¶ÁÓ²ÅÌºÜ¿¨
 	std::this_thread::sleep_for(std::chrono::seconds(1));
 	{
 		spCoAwait->SetResult(objT);
@@ -93,7 +93,7 @@ void CoDb<T>::SaveInDbThread(const T& ref, SpCoAwaiterT& spCoAwait)
 	out.close();
 	LOG(INFO) << "ÒÑÐ´Èë" << strFileName;
 	//Ä£ÄâÐ´Ó²ÅÌºÜ¿¨
-	std::this_thread::sleep_for(std::chrono::seconds(5));
+	std::this_thread::sleep_for(std::chrono::seconds(2));
 	{
 		spCoAwait->SetResult(ref);
 		std::lock_guard lock(m_mutexDequeResult);
