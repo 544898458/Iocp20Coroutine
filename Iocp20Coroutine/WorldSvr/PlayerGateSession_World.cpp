@@ -37,7 +37,7 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 		auto itFindSession = g_mapPlayerGateSession.find(idSessionId);
 		if (g_mapPlayerGateSession.end() == itFindSession)
 		{
-			LOG(ERROR) << "idSessionI=" << idSessionId;
+			LOG(ERROR) << "idSessionId=" << idSessionId;
 			assert(false);
 			co_return 0;
 		}
@@ -45,11 +45,14 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 		auto& refGateSession = itFindSession->second;
 		//通知GameSvr此Session是断线状态（不再接收消息）
 		LOG(INFO) << gbkName << "," << m_idPlayerGateSession << "踢" << refGateSession.m_idPlayerGateSession;
-		refGateSession.SendToGate转发<MsgGateDeleteSession>({ .gateClientSessionId = refGateSession.m_idPlayerGateSession });
+		refGateSession.SendToGate转发<MsgGateDeleteSession>({});
 
 	}
-	g_mapPlayerNickNameGateSessionId.insert({ gbkName,m_idPlayerGateSession });
+	//const auto pair = g_mapPlayerNickNameGateSessionId.insert({ gbkName,m_idPlayerGateSession});
+	//assert(pair.second);
+	g_mapPlayerNickNameGateSessionId[gbkName] = m_idPlayerGateSession;
 
+	m_nickName = gbkName;
 	//通知GateSvr继续登录流程
 	SendToGate转发(msgResponce);
 	co_return 0;

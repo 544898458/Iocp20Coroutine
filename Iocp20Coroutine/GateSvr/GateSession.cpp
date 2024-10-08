@@ -83,7 +83,8 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 
 void GateSession::OnDestroy()
 {
-	SendToGameSvr(MsgGateDeleteSession(), GetId(), ++m_snSendToGameSvr);
+	SendToGameSvr<MsgGateDeleteSession>({}, GetId(), ++m_snSendToGameSvr);
+	SendToWorldSvr×ª·¢<MsgGateDeleteSession>({}, GetId());// , ++m_snSendToWorldSvr);
 }
 
 void GateSession::OnInit(CompeletionKeySession& refSession, GateServer& refServer)

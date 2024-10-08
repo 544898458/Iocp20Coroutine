@@ -35,7 +35,10 @@ void SendToGameSvr转发(const void* buf, const int len, uint64_t gateSessionId)
 template<class T>
 void SendToGameSvr(const T& refMsg, const uint64_t gateSessionId, uint32_t snSend)
 {
-	g_ConnectToGameSvr->Session.Send(refMsg);
+	MsgPack::SendMsgpack(refMsg, [gateSessionId, snSend](const void* buf, int len)
+		{
+			g_ConnectToGameSvr->Session.Send(MsgGate转发(buf, len, gateSessionId, snSend));
+		}, false);
 }
 template void SendToGameSvr(const MsgGateDeleteSession&, const uint64_t gateSessionId, uint32_t);
 template void SendToGameSvr(const MsgGateAddSession&, const uint64_t gateSessionId, uint32_t);
@@ -50,9 +53,10 @@ void SendToWorldSvr转发(const T& refMsg, const uint64_t gateSessionId)
 			static uint32_t sn = 0;
 			++sn;
 			g_ConnectToWorldSvr->Session.Send(MsgGate转发(buf, len, gateSessionId, sn));
-		},false);
+		}, false);
 }
 template void SendToWorldSvr转发(const MsgLogin&, const uint64_t gateSessionId);
+template void SendToWorldSvr转发(const MsgGateDeleteSession&, const uint64_t gateSessionId);
 
 
 std::unique_ptr<Iocp::Server<GateServer>> g_upGateSvr;
@@ -82,7 +86,7 @@ void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 
 int main()
 {
-	Iocp::ThreadPool threadPoolNetwork; 
+	Iocp::ThreadPool threadPoolNetwork;
 	threadPoolNetwork.Init();
 	g_upGateSvr.reset(new Iocp::Server<GateServer>(threadPoolNetwork.GetIocp()));
 	Iocp::WsaStartup();

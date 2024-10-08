@@ -39,7 +39,7 @@ bool WorldSessionFromGate::Process()
 		{
 		case MsgId::Invalid_0://没有消息可处理
 			return true;
-		//case MsgId::Login:	this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &WorldSession::OnRecv); break;
+			//case MsgId::Login:	this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &WorldSession::OnRecv); break;
 		case MsgId::Gate转发:	return this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &WorldSessionFromGate::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
@@ -74,8 +74,8 @@ void WorldSessionFromGate::OnRecvPack(const void* buf, int len)
 	}
 }
 
-std::map<uint64_t,PlayerGateSession_World> g_mapPlayerGateSession;
-
+std::map<uint64_t, PlayerGateSession_World> g_mapPlayerGateSession;
+extern std::map<std::string, uint64_t> g_mapPlayerNickNameGateSessionId;
 void WorldSessionFromGate::OnRecv(const MsgGate转发& msg转发)
 {
 	if (msg转发.vecByte.empty())
@@ -91,17 +91,34 @@ void WorldSessionFromGate::OnRecv(const MsgGate转发& msg转发)
 	LOG(INFO) << obj;
 
 	auto iter = g_mapPlayerGateSession.find(msg转发.gateClientSessionId);
-	if (g_mapPlayerGateSession.end() == iter)
+
+
+	switch (msg.id)
 	{
-		auto pair = g_mapPlayerGateSession.insert({ msg转发.gateClientSessionId,PlayerGateSession_World(*this,msg转发.gateClientSessionId)});
-		iter = pair.first;
+	case MsgId::GateDeleteSession:
+	{
+		assert(g_mapPlayerGateSession.end() != iter);
+		auto& refPlayerGateSession = iter->second;
+		//const auto countErase = g_mapPlayerNickNameGateSessionId.erase(refPlayerGateSession.NickName());
+		//assert(1 == countErase);
+		const auto countErase = g_mapPlayerGateSession.erase(iter);
+		assert(1 == countErase);
 	}
+	break;
+	default:
+	{
+		if (g_mapPlayerGateSession.end() == iter)
+		{
+			auto pair = g_mapPlayerGateSession.insert({ msg转发.gateClientSessionId,PlayerGateSession_World(*this,msg转发.gateClientSessionId) });
+			iter = pair.first;
+		}
 
-	auto& refPlayerGateSession = iter->second;
-	
-	refPlayerGateSession.RecvMsg(msg.id, obj);
+		auto& refPlayerGateSession = iter->second;
+		refPlayerGateSession.RecvMsg(msg.id, obj);
+	}
+	break;
+	}
 }
-
 template<> std::deque<MsgGate转发>& WorldSessionFromGate::GetQueue() { return m_queueGate转发; }
 
 void WorldSessionFromGate::OnInit(CompeletionKeySession& refSession, WorldSvrAcceptGate& refServer)
