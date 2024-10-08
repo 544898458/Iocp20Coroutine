@@ -20,7 +20,7 @@
 
 std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GateToGame>> g_ConnectToGameSvr;
 bool g_running(true);
-void SendToGameSvr(const void* buf, const int len, uint64_t gateSessionId)// , uint32_t sn)
+void SendToGameSvr转发(const void* buf, const int len, uint64_t gateSessionId)// , uint32_t sn)
 {
 	static uint32_t sn = 0;
 	++sn;
@@ -33,13 +33,12 @@ void SendToGameSvr(const void* buf, const int len, uint64_t gateSessionId)// , u
 /// <typeparam name="T"></typeparam>
 /// <param name="refMsg"></param>
 template<class T>
-void SendToGameSvr(const T& refMsg)//, uint32_t snSend)
+void SendToGameSvr(const T& refMsg, const uint64_t gateSessionId, uint32_t snSend)
 {
-	//refMsg.msg.SetSn(snSend);
 	g_ConnectToGameSvr->Session.Send(refMsg);
 }
-template void SendToGameSvr(const MsgGateDeleteSession&);// , uint32_t);
-template void SendToGameSvr(const MsgGateAddSession&);// , uint32_t);
+template void SendToGameSvr(const MsgGateDeleteSession&, const uint64_t gateSessionId, uint32_t);
+template void SendToGameSvr(const MsgGateAddSession&, const uint64_t gateSessionId, uint32_t);
 
 std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GateToWorld>> g_ConnectToWorldSvr;
 

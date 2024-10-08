@@ -13,8 +13,8 @@ public:
 	using CompeletionKeySession = WebSocketSession<GateSession>;
 	GateSession(CompeletionKeySession& ref) :m_refSession(ref)
 	{
-
 	}
+	uint64_t GetId()const { return (uint64_t)this; }
 	//int OnRecv(CompeletionKeySession&, const void* buf, int len);
 	/// <summary>
 	/// WebSocket收到一个完整二进制包
@@ -22,7 +22,7 @@ public:
 	/// <param name="buf"></param>
 	/// <param name="len"></param>
 	void OnRecvWsPack(const void* buf, const int len);
-	
+
 	void OnDestroy();
 	void OnInit(CompeletionKeySession& refSession, GateServer&);
 	void OnRecvWorldSvr(const MsgLoginResponce& msg);
@@ -39,6 +39,7 @@ public:
 	std::deque<MsgLogin> m_queueLogin;
 	MsgQueueMsgPack<GateSession> m_MsgQueue;
 	uint32_t m_snRecv = 0;
+	uint32_t m_snSendToGameSvr = 0;
 	bool m_bLoginOk = false;
 private:
 	void OnRecv(const MsgLogin& msg);

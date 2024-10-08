@@ -44,7 +44,8 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 
 		auto& refGateSession = itFindSession->second;
 		//通知GameSvr此Session是断线状态（不再接收消息）
-		SendToGate转发<MsgGateDeleteSession>({ .gateClientSessionId = m_idPlayerGateSession });
+		LOG(INFO) << gbkName << "," << m_idPlayerGateSession << "踢" << refGateSession.m_idPlayerGateSession;
+		refGateSession.SendToGate转发<MsgGateDeleteSession>({ .gateClientSessionId = refGateSession.m_idPlayerGateSession });
 
 	}
 	g_mapPlayerNickNameGateSessionId.insert({ gbkName,m_idPlayerGateSession });

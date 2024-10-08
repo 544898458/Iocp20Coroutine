@@ -54,15 +54,15 @@ public:
 private:
 	void OnRecvPack(const void* buf, const int len);
 	void OnRecv(const MsgGate转发& msg);
-	void OnRecv(const MsgGateAddSession& msg);
-	void OnRecv(const MsgGateDeleteSession& msg);
+	void OnRecv(const MsgGateAddSession& msg, const uint64_t idGateClientSession);
+	void OnRecv(const MsgGateDeleteSession& msg, const uint64_t idGateClientSession);
 
 	/// <summary>
 	/// 这里保存的都是解析后的消息明文
 	/// </summary>
 	std::deque<MsgGate转发> m_queueGate转发;
-	std::deque<MsgGateAddSession> m_queueGateAddSession;
-	std::deque<MsgGateDeleteSession> m_queueGateDeleteSession;
+	//std::deque<MsgGateAddSession> m_queueGateAddSession;
+	//std::deque<MsgGateDeleteSession> m_queueGateDeleteSession;
 
 	std::map<uint64_t, PlayerGateSession_Game> m_mapPlayerGateSession;
 	MsgQueueMsgPack<GameSvrSession> m_MsgQueue;

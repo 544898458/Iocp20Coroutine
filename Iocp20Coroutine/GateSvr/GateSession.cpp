@@ -19,7 +19,10 @@ template void WebSocketSession<GateSession>::OnInit<GateServer>(Iocp::SessionSoc
 //    return 0;
 //}
 
-void SendToGameSvr(const void* buf, const int len, uint64_t gateSessionId);// , uint32_t sn);
+void SendToGameSvr转发(const void* buf, const int len, uint64_t gateSessionId);// , uint32_t sn);
+template<class T> void SendToWorldSvr转发(const T& refMsg, const uint64_t gateSessionId);// , uint32_t snSend);
+template<class T> void SendToGameSvr(const T& refMsg, const uint64_t gateSessionId, uint32_t snSend);
+
 void GateSession::OnRecvWsPack(const void* buf, const int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
@@ -32,7 +35,7 @@ void GateSession::OnRecvWsPack(const void* buf, const int len)
 	case MsgId::Login:	m_MsgQueue.PushMsg<MsgLogin>(*this, obj); break;
 	default:
 		LOG(WARNING) << "转发GameSvr消息:" << msg.id;
-		SendToGameSvr(buf, len, (uint64_t)this);// , ++m_snSend);
+		SendToGameSvr转发(buf, len, GetId());// , ++m_snSend);
 		break;
 	}
 
@@ -50,14 +53,11 @@ void GateSession::OnRecv(const MsgLogin& msg)
 	m_coLogin.Run();
 }
 
-template<class T> void SendToWorldSvr转发(const T& refMsg, const uint64_t gateSessionId);// , uint32_t snSend);
-template<class T> void SendToGameSvr(const T& refMsg);// , uint32_t snSend);
-
 CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 {
 	assert(!m_bLoginOk);
 	{
-		auto [stop, responce] = co_await CoRpc<MsgLoginResponce>::Send<MsgLogin>(msg, [this](const MsgLogin& msg) {SendToWorldSvr转发<MsgLogin>(msg, (uint64_t)this); }, funCancel);
+		auto [stop, responce] = co_await CoRpc<MsgLoginResponce>::Send<MsgLogin>(msg, [this](const MsgLogin& msg) {SendToWorldSvr转发<MsgLogin>(msg, GetId()); }, funCancel);
 		LOG(INFO) << "WorldSvr返回登录结果stop=" << stop << ",error=" << responce.result;
 		if (stop)
 		{
@@ -67,23 +67,23 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 
 		if (responce.result != MsgLoginResponce::OK)
 		{
-			//此处应该提示后断线
+			LOG(WARNING) << "登录失败";
 			co_return 0;
 		}
 		m_bLoginOk = true;
 
 	}
-			
+
 	{
 		//登录GameSvr
-		SendToGameSvr<MsgGateAddSession>({ .gateClientSessionId = (uint64_t)this });// , ++m_snSend);
+		SendToGameSvr(MsgGateAddSession(), GetId(), ++m_snSendToGameSvr);
 	}
 	co_return 0;
 }
 
 void GateSession::OnDestroy()
 {
-	SendToGameSvr<MsgGateDeleteSession>({ .gateClientSessionId = (uint64_t)this });// , ++m_snSend);
+	SendToGameSvr(MsgGateDeleteSession(), GetId(), ++m_snSendToGameSvr);
 }
 
 void GateSession::OnInit(CompeletionKeySession& refSession, GateServer& refServer)
@@ -93,7 +93,7 @@ void GateSession::OnInit(CompeletionKeySession& refSession, GateServer& refServe
 			LOG(INFO) << "游戏客户端已连上";
 			//m_pServer = &refServer;
 			//m_pSession = &refSession;
-		}, (uint64_t)this);
+		}, GetId());
 
 }
 
@@ -104,7 +104,8 @@ void GateSession::OnRecvWorldSvr(const MsgLoginResponce& msg)
 
 void GateSession::OnRecvWorldSvr(const MsgGateDeleteSession& msg)
 {
-	m_refSession.m_refSession.CloseSocket();
+	LOG(INFO) << "主动断开游戏客户端Socket,Id=" << GetId(),
+		m_refSession.m_refSession.CloseSocket();
 }
 
 bool GateSession::Process()

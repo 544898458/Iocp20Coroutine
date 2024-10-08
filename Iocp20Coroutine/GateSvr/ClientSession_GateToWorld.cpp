@@ -19,7 +19,6 @@ void ClientSession_GateToWorld::Process()
 
 		switch (msgId)
 		{
-		case MsgId::GateDeleteSession:this->m_MsgQueue.OnRecv(this->m_queueGateDeleteSession, *this, &ClientSession_GateToWorld::OnRecv); break;
 		case MsgId::Gate转发:this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &ClientSession_GateToWorld::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
@@ -27,12 +26,6 @@ void ClientSession_GateToWorld::Process()
 			break;
 		}
 	}
-}
-
-
-void ClientSession_GateToWorld::OnRecv(const MsgGateDeleteSession& msg)
-{
-	
 }
 
 void ClientSession_GateToWorld::OnRecv(const MsgGate转发& msg转发)
@@ -55,7 +48,7 @@ void ClientSession_GateToWorld::OnRecv(const MsgGate转发& msg转发)
 	switch (msg.id)
 	{
 	case MsgId::Login:	pSession->Session.m_Session.OnRecvWorldSvr(obj.as<MsgLoginResponce>());	break;
-		case MsgId::GateDeleteSession:	pSession->Session.m_Session.OnRecvWorldSvr(obj.as<MsgGateDeleteSession>());	break;
+	case MsgId::GateDeleteSession:	pSession->Session.m_Session.OnRecvWorldSvr(obj.as<MsgGateDeleteSession>());	break;
 	}
 }
 
@@ -89,7 +82,7 @@ void ClientSession_GateToWorld::OnRecvPack(const void* buf, int len)
 
 	switch (msg.id)
 	{
-	case MsgId::GateDeleteSession:	m_MsgQueue.PushMsg<MsgGateDeleteSession>(*this,obj);break;
+	case MsgId::GateDeleteSession:	m_MsgQueue.PushMsg<MsgGateDeleteSession>(*this, obj); break;
 	case MsgId::Gate转发:	m_MsgQueue.PushMsg<MsgGate转发>(*this, obj); break;
 	default:
 		LOG(WARNING) << "ERR:" << msg.id;

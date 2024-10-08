@@ -60,8 +60,8 @@ void GameSvrSession::OnRecvPack(const void* buf, const int len)
 	switch (msg.id)
 	{
 	case MsgId::Gate转发:m_MsgQueue.PushMsg<MsgGate转发>(*this, obj); break;
-	case MsgId::GateAddSession:m_MsgQueue.PushMsg<MsgGateAddSession>(*this, obj); break;
-	case MsgId::GateDeleteSession:m_MsgQueue.PushMsg<MsgGateDeleteSession>(*this, obj); break;
+		//case MsgId::GateAddSession:m_MsgQueue.PushMsg<MsgGateAddSession>(*this, obj); break;
+		//case MsgId::GateDeleteSession:m_MsgQueue.PushMsg<MsgGateDeleteSession>(*this, obj); break;
 	default:
 		LOG(ERROR) << "没处理msgId:" << msg.id;
 		assert(false);
@@ -97,8 +97,8 @@ bool GameSvrSession::Process()
 		{
 		case MsgId::Invalid_0:return true;//没有消息可处理
 		case MsgId::Gate转发:return this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &GameSvrSession::OnRecv); break;
-		case MsgId::GateAddSession:return this->m_MsgQueue.OnRecv(this->m_queueGateAddSession, *this, &GameSvrSession::OnRecv); break;
-		case MsgId::GateDeleteSession:return this->m_MsgQueue.OnRecv(this->m_queueGateDeleteSession, *this, &GameSvrSession::OnRecv); break;
+			//case MsgId::GateAddSession:return this->m_MsgQueue.OnRecv(this->m_queueGateAddSession, *this, &GameSvrSession::OnRecv); break;
+			//case MsgId::GateDeleteSession:return this->m_MsgQueue.OnRecv(this->m_queueGateDeleteSession, *this, &GameSvrSession::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
 			assert(false);
@@ -115,8 +115,8 @@ bool GameSvrSession::Process()
 	return true;
 }
 template<> std::deque<MsgGate转发>& GameSvrSession::GetQueue() { return m_queueGate转发; }
-template<> std::deque<MsgGateAddSession>& GameSvrSession::GetQueue() { return m_queueGateAddSession; }
-template<> std::deque<MsgGateDeleteSession>& GameSvrSession::GetQueue() { return m_queueGateDeleteSession; }
+//template<> std::deque<MsgGateAddSession>& GameSvrSession::GetQueue() { return m_queueGateAddSession; }
+//template<> std::deque<MsgGateDeleteSession>& GameSvrSession::GetQueue() { return m_queueGateDeleteSession; }
 
 
 void GameSvrSession::OnRecv(const MsgGate转发& msg转发)
@@ -142,12 +142,20 @@ void GameSvrSession::OnRecv(const MsgGate转发& msg转发)
 	}
 
 	auto& refPlayerGateSession = iter->second;
-	refPlayerGateSession.RecvMsg(msg.id, obj);
+	switch (msg.id)
+	{
+	case MsgId::GateAddSession:OnRecv(obj.as<MsgGateAddSession>(), msg转发.gateClientSessionId); break;
+	case MsgId::GateDeleteSession:OnRecv(obj.as<MsgGateAddSession>(), msg转发.gateClientSessionId); break;
+	default:
+		refPlayerGateSession.RecvMsg(msg.id, obj);
+		break;
+	}
+
 }
 
-void GameSvrSession::OnRecv(const MsgGateAddSession& msg)
+void GameSvrSession::OnRecv(const MsgGateAddSession& msg, const uint64_t idGateClientSession)
 {
-	auto iterOld = m_mapPlayerGateSession.find(msg.gateClientSessionId);
+	auto iterOld = m_mapPlayerGateSession.find(idGateClientSession);
 	if (m_mapPlayerGateSession.end() != iterOld)
 	{
 		LOG(ERROR) << "err";
@@ -155,7 +163,7 @@ void GameSvrSession::OnRecv(const MsgGateAddSession& msg)
 		m_mapPlayerGateSession.erase(iterOld);
 	}
 
-	auto pair = m_mapPlayerGateSession.insert({ msg.gateClientSessionId, PlayerGateSession_Game(*this,msg.gateClientSessionId) });
+	auto pair = m_mapPlayerGateSession.insert({ idGateClientSession, PlayerGateSession_Game(*this,idGateClientSession) });
 	if (!pair.second)
 	{
 		LOG(ERROR) << "ERR";
@@ -166,7 +174,7 @@ void GameSvrSession::OnRecv(const MsgGateAddSession& msg)
 	pair.first->second.Init();
 }
 
-void GameSvrSession::OnRecv(const MsgGateDeleteSession& msg)
+void GameSvrSession::OnRecv(const MsgGateDeleteSession& msg, const uint64_t idGateClientSession)
 {
 	auto iterOld = m_mapPlayerGateSession.find(msg.gateClientSessionId);
 	if (m_mapPlayerGateSession.end() == iterOld)

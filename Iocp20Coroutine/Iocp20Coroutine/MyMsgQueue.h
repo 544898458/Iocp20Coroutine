@@ -205,9 +205,7 @@ struct MsgGate×ª·¢
 struct MsgGateAddSession
 {
 	MsgHead msg{ .id = GateAddSession };
-	uint64_t gateClientSessionId;
-	//IPµØÖ·
-	MSGPACK_DEFINE(msg, gateClientSessionId);
+	MSGPACK_DEFINE(msg);
 };
 
 struct MsgGateDeleteSession

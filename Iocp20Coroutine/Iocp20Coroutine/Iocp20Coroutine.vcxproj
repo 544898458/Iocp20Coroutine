@@ -205,7 +205,7 @@
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\SessionSocketCompletionKeyTemplate.h">
-      <FileType>CppForm</FileType>
+      <FileType>CppHeader</FileType>
     </ClInclude>
     <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

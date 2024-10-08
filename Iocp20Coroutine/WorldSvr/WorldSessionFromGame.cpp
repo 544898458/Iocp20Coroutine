@@ -39,7 +39,7 @@ bool WorldSessionFromGame::Process()
 		switch (msgId)
 		{
 		case MsgId::Invalid_0://没有消息可处理
-			return false;
+			return true;
 			//case MsgId::Login:	this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &WorldSession::OnRecv); break;
 		case MsgId::Say:	return this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &WorldSessionFromGame::OnRecv); break;
 		case MsgId::ConsumeMoney:	return this->m_MsgQueue.OnRecv(this->m_queueConsumeMoney, *this, &WorldSessionFromGame::OnRecv); break;
