@@ -10,7 +10,7 @@
 #include "../IocpNetwork/StrConv.h"
 #include "PlayerGateSession_Game.h"
 
-void SendToWorldSvr(const MsgChangeMoney& msg);
+template<class T> void SendToWorldSvr(const T& msg, const uint64_t idGateSession);
 
 namespace AiCo
 {
@@ -191,7 +191,7 @@ namespace AiCo
 		KeepCancel kc(funCancel);
 		using namespace std;
 
-		while (!co_await CoTimer::Wait(10ms, funCancel))
+		while (!co_await CoTimer::Wait(1000ms, funCancel))
 		{
 			SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string& >({ -30.0 }, refSpace, "altman-red");
 			spEntityMonster->AddComponentAttack();
@@ -211,7 +211,8 @@ namespace AiCo
 		KeepCancel kc(funCancel);
 		using namespace std;
 
-		auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .addMoney = 0 < changeMoney ,.changeMoney = changeMoney }, SendToWorldSvr, funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
+		auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .addMoney = 0 < changeMoney ,.changeMoney = changeMoney },
+			[&refSession](const MsgChangeMoney& msg) {SendToWorldSvr<MsgChangeMoney>(msg, refSession.m_idPlayerGateSession); }, funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
 		const auto& responce = std::get<1>(tuple);
 		if (std::get<0>(tuple))
 		{

@@ -85,7 +85,8 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 	CoAddRole().RunNew();
 }
 
-void SendToWorldSvr(const MsgChangeMoney& msg);
+template<class T> void SendToWorldSvr(const T& msg, const uint64_t idGateSession);
+
 void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 {
 	//if (!m_coRpc.Finished())
@@ -105,7 +106,8 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 CoTask<int> PlayerGateSession_Game::CoAddBuilding()
 {
 	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());//不能存对象，扩容可能导致引用和指针失效
-	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 0 }, SendToWorldSvr, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 1 }, 
+		[this](const MsgChangeMoney& ref) {SendToWorldSvr<MsgChangeMoney>(ref,m_idPlayerGateSession); }, ** iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	const MsgChangeMoneyResponce& responce = std::get<1>(tuple);
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 0,float(std::rand() % 50) }, m_refSession.m_pServer->m_space, "house_type19");
@@ -186,8 +188,7 @@ void PlayerGateSession_Game::OnRecv(const MsgSay& msg)
 {
 	auto utf8Content = StrConv::Utf8ToGbk(msg.content);
 	LOG(INFO) << "收到聊天:" << utf8Content;
-	void SendToWorldSvr(const MsgSay & msg);
-	SendToWorldSvr(msg);
+	SendToWorldSvr<MsgSay>(msg,m_idPlayerGateSession);
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)

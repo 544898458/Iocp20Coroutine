@@ -6,7 +6,7 @@ struct DbPlayer
 {
 	std::string nickName;
 	std::string pwd="Hello, world!pwd";
-	int32_t money = 0;
+	int32_t money = 3;
 	MSGPACK_DEFINE(nickName, pwd, money);
 
 	static CoTask<DbPlayer*> CoGet¾ø²»·µ»Ø¿Õ(const std::string& refStrNickName);

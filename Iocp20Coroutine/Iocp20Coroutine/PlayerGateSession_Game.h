@@ -30,7 +30,7 @@ public:
 	void Init();
 
 	uint32_t m_snRecv = 0;
-
+	const uint64_t m_idPlayerGateSession;
 private:
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);
 	/// <summary>
@@ -55,8 +55,7 @@ private:
 /// </summary>
 	std::set<SpEntity> m_vecSpEntity;
 	GameSvrSession& m_refSession;
-	const uint64_t m_idPlayerGateSession;
-
+	
 	std::vector<uint64_t> m_vecSelectedEntity;
 	std::string m_nickName;
 	uint32_t m_snSend = 0;

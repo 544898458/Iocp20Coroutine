@@ -62,12 +62,35 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 //std::unique_ptr<Iocp::Server<WorldClient> > g_worldSvr;// (Iocp::ThreadPool::GetIocp());
 std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GameToWorld>> g_ConnectToWorldSvr;
 
-void SendToWorldSvr(const MsgSay& msg){MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); });}
-void SendToWorldSvr(const MsgChangeMoney& msg) 
+//void SendToWorldSvr(const MsgSay& msg){MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); });}
+//void SendToWorldSvr(const MsgChangeMoney& msg) 
+//{
+//	msg.msg.sn = (++g_ConnectToWorldSvr->m_snSend);
+//	MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); }); 
+//}
+template<class T>
+void SendToWorldSvr(const T& refMsg, const uint64_t idGateSession)
 {
-	msg.msg.sn = (++g_ConnectToWorldSvr->m_snSend);
-	MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); }); 
+	//msg.msg.sn = (++g_ConnectToWorldSvr->m_snSend);
+	//MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); }); 
+
+	//MsgPack::SendMsgpack(refMsg, [idGateSession](const void* buf, int len)
+	//	{
+	//		g_ConnectToWorldSvr->Session.Send(MsgGate转发(buf, len, idGateSession, ++g_ConnectToWorldSvr->m_snSend));
+	//	}, false);
+
+
+	MsgPack::SendMsgpack(refMsg, [idGateSession](const void* buf, int len)
+		{
+			MsgGate转发 msg(buf, len, idGateSession, ++g_ConnectToWorldSvr->m_snSend);
+			MsgPack::SendMsgpack(msg, [](const void* buf转发, int len转发)
+				{
+					g_ConnectToWorldSvr->Send(buf转发, len转发);
+				});
+		}, false);
 }
+template void SendToWorldSvr(const MsgSay& msg, const uint64_t idGateSession);
+template void SendToWorldSvr(const MsgChangeMoney& msg, const uint64_t idGateSession);
 
 ///*
 int main(void)
@@ -106,7 +129,7 @@ int main(void)
 
 	//g_worldSvr->Init<WorldSession>(12346);
 	//g_worldSvr.reset(new Iocp::Server<WorldClient>(Iocp::ThreadPool::GetIocp()));
-	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<ClientSession_GameToWorld>(L"127.0.0.1", PORT_WORLDSVR_ACCEPT_GAME , threadPoolNetwork.GetIocp()));
+	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<ClientSession_GameToWorld>(L"127.0.0.1", PORT_WORLDSVR_ACCEPT_GAME, threadPoolNetwork.GetIocp()));
 	extern std::function<void(MsgSay const&)> m_funBroadcast;
 	m_funBroadcast = [&accept](const MsgSay& msg) {accept.m_Server.m_Sessions.Broadcast(msg); };
 
@@ -118,9 +141,9 @@ int main(void)
 	//主逻辑工作线程
 	using namespace std;
 	std::chrono::system_clock::time_point timeLast = std::chrono::system_clock::now();
-	
+
 	std::chrono::milliseconds msSleep = 100ms;
-	const std::chrono::milliseconds ms10Frame= 1s;
+	const std::chrono::milliseconds ms10Frame = 1s;
 	int i = 0;
 	while (g_running)
 	{
@@ -137,7 +160,7 @@ int main(void)
 			else
 				++msSleep;
 		}
-		if(msSleep>0ms)
+		if (msSleep > 0ms)
 			std::this_thread::sleep_for(msSleep);
 
 		accept.m_Server.Update();
