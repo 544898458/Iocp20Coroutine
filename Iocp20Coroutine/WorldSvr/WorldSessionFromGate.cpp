@@ -99,16 +99,25 @@ void WorldSessionFromGate::OnRecv(const MsgGate转发& msg转发)
 	{
 		assert(g_mapPlayerGateSession.end() != iter);
 		auto& refPlayerGateSession = iter->second;
-		//const auto countErase = g_mapPlayerNickNameGateSessionId.erase(refPlayerGateSession.NickName());
-		//assert(1 == countErase);
-		const auto countErase = g_mapPlayerGateSession.erase(iter);
-		assert(1 == countErase);
+		{
+			auto iterFind = g_mapPlayerNickNameGateSessionId.find(refPlayerGateSession.NickName());
+			assert(g_mapPlayerNickNameGateSessionId.end() != iterFind);
+			if (g_mapPlayerNickNameGateSessionId.end() != iterFind)
+			{
+				LOG(INFO) << refPlayerGateSession.NickName() << ",删除名字对应的SessionId:" << msg转发.gateClientSessionId;
+				g_mapPlayerNickNameGateSessionId.erase(iterFind);
+			}
+		}
+		g_mapPlayerGateSession.erase(iter);
+		LOG(INFO) << "删除PlayerGateSession_World对象,Id=" << msg转发.gateClientSessionId;
+		
 	}
 	break;
 	default:
 	{
 		if (g_mapPlayerGateSession.end() == iter)
 		{
+			LOG(INFO) << "添加未登录的PlayerGateSession_World,SessionId=" << msg转发.gateClientSessionId;
 			auto pair = g_mapPlayerGateSession.insert({ msg转发.gateClientSessionId,PlayerGateSession_World(*this,msg转发.gateClientSessionId) });
 			iter = pair.first;
 		}

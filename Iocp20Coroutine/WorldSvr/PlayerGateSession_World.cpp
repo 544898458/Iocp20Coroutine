@@ -45,12 +45,13 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 		auto& refGateSession = itFindSession->second;
 		//通知GameSvr此Session是断线状态（不再接收消息）
 		LOG(INFO) << gbkName << "," << m_idPlayerGateSession << "踢" << refGateSession.m_idPlayerGateSession;
-		refGateSession.SendToGate转发<MsgGateDeleteSession>({});
-
+		static FunCancel funCancle;
+		co_await CoRpc<MsgGateDeleteSessionResponce>::Send<MsgGateDeleteSession>({}, [&refGateSession](const MsgGateDeleteSession& refMsg) {refGateSession.SendToGate转发(refMsg); }, funCancle);
+		assert(g_mapPlayerNickNameGateSessionId.find(gbkName) == g_mapPlayerNickNameGateSessionId.end());
 	}
-	//const auto pair = g_mapPlayerNickNameGateSessionId.insert({ gbkName,m_idPlayerGateSession});
-	//assert(pair.second);
-	g_mapPlayerNickNameGateSessionId[gbkName] = m_idPlayerGateSession;
+	const auto pair = g_mapPlayerNickNameGateSessionId.insert({ gbkName, m_idPlayerGateSession });//g_mapPlayerNickNameGateSessionId[gbkName] = m_idPlayerGateSession;
+	assert(pair.second);
+	LOG(INFO) << gbkName << ",已添加此名字对应的SessionId=" << m_idPlayerGateSession;
 
 	m_nickName = gbkName;
 	//通知GateSvr继续登录流程
@@ -65,6 +66,11 @@ void PlayerGateSession_World::OnRecv(const MsgLogin& msg)
 	m_coLogin.Run();
 }
 
+void PlayerGateSession_World::OnRecv(const MsgGateDeleteSessionResponce& msg)
+{
+	CoRpc<MsgGateDeleteSessionResponce>::OnRecvResponce(false, msg);
+}
+
 template<class T_Msg>
 void PlayerGateSession_World::RecvMsg(const msgpack::object& obj)
 {
@@ -77,18 +83,13 @@ void PlayerGateSession_World::RecvMsg(const MsgId idMsg, const msgpack::object& 
 	switch (idMsg)
 	{
 	case MsgId::Login:RecvMsg<MsgLogin>(obj); break;
+	case MsgId::GateDeleteSessionResponce:RecvMsg<MsgGateDeleteSessionResponce>(obj); break;
 	default:
 		LOG(ERROR) << "没处理msgId:" << idMsg;
 		assert(false);
 		break;
 	}
 }
-
-void PlayerGateSession_World::Process()
-{
-
-}
-
 
 template<class T>
 void PlayerGateSession_World::SendToGate转发(const T& refMsg)

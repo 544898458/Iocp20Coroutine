@@ -57,6 +57,7 @@ void SendToWorldSvr转发(const T& refMsg, const uint64_t gateSessionId)
 }
 template void SendToWorldSvr转发(const MsgLogin&, const uint64_t gateSessionId);
 template void SendToWorldSvr转发(const MsgGateDeleteSession&, const uint64_t gateSessionId);
+template void SendToWorldSvr转发(const MsgGateDeleteSessionResponce&, const uint64_t gateSessionId);
 
 
 std::unique_ptr<Iocp::Server<GateServer>> g_upGateSvr;

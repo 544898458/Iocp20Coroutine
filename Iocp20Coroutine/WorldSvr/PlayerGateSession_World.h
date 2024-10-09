@@ -35,6 +35,7 @@ private:
 /// </summary>
 /// <param name="msg"></param>
 	void OnRecv(const MsgLogin& msg);
+	void OnRecv(const MsgGateDeleteSessionResponce& msg);
 	CoTask<int> CoLogin(const MsgLogin msg);
 	
 	CoTask<int> m_coLogin;

@@ -83,6 +83,11 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 
 void GateSession::OnDestroy()
 {
+	if (m_bClosed)
+	{
+		return;
+	}
+	m_bClosed = true;
 	SendToGameSvr<MsgGateDeleteSession>({}, GetId(), ++m_snSendToGameSvr);
 	SendToWorldSvr转发<MsgGateDeleteSession>({}, GetId());// , ++m_snSendToWorldSvr);
 }
@@ -107,6 +112,11 @@ void GateSession::OnRecvWorldSvr(const MsgGateDeleteSession& msg)
 {
 	LOG(INFO) << "主动断开游戏客户端Socket,Id=" << GetId(),
 		m_refSession.m_refSession.CloseSocket();
+
+	OnDestroy();
+	MsgGateDeleteSessionResponce msgResponce;
+	msgResponce.msg.rpcSnId = msg.msg.rpcSnId;
+	SendToWorldSvr转发(msgResponce, GetId());
 }
 
 bool GateSession::Process()

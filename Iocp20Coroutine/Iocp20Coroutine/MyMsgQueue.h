@@ -33,7 +33,9 @@ enum MsgId
 	NotifyeMoney,
 	Gate×ª·¢,
 	GateAddSession,
+	GateAddSessionResponce,
 	GateDeleteSession,
+	GateDeleteSessionResponce,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -211,5 +213,10 @@ struct MsgGateAddSession
 struct MsgGateDeleteSession
 {
 	MsgHead msg{ .id = GateDeleteSession };
+	MSGPACK_DEFINE(msg);
+};
+struct MsgGateDeleteSessionResponce
+{
+	MsgHead msg{ .id = GateDeleteSessionResponce };
 	MSGPACK_DEFINE(msg);
 };

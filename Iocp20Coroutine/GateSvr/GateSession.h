@@ -48,5 +48,6 @@ private:
 
 	CoTask<int> m_coLogin;
 	FunCancel m_funCancelLogin;
+	bool m_bClosed = false;
 };
 
