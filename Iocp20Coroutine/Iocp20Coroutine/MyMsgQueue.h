@@ -27,7 +27,7 @@ enum MsgId
 	SelectRoles,
 	AddRole,
 	DelRoleRet,
-	ConsumeMoney,
+	ChangeMoney,
 	ChangeMoneyResponce,
 	AddBuilding,
 	NotifyeMoney,
@@ -95,11 +95,11 @@ struct MsgAddBuilding
 
 struct MsgChangeMoney
 {
-	MsgHead msg{ .id = ConsumeMoney };
+	MsgHead msg{ .id = ChangeMoney };
 	bool addMoney;
 	int32_t changeMoney;
-	std::string nickName;
-	MSGPACK_DEFINE(msg, addMoney, changeMoney, nickName);
+	//std::string nickName;
+	MSGPACK_DEFINE(msg, addMoney, changeMoney);
 };
 
 struct MsgChangeMoneyResponce

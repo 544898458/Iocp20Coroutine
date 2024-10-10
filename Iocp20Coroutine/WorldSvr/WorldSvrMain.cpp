@@ -56,6 +56,10 @@ GameSvr,GateSvr,WorldSvr都可以做，
 
 int main()
 {
+	FLAGS_alsologtostderr = true;//是否将日志输出到文件和stderr
+	FLAGS_colorlogtostdout = true;
+	FLAGS_colorlogtostderr = true;//20240216
+
 	Iocp::ThreadPool threadPoolNetwork;
 	threadPoolNetwork.Init();
 

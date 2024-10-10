@@ -206,12 +206,17 @@ namespace AiCo
 		co_return 0;
 	}
 
-	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, int changeMoney, FunCancel& funCancel)
+	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, int changeMoney, bool addMoney, FunCancel& funCancel)
 	{
+		if (changeMoney < 0)
+		{
+			assert(false);
+			co_return std::make_tuple(false, MsgChangeMoneyResponce());
+		}
 		KeepCancel kc(funCancel);
 		using namespace std;
 
-		auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .addMoney = 0 < changeMoney ,.changeMoney = changeMoney },
+		auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .addMoney = addMoney,.changeMoney = changeMoney },
 			[&refSession](const MsgChangeMoney& msg) {SendToWorldSvr<MsgChangeMoney>(msg, refSession.m_idPlayerGateSession); }, funCancel);//以同步编程的方式，向另一个服务器发送请求并等待返回
 		const auto& responce = std::get<1>(tuple);
 		if (std::get<0>(tuple))
@@ -234,7 +239,7 @@ namespace AiCo
 
 		while (!co_await CoTimer::Wait(100ms, funCancel))
 		{
-			auto tuple = co_await ChangeMoney(refSession, 10, funCancel);
+			auto tuple = co_await ChangeMoney(refSession, 10, true, funCancel);
 			const auto& responce = std::get<1>(tuple);
 			if (std::get<0>(tuple))
 			{

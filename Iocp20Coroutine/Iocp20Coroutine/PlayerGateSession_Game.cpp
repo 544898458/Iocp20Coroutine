@@ -129,7 +129,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding()
 CoTask<int> PlayerGateSession_Game::CoAddRole()
 {
 	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());
-	const auto [stop, responce] = co_await AiCo::ChangeMoney(*this, -3, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	const auto [stop, responce] = co_await AiCo::ChangeMoney(*this, 3, false, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ float(std::rand() % 30),30 }, m_refSession.m_pServer->m_space, "altman-blue");
 	if (stop)
