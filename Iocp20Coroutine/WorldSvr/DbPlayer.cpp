@@ -5,7 +5,7 @@
 
 std::map<std::string, DbPlayer> g_mapDbPlayer;
 extern CoDb<DbPlayer> g_CoDbPlayer;
-template CoAwaiter<DbPlayer>& CoDb<DbPlayer>::CoSave(const DbPlayer&, FunCancel&);
+template CoAwaiter<DbPlayer>& CoDb<DbPlayer>::CoSave(const DbPlayer&, const std::string& strNickName, FunCancel&);
 
 CoTask<DbPlayer*> DbPlayer::CoGet¾ø²»·µ»Ø¿Õ(const std::string& refStrNickName)
 {

@@ -40,12 +40,12 @@ namespace StrConv
 			0,							//输出（不输出，统计转换后的字节数）
 			0							//输出的空间大小
 		);
-		if (len <= 0)
+		if (len <= 1)
 		{
 			return std::string();
 		}
 		std::wstring wstr; //用wstring存储的
-		wstr.resize(len);//分配大小
+		wstr.resize(len-1);//分配大小
 		//开始写进去 
 		MultiByteToWideChar(CP_UTF8, 0, strUtf8.c_str(), -1, (wchar_t*)wstr.data(), len);
 
@@ -55,12 +55,12 @@ namespace StrConv
 			0, //失败替代默认字符
 			0 //是否使用默认替代  0 false
 		);
-		if (len <= 0)
+		if (len <= 1)
 		{
 			return std::string();
 		}
 		std::string utf8;
-		utf8.resize(len);
+		utf8.resize(len-1);
 		WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, (char*)utf8.data(), len, 0, 0);
 
 		return utf8;

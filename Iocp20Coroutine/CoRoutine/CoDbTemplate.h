@@ -64,18 +64,18 @@ void CoDb<T>::LoadFromDbThread(const std::string nickName, SpCoAwaiterT& spCoAwa
 	std::this_thread::sleep_for(std::chrono::seconds(1));
 	{
 		spCoAwait->SetResult(objT);
-				
+
 		m_dequeResult.push_back(spCoAwait);
 	}
 }
 
 template<class T>
-void CoDb<T>::SaveInDbThread(const T& ref, SpCoAwaiterT& spCoAwait)
+void CoDb<T>::SaveInDbThread(const T& ref, const std::string & strNickName, SpCoAwaiterT& spCoAwait)
 {
 	std::ostringstream oss;
-	oss << typeid(T).name() << "_" << ref.nickName << ".bin";
+	oss << typeid(T).name() << "_" << strNickName << ".bin";
 	const auto& strFileName = oss.str();
-			
+
 	// 打开文件
 	std::ofstream out(strFileName, std::ios::binary);
 
@@ -102,9 +102,9 @@ void CoDb<T>::SaveInDbThread(const T& ref, SpCoAwaiterT& spCoAwait)
 };
 
 template<class T>
-CoAwaiter<T>& CoDb<T>::CoSave(const T& ref, FunCancel& cancel)
+CoAwaiter<T>& CoDb<T>::CoSave(const T& ref, const std::string& strNickName, FunCancel& cancel)
 {
-	return DoDb([this, &ref](SpCoAwaiterT& sp) {this->SaveInDbThread(ref, sp); }, cancel);
+	return DoDb([this, &ref, &strNickName](SpCoAwaiterT& sp) {this->SaveInDbThread(ref, strNickName, sp); }, cancel);
 }
 
 template<class T>

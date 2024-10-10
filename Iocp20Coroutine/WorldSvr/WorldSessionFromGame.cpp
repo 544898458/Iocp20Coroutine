@@ -153,7 +153,7 @@ CoTask<int> WorldSessionFromGame::CoChangeMoney(const MsgChangeMoney msg, const 
 		}
 	}
 	static FunCancel fun;
-	co_await g_CoDbPlayer.CoSave(refDb, fun);
+	co_await g_CoDbPlayer.CoSave(refDb, strNickName, fun);
 
 	msgResponce.finalMoney = refDb.money;
 	this->Send(msgResponce);

@@ -18,7 +18,7 @@ public:
 	/// <param name="ref"></param>
 	/// <param name="cancel"></param>
 	/// <returns></returns>
-	CoAwaiter<T>& CoSave(const T& ref, FunCancel& cancel);
+	CoAwaiter<T>& CoSave(const T& ref, const std::string& strNickName, FunCancel& cancel);
 	CoAwaiter<T>& Load(const std::string nickName, FunCancel& cancel);
 	/// <summary>
 	/// 主线程（单线程）调用，得到数据库执行结果（执行协程下一句）
@@ -27,7 +27,7 @@ public:
 
 private:
 	using SpCoAwaiterT = std::shared_ptr<CoAwaiter<T>>;
-	void SaveInDbThread(const T& ref, SpCoAwaiterT& spCoAwaiter);
+	void SaveInDbThread(const T& ref, const std::string& strNickName, SpCoAwaiterT& spCoAwaiter);
 	void LoadFromDbThread(const std::string nickName, SpCoAwaiterT& spCoAwait);
 	CoTask<Iocp::Overlapped::YieldReturn> CoDbDbThreadProcess(Iocp::Overlapped&);
 	using DbFun = std::function<void(SpCoAwaiterT& sp)>;
