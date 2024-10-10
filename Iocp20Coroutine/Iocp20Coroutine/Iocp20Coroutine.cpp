@@ -151,7 +151,9 @@ int main(void)
 		if (i >= 10)
 		{
 			i = 0;
-			auto duration = std::chrono::system_clock::now() - timeLast;
+			auto now = std::chrono::system_clock::now();
+			std::chrono::duration duration = now - timeLast;
+			timeLast = now;
 			if (duration > ms10Frame)
 			{
 				if (msSleep > 0ms)
