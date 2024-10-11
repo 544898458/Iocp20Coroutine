@@ -17,7 +17,7 @@
 using namespace std;
 
 Entity::Entity(const Position& pos, Space& space, const std::string& strPrefabName) :
-	Id((uint64_t)this), m_strPrefabName(strPrefabName), m_space(space), m_Pos(pos)
+	Id((uint64_t)this), m_strPrefabName(strPrefabName), m_refSpace(space), m_Pos(pos)
 {
 }
 
@@ -102,7 +102,7 @@ void Entity::BroadcastEnter()
 template<class T>
 void Entity::Broadcast(const T& msg)
 {
-	m_space.Broadcast(msg);
+	m_refSpace.Broadcast(msg);
 }
 
 template void Entity::Broadcast(const MsgAddRoleRet& msg);

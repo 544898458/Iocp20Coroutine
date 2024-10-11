@@ -14,16 +14,16 @@ public:
 	WorldSessionFromGame(CompeletionKeySession&ref):m_refSession(ref){}
 	int OnRecv(CompeletionKeySession&, const void* buf, int len);
 	void OnDestroy();
-	void OnInit(CompeletionKeySession& refSession, WorldSvrAcceptGame&);
+	void OnInit(WorldSvrAcceptGame&);
 	template<class T>
 	void Send(const T& ref)
 	{
 		assert(ref.msg.id != MsgId::Invalid_0);
 
 		ref.msg.sn = (++m_snSend);
-		MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_pSession->Send(buf, len); });
+		MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_refSession.Send(buf, len); });
 	}
-	CompeletionKeySession* m_pSession = nullptr;
+	//CompeletionKeySession* m_pSession = nullptr;
 	WorldSvrAcceptGame* m_pServer = nullptr;
 	template<class T> std::deque<T>& GetQueue();
 	bool Process();

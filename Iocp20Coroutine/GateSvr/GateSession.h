@@ -24,7 +24,7 @@ public:
 	void OnRecvWsPack(const void* buf, const int len);
 
 	void OnDestroy();
-	void OnInit(CompeletionKeySession& refSession, GateServer&);
+	void OnInit(GateServer&);
 	void OnRecvWorldSvr(const MsgLoginResponce& msg);
 	void OnRecvWorldSvr(const MsgGateDeleteSession& msg);
 	/// <summary>

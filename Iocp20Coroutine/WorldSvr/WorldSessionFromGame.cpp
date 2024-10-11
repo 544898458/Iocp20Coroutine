@@ -198,13 +198,13 @@ void WorldSessionFromGame::OnRecv(const MsgChangeMoney& msg, const uint64_t idGa
 //template<> std::deque<MsgChangeMoney>& WorldSessionFromGame::GetQueue() { return m_queueConsumeMoney; }
 template<> std::deque<MsgGate转发>& WorldSessionFromGame::GetQueue() { return m_queueGate转发; }
 
-void WorldSessionFromGame::OnInit(CompeletionKeySession& refSession, WorldSvrAcceptGame& refServer)
+void WorldSessionFromGame::OnInit(WorldSvrAcceptGame& refServer)
 {
-	refServer.m_Sessions.AddSession(&refSession, [this, &refSession, &refServer]()
+	refServer.m_Sessions.AddSession(&m_refSession, [this, &refServer]()
 		{
 			LOG(INFO) << "GameSvr已连上";
 			m_pServer = &refServer;
-			m_pSession = &refSession;
+			//m_pSession = &refSession;
 
 			//m_entity.Init(5, m_pServer->m_space, TraceEnemy, this);
 			//m_pServer->m_space.setEntity.insert(&m_entity);

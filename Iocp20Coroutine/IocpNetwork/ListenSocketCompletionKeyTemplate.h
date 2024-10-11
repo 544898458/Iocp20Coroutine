@@ -8,7 +8,7 @@ namespace Iocp {
 	template<class T_Session,class T_Server>
 		requires requires(Iocp::SessionSocketCompletionKey<T_Session>& refCompletionKeySession, T_Session& refSession, T_Server& refServer)
 	{
-		requires std::is_same_v<void, decltype(refSession.OnInit(refCompletionKeySession, refServer))>;//void OnInit(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
+		requires std::is_same_v<void, decltype(refSession.OnInit(refServer))>;//void OnInit(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
 	}
 	void ListenSocketCompletionKey::StartCoRoutine( HANDLE hIocp,SOCKET socketListen, T_Server &refServer)
 	{
@@ -67,7 +67,7 @@ namespace Iocp {
 
 			//绑定到完成端口
 			auto pNewCompleteKey = new SessionSocketCompletionKey<T_Session>(pAcceptOverlapped->socket);
-			pNewCompleteKey->Session.OnInit(*pNewCompleteKey,refServer);//回调用户自定义函数
+			pNewCompleteKey->Session.OnInit(refServer);//回调用户自定义函数
 			refServer.OnAdd(*pNewCompleteKey);
 			HANDLE hPort1 = CreateIoCompletionPort((HANDLE)pAcceptOverlapped->socket, hIocp, (ULONG_PTR)pNewCompleteKey, 0);
 			if (hPort1 != hIocp)

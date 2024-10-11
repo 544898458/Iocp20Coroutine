@@ -75,7 +75,7 @@ void AttackComponent::Update(Entity& refThis)
 	}
 
 	std::vector<std::pair<int64_t,SpEntity>> vecEnemy;
-	std::copy_if(refThis.m_space.m_mapEntity.begin(), refThis.m_space.m_mapEntity.end(), std::back_inserter(vecEnemy), [&refThis](const auto &pair)
+	std::copy_if(refThis.m_refSpace.m_mapEntity.begin(), refThis.m_refSpace.m_mapEntity.end(), std::back_inserter(vecEnemy), [&refThis](const auto &pair)
 		{
 			auto& sp = pair.second;
 			return sp.get() != &refThis && !sp->IsDead() && sp->IsEnemy(refThis);

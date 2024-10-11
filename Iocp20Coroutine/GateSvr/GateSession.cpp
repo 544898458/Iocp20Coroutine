@@ -13,7 +13,7 @@ template class Iocp::SessionSocketCompletionKey<GateSession::CompeletionKeySessi
 template class MsgQueueMsgPack<GateSession::CompeletionKeySession>;
 template class WebSocketSession<GateSession>;
 template class WebSocketEndpoint<GateSession, Iocp::SessionSocketCompletionKey<GateSession::CompeletionKeySession> >;
-template void WebSocketSession<GateSession>::OnInit<GateServer>(Iocp::SessionSocketCompletionKey<GateSession::CompeletionKeySession>& refSession, GateServer& server);
+template void WebSocketSession<GateSession>::OnInit<GateServer>(GateServer& server);
 //int GateSession::OnRecv(CompeletionKeySession&, const void* buf, int len)
 //{
 //    return 0;
@@ -100,9 +100,9 @@ void GateSession::OnDestroy()
 	SendToWorldSvr转发<MsgGateDeleteSession>({}, GetId());// , ++m_snSendToWorldSvr);
 }
 
-void GateSession::OnInit(CompeletionKeySession& refSession, GateServer& refServer)
+void GateSession::OnInit(GateServer& refServer)
 {
-	refServer.m_Sessions.AddSession(refSession.m_pSession, [this, &refSession, &refServer]()
+	refServer.m_Sessions.AddSession(&m_refSession.m_refSession, [this, &refServer]()
 		{
 			LOG(INFO) << "游戏客户端已连上";
 			//m_pServer = &refServer;

@@ -14,7 +14,7 @@ public:
 	WorldSessionFromGate(CompeletionKeySession&ref):m_refSession(ref) {}
 	int OnRecv(CompeletionKeySession&, const void* buf, int len);
 	void OnDestroy();
-	void OnInit(CompeletionKeySession& refSession, WorldSvrAcceptGate&);
+	void OnInit(WorldSvrAcceptGate&);
 	template<class T>
 	void Send(const T& ref)
 	{

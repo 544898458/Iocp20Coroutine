@@ -23,7 +23,7 @@ void GameSvr::OnDel()
 }
 void GameSvr::Update()
 {
-	m_Sessions.Update([this](){m_space.Update();});
+	m_Sessions.Update([this](){m_Space.Update();});
 	/*
 	std::lock_guard lock(m_Sessions.m_setSessionMutex);
 	std::set<MyServer::Session*> setDelete;

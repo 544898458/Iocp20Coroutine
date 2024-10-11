@@ -26,7 +26,7 @@ public:
 	/// </summary>
 	/// <param name="refWsSession"></param>
 	/// <param name="server"></param>
-	void OnInit(Session& refWsSession, GameSvr& server);
+	void OnInit(GameSvr& server);
 	void OnDestroy();
 	template<class T> void Send(T&& ref)
 	{

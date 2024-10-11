@@ -16,7 +16,7 @@ public:
 	void OnDel();
 	void Update();
 
-	Space m_space;
+	Space m_Space;
 	Sessions<GameSvrSession> m_Sessions;
 
 };

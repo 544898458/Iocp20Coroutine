@@ -5,6 +5,17 @@
 #include "ByteQueue.h"
 namespace Iocp
 {
+	template<class T_Session, class T_Server>
+	//requires requires(T_Session &refSession, Iocp::SessionSocketCompletionKey<T_Session> &refSessionSocketCompletionKey)
+	//{
+	//	requires std::is_same_v<int, decltype(refSession.OnRecv(refSessionSocketCompletionKey, (const void*)0, (int)0))>;
+	//}
+	class SessionSocketCompletionKey2 :public SocketCompeletionKey
+	{
+	public:
+		SessionSocketCompletionKey2(T_Server& ref) :m_ref(ref) {}
+		T_Server& m_ref;
+	};
 	template<class T_Session>
 	//requires requires(T_Session &refSession, Iocp::SessionSocketCompletionKey<T_Session> &refSessionSocketCompletionKey)
 	//{
@@ -65,12 +76,12 @@ namespace Iocp
 		return std::make_tuple((const char*)buf + sizeofPackLen, usPackLen, usPackLen + (uint16_t)sizeofPackLen);
 	}
 	template<class T>
-	static int OnRecv3(const void* buf, const int len, T&ref, void (T::*OnRecvPack)(const void*, const int))
+	static int OnRecv3(const void* buf, const int len, T& ref, void (T::* OnRecvPack)(const void*, const int))
 	{
 		int processedLenAll = 0;
 		const char* bufIter = (const char*)buf;
 		int lenIter = len;
-		while(true)
+		while (true)
 		{
 			auto [bufPack, lenPack, processedLen] = OnRecv2(bufIter, lenIter);
 			if (lenPack <= 0 || nullptr == bufPack)

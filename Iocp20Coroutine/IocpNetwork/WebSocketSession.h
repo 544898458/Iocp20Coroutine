@@ -148,9 +148,9 @@ public:
 		requires requires(WebSocketSession<T_Session>& refWsSesson, T_Session& refSession, T_Server& server)
 	{
 		//refSession.OnRecvWsPack((const char[])0, (const int )0	);
-		refSession.OnInit(refWsSesson, server);
+		refSession.OnInit(server);
 	}
-	void OnInit(Session& refSession, T_Server&);
+	void OnInit(T_Server&);
 	/// <summary>
 	/// 用户自定义函数，这里是纯数据，连封包概念都没有，封包是WebSocket协议负责的工作
 	/// </summary>
@@ -180,7 +180,6 @@ public:
 	std::unique_ptr<MyWebSocketEndpoint<T_Session, Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>>> m_webSocketEndpoint;
 	Session& m_refSession;
 	T_Session m_Session;
-	Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>* m_pSession;
 private:
 
 

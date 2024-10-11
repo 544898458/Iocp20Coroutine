@@ -11,7 +11,7 @@ namespace Iocp {
 		template<class T_Session, class T_Server >
 			requires requires(Iocp::SessionSocketCompletionKey<T_Session>& refCompletionKeySession, T_Session& refSession, T_Server& refServer)
 		{
-			requires std::is_same_v<void, decltype(refSession.OnInit(refCompletionKeySession, refServer))>;//void OnInit(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
+			requires std::is_same_v<void, decltype(refSession.OnInit(refServer))>;//void OnInit(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
 		}
 		static void StartCoRoutine(HANDLE hIocp, SOCKET socketListen, T_Server& refServer);
 		//Overlapped acceptOverlapped;

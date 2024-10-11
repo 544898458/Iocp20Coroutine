@@ -14,7 +14,7 @@ class PlayerGateSession_Game;
 class Entity :public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
 public:
-	Entity(const Position& pos, Space& m_space, const std::string& strPrefabName);
+	Entity(const Position& pos, Space& m_refSpace, const std::string& strPrefabName);
 	Entity(const Entity&) = delete;
 	void Update();
 	void Hurt(int);
@@ -51,7 +51,7 @@ public:
 	std::shared_ptr<MonsterComponent> m_spMonster;
 	std::shared_ptr<BuildingComponent> m_spBuilding;
 	//private:
-	Space& m_space;
+	Space& m_refSpace;
 };
 
 //x,y就是坐标系中的坐标，如（4，4）答案就是45°

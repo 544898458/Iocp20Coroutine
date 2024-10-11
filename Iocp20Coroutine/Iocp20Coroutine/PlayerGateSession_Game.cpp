@@ -110,7 +110,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding()
 		[this](const MsgChangeMoney& ref) {SendToWorldSvr<MsgChangeMoney>(ref,m_idPlayerGateSession); }, ** iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	const MsgChangeMoneyResponce& responce = std::get<1>(tuple);
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
-	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 0,float(std::rand() % 50) }, m_refSession.m_pServer->m_space, "house_type19");
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 0,float(std::rand() % 50) }, m_refSession.m_pServer->m_Space, "house_type19");
 	if (0 != responce.error)
 	{
 		LOG(WARNING) << "扣钱失败,error=" << responce.error;
@@ -120,7 +120,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding()
 	spNewEntity->AddComponentPlayer(*this);
 	spNewEntity->AddComponentBuilding(*this);
 	m_vecSpEntity.insert(spNewEntity);//自己控制的单位
-	m_refSession.m_pServer->m_space.m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
+	m_refSession.m_pServer->m_Space.m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 	spNewEntity->BroadcastEnter();
 	co_return 0;
@@ -131,7 +131,7 @@ CoTask<int> PlayerGateSession_Game::CoAddRole()
 	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());
 	const auto [stop, responce] = co_await AiCo::ChangeMoney(*this, 3, false, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
-	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ float(std::rand() % 30),30 }, m_refSession.m_pServer->m_space, "altman-blue");
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ float(std::rand() % 30),30 }, m_refSession.m_pServer->m_Space, "altman-blue");
 	if (stop)
 	{
 		LOG(WARNING) << "扣钱失败";
@@ -140,7 +140,7 @@ CoTask<int> PlayerGateSession_Game::CoAddRole()
 	spNewEntity->AddComponentPlayer(*this);
 	spNewEntity->AddComponentAttack();
 	m_vecSpEntity.insert(spNewEntity);//自己控制的单位
-	m_refSession.m_pServer->m_space.m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
+	m_refSession.m_pServer->m_Space.m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 	spNewEntity->BroadcastEnter();
 	co_return 0;
@@ -148,7 +148,7 @@ CoTask<int> PlayerGateSession_Game::CoAddRole()
 
 void PlayerGateSession_Game::Init()
 {
-	for (const auto& [id, spEntity] : m_refSession.m_pServer->m_space.m_mapEntity)//所有地图上的实体发给自己
+	for (const auto& [id, spEntity] : m_refSession.m_pServer->m_Space.m_mapEntity)//所有地图上的实体发给自己
 	{
 		Send(MsgAddRoleRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->NickName()), spEntity->m_strPrefabName));
 		Send(MsgNotifyPos(*spEntity));
@@ -160,7 +160,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
-	auto& refSpace = m_refSession.m_pServer->m_space;
+	auto& refSpace = m_refSession.m_pServer->m_Space;
 	//refThis.m_pSession->m_entity.WalkToPos(targetX, targetZ, pServer);
 	for (const auto id : m_vecSelectedEntity)
 	{
