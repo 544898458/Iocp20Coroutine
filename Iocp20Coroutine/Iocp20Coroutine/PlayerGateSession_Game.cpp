@@ -167,8 +167,8 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 		auto itFind = refSpace.m_mapEntity.find(id);
 		if (itFind == refSpace.m_mapEntity.end())
 		{
-			LOG(ERROR) << "ERR";
-			assert(false);
+			LOG(INFO) << "选中的实体不存在:" << id;
+			//assert(false);
 			continue;
 		}
 		auto& spEntity = itFind->second;

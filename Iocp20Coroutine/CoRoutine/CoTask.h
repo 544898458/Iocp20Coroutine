@@ -90,6 +90,7 @@ public:
 		{
 			//return std::terminate(); 
 			LOG(WARNING) << "unhandled_exception";
+			assert(false);
 		}
 		// co_return 时执行，return_void跟return_value二选一，协程的返回值
 		//void return_void() {}

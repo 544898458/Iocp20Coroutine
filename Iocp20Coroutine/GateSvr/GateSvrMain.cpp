@@ -87,6 +87,10 @@ void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 
 int main()
 {
+	FLAGS_alsologtostderr = true;//是否将日志输出到文件和stderr
+	FLAGS_colorlogtostdout = true;
+	FLAGS_colorlogtostderr = true;//20240216
+
 	Iocp::ThreadPool threadPoolNetwork;
 	threadPoolNetwork.Init();
 	g_upGateSvr.reset(new Iocp::Server<GateServer>(threadPoolNetwork.GetIocp()));

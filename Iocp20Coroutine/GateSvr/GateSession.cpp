@@ -25,18 +25,26 @@ template<class T> void SendToGameSvr(const T& refMsg, const uint64_t gateSession
 
 void GateSession::OnRecvWsPack(const void* buf, const int len)
 {
-	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
-	msgpack::object obj = oh.get();
-	const auto msg = MsgHead::GetMsgId(obj);
-	//LOG(INFO) << obj;
-
-	switch (msg.id)
+	try
 	{
-	case MsgId::Login:	m_MsgQueue.PushMsg<MsgLogin>(*this, obj); break;
-	default:
-		LOG(WARNING) << "转发GameSvr消息:" << msg.id;
-		SendToGameSvr转发(buf, len, GetId());// , ++m_snSend);
-		break;
+		msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
+		msgpack::object obj = oh.get();
+		const auto msg = MsgHead::GetMsgId(obj);
+		//LOG(INFO) << obj;
+
+		switch (msg.id)
+		{
+		case MsgId::Login:	m_MsgQueue.PushMsg<MsgLogin>(*this, obj); break;
+		default:
+			LOG(WARNING) << "转发GameSvr消息:" << msg.id;
+			SendToGameSvr转发(buf, len, GetId());// , ++m_snSend);
+			break;
+		}
+	}
+	catch (const msgpack::unpack_error& error)
+	{
+		LOG(WARNING) << "MsgPack解包失败:" << error.what();
+		assert(false);
 	}
 
 }
