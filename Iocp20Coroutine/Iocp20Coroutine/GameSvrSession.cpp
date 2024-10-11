@@ -69,6 +69,7 @@ void GameSvrSession::OnRecvPack(const void* buf, const int len)
 	}
 }
 
+//网络线程，多线程
 void GameSvrSession::OnInit(GameSvr& server)
 {
 	server.m_Sessions.AddSession(&m_refSession, [this, &server]()
@@ -78,6 +79,7 @@ void GameSvrSession::OnInit(GameSvr& server)
 		}, (uint64_t)this);
 }
 
+//网络线程，多线程
 void GameSvrSession::OnDestroy()
 {
 	for (auto& pair : m_mapPlayerGateSession)

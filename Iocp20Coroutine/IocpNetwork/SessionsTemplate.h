@@ -1,6 +1,13 @@
 #include "Sessions.h"
 #include "../LogStrategy/StrategyLog.h"
 
+/// <summary>
+/// 网络线程，多线程
+/// </summary>
+/// <typeparam name="T_Session"></typeparam>
+/// <param name="pSession"></param>
+/// <param name="functionLock"></param>
+/// <param name="idSession"></param>
 template<class T_Session>
 template<typename T_Function>
 void Sessions<T_Session>::AddSession(Session* pSession, T_Function const& functionLock, const uint64_t idSession)

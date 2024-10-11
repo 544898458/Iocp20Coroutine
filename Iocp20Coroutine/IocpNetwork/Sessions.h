@@ -17,7 +17,7 @@ public:
 	template<class T>
 	void Broadcast(const T& msg)
 	{
-		std::lock_guard lock(m_setSessionMutex);
+		//std::lock_guard lock(m_setSessionMutex);
 		if (m_mapSession.empty())
 			return;
 
@@ -49,6 +49,11 @@ private:
 	std::recursive_mutex m_setSessionMutex;
 };
 
+/// <summary>
+/// 主线程，界面线程
+/// </summary>
+/// <typeparam name="T_Session"></typeparam>
+/// <param name="functionLockUpdate"></param>
 template<class T_Session>
 template<typename T_Function>
 void Sessions<T_Session>::Update(T_Function const& functionLockUpdate)
