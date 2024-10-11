@@ -136,6 +136,7 @@ int main(void)
 
 	FunCancel funCancelSpawnMonster;
 	AiCo::SpawnMonster(accept.m_Server.m_Space无限刷怪, funCancelSpawnMonster).RunNew();
+	AiCo::单人剧情(accept.m_Server.m_Space单人剧情, funCancelSpawnMonster).RunNew();
 
 	//主逻辑工作线程
 	using namespace std;

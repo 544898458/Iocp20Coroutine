@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "../CoRoutine/CoTimer.h"
 #include "../CoRoutine/CoRpc.h"
+#include "../CoRoutine/CoEvent.h"
 #include "GameSvrSession.h"
 #include "GameSvr.h"
 #include "PlayerSystem.h"
@@ -205,7 +206,13 @@ namespace AiCo
 		LOG(INFO) << "停止刷怪协程";
 		co_return 0;
 	}
-
+	CoTask<int> 单人剧情(Space& refSpace, FunCancel& funCancel)
+	{
+		KeepCancel kc(funCancel);
+		using namespace std;
+		co_await CoEvent<int>::Wait(funCancel);
+		co_return 0;
+	}
 	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, int changeMoney, bool addMoney, FunCancel& funCancel)
 	{
 		if (changeMoney < 0)

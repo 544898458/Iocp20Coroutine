@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\CoRoutine\CoLock.cpp" />
+    <ClCompile Include="..\CoRoutine\CoRpc.cpp" />
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp" />
     <ClCompile Include="..\IocpNetwork\Client.cpp" />
     <ClCompile Include="..\IocpNetwork\ListenSocketCompletionKey.cpp" />
@@ -161,7 +162,9 @@
     <ClCompile Include="ClientSession_GateToWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\CoRoutine\CoEvent.h" />
     <ClInclude Include="..\CoRoutine\CoLock.h" />
+    <ClInclude Include="..\CoRoutine\CoRpc.h" />
     <ClInclude Include="..\IocpNetwork\ByteQueue.h" />
     <ClInclude Include="..\IocpNetwork\Client.h" />
     <ClInclude Include="..\IocpNetwork\ListenSocketCompletionKey.h" />

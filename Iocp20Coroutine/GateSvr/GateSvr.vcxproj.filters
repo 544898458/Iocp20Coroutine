@@ -93,6 +93,9 @@
     <ClCompile Include="..\CoRoutine\CoLock.cpp">
       <Filter>CoRoutine</Filter>
     </ClCompile>
+    <ClCompile Include="..\CoRoutine\CoRpc.cpp">
+      <Filter>CoRoutine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GateSession.h">
@@ -192,6 +195,12 @@
       <Filter>IocpNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoLock.h">
+      <Filter>CoRoutine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CoRoutine\CoRpc.h">
+      <Filter>CoRoutine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CoRoutine\CoEvent.h">
       <Filter>CoRoutine</Filter>
     </ClInclude>
   </ItemGroup>
