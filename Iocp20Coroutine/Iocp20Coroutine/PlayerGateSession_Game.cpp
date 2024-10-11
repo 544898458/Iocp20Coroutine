@@ -21,26 +21,26 @@ void PlayerGateSession_Game::Send(const T& ref)
 	++m_snSend;
 	ref.msg.sn = (m_snSend);
 
-	MsgPack::SendMsgpack(ref, [this](const void* buf, int len) 
+	MsgPack::SendMsgpack(ref, [this](const void* buf, int len)
 		{
 			MsgGate转发 msg(buf, len, m_idPlayerGateSession, m_snSend);
 			MsgPack::SendMsgpack(msg, [this](const void* buf转发, int len转发)
-			{
-				this->m_refSession.SendToGate(buf转发, len转发);
-			});
-		},false);
+				{
+					this->m_refSession.SendToGate(buf转发, len转发);
+				});
+		}, false);
 }
 
 
-void PlayerGateSession_Game::OnDestroy(Space& refSpace)
+void PlayerGateSession_Game::OnDestroy()
 {
 	for (auto sp : m_vecSpEntity)
 	{
-		refSpace.m_mapEntity.erase((int64_t)sp.get());
-
+		sp->m_refSpace.m_mapEntity.erase((int64_t)sp.get());
+		LOG(INFO) << "m_mapEntity.size=" << sp->m_refSpace.m_mapEntity.size();
 		sp->OnDestroy();
 	}
-	LOG(INFO) << "m_mapEntity.size=" << refSpace.m_mapEntity.size();
+
 	m_vecSpEntity.clear();
 
 	for (auto& sp : m_vecFunCancel)
@@ -106,11 +106,12 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 CoTask<int> PlayerGateSession_Game::CoAddBuilding()
 {
 	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());//不能存对象，扩容可能导致引用和指针失效
-	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 1 }, 
-		[this](const MsgChangeMoney& ref) {SendToWorldSvr<MsgChangeMoney>(ref,m_idPlayerGateSession); }, ** iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 1 },
+		[this](const MsgChangeMoney& ref) {SendToWorldSvr<MsgChangeMoney>(ref, m_idPlayerGateSession); }, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	const MsgChangeMoneyResponce& responce = std::get<1>(tuple);
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
-	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 0,float(std::rand() % 50) }, m_refSession.m_pServer->m_Space, "house_type19");
+	CHECK_NOTNULL_CO_RET_0(m_pCurSpace);
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 0,float(std::rand() % 50) }, *m_pCurSpace, "house_type19");
 	if (0 != responce.error)
 	{
 		LOG(WARNING) << "扣钱失败,error=" << responce.error;
@@ -120,7 +121,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding()
 	spNewEntity->AddComponentPlayer(*this);
 	spNewEntity->AddComponentBuilding(*this);
 	m_vecSpEntity.insert(spNewEntity);//自己控制的单位
-	m_refSession.m_pServer->m_Space.m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
+	m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 	spNewEntity->BroadcastEnter();
 	co_return 0;
@@ -131,7 +132,8 @@ CoTask<int> PlayerGateSession_Game::CoAddRole()
 	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());
 	const auto [stop, responce] = co_await AiCo::ChangeMoney(*this, 3, false, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
-	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ float(std::rand() % 30),30 }, m_refSession.m_pServer->m_Space, "altman-blue");
+	CHECK_NOTNULL_CO_RET_0(m_pCurSpace);
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ float(std::rand() % 30),30 }, *m_pCurSpace, "altman-blue");
 	if (stop)
 	{
 		LOG(WARNING) << "扣钱失败";
@@ -140,15 +142,17 @@ CoTask<int> PlayerGateSession_Game::CoAddRole()
 	spNewEntity->AddComponentPlayer(*this);
 	spNewEntity->AddComponentAttack();
 	m_vecSpEntity.insert(spNewEntity);//自己控制的单位
-	m_refSession.m_pServer->m_Space.m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
+	m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 	spNewEntity->BroadcastEnter();
 	co_return 0;
 }
 
-void PlayerGateSession_Game::Init()
+void PlayerGateSession_Game::Init(Space& refSpace)
 {
-	for (const auto& [id, spEntity] : m_refSession.m_pServer->m_Space.m_mapEntity)//所有地图上的实体发给自己
+	m_pCurSpace = &refSpace;
+
+	for (const auto& [id, spEntity] : refSpace.m_mapEntity)//所有地图上的实体发给自己
 	{
 		Send(MsgAddRoleRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->NickName()), spEntity->m_strPrefabName));
 		Send(MsgNotifyPos(*spEntity));
@@ -160,7 +164,8 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
-	auto& refSpace = m_refSession.m_pServer->m_Space;
+	CHECK_NOTNULL_VOID(m_pCurSpace);
+	auto& refSpace = *m_pCurSpace;
 	//refThis.m_pSession->m_entity.WalkToPos(targetX, targetZ, pServer);
 	for (const auto id : m_vecSelectedEntity)
 	{
@@ -188,7 +193,7 @@ void PlayerGateSession_Game::OnRecv(const MsgSay& msg)
 {
 	auto utf8Content = StrConv::Utf8ToGbk(msg.content);
 	LOG(INFO) << "收到聊天:" << utf8Content;
-	SendToWorldSvr<MsgSay>(msg,m_idPlayerGateSession);
+	SendToWorldSvr<MsgSay>(msg, m_idPlayerGateSession);
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)

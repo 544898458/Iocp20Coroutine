@@ -84,7 +84,7 @@ void GameSvrSession::OnDestroy()
 {
 	for (auto& pair : m_mapPlayerGateSession)
 	{
-		pair.second.OnDestroy(m_pServer->m_Space);
+		pair.second.OnDestroy();
 	}
 	m_pServer = nullptr;//不用加锁
 }
@@ -176,7 +176,7 @@ void GameSvrSession::OnRecv(const MsgGateAddSession& msg, const uint64_t idGateC
 		return;
 	}
 
-	pair.first->second.Init();
+	pair.first->second.Init(m_pServer->m_Space);
 }
 
 void GameSvrSession::OnRecv(const MsgGateDeleteSession& msg, const uint64_t idGateClientSession)
@@ -189,7 +189,7 @@ void GameSvrSession::OnRecv(const MsgGateDeleteSession& msg, const uint64_t idGa
 		return;
 	}
 
-	iterOld->second.OnDestroy(m_pServer->m_Space);
+	iterOld->second.OnDestroy();
 	m_mapPlayerGateSession.erase(iterOld);
 	LOG(INFO) << "已删除,idGateClientSession=" << idGateClientSession;
 }

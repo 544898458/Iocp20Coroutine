@@ -12,6 +12,15 @@ class StrategyLog
 		return;\
 	}\
 }
+#define CHECK_NOTNULL_CO_RET_0( PTR ) \
+{\
+	if (nullptr == (PTR)) \
+	{\
+		LOG(ERROR)<< #PTR << ",is null";\
+		co_return 0;\
+	}\
+}
+
 #define CHECK_GE_VOID( val1, val2) \
 {\
 	CHECK_GE(val1, val2);\

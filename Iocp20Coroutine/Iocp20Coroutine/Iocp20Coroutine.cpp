@@ -135,8 +135,7 @@ int main(void)
 
 
 	FunCancel funCancelSpawnMonster;
-	auto coSpawnMonster = AiCo::SpawnMonster(accept.m_Server.m_Space, funCancelSpawnMonster);
-	coSpawnMonster.Run();
+	AiCo::SpawnMonster(accept.m_Server.m_Space, funCancelSpawnMonster).RunNew();
 
 	//主逻辑工作线程
 	using namespace std;

@@ -23,11 +23,11 @@ public:
 	}
 	void RecvMsg(const MsgId idMsg, const msgpack::object& obj);
 	void Process();
-	void OnDestroy(Space& refSpace);
+	void OnDestroy();
 	void Erase(SpEntity& spEntity);
 	template<class T> void Send(const T& ref);
 	const std::string& NickName()const { return m_nickName; }
-	void Init();
+	void Init(Space& refSpace);
 
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
@@ -42,7 +42,7 @@ private:
 	void OnRecv(const MsgSelectRoles& msg);
 	void OnRecv(const MsgAddRole& msg);
 	void OnRecv(const MsgAddBuilding& msg);
-	
+
 	CoTask<int> CoAddRole();
 	CoTask<int> CoAddBuilding();
 
@@ -51,11 +51,15 @@ private:
 	bool m_bLoginOk = false;
 
 	/// <summary>
-/// 加入Space空间的实体（玩家角色）
-/// </summary>
+	/// 加入Space空间的实体（玩家角色）
+	/// </summary>
 	std::set<SpEntity> m_vecSpEntity;
+	/// <summary>
+	/// 当前这个玩家在哪个Space里
+	/// </summary>
+	Space* m_pCurSpace = nullptr;
 	GameSvrSession& m_refSession;
-	
+
 	std::vector<uint64_t> m_vecSelectedEntity;
 	std::string m_nickName;
 	uint32_t m_snSend = 0;
