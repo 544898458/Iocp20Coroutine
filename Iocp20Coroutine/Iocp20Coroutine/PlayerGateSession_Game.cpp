@@ -148,7 +148,7 @@ CoTask<int> PlayerGateSession_Game::CoAddRole()
 	co_return 0;
 }
 
-void PlayerGateSession_Game::Init(Space& refSpace)
+void PlayerGateSession_Game::EnterSpace(Space& refSpace)
 {
 	m_pCurSpace = &refSpace;
 

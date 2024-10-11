@@ -10,7 +10,7 @@ template class Iocp::Server<GameSvr>;
 template bool Iocp::Server<GameSvr>::Init<GameSvrSession>(const uint16_t);
 template void Iocp::ListenSocketCompletionKey::StartCoRoutine<GameSvrSession, GameSvr >(HANDLE hIocp, SOCKET socketListen, GameSvr&);
 
-GameSvr::GameSvr() 
+GameSvr::GameSvr()
 {
 }
 
@@ -23,7 +23,11 @@ void GameSvr::OnDel()
 }
 void GameSvr::Update()
 {
-	m_Sessions.Update([this](){m_Space.Update();});
+	m_Sessions.Update([this]()
+		{
+			m_Space无限刷怪.Update();
+			m_Space单人剧情.Update();
+		});
 	/*
 	std::lock_guard lock(m_Sessions.m_setSessionMutex);
 	std::set<MyServer::Session*> setDelete;

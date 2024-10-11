@@ -16,7 +16,8 @@ public:
 	void OnDel();
 	void Update();
 
-	Space m_Space;
+	Space m_Space无限刷怪;
+	Space m_Space单人剧情;
 	Sessions<GameSvrSession> m_Sessions;
 
 };

@@ -20,11 +20,11 @@ public:
 };
 
 //Space(GameSvr* pServer) = default;
-
+class PlayerGateSession_Game;
 template<class T>
 void Space::Broadcast(const T& msg)
 {
-	std::set<Entity*> setEntity;
+	std::set<PlayerGateSession_Game*> setEntity;
 	for (const auto& [k, spEntity] : m_mapEntity)
 	{
 		assert(spEntity);
@@ -32,10 +32,10 @@ void Space::Broadcast(const T& msg)
 		if (!spEntity->m_spPlayer)
 			continue;
 		
-		if (setEntity.find(spEntity.get()) != setEntity.end())
+		if (setEntity.find(&spEntity->m_spPlayer->m_refSession) != setEntity.end())
 			continue;
 
 		spEntity->m_spPlayer->m_refSession.Send(msg);
-		setEntity.insert(spEntity.get());
+		setEntity.insert(&spEntity->m_spPlayer->m_refSession);
 	}
 }

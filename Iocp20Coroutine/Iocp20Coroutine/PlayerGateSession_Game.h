@@ -27,7 +27,7 @@ public:
 	void Erase(SpEntity& spEntity);
 	template<class T> void Send(const T& ref);
 	const std::string& NickName()const { return m_nickName; }
-	void Init(Space& refSpace);
+	void EnterSpace(Space& refSpace);
 
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
