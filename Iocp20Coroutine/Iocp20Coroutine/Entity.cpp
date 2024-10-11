@@ -102,7 +102,7 @@ void Entity::BroadcastEnter()
 template<class T>
 void Entity::Broadcast(const T& msg)
 {
-	m_space.m_pServer->m_Sessions.Broadcast(msg);
+	m_space.Broadcast(msg);
 }
 
 template void Entity::Broadcast(const MsgAddRoleRet& msg);

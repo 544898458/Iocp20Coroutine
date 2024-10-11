@@ -10,6 +10,10 @@ template class Iocp::Server<GameSvr>;
 template bool Iocp::Server<GameSvr>::Init<GameSvrSession>(const uint16_t);
 template void Iocp::ListenSocketCompletionKey::StartCoRoutine<GameSvrSession, GameSvr >(HANDLE hIocp, SOCKET socketListen, GameSvr&);
 
+GameSvr::GameSvr() 
+{
+}
+
 void GameSvr::OnAdd(Session&)
 {
 }

@@ -136,11 +136,11 @@ namespace AiCo
 		LOG(INFO) << "走向目标协程结束:" << posTarget;
 	}
 
-	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spTarget, GameSvr* pServer, FunCancel& funCancel)
+	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spTarget, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
-		auto pLocalServer = pServer;
-		pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(*spTarget, "run"));
+		
+		spThis->Broadcast(MsgChangeSkeleAnim(*spTarget, "run"));
 
 		while (true)
 		{
@@ -165,7 +165,7 @@ namespace AiCo
 			if (spThis->DistanceLessEqual(*spTarget, spThis->m_f攻击距离))
 			{
 				//LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
-				pLocalServer->m_Sessions.Broadcast(MsgChangeSkeleAnim(*spTarget, "idle"));
+				spThis->Broadcast(MsgChangeSkeleAnim(*spTarget, "idle"));
 				co_return 0;
 			}
 			if (!MoveStep(*spThis, spTarget->m_Pos))

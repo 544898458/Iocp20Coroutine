@@ -10,7 +10,7 @@ class GameSvr
 public:
 	GameSvr(const GameSvr&) = delete;
 	GameSvr(GameSvr&&) = delete;
-	GameSvr():m_space(this) {}
+	GameSvr();
 	using Session = Iocp::SessionSocketCompletionKey<GameSvrSession>;
 	void OnAdd(Session&);
 	void OnDel();

@@ -108,7 +108,7 @@ void AttackComponent::Update(Entity& refThis)
 			assert(m_coWalk.Finished());//20240205
 			assert(m_coAttack.Finished());//20240205
 			/*m_coStop = false;*/
-			m_coWalk = AiCo::WalkToTarget(refThis.shared_from_this(), spEntity, refThis.m_space.m_pServer, m_cancel);
+			m_coWalk = AiCo::WalkToTarget(refThis.shared_from_this(), spEntity, m_cancel);
 			m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 			return;
 		}
