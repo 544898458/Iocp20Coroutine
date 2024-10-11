@@ -36,7 +36,7 @@ void GateSession::OnRecvWsPack(const void* buf, const int len)
 		{
 		case MsgId::Login:	m_MsgQueue.PushMsg<MsgLogin>(*this, obj); break;
 		default:
-			LOG(WARNING) << "转发GameSvr消息:" << msg.id;
+			LOG(INFO) << "转发GameSvr消息:" << msg.id;
 			SendToGameSvr转发(buf, len, GetId());// , ++m_snSend);
 			break;
 		}
