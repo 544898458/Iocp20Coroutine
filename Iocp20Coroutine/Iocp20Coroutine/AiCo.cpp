@@ -210,7 +210,7 @@ namespace AiCo
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
-		co_await CoEvent<int>::Wait(funCancel);
+		auto [stop,pPlayerGateSession] = co_await CoEvent<PlayerGateSession_Game*>::Wait(funCancel);
 		co_return 0;
 	}
 	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, int changeMoney, bool addMoney, FunCancel& funCancel)

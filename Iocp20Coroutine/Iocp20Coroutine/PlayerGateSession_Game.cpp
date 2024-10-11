@@ -5,6 +5,7 @@
 #include "../IocpNetwork/MsgPack.h"
 #include "../IocpNetwork/StrConv.h"
 #include "../CoRoutine/CoRpc.h"
+#include "../CoRoutine/CoEvent.h"
 #include "AiCo.h"
 #include "AttackComponent.h"
 #include "GameSvr.h"
@@ -157,6 +158,8 @@ void PlayerGateSession_Game::EnterSpace(Space& refSpace)
 		Send(MsgAddRoleRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->NickName()), spEntity->m_strPrefabName));
 		Send(MsgNotifyPos(*spEntity));
 	}
+
+	CoEvent<PlayerGateSession_Game*>::OnRecvEvent(false, this);
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
