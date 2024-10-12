@@ -3,6 +3,7 @@
 #include "GameSvrSession.h"
 #include "Space.h"
 #include "../CoRoutine/CoTimer.h"
+#include "../CoRoutine/CoEvent.h"
 #include "GameSvr.h"
 #include "AiCo.h"
 #include <cmath>
@@ -97,6 +98,7 @@ void Entity::BroadcastEnter()
 {
 	Broadcast(MsgAddRoleRet((uint64_t)this, StrConv::GbkToUtf8(NickName()), m_strPrefabName));//自己广播给别人
 	Broadcast(MsgNotifyPos(*this));
+	CoEvent<WpEntity>::OnRecvEvent(false, weak_from_this());
 }
 
 template<class T>

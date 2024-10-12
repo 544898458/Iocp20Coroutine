@@ -10,7 +10,8 @@
 class Space
 {
 public:
-	//Space(GameSvr* pServer) = default;
+	Space() = default;
+	Space(const Space&) = delete;
 	template<class T>
 	void Broadcast(const T& msg);
 

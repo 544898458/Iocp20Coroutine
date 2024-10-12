@@ -138,6 +138,9 @@
     <ClCompile Include="..\CoRoutine\CoLock.cpp">
       <Filter>CoRoutine</Filter>
     </ClCompile>
+    <ClCompile Include="MyEvent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -286,6 +289,9 @@
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoLock.h">
       <Filter>CoRoutine</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEvent.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

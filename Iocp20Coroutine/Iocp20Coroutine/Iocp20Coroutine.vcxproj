@@ -177,6 +177,7 @@
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\ListenSocketCompletionKey.cpp" />
     <ClCompile Include="MonsterComponent.cpp" />
+    <ClCompile Include="MyEvent.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -245,6 +246,7 @@
     <ClInclude Include="GameSvr.h" />
     <ClInclude Include="GameSvrSession.h" />
     <ClInclude Include="MonsterComponent.h" />
+    <ClInclude Include="MyEvent.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PlayerGateSession_Game.h" />

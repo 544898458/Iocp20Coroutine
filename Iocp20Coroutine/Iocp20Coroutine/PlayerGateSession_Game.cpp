@@ -130,7 +130,6 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding()
 	m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 	spNewEntity->BroadcastEnter();
-	CoEvent<WpEntity>::OnRecvEvent(false, spNewEntity->weak_from_this());
 	co_return 0;
 }
 

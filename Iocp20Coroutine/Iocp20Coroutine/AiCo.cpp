@@ -10,6 +10,8 @@
 #include "PlayerComponent.h"
 #include "../IocpNetwork/StrConv.h"
 #include "PlayerGateSession_Game.h"
+#include "MyEvent.h"
+#include "MonsterComponent.h"
 
 template<class T> void SendToWorldSvr(const T& msg, const uint64_t idGateSession);
 
@@ -112,7 +114,7 @@ namespace AiCo
 		KeepCancel kc(funCancel);
 		const auto posLocalTarget = posTarget;
 		spThis->Broadcast(MsgChangeSkeleAnim(*spThis, "run"));
-
+		CoEvent<MyEvent::MoveEntity>::OnRecvEvent(false, { spThis->weak_from_this() });
 		while (true)
 		{
 			if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
@@ -194,14 +196,15 @@ namespace AiCo
 
 		while (!co_await CoTimer::Wait(1000ms, funCancel))
 		{
-			SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string& >({ -30.0 }, refSpace, "altman-red");
-			spEntityMonster->AddComponentAttack();
-			spEntityMonster->AddComponentMonster();
-			spEntityMonster->m_f警戒距离 = 20;
-			spEntityMonster->m_f移动速度 = 0.2f;
-			refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster });
-			//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
-			spEntityMonster->BroadcastEnter();
+			//SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string& >({ -30.0 }, refSpace, "altman-red");
+			//spEntityMonster->AddComponentAttack();
+			//spEntityMonster->AddComponentMonster();
+			//spEntityMonster->m_f警戒距离 = 20;
+			//spEntityMonster->m_f移动速度 = 0.2f;
+			//refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster });
+			////LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
+			//spEntityMonster->BroadcastEnter();
+			MonsterComponent::AddMonster(refSpace);
 		}
 		LOG(INFO) << "停止刷怪协程";
 		co_return 0;
@@ -226,13 +229,31 @@ namespace AiCo
 
 		pPlayerGateSession->Say("请点一下造建筑，3秒后就能造出一个建筑，建筑会自动造钱");
 
+		
+		auto funSameSpace = [&refSpace](const WpEntity& refWpEntity) { return MyEvent::SameSpace(refWpEntity, refSpace); };
 		{
-			auto [stop, wpEntity] = co_await CoEvent<WpEntity>::Wait(funCancel);
-			if (stop)
-				co_return 0;
+			auto [stop, wpEntity] = co_await CoEvent<WpEntity>::Wait(funCancel, funSameSpace);
+			if (stop)co_return 0;
 		}
 
 		pPlayerGateSession->Say("现在可以看左上角的钱数会缓慢增加了，现在可以点“造兵”按钮扣钱造兵");
+
+		{
+			auto [stop, wpEntity] = co_await CoEvent<WpEntity>::Wait(funCancel, funSameSpace);
+			if (stop)co_return 0;
+		}
+
+		pPlayerGateSession->Say("鼠标单击您的兵（镜头焦点会对准此单位），再点击地面，可以指挥他走向点击处");
+
+		{
+			auto [stop, wpEntity] = co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace](const MyEvent::MoveEntity& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; });
+			if (stop)co_return 0;
+		}
+
+		pPlayerGateSession->Say("很好！，您已经可以指挥兵移动了，现在给您刷一个怪，把兵移动到怪附近，兵就会自动打怪");
+
+		MonsterComponent::AddMonster(refSpace);
+
 		co_return 0;
 	}
 	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, int changeMoney, bool addMoney, FunCancel& funCancel)
