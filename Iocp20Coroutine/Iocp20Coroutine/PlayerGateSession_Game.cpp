@@ -165,6 +165,7 @@ void PlayerGateSession_Game::EnterSpace(Space& refSpace)
 	}
 
 	CoEvent<PlayerGateSession_Game*>::OnRecvEvent(false, this);
+	AiCo::单人剧情(m_Space单人剧情, m_funCancel单人剧情, *this).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
@@ -291,4 +292,5 @@ void PlayerGateSession_Game::Process()
 	//		break;
 	//	}
 	//}
+	m_Space单人剧情.Update();
 }

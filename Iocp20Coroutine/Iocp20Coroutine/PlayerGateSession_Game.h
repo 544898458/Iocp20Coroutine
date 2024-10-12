@@ -2,9 +2,10 @@
 #include "../Iocp20Coroutine/MyMsgQueue.h"
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 #include "SpEntity.h"
+#include "Space.h"
 #include <set>
 class GameSvrSession;
-class Space;
+
 
 /// <summary>
 /// 这个GameSvr里的对象，对应一个GateSvr对游戏客户端的连接
@@ -32,6 +33,7 @@ public:
 
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
+	Space m_Space单人剧情;
 private:
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);
 	/// <summary>
@@ -64,5 +66,6 @@ private:
 	std::vector<uint64_t> m_vecSelectedEntity;
 	std::string m_nickName;
 	uint32_t m_snSend = 0;
+	FunCancel m_funCancel单人剧情;
 };
 

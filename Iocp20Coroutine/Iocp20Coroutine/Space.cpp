@@ -4,14 +4,24 @@
 #include "PlayerComponent.h"
 #include "GameSvrSession.h"
 
+Space::~Space()
+{
+	EraseEntity(true);
+}
+
 void Space::Update()
+{
+	EraseEntity(false);
+}
+
+void Space::EraseEntity(const bool bForceEraseAll)
 {
 	for (auto iter = m_mapEntity.begin(); iter != m_mapEntity.end(); )
 	{
-		auto &spEntity = iter->second;
+		auto& spEntity = iter->second;
 		spEntity->Update();
 
-		if (!spEntity->NeedDelete())
+		if (!bForceEraseAll && !spEntity->NeedDelete())
 		{
 			++iter;
 			continue;

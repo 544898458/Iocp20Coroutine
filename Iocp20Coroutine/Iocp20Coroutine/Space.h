@@ -7,16 +7,19 @@
 /// <summary>
 /// Go”Ô—‘GoWorldøÚº‹Space/Entity£¨œ‡µ±”⁄C#”Ô—‘ETøÚº‹Scene/Unit
 /// </summary>
-class Space
+class Space final
 {
 public:
 	Space() = default;
 	Space(const Space&) = delete;
+	~Space();
 	template<class T>
 	void Broadcast(const T& msg);
 
 	std::map<int64_t, SpEntity> m_mapEntity;
 	void Update();
+private:
+	void EraseEntity(const bool bForceEraseAll);
 	//GameSvr * const m_pServer;
 };
 

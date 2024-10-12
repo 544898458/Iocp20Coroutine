@@ -93,6 +93,17 @@ void GameSvrSession::OnDestroy()
 //主线程，单线程
 bool GameSvrSession::Process()
 {
+	ProcessMsg();
+
+	for (auto& pair : m_mapPlayerGateSession)
+	{
+		pair.second.Process();
+	}
+
+	return true;
+}
+bool GameSvrSession::ProcessMsg()
+{
 	while (true)
 	{
 		const MsgId msgId = this->m_MsgQueue.PopMsg();
@@ -110,12 +121,6 @@ bool GameSvrSession::Process()
 		}
 		assert(false);
 	}
-
-	for (auto& pair : m_mapPlayerGateSession)
-	{
-		pair.second.Process();
-	}
-	return true;
 }
 template<> std::deque<MsgGate转发>& GameSvrSession::GetQueue() { return m_queueGate转发; }
 //template<> std::deque<MsgGateAddSession>& GameSvrSession::GetQueue() { return m_queueGateAddSession; }
@@ -178,7 +183,7 @@ void GameSvrSession::OnRecv(const MsgGateAddSession& msg, const uint64_t idGateC
 	}
 
 	//pair.first->second.EnterSpace(m_pServer->m_Space无限刷怪);
-	pair.first->second.EnterSpace(m_pServer->m_Space单人剧情);
+	pair.first->second.EnterSpace(pair.first->second.m_Space单人剧情);
 }
 
 void GameSvrSession::OnRecv(const MsgGateDeleteSession& msg, const uint64_t idGateClientSession)

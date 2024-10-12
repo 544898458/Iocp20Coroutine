@@ -26,7 +26,6 @@ void GameSvr::Update()
 	m_Sessions.Update([this]()
 		{
 			m_Space无限刷怪.Update();
-			m_Space单人剧情.Update();
 		});
 	/*
 	std::lock_guard lock(m_Sessions.m_setSessionMutex);
