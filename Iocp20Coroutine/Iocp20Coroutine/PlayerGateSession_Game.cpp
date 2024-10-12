@@ -69,6 +69,11 @@ void PlayerGateSession_Game::Erase(SpEntity& spEntity)
 	m_vecSpEntity.erase(spEntity);
 }
 
+void PlayerGateSession_Game::Say(const std::string& str)
+{
+	Send(MsgSay(StrConv::GbkToUtf8(str)));
+}
+
 void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 {
 	//if (!m_coRpc.Finished())
@@ -125,6 +130,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding()
 	m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 	spNewEntity->BroadcastEnter();
+	CoEvent<WpEntity>::OnRecvEvent(false, spNewEntity->weak_from_this());
 	co_return 0;
 }
 

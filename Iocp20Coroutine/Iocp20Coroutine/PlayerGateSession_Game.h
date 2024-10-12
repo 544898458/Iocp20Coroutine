@@ -26,6 +26,7 @@ public:
 	void OnDestroy();
 	void Erase(SpEntity& spEntity);
 	template<class T> void Send(const T& ref);
+	void Say(const std::string& str);
 	const std::string& NickName()const { return m_nickName; }
 	void EnterSpace(Space& refSpace);
 

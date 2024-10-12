@@ -124,7 +124,7 @@ namespace AiCo
 			{
 				LOG(INFO) << "自己阵亡，走向" << posLocalTarget << "的协程取消了";
 				if (spThis->m_spPlayer)
-					spThis->m_spPlayer->m_refSession.Send(MsgSay(StrConv::GbkToUtf8("自己阵亡")));
+					spThis->m_spPlayer->Say("自己阵亡");
 
 				co_return 0;
 			}
@@ -140,7 +140,7 @@ namespace AiCo
 	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spTarget, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
-		
+
 		spThis->Broadcast(MsgChangeSkeleAnim(*spTarget, "run"));
 
 		while (true)
@@ -154,7 +154,7 @@ namespace AiCo
 			{
 				LOG(INFO) << "自己阵亡，走向[" << spTarget->NickName() << "]的协程取消了";
 				if (spThis->m_spPlayer)
-					spThis->m_spPlayer->m_refSession.Send(MsgSay(StrConv::GbkToUtf8("自己阵亡")));
+					spThis->m_spPlayer->Say("自己阵亡");
 
 				co_return 0;
 			}
@@ -210,7 +210,29 @@ namespace AiCo
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
-		auto [stop,pPlayerGateSession] = co_await CoEvent<PlayerGateSession_Game*>::Wait(funCancel);
+		PlayerGateSession_Game* pPlayerGateSession = nullptr;
+		{
+			auto [stop, p] = co_await CoEvent<PlayerGateSession_Game*>::Wait(funCancel);
+			if (stop)
+				co_return 0;
+
+			pPlayerGateSession = p;
+		}
+
+		CHECK_NOTNULL_CO_RET_0(pPlayerGateSession);
+		pPlayerGateSession->Say("欢迎来到即时策略游戏单人剧情");
+		if (co_await CoTimer::Wait(1s, funCancel))
+			co_return 0;
+
+		pPlayerGateSession->Say("请点一下造建筑，3秒后就能造出一个建筑，建筑会自动造钱");
+
+		{
+			auto [stop, wpEntity] = co_await CoEvent<WpEntity>::Wait(funCancel);
+			if (stop)
+				co_return 0;
+		}
+
+		pPlayerGateSession->Say("现在可以看左上角的钱数会缓慢增加了，现在可以点“造兵”按钮扣钱造兵");
 		co_return 0;
 	}
 	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, int changeMoney, bool addMoney, FunCancel& funCancel)
@@ -246,7 +268,7 @@ namespace AiCo
 
 		while (!co_await CoTimer::Wait(100ms, funCancel))
 		{
-			auto tuple = co_await ChangeMoney(refSession, 10, true, funCancel);
+			auto tuple = co_await ChangeMoney(refSession, 2, true, funCancel);
 			const auto& responce = std::get<1>(tuple);
 			if (std::get<0>(tuple))
 			{
