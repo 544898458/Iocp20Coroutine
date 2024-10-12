@@ -117,7 +117,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding()
 	const MsgChangeMoneyResponce& responce = std::get<1>(tuple);
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	CHECK_NOTNULL_CO_RET_0(m_pCurSpace);
-	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ 0,float(std::rand() % 50) }, *m_pCurSpace, "house_type19");
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ 0,float(std::rand() % 50) }, *m_pCurSpace, "house_type19", "兵厂");
 	if (0 != responce.error)
 	{
 		LOG(WARNING) << "扣钱失败,error=" << responce.error;
@@ -139,7 +139,7 @@ CoTask<int> PlayerGateSession_Game::CoAddRole()
 	const auto [stop, responce] = co_await AiCo::ChangeMoney(*this, 3, false, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	CHECK_NOTNULL_CO_RET_0(m_pCurSpace);
-	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string& >({ float(std::rand() % 30),30 }, *m_pCurSpace, "altman-blue");
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string&>({ float(std::rand() % 30),30 }, *m_pCurSpace, "altman-blue", "兵");
 	if (stop)
 	{
 		LOG(WARNING) << "扣钱失败";
@@ -154,13 +154,13 @@ CoTask<int> PlayerGateSession_Game::CoAddRole()
 	co_return 0;
 }
 
-void PlayerGateSession_Game::EnterSpace(Space& refSpace)
+void PlayerGateSession_Game::EnterSpace(Space& refSpace, const std::string &strNickName)
 {
 	m_pCurSpace = &refSpace;
-
+	m_strNickName = strNickName;
 	for (const auto& [id, spEntity] : refSpace.m_mapEntity)//所有地图上的实体发给自己
 	{
-		Send(MsgAddRoleRet((uint64_t)spEntity.get(), StrConv::GbkToUtf8(spEntity->NickName()), spEntity->m_strPrefabName));
+		Send(MsgAddRoleRet(*spEntity));
 		Send(MsgNotifyPos(*spEntity));
 	}
 

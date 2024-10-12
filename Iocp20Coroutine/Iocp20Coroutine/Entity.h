@@ -14,7 +14,7 @@ class PlayerGateSession_Game;
 class Entity :public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
 public:
-	Entity(const Position& pos, Space& m_refSpace, const std::string& strPrefabName);
+	Entity(const Position& pos, Space& refSpace, const std::string& strPrefabName, const std::string& strEntityName);
 	Entity(const Entity&) = delete;
 	void Update();
 	void Hurt(int);
@@ -40,6 +40,10 @@ public:
 	const float m_f攻击距离 = 5.0f;
 
 	std::string m_strPrefabName;
+	/// <summary>
+	/// 兵、兵厂、怪
+	/// </summary>
+	std::string m_strEntityName;
 
 	//静态ECS，没有基类强转子类
 	void AddComponentPlayer(PlayerGateSession_Game& refSession);

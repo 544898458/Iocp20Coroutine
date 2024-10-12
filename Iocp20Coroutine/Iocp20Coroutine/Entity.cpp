@@ -17,8 +17,8 @@
 
 using namespace std;
 
-Entity::Entity(const Position& pos, Space& space, const std::string& strPrefabName) :
-	Id((uint64_t)this), m_strPrefabName(strPrefabName), m_refSpace(space), m_Pos(pos)
+Entity::Entity(const Position& pos, Space& space, const std::string& strPrefabName, const std::string& strEntityName) :
+	Id((uint64_t)this), m_strPrefabName(strPrefabName), m_refSpace(space), m_Pos(pos), m_strEntityName(strEntityName)
 {
 }
 
@@ -74,7 +74,7 @@ void Entity::OnDestroy()
 	LOG(INFO) << "调用Entity::OnDestroy";
 	Broadcast(MsgDelRoleRet((uint64_t)this));
 
-	if( m_spAttack)
+	if (m_spAttack)
 		m_spAttack->TryCancel(*this);
 
 	if (m_spBuilding)
@@ -89,14 +89,14 @@ const std::string& Entity::NickName()
 	if (m_spPlayer)
 		return m_spPlayer->m_refSession.NickName();
 
-	static const std::string str怪("怪");
-	return str怪;
+	static const std::string str("坏人");
+	return str;
 }
 
 
 void Entity::BroadcastEnter()
 {
-	Broadcast(MsgAddRoleRet((uint64_t)this, StrConv::GbkToUtf8(NickName()), m_strPrefabName));//自己广播给别人
+	Broadcast(MsgAddRoleRet(*this));//自己广播给别人
 	Broadcast(MsgNotifyPos(*this));
 	CoEvent<WpEntity>::OnRecvEvent(false, weak_from_this());
 }

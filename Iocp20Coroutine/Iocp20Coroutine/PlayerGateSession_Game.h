@@ -28,8 +28,8 @@ public:
 	void Erase(SpEntity& spEntity);
 	template<class T> void Send(const T& ref);
 	void Say(const std::string& str);
-	const std::string& NickName()const { return m_nickName; }
-	void EnterSpace(Space& refSpace);
+	const std::string& NickName()const { return m_strNickName; }
+	void EnterSpace(Space& refSpace, const std::string& strNickName);
 
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
@@ -64,7 +64,7 @@ private:
 	GameSvrSession& m_refSession;
 
 	std::vector<uint64_t> m_vecSelectedEntity;
-	std::string m_nickName;
+	std::string m_strNickName;
 	uint32_t m_snSend = 0;
 	FunCancel m_funCancelµ¥ÈË¾çÇé;
 };

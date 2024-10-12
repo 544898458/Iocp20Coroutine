@@ -13,5 +13,10 @@
 #include "PlayerComponent.h"
 #include "../CoRoutine/CoRpc.h"
 
-MsgNotifyPos::MsgNotifyPos(Entity& ref) : entityId((uint64_t)&ref), x(ref.m_Pos.x), z(ref.m_Pos.z), eulerAnglesY(ref.m_eulerAnglesY), hp(ref.m_hp)
-{}
+MsgNotifyPos::MsgNotifyPos(Entity& ref) : entityId(ref.Id), x(ref.m_Pos.x), z(ref.m_Pos.z), eulerAnglesY(ref.m_eulerAnglesY), hp(ref.m_hp)
+{
+}
+
+MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :entityId(ref.Id), nickName(StrConv::GbkToUtf8(ref.NickName())), entityName(StrConv::GbkToUtf8(ref.m_strEntityName)), prefabName(ref.m_strPrefabName)
+{
+}

@@ -98,7 +98,6 @@ struct MsgChangeMoney
 	MsgHead msg{ .id = ChangeMoney };
 	bool addMoney;
 	int32_t changeMoney;
-	//std::string nickName;
 	MSGPACK_DEFINE(msg, addMoney, changeMoney);
 };
 
@@ -148,13 +147,13 @@ struct MsgSelectRoles
 
 struct MsgAddRoleRet
 {
-	MsgAddRoleRet(uint64_t entityId, std::string nickName, std::string prefabName)
-		:entityId(entityId), nickName(nickName), prefabName(prefabName) {}
+	MsgAddRoleRet(Entity&);
 	MsgHead msg{ .id = AddRoleRet };
 	uint64_t entityId;
 	std::string nickName;
+	std::string entityName;
 	std::string prefabName;
-	MSGPACK_DEFINE(msg, entityId, nickName, prefabName);
+	MSGPACK_DEFINE(msg, entityId, nickName, entityName, prefabName);
 };
 
 struct MsgDelRoleRet
@@ -207,7 +206,9 @@ struct MsgGate×ª·¢
 struct MsgGateAddSession
 {
 	MsgHead msg{ .id = GateAddSession };
-	MSGPACK_DEFINE(msg);
+	std::string nickName;
+
+	MSGPACK_DEFINE(msg, nickName);
 };
 
 struct MsgGateDeleteSession

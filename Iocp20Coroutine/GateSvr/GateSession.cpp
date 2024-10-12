@@ -8,6 +8,7 @@
 #include "GateServer.h"
 #include "../IocpNetwork/SessionsTemplate.h"
 #include "../CoRoutine/CoRpc.h"
+#include "../IocpNetwork/StrConv.h"
 
 template class Iocp::SessionSocketCompletionKey<GateSession::CompeletionKeySession>;
 template class MsgQueueMsgPack<GateSession::CompeletionKeySession>;
@@ -84,7 +85,7 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 
 	{
 		//µÇÂ¼GameSvr
-		SendToGameSvr(MsgGateAddSession(), GetId(), ++m_snSendToGameSvr);
+		SendToGameSvr<MsgGateAddSession>({ .nickName = StrConv::Utf8ToGbk(msg.name) }, GetId(), ++m_snSendToGameSvr);
 	}
 	co_return 0;
 }
