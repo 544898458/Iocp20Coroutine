@@ -247,6 +247,6 @@ struct MsgGateDeleteSessionResponce
 struct Msg采集
 {
 	MsgHead msg{ .id = 采集 };
-	uint64_t id目标资源;
+	double id目标资源;//TypeScript只有FLOAT64,没有POSITIVE_INTEGER和NEGATIVE_INTEGER
 	MSGPACK_DEFINE(msg, id目标资源);
 };

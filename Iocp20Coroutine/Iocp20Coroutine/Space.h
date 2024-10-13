@@ -21,7 +21,7 @@ public:
 
 	std::map<int64_t, SpEntity> m_mapEntity;
 	WpEntity GetEntity(const int64_t id);
-	WpEntity Get最近的Entity(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件 = {})
+	WpEntity Get最近的Entity(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件 )
 	{
 		std::vector<std::pair<int64_t, SpEntity>> vecEnemy;
 		std::copy_if(m_mapEntity.begin(), m_mapEntity.end(), std::back_inserter(vecEnemy),
@@ -36,7 +36,7 @@ public:
 				if (fun符合条件 && !fun符合条件(*sp))
 					return false;
 
-				return sp.get() != &refEntity && !sp->IsDead() && sp->IsEnemy(refEntity);
+				return sp.get() != &refEntity && !sp->IsDead();
 			});
 
 		if (vecEnemy.empty())

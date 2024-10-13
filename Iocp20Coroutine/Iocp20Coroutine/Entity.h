@@ -10,9 +10,12 @@ class PlayerComponent;
 class MonsterComponent;
 class BuildingComponent;
 class AttackComponent;
+class DefenceComponent;
 class 采集Component;
 class 资源Component;
 class PlayerGateSession_Game;
+
+
 class Entity :public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
 public:
@@ -52,6 +55,7 @@ public:
 	void AddComponentMonster();
 	std::shared_ptr<PlayerComponent> m_spPlayer;
 	std::shared_ptr<AttackComponent> m_spAttack;
+	std::shared_ptr<DefenceComponent> m_spDefence;
 	std::shared_ptr<MonsterComponent> m_spMonster;
 	std::shared_ptr<BuildingComponent> m_spBuilding;
 	std::shared_ptr<采集Component> m_sp采集;

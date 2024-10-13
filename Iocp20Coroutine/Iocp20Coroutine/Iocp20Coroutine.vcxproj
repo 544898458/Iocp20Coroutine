@@ -146,6 +146,7 @@
     <ClCompile Include="..\IocpNetwork\MsgQueue.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="DefenceComponent.cpp" />
     <ClCompile Include="单人剧情.cpp" />
     <ClCompile Include="单位.cpp" />
     <ClCompile Include="资源Component.cpp" />
@@ -242,6 +243,7 @@
     <ClInclude Include="AiCo.h" />
     <ClInclude Include="AttackComponent.h" />
     <ClInclude Include="BuildingComponent.h" />
+    <ClInclude Include="DefenceComponent.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="GameSvr.h" />
     <ClInclude Include="GameSvrSession.h" />

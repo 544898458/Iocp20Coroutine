@@ -8,6 +8,7 @@
 #include "../CoRoutine/CoEvent.h"
 #include "AiCo.h"
 #include "AttackComponent.h"
+#include "DefenceComponent.h"
 #include "采集Component.h"
 #include "GameSvr.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
@@ -80,7 +81,7 @@ void PlayerGateSession_Game::Say(const std::string& str)
 
 void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 {
-	ForEachMyEntity([this](Entity& ref)
+	ForEachSelected([this](Entity& ref)
 		{
 			CHECK_VOID(ref.m_spBuilding);
 			ref.m_spBuilding->造兵(*this, ref);
@@ -89,12 +90,12 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 
 void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
 {
-	ForEachMyEntity([this, &msg](Entity& ref)
+	ForEachSelected([this, &msg](Entity& ref)
 		{
 			CHECK_VOID(ref.m_sp采集);
 			CHECK_NOTNULL_VOID(m_pCurSpace);
-			auto wpEntity = m_pCurSpace->GetEntity(msg.id目标资源);
-			if (wpEntity.expired())
+			auto wpEntity = m_pCurSpace->GetEntity((int64_t)msg.id目标资源);
+			if (!wpEntity.expired())
 				ref.m_sp采集->采集(*this, ref, wpEntity);
 		});
 }
@@ -106,10 +107,10 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
 	CHECK_NOTNULL_VOID(m_pCurSpace);
-	ForEachMyEntity([this, targetX, targetZ](Entity& ref) {ref.m_spAttack->WalkToPos(ref, Position(targetX, targetZ)); });
+	ForEachSelected([this, targetX, targetZ](Entity& ref) {ref.m_spAttack->WalkToPos(ref, Position(targetX, targetZ)); });
 }
 
-void PlayerGateSession_Game::ForEachMyEntity(std::function<void(Entity& ref)> fun)
+void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fun)
 {
 	CHECK_NOTNULL_VOID(m_pCurSpace);
 	for (const auto id : m_vecSelectedEntity)
@@ -128,8 +129,7 @@ void PlayerGateSession_Game::ForEachMyEntity(std::function<void(Entity& ref)> fu
 			continue;
 		}
 
-		if (spEntity->m_spBuilding)
-			fun(*spEntity);
+		fun(*spEntity);
 
 	}
 
@@ -176,6 +176,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 	//spNewEntity->AddComponentAttack();
 	spNewEntity->AddComponentPlayer(*this);
 	BuildingComponent::AddComponent(*spNewEntity, *this, 类型);
+	DefenceComponent::AddComponent(*spNewEntity);
 	spNewEntity->m_spBuilding->m_fun造活动单位 = 配置.fun造兵;
 	m_vecSpEntity.insert(spNewEntity);//自己控制的单位
 	m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
@@ -223,8 +224,17 @@ template void PlayerGateSession_Game::Send(const MsgNotifyMoney&);
 template<class T_Msg>
 void PlayerGateSession_Game::RecvMsg(const msgpack::object& obj)
 {
-	const auto msg = obj.as<T_Msg>();
-	OnRecv(msg);
+	try
+	{
+		const auto msg = obj.as<T_Msg>();
+		OnRecv(msg);
+	}
+	catch (const msgpack::type_error& error)
+	{
+		LOG(ERROR) << typeid(T_Msg).name() << ",反序列化失败," << error.what();
+		assert(false);
+		return;
+	}
 }
 
 void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& obj)

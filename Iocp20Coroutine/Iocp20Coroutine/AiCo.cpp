@@ -80,6 +80,12 @@ namespace AiCo
 
 		co_return 0;//协程正常退出
 	}
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="refThis"></param>
+	/// <param name="localTarget"></param>
+	/// <returns>是否还要走下一步</returns>
 	bool MoveStep(Entity& refThis, const Position localTarget)
 	{
 		const float step = refThis.m_f移动速度;
@@ -133,14 +139,14 @@ namespace AiCo
 
 			if (!MoveStep(*spThis, posLocalTarget))
 			{
-				co_return true;
+				co_return false;
 			}
 		}
 		LOG(INFO) << "走向目标协程结束:" << posTarget;
 		co_return false;
 	}
 
-	CoTaskBool WalkToTarget(SpEntity spThis, SpEntity spTarget, FunCancel& funCancel)
+	CoTaskBool WalkToTarget(SpEntity spThis, SpEntity spTarget, FunCancel& funCancel, const bool b检查警戒距离)
 	{
 		KeepCancel kc(funCancel);
 
@@ -161,7 +167,7 @@ namespace AiCo
 
 				co_return true;
 			}
-			if (!spThis->DistanceLessEqual(*spTarget, spThis->m_f警戒距离))
+			if (b检查警戒距离 && !spThis->DistanceLessEqual(*spTarget, spThis->m_f警戒距离))
 			{
 				LOG(INFO) << "离开自己的警戒距离" << spTarget << "的协程取消了";
 				co_return true;
@@ -170,7 +176,7 @@ namespace AiCo
 			{
 				//LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
 				spThis->Broadcast(MsgChangeSkeleAnim(*spTarget, "idle"));
-				co_return true;
+				co_return false;
 			}
 			if (!MoveStep(*spThis, spTarget->m_Pos))
 			{

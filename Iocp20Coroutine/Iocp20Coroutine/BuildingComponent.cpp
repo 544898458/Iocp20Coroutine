@@ -8,6 +8,7 @@
 #include "PlayerGateSession_Game.h"
 #include "单位.h"
 #include "AttackComponent.h"
+#include "DefenceComponent.h"
 #include "采集Component.h"
 
 
@@ -76,6 +77,7 @@ CoTask<SpEntity> BuildingComponent::Co造活动单位(BuildingComponent& refThis, Pla
 		}
 		spNewEntity->AddComponentPlayer(refGateSession);
 		AttackComponent::AddComponent(*spNewEntity);
+		DefenceComponent::AddComponent(*spNewEntity);
 		refGateSession.m_vecSpEntity.insert(spNewEntity);//自己控制的单位
 		refGateSession.m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
@@ -97,13 +99,13 @@ CoTaskBool BuildingComponent::Co造兵(BuildingComponent& refThis, PlayerGateSessi
 
 CoTaskBool BuildingComponent::Co造工程车(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
 {
-	auto spEntity = co_await Co造活动单位(refThis, refGateSession, refEntity, 工程车);
-	if (!spEntity)
+	auto spNew = co_await Co造活动单位(refThis, refGateSession, refEntity, 工程车);
+	if (!spNew)
 	{
 		assert(false);
 		co_return false;
 	}
 
-	采集Component::AddComponent(refEntity);
+	采集Component::AddComponent(*spNew);
 	co_return false;
 }

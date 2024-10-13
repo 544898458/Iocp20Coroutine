@@ -56,7 +56,7 @@ private:
 	void OnRecv(const MsgAddBuilding& msg);
 	void OnRecv(const Msg采集& msg);
 
-	void ForEachMyEntity(std::function<void(Entity& ref)> fun);
+	void ForEachSelected(std::function<void(Entity& ref)> fun);
 	//CoTask<int> CoAddRole();
 	CoTask<int> CoAddBuilding(const 建筑单位类型 类型);
 

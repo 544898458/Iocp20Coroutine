@@ -9,7 +9,7 @@
 #include "Space.h"
 #include "PlayerGateSession_Game.h"
 
-void AttackComponent::AddComponent(Entity &refEntity)
+void AttackComponent::AddComponent(Entity& refEntity)
 {
 	CHECK_VOID(!refEntity.m_spAttack);
 	refEntity.m_spAttack = std::make_shared<AttackComponent>();
@@ -75,8 +75,8 @@ void AttackComponent::Update(Entity& refThis)
 		return;
 	}
 
-	std::vector<std::pair<int64_t,SpEntity>> vecEnemy;
-	std::copy_if(refThis.m_refSpace.m_mapEntity.begin(), refThis.m_refSpace.m_mapEntity.end(), std::back_inserter(vecEnemy), [&refThis](const auto &pair)
+	std::vector<std::pair<int64_t, SpEntity>> vecEnemy;
+	std::copy_if(refThis.m_refSpace.m_mapEntity.begin(), refThis.m_refSpace.m_mapEntity.end(), std::back_inserter(vecEnemy), [&refThis](const auto& pair)
 		{
 			auto& sp = pair.second;
 			return sp.get() != &refThis && !sp->IsDead() && sp->IsEnemy(refThis);
@@ -89,7 +89,7 @@ void AttackComponent::Update(Entity& refThis)
 			return refThis.DistancePow2(*sp1) < refThis.DistancePow2(*sp2);
 		});
 
-	const auto& wpEntity = refThis.m_refSpace.Get最近的Entity(refThis, true);
+	const auto& wpEntity = refThis.m_refSpace.Get最近的Entity(refThis, true, [](const Entity& ref)->bool {return nullptr != ref.m_spDefence; });
 	if (!wpEntity.expired())
 	{
 		if (refThis.DistanceLessEqual(*wpEntity.lock(), refThis.m_f攻击距离))

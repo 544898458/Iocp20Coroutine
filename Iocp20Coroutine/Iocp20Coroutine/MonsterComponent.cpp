@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "AiCo.h"
 #include "AttackComponent.h"
+#include "DefenceComponent.h"
 #include "Space.h"
 
 void Entity::AddComponentMonster()
@@ -25,6 +26,7 @@ void MonsterComponent::AddMonster(Space& refSpace)
 {
 	SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ -30.0 }, refSpace, "altman-red", "¹Ö");
 	AttackComponent::AddComponent(*spEntityMonster);
+	DefenceComponent::AddComponent(*spEntityMonster);
 	spEntityMonster->AddComponentMonster();
 	spEntityMonster->m_f¾¯½ä¾àÀë = 20;
 	spEntityMonster->m_fÒÆ¶¯ËÙ¶È = 0.2f;
