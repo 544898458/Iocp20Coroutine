@@ -3,8 +3,10 @@
 #include "BuildingComponent.h"
 #include "Entity.h"
 #include "../CoRoutine/CoTimer.h"
+#include "../CoRoutine/CoEvent.h"
 #include "Space.h"
 #include "AiCo.h"
+#include "MyEvent.h"
 
 void 采集Component::采集(PlayerGateSession_Game& refGateSession, Entity& refThis, WpEntity wp目标资源)
 {
@@ -44,6 +46,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, Entity&
 				if (stop)
 					co_return true;
 
+				CoEvent<MyEvent::晶体矿已运回基地>::OnRecvEvent(false, {});
 				continue;
 			}
 
@@ -57,6 +60,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, Entity&
 		//还没装满，还要继续去采矿
 		if (refThis.DistanceLessEqual(*wp目标资源.lock(), refThis.m_f攻击距离))//在目标矿附近
 		{
+			CoEvent<MyEvent::开始采集晶体矿>::OnRecvEvent(false, {});
 			co_await CoTimer::Wait(1s, m_funCancel);//采矿1个矿耗时
 			++m_u32携带晶体矿;
 			continue;

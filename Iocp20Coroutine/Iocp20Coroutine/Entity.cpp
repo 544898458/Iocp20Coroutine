@@ -98,7 +98,7 @@ void Entity::BroadcastEnter()
 {
 	Broadcast(MsgAddRoleRet(*this));//自己广播给别人
 	Broadcast(MsgNotifyPos(*this));
-	CoEvent<WpEntity>::OnRecvEvent(false, weak_from_this());
+	CoEvent<MyEvent::AddEntity>::OnRecvEvent(false, { weak_from_this() });
 }
 
 template<class T>
