@@ -39,12 +39,19 @@ enum MsgId
 };
 MSGPACK_ADD_ENUM(MsgId);
 
-enum 建筑类型
+enum 建筑单位类型
 {
-	基地,//用来造工人
+	基地,//用来造工程车
 	兵厂,//用来造兵
 };
-MSGPACK_ADD_ENUM(建筑类型);
+MSGPACK_ADD_ENUM(建筑单位类型);
+
+enum 活动单位类型
+{
+	工程车,//可以采矿，采气，也可以简单攻击
+	兵,//只能攻击
+};
+MSGPACK_ADD_ENUM(活动单位类型);
 
 struct MsgHead
 {
@@ -97,7 +104,7 @@ struct MsgAddRole
 struct MsgAddBuilding
 {
 	MsgHead msg;
-	建筑类型 类型;
+	建筑单位类型 类型;
 	MSGPACK_DEFINE(msg, 类型);
 };
 

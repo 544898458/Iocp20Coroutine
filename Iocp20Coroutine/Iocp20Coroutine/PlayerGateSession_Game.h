@@ -56,7 +56,7 @@ private:
 	void OnRecv(const MsgAddBuilding& msg);
 
 	//CoTask<int> CoAddRole();
-	CoTask<int> CoAddBuilding(const 建筑类型 类型);
+	CoTask<int> CoAddBuilding(const 建筑单位类型 类型);
 
 	std::vector<CoTask<int>>	m_vecCoRpc;
 	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;

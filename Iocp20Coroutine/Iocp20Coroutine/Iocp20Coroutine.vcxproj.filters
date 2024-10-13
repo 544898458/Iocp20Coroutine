@@ -141,6 +141,9 @@
     <ClCompile Include="MyEvent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="单位.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -291,6 +294,9 @@
       <Filter>CoRoutine</Filter>
     </ClInclude>
     <ClInclude Include="MyEvent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

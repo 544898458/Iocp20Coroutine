@@ -6,6 +6,7 @@
 #include "AiCo.h"
 #include "PlayerComponent.h"
 #include "PlayerGateSession_Game.h"
+#include "单位.h"
 
 void Entity::AddComponentBuilding(PlayerGateSession_Game& refSession)
 {
@@ -30,17 +31,23 @@ void BuildingComponent::TryCancel(Entity& refEntity)
 
 void BuildingComponent::造兵(PlayerGateSession_Game& refGateSession, Entity& refEntity)
 {
+	CHECK_VOID(m_fun造活动单位);
 	++m_i等待造兵数;
-	m_TaskCancel造兵.TryRun(Co造兵(refGateSession, refEntity));
+	m_TaskCancel造兵.TryRun(m_fun造活动单位(*this, refGateSession, refEntity));
 }
 
-CoTaskUint8 BuildingComponent::Co造兵(PlayerGateSession_Game& refGateSession, Entity& refEntity)
+CoTaskUint8 BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity, const 活动单位类型 类型)
 {
-	while (0 < m_i等待造兵数)
+	单位::活动单位配置 配置;
+	if (!单位::Find活动单位配置(类型, 配置))
 	{
-		--m_i等待造兵数;
+		co_return true;
+	}
+	while (0 < refThis.m_i等待造兵数)
+	{
+		--refThis.m_i等待造兵数;
 		//先扣钱
-		const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, 5, false, m_TaskCancel造兵.cancel);
+		const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, 配置.配置.u32消耗钱, false, refThis.m_TaskCancel造兵.cancel);
 		if (stop)
 		{
 			LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney << ",rpcSn=" << responce.msg.rpcSnId;
@@ -48,7 +55,7 @@ CoTaskUint8 BuildingComponent::Co造兵(PlayerGateSession_Game& refGateSession, En
 		}
 		//耗时
 		using namespace std;
-		if (co_await CoTimer::Wait(1s, m_TaskCancel造兵.cancel))
+		if (co_await CoTimer::Wait(1s, refThis.m_TaskCancel造兵.cancel))
 		{
 			co_return 0;
 		}
@@ -58,7 +65,7 @@ CoTaskUint8 BuildingComponent::Co造兵(PlayerGateSession_Game& refGateSession, En
 		const auto posBuilding = refEntity.m_Pos;
 		Position pos = { posBuilding.x - 2 + std::rand() % 4, posBuilding.z + 2 };
 		auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string&>(
-			pos, *refGateSession.m_pCurSpace, "altman-blue", "近战兵");
+			pos, *refGateSession.m_pCurSpace, 配置.配置.strPrefabName, 配置.配置.strName);
 		if (stop)
 		{
 			LOG(WARNING) << "扣钱失败";
@@ -71,4 +78,14 @@ CoTaskUint8 BuildingComponent::Co造兵(PlayerGateSession_Game& refGateSession, En
 
 		spNewEntity->BroadcastEnter();
 	}
+}
+
+CoTaskUint8 BuildingComponent::Co造兵(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
+{
+	return Co造活动单位(refThis, refGateSession, refEntity, 兵);
+}
+
+CoTaskUint8 BuildingComponent::Co造工程车(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
+{
+	return Co造活动单位(refThis, refGateSession, refEntity,	工程车);
 }

@@ -27,3 +27,10 @@ class StrategyLog
 	if (val1 < val2)\
 		return;\
 }
+
+#define CHECK_VOID( exp ) \
+{\
+	CHECK(exp);\
+	if (!exp)\
+		return;\
+}
