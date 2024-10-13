@@ -34,6 +34,15 @@ public:
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
 	Space m_Space单人剧情;
+	/// <summary>
+	/// 当前这个玩家在哪个Space里
+	/// </summary>
+	Space* m_pCurSpace = nullptr;
+	/// <summary>
+	/// 加入Space空间的实体（玩家角色）
+	/// </summary>
+	std::set<SpEntity> m_vecSpEntity;
+
 private:
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);
 	/// <summary>
@@ -46,21 +55,13 @@ private:
 	void OnRecv(const MsgAddRole& msg);
 	void OnRecv(const MsgAddBuilding& msg);
 
-	CoTask<int> CoAddRole();
-	CoTask<int> CoAddBuilding();
+	//CoTask<int> CoAddRole();
+	CoTask<int> CoAddBuilding(const 建筑类型 类型);
 
 	std::vector<CoTask<int>>	m_vecCoRpc;
 	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;
 	bool m_bLoginOk = false;
 
-	/// <summary>
-	/// 加入Space空间的实体（玩家角色）
-	/// </summary>
-	std::set<SpEntity> m_vecSpEntity;
-	/// <summary>
-	/// 当前这个玩家在哪个Space里
-	/// </summary>
-	Space* m_pCurSpace = nullptr;
 	GameSvrSession& m_refSession;
 
 	std::vector<uint64_t> m_vecSelectedEntity;

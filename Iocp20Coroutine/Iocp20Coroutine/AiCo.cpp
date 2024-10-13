@@ -289,9 +289,8 @@ namespace AiCo
 
 		while (!co_await CoTimer::Wait(100ms, funCancel))
 		{
-			auto tuple = co_await ChangeMoney(refSession, 2, true, funCancel);
-			const auto& responce = std::get<1>(tuple);
-			if (std::get<0>(tuple))
+			const auto& [stop, responce] = co_await ChangeMoney(refSession, 2, true, funCancel);
+			if (stop)
 			{
 				LOG(WARNING) << "Ð­³ÌRPC´ò¶Ï,error=" << responce.error << ",finalMoney=" << responce.finalMoney << ",rpcSn=" << responce.msg.rpcSnId;
 				co_return 0;

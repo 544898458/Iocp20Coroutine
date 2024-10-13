@@ -93,7 +93,7 @@ void CoDb<T>::SaveInDbThread(const T& ref, const std::string & strNickName, SpCo
 	out.close();
 	LOG(INFO) << "已写入" << strFileName;
 	//模拟写硬盘很卡
-	std::this_thread::sleep_for(std::chrono::seconds(2));
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 	{
 		spCoAwait->SetResult(ref);
 		std::lock_guard lock(m_mutexDequeResult);

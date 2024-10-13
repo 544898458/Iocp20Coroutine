@@ -39,6 +39,13 @@ enum MsgId
 };
 MSGPACK_ADD_ENUM(MsgId);
 
+enum 建筑类型
+{
+	基地,//用来造工人
+	兵厂,//用来造兵
+};
+MSGPACK_ADD_ENUM(建筑类型);
+
 struct MsgHead
 {
 	//void SetSn(uint32_t snParam) const
@@ -90,7 +97,8 @@ struct MsgAddRole
 struct MsgAddBuilding
 {
 	MsgHead msg;
-	MSGPACK_DEFINE(msg);
+	建筑类型 类型;
+	MSGPACK_DEFINE(msg, 类型);
 };
 
 struct MsgChangeMoney

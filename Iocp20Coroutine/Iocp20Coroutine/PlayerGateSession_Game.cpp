@@ -10,6 +10,7 @@
 #include "AttackComponent.h"
 #include "GameSvr.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
+#include "BuildingComponent.h"
 
 /// <summary>
 /// GameSvr通过GateSvr透传给游戏客户端
@@ -76,19 +77,29 @@ void PlayerGateSession_Game::Say(const std::string& str)
 
 void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 {
-	//if (!m_coRpc.Finished())
-	//{
-	//	LOG(WARNING) << "m_coRpc前一个协程还没结束";
-	//	return;
-	//}
-	//auto iterNew = m_vecCoRpc.insert(m_vecCoRpc.end(), CoAddRole());
-	//if (iterNew == m_vecCoRpc.end())
-	//{
-	//	LOG(ERROR) << "err";
-	//	return;
-	//}
-	//iterNew->Run();
-	CoAddRole().RunNew();
+	CHECK_NOTNULL_VOID(m_pCurSpace);
+	for (const auto id : m_vecSelectedEntity)
+	{
+		auto itFind = m_pCurSpace->m_mapEntity.find(id);
+		if (itFind == m_pCurSpace->m_mapEntity.end())
+		{
+			LOG(INFO) << "选中的实体不存在:" << id;
+			//assert(false);
+			continue;
+		}
+		auto& spEntity = itFind->second;
+		if (m_vecSpEntity.end() == std::find_if(m_vecSpEntity.begin(), m_vecSpEntity.end(), [&spEntity](const auto& sp) {return sp == spEntity; }))
+		{
+			LOG(ERROR) << id << "不是自己的单位，不能操作";
+			continue;
+		}
+
+		if (spEntity->m_spBuilding)
+			spEntity->m_spBuilding->造兵(*this, *spEntity);
+
+	}
+
+	//CoAddRole().RunNew();
 }
 
 template<class T> void SendToWorldSvr(const T& msg, const uint64_t idGateSession);
@@ -100,7 +111,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 	//	LOG(WARNING) << "m_coRpc前一个协程还没结束";
 	//	return;
 	//}
-	auto iterNew = m_vecCoRpc.insert(m_vecCoRpc.end(), CoAddBuilding());
+	auto iterNew = m_vecCoRpc.insert(m_vecCoRpc.end(), CoAddBuilding(msg.类型));
 	if (iterNew == m_vecCoRpc.end())
 	{
 		LOG(ERROR) << "err";
@@ -109,7 +120,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 	iterNew->Run();
 }
 
-CoTask<int> PlayerGateSession_Game::CoAddBuilding()
+CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑类型 类型)
 {
 	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());//不能存对象，扩容可能导致引用和指针失效
 	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 1 },
@@ -126,27 +137,6 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding()
 	//spNewEntity->AddComponentAttack();
 	spNewEntity->AddComponentPlayer(*this);
 	spNewEntity->AddComponentBuilding(*this);
-	m_vecSpEntity.insert(spNewEntity);//自己控制的单位
-	m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
-
-	spNewEntity->BroadcastEnter();
-	co_return 0;
-}
-
-CoTask<int> PlayerGateSession_Game::CoAddRole()
-{
-	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());
-	const auto [stop, responce] = co_await AiCo::ChangeMoney(*this, 3, false, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
-	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
-	CHECK_NOTNULL_CO_RET_0(m_pCurSpace);
-	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string&>({ float(std::rand() % 30),30 }, *m_pCurSpace, "altman-blue", "兵");
-	if (stop)
-	{
-		LOG(WARNING) << "扣钱失败";
-		co_return 0;
-	}
-	spNewEntity->AddComponentPlayer(*this);
-	spNewEntity->AddComponentAttack();
 	m_vecSpEntity.insert(spNewEntity);//自己控制的单位
 	m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
