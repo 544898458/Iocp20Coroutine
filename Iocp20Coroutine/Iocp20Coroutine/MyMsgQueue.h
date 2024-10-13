@@ -36,6 +36,7 @@ enum MsgId
 	GateAddSessionResponce,
 	GateDeleteSession,
 	GateDeleteSessionResponce,
+	采集,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -88,7 +89,7 @@ struct MsgLogin
 struct MsgLoginResponce
 {
 	MsgHead msg = { .id = MsgId::Login };
-	enum Error 
+	enum Error
 	{
 		OK,
 		Busy,
@@ -236,8 +237,16 @@ struct MsgGateDeleteSession
 	MsgHead msg{ .id = GateDeleteSession };
 	MSGPACK_DEFINE(msg);
 };
+
 struct MsgGateDeleteSessionResponce
 {
 	MsgHead msg{ .id = GateDeleteSessionResponce };
 	MSGPACK_DEFINE(msg);
+};
+
+struct Msg采集
+{
+	MsgHead msg{ .id = 采集 };
+	uint64_t id目标资源;
+	MSGPACK_DEFINE(msg, id目标资源);
 };

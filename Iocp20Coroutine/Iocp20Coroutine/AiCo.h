@@ -14,8 +14,8 @@ namespace AiCo
 	//如果是Entity自己的协程，可以用引用Entity&，前提是确保Entity销毁前停止这个协程
 	CoTask<int> Attack(SpEntity spEntity, SpEntity spDefencer, FunCancel& cancel);
 	CoTask<int> Idle(SpEntity spEntity, FunCancel& funCancel);
-	CoTask<int> WalkToPos(SpEntity spThis, const Position &posTarget, FunCancel& funCancel);
-	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spEntity, FunCancel& funCancel);
+	CoTaskBool WalkToPos(SpEntity spThis, const Position &posTarget, FunCancel& funCancel);
+	CoTaskBool WalkToTarget(SpEntity spThis, SpEntity spEntity, FunCancel& funCancel);
 	CoTask<int> WaitDelete(SpEntity spThis, FunCancel& funCancel);
 	CoTask<int> SpawnMonster(Space& refSpace, FunCancel& funCancel);
 	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, uint32_t changeMoney, bool addMoney, FunCancel& funCancel);

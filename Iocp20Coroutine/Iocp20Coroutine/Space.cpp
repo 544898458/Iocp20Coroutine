@@ -9,6 +9,19 @@ Space::~Space()
 	EraseEntity(true);
 }
 
+WpEntity Space::GetEntity(const int64_t id)
+{
+	auto itFind = m_mapEntity.find(id);
+	if (itFind == m_mapEntity.end())
+	{
+		LOG(INFO) << "选中的实体不存在:" << id;
+		//assert(false);
+		return {};
+	}
+	CHECK_DEFAULT(itFind->second);
+	return itFind->second->weak_from_this();
+}
+
 void Space::Update()
 {
 	EraseEntity(false);

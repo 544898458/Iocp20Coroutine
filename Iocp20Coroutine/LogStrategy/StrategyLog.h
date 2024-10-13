@@ -34,3 +34,17 @@ class StrategyLog
 	if (!exp)\
 		return;\
 }
+
+#define CHECK_DEFAULT( exp ) \
+{\
+	CHECK(exp);\
+	if (!exp)\
+		return {};\
+}
+
+#define CHECK_FALSE( exp ) \
+{\
+	CHECK(exp);\
+	if (!exp)\
+		return false;\
+}

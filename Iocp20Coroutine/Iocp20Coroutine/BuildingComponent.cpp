@@ -10,12 +10,13 @@
 #include "AttackComponent.h"
 #include "采集Component.h"
 
-void Entity::AddComponentBuilding(PlayerGateSession_Game& refSession)
+
+void BuildingComponent::AddComponent(Entity& refThis, PlayerGateSession_Game& refSession, const 建筑单位类型 类型)
 {
-	m_spBuilding = std::make_shared<BuildingComponent, PlayerGateSession_Game&>(refSession);
+	refThis.m_spBuilding = std::make_shared<BuildingComponent, PlayerGateSession_Game&, const 建筑单位类型&>(refSession, 类型);
 }
 
-BuildingComponent::BuildingComponent(PlayerGateSession_Game& refSession)
+BuildingComponent::BuildingComponent(PlayerGateSession_Game& refSession, const 建筑单位类型 &类型) :m_类型(类型)
 {
 	//if (!m_coAddMoney.Finished())
 	//{
@@ -83,26 +84,26 @@ CoTask<SpEntity> BuildingComponent::Co造活动单位(BuildingComponent& refThis, Pla
 	}
 }
 
-CoTaskUint8 BuildingComponent::Co造兵(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
+CoTaskBool BuildingComponent::Co造兵(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
 {
 	auto spEntity = co_await Co造活动单位(refThis, refGateSession, refEntity, 兵);
 	if (!spEntity)
 	{
 		assert(false);
-		co_return 0;
+		co_return false;
 	}
-	co_return 0;
+	co_return false;
 }
 
-CoTaskUint8 BuildingComponent::Co造工程车(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
+CoTaskBool BuildingComponent::Co造工程车(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
 {
 	auto spEntity = co_await Co造活动单位(refThis, refGateSession, refEntity, 工程车);
 	if (!spEntity)
 	{
 		assert(false);
-		co_return 0;
+		co_return false;
 	}
 
 	采集Component::AddComponent(refEntity);
-	co_return 0;
+	co_return false;
 }

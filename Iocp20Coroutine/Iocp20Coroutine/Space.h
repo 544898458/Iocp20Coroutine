@@ -1,7 +1,10 @@
 #pragma once
 #include <map>
 #include <set>
+#include <functional>
+#include <algorithm>
 #include "SpEntity.h"
+#include "Entity.h"
 
 //class GameSvr;
 /// <summary>
@@ -17,6 +20,38 @@ public:
 	void Broadcast(const T& msg);
 
 	std::map<int64_t, SpEntity> m_mapEntity;
+	WpEntity GetEntity(const int64_t id);
+	WpEntity Get最近的Entity(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件 = {})
+	{
+		std::vector<std::pair<int64_t, SpEntity>> vecEnemy;
+		std::copy_if(m_mapEntity.begin(), m_mapEntity.end(), std::back_inserter(vecEnemy),
+			[bFindEnemy, &refEntity, &fun符合条件](const auto& pair)
+			{
+				auto& sp = pair.second;
+				CHECK_FALSE(sp);
+				const auto bEnemy = sp->IsEnemy(refEntity);
+				if (bEnemy != bFindEnemy)
+					return false;
+
+				if (fun符合条件 && !fun符合条件(*sp))
+					return false;
+
+				return sp.get() != &refEntity && !sp->IsDead() && sp->IsEnemy(refEntity);
+			});
+
+		if (vecEnemy.empty())
+		{
+			return {};
+		}
+
+		auto iterMin = std::min_element(vecEnemy.begin(), vecEnemy.end(), [&refEntity](const auto& pair1, const auto& pair2)
+			{
+				auto& sp1 = pair1.second;
+				auto& sp2 = pair2.second;
+				return refEntity.DistancePow2(*sp1) < refEntity.DistancePow2(*sp2);
+			});
+		return iterMin->second->weak_from_this();
+	}
 	void Update();
 private:
 	void EraseEntity(const bool bForceEraseAll);
@@ -32,10 +67,10 @@ void Space::Broadcast(const T& msg)
 	for (const auto& [k, spEntity] : m_mapEntity)
 	{
 		assert(spEntity);
-		
+
 		if (!spEntity->m_spPlayer)
 			continue;
-		
+
 		if (setEntity.find(&spEntity->m_spPlayer->m_refSession) != setEntity.end())
 			continue;
 

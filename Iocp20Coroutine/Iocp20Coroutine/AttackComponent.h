@@ -11,7 +11,7 @@ public:
 	void Update(Entity& refEntity);
 	static void AddComponent(Entity& refEntity);
 
-	CoTask<int> m_coWalk;
+	CoTaskBool m_coWalk;
 	CoTask<int> m_coAttack;
 	FunCancel m_cancel;
 };

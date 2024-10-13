@@ -89,19 +89,18 @@ void AttackComponent::Update(Entity& refThis)
 			return refThis.DistancePow2(*sp1) < refThis.DistancePow2(*sp2);
 		});
 
-	if (iterMin != vecEnemy.end())
+	const auto& wpEntity = refThis.m_refSpace.Get最近的Entity(refThis, true);
+	if (!wpEntity.expired())
 	{
-		const auto& spEntity = iterMin->second;
-
-		if (refThis.DistanceLessEqual(*spEntity, refThis.m_f攻击距离))
+		if (refThis.DistanceLessEqual(*wpEntity.lock(), refThis.m_f攻击距离))
 		{
 			TryCancel(refThis);
 
-			m_coAttack = AiCo::Attack(refThis.shared_from_this(), spEntity, m_cancel);
+			m_coAttack = AiCo::Attack(refThis.shared_from_this(), wpEntity.lock(), m_cancel);
 			m_coAttack.Run();
 			return;
 		}
-		else if (refThis.DistanceLessEqual(*spEntity, refThis.m_f警戒距离))
+		else if (refThis.DistanceLessEqual(*wpEntity.lock(), refThis.m_f警戒距离))
 		{
 			TryCancel(refThis);
 
@@ -109,7 +108,7 @@ void AttackComponent::Update(Entity& refThis)
 			assert(m_coWalk.Finished());//20240205
 			assert(m_coAttack.Finished());//20240205
 			/*m_coStop = false;*/
-			m_coWalk = AiCo::WalkToTarget(refThis.shared_from_this(), spEntity, m_cancel);
+			m_coWalk = AiCo::WalkToTarget(refThis.shared_from_this(), wpEntity.lock(), m_cancel);
 			m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 			return;
 		}

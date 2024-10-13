@@ -8,6 +8,7 @@
 #include "../CoRoutine/CoEvent.h"
 #include "AiCo.h"
 #include "AttackComponent.h"
+#include "采集Component.h"
 #include "GameSvr.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 #include "BuildingComponent.h"
@@ -79,6 +80,37 @@ void PlayerGateSession_Game::Say(const std::string& str)
 
 void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 {
+	ForEachMyEntity([this](Entity& ref)
+		{
+			CHECK_VOID(ref.m_spBuilding);
+			ref.m_spBuilding->造兵(*this, ref);
+		});
+}
+
+void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
+{
+	ForEachMyEntity([this, &msg](Entity& ref)
+		{
+			CHECK_VOID(ref.m_sp采集);
+			CHECK_NOTNULL_VOID(m_pCurSpace);
+			auto wpEntity = m_pCurSpace->GetEntity(msg.id目标资源);
+			if (wpEntity.expired())
+				ref.m_sp采集->采集(*this, ref, wpEntity);
+		});
+}
+
+
+void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
+{
+	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
+	const auto targetX = msg.x;
+	const auto targetZ = msg.z;
+	CHECK_NOTNULL_VOID(m_pCurSpace);
+	ForEachMyEntity([this, targetX, targetZ](Entity& ref) {ref.m_spAttack->WalkToPos(ref, Position(targetX, targetZ)); });
+}
+
+void PlayerGateSession_Game::ForEachMyEntity(std::function<void(Entity& ref)> fun)
+{
 	CHECK_NOTNULL_VOID(m_pCurSpace);
 	for (const auto id : m_vecSelectedEntity)
 	{
@@ -97,7 +129,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 		}
 
 		if (spEntity->m_spBuilding)
-			spEntity->m_spBuilding->造兵(*this, *spEntity);
+			fun(*spEntity);
 
 	}
 
@@ -121,10 +153,11 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 	}
 	iterNew->Run();
 }
+
 CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 {
 	单位::建筑单位配置 配置;
-	if (!单位::Find建筑单位配置(类型,配置))
+	if (!单位::Find建筑单位配置(类型, 配置))
 	{
 		co_return true;
 	}
@@ -142,7 +175,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 	}
 	//spNewEntity->AddComponentAttack();
 	spNewEntity->AddComponentPlayer(*this);
-	spNewEntity->AddComponentBuilding(*this);
+	BuildingComponent::AddComponent(*spNewEntity, *this, 类型);
 	spNewEntity->m_spBuilding->m_fun造活动单位 = 配置.fun造兵;
 	m_vecSpEntity.insert(spNewEntity);//自己控制的单位
 	m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
@@ -163,36 +196,6 @@ void PlayerGateSession_Game::EnterSpace(Space& refSpace, const std::string& strN
 
 	CoEvent<PlayerGateSession_Game*>::OnRecvEvent(false, this);
 	单人剧情::Co(m_Space单人剧情, m_funCancel单人剧情, *this).RunNew();
-}
-
-void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
-{
-	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
-	const auto targetX = msg.x;
-	const auto targetZ = msg.z;
-	CHECK_NOTNULL_VOID(m_pCurSpace);
-	auto& refSpace = *m_pCurSpace;
-	//refThis.m_pSession->m_entity.WalkToPos(targetX, targetZ, pServer);
-	for (const auto id : m_vecSelectedEntity)
-	{
-		auto itFind = refSpace.m_mapEntity.find(id);
-		if (itFind == refSpace.m_mapEntity.end())
-		{
-			LOG(INFO) << "选中的实体不存在:" << id;
-			//assert(false);
-			continue;
-		}
-		auto& spEntity = itFind->second;
-		if (m_vecSpEntity.end() == std::find_if(m_vecSpEntity.begin(), m_vecSpEntity.end(), [&spEntity](const auto& sp) {return sp == spEntity; }))
-		{
-			LOG(ERROR) << id << "不是自己的单位，不能移动";
-			continue;
-		}
-
-		if (spEntity->m_spAttack)
-			spEntity->m_spAttack->WalkToPos(*spEntity.get(), Position(targetX, targetZ));
-
-	}
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgSay& msg)
@@ -233,6 +236,7 @@ void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& o
 	case MsgId::SelectRoles:RecvMsg<MsgSelectRoles>(obj); break;
 	case MsgId::AddRole:RecvMsg<MsgAddRole>(obj); break;
 	case MsgId::AddBuilding:RecvMsg<MsgAddBuilding>(obj); break;
+	case MsgId::采集:RecvMsg<Msg采集>(obj); break;
 	case MsgId::Gate转发:
 		LOG(ERROR) << "不能再转发";
 		assert(false);

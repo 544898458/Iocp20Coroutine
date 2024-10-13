@@ -109,7 +109,7 @@ namespace AiCo
 
 		return true;
 	}
-	CoTask<int>WalkToPos(SpEntity spThis, const Position& posTarget, FunCancel& funCancel)
+	CoTaskBool WalkToPos(SpEntity spThis, const Position& posTarget, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		const auto posLocalTarget = posTarget;
@@ -120,7 +120,7 @@ namespace AiCo
 			if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
 			{
 				LOG(INFO) << "走向" << posLocalTarget << "的协程取消了";
-				co_return 0;
+				co_return true;
 			}
 			if (spThis->IsDead())
 			{
@@ -128,18 +128,19 @@ namespace AiCo
 				if (spThis->m_spPlayer)
 					spThis->m_spPlayer->Say("自己阵亡");
 
-				co_return 0;
+				co_return true;
 			}
 
 			if (!MoveStep(*spThis, posLocalTarget))
 			{
-				co_return 0;
+				co_return true;
 			}
 		}
 		LOG(INFO) << "走向目标协程结束:" << posTarget;
+		co_return false;
 	}
 
-	CoTask<int> WalkToTarget(SpEntity spThis, SpEntity spTarget, FunCancel& funCancel)
+	CoTaskBool WalkToTarget(SpEntity spThis, SpEntity spTarget, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 
@@ -150,7 +151,7 @@ namespace AiCo
 			if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
 			{
 				LOG(INFO) << "走向" << spTarget << "的协程取消了";
-				co_return 0;
+				co_return true;
 			}
 			if (spThis->IsDead())
 			{
@@ -158,25 +159,26 @@ namespace AiCo
 				if (spThis->m_spPlayer)
 					spThis->m_spPlayer->Say("自己阵亡");
 
-				co_return 0;
+				co_return true;
 			}
 			if (!spThis->DistanceLessEqual(*spTarget, spThis->m_f警戒距离))
 			{
 				LOG(INFO) << "离开自己的警戒距离" << spTarget << "的协程取消了";
-				co_return 0;
+				co_return true;
 			}
 			if (spThis->DistanceLessEqual(*spTarget, spThis->m_f攻击距离))
 			{
 				//LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
 				spThis->Broadcast(MsgChangeSkeleAnim(*spTarget, "idle"));
-				co_return 0;
+				co_return true;
 			}
 			if (!MoveStep(*spThis, spTarget->m_Pos))
 			{
-				co_return 0;
+				co_return true;
 			}
 		}
 		LOG(INFO) << "走向目标协程结束:" << spThis->m_Pos;
+		co_return false;
 	}
 	CoTask<int> WaitDelete(SpEntity spThis, FunCancel& funCancel)
 	{
