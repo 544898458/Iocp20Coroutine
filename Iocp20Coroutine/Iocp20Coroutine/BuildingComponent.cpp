@@ -7,6 +7,8 @@
 #include "PlayerComponent.h"
 #include "PlayerGateSession_Game.h"
 #include "单位.h"
+#include "AttackComponent.h"
+#include "采集Component.h"
 
 void Entity::AddComponentBuilding(PlayerGateSession_Game& refSession)
 {
@@ -36,12 +38,12 @@ void BuildingComponent::造兵(PlayerGateSession_Game& refGateSession, Entity& ref
 	m_TaskCancel造兵.TryRun(m_fun造活动单位(*this, refGateSession, refEntity));
 }
 
-CoTaskUint8 BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity, const 活动单位类型 类型)
+CoTask<SpEntity> BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity, const 活动单位类型 类型)
 {
 	单位::活动单位配置 配置;
 	if (!单位::Find活动单位配置(类型, 配置))
 	{
-		co_return true;
+		co_return{};
 	}
 	while (0 < refThis.m_i等待造兵数)
 	{
@@ -51,13 +53,13 @@ CoTaskUint8 BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGa
 		if (stop)
 		{
 			LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney << ",rpcSn=" << responce.msg.rpcSnId;
-			co_return 0;
+			co_return{};
 		}
 		//耗时
 		using namespace std;
 		if (co_await CoTimer::Wait(1s, refThis.m_TaskCancel造兵.cancel))
 		{
-			co_return 0;
+			co_return{};
 		}
 
 		LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
@@ -69,23 +71,38 @@ CoTaskUint8 BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGa
 		if (stop)
 		{
 			LOG(WARNING) << "扣钱失败";
-			co_return 0;
+			co_return{};
 		}
 		spNewEntity->AddComponentPlayer(refGateSession);
-		spNewEntity->AddComponentAttack();
+		AttackComponent::AddComponent(*spNewEntity);
 		refGateSession.m_vecSpEntity.insert(spNewEntity);//自己控制的单位
 		refGateSession.m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 		spNewEntity->BroadcastEnter();
+		co_return spNewEntity;
 	}
 }
 
 CoTaskUint8 BuildingComponent::Co造兵(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
 {
-	return Co造活动单位(refThis, refGateSession, refEntity, 兵);
+	auto spEntity = co_await Co造活动单位(refThis, refGateSession, refEntity, 兵);
+	if (!spEntity)
+	{
+		assert(false);
+		co_return 0;
+	}
+	co_return 0;
 }
 
 CoTaskUint8 BuildingComponent::Co造工程车(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
 {
-	return Co造活动单位(refThis, refGateSession, refEntity,	工程车);
+	auto spEntity = co_await Co造活动单位(refThis, refGateSession, refEntity, 工程车);
+	if (!spEntity)
+	{
+		assert(false);
+		co_return 0;
+	}
+
+	采集Component::AddComponent(refEntity);
+	co_return 0;
 }

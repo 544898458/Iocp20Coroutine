@@ -144,6 +144,15 @@
     <ClCompile Include="单位.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="采集Component.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="单人剧情.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="资源Component.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -297,6 +306,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="单位.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="采集Component.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="单人剧情.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="资源Component.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

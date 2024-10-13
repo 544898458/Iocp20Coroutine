@@ -146,7 +146,10 @@
     <ClCompile Include="..\IocpNetwork\MsgQueue.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="单人剧情.cpp" />
     <ClCompile Include="单位.cpp" />
+    <ClCompile Include="资源Component.cpp" />
+    <ClCompile Include="采集Component.cpp" />
     <ClInclude Include="..\CoRoutine\CoLock.h" />
     <ClInclude Include="..\IocpNetwork\MsgQueueMsgPackTemplate.h">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -250,7 +253,10 @@
     <ClInclude Include="PlayerSystem.h" />
     <ClInclude Include="SpEntity.h" />
     <ClInclude Include="ClientSession_GameToWorld.h" />
+    <ClInclude Include="单人剧情.h" />
     <ClInclude Include="单位.h" />
+    <ClInclude Include="资源Component.h" />
+    <ClInclude Include="采集Component.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CoRoutine\CoTask.h" />

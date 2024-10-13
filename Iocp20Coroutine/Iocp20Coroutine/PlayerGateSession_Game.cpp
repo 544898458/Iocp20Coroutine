@@ -13,6 +13,7 @@
 #include "BuildingComponent.h"
 #include <unordered_map>
 #include "单位.h"
+#include "单人剧情.h"
 /// <summary>
 /// GameSvr通过GateSvr透传给游戏客户端
 /// </summary>
@@ -161,7 +162,7 @@ void PlayerGateSession_Game::EnterSpace(Space& refSpace, const std::string& strN
 	}
 
 	CoEvent<PlayerGateSession_Game*>::OnRecvEvent(false, this);
-	AiCo::单人剧情(m_Space单人剧情, m_funCancel单人剧情, *this).RunNew();
+	单人剧情::Co(m_Space单人剧情, m_funCancel单人剧情, *this).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)

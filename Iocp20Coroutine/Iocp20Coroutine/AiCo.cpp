@@ -209,53 +209,6 @@ namespace AiCo
 		LOG(INFO) << "停止刷怪协程";
 		co_return 0;
 	}
-	CoTask<int> 单人剧情(Space& refSpace, FunCancel& funCancel, PlayerGateSession_Game &refGateSession)
-	{
-		KeepCancel kc(funCancel);
-		using namespace std;
-		//PlayerGateSession_Game* pPlayerGateSession = nullptr;
-		//{
-		//	auto [stop, p] = co_await CoEvent<PlayerGateSession_Game*>::Wait(funCancel);
-		//	if (stop)
-		//		co_return 0;
-
-		//	pPlayerGateSession = p;
-		//}
-
-		//CHECK_NOTNULL_CO_RET_0(pPlayerGateSession);
-		refGateSession.Say("欢迎来到即时策略游戏单人剧情");
-		if (co_await CoTimer::Wait(1s, funCancel))
-			co_return 0;
-
-		refGateSession.Say("请点一下造建筑，3秒后就能造出一个建筑，建筑会自动造钱");
-
-		
-		auto funSameSpace = [&refSpace](const WpEntity& refWpEntity) { return MyEvent::SameSpace(refWpEntity, refSpace); };
-		{
-			auto [stop, wpEntity] = co_await CoEvent<WpEntity>::Wait(funCancel, funSameSpace);
-			if (stop)co_return 0;
-		}
-
-		refGateSession.Say("现在可以看左上角的钱数会缓慢增加了，现在可以点“造兵”按钮扣钱造兵");
-
-		{
-			auto [stop, wpEntity] = co_await CoEvent<WpEntity>::Wait(funCancel, funSameSpace);
-			if (stop)co_return 0;
-		}
-
-		refGateSession.Say("鼠标单击您的兵（镜头焦点会对准此单位），再点击地面，可以指挥他走向点击处");
-
-		{
-			auto [stop, wpEntity] = co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace](const MyEvent::MoveEntity& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; });
-			if (stop)co_return 0;
-		}
-
-		refGateSession.Say("很好！，您已经可以指挥兵移动了，现在给您刷一个怪，把兵移动到怪附近，兵就会自动打怪");
-
-		MonsterComponent::AddMonster(refSpace);
-
-		co_return 0;
-	}
 	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, uint32_t changeMoney, bool addMoney, FunCancel& funCancel)
 	{
 		if (changeMoney < 0)

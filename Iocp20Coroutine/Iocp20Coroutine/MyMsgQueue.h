@@ -41,15 +41,20 @@ MSGPACK_ADD_ENUM(MsgId);
 
 enum 建筑单位类型
 {
-	基地,//用来造工程车
-	兵厂,//用来造兵
+	基地,//指挥中心(Command Center),用来造工程车()
+	兵厂,//兵营Barracks，用来造兵
 };
+enum 资源单位类型
+{
+	晶体矿,//Minerals
+};
+
 MSGPACK_ADD_ENUM(建筑单位类型);
 
 enum 活动单位类型
 {
-	工程车,//可以采矿，采气，也可以简单攻击
-	兵,//只能攻击
+	工程车,//空间工程车Space Construction Vehicle。可以采矿，采气，也可以简单攻击
+	兵,//陆战队员Marine。只能攻击
 };
 MSGPACK_ADD_ENUM(活动单位类型);
 

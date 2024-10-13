@@ -9,9 +9,10 @@
 #include "Space.h"
 #include "PlayerGateSession_Game.h"
 
-void Entity::AddComponentAttack()
+void AttackComponent::AddComponent(Entity &refEntity)
 {
-	m_spAttack = std::make_shared<AttackComponent>();
+	CHECK_VOID(!refEntity.m_spAttack);
+	refEntity.m_spAttack = std::make_shared<AttackComponent>();
 }
 
 void AttackComponent::WalkToPos(Entity& refEntity, const Position& posTarget)

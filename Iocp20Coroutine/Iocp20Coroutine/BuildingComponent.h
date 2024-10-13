@@ -1,5 +1,6 @@
 #pragma once
 #include "../CoRoutine/CoTask.h"
+#include "SpEntity.h"
 class Entity;
 class GameSvrSession;
 class PlayerGateSession_Game;
@@ -15,7 +16,7 @@ public:
 	static CoTaskUint8 Co造兵(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity);
 	static CoTaskUint8 Co造工程车(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity);
 private:
-	static CoTaskUint8 Co造活动单位(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity, const 活动单位类型 类型);
+	static CoTask<SpEntity> Co造活动单位(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity, const 活动单位类型 类型);
 	int m_i等待造兵数 = 0;
 	//CoTask<int> m_coAddMoney;
 	//FunCancel m_cancelAddMoney;
