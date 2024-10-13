@@ -11,6 +11,7 @@
 #include "GameSvr.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 #include "BuildingComponent.h"
+#include <unordered_map>
 
 /// <summary>
 /// GameSvr通过GateSvr透传给游戏客户端
@@ -120,15 +121,34 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 	iterNew->Run();
 }
 
+struct 建筑配置
+{
+	std::string Name;
+	std::string prefabName;
+	uint32_t 消耗钱;
+	
+};
+std::unordered_map<建筑类型, 建筑配置> g_map建筑配置 =
+{
+	{基地, {"基地","house_type19",1}},
+	{兵厂, {"兵厂","house_type19",2}}
+};
 CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑类型 类型)
 {
+	const auto& iterFind = g_map建筑配置.find(类型);
+	if (iterFind == g_map建筑配置.end())
+	{
+		assert(false);
+		co_return 0;
+	}
+	const auto& 配置 = iterFind->second;
 	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());//不能存对象，扩容可能导致引用和指针失效
-	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 1 },
+	auto tuple = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 配置.消耗钱 },
 		[this](const MsgChangeMoney& ref) {SendToWorldSvr<MsgChangeMoney>(ref, m_idPlayerGateSession); }, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	const MsgChangeMoneyResponce& responce = std::get<1>(tuple);
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	CHECK_NOTNULL_CO_RET_0(m_pCurSpace);
-	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ 0,float(std::rand() % 50) }, *m_pCurSpace, "house_type19", "兵厂");
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ 0,float(std::rand() % 50) }, *m_pCurSpace, 配置.prefabName, 配置.Name);
 	if (0 != responce.error)
 	{
 		LOG(WARNING) << "扣钱失败,error=" << responce.error;
@@ -144,7 +164,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑类型 类型)
 	co_return 0;
 }
 
-void PlayerGateSession_Game::EnterSpace(Space& refSpace, const std::string &strNickName)
+void PlayerGateSession_Game::EnterSpace(Space& refSpace, const std::string& strNickName)
 {
 	m_pCurSpace = &refSpace;
 	m_strNickName = strNickName;

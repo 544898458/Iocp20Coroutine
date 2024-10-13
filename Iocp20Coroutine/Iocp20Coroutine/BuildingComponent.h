@@ -10,12 +10,11 @@ public:
 	void TryCancel(Entity& refEntity);
 	void 造兵(PlayerGateSession_Game&, Entity& refEntity);
 private:
-	CoTask<int> Co造兵(PlayerGateSession_Game& refGateSession, Entity& refEntity);
+	CoTaskUint8 Co造兵(PlayerGateSession_Game& refGateSession, Entity& refEntity);
 private:
 	int m_i等待造兵数 = 0;
-	CoTask<int> m_coAddMoney;
-	FunCancel m_cancelAddMoney;
-	CoTask<int> m_co造兵;
-	FunCancel m_cancel造兵;
+	//CoTask<int> m_coAddMoney;
+	//FunCancel m_cancelAddMoney;
+	CoTaskCancel m_TaskCancel造兵;
 };
 

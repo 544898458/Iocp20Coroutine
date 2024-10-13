@@ -137,12 +137,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\CoRoutine\CoLock.cpp" />
-    <ClCompile Include="..\CoRoutine\CoRpc.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\CoRoutine\CoTask.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\CoRoutine\CoRpc.cpp" />
+    <ClCompile Include="..\CoRoutine\CoTask.cpp" />
     <ClCompile Include="..\CoRoutine\CoTimer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

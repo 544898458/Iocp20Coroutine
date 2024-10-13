@@ -14,53 +14,33 @@ void Entity::AddComponentBuilding(PlayerGateSession_Game& refSession)
 
 BuildingComponent::BuildingComponent(PlayerGateSession_Game& refSession)
 {
-	if (!m_coAddMoney.Finished())
-	{
-		LOG(INFO) << "前一个造建筑协程还没返回";
-		return;
-	}
-	m_coAddMoney = AiCo::AddMoney(refSession, m_cancelAddMoney);
-	m_coAddMoney.Run();
+	//if (!m_coAddMoney.Finished())
+	//{
+	//	LOG(INFO) << "前一个造建筑协程还没返回";
+	//	return;
+	//}
+	//m_coAddMoney = AiCo::AddMoney(refSession, m_cancelAddMoney);
+	//m_coAddMoney.Run();
 }
 
 void BuildingComponent::TryCancel(Entity& refEntity)
 {
-	if (m_cancelAddMoney)
-	{
-		//LOG(INFO) << "调用m_cancel";
-		m_cancelAddMoney();
-		assert(m_coAddMoney.Finished());
-	}
-	else
-	{
-		//LOG(INFO) << "m_cancel是空的，没有要取消的协程";
-		if (!m_coAddMoney.Finished())
-		{
-			LOG(ERROR) << "协程没结束，却提前清空了m_cancel";
-			assert(false);
-		}
-	}
-
-	assert(m_coAddMoney.Finished());
+	m_TaskCancel造兵.TryCancel();
 }
 
 void BuildingComponent::造兵(PlayerGateSession_Game& refGateSession, Entity& refEntity)
 {
 	++m_i等待造兵数;
-	if (m_co造兵.Finished())
-	{
-		m_co造兵 = Co造兵(refGateSession, refEntity);
-		m_co造兵.Run();
-	}
+	m_TaskCancel造兵.TryRun(Co造兵(refGateSession, refEntity));
 }
 
-CoTask<int> BuildingComponent::Co造兵(PlayerGateSession_Game& refGateSession, Entity& refEntity)
+CoTaskUint8 BuildingComponent::Co造兵(PlayerGateSession_Game& refGateSession, Entity& refEntity)
 {
 	while (0 < m_i等待造兵数)
 	{
 		--m_i等待造兵数;
 		//先扣钱
-		const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, 5, false, m_cancel造兵);
+		const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, 5, false, m_TaskCancel造兵.cancel);
 		if (stop)
 		{
 			LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney << ",rpcSn=" << responce.msg.rpcSnId;
@@ -68,7 +48,7 @@ CoTask<int> BuildingComponent::Co造兵(PlayerGateSession_Game& refGateSession, En
 		}
 		//耗时
 		using namespace std;
-		if (co_await CoTimer::Wait(1s, m_cancel造兵))
+		if (co_await CoTimer::Wait(1s, m_TaskCancel造兵.cancel))
 		{
 			co_return 0;
 		}

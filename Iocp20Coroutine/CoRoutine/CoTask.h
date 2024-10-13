@@ -412,3 +412,18 @@ private:
 };
 
 typedef CoAwaiter<bool> CoAwaiterBool;
+typedef CoTask<uint8_t> CoTaskUint8;
+struct CoTaskCancel 
+{
+	CoTaskUint8 co;
+	FunCancel cancel;
+	void TryCancel();
+	void TryRun(CoTaskUint8&& ref)
+	{
+		if (co.Finished())
+		{
+			co = std::forward<CoTaskUint8&&>(ref);
+			co.Run();
+		}
+	}
+};

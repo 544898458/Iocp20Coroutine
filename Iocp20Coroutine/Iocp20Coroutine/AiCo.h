@@ -19,7 +19,7 @@ namespace AiCo
 	CoTask<int> WaitDelete(SpEntity spThis, FunCancel& funCancel);
 	CoTask<int> SpawnMonster(Space& refSpace, FunCancel& funCancel);
 	CoTask<int> µ¥ÈË¾çÇé(Space& refSpace, FunCancel& funCancel, PlayerGateSession_Game& refGateSession);
-	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, int changeMoney, bool addMoney, FunCancel& funCancel);
+	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, uint32_t changeMoney, bool addMoney, FunCancel& funCancel);
 	CoTask<int> AddMoney(PlayerGateSession_Game& refSession, FunCancel& funCancel);
 };
 

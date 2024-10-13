@@ -105,7 +105,7 @@ struct MsgChangeMoney
 {
 	MsgHead msg{ .id = ChangeMoney };
 	bool addMoney;
-	int32_t changeMoney;
+	uint32_t changeMoney;
 	MSGPACK_DEFINE(msg, addMoney, changeMoney);
 };
 
