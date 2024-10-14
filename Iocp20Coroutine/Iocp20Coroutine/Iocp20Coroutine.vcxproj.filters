@@ -25,6 +25,18 @@
     <Filter Include="LogStrategy">
       <UniqueIdentifier>{6c3059f5-dbba-4620-9142-06dfb6d5c5db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RecastNavigation">
+      <UniqueIdentifier>{d104c857-ac40-455d-bc85-b2223adcdbb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RecastNavigation\DetourTileCache">
+      <UniqueIdentifier>{e2f34177-80ea-40d7-a541-c55176f71d0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RecastNavigation\Detour">
+      <UniqueIdentifier>{fc340d5b-a042-451d-b3d1-52c74e53e5be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RecastNavigation\DetourCrowd">
+      <UniqueIdentifier>{a2765b43-c882-4c6a-a96c-91a6af5efae2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Space.cpp">
@@ -155,6 +167,57 @@
     </ClCompile>
     <ClCompile Include="DefenceComponent.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Sample_TempObstacles.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DetourTileCache\Source\DetourTileCache.cpp">
+      <Filter>RecastNavigation\DetourTileCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DetourTileCache\Source\DetourTileCacheBuilder.cpp">
+      <Filter>RecastNavigation\DetourTileCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Detour\Source\DetourAlloc.cpp">
+      <Filter>RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Detour\Source\DetourAssert.cpp">
+      <Filter>RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Detour\Source\DetourCommon.cpp">
+      <Filter>RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Detour\Source\DetourNavMesh.cpp">
+      <Filter>RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Detour\Source\DetourNavMeshBuilder.cpp">
+      <Filter>RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Detour\Source\DetourNavMeshQuery.cpp">
+      <Filter>RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Detour\Source\DetourNode.cpp">
+      <Filter>RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="CrowdToolState.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DetourCrowd\Source\DetourCrowd.cpp">
+      <Filter>RecastNavigation\DetourCrowd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DetourCrowd\Source\DetourLocalBoundary.cpp">
+      <Filter>RecastNavigation\DetourCrowd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DetourCrowd\Source\DetourObstacleAvoidance.cpp">
+      <Filter>RecastNavigation\DetourCrowd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DetourCrowd\Source\DetourPathCorridor.cpp">
+      <Filter>RecastNavigation\DetourCrowd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DetourCrowd\Source\DetourPathQueue.cpp">
+      <Filter>RecastNavigation\DetourCrowd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DetourCrowd\Source\DetourProximityGrid.cpp">
+      <Filter>RecastNavigation\DetourCrowd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -321,6 +384,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="DefenceComponent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Sample_TempObstacles.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CrowdToolState.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
