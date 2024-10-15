@@ -201,7 +201,7 @@
     <ClCompile Include="..\recastnavigation-main\Detour\Source\DetourNode.cpp">
       <Filter>RecastNavigation\Detour</Filter>
     </ClCompile>
-    <ClCompile Include="CrowdToolState.cpp">
+    <ClCompile Include="CrowdTool.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\recastnavigation-main\DetourCrowd\Source\DetourCrowd.cpp">
@@ -395,7 +395,7 @@
     <ClInclude Include="Sample_TempObstacles.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CrowdToolState.h">
+    <ClInclude Include="CrowdTool.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

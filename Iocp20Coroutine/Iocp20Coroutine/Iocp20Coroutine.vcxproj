@@ -194,7 +194,7 @@
     <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\PerfTimer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="CrowdToolState.cpp" />
+    <ClCompile Include="CrowdTool.cpp" />
     <ClCompile Include="Sample_TempObstacles.cpp" />
     <ClCompile Include="DefenceComponent.cpp" />
     <ClCompile Include="单人剧情.cpp" />
@@ -293,7 +293,7 @@
     <ClInclude Include="AiCo.h" />
     <ClInclude Include="AttackComponent.h" />
     <ClInclude Include="BuildingComponent.h" />
-    <ClInclude Include="CrowdToolState.h" />
+    <ClInclude Include="CrowdTool.h" />
     <ClInclude Include="Sample_TempObstacles.h" />
     <ClInclude Include="DefenceComponent.h" />
     <ClInclude Include="Entity.h" />
