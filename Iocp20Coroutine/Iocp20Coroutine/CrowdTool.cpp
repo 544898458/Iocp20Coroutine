@@ -5,6 +5,27 @@
 #include "CrowdTool.h"
 #include "Sample_TempObstacles.h"
 
+CrowdToolState g_CrowdTool;
+void CrowToolAddAgent(float arrF[])
+{
+	if (nullptr == g_CrowdTool.m_sample)
+	{
+		g_CrowdTool.init(new Sample_TempObstacles());
+	}
+	g_CrowdTool.addAgent(arrF);
+}
+
+void CrowToolUpdate()
+{
+	const float SIM_RATE = 20;
+	const float DELTA_TIME = 1.0f / SIM_RATE;
+	g_CrowdTool.handleUpdate(DELTA_TIME);
+}
+
+void CrowdToolSetMoveTarget(const float* p, bool adjust)
+{
+	g_CrowdTool.setMoveTarget(p, adjust);
+}
 
 void CrowdToolState::handleUpdate(const float dt)
 {
@@ -148,8 +169,58 @@ void CrowdToolState::setMoveTarget(const float* p, bool adjust)
 	}
 }
 
-CrowdToolState g_CrowdTool;
-void CrowToolAddAgent(float arrF[])
+void CrowdToolState::init(class Sample* sample)
 {
-	g_CrowdTool.addAgent(arrF);
+	if (m_sample != sample)
+	{
+		m_sample = sample;
+	}
+
+	dtNavMesh* nav = m_sample->getNavMesh();
+	dtCrowd* crowd = m_sample->getCrowd();
+
+	if (nav && crowd && (m_nav != nav || m_crowd != crowd))
+	{
+		m_nav = nav;
+		m_crowd = crowd;
+
+		crowd->init(MAX_AGENTS, m_sample->getAgentRadius(), nav);
+
+		// Make polygons with 'disabled' flag invalid.
+		crowd->getEditableFilter(0)->setExcludeFlags(SAMPLE_POLYFLAGS_DISABLED);
+
+		// Setup local avoidance params to different qualities.
+		dtObstacleAvoidanceParams params;
+		// Use mostly default settings, copy from dtCrowd.
+		memcpy(&params, crowd->getObstacleAvoidanceParams(0), sizeof(dtObstacleAvoidanceParams));
+
+		// Low (11)
+		params.velBias = 0.5f;
+		params.adaptiveDivs = 5;
+		params.adaptiveRings = 2;
+		params.adaptiveDepth = 1;
+		crowd->setObstacleAvoidanceParams(0, &params);
+
+		// Medium (22)
+		params.velBias = 0.5f;
+		params.adaptiveDivs = 5;
+		params.adaptiveRings = 2;
+		params.adaptiveDepth = 2;
+		crowd->setObstacleAvoidanceParams(1, &params);
+
+		// Good (45)
+		params.velBias = 0.5f;
+		params.adaptiveDivs = 7;
+		params.adaptiveRings = 2;
+		params.adaptiveDepth = 3;
+		crowd->setObstacleAvoidanceParams(2, &params);
+
+		// High (66)
+		params.velBias = 0.5f;
+		params.adaptiveDivs = 7;
+		params.adaptiveRings = 3;
+		params.adaptiveDepth = 3;
+
+		crowd->setObstacleAvoidanceParams(3, &params);
+	}
 }

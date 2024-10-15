@@ -5,9 +5,22 @@ class dtNavMeshQuery;
 class dtCrowd;
 class dtTileCache;
 
+enum SamplePolyFlags
+{
+	SAMPLE_POLYFLAGS_WALK = 0x01,		// Ability to walk (ground, grass, road)
+	SAMPLE_POLYFLAGS_SWIM = 0x02,		// Ability to swim (water).
+	SAMPLE_POLYFLAGS_DOOR = 0x04,		// Ability to move through doors.
+	SAMPLE_POLYFLAGS_JUMP = 0x08,		// Ability to jump.
+	SAMPLE_POLYFLAGS_DISABLED = 0x10,		// Disabled polygon
+	SAMPLE_POLYFLAGS_ALL = 0xffff	// All abilities.
+};
+
 class Sample
 {
 public:
+	class dtNavMesh* getNavMesh() { return m_navMesh; }
+	class InputGeom* getInputGeom() { return m_geom; }
+	class dtNavMeshQuery* getNavMeshQuery() { return m_navQuery; }
 	class dtCrowd* getCrowd() { return m_crowd; }
 	float getAgentRadius() { return m_agentRadius; }
 	float getAgentHeight() { return m_agentHeight; }
@@ -39,20 +52,14 @@ public:
 	bool m_filterLedgeSpans;
 	bool m_filterWalkableLowHeightSpans;
 
+	Sample();
+
 };
 
 class Sample_TempObstacles :public Sample
 {
 public:
 	void handleUpdate(const float dt);
-	class InputGeom* getInputGeom() { return m_geom; }
-	class dtNavMesh* getNavMesh() { return m_navMesh; }
-	class dtNavMeshQuery* getNavMeshQuery() { return m_navQuery; }
-	class dtCrowd* getCrowd() { return m_crowd; }
-	float getAgentRadius() { return m_agentRadius; }
-	float getAgentHeight() { return m_agentHeight; }
-	float getAgentClimb() { return m_agentMaxClimb; }
-
 	class dtTileCache* m_tileCache;
 };
 

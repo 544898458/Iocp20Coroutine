@@ -168,6 +168,8 @@ int main(void)
 		g_ConnectToWorldSvr->Session.Process();
 		CoTimer::Update();
 		CoTask<int>::Process();
+		void CrowToolUpdate();
+		CrowToolUpdate();
 	}
 
 	if (funCancelSpawnMonster)

@@ -21,6 +21,10 @@ void AttackComponent::AddComponent(Entity& refEntity)
 
 void AttackComponent::WalkToPos(Entity& refEntity, const Position& posTarget)
 {
+	void CrowdToolSetMoveTarget(const float* p, bool adjust);
+	float arrFloat[] = { posTarget.x,0,posTarget.z };
+	CrowdToolSetMoveTarget(arrFloat, false);
+	return;
 	if (refEntity.IsDead())
 	{
 		if (refEntity.m_spPlayer)
@@ -118,18 +122,17 @@ void AttackComponent::Update(Entity& refThis)
 		}
 	}
 
-	if (!refThis.m_spPlayer)//怪随机走
-	{
-		TryCancel(refThis);
-		assert(m_coWalk.Finished());//20240205
-		assert(m_coAttack.Finished());//20240205
+	//if (!refThis.m_spPlayer)//怪随机走
+	//{
+	//	TryCancel(refThis);
+	//	assert(m_coWalk.Finished());//20240205
+	//	assert(m_coAttack.Finished());//20240205
 
-		auto posTarget = refThis.m_Pos;
-		posTarget.x += std::rand() % 11 - 5;//随机走
-		posTarget.z += std::rand() % 11 - 5;
-		m_coWalk = AiCo::WalkToPos(refThis.shared_from_this(), posTarget, m_cancel);
-		m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
-
-	}
+	//	auto posTarget = refThis.m_Pos;
+	//	posTarget.x += std::rand() % 11 - 5;//随机走
+	//	posTarget.z += std::rand() % 11 - 5;
+	//	m_coWalk = AiCo::WalkToPos(refThis.shared_from_this(), posTarget, m_cancel);
+	//	m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
+	//}
 }
 
