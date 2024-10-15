@@ -9,14 +9,15 @@
 #include "Space.h"
 #include "PlayerGateSession_Game.h"
 
-
+extern std::unordered_map<int, uint64_t> m_mapEntityId;
 void AttackComponent::AddComponent(Entity& refEntity)
 {
 	CHECK_VOID(!refEntity.m_spAttack);
 	refEntity.m_spAttack = std::make_shared<AttackComponent>();
 	float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z};
-	void CrowToolAddAgent(float arrF[]);
-	CrowToolAddAgent(arrF);
+	int CrowToolAddAgent(float arrF[]);
+	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);
+	m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
 }
 
 void AttackComponent::WalkToPos(Entity& refEntity, const Position& posTarget)

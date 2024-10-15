@@ -14,5 +14,6 @@ public:
 	CoTaskBool m_coWalk;
 	CoTask<int> m_coAttack;
 	FunCancel m_cancel;
+	int m_idxCrowdAgent = 0;
 };
 

@@ -56,6 +56,7 @@ struct CrowdToolParams
 
 class CrowdToolState : public SampleToolState
 {
+public:
 	Sample* m_sample;
 	dtNavMesh* m_nav;
 	dtCrowd* m_crowd;
@@ -95,7 +96,7 @@ public:
 	inline bool isRunning() const { return m_run; }
 	inline void setRunning(const bool s) { m_run = s; }
 	
-	void addAgent(const float* pos);
+	int addAgent(const float* pos);
 	void removeAgent(const int idx);
 	void hilightAgent(const int idx);
 	void updateAgentParams();

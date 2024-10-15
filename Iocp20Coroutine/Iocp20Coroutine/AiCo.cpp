@@ -148,6 +148,7 @@ namespace AiCo
 
 	CoTaskBool WalkToTarget(SpEntity spThis, SpEntity spTarget, FunCancel& funCancel, const bool b¼ì²é¾¯½ä¾àÀë)
 	{
+		co_return true;
 		KeepCancel kc(funCancel);
 
 		spThis->Broadcast(MsgChangeSkeleAnim(*spTarget, "run"));

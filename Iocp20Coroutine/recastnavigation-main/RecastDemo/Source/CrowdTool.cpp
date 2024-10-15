@@ -640,9 +640,9 @@ void CrowdToolState::handleUpdate(const float dt)
 		updateTick(dt);
 }
 
-void CrowdToolState::addAgent(const float* p)
+int CrowdToolState::addAgent(const float* p)
 {
-	if (!m_sample) return;
+	if (!m_sample) return -1;
 	dtCrowd* crowd = m_sample->getCrowd();
 	
 	dtCrowdAgentParams ap;
@@ -679,6 +679,7 @@ void CrowdToolState::addAgent(const float* p)
 			dtVcopy(&trail->trail[i*3], p);
 		trail->htrail = 0;
 	}
+	return idx;
 }
 
 void CrowdToolState::removeAgent(const int idx)
