@@ -16,16 +16,17 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
+#include "pch.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
 #include <float.h>
-#include "SDL.h"
-#include "SDL_opengl.h"
+//#include "SDL.h"
+//#include "SDL_opengl.h"
 #ifdef __APPLE__
 #	include <OpenGL/glu.h>
 #else
-#	include <GL/glu.h>
+//#	include <GL/glu.h>
 #endif
 #include "imgui.h"
 #include "CrowdTool.h"
