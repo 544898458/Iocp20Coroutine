@@ -617,7 +617,7 @@ void drawDetailOverlay(const dtTileCache* tc, const int tx, const int ty, double
 		pos[0] = (tile->header->bmin[0] + tile->header->bmax[0]) / 2.0f;
 		pos[1] = tile->header->bmin[1];
 		pos[2] = (tile->header->bmin[2] + tile->header->bmax[2]) / 2.0f;
-
+		/*
 		GLdouble x, y, z;
 		if (gluProject((GLdouble)pos[0], (GLdouble)pos[1], (GLdouble)pos[2],
 			model, proj, view, &x, &y, &z))
@@ -629,6 +629,7 @@ void drawDetailOverlay(const dtTileCache* tc, const int tx, const int ty, double
 			snprintf(text, 128, "Raw:%.1fkB", rawSize / 1024.0f);
 			imguiDrawText((int)x, (int)y - 65, IMGUI_ALIGN_CENTER, text, imguiRGBA(0, 0, 0, 128));
 		}
+		*/
 	}
 }
 
@@ -710,6 +711,7 @@ public:
 
 	virtual void handleMenu()
 	{
+		/*
 		imguiLabel("Highlight Tile Cache");
 		imguiValue("Click LMB to highlight a tile.");
 		imguiSeparator();
@@ -721,6 +723,7 @@ public:
 			m_drawType = DRAWDETAIL_CONTOURS;
 		if (imguiCheck("Draw Mesh", m_drawType == DRAWDETAIL_MESH))
 			m_drawType = DRAWDETAIL_MESH;
+			*/
 	}
 
 	virtual void handleClick(const float* /*s*/, const float* p, bool /*shift*/)
@@ -740,6 +743,7 @@ public:
 		if (m_hitPosSet && m_sample)
 		{
 			const float s = m_sample->getAgentRadius();
+			/*
 			glColor4ub(0, 0, 0, 128);
 			glLineWidth(2.0f);
 			glBegin(GL_LINES);
@@ -755,6 +759,7 @@ public:
 			int tx = 0, ty = 0;
 			m_sample->getTilePos(m_hitPos, tx, ty);
 			m_sample->renderCachedTile(tx, ty, m_drawType);
+			*/
 		}
 	}
 
@@ -800,6 +805,7 @@ public:
 
 	virtual void handleMenu()
 	{
+		/*
 		imguiLabel("Create Temp Obstacles");
 
 		if (imguiButton("Remove All"))
@@ -809,6 +815,7 @@ public:
 
 		imguiValue("Click LMB to create an obstacle.");
 		imguiValue("Shift+LMB to remove an obstacle.");
+		*/
 	}
 
 	virtual void handleClick(const float* s, const float* p, bool shift)
@@ -865,6 +872,7 @@ Sample_TempObstacles::~Sample_TempObstacles()
 
 void Sample_TempObstacles::handleSettings()
 {
+	/*
 	Sample::handleCommonSettings();
 
 	if (imguiCheck("Keep Itermediate Results", m_keepInterResults))
@@ -884,7 +892,7 @@ void Sample_TempObstacles::handleSettings()
 		const int ts = (int)m_tileSize;
 		const int tw = (gw + ts - 1) / ts;
 		const int th = (gh + ts - 1) / ts;
-		snprintf(text, 64, "Tiles  %d x %d", tw, th);
+		//snprintf(text, 64, "Tiles  %d x %d", tw, th);
 		imguiValue(text);
 
 		// Max tiles and max polys affect how the tile IDs are caculated.
@@ -894,9 +902,9 @@ void Sample_TempObstacles::handleSettings()
 		int polyBits = 22 - tileBits;
 		m_maxTiles = 1 << tileBits;
 		m_maxPolysPerTile = 1 << polyBits;
-		snprintf(text, 64, "Max Tiles  %d", m_maxTiles);
+		//snprintf(text, 64, "Max Tiles  %d", m_maxTiles);
 		imguiValue(text);
-		snprintf(text, 64, "Max Polys  %d", m_maxPolysPerTile);
+		//snprintf(text, 64, "Max Polys  %d", m_maxPolysPerTile);
 		imguiValue(text);
 		gridSize = tw * th;
 	}
@@ -913,16 +921,16 @@ void Sample_TempObstacles::handleSettings()
 
 	const float compressionRatio = (float)m_cacheCompressedSize / (float)(m_cacheRawSize + 1);
 
-	snprintf(msg, 64, "Layers  %d", m_cacheLayerCount);
-	imguiValue(msg);
-	snprintf(msg, 64, "Layers (per tile)  %.1f", (float)m_cacheLayerCount / (float)gridSize);
-	imguiValue(msg);
+	//snprintf(msg, 64, "Layers  %d", m_cacheLayerCount);
+	//imguiValue(msg);
+	//snprintf(msg, 64, "Layers (per tile)  %.1f", (float)m_cacheLayerCount / (float)gridSize);
+	//imguiValue(msg);
 
-	snprintf(msg, 64, "Memory  %.1f kB / %.1f kB (%.1f%%)", m_cacheCompressedSize / 1024.0f, m_cacheRawSize / 1024.0f, compressionRatio * 100.0f);
-	imguiValue(msg);
-	snprintf(msg, 64, "Navmesh Build Time  %.1f ms", m_cacheBuildTimeMs);
-	imguiValue(msg);
-	snprintf(msg, 64, "Build Peak Mem Usage  %.1f kB", m_cacheBuildMemUsage / 1024.0f);
+	//snprintf(msg, 64, "Memory  %.1f kB / %.1f kB (%.1f%%)", m_cacheCompressedSize / 1024.0f, m_cacheRawSize / 1024.0f, compressionRatio * 100.0f);
+	//imguiValue(msg);
+	//snprintf(msg, 64, "Navmesh Build Time  %.1f ms", m_cacheBuildTimeMs);
+	//imguiValue(msg);
+	//snprintf(msg, 64, "Build Peak Mem Usage  %.1f kB", m_cacheBuildMemUsage / 1024.0f);
 	imguiValue(msg);
 
 	imguiSeparator();
@@ -947,10 +955,12 @@ void Sample_TempObstacles::handleSettings()
 	imguiUnindent();
 
 	imguiSeparator();
+	*/
 }
 
 void Sample_TempObstacles::handleTools()
 {
+	/*
 	int type = !m_tool ? TOOL_NONE : m_tool->type();
 
 	if (imguiCheck("Test Navmesh", type == TOOL_NAVMESH_TESTER))
@@ -986,10 +996,12 @@ void Sample_TempObstacles::handleTools()
 		m_tool->handleMenu();
 
 	imguiUnindent();
+	*/
 }
 
 void Sample_TempObstacles::handleDebugMode()
 {
+	/*
 	// Check which modes are valid.
 	bool valid[MAX_DRAWMODE];
 	for (int i = 0; i < MAX_DRAWMODE; ++i)
@@ -1038,6 +1050,7 @@ void Sample_TempObstacles::handleDebugMode()
 		imguiValue("rebuild some tiles to see");
 		imguiValue("more debug mode options.");
 	}
+	*/
 }
 
 void Sample_TempObstacles::handleRender()
@@ -1064,7 +1077,7 @@ void Sample_TempObstacles::handleRender()
 		drawObstacles(&m_dd, m_tileCache);
 
 
-	glDepthMask(GL_FALSE);
+	//glDepthMask(GL_FALSE);
 
 	// Draw bounds
 	const float* bmin = m_geom->getNavMeshBoundsMin();
@@ -1099,7 +1112,7 @@ void Sample_TempObstacles::handleRender()
 	}
 
 
-	glDepthMask(GL_TRUE);
+	//glDepthMask(GL_TRUE);
 
 	m_geom->drawConvexVolumes(&m_dd);
 
@@ -1107,7 +1120,7 @@ void Sample_TempObstacles::handleRender()
 		m_tool->handleRender();
 	renderToolStates();
 
-	glDepthMask(GL_TRUE);
+	//glDepthMask(GL_TRUE);
 }
 
 void Sample_TempObstacles::renderCachedTile(const int tx, const int ty, const int type)
@@ -1416,7 +1429,8 @@ void Sample_TempObstacles::saveAll(const char* path)
 {
 	if (!m_tileCache) return;
 
-	FILE* fp = fopen(path, "wb");
+	FILE* fp = nullptr;
+	fopen_s(&fp, path, "wb");
 	if (!fp)
 		return;
 
@@ -1454,7 +1468,8 @@ void Sample_TempObstacles::saveAll(const char* path)
 
 void Sample_TempObstacles::loadAll(const char* path)
 {
-	FILE* fp = fopen(path, "rb");
+	FILE* fp = nullptr;
+	fopen_s(&fp, path, "rb");
 	if (!fp) return;
 
 	// Read header.

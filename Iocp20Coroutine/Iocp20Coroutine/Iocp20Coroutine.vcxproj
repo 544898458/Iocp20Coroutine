@@ -117,6 +117,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>..\recastnavigation-main\DebugUtils\Debug\DebugUtils-d.lib;..\recastnavigation-main\Detour\Debug\Detour-d.lib;..\recastnavigation-main\DetourCrowd\Debug\DetourCrowd-d.lib;..\recastnavigation-main\DetourTileCache\Debug\DetourTileCache-d.lib;..\recastnavigation-main\Recast\Debug\Recast-d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -146,6 +147,7 @@
     <ClCompile Include="..\IocpNetwork\MsgQueue.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DebugUtils\Source\DebugDraw.cpp" />
     <ClCompile Include="..\recastnavigation-main\DetourCrowd\Source\DetourCrowd.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -191,17 +193,32 @@
     <ClCompile Include="..\recastnavigation-main\Detour\Source\DetourNode.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Contrib\fastlz\fastlz.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\ChunkyTriMesh.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\CrowdTool.cpp" />
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\InputGeom.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\MeshLoaderObj.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
     <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\PerfTimer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\Sample.cpp" />
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\SampleInterfaces.cpp" />
     <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\Sample_TempObstacles.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="CrowdTool.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\ValueHistory.cpp" />
+    <ClCompile Include="RecastNavigationCrowd.cpp" />
     <ClCompile Include="Sample_TempObstacles.cpp" />
     <ClCompile Include="DefenceComponent.cpp" />
     <ClCompile Include="单人剧情.cpp" />
@@ -300,7 +317,6 @@
     <ClInclude Include="AiCo.h" />
     <ClInclude Include="AttackComponent.h" />
     <ClInclude Include="BuildingComponent.h" />
-    <ClInclude Include="CrowdTool.h" />
     <ClInclude Include="Sample_TempObstacles.h" />
     <ClInclude Include="DefenceComponent.h" />
     <ClInclude Include="Entity.h" />

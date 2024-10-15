@@ -40,6 +40,15 @@
     <Filter Include="RecastNavigation\RecastDemo">
       <UniqueIdentifier>{9dbd1bea-18a2-4e08-9964-ad281a3fd0e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RecastNavigation\DebugUtils">
+      <UniqueIdentifier>{bd845325-604b-4333-b930-4c09a31c4e39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RecastNavigation\Recast">
+      <UniqueIdentifier>{19d747b0-521f-42df-84cc-f19c9b4ab6fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RecastNavigation\RecastDemo\Contrib">
+      <UniqueIdentifier>{1c9a54c2-5f97-40af-901e-7716536a2acc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Space.cpp">
@@ -201,7 +210,7 @@
     <ClCompile Include="..\recastnavigation-main\Detour\Source\DetourNode.cpp">
       <Filter>RecastNavigation\Detour</Filter>
     </ClCompile>
-    <ClCompile Include="CrowdTool.cpp">
+    <ClCompile Include="RecastNavigationCrowd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\recastnavigation-main\DetourCrowd\Source\DetourCrowd.cpp">
@@ -230,6 +239,30 @@
     </ClCompile>
     <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\CrowdTool.cpp">
       <Filter>RecastNavigation\RecastDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\Sample.cpp">
+      <Filter>RecastNavigation\RecastDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\ValueHistory.cpp">
+      <Filter>RecastNavigation\RecastDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DebugUtils\Source\DebugDraw.cpp">
+      <Filter>RecastNavigation\DebugUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\SampleInterfaces.cpp">
+      <Filter>RecastNavigation\RecastDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\InputGeom.cpp">
+      <Filter>RecastNavigation\RecastDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\ChunkyTriMesh.cpp">
+      <Filter>RecastNavigation\RecastDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\MeshLoaderObj.cpp">
+      <Filter>RecastNavigation\RecastDemo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Contrib\fastlz\fastlz.c">
+      <Filter>RecastNavigation\RecastDemo\Contrib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -399,9 +432,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Sample_TempObstacles.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CrowdTool.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

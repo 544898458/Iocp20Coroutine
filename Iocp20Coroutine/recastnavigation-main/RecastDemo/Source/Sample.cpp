@@ -15,7 +15,7 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 //
-
+#include "pch.h"
 #include <math.h>
 #include <stdio.h>
 #include "Sample.h"
@@ -27,8 +27,8 @@
 #include "DetourNavMeshQuery.h"
 #include "DetourCrowd.h"
 #include "imgui.h"
-#include "SDL.h"
-#include "SDL_opengl.h"
+//#include "SDL.h"
+//#include "SDL_opengl.h"
 
 #ifdef WIN32
 #	define snprintf _snprintf
@@ -117,6 +117,7 @@ void Sample::handleDebugMode()
 
 void Sample::handleRender()
 {
+	/*
 	if (!m_geom)
 		return;
 	
@@ -127,6 +128,7 @@ void Sample::handleRender()
 	const float* bmin = m_geom->getMeshBoundsMin();
 	const float* bmax = m_geom->getMeshBoundsMax();
 	duDebugDrawBoxWire(&m_dd, bmin[0],bmin[1],bmin[2], bmax[0],bmax[1],bmax[2], duRGBA(255,255,255,128), 1.0f);
+	*/
 }
 
 void Sample::handleRenderOverlay(double* /*proj*/, double* /*model*/, int* /*view*/)
@@ -196,6 +198,7 @@ void Sample::resetCommonSettings()
 
 void Sample::handleCommonSettings()
 {
+	/*
 	imguiLabel("Rasterization");
 	imguiSlider("Cell Size", &m_cellSize, 0.1f, 1.0f, 0.01f);
 	imguiSlider("Cell Height", &m_cellHeight, 0.1f, 1.0f, 0.01f);
@@ -253,6 +256,7 @@ void Sample::handleCommonSettings()
 	imguiSlider("Max Sample Error", &m_detailSampleMaxError, 0.0f, 16.0f, 1.0f);
 	
 	imguiSeparator();
+	*/
 }
 
 void Sample::handleClick(const float* s, const float* p, bool shift)
@@ -350,7 +354,8 @@ struct NavMeshTileHeader
 
 dtNavMesh* Sample::loadAll(const char* path)
 {
-	FILE* fp = fopen(path, "rb");
+	FILE* fp = nullptr;
+	fopen_s(&fp, path, "rb");
 	if (!fp) return 0;
 
 	// Read header.
@@ -422,7 +427,8 @@ void Sample::saveAll(const char* path, const dtNavMesh* mesh)
 {
 	if (!mesh) return;
 
-	FILE* fp = fopen(path, "wb");
+	FILE* fp = nullptr;
+	fopen_s(&fp, path, "wb");
 	if (!fp)
 		return;
 

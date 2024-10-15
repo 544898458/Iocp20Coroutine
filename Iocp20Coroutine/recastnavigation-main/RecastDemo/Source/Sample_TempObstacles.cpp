@@ -865,6 +865,7 @@ Sample_TempObstacles::~Sample_TempObstacles()
 
 void Sample_TempObstacles::handleSettings()
 {
+	/*
 	Sample::handleCommonSettings();
 
 	if (imguiCheck("Keep Itermediate Results", m_keepInterResults))
@@ -947,10 +948,12 @@ void Sample_TempObstacles::handleSettings()
 	imguiUnindent();
 	
 	imguiSeparator();
+	*/
 }
 
 void Sample_TempObstacles::handleTools()
 {
+	/*
 	int type = !m_tool ? TOOL_NONE : m_tool->type();
 
 	if (imguiCheck("Test Navmesh", type == TOOL_NAVMESH_TESTER))
@@ -986,6 +989,7 @@ void Sample_TempObstacles::handleTools()
 		m_tool->handleMenu();
 
 	imguiUnindent();
+	*/
 }
 
 void Sample_TempObstacles::handleDebugMode()

@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "ValueHistory.h"
 #include "imgui.h"
 #include <string.h>
@@ -54,11 +55,12 @@ void GraphParams::setValueRange(float ivmin, float ivmax, int indiv, const char*
 	vmin = ivmin;
 	vmax = ivmax;
 	ndiv = indiv;
-	strcpy(units, iunits);
+	//strcpy(units, iunits);
 }
 
 void drawGraphBackground(const GraphParams* p)
 {
+	/*
 	// BG
 	imguiDrawRoundedRect((float)p->x, (float)p->y, (float)p->w, (float)p->h, (float)p->pad, imguiRGBA(64,64,64,128));
 	
@@ -111,5 +113,6 @@ void drawGraph(const GraphParams* p, const ValueHistory* graph,
 	snprintf(text, 64, "%.2f %s", graph->getAverage(), p->units);
 	imguiDrawText(ix+size+5, iy+3, IMGUI_ALIGN_LEFT, label, imguiRGBA(255,255,255,192));
 	imguiDrawText(ix+size+150, iy+3, IMGUI_ALIGN_RIGHT, text, imguiRGBA(255,255,255,128));
+	*/
 }
 

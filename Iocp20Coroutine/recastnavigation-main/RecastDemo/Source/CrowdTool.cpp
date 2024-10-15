@@ -201,6 +201,7 @@ void CrowdToolState::reset()
 
 void CrowdToolState::handleRender()
 {
+	/*
 	duDebugDraw& dd = m_sample->getDebugDraw();
 	const float rad = m_sample->getAgentRadius();
 	
@@ -333,7 +334,7 @@ void CrowdToolState::handleRender()
 				
 				if (m_toolParams.m_anticipateTurns)
 				{
-					/*					float dvel[3], pos[3];
+					float dvel[3], pos[3];
 					 calcSmoothSteerDirection(ag->pos, ag->cornerVerts, ag->ncorners, dvel);
 					 pos[0] = ag->pos[0] + dvel[0];
 					 pos[1] = ag->pos[1] + dvel[1];
@@ -351,7 +352,7 @@ void CrowdToolState::handleRender()
 					 dd.vertex(pos[0],y,pos[2], duRGBA(255,0,0,192));
 					 dd.vertex(tgt[0],y,tgt[2], duRGBA(255,0,0,192));
 					 
-					 dd.end();*/
+					 dd.end();
 				}
 			}
 		}
@@ -516,11 +517,13 @@ void CrowdToolState::handleRender()
 	}
 	
 	dd.depthMask(true);
+	*/
 }
 
 
 void CrowdToolState::handleRenderOverlay(double* proj, double* model, int* view)
 {
+	/*
 	GLdouble x, y, z;
 	
 	// Draw start and end point labels
@@ -628,7 +631,7 @@ void CrowdToolState::handleRenderOverlay(double* proj, double* model, int* view)
 		gp.setValueRange(0.0f, 2000.0f, 1, "");
 		drawGraph(&gp, &m_crowdSampleCount, 0, "Sample Count", duRGBA(96,96,96,128));
 	}
-	
+	*/
 }
 
 void CrowdToolState::handleUpdate(const float dt)
@@ -893,7 +896,7 @@ void CrowdTool::handleMenu()
 	if (!m_state)
 		return;
 	CrowdToolParams* params = m_state->getToolParams();
-
+	/*
 	if (imguiCheck("Create Agents", m_mode == TOOLMODE_CREATE))
 		m_mode = TOOLMODE_CREATE;
 	if (imguiCheck("Move Target", m_mode == TOOLMODE_MOVE_TARGET))
@@ -987,6 +990,7 @@ void CrowdTool::handleMenu()
 			params->m_showDetailAll = !params->m_showDetailAll;
 		imguiUnindent();
 	}
+	*/
 }
 
 void CrowdTool::handleClick(const float* s, const float* p, bool shift)
@@ -1075,6 +1079,7 @@ void CrowdTool::handleRender()
 
 void CrowdTool::handleRenderOverlay(double* proj, double* model, int* view)
 {
+	/*
 	rcIgnoreUnused(model);
 	rcIgnoreUnused(proj);
 
@@ -1104,4 +1109,5 @@ void CrowdTool::handleRenderOverlay(double* proj, double* model, int* view)
 		imguiDrawText(280, ty, IMGUI_ALIGN_LEFT, "- RUNNING -", imguiRGBA(255,32,16,255));	
 	else 
 		imguiDrawText(280, ty, IMGUI_ALIGN_LEFT, "- PAUSED -", imguiRGBA(255,255,255,128));	
+		*/
 }
