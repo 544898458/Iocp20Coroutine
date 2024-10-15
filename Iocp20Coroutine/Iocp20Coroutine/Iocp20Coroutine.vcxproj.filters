@@ -225,6 +225,9 @@
     <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\PerfTimer.cpp">
       <Filter>RecastNavigation\RecastDemo</Filter>
     </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\Sample_TempObstacles.cpp">
+      <Filter>RecastNavigation\RecastDemo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">

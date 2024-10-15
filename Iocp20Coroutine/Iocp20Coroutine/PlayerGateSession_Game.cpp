@@ -236,6 +236,12 @@ void PlayerGateSession_Game::RecvMsg(const msgpack::object& obj)
 		return;
 	}
 }
+extern Space g_Space无限刷怪;
+PlayerGateSession_Game::PlayerGateSession_Game(GameSvrSession& ref, uint64_t idPlayerGateSession) :
+	m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession), m_Space单人剧情(g_Space无限刷怪)
+{
+	
+}
 
 void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& obj)
 {

@@ -13,15 +13,9 @@ class GameSvrSession;
 class PlayerGateSession_Game
 {
 public:
-	PlayerGateSession_Game(GameSvrSession& ref, const uint64_t idPlayerGateSession) :m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession)
-	{
-
-	}
+	PlayerGateSession_Game(GameSvrSession& ref, uint64_t idPlayerGateSession);
 	PlayerGateSession_Game(const PlayerGateSession_Game&) = delete;
-	PlayerGateSession_Game(PlayerGateSession_Game&& ref)noexcept :m_refSession(ref.m_refSession), m_idPlayerGateSession(ref.m_idPlayerGateSession)
-	{
-
-	}
+	PlayerGateSession_Game(PlayerGateSession_Game&& ref) = delete;
 	void RecvMsg(const MsgId idMsg, const msgpack::object& obj);
 	void Process();
 	void OnDestroy();
@@ -33,7 +27,7 @@ public:
 
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
-	Space m_Space单人剧情;
+	Space &m_Space单人剧情;
 	/// <summary>
 	/// 当前这个玩家在哪个Space里
 	/// </summary>

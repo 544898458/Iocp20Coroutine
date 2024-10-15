@@ -21,12 +21,14 @@ void GameSvr::OnAdd(Session&)
 void GameSvr::OnDel()
 {
 }
+extern Space g_Space无限刷怪;
 void GameSvr::Update()
 {
 	m_Sessions.Update([this]()
 		{
-			m_Space无限刷怪.Update();
+			g_Space无限刷怪.Update();
 		});
+	
 	/*
 	std::lock_guard lock(m_Sessions.m_setSessionMutex);
 	std::set<MyServer::Session*> setDelete;

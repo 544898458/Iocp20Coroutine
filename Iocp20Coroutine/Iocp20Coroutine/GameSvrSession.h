@@ -32,7 +32,7 @@ public:
 	{
 		for (auto& pair : m_mapPlayerGateSession)
 		{
-			pair.second.Send(ref);
+			pair.second->Send(ref);
 		}
 	}
 	void SendToGate(const void* buf, const int len)
@@ -65,6 +65,6 @@ private:
 	//std::deque<MsgGateAddSession> m_queueGateAddSession;
 	//std::deque<MsgGateDeleteSession> m_queueGateDeleteSession;
 
-	std::map<uint64_t, PlayerGateSession_Game> m_mapPlayerGateSession;
+	std::map<uint64_t, std::shared_ptr<PlayerGateSession_Game>> m_mapPlayerGateSession;
 	MsgQueueMsgPack<GameSvrSession> m_MsgQueue;
 };

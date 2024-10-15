@@ -85,7 +85,7 @@ void GameSvrSession::OnDestroy()
 {
 	for (auto& pair : m_mapPlayerGateSession)
 	{
-		pair.second.OnDestroy();
+		pair.second->OnDestroy();
 	}
 	m_pServer = nullptr;//不用加锁
 }
@@ -97,7 +97,7 @@ bool GameSvrSession::Process()
 
 	for (auto& pair : m_mapPlayerGateSession)
 	{
-		pair.second.Process();
+		pair.second->Process();
 	}
 
 	return true;
@@ -157,7 +157,7 @@ void GameSvrSession::OnRecv(const MsgGate转发& msg转发)
 
 		auto& refPlayerGateSession = iter->second;
 
-		refPlayerGateSession.RecvMsg(msg.id, obj);
+		refPlayerGateSession->RecvMsg(msg.id, obj);
 	}
 	break;
 	}
@@ -174,7 +174,7 @@ void GameSvrSession::OnRecv(const MsgGateAddSession& msg, const uint64_t idGateC
 		m_mapPlayerGateSession.erase(iterOld);
 	}
 
-	auto pair = m_mapPlayerGateSession.insert({ idGateClientSession, PlayerGateSession_Game(*this,idGateClientSession) });
+	auto pair = m_mapPlayerGateSession.insert({ idGateClientSession, std::make_shared<PlayerGateSession_Game,GameSvrSession&,uint64_t>(*this,(uint64_t)idGateClientSession) });
 	if (!pair.second)
 	{
 		LOG(ERROR) << "ERR";
@@ -183,7 +183,7 @@ void GameSvrSession::OnRecv(const MsgGateAddSession& msg, const uint64_t idGateC
 	}
 
 	//pair.first->second.EnterSpace(m_pServer->m_Space无限刷怪);
-	pair.first->second.EnterSpace(pair.first->second.m_Space单人剧情, msg.nickName);
+	pair.first->second->EnterSpace(pair.first->second->m_Space单人剧情, msg.nickName);
 }
 
 void GameSvrSession::OnRecv(const MsgGateDeleteSession& msg, const uint64_t idGateClientSession)
@@ -196,7 +196,7 @@ void GameSvrSession::OnRecv(const MsgGateDeleteSession& msg, const uint64_t idGa
 		return;
 	}
 
-	iterOld->second.OnDestroy();
+	iterOld->second->OnDestroy();
 	m_mapPlayerGateSession.erase(iterOld);
 	LOG(INFO) << "已删除,idGateClientSession=" << idGateClientSession;
 }

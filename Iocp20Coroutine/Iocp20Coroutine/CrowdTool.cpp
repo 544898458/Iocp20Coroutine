@@ -3,7 +3,7 @@
 #include "../recastnavigation-main/Detour/Include/DetourCommon.h"
 #include "../recastnavigation-main/RecastDemo/Include/PerfTimer.h"
 #include "CrowdTool.h"
-#include "Sample_TempObstacles.h"
+#include "../recastnavigation-main/RecastDemo/Include/Sample_TempObstacles.h"
 
 CrowdToolState g_CrowdTool;
 void CrowToolAddAgent(float arrF[])

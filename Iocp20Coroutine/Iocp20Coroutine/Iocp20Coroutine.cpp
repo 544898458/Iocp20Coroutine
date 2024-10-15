@@ -91,6 +91,7 @@ void SendToWorldSvr(const T& refMsg, const uint64_t idGateSession)
 }
 template void SendToWorldSvr(const MsgSay& msg, const uint64_t idGateSession);
 template void SendToWorldSvr(const MsgChangeMoney& msg, const uint64_t idGateSession);
+Space g_Space无限刷怪;
 
 ///*
 int main(void)
@@ -135,7 +136,7 @@ int main(void)
 
 
 	FunCancel funCancelSpawnMonster;
-	AiCo::SpawnMonster(accept.m_Server.m_Space无限刷怪, funCancelSpawnMonster).RunNew();
+	AiCo::SpawnMonster(g_Space无限刷怪, funCancelSpawnMonster).RunNew();
 	
 	//主逻辑工作线程
 	using namespace std;
