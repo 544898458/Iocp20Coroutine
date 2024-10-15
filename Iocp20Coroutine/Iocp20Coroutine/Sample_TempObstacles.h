@@ -45,6 +45,13 @@ class Sample_TempObstacles :public Sample
 {
 public:
 	void handleUpdate(const float dt);
+	class InputGeom* getInputGeom() { return m_geom; }
+	class dtNavMesh* getNavMesh() { return m_navMesh; }
+	class dtNavMeshQuery* getNavMeshQuery() { return m_navQuery; }
+	class dtCrowd* getCrowd() { return m_crowd; }
+	float getAgentRadius() { return m_agentRadius; }
+	float getAgentHeight() { return m_agentHeight; }
+	float getAgentClimb() { return m_agentMaxClimb; }
 
 	class dtTileCache* m_tileCache;
 };

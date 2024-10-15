@@ -37,6 +37,9 @@
     <Filter Include="RecastNavigation\DetourCrowd">
       <UniqueIdentifier>{a2765b43-c882-4c6a-a96c-91a6af5efae2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RecastNavigation\RecastDemo">
+      <UniqueIdentifier>{9dbd1bea-18a2-4e08-9964-ad281a3fd0e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Space.cpp">
@@ -218,6 +221,9 @@
     </ClCompile>
     <ClCompile Include="..\recastnavigation-main\DetourCrowd\Source\DetourProximityGrid.cpp">
       <Filter>RecastNavigation\DetourCrowd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\PerfTimer.cpp">
+      <Filter>RecastNavigation\RecastDemo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

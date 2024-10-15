@@ -1,7 +1,15 @@
 #include "pch.h"
-#include "CrowdToolState.h"
 #include "../recastnavigation-main/DetourCrowd/Include/DetourCrowd.h"
+#include "../recastnavigation-main/RecastDemo/Include/PerfTimer.h"
+#include "CrowdToolState.h"
 #include "Sample_TempObstacles.h"
+
+
+void CrowdToolState::handleUpdate(const float dt)
+{
+	if (m_run)
+		updateTick(dt);
+}
 
 void CrowdToolState::addAgent(const float* p)
 {
@@ -42,4 +50,35 @@ void CrowdToolState::addAgent(const float* p)
 		//	dtVcopy(&trail->trail[i * 3], p);
 		//trail->htrail = 0;
 	}
+}
+
+void CrowdToolState::updateTick(const float dt)
+{
+	if (!m_sample) return;
+	dtNavMesh* nav = m_sample->getNavMesh();
+	dtCrowd* crowd = m_sample->getCrowd();
+	if (!nav || !crowd) return;
+
+	TimeVal startTime = getPerfTime();
+
+	crowd->update(dt, &m_agentDebug);
+
+	TimeVal endTime = getPerfTime();
+
+	// Update agent trails
+	//for (int i = 0; i < crowd->getAgentCount(); ++i)
+	//{
+	//	const dtCrowdAgent* ag = crowd->getAgent(i);
+	//	AgentTrail* trail = &m_trails[i];
+	//	if (!ag->active)
+	//		continue;
+	//	// Update agent movement trail.
+	//	trail->htrail = (trail->htrail + 1) % AGENT_MAX_TRAIL;
+	//	dtVcopy(&trail->trail[trail->htrail * 3], ag->npos);
+	//}
+
+	//m_agentDebug.vod->normalizeSamples();
+
+	//m_crowdSampleCount.addSample((float)crowd->getVelocitySampleCount());
+	//m_crowdTotalTime.addSample(getPerfTimeUsec(endTime - startTime) / 1000.0f);
 }
