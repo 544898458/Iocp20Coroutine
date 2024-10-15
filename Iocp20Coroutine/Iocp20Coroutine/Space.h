@@ -53,7 +53,6 @@ public:
 		return iterMin->second->weak_from_this();
 	}
 	void Update();
-	CrowdTool m_
 private:
 	void EraseEntity(const bool bForceEraseAll);
 	//GameSvr * const m_pServer;

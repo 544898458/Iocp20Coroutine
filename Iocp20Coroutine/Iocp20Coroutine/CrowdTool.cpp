@@ -6,13 +6,13 @@
 #include "Sample_TempObstacles.h"
 
 
-void CrowdTool::handleUpdate(const float dt)
+void CrowdToolState::handleUpdate(const float dt)
 {
 	if (m_run)
 		updateTick(dt);
 }
 
-void CrowdTool::addAgent(const float* p)
+void CrowdToolState::addAgent(const float* p)
 {
 	if (!m_sample) return;
 	dtCrowd* crowd = m_sample->getCrowd();
@@ -53,7 +53,7 @@ void CrowdTool::addAgent(const float* p)
 	}
 }
 
-void CrowdTool::updateTick(const float dt)
+void CrowdToolState::updateTick(const float dt)
 {
 	if (!m_sample) return;
 	dtNavMesh* nav = m_sample->getNavMesh();
@@ -92,7 +92,7 @@ static void calcVel(float* vel, const float* pos, const float* tgt, const float 
 	dtVscale(vel, vel, speed);
 }
 
-void CrowdTool::setMoveTarget(const float* p, bool adjust)
+void CrowdToolState::setMoveTarget(const float* p, bool adjust)
 {
 	if (!m_sample) return;
 
@@ -146,4 +146,10 @@ void CrowdTool::setMoveTarget(const float* p, bool adjust)
 			}
 		}
 	}
+}
+
+CrowdToolState g_CrowdTool;
+void CrowToolAddAgent(float arrF[])
+{
+	g_CrowdTool.addAgent(arrF);
 }

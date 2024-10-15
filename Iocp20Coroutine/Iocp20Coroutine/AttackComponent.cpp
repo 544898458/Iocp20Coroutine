@@ -9,10 +9,14 @@
 #include "Space.h"
 #include "PlayerGateSession_Game.h"
 
+
 void AttackComponent::AddComponent(Entity& refEntity)
 {
 	CHECK_VOID(!refEntity.m_spAttack);
 	refEntity.m_spAttack = std::make_shared<AttackComponent>();
+	float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z};
+	void CrowToolAddAgent(float arrF[]);
+	CrowToolAddAgent(arrF);
 }
 
 void AttackComponent::WalkToPos(Entity& refEntity, const Position& posTarget)
