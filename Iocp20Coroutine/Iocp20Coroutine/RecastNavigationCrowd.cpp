@@ -24,9 +24,9 @@ CrowdToolState& GetCrowdTool()
 	return *p;
 }
 
-int CrowToolAddAgent(float arrF[])
+int CrowToolAddAgent(float arrF[], float fSpeed)
 {
-	return GetCrowdTool().addAgent(arrF);
+	return GetCrowdTool().addAgent(arrF, fSpeed);
 }
 
 void CrowToolRemoveAgent(int idx)
@@ -38,7 +38,7 @@ std::unordered_map<int, uint64_t> m_mapEntityId;
 extern Space g_Space无限刷怪;
 void CrowToolUpdate()
 {
-	const float SIM_RATE = 20;
+	const float SIM_RATE = 10;
 	const float DELTA_TIME = 1.0f / SIM_RATE;
 	GetCrowdTool().handleUpdate(DELTA_TIME);
 	auto m_sample = GetCrowdTool().m_sample;
@@ -76,7 +76,7 @@ void CrowToolUpdate()
 		auto sp = spEntity.lock();
 		sp->m_Pos = { pos[0] ,pos[2] };
 
-		sp->Broadcast(MsgNotifyPos(*sp));
+		//sp->Broadcast(MsgNotifyPos(*sp));
 	}
 }
 
@@ -90,7 +90,7 @@ RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& 
 {
 	float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z };
 	assert(AttackComponent::INVALID_AGENT_IDX == refEntity.m_spAttack->m_idxCrowdAgent);
-	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);
+	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF,refEntity.m_速度每帧移动距离*10);
 	m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
 
 	SetMoveTarget(posTarget);

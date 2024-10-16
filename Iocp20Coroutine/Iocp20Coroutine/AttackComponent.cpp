@@ -74,10 +74,6 @@ void AttackComponent::Update(Entity& refThis)
 	{
 		return;//表示不允许打断
 	}
-	if (!m_coWalk.Finished())
-	{
-		return;//表示不允许打断
-	}
 
 	if (refThis.IsDead())
 	{
@@ -109,7 +105,7 @@ void AttackComponent::Update(Entity& refThis)
 			m_coAttack.Run();
 			return;
 		}
-		else if (refThis.DistanceLessEqual(*wpEntity.lock(), refThis.m_f警戒距离))
+		else if (refThis.DistanceLessEqual(*wpEntity.lock(), refThis.m_f警戒距离) && m_coWalk.Finished())
 		{
 			TryCancel(refThis);
 
@@ -123,7 +119,7 @@ void AttackComponent::Update(Entity& refThis)
 		}
 	}
 
-	if (!refThis.m_spPlayer)//怪随机走
+	if (!refThis.m_spPlayer && m_coWalk.Finished())//怪随机走
 	{
 		TryCancel(refThis);
 		assert(m_coWalk.Finished());//20240205

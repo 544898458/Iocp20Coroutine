@@ -9,6 +9,11 @@ struct Position
 {
 	float x;
 	float z;
+
+	bool operator==(const Position& refRight)const
+	{
+		return x == refRight.x && z == refRight.z;
+	}
 };
 template <class _Traits>
 std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const Position& _ref)

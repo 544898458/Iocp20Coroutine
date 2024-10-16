@@ -96,7 +96,7 @@ public:
 	inline bool isRunning() const { return m_run; }
 	inline void setRunning(const bool s) { m_run = s; }
 	
-	int addAgent(const float* pos);
+	int addAgent(const float* pos, float fSpeed);
 	void removeAgent(const int idx);
 	void hilightAgent(const int idx);
 	void updateAgentParams();

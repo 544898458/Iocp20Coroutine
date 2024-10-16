@@ -24,12 +24,12 @@ MonsterComponent::MonsterComponent(Entity& refThis)
 
 void MonsterComponent::AddMonster(Space& refSpace)
 {
-	SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ -30.0 }, refSpace, "altman-red", "怪");
+	SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ -50.0 }, refSpace, "altman-red", "怪");
 	AttackComponent::AddComponent(*spEntityMonster);
 	DefenceComponent::AddComponent(*spEntityMonster);
 	spEntityMonster->AddComponentMonster();
 	spEntityMonster->m_f警戒距离 = 20;
-	spEntityMonster->m_f移动速度 = 0.2f;
+	spEntityMonster->m_速度每帧移动距离 = 0.2f;
 	refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster });
 	//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 	spEntityMonster->BroadcastEnter();

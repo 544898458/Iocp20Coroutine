@@ -87,13 +87,11 @@ namespace AiCo
 	/// <param name="refThis"></param>
 	/// <param name="localTarget"></param>
 	/// <returns>是否还要走下一步</returns>
-	bool MoveStep(Entity& refThis, const Position localTarget, RecastNavigationCrowd& rnc)
+	bool MoveStep(Entity& refThis, const Position localTarget)
 	{
-		const float step = refThis.m_f移动速度;
-		const auto oldPos = refThis.m_Pos;//复制对象，不是引用
+		const float step = refThis.m_速度每帧移动距离;
 		float& x = refThis.m_Pos.x;
 		float& z = refThis.m_Pos.z;
-		rnc.SetMoveTarget(localTarget);
 		if (std::abs(localTarget.x - x) < step && std::abs(localTarget.z - z) < step)
 		{
 			//LOG(INFO) << "已走到" << localTarget.x << "," << localTarget.z << "附近，协程正常退出";
@@ -111,7 +109,7 @@ namespace AiCo
 		//	z += localTarget.z < z ? -step : step;
 		//}
 
-		refThis.m_eulerAnglesY = CalculateAngle(oldPos, refThis.m_Pos);
+		refThis.m_eulerAnglesY = CalculateAngle(refThis.m_Pos, localTarget);
 		refThis.Broadcast(MsgNotifyPos(refThis));
 
 		return true;
@@ -140,7 +138,7 @@ namespace AiCo
 				co_return true;
 			}
 
-			if (!MoveStep(*spThis, posLocalTarget, rnc))
+			if (!MoveStep(*spThis, posLocalTarget))
 			{
 				co_return false;
 			}
@@ -155,7 +153,7 @@ namespace AiCo
 		KeepCancel kc(funCancel);
 
 		spThis->Broadcast(MsgChangeSkeleAnim(*spTarget, "run"));
-
+		Position posOld;
 		while (true)
 		{
 			if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
@@ -182,7 +180,14 @@ namespace AiCo
 				spThis->Broadcast(MsgChangeSkeleAnim(*spTarget, "idle"));
 				co_return false;
 			}
-			if (!MoveStep(*spThis, spTarget->m_Pos, rnc))
+
+			if (posOld != spTarget->m_Pos)
+			{
+				rnc.SetMoveTarget(spTarget->m_Pos);
+				posOld = spTarget->m_Pos;
+			}
+
+			if (!MoveStep(*spThis, spTarget->m_Pos))
 			{
 				co_return true;
 			}
@@ -217,7 +222,6 @@ namespace AiCo
 			////LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 			//spEntityMonster->BroadcastEnter();
 			MonsterComponent::AddMonster(refSpace);
-			co_return 0;
 		}
 		LOG(INFO) << "停止刷怪协程";
 		co_return 0;

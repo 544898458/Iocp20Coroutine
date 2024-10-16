@@ -41,7 +41,7 @@ public:
 	bool m_bNeedDelete = false;
 	int m_hp = 20;
 	float m_f警戒距离 = 30;
-	float m_f移动速度 = 0.5f;//每帧多少米
+	float m_速度每帧移动距离 = 0.5f;//每帧多少米
 	const float m_f攻击距离 = 5.0f;
 
 	std::string m_strPrefabName;

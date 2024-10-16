@@ -107,7 +107,11 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
 	CHECK_NOTNULL_VOID(m_pCurSpace);
-	ForEachSelected([this, targetX, targetZ](Entity& ref) {ref.m_spAttack->WalkToPos(ref, Position(targetX, targetZ)); });
+	ForEachSelected([this, targetX, targetZ](Entity& ref) 
+		{
+			if(ref.m_spAttack)
+				ref.m_spAttack->WalkToPos(ref, Position(targetX, targetZ)); 
+		});
 }
 
 void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fun)
