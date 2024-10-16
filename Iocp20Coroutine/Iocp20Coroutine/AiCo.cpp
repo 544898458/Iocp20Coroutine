@@ -12,6 +12,7 @@
 #include "PlayerGateSession_Game.h"
 #include "MyEvent.h"
 #include "MonsterComponent.h"
+#include "RecastNavigationCrowd.h"
 
 template<class T> void SendToWorldSvr(const T& msg, const uint64_t idGateSession);
 
@@ -86,13 +87,13 @@ namespace AiCo
 	/// <param name="refThis"></param>
 	/// <param name="localTarget"></param>
 	/// <returns>是否还要走下一步</returns>
-	bool MoveStep(Entity& refThis, const Position localTarget)
+	bool MoveStep(Entity& refThis, const Position localTarget, RecastNavigationCrowd& rnc)
 	{
 		const float step = refThis.m_f移动速度;
 		const auto oldPos = refThis.m_Pos;//复制对象，不是引用
 		float& x = refThis.m_Pos.x;
 		float& z = refThis.m_Pos.z;
-
+		rnc.SetMoveTarget(localTarget);
 		if (std::abs(localTarget.x - x) < step && std::abs(localTarget.z - z) < step)
 		{
 			//LOG(INFO) << "已走到" << localTarget.x << "," << localTarget.z << "附近，协程正常退出";
@@ -100,15 +101,15 @@ namespace AiCo
 			return false;
 		}
 
-		if (std::abs(localTarget.x - x) >= step)
-		{
-			x += localTarget.x < x ? -step : step;
-		}
+		//if (std::abs(localTarget.x - x) >= step)
+		//{
+		//	x += localTarget.x < x ? -step : step;
+		//}
 
-		if (std::abs(localTarget.z - z) >= step)
-		{
-			z += localTarget.z < z ? -step : step;
-		}
+		//if (std::abs(localTarget.z - z) >= step)
+		//{
+		//	z += localTarget.z < z ? -step : step;
+		//}
 
 		refThis.m_eulerAnglesY = CalculateAngle(oldPos, refThis.m_Pos);
 		refThis.Broadcast(MsgNotifyPos(refThis));
@@ -117,6 +118,8 @@ namespace AiCo
 	}
 	CoTaskBool WalkToPos(SpEntity spThis, const Position& posTarget, FunCancel& funCancel)
 	{
+		const auto posOld = spThis->m_Pos;
+		RecastNavigationCrowd rnc(*spThis, posTarget);
 		KeepCancel kc(funCancel);
 		const auto posLocalTarget = posTarget;
 		spThis->Broadcast(MsgChangeSkeleAnim(*spThis, "run"));
@@ -137,7 +140,7 @@ namespace AiCo
 				co_return true;
 			}
 
-			if (!MoveStep(*spThis, posLocalTarget))
+			if (!MoveStep(*spThis, posLocalTarget, rnc))
 			{
 				co_return false;
 			}
@@ -148,7 +151,7 @@ namespace AiCo
 
 	CoTaskBool WalkToTarget(SpEntity spThis, SpEntity spTarget, FunCancel& funCancel, const bool b检查警戒距离)
 	{
-		co_return true;
+		RecastNavigationCrowd rnc(*spThis, spTarget->m_Pos);
 		KeepCancel kc(funCancel);
 
 		spThis->Broadcast(MsgChangeSkeleAnim(*spTarget, "run"));
@@ -179,7 +182,7 @@ namespace AiCo
 				spThis->Broadcast(MsgChangeSkeleAnim(*spTarget, "idle"));
 				co_return false;
 			}
-			if (!MoveStep(*spThis, spTarget->m_Pos))
+			if (!MoveStep(*spThis, spTarget->m_Pos, rnc))
 			{
 				co_return true;
 			}
@@ -214,6 +217,7 @@ namespace AiCo
 			////LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 			//spEntityMonster->BroadcastEnter();
 			MonsterComponent::AddMonster(refSpace);
+			co_return 0;
 		}
 		LOG(INFO) << "停止刷怪协程";
 		co_return 0;

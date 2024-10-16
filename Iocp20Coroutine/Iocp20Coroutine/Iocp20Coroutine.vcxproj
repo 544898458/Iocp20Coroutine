@@ -317,6 +317,7 @@
     <ClInclude Include="AiCo.h" />
     <ClInclude Include="AttackComponent.h" />
     <ClInclude Include="BuildingComponent.h" />
+    <ClInclude Include="RecastNavigationCrowd.h" />
     <ClInclude Include="Sample_TempObstacles.h" />
     <ClInclude Include="DefenceComponent.h" />
     <ClInclude Include="Entity.h" />

@@ -573,6 +573,7 @@ void dtCrowd::removeAgent(const int idx)
 {
 	if (idx >= 0 && idx < m_maxAgents)
 	{
+		dtAssert(m_agents[idx].active);
 		m_agents[idx].active = false;
 	}
 }

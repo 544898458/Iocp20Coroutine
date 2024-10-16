@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include "Space.h"
 #include "Entity.h"
+#include "RecastNavigationCrowd.h"
+#include "AttackComponent.h"
 
 CrowdToolState& GetCrowdTool()
 {
@@ -21,9 +23,15 @@ CrowdToolState& GetCrowdTool()
 	}
 	return *p;
 }
+
 int CrowToolAddAgent(float arrF[])
 {
 	return GetCrowdTool().addAgent(arrF);
+}
+
+void CrowToolRemoveAgent(int idx)
+{
+	GetCrowdTool().removeAgent(idx);
 }
 
 std::unordered_map<int, uint64_t> m_mapEntityId;
@@ -52,7 +60,7 @@ void CrowToolUpdate()
 		const float radius = ag->params.radius;
 		const float* pos = ag->npos;
 
-		unsigned int col = duRGBA(0,0,0,32);
+		unsigned int col = duRGBA(0, 0, 0, 32);
 		//if (m_agentDebug.idx == i)
 		//	col = duRGBA(255,0,0,128);
 
@@ -62,16 +70,45 @@ void CrowToolUpdate()
 		if (spEntity.expired())
 		{
 			LOG(WARNING) << "要删才行";
+			assert(false);
 			continue;
 		}
 		auto sp = spEntity.lock();
 		sp->m_Pos = { pos[0] ,pos[2] };
-		
+
 		sp->Broadcast(MsgNotifyPos(*sp));
 	}
 }
 
-void CrowdToolSetMoveTarget(const float* p, bool adjust)
+void CrowdToolSetMoveTarget(const float* p, const int idx)
 {
-	GetCrowdTool().setMoveTarget(p, adjust);
+	GetCrowdTool().m_agentDebug.idx = idx;
+	GetCrowdTool().setMoveTarget(p, false);
+}
+
+RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& posTarget) :m_refEntity(refEntity)
+{
+	float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z };
+	assert(AttackComponent::INVALID_AGENT_IDX == refEntity.m_spAttack->m_idxCrowdAgent);
+	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);
+	m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
+
+	SetMoveTarget(posTarget);
+}
+
+RecastNavigationCrowd::~RecastNavigationCrowd()
+{
+	CrowToolRemoveAgent(m_refEntity.m_spAttack->m_idxCrowdAgent);
+	m_refEntity.m_spAttack->m_idxCrowdAgent = AttackComponent::INVALID_AGENT_IDX;
+}
+
+void RecastNavigationCrowd::SetMoveTarget(const Position& posTarget)
+{
+	float arrF[] = { posTarget.x,0,posTarget.z };
+	assert(AttackComponent::INVALID_AGENT_IDX != m_refEntity.m_spAttack->m_idxCrowdAgent);
+	if (AttackComponent::INVALID_AGENT_IDX == m_refEntity.m_spAttack->m_idxCrowdAgent)
+	{
+		LOG(ERROR) << "可能超过容量";
+	}
+	CrowdToolSetMoveTarget(arrF, m_refEntity.m_spAttack->m_idxCrowdAgent);
 }

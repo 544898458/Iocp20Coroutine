@@ -1,0 +1,10 @@
+#pragma once
+class Entity;
+class RecastNavigationCrowd final
+{
+public:
+	RecastNavigationCrowd(Entity& refEntity, const Position& posTarget);
+	~RecastNavigationCrowd();
+	void SetMoveTarget(const Position& posTarget);
+	Entity& m_refEntity;
+};

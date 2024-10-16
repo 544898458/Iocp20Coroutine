@@ -14,6 +14,7 @@ public:
 	CoTaskBool m_coWalk;
 	CoTask<int> m_coAttack;
 	FunCancel m_cancel;
-	int m_idxCrowdAgent = 0;
+	static const int INVALID_AGENT_IDX = -1;//0是合法值
+	int m_idxCrowdAgent = INVALID_AGENT_IDX;
 };
 
