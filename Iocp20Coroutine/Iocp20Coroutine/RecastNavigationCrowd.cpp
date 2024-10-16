@@ -91,6 +91,7 @@ RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& 
 	float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z };
 	assert(AttackComponent::INVALID_AGENT_IDX == refEntity.m_spAttack->m_idxCrowdAgent);
 	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF,refEntity.m_速度每帧移动距离*10);
+	assert(AttackComponent::INVALID_AGENT_IDX != m_refEntity.m_spAttack->m_idxCrowdAgent);
 	m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
 
 	SetMoveTarget(posTarget);

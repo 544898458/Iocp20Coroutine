@@ -38,7 +38,7 @@
 #include "DetourCommon.h"
 #include "DetourNode.h"
 #include "SampleInterfaces.h"
-
+#include "../../Detour/Include/DetourAssert.h"
 #ifdef WIN32
 #	define snprintf _snprintf
 #endif
@@ -679,6 +679,7 @@ int CrowdToolState::addAgent(const float* p, float fSpeed)
 			dtVcopy(&trail->trail[i * 3], p);
 		trail->htrail = 0;
 	}
+	dtAssert(idx >= 0);
 	return idx;
 }
 

@@ -83,8 +83,8 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 {
 	ForEachSelected([this](Entity& ref)
 		{
-			CHECK_VOID(ref.m_spBuilding);
-			ref.m_spBuilding->Ôì±ø(*this, ref);
+			if (ref.m_spBuilding)
+				ref.m_spBuilding->Ôì±ø(*this, ref);
 		});
 }
 

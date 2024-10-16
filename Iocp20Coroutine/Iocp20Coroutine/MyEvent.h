@@ -1,7 +1,7 @@
 #pragma once
 #include "SpEntity.h"
 class Space;
-
+class PlayerGateSession_Game;
 namespace MyEvent
 {
 	struct AddEntity
@@ -19,6 +19,6 @@ namespace MyEvent
 	{
 
 	};
-	bool SameSpace(const WpEntity& refWpEntity, const Space& refSpace);;
+	bool SameSpace(const WpEntity& refWpEntity, const Space& refSpace, PlayerGateSession_Game& refGateSession);
 }
 

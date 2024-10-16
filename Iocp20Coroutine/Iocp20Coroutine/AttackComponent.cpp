@@ -8,6 +8,7 @@
 #include "AiCo.h"
 #include "Space.h"
 #include "PlayerGateSession_Game.h"
+#include "采集Component.h"
 
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
 void AttackComponent::AddComponent(Entity& refEntity)
@@ -113,6 +114,10 @@ void AttackComponent::Update(Entity& refThis)
 			assert(m_coWalk.Finished());//20240205
 			assert(m_coAttack.Finished());//20240205
 			/*m_coStop = false;*/
+			if (refThis.m_sp采集)
+			{
+				refThis.m_sp采集->m_TaskCancel.TryCancel();
+			}
 			m_coWalk = AiCo::WalkToTarget(refThis.shared_from_this(), wpEntity.lock(), m_cancel);
 			m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 			return;

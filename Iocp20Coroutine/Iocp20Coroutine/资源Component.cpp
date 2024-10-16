@@ -5,7 +5,7 @@
 #include "Entity.h"
 void 资源Component::Add(Space& refSpace)
 {
-	SpEntity spEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ -30.0 }, refSpace, "tree_large", "晶体矿");
+	SpEntity spEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ 30.0 }, refSpace, "tree_large", "晶体矿");
 	refSpace.m_mapEntity.insert({ spEntity->Id ,spEntity});
 	//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 	spEntity->m_sp资源= std::make_shared<资源Component>();

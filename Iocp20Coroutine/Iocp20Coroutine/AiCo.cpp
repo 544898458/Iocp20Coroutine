@@ -13,6 +13,7 @@
 #include "MyEvent.h"
 #include "MonsterComponent.h"
 #include "RecastNavigationCrowd.h"
+#include "AttackComponent.h"
 
 template<class T> void SendToWorldSvr(const T& msg, const uint64_t idGateSession);
 

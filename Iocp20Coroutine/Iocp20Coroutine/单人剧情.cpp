@@ -31,7 +31,7 @@ namespace 单人剧情
 
 		refGateSession.Say("请单击“造基地”按钮，3秒后就能造出一个基地");
 
-		const auto funSameSpace = [&refSpace](const MyEvent::AddEntity& refAddEntity) { return MyEvent::SameSpace(refAddEntity.wpEntity, refSpace); };
+		const auto funSameSpace = [&refSpace,&refGateSession](const MyEvent::AddEntity& refAddEntity) { return MyEvent::SameSpace(refAddEntity.wpEntity, refSpace, refGateSession); };
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
