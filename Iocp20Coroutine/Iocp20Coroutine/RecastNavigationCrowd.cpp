@@ -48,6 +48,14 @@ uint32_t CrowToolAdd·½¿é×èµ²(float arrF[], float f°ë±ß³¤)
 	return u32Ret;
 }
 
+bool CrowToolRemove×èµ²(const uint32_t u32DtObstacleRef)
+{
+	auto* pSample_TempObstacles = dynamic_cast<Sample_TempObstacles*>(GetCrowdTool().m_sample);
+	const auto result = pSample_TempObstacles->m_tileCache->removeObstacle(u32DtObstacleRef);
+	const auto ret = DT_SUCCESS == result;
+	assert(ret);
+	return ret;
+}
 
 std::unordered_map<int, uint64_t> m_mapEntityId;
 extern Space g_SpaceÎÞÏÞË¢¹Ö;
@@ -57,7 +65,7 @@ void CrowToolUpdate()
 	const float DELTA_TIME = 1.0f / SIM_RATE;
 	GetCrowdTool().handleUpdate(DELTA_TIME);
 	auto m_sample = GetCrowdTool().m_sample;
-
+	m_sample->handleUpdate(DELTA_TIME);
 	duDebugDraw& dd = m_sample->getDebugDraw();
 	const float rad = m_sample->getAgentRadius();
 

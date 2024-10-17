@@ -13,6 +13,7 @@ class AttackComponent;
 class DefenceComponent;
 class 采集Component;
 class 资源Component;
+class 临时阻挡Component;
 class PlayerGateSession_Game;
 
 
@@ -36,7 +37,7 @@ public:
 	int m_eulerAnglesY = 0;
 	CoTask<int> m_coWaitDelete;
 	FunCancel m_cancelDelete;
-	
+
 	const uint64_t Id;
 	bool m_bNeedDelete = false;
 	int m_hp = 20;
@@ -60,6 +61,7 @@ public:
 	std::shared_ptr<BuildingComponent> m_spBuilding;
 	std::shared_ptr<采集Component> m_sp采集;
 	std::shared_ptr<资源Component> m_sp资源;
+	std::shared_ptr<临时阻挡Component> m_sp临时阻挡;
 
 	//private:
 	Space& m_refSpace;

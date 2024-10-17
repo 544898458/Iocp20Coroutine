@@ -10,11 +10,12 @@
 #include "AttackComponent.h"
 #include "DefenceComponent.h"
 #include "采集Component.h"
-
+#include "临时阻挡Component.h"
 
 void BuildingComponent::AddComponent(Entity& refThis, PlayerGateSession_Game& refSession, const 建筑单位类型 类型)
 {
 	refThis.m_spBuilding = std::make_shared<BuildingComponent, PlayerGateSession_Game&, const 建筑单位类型&>(refSession, 类型);
+	临时阻挡Component::AddComponent(refThis);
 }
 
 BuildingComponent::BuildingComponent(PlayerGateSession_Game& refSession, const 建筑单位类型 &类型) :m_类型(类型)
