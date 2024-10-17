@@ -12,10 +12,10 @@
 #include "采集Component.h"
 #include "临时阻挡Component.h"
 
-void BuildingComponent::AddComponent(Entity& refThis, PlayerGateSession_Game& refSession, const 建筑单位类型 类型)
+void BuildingComponent::AddComponent(Entity& refThis, PlayerGateSession_Game& refSession, const 建筑单位类型 类型, float f半边长)
 {
 	refThis.m_spBuilding = std::make_shared<BuildingComponent, PlayerGateSession_Game&, const 建筑单位类型&>(refSession, 类型);
-	临时阻挡Component::AddComponent(refThis);
+	临时阻挡Component::AddComponent(refThis, f半边长);
 }
 
 BuildingComponent::BuildingComponent(PlayerGateSession_Game& refSession, const 建筑单位类型 &类型) :m_类型(类型)
@@ -71,11 +71,7 @@ CoTask<SpEntity> BuildingComponent::Co造活动单位(BuildingComponent& refThis, Pla
 		Position pos = { posBuilding.x + std::rand() % 4, posBuilding.z + 3 };
 		auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string&>(
 			pos, *refGateSession.m_pCurSpace, 配置.配置.strPrefabName, 配置.配置.strName);
-		if (stop)
-		{
-			LOG(WARNING) << "扣钱失败";
-			co_return{};
-		}
+		spNewEntity->m_f警戒距离 = 配置.f警戒距离;
 		spNewEntity->AddComponentPlayer(refGateSession);
 		AttackComponent::AddComponent(*spNewEntity);
 		DefenceComponent::AddComponent(*spNewEntity);

@@ -14,11 +14,16 @@ namespace 单位
 	{
 		单位配置 配置;
 		BuildingComponent::Fun造兵 fun造兵;
+		/// <summary>
+		/// 静态阻挡（园的半径或正方形的半边长）
+		/// </summary>
+		float f半边长;
 	};
 
 	struct 活动单位配置
 	{
 		单位配置 配置;
+		float f警戒距离;
 	};
 
 	bool Find建筑单位配置(const 建筑单位类型 类型, 建筑单位配置& refOut);

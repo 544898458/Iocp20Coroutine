@@ -14,14 +14,14 @@ extern std::unordered_map<int, uint64_t> m_mapEntityId;
 void AttackComponent::AddComponent(Entity& refEntity)
 {
 	CHECK_VOID(!refEntity.m_spAttack);
-	refEntity.m_spAttack = std::make_shared<AttackComponent,Entity&>(refEntity);
+	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&>(refEntity);
 	//float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z};
 	//int CrowToolAddAgent(float arrF[]);
 	//refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);
 	//m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
 }
 
-void AttackComponent::WalkToPos(const Position& posTarget)
+void AttackComponent::WalkToPos手动控制(const Position& posTarget)
 {
 	//void CrowdToolSetMoveTarget(const float* p, const int idx);
 	//float arrFloat[] = { posTarget.x,0,posTarget.z };
@@ -42,8 +42,8 @@ void AttackComponent::WalkToPos(const Position& posTarget)
 	assert(m_coWalk.Finished());//20240205
 	assert(m_coAttack.Finished());//20240205
 	/*m_coStop = false;*/
-	m_coWalk = AiCo::WalkToPos(m_refEntity.shared_from_this(), posTarget, m_cancel);
-	m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
+	m_coWalk手动控制 = AiCo::WalkToPos(m_refEntity.shared_from_this(), posTarget, m_cancel);
+	m_coWalk手动控制.Run();//协程离开开始运行（运行到第一个co_await
 }
 
 
@@ -57,7 +57,7 @@ void AttackComponent::TryCancel()
 	else
 	{
 		//LOG(INFO) << "m_cancel是空的，没有要取消的协程";
-		if (!m_coWalk.Finished() || !m_coAttack.Finished() || (m_refEntity.m_spMonster && !m_refEntity.m_spMonster->m_coIdle.Finished()))
+		if (!m_coWalk.Finished() || !m_coAttack.Finished() || (m_refEntity.m_spMonster && !m_refEntity.m_spMonster->m_coIdle.Finished()) || !m_coWalk手动控制.Finished())
 		{
 			LOG(ERROR) << "协程没结束，却提前清空了m_cancel";
 			assert(false);
@@ -72,14 +72,13 @@ void AttackComponent::TryCancel()
 void AttackComponent::Update()
 {
 	if (!m_coAttack.Finished())
-	{
 		return;//表示不允许打断
-	}
+
+	if (!m_coWalk手动控制.Finished())
+		return;//表示不允许打断
 
 	if (m_refEntity.IsDead())
-	{
 		return;
-	}
 
 	std::vector<std::pair<int64_t, SpEntity>> vecEnemy;
 	std::copy_if(m_refEntity.m_refSpace.m_mapEntity.begin(), m_refEntity.m_refSpace.m_mapEntity.end(), std::back_inserter(vecEnemy), [this](const auto& pair)
@@ -106,7 +105,7 @@ void AttackComponent::Update()
 			m_coAttack.Run();
 			return;
 		}
-		else if (m_refEntity.DistanceLessEqual(*wpEntity.lock(), m_refEntity.m_f警戒距离) && m_coWalk.Finished())
+		else if (m_refEntity.DistanceLessEqual(*wpEntity.lock(), m_refEntity.m_f警戒距离) && m_coWalk.Finished() && (m_refEntity.m_sp采集 && m_refEntity.m_sp采集->m_TaskCancel.co.Finished()))
 		{
 			TryCancel();
 

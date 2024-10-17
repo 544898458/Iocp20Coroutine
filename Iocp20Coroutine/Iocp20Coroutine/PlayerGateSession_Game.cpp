@@ -92,7 +92,9 @@ void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
 {
 	ForEachSelected([this, &msg](Entity& ref)
 		{
-			CHECK_VOID(ref.m_sp采集);
+			if (!ref.m_sp采集)
+				return;
+
 			CHECK_NOTNULL_VOID(m_pCurSpace);
 			auto wpEntity = m_pCurSpace->GetEntity((int64_t)msg.id目标资源);
 			if (!wpEntity.expired())
@@ -111,8 +113,11 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 		{
 			if (ref.m_spAttack)
 			{
+				if (ref.m_sp采集)
+					ref.m_sp采集->m_TaskCancel.TryCancel();
+
 				ref.m_spAttack->TryCancel();
-				ref.m_spAttack->WalkToPos(Position(targetX, targetZ));
+				ref.m_spAttack->WalkToPos手动控制(Position(targetX, targetZ));
 			}
 		});
 }
@@ -183,7 +188,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 	}
 	//spNewEntity->AddComponentAttack();
 	spNewEntity->AddComponentPlayer(*this);
-	BuildingComponent::AddComponent(*spNewEntity, *this, 类型);
+	BuildingComponent::AddComponent(*spNewEntity, *this, 类型, 配置.f半边长);
 	DefenceComponent::AddComponent(*spNewEntity);
 	spNewEntity->m_spBuilding->m_fun造活动单位 = 配置.fun造兵;
 	m_vecSpEntity.insert(spNewEntity);//自己控制的单位

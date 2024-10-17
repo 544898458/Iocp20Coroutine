@@ -5,18 +5,18 @@ namespace 单位
 {
 	std::unordered_map<建筑单位类型, 建筑单位配置> g_map建筑单位配置 =
 	{
-		{基地, {{"基地","house_type06",1},&BuildingComponent::Co造工程车}},
-		{兵厂, {{"兵厂","house_type19",2},&BuildingComponent::Co造兵}},
+		{基地, {{"基地","house_type06",1},&BuildingComponent::Co造工程车, 2.0f}},
+		{兵厂, {{"兵厂","house_type19",2},&BuildingComponent::Co造兵, 2.0f}},
 	};
 
 	std::unordered_map<活动单位类型, 活动单位配置> g_map活动单位配置 =
 	{
-		{工程车,{{"工程车","altman-yellow",3}}},
-		{兵,	{{"兵","altman-blue",5}}},
+		{工程车,{{"工程车"	, "altman-yellow"	, 3}, 8	}},
+		{兵,	{{"兵"		, "altman-blue"		, 5}, 15}},
 	};
 
-	template<class K,class V>
-	bool Find配置(std::unordered_map<K,V> &refMap, const K 类型, V& refOut)
+	template<class K, class V>
+	bool Find配置(std::unordered_map<K, V>& refMap, const K 类型, V& refOut)
 	{
 		const auto& iterFind = refMap.find(类型);
 		if (iterFind == refMap.end())

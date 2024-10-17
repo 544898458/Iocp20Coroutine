@@ -30,7 +30,8 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, Entity&
 
 		if (wpEntity基地.expired())
 		{
-			co_await CoTimer::Wait(1s, m_TaskCancel.cancel);//自己连一个基地都没有，等一会儿再试
+			if (co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//自己连一个基地都没有，等一会儿再试
+				co_return true;
 			continue;
 		}
 
@@ -63,7 +64,8 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, Entity&
 		if (refThis.DistanceLessEqual(*wp目标资源.lock(), refThis.m_f攻击距离))//在目标矿附近
 		{
 			CoEvent<MyEvent::开始采集晶体矿>::OnRecvEvent(false, {});
-			co_await CoTimer::Wait(1s, m_TaskCancel.cancel);//采矿1个矿耗时
+			if(co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//采矿1个矿耗时
+				co_return true;//中断
 			++m_u32携带晶体矿;
 			continue;
 		}
@@ -71,7 +73,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, Entity&
 		//距离目标矿太远，走向晶体矿
 		refThis.m_spAttack->TryCancel();
 		if (co_await AiCo::WalkToTarget(refThis.shared_from_this(), wp目标资源.lock(), m_TaskCancel.cancel, false))
-			co_return true;//中断，可能打怪去了
+			co_return true;//中断
 	}
 }
 
