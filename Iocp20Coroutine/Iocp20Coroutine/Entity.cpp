@@ -53,7 +53,7 @@ void Entity::Hurt(int hp)
 void Entity::Update()
 {
 	if (m_spAttack)
-		m_spAttack->Update(*this);
+		m_spAttack->Update();
 }
 
 bool Entity::IsEnemy(const Entity& refEntity)
@@ -75,7 +75,7 @@ void Entity::OnDestroy()
 	Broadcast(MsgDelRoleRet((uint64_t)this));
 
 	if (m_spAttack)
-		m_spAttack->TryCancel(*this);
+		m_spAttack->TryCancel();
 
 	if (m_spBuilding)
 		m_spBuilding->TryCancel(*this);

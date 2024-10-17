@@ -52,8 +52,9 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, Entity&
 			}
 
 			//离基地太远，走向基地
+			refThis.m_spAttack->TryCancel();
 			if (co_await AiCo::WalkToTarget(refThis.shared_from_this(), wpEntity基地.lock(), m_TaskCancel.cancel, false))
-				co_return true;
+				co_return true;//中断，可能打怪去了
 
 			continue;
 		}
@@ -68,7 +69,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, Entity&
 		}
 
 		//距离目标矿太远，走向晶体矿
-		refThis.m_spAttack->TryCancel(refThis);
+		refThis.m_spAttack->TryCancel();
 		if (co_await AiCo::WalkToTarget(refThis.shared_from_this(), wp目标资源.lock(), m_TaskCancel.cancel, false))
 			co_return true;//中断，可能打怪去了
 	}

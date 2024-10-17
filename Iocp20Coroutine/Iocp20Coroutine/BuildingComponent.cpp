@@ -67,7 +67,7 @@ CoTask<SpEntity> BuildingComponent::Co造活动单位(BuildingComponent& refThis, Pla
 		LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 		CHECK_NOTNULL_CO_RET_0(refGateSession.m_pCurSpace);
 		const auto posBuilding = refEntity.m_Pos;
-		Position pos = { posBuilding.x - 2 + std::rand() % 4, posBuilding.z + 2 };
+		Position pos = { posBuilding.x + std::rand() % 4, posBuilding.z + 3 };
 		auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string&>(
 			pos, *refGateSession.m_pCurSpace, 配置.配置.strPrefabName, 配置.配置.strName);
 		if (stop)

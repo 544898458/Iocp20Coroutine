@@ -109,8 +109,11 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 	CHECK_NOTNULL_VOID(m_pCurSpace);
 	ForEachSelected([this, targetX, targetZ](Entity& ref) 
 		{
-			if(ref.m_spAttack)
-				ref.m_spAttack->WalkToPos(ref, Position(targetX, targetZ)); 
+			if (ref.m_spAttack)
+			{
+				ref.m_spAttack->TryCancel();
+				ref.m_spAttack->WalkToPos(Position(targetX, targetZ));
+			}
 		});
 }
 
@@ -171,7 +174,8 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const Ω®÷˛µ•Œª¿‡–Õ ¿‡–Õ)
 	const MsgChangeMoneyResponce& responce = std::get<1>(tuple);
 	LOG(INFO) << "–≠≥ÃRPC∑µªÿ,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	CHECK_NOTNULL_CO_RET_0(m_pCurSpace);
-	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ 0,float(std::rand() % 50) }, *m_pCurSpace, ≈‰÷√.≈‰÷√.strPrefabName, ≈‰÷√.≈‰÷√.strName);
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(
+		{ 35,float(std::rand() % 20) }, *m_pCurSpace, ≈‰÷√.≈‰÷√.strPrefabName, ≈‰÷√.≈‰÷√.strName);
 	if (0 != responce.error)
 	{
 		LOG(WARNING) << "ø€«Æ ß∞‹,error=" << responce.error;
