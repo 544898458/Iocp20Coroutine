@@ -27,7 +27,7 @@
 
 class Sample_TempObstacles : public Sample
 {
-protected:
+public:
 	bool m_keepInterResults;
 
 	struct LinearAllocator* m_talloc;

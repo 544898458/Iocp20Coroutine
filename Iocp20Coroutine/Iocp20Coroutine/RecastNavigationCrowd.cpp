@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "../recastnavigation-main/DetourCrowd/Include/DetourCrowd.h"
 #include "../recastnavigation-main/Detour/Include/DetourCommon.h"
+#include "../recastnavigation-main/DetourTileCache/Include/DetourTileCache.h"
 #include "../recastnavigation-main/RecastDemo/Include/PerfTimer.h"
 #include "CrowdTool.h"
 #include "../recastnavigation-main/RecastDemo/Include/Sample_TempObstacles.h"
+
 #include <unordered_map>
 #include "Space.h"
 #include "Entity.h"
@@ -33,6 +35,19 @@ void CrowToolRemoveAgent(int idx)
 {
 	GetCrowdTool().removeAgent(idx);
 }
+
+
+uint32_t CrowToolAdd方块阻挡(float arrF[], float f半边长)
+{
+	auto* pSample_TempObstacles = dynamic_cast<Sample_TempObstacles*>(GetCrowdTool().m_sample);
+	float arrMin[] = { arrF[0] - f半边长 , arrF[1] - f半边长 , arrF[2] - f半边长 };
+	float arrMax[] = { arrF[0] + f半边长 , arrF[1] + f半边长 , arrF[2] + f半边长 };
+	uint32_t u32Ret(0);
+	const auto result = pSample_TempObstacles->m_tileCache->addBoxObstacle(arrMin, arrMax, &u32Ret);
+	assert(DT_SUCCESS == result);
+	return u32Ret;
+}
+
 
 std::unordered_map<int, uint64_t> m_mapEntityId;
 extern Space g_Space无限刷怪;
@@ -90,7 +105,7 @@ RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& 
 {
 	float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z };
 	assert(AttackComponent::INVALID_AGENT_IDX == refEntity.m_spAttack->m_idxCrowdAgent);
-	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF,refEntity.m_速度每帧移动距离*10);
+	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF, refEntity.m_速度每帧移动距离 * 10);
 	assert(AttackComponent::INVALID_AGENT_IDX != m_refEntity.m_spAttack->m_idxCrowdAgent);
 	m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
 
