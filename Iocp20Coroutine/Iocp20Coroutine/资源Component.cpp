@@ -10,6 +10,6 @@ void 资源Component::Add(Space& refSpace)
 	refSpace.m_mapEntity.insert({ spEntity->Id ,spEntity});
 	//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 	spEntity->m_sp资源 = std::make_shared<资源Component>();
-	临时阻挡Component::AddComponent(*spEntity, 1);
+	临时阻挡Component::AddComponent(*spEntity, 0.5f);
 	spEntity->BroadcastEnter();
 }

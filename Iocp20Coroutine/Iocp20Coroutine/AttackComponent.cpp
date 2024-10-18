@@ -105,7 +105,7 @@ void AttackComponent::Update()
 			m_coAttack.Run();
 			return;
 		}
-		else if (m_refEntity.DistanceLessEqual(*wpEntity.lock(), m_refEntity.m_f警戒距离) && m_coWalk.Finished() && (m_refEntity.m_sp采集 && m_refEntity.m_sp采集->m_TaskCancel.co.Finished()))
+		else if (m_refEntity.DistanceLessEqual(*wpEntity.lock(), m_refEntity.m_f警戒距离) && m_coWalk.Finished() && (!m_refEntity.m_sp采集 || m_refEntity.m_sp采集->m_TaskCancel.co.Finished()))
 		{
 			TryCancel();
 

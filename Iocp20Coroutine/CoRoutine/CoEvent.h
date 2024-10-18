@@ -40,7 +40,6 @@ public:
 				g_mapRpc.erase(iterFind);
 			}
 		}
-
 	}
 
 	static CoAwaiter<std::tuple<bool, T_Responce>>& Wait(FunCancel& funCancel, FunWant funWantEvent = [](const T_Responce&) {return true; })

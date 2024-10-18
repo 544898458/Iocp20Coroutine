@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include "资源Component.h"
 #include "MonsterComponent.h"
+#include "PlayerComponent.h"
 
 namespace 单人剧情
 {
@@ -43,7 +44,23 @@ namespace 单人剧情
 
 		refGateSession.Say("现在您有一辆工程车了，单击选中您的工程车，再点击地面，命令它走向目标点");
 
-		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace](const MyEvent::MoveEntity& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
+		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace, &refGateSession](const MyEvent::MoveEntity& ref) 
+			{
+				if (ref.wpEntity.expired())
+					return false;
+
+				auto spEnity = ref.wpEntity.lock();
+				if (&spEnity->m_refSpace != &refSpace)
+					return false;
+				
+				if (!spEnity->m_spPlayer)
+					return false;
+
+				if (&spEnity->m_spPlayer->m_refSession != &refGateSession)
+					return false;
+
+				return true;
+			})))
 			co_return 0;
 
 		refGateSession.Say("很好！现在给您刷了一个晶体矿，请点击晶体矿，让工程车在晶体矿和基地之间搬运晶体矿");
