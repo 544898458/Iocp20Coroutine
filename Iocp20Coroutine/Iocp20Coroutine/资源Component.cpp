@@ -4,12 +4,23 @@
 #include "MyMsgQueue.h"
 #include "Entity.h"
 #include "临时阻挡Component.h"
-void 资源Component::Add(Space& refSpace)
+#include "单位.h"
+
+void 资源Component::Add(Space& refSpace, const 资源类型 类型)
 {
-	SpEntity spEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ 30.0 }, refSpace, "tree_large", "晶体矿");
-	refSpace.m_mapEntity.insert({ spEntity->Id ,spEntity});
+	单位::资源单位配置 配置 = {};
+	if (!单位::Find资源单位配置(类型, 配置))
+	{
+		LOG(ERROR) << "Add" << 类型;
+		assert(false);
+		return;
+	}
+
+	SpEntity spEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(
+		{ 20,float(rand() % 20) }, refSpace, 配置.配置.strPrefabName, 配置.配置.strName);
+	refSpace.m_mapEntity.insert({ spEntity->Id ,spEntity });
 	//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
-	spEntity->m_sp资源 = std::make_shared<资源Component>();
+	spEntity->m_sp资源 = std::make_shared<资源Component, const 资源类型>(std::forward<const 资源类型&&>(类型));
 	临时阻挡Component::AddComponent(*spEntity, 0.5f);
 	spEntity->BroadcastEnter();
 }

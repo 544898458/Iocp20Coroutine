@@ -26,7 +26,13 @@ namespace 单位
 		float f警戒距离;
 	};
 
+	struct 资源单位配置
+	{
+		单位配置 配置;
+	};
+
 	bool Find建筑单位配置(const 建筑单位类型 类型, 建筑单位配置& refOut);
 	bool Find活动单位配置(const 活动单位类型 类型, 活动单位配置& refOut);
+	bool Find资源单位配置(const 资源类型 类型, 资源单位配置& refOut);
 };
 

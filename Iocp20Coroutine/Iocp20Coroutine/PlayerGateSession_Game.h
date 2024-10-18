@@ -24,6 +24,7 @@ public:
 	void Say(const std::string& str);
 	const std::string& NickName()const { return m_strNickName; }
 	void EnterSpace(Space& refSpace, const std::string& strNickName);
+	void SendMy×ÊÔ´();
 
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;

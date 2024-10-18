@@ -50,9 +50,10 @@ enum 建筑单位类型
 	基地,//指挥中心(Command Center),用来造工程车()
 	兵厂,//兵营Barracks，用来造兵
 };
-enum 资源单位类型
+enum 资源类型
 {
 	晶体矿,//Minerals
+	燃气矿,//Vespene Gas
 };
 
 MSGPACK_ADD_ENUM(建筑单位类型);

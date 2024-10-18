@@ -14,6 +14,11 @@ namespace 单位
 		{工程车,{{"工程车"	, "altman-yellow"	, 3}, 8	}},
 		{兵,	{{"兵"		, "altman-blue"		, 5}, 15}},
 	};
+	std::unordered_map<资源类型, 资源单位配置> g_map资源单位配置 =
+	{
+		{晶体矿,{{"晶体矿"	, "tree_large"	, 3}}},
+		{燃气矿,	{{"燃气"	, "house_type03", 5}}},
+	};
 
 	template<class K, class V>
 	bool Find配置(std::unordered_map<K, V>& refMap, const K 类型, V& refOut)
@@ -36,5 +41,9 @@ namespace 单位
 	bool Find活动单位配置(const 活动单位类型 类型, 活动单位配置& refOut)
 	{
 		return Find配置(g_map活动单位配置, 类型, refOut);
+	}
+	bool Find资源单位配置(const 资源类型 类型, 资源单位配置& refOut)
+	{
+		return Find配置(g_map资源单位配置, 类型, refOut);
 	}
 }
