@@ -18,7 +18,7 @@ void BuildingComponent::AddComponent(Entity& refThis, PlayerGateSession_Game& re
 	临时阻挡Component::AddComponent(refThis, f半边长);
 }
 
-BuildingComponent::BuildingComponent(PlayerGateSession_Game& refSession, const 建筑单位类型 &类型) :m_类型(类型)
+BuildingComponent::BuildingComponent(PlayerGateSession_Game& refSession, const 建筑单位类型& 类型) :m_类型(类型)
 {
 	//if (!m_coAddMoney.Finished())
 	//{
@@ -37,11 +37,16 @@ void BuildingComponent::TryCancel(Entity& refEntity)
 void BuildingComponent::造兵(PlayerGateSession_Game& refGateSession, Entity& refEntity)
 {
 	CHECK_VOID(m_fun造活动单位);
+	if (refGateSession.活动单位包括制造队列中的() >= refGateSession.活动单位上限())
+	{
+		refGateSession.Say("民房不足"); //Additional supply depots required.需要更多的食堂
+		return;
+	}
 	++m_i等待造兵数;
 	m_TaskCancel造兵.TryRun(m_fun造活动单位(*this, refGateSession, refEntity));
 }
 
-CoTaskBool BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity, const 活动单位类型 类型,std::function<void(Entity&)> fun)
+CoTaskBool BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity, const 活动单位类型 类型, std::function<void(Entity&)> fun)
 {
 	单位::活动单位配置 配置;
 	if (!单位::Find活动单位配置(类型, 配置))
@@ -92,5 +97,5 @@ CoTaskBool BuildingComponent::Co造兵(BuildingComponent& refThis, PlayerGateSessi
 
 CoTaskBool BuildingComponent::Co造工程车(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
 {
-	return Co造活动单位(refThis, refGateSession, refEntity, 工程车, [](Entity & refEntity) {采集Component::AddComponent(refEntity);});
+	return Co造活动单位(refThis, refGateSession, refEntity, 工程车, [](Entity& refEntity) {采集Component::AddComponent(refEntity); });
 }

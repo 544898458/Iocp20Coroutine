@@ -373,11 +373,18 @@ uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
 	uint16_t 制造队列中的单位 = 0;
 	for (const auto& refEntity : m_setSpEntity)
 	{
-		if (!refEntity->m_spBuilding)
-			continue;
-
-		制造队列中的单位 += refEntity->m_spBuilding->m_i等待造兵数; break;
+		if (refEntity->m_spBuilding)
+		{
+			制造队列中的单位 += refEntity->m_spBuilding->m_i等待造兵数; break;
+			
+		}
+		else
+		{
+			++制造队列中的单位;
+		}
+		
 	}
-	return 制造队列中的单位 + m_setSpEntity.size();
+
+	return 制造队列中的单位;
 
 }

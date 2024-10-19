@@ -25,6 +25,8 @@ public:
 	const std::string& NickName()const { return m_strNickName; }
 	void EnterSpace(Space& refSpace, const std::string& strNickName);
 	void Send资源();
+	uint16_t 活动单位上限() const;
+	uint16_t 活动单位包括制造队列中的() const;
 
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
@@ -41,8 +43,6 @@ public:
 	uint32_t m_u32燃气矿 = 0;
 
 private:
-	uint16_t 活动单位上限() const;
-	uint16_t 活动单位包括制造队列中的() const;
 
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);
 	/// <summary>
