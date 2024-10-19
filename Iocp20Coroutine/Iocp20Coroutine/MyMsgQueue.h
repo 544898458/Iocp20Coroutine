@@ -42,6 +42,7 @@ enum MsgId
 	GateDeleteSession,
 	GateDeleteSessionResponce,
 	采集,
+	资源,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -50,13 +51,14 @@ enum 建筑单位类型
 	基地,//指挥中心(Command Center),用来造工程车()
 	兵厂,//兵营Barracks，用来造兵
 };
+MSGPACK_ADD_ENUM(建筑单位类型);
+
 enum 资源类型
 {
 	晶体矿,//Minerals
 	燃气矿,//Vespene Gas
 };
-
-MSGPACK_ADD_ENUM(建筑单位类型);
+MSGPACK_ADD_ENUM(资源类型);
 
 enum 活动单位类型
 {
@@ -255,4 +257,11 @@ struct Msg采集
 	MsgHead msg{ .id = 采集 };
 	double id目标资源;//TypeScript只有FLOAT64,没有POSITIVE_INTEGER和NEGATIVE_INTEGER
 	MSGPACK_DEFINE(msg, id目标资源);
+};
+
+struct Msg资源
+{
+	MsgHead msg{ .id = 资源 };
+	int32_t 燃气矿;
+	MSGPACK_DEFINE(msg, 燃气矿);
 };

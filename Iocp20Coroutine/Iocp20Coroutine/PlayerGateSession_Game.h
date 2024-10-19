@@ -38,6 +38,8 @@ public:
 	/// </summary>
 	std::set<SpEntity> m_vecSpEntity;
 
+	int m_iÈ¼Æø¿ó = 0;
+
 private:
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);
 	/// <summary>

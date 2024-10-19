@@ -324,3 +324,9 @@ void PlayerGateSession_Game::Process()
 	//}
 	m_Space单人剧情.Update();
 }
+
+
+void PlayerGateSession_Game::SendMy资源()
+{
+	Send<Msg资源>({.燃气矿=m_i燃气矿});
+}

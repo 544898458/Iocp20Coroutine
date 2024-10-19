@@ -212,7 +212,7 @@ namespace AiCo
 		KeepCancel kc(funCancel);
 		using namespace std;
 
-		while (!co_await CoTimer::Wait(1000ms, funCancel))
+		while (!co_await CoTimer::Wait(5000ms, funCancel))
 		{
 			//SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string& >({ -30.0 }, refSpace, "altman-red");
 			//spEntityMonster->AddComponentAttack();

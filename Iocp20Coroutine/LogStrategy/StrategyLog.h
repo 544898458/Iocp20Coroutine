@@ -35,6 +35,13 @@ class StrategyLog
 		return;\
 }
 
+#define CHECK_CO_RET_FALSE( exp ) \
+{\
+	CHECK(exp);\
+	if (!exp)\
+		co_return false;\
+}
+
 #define CHECK_DEFAULT( exp ) \
 {\
 	CHECK(exp);\
