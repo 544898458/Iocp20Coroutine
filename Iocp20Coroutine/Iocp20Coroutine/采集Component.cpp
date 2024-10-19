@@ -65,8 +65,8 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, Entity&
 				}
 				else
 				{
-					refGateSession.m_i燃气矿 += addMoney;
-					refGateSession.SendMy资源();
+					refGateSession.m_u32燃气矿 += addMoney;
+					refGateSession.Send资源();
 				}
 				continue;
 			}

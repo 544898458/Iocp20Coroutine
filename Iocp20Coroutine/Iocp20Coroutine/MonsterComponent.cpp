@@ -28,7 +28,7 @@ void MonsterComponent::AddMonster(Space& refSpace)
 	AttackComponent::AddComponent(*spEntityMonster);
 	DefenceComponent::AddComponent(*spEntityMonster);
 	spEntityMonster->AddComponentMonster();
-	spEntityMonster->m_f¾¯½ä¾àÀë = 10;
+	spEntityMonster->m_f¾¯½ä¾àÀë = 20;
 	spEntityMonster->m_ËÙ¶ÈÃ¿Ö¡ÒÆ¶¯¾àÀë = 0.2f;
 	refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster });
 	//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();

@@ -24,7 +24,7 @@ public:
 	void Say(const std::string& str);
 	const std::string& NickName()const { return m_strNickName; }
 	void EnterSpace(Space& refSpace, const std::string& strNickName);
-	void SendMy资源();
+	void Send资源();
 
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
@@ -38,7 +38,7 @@ public:
 	/// </summary>
 	std::set<SpEntity> m_vecSpEntity;
 
-	int m_i燃气矿 = 0;
+	uint32_t m_u32燃气矿 = 0;
 
 private:
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);

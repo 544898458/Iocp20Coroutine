@@ -7,12 +7,16 @@ namespace 单位
 	{
 		std::string strName;
 		std::string strPrefabName;
-		uint32_t u32消耗钱;
 	};
-
+	struct 制造消耗
+	{
+		uint32_t u32消耗晶体矿;
+		uint32_t u32消耗燃气矿;
+	};
 	struct 建筑单位配置
 	{
 		单位配置 配置;
+		制造消耗 消耗;
 		BuildingComponent::Fun造兵 fun造兵;
 		/// <summary>
 		/// 静态阻挡（园的半径或正方形的半边长）
@@ -23,6 +27,7 @@ namespace 单位
 	struct 活动单位配置
 	{
 		单位配置 配置;
+		制造消耗 消耗;
 		float f警戒距离;
 	};
 

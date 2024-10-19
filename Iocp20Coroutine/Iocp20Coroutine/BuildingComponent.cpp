@@ -52,7 +52,7 @@ CoTask<SpEntity> BuildingComponent::Co造活动单位(BuildingComponent& refThis, Pla
 	{
 		--refThis.m_i等待造兵数;
 		//先扣钱
-		const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, 配置.配置.u32消耗钱, false, refThis.m_TaskCancel造兵.cancel);
+		const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, 配置.消耗.u32消耗晶体矿, false, refThis.m_TaskCancel造兵.cancel);
 		if (stop)
 		{
 			LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney << ",rpcSn=" << responce.msg.rpcSnId;
@@ -79,6 +79,7 @@ CoTask<SpEntity> BuildingComponent::Co造活动单位(BuildingComponent& refThis, Pla
 		refGateSession.m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 		spNewEntity->BroadcastEnter();
+		refGateSession.Send资源();
 		co_return spNewEntity;
 	}
 }

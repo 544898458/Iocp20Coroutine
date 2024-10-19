@@ -262,6 +262,6 @@ struct Msg采集
 struct Msg资源
 {
 	MsgHead msg{ .id = 资源 };
-	int32_t 燃气矿;
+	uint32_t 燃气矿;
 	MSGPACK_DEFINE(msg, 燃气矿);
 };
