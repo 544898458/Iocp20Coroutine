@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "../recastnavigation-main/DetourCrowd/Include/DetourCrowd.h"
 #include "../recastnavigation-main/Detour/Include/DetourCommon.h"
+#include "../recastnavigation-main/Detour/Include/DetourStatus.h"
 #include "../recastnavigation-main/DetourTileCache/Include/DetourTileCache.h"
 #include "../recastnavigation-main/RecastDemo/Include/PerfTimer.h"
 #include "CrowdTool.h"
@@ -11,6 +12,7 @@
 #include "Entity.h"
 #include "RecastNavigationCrowd.h"
 #include "AttackComponent.h"
+#include "MyMsgQueue.h"
 
 CrowdToolState& GetCrowdTool()
 {
@@ -107,6 +109,21 @@ void CrowdToolSetMoveTarget(const float* p, const int idx)
 {
 	GetCrowdTool().m_agentDebug.idx = idx;
 	GetCrowdTool().setMoveTarget(p, false);
+}
+
+bool CrowdToolfindNearest(Position& refPos)
+{
+	auto& refCrowTool = GetCrowdTool();
+	dtNavMeshQuery* navquery = refCrowTool.m_sample->getNavMeshQuery();
+	CHECK_NOTNULL_RET_FALSE(navquery);
+
+	dtQueryFilter filter;
+	const float* halfExtents = refCrowTool.m_sample->m_crowd->getQueryExtents();
+	float tgt[3];
+	dtPolyRef ref;
+	float p[] = { refPos.x,0,refPos.z };
+	CHECK_RET_FALSE(DT_SUCCESS == navquery->findNearestPoly(p, halfExtents, &filter, &ref, tgt));
+	return true;
 }
 
 RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& posTarget) :m_refEntity(refEntity)

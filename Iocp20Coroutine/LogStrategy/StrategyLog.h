@@ -20,6 +20,22 @@ class StrategyLog
 		co_return 0;\
 	}\
 }
+#define CHECK_RET_FALSE( EXP ) \
+{\
+	if (EXP) \
+	{\
+		LOG(ERROR)<< #EXP ;\
+		return false;\
+	}\
+}
+#define CHECK_NOTNULL_RET_FALSE( PTR ) \
+{\
+	if (nullptr == (PTR)) \
+	{\
+		LOG(ERROR)<< #PTR << ",is null";\
+		return false;\
+	}\
+}
 
 #define CHECK_GE_VOID( val1, val2) \
 {\

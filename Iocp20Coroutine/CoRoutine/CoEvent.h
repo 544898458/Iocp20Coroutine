@@ -23,7 +23,7 @@ public:
 			vec.emplace_back(k);
 		}
 
-		for (auto k :vec )
+		for (auto k : vec)
 		{
 			auto iterFind = g_mapRpc.find(k);
 			if (iterFind == g_mapRpc.end())
@@ -33,7 +33,7 @@ public:
 			}
 
 			auto& [coAwaiter, fun] = iterFind->second;
-			if (fun(responce))
+			if (stop || fun(responce))
 			{
 				auto ret = std::make_tuple(stop, responce);
 				coAwaiter.Run(ret);//此处可能加g_mapRpc

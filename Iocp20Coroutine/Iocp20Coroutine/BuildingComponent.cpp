@@ -55,7 +55,6 @@ CoTaskBool BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGat
 	}
 	while (0 < refThis.m_i等待造兵数)
 	{
-		--refThis.m_i等待造兵数;
 		//先扣钱
 		const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, 配置.消耗.u32消耗晶体矿, false, refThis.m_TaskCancel造兵.cancel);
 		if (stop)
@@ -74,6 +73,8 @@ CoTaskBool BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGat
 		CHECK_NOTNULL_CO_RET_0(refGateSession.m_pCurSpace);
 		const auto posBuilding = refEntity.m_Pos;
 		Position pos = { posBuilding.x + std::rand() % 10, posBuilding.z + 3 };
+		bool CrowdToolfindNearest(Position & refPos);
+		CrowdToolfindNearest(pos);
 		auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string&>(
 			pos, *refGateSession.m_pCurSpace, 配置.配置.strPrefabName, 配置.配置.strName);
 		spNewEntity->m_f警戒距离 = 配置.f警戒距离;
@@ -84,6 +85,8 @@ CoTaskBool BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGat
 		refGateSession.m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 		if (fun)
 			fun(*spNewEntity);
+
+		--refThis.m_i等待造兵数;
 
 		spNewEntity->BroadcastEnter();
 		refGateSession.Send资源();
