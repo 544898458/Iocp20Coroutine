@@ -8,7 +8,7 @@ namespace 单位
 	{
 		{基地, {{"基地","house_type06"},{1,0},&BuildingComponent::Co造工程车, 2.0f}},
 		{兵厂, {{"兵厂","house_type19"},{2,11},&BuildingComponent::Co造兵, 2.0f} },
-		{民房, {{"民房","house_type21"},{2,11},{}, 2.0f}},
+		{民房, {{"民房","house_type21"},{2,3},{}, 2.0f}},
 	};
 
 	std::unordered_map<活动单位类型, 活动单位配置> g_map活动单位配置 =
