@@ -171,6 +171,13 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 
 CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 {
+	Position pos = { 35,float(std::rand() % 20) };
+	if (!Can放置建筑(pos))
+	{
+		Say("此处不可放置");
+		co_return 0;
+	}
+
 	单位::建筑单位配置 配置;
 	if (!单位::Find建筑单位配置(类型, 配置))
 	{
@@ -204,7 +211,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 	//加建筑
 	CHECK_NOTNULL_CO_RET_0(m_pCurSpace);
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(
-		{ 35,float(std::rand() % 20) }, *m_pCurSpace, 配置.配置.strPrefabName, 配置.配置.strName);
+		pos, *m_pCurSpace, 配置.配置.strPrefabName, 配置.配置.strName);
 	//spNewEntity->AddComponentAttack();
 	spNewEntity->AddComponentPlayer(*this);
 	BuildingComponent::AddComponent(*spNewEntity, *this, 类型, 配置.f半边长);
@@ -376,15 +383,33 @@ uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
 		if (refEntity->m_spBuilding)
 		{
 			制造队列中的单位 += refEntity->m_spBuilding->m_i等待造兵数;
-			
+
 		}
 		else
 		{
 			++制造队列中的单位;
 		}
-		
+
 	}
 
 	return 制造队列中的单位;
 
+}
+
+bool PlayerGateSession_Game::Can放置建筑(const Position& pos)
+{
+	bool CrowdTool可放置(const Position & refPos);
+
+	if (!CrowdTool可放置(pos))return false;
+
+	float f半边长 = 2;
+
+	if (!CrowdTool可放置({ pos.x - f半边长 ,pos.z + f半边长 }))return false;
+	if (!CrowdTool可放置({ pos.x - f半边长 ,pos.z - f半边长 }))return false;
+	if (!CrowdTool可放置({ pos.x + f半边长 ,pos.z + f半边长 }))return false;
+	if (!CrowdTool可放置({ pos.x + f半边长 ,pos.z - f半边长 }))return false;
+
+	//遍历全地图所有建筑判断重叠
+
+	return true;
 }

@@ -111,7 +111,7 @@ void CrowdToolSetMoveTarget(const float* p, const int idx)
 	GetCrowdTool().setMoveTarget(p, false);
 }
 
-bool CrowdToolfindNearest(Position& refPos)
+bool CrowdTool¿É·ÅÖÃ(const Position& refPos)
 {
 	auto& refCrowTool = GetCrowdTool();
 	dtNavMeshQuery* navquery = refCrowTool.m_sample->getNavMeshQuery();
@@ -122,8 +122,12 @@ bool CrowdToolfindNearest(Position& refPos)
 	float tgt[3];
 	dtPolyRef ref;
 	float p[] = { refPos.x,0,refPos.z };
-	CHECK_RET_FALSE(DT_SUCCESS == navquery->findNearestPoly(p, halfExtents, &filter, &ref, tgt));
-	return true;
+	dtVcopy(tgt, p);
+	if (DT_SUCCESS != navquery->findNearestPoly(p, halfExtents, &filter, &ref, tgt))
+		return false;
+	Position posNew = { tgt[0],tgt[2] };
+	return refPos.DistanceLessEqual(posNew, 0.5f);
+		//return true;
 }
 
 RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& posTarget) :m_refEntity(refEntity)

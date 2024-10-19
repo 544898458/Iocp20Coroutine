@@ -724,9 +724,11 @@ dtStatus dtNavMeshQuery::findNearestPoly(const float* center, const float* halfE
 		dtVcopy(nearestPt, query.nearestPoint());
 		if (isOverPoly)
 			*isOverPoly = query.isOverPoly();
+
+		return DT_SUCCESS;
 	}
 	
-	return DT_SUCCESS;
+	return DT_FAILURE;
 }
 
 void dtNavMeshQuery::queryPolygonsInTile(const dtMeshTile* tile, const float* qmin, const float* qmax,

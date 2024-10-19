@@ -22,7 +22,7 @@ class StrategyLog
 }
 #define CHECK_RET_FALSE( EXP ) \
 {\
-	if (EXP) \
+	if (!(EXP)) \
 	{\
 		LOG(ERROR)<< #EXP ;\
 		return false;\

@@ -6,7 +6,7 @@ namespace 单位
 
 	std::unordered_map<建筑单位类型, 建筑单位配置> g_map建筑单位配置 =
 	{
-		{基地, {{"基地","house_type06"},{1,0},&BuildingComponent::Co造工程车, 2.0f}},
+		{基地, {{"基地","house_type06"},{1,0},&BuildingComponent::Co造工程车, 10.0f}},
 		{兵厂, {{"兵厂","house_type19"},{2,11},&BuildingComponent::Co造兵, 2.0f} },
 		{民房, {{"民房","house_type21"},{2,3},{}, 2.0f}},
 	};

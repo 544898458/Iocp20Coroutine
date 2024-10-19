@@ -55,6 +55,20 @@ CoTaskBool BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGat
 	}
 	while (0 < refThis.m_i等待造兵数)
 	{
+		using namespace std;
+		const auto posBuilding = refEntity.m_Pos;
+		Position pos = { posBuilding.x + std::rand() % 10, posBuilding.z + 3 };
+		bool CrowdTool可放置(const Position & refPos);
+		if (!CrowdTool可放置(pos))
+		{
+			refGateSession.Say("此处不可放置");
+			if (co_await CoTimer::Wait(1s, refThis.m_TaskCancel造兵.cancel))
+			{
+				co_return{};
+			}
+			continue;
+		}
+
 		//先扣钱
 		const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, 配置.消耗.u32消耗晶体矿, false, refThis.m_TaskCancel造兵.cancel);
 		if (stop)
@@ -63,7 +77,6 @@ CoTaskBool BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGat
 			co_return{};
 		}
 		//耗时
-		using namespace std;
 		if (co_await CoTimer::Wait(1s, refThis.m_TaskCancel造兵.cancel))
 		{
 			co_return{};
@@ -71,10 +84,6 @@ CoTaskBool BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGat
 
 		LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 		CHECK_NOTNULL_CO_RET_0(refGateSession.m_pCurSpace);
-		const auto posBuilding = refEntity.m_Pos;
-		Position pos = { posBuilding.x + std::rand() % 10, posBuilding.z + 3 };
-		bool CrowdToolfindNearest(Position & refPos);
-		CrowdToolfindNearest(pos);
 		auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string&>(
 			pos, *refGateSession.m_pCurSpace, 配置.配置.strPrefabName, 配置.配置.strName);
 		spNewEntity->m_f警戒距离 = 配置.f警戒距离;

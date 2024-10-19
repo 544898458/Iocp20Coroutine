@@ -4,7 +4,7 @@
 #include "../CoRoutine/CoTask.h"
 
 class Entity;
-
+const float fExponent = 2.0f;
 struct Position
 {
 	float x;
@@ -13,6 +13,16 @@ struct Position
 	bool operator==(const Position& refRight)const
 	{
 		return x == refRight.x && z == refRight.z;
+	}
+
+	bool DistanceLessEqual(const Position& refPos, float fDistance)const
+	{
+		return this->DistancePow2(refPos) <= std::pow(fDistance, fExponent);
+	}
+
+	float DistancePow2(const Position& refPos)const
+	{
+		return std::pow(x - refPos.x, fExponent) + std::pow(z - refPos.z, fExponent);
 	}
 };
 template <class _Traits>

@@ -28,6 +28,8 @@ public:
 	uint16_t 活动单位上限() const;
 	uint16_t 活动单位包括制造队列中的() const;
 
+	bool Can放置建筑(const Position& pos);
+
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
 	Space& m_Space单人剧情;

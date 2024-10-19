@@ -23,16 +23,16 @@ Entity::Entity(const Position& pos, Space& space, const std::string& strPrefabNa
 {
 }
 
-const float fExponent = 2.0f;
 bool Entity::DistanceLessEqual(const Entity& refEntity, float fDistance)
 {
-	return this->DistancePow2(refEntity) <= std::pow(fDistance, fExponent);
+	return this->m_Pos.DistanceLessEqual(refEntity.m_Pos, fDistance);
 }
 
 float Entity::DistancePow2(const Entity& refEntity)const
 {
-	return std::pow(this->m_Pos.x - refEntity.m_Pos.x, fExponent) + std::pow(this->m_Pos.z - refEntity.m_Pos.z, fExponent);
+	return this->m_Pos.DistancePow2(refEntity.m_Pos);
 }
+
 void Entity::Hurt(int hp)
 {
 	CHECK_GE(hp, 0);
