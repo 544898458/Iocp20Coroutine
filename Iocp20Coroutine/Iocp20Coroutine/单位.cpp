@@ -3,10 +3,12 @@
 #include <unordered_map>
 namespace 单位
 {
+
 	std::unordered_map<建筑单位类型, 建筑单位配置> g_map建筑单位配置 =
 	{
 		{基地, {{"基地","house_type06"},{1,0},&BuildingComponent::Co造工程车, 2.0f}},
 		{兵厂, {{"兵厂","house_type19"},{2,11},&BuildingComponent::Co造兵, 2.0f} },
+		{民房, {{"民房","house_type21"},{2,11},{}, 2.0f}},
 	};
 
 	std::unordered_map<活动单位类型, 活动单位配置> g_map活动单位配置 =
@@ -17,7 +19,7 @@ namespace 单位
 	std::unordered_map<资源类型, 资源单位配置> g_map资源单位配置 =
 	{
 		{晶体矿,{{"晶体矿"	, "tree_large"	}}},
-		{燃气矿,{{"燃气"	, "house_type03"}}},
+		{燃气矿,{{"燃气矿"	, "house_type03"}}},
 	};
 
 	template<class K, class V>

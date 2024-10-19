@@ -16,6 +16,7 @@
 #include <unordered_map>
 #include "单位.h"
 #include "单人剧情.h"
+#include <sstream>
 /// <summary>
 /// GameSvr通过GateSvr透传给游戏客户端
 /// </summary>
@@ -109,7 +110,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
 	CHECK_NOTNULL_VOID(m_pCurSpace);
-	ForEachSelected([this, targetX, targetZ](Entity& ref) 
+	ForEachSelected([this, targetX, targetZ](Entity& ref)
 		{
 			if (ref.m_spAttack)
 			{
@@ -157,13 +158,14 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 	//	LOG(WARNING) << "m_coRpc前一个协程还没结束";
 	//	return;
 	//}
-	auto iterNew = m_vecCoRpc.insert(m_vecCoRpc.end(), CoAddBuilding(msg.类型));
+	/*auto iterNew = m_vecCoRpc.insert(m_vecCoRpc.end(), CoAddBuilding(msg.类型));
 	if (iterNew == m_vecCoRpc.end())
 	{
 		LOG(ERROR) << "err";
 		return;
 	}
-	iterNew->Run();
+	iterNew->Run();*/
+	CoAddBuilding(msg.类型).RunNew();
 }
 
 CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
@@ -175,12 +177,14 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 	}
 	if (配置.消耗.u32消耗燃气矿 > m_u32燃气矿)
 	{
-		Say("燃气矿不足"+ 配置.消耗.u32消耗燃气矿);
+		std::ostringstream oss;
+		oss << "燃气矿不足" << 配置.消耗.u32消耗燃气矿;
+		Say(oss.str());
 		co_return 0;
 	}
 	m_u32燃气矿 -= 配置.消耗.u32消耗燃气矿;
 	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());//不能存对象，扩容可能导致引用和指针失效
-	auto [stop,responce] = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({.changeMoney = 配置.消耗.u32消耗晶体矿},
+	auto [stop, responce] = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 配置.消耗.u32消耗晶体矿 },
 		[this](const MsgChangeMoney& ref) {SendToWorldSvr<MsgChangeMoney>(ref, m_idPlayerGateSession); }, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	if (stop)
@@ -195,7 +199,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 		Say("晶体矿矿不足" + 配置.消耗.u32消耗晶体矿);
 		co_return 0;
 	}
-		
+
 	//加建筑
 	CHECK_NOTNULL_CO_RET_0(m_pCurSpace);
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(
@@ -267,7 +271,7 @@ extern Space g_Space无限刷怪;
 PlayerGateSession_Game::PlayerGateSession_Game(GameSvrSession& ref, uint64_t idPlayerGateSession) :
 	m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession), m_Space单人剧情(g_Space无限刷怪)
 {
-	
+
 }
 
 void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& obj)
@@ -342,5 +346,21 @@ void PlayerGateSession_Game::Process()
 
 void PlayerGateSession_Game::Send资源()
 {
-	Send<Msg资源>({.燃气矿=m_u32燃气矿});
+	Send<Msg资源>({ .燃气矿 = m_u32燃气矿,.活动单位 = (uint32_t)m_vecSpEntity.size(),.活动单位上限 = 活动单位上限() });
+}
+
+uint16_t PlayerGateSession_Game::活动单位上限() const
+{
+	uint16_t result = 0;
+	for (const auto& refEntity : m_vecSpEntity)
+	{
+		if (!refEntity->m_spBuilding)
+			continue;
+
+		if (民房 != refEntity->m_spBuilding->m_类型)
+			continue;
+
+		++result;
+	}
+	return result;
 }

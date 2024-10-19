@@ -50,6 +50,7 @@ enum 建筑单位类型
 {
 	基地,//指挥中心(Command Center),用来造工程车()
 	兵厂,//兵营Barracks，用来造兵
+	民房,//供给站(Supply Depot)
 };
 MSGPACK_ADD_ENUM(建筑单位类型);
 
@@ -263,5 +264,7 @@ struct Msg资源
 {
 	MsgHead msg{ .id = 资源 };
 	uint32_t 燃气矿;
-	MSGPACK_DEFINE(msg, 燃气矿);
+	uint32_t 活动单位;
+	uint32_t 活动单位上限;
+	MSGPACK_DEFINE(msg, 燃气矿, 活动单位, 活动单位上限);
 };
