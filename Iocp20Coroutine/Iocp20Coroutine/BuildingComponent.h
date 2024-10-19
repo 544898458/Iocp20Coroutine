@@ -18,9 +18,10 @@ public:
 	static CoTaskBool Co造兵(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity);
 	static CoTaskBool Co造工程车(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity);
 	static void AddComponent(Entity& refThis, PlayerGateSession_Game& refSession, const 建筑单位类型 类型, float f半边长);
-private:
-	static CoTask<SpEntity> Co造活动单位(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity, const 活动单位类型 类型);
 	int m_i等待造兵数 = 0;
+private:
+	static CoTaskBool Co造活动单位(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity, const 活动单位类型 类型, std::function<void(Entity&)> fun = {});
+	
 	//CoTask<int> m_coAddMoney;
 	//FunCancel m_cancelAddMoney;
 	CoTaskCancel m_TaskCancel造兵;

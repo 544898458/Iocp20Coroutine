@@ -36,12 +36,13 @@ public:
 	/// <summary>
 	/// 加入Space空间的实体（玩家角色）
 	/// </summary>
-	std::set<SpEntity> m_vecSpEntity;
+	std::set<SpEntity> m_setSpEntity;
 
 	uint32_t m_u32燃气矿 = 0;
 
 private:
 	uint16_t 活动单位上限() const;
+	uint16_t 活动单位包括制造队列中的() const;
 
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);
 	/// <summary>

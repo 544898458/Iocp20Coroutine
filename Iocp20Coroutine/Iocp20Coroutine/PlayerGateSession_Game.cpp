@@ -41,14 +41,14 @@ void PlayerGateSession_Game::Send(const T& ref)
 
 void PlayerGateSession_Game::OnDestroy()
 {
-	for (auto sp : m_vecSpEntity)
+	for (auto sp : m_setSpEntity)
 	{
 		sp->m_refSpace.m_mapEntity.erase((int64_t)sp.get());
 		LOG(INFO) << "m_mapEntity.size=" << sp->m_refSpace.m_mapEntity.size();
 		sp->OnDestroy();
 	}
 
-	m_vecSpEntity.clear();
+	m_setSpEntity.clear();
 
 	for (auto& sp : m_vecFunCancel)
 	{
@@ -61,18 +61,19 @@ void PlayerGateSession_Game::OnDestroy()
 		{
 		});*/
 
-
+	if (m_funCancel单人剧情)
+		m_funCancel单人剧情();
 }
 
 void PlayerGateSession_Game::Erase(SpEntity& spEntity)
 {
-	if (!m_vecSpEntity.contains(spEntity))
+	if (!m_setSpEntity.contains(spEntity))
 	{
 		LOG(WARNING) << "ERR";
 		return;
 	}
 
-	m_vecSpEntity.erase(spEntity);
+	m_setSpEntity.erase(spEntity);
 }
 
 void PlayerGateSession_Game::Say(const std::string& str)
@@ -136,7 +137,7 @@ void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fu
 			continue;
 		}
 		auto& spEntity = itFind->second;
-		if (m_vecSpEntity.end() == std::find_if(m_vecSpEntity.begin(), m_vecSpEntity.end(), [&spEntity](const auto& sp) {return sp == spEntity; }))
+		if (m_setSpEntity.end() == std::find_if(m_setSpEntity.begin(), m_setSpEntity.end(), [&spEntity](const auto& sp) {return sp == spEntity; }))
 		{
 			LOG(ERROR) << id << "不是自己的单位，不能操作";
 			continue;
@@ -209,7 +210,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 	BuildingComponent::AddComponent(*spNewEntity, *this, 类型, 配置.f半边长);
 	DefenceComponent::AddComponent(*spNewEntity);
 	spNewEntity->m_spBuilding->m_fun造活动单位 = 配置.fun造兵;
-	m_vecSpEntity.insert(spNewEntity);//自己控制的单位
+	m_setSpEntity.insert(spNewEntity);//自己控制的单位
 	m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 	spNewEntity->BroadcastEnter();
@@ -346,21 +347,37 @@ void PlayerGateSession_Game::Process()
 
 void PlayerGateSession_Game::Send资源()
 {
-	Send<Msg资源>({ .燃气矿 = m_u32燃气矿,.活动单位 = (uint32_t)m_vecSpEntity.size(),.活动单位上限 = 活动单位上限() });
+	Send<Msg资源>({ .燃气矿 = m_u32燃气矿,.活动单位 = 活动单位包括制造队列中的(),.活动单位上限 = 活动单位上限() });
 }
 
 uint16_t PlayerGateSession_Game::活动单位上限() const
 {
 	uint16_t result = 0;
-	for (const auto& refEntity : m_vecSpEntity)
+	for (const auto& refEntity : m_setSpEntity)
 	{
 		if (!refEntity->m_spBuilding)
 			continue;
 
-		if (民房 != refEntity->m_spBuilding->m_类型)
-			continue;
-
-		++result;
+		switch (refEntity->m_spBuilding->m_类型)
+		{
+		case 民房:result += 5; break;
+		case 基地:result += 2; break;
+		default:break;
+		}
 	}
 	return result;
+}
+
+uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
+{
+	uint16_t 制造队列中的单位 = 0;
+	for (const auto& refEntity : m_setSpEntity)
+	{
+		if (!refEntity->m_spBuilding)
+			continue;
+
+		制造队列中的单位 += refEntity->m_spBuilding->m_i等待造兵数; break;
+	}
+	return 制造队列中的单位 + m_setSpEntity.size();
+
 }

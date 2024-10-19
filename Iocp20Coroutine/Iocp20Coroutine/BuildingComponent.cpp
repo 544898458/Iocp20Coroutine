@@ -41,7 +41,7 @@ void BuildingComponent::造兵(PlayerGateSession_Game& refGateSession, Entity& ref
 	m_TaskCancel造兵.TryRun(m_fun造活动单位(*this, refGateSession, refEntity));
 }
 
-CoTask<SpEntity> BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity, const 活动单位类型 类型)
+CoTaskBool BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity, const 活动单位类型 类型,std::function<void(Entity&)> fun)
 {
 	单位::活动单位配置 配置;
 	if (!单位::Find活动单位配置(类型, 配置))
@@ -75,35 +75,22 @@ CoTask<SpEntity> BuildingComponent::Co造活动单位(BuildingComponent& refThis, Pla
 		spNewEntity->AddComponentPlayer(refGateSession);
 		AttackComponent::AddComponent(*spNewEntity);
 		DefenceComponent::AddComponent(*spNewEntity);
-		refGateSession.m_vecSpEntity.insert(spNewEntity);//自己控制的单位
+		refGateSession.m_setSpEntity.insert(spNewEntity);//自己控制的单位
 		refGateSession.m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
+		if (fun)
+			fun(*spNewEntity);
 
 		spNewEntity->BroadcastEnter();
 		refGateSession.Send资源();
-		co_return spNewEntity;
 	}
 }
 
 CoTaskBool BuildingComponent::Co造兵(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
 {
-	auto spEntity = co_await Co造活动单位(refThis, refGateSession, refEntity, 兵);
-	if (!spEntity)
-	{
-		assert(false);
-		co_return false;
-	}
-	co_return false;
+	return Co造活动单位(refThis, refGateSession, refEntity, 兵);
 }
 
 CoTaskBool BuildingComponent::Co造工程车(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
 {
-	auto spNew = co_await Co造活动单位(refThis, refGateSession, refEntity, 工程车);
-	if (!spNew)
-	{
-		assert(false);
-		co_return false;
-	}
-
-	采集Component::AddComponent(*spNew);
-	co_return false;
+	return Co造活动单位(refThis, refGateSession, refEntity, 工程车, [](Entity & refEntity) {采集Component::AddComponent(refEntity);});
 }
