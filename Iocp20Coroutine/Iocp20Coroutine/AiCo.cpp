@@ -227,7 +227,7 @@ namespace AiCo
 		LOG(INFO) << "Í£Ö¹Ë¢¹ÖÐ­³Ì";
 		co_return 0;
 	}
-	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, uint32_t changeMoney, bool addMoney, FunCancel& funCancel)
+	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, int32_t changeMoney, bool addMoney, FunCancel& funCancel)
 	{
 		if (changeMoney < 0)
 		{

@@ -124,7 +124,8 @@ MSGPACK_ADD_ENUM(MsgLoginResponce::Error);
 struct MsgAddRole
 {
 	MsgHead msg;
-	MSGPACK_DEFINE(msg);
+	活动单位类型 类型;
+	MSGPACK_DEFINE(msg, 类型);
 };
 
 struct MsgAddBuilding
@@ -138,7 +139,7 @@ struct MsgChangeMoney
 {
 	MsgHead msg{ .id = ChangeMoney };
 	bool addMoney;
-	uint32_t changeMoney;
+	int32_t changeMoney;
 	MSGPACK_DEFINE(msg, addMoney, changeMoney);
 };
 

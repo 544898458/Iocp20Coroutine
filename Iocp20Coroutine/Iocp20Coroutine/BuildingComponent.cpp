@@ -34,16 +34,16 @@ void BuildingComponent::TryCancel(Entity& refEntity)
 	m_TaskCancel造兵.TryCancel();
 }
 
-void BuildingComponent::造兵(PlayerGateSession_Game& refGateSession, Entity& refEntity)
+void BuildingComponent::造兵(PlayerGateSession_Game& refGateSession, Entity& refEntity, const 活动单位类型 类型)
 {
-	CHECK_VOID(m_fun造活动单位);
+	//CHECK_VOID(m_fun造活动单位);
 	if (refGateSession.活动单位包括制造队列中的() >= refGateSession.活动单位上限())
 	{
 		refGateSession.Say("民房不足"); //Additional supply depots required.需要更多的食堂
 		return;
 	}
 	++m_i等待造兵数;
-	m_TaskCancel造兵.TryRun(m_fun造活动单位(*this, refGateSession, refEntity));
+	m_TaskCancel造兵.TryRun(Co造活动单位(*this, refGateSession, refEntity, 类型));
 }
 
 CoTaskBool BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity, const 活动单位类型 类型, std::function<void(Entity&)> fun)
@@ -70,7 +70,7 @@ CoTaskBool BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGat
 		}
 
 		//先扣钱
-		const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, 配置.消耗.u32消耗晶体矿, false, refThis.m_TaskCancel造兵.cancel);
+		const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, 配置.消耗.u16消耗晶体矿, false, refThis.m_TaskCancel造兵.cancel);
 		if (stop)
 		{
 			LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney << ",rpcSn=" << responce.msg.rpcSnId;
@@ -100,14 +100,4 @@ CoTaskBool BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGat
 		spNewEntity->BroadcastEnter();
 		refGateSession.Send资源();
 	}
-}
-
-CoTaskBool BuildingComponent::Co造兵(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
-{
-	return Co造活动单位(refThis, refGateSession, refEntity, 兵);
-}
-
-CoTaskBool BuildingComponent::Co造工程车(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
-{
-	return Co造活动单位(refThis, refGateSession, refEntity, 工程车, [](Entity& refEntity) {采集Component::AddComponent(refEntity); });
 }
