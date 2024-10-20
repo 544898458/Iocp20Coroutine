@@ -27,6 +27,16 @@ BuildingComponent::BuildingComponent(PlayerGateSession_Game& refSession, const ½
 	//}
 	//m_coAddMoney = AiCo::AddMoney(refSession, m_cancelAddMoney);
 	//m_coAddMoney.Run();
+	switch (ÀàĞÍ)
+	{
+	case »ùµØ:m_set¿ÉÔìÀàĞÍ.insert(¹¤³Ì³µ); break;
+	case ±ø³§:
+		m_set¿ÉÔìÀàĞÍ.insert(±ø);
+		m_set¿ÉÔìÀàĞÍ.insert(½üÕ½±ø);
+		break;
+	default:
+		break;
+	}
 }
 
 void BuildingComponent::TryCancel(Entity& refEntity)
@@ -42,19 +52,26 @@ void BuildingComponent::Ôì±ø(PlayerGateSession_Game& refGateSession, Entity& ref
 		refGateSession.Say("Ãñ·¿²»×ã"); //Additional supply depots required.ĞèÒª¸ü¶àµÄÊ³ÌÃ
 		return;
 	}
-	++m_iµÈ´ıÔì±øÊı;
-	m_TaskCancelÔì±ø.TryRun(CoÔì»î¶¯µ¥Î»(*this, refGateSession, refEntity, ÀàĞÍ));
+	if(m_set¿ÉÔìÀàĞÍ.end()==m_set¿ÉÔìÀàĞÍ.find(ÀàĞÍ))
+	{
+		refGateSession.Say("Ôì²»ÁËÕâÖÖµ¥Î»");
+		return;
+	}
+
+	m_listµÈ´ıÔì.emplace_back(ÀàĞÍ);//++m_iµÈ´ıÔì±øÊı;
+	m_TaskCancelÔì±ø.TryRun(CoÔì»î¶¯µ¥Î»(*this, refGateSession, refEntity));
 }
 
-CoTaskBool BuildingComponent::CoÔì»î¶¯µ¥Î»(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity, const »î¶¯µ¥Î»ÀàĞÍ ÀàĞÍ, std::function<void(Entity&)> fun)
+CoTaskBool BuildingComponent::CoÔì»î¶¯µ¥Î»(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
 {
-	µ¥Î»::»î¶¯µ¥Î»ÅäÖÃ ÅäÖÃ;
-	if (!µ¥Î»::Find»î¶¯µ¥Î»ÅäÖÃ(ÀàĞÍ, ÅäÖÃ))
+	while (!refThis.m_listµÈ´ıÔì.empty())
 	{
-		co_return{};
-	}
-	while (0 < refThis.m_iµÈ´ıÔì±øÊı)
-	{
+		const auto ÀàĞÍ(refThis.m_listµÈ´ıÔì.front());
+		µ¥Î»::»î¶¯µ¥Î»ÅäÖÃ ÅäÖÃ;
+		if (!µ¥Î»::Find»î¶¯µ¥Î»ÅäÖÃ(ÀàĞÍ, ÅäÖÃ))
+		{
+			co_return{};
+		}
 		using namespace std;
 		const auto posBuilding = refEntity.m_Pos;
 		Position pos = { posBuilding.x + std::rand() % 10, posBuilding.z + 3 };
@@ -92,10 +109,21 @@ CoTaskBool BuildingComponent::CoÔì»î¶¯µ¥Î»(BuildingComponent& refThis, PlayerGat
 		DefenceComponent::AddComponent(*spNewEntity);
 		refGateSession.m_setSpEntity.insert(spNewEntity);//×Ô¼º¿ØÖÆµÄµ¥Î»
 		refGateSession.m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//È«µØÍ¼µ¥Î»
-		if (fun)
-			fun(*spNewEntity);
+		
+		switch (ÀàĞÍ)
+		{
+		case ¹¤³Ì³µ:²É¼¯Component::AddComponent(*spNewEntity);break;
+		default:break;
+		}
 
-		--refThis.m_iµÈ´ıÔì±øÊı;
+		if (refThis.m_listµÈ´ıÔì.empty())
+		{
+			LOG(ERROR) << "err";
+			assert(false);
+			co_return{};
+		}
+
+		refThis.m_listµÈ´ıÔì.pop_front();//--refThis.m_iµÈ´ıÔì±øÊı;
 
 		spNewEntity->BroadcastEnter();
 		refGateSession.Send×ÊÔ´();
