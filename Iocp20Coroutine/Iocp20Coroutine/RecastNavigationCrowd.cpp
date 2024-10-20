@@ -111,7 +111,7 @@ void CrowdToolSetMoveTarget(const float* p, const int idx)
 	GetCrowdTool().setMoveTarget(p, false);
 }
 
-bool CrowdTool可放置(const Position& refPos)
+bool CrowdTool可站立(const Position& refPos)
 {
 	auto& refCrowTool = GetCrowdTool();
 	dtNavMeshQuery* navquery = refCrowTool.m_sample->getNavMeshQuery();
@@ -128,6 +128,15 @@ bool CrowdTool可放置(const Position& refPos)
 	Position posNew = { tgt[0],tgt[2] };
 	return refPos.DistanceLessEqual(posNew, 0.5f);
 		//return true;
+}
+
+bool CrowdTool判断单位重叠(const Position& refPosOld, const Position& refPosNew, const float f半边长)
+{
+	const float arrMinNew[] = { refPosNew.x - f半边长,0,refPosNew.z - f半边长 };
+	const float arrMaxNew[] = { refPosNew.x + f半边长,0,refPosNew.z + f半边长 };
+	const float arrMinOld[] = { refPosOld.x - f半边长,0,refPosOld.z - f半边长 };
+	const float arrMaxOld[] = { refPosOld.x + f半边长,0,refPosOld.z + f半边长 };
+	return dtOverlapBounds(arrMinOld, arrMaxOld, arrMinNew, arrMaxNew);
 }
 
 RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& posTarget) :m_refEntity(refEntity)
@@ -157,3 +166,4 @@ void RecastNavigationCrowd::SetMoveTarget(const Position& posTarget)
 	}
 	CrowdToolSetMoveTarget(arrF, m_refEntity.m_spAttack->m_idxCrowdAgent);
 }
+

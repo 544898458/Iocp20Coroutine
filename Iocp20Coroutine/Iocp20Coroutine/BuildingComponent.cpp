@@ -58,8 +58,8 @@ CoTaskBool BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGat
 		using namespace std;
 		const auto posBuilding = refEntity.m_Pos;
 		Position pos = { posBuilding.x + std::rand() % 10, posBuilding.z + 3 };
-		bool CrowdTool可放置(const Position & refPos);
-		if (!CrowdTool可放置(pos))
+		bool CrowdTool可站立(const Position & refPos);
+		if (!CrowdTool可站立(pos))
 		{
 			refGateSession.Say("此处不可放置");
 			if (co_await CoTimer::Wait(1s, refThis.m_TaskCancel造兵.cancel))

@@ -171,7 +171,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 
 CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 {
-	Position pos = { 35,float(std::rand() % 20) };
+	Position pos = { 35,float(std::rand() % 60) - 30 };
 	if (!Can放置建筑(pos))
 	{
 		Say("此处不可放置");
@@ -398,18 +398,25 @@ uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
 
 bool PlayerGateSession_Game::Can放置建筑(const Position& pos)
 {
-	bool CrowdTool可放置(const Position & refPos);
+	bool CrowdTool可站立(const Position & refPos);
 
-	if (!CrowdTool可放置(pos))return false;
+	if (!CrowdTool可站立(pos))return false;
 
-	float f半边长 = 2;
+	float f半边长 = 3;
 
-	if (!CrowdTool可放置({ pos.x - f半边长 ,pos.z + f半边长 }))return false;
-	if (!CrowdTool可放置({ pos.x - f半边长 ,pos.z - f半边长 }))return false;
-	if (!CrowdTool可放置({ pos.x + f半边长 ,pos.z + f半边长 }))return false;
-	if (!CrowdTool可放置({ pos.x + f半边长 ,pos.z - f半边长 }))return false;
+	if (!CrowdTool可站立({ pos.x - f半边长 ,pos.z + f半边长 }))return false;
+	if (!CrowdTool可站立({ pos.x - f半边长 ,pos.z - f半边长 }))return false;
+	if (!CrowdTool可站立({ pos.x + f半边长 ,pos.z + f半边长 }))return false;
+	if (!CrowdTool可站立({ pos.x + f半边长 ,pos.z - f半边长 }))return false;
 
 	//遍历全地图所有建筑判断重叠
-
+	CHECK_NOTNULL_RET_FALSE(m_pCurSpace);
+	for (const auto& kv : m_pCurSpace->m_mapEntity)
+	{
+		const auto& refPosOld = kv.second->m_Pos;
+		bool CrowdTool判断单位重叠(const Position & refPosOld, const Position & refPosNew, const float f半边长);
+		if (CrowdTool判断单位重叠(pos, refPosOld, f半边长))
+			return false;
+	}
 	return true;
 }
