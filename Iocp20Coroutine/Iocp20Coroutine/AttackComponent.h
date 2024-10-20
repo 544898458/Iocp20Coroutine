@@ -6,14 +6,11 @@ class Entity;
 class AttackComponent final
 {
 public:
-	AttackComponent(Entity& refEntity) :m_refEntity(refEntity) 
-	{
-
-	}
+	AttackComponent(Entity& refEntity, const 活动单位类型 类型);
 	void WalkToPos手动控制(const Position& posTarget);
 	void TryCancel();
 	void Update();
-	static void AddComponent(Entity& refEntity);
+	static void AddComponent(Entity& refEntity, const 活动单位类型 类型);
 
 	CoTaskBool m_coWalk;
 	CoTaskBool m_coWalk手动控制;
@@ -22,5 +19,6 @@ public:
 	static const int INVALID_AGENT_IDX = -1;//0是合法值
 	int m_idxCrowdAgent = INVALID_AGENT_IDX;
 	Entity& m_refEntity;
+	const 活动单位类型 m_类型;
 };
 

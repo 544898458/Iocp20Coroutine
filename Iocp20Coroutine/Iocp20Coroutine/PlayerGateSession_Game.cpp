@@ -120,6 +120,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 
 				ref.m_spAttack->TryCancel();
 				ref.m_spAttack->WalkToPos手动控制(Position(targetX, targetZ));
+				Say("走走走!");//Go! Go! Go!
 			}
 		});
 }
@@ -127,7 +128,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fun)
 {
 	CHECK_NOTNULL_VOID(m_pCurSpace);
-	for (const auto id : m_vecSelectedEntity)
+	for (const auto id : m_listSelectedEntity)
 	{
 		auto itFind = m_pCurSpace->m_mapEntity.find(id);
 		if (itFind == m_pCurSpace->m_mapEntity.end())
@@ -174,7 +175,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 	Position pos = { 35,float(std::rand() % 60) - 30 };
 	if (!Can放置建筑(pos))
 	{
-		Say("此处不可放置");
+		Say("此处不可放置");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
 		co_return 0;
 	}
 
@@ -247,9 +248,24 @@ void PlayerGateSession_Game::OnRecv(const MsgSay& msg)
 
 void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
 {
+	CHECK_NOTNULL_VOID(m_pCurSpace);
 	LOG(INFO) << "收到选择:" << msg.ids.size();
-	m_vecSelectedEntity.clear();
-	std::transform(msg.ids.begin(), msg.ids.end(), std::back_inserter(m_vecSelectedEntity), [](const double& id) {return uint64_t(id); });
+	m_listSelectedEntity.clear();
+	std::transform(msg.ids.begin(), msg.ids.end(), std::back_inserter(m_listSelectedEntity), [](const double& id) {return uint64_t(id); });
+	for (const auto id : m_listSelectedEntity)
+	{
+		auto wpEntity = m_pCurSpace->GetEntity(id);
+		if (wpEntity.expired())
+			continue;
+		auto spEntity = wpEntity.lock();
+		switch (spEntity->m_spAttack->m_类型)
+		{
+		case 兵:Say("待命中!"); break;//Standing by. 待命中
+		case 近战兵:Say("准备行动!"); break;//Checked up and good to go. 检查完毕，准备动身
+		case 工程车:Say("老大!"); break;//Commander.
+		default:break;
+		}
+	}
 }
 
 template void PlayerGateSession_Game::Send(const MsgAddRoleRet&);

@@ -105,14 +105,24 @@ CoTaskBool BuildingComponent::Co造活动单位(BuildingComponent& refThis, PlayerGat
 			pos, *refGateSession.m_pCurSpace, 配置.配置.strPrefabName, 配置.配置.strName);
 		spNewEntity->m_f警戒距离 = 配置.f警戒距离;
 		spNewEntity->AddComponentPlayer(refGateSession);
-		AttackComponent::AddComponent(*spNewEntity);
+		AttackComponent::AddComponent(*spNewEntity,类型);
 		DefenceComponent::AddComponent(*spNewEntity);
 		refGateSession.m_setSpEntity.insert(spNewEntity);//自己控制的单位
 		refGateSession.m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 		
 		switch (类型)
 		{
-		case 工程车:采集Component::AddComponent(*spNewEntity);break;
+		case 工程车:
+			采集Component::AddComponent(*spNewEntity);
+			refGateSession.Say("工程车可以开工了!");//SCV, good to go, sir. SCV可以开工了
+			break;
+		case 兵:
+			refGateSession.Say("听说有人要买我的狗头？");//You want a piece of me, boy?想要我的一部分吗，小子？
+			break;
+		case 近战兵:
+			refGateSession.Say("听说有人要我的斧头？");//You want a piece of me, boy?想要我的一部分吗，小子？
+			break;
+
 		default:break;
 		}
 

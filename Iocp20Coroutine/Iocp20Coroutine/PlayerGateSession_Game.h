@@ -68,7 +68,7 @@ private:
 
 	GameSvrSession& m_refSession;
 
-	std::vector<uint64_t> m_vecSelectedEntity;
+	std::list<uint64_t> m_listSelectedEntity;
 	std::string m_strNickName;
 	uint32_t m_snSend = 0;
 	FunCancel m_funCancelµ¥ÈË¾çÇé;

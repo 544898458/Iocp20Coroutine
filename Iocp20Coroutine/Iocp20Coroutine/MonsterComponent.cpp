@@ -25,7 +25,7 @@ MonsterComponent::MonsterComponent(Entity& refThis)
 void MonsterComponent::AddMonster(Space& refSpace)
 {
 	SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ -50.0 }, refSpace, "altman-red", "π÷");
-	AttackComponent::AddComponent(*spEntityMonster);
+	AttackComponent::AddComponent(*spEntityMonster,±¯);
 	DefenceComponent::AddComponent(*spEntityMonster);
 	spEntityMonster->AddComponentMonster();
 	spEntityMonster->m_fæØΩ‰æ‡¿Î = 20;
