@@ -63,10 +63,15 @@ namespace Iocp {
 		//this->sendOverlapped.coTask.Run2(this->sendOverlapped.callSend);
 		{
 			//std::lock_guard lock(this->sendOverlapped.coTask.m_mutex);
-			if (Overlapped::SendState_Sending != this->sendOverlapped.atomicSendState.load())
-			{
-				PostQueuedCompletionStatus(m_hIocp, 0, (ULONG_PTR)this, &notifySendOverlapped.overlapped);
-			}
+			PostNotifySend();
+		}
+	}
+	template<class T_Session>
+	void SessionSocketCompletionKey<T_Session>::PostNotifySend()
+	{
+		if (Overlapped::SendState_Sending != this->sendOverlapped.atomicSendState.load())
+		{
+			PostQueuedCompletionStatus(m_hIocp, 0, (ULONG_PTR)this, &notifySendOverlapped.overlapped);
 		}
 	}
 	template<class T_Session>
@@ -112,6 +117,7 @@ namespace Iocp {
 			if (!sendFinish)
 			{
 				LOG(INFO) << "PostRecv协程结束，但是sendOverlapped还没结束,GetCurrentThreadId=" << GetCurrentThreadId();
+				PostNotifySend();
 				co_return Overlapped::Error;
 			}
 		}
@@ -125,6 +131,11 @@ namespace Iocp {
 	{
 		while (true)
 		{
+			if (0 == Socket())
+			{
+				LOG(INFO) << "断线了,退出Send协程";
+				break;
+			}
 			bool needYield(false), callSend(false);
 			std::tie(needYield, callSend) = WSASend(overlapped);
 			if (!needYield)

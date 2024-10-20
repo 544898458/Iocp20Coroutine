@@ -86,8 +86,13 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 {
 	ForEachSelected([this, &msg](Entity& ref)
 		{
-			if (ref.m_sp造活动单位)
-				ref.m_sp造活动单位->造兵(*this, ref, msg.类型);
+			if (!ref.m_sp造活动单位)
+			{
+				Say("造不了");
+				return;
+			}
+
+			ref.m_sp造活动单位->造兵(*this, ref, msg.类型);
 		});
 }
 
@@ -173,16 +178,15 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 
 CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 {
-	Position pos = { 35,float(std::rand() % 60) - 30 };
-	if (!Can放置建筑(pos))
-	{
-		Say("此处不可放置");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
-		co_return 0;
-	}
-
 	单位::建筑单位配置 配置;
 	if (!单位::Find建筑单位配置(类型, 配置))
 	{
+		co_return 0;
+	}
+	Position pos = { 35,float(std::rand() % 60) - 30 };
+	if (!可放置建筑(pos, 配置.f半边长))
+	{
+		Say("此处不可放置");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
 		co_return 0;
 	}
 	if (配置.消耗.u16消耗燃气矿 > m_u32燃气矿)
@@ -268,12 +272,15 @@ void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
 			continue;
 
 		auto spEntity = wpEntity.lock();
-		switch (spEntity->m_spAttack->m_类型)
+		if (spEntity->m_spAttack)
 		{
-		case 兵:Say("待命中!"); break;//Standing by. 待命中
-		case 近战兵:Say("准备行动!"); break;//Checked up and good to go. 检查完毕，准备动身
-		case 工程车:Say("老大!"); break;//Commander.
-		default:break;
+			switch (spEntity->m_spAttack->m_类型)
+			{
+			case 兵:Say("待命中!"); break;//Standing by. 待命中
+			case 近战兵:Say("准备行动!"); break;//Checked up and good to go. 检查完毕，准备动身
+			case 工程车:Say("老大!"); break;//Commander.
+			default:break;
+			}
 		}
 	}
 }
@@ -422,13 +429,11 @@ uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
 
 }
 
-bool PlayerGateSession_Game::Can放置建筑(const Position& pos)
+bool PlayerGateSession_Game::可放置建筑(const Position& pos, float f半边长)
 {
 	bool CrowdTool可站立(const Position & refPos);
 
 	if (!CrowdTool可站立(pos))return false;
-
-	float f半边长 = 3;
 
 	if (!CrowdTool可站立({ pos.x - f半边长 ,pos.z + f半边长 }))return false;
 	if (!CrowdTool可站立({ pos.x - f半边长 ,pos.z - f半边长 }))return false;

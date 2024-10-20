@@ -59,7 +59,7 @@ public:
 private:
 	static uint32_t g_rpcSnId;
 	static std::map<uint32_t, std::tuple<CoAwaiterRet, FunWant >> g_mapRpc;
-	static std::map<uint32_t, FunCancel> g_mapRpcCancel;
+	//static std::map<uint32_t, FunCancel&> g_mapRpcCancel;
 };
 
 template<class T_Responce>	uint32_t CoEvent<T_Responce>::g_rpcSnId = 0;

@@ -31,6 +31,7 @@ namespace Iocp
 		virtual ~SessionSocketCompletionKey();
 		void StartCoRoutine(HANDLE hIocp);
 		void Send(const void* buf, int len);
+		void PostNotifySend();
 		bool Finished();
 		T_Session Session;
 		uint32_t m_snSend = 0;
