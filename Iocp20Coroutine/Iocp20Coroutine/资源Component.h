@@ -1,6 +1,7 @@
 #pragma once
 class Space;
 enum 资源类型;
+struct Position;
 class 资源Component
 {
 public:
