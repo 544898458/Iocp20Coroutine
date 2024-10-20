@@ -270,6 +270,9 @@
     <ClCompile Include="造活动单位Component.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="地堡Component.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -447,6 +450,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="造活动单位Component.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="地堡Component.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

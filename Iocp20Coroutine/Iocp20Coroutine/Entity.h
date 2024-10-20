@@ -13,6 +13,7 @@ class AttackComponent;
 class DefenceComponent;
 class 采集Component;
 class 资源Component;
+class 地堡Component; 
 class 临时阻挡Component;
 class 造活动单位Component;
 class PlayerGateSession_Game;
@@ -30,6 +31,7 @@ public:
 	bool DistanceLessEqual(const Entity& refEntity, float fDistance);
 	float DistancePow2(const Entity& refEntity)const;
 	void OnDestroy();
+	void BroadcastLeave();
 	const std::string& NickName();
 	void BroadcastEnter();
 	template<class T> void Broadcast(const T& msg);
@@ -62,6 +64,7 @@ public:
 	std::shared_ptr<BuildingComponent> m_spBuilding;
 	std::shared_ptr<采集Component> m_sp采集;
 	std::shared_ptr<资源Component> m_sp资源;
+	std::shared_ptr<地堡Component> m_sp地堡;
 	std::shared_ptr<临时阻挡Component> m_sp临时阻挡;
 	std::shared_ptr<造活动单位Component> m_sp造活动单位;
 

@@ -18,6 +18,7 @@
 #include "单人剧情.h"
 #include <sstream>
 #include "造活动单位Component.h"
+#include "地堡Component.h"
 /// <summary>
 /// GameSvr通过GateSvr透传给游戏客户端
 /// </summary>
@@ -100,15 +101,48 @@ void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
 {
 	ForEachSelected([this, &msg](Entity& ref)
 		{
-			if (!ref.m_sp采集)
-				return;
-
 			CHECK_NOTNULL_VOID(m_pCurSpace);
 			auto wpEntity = m_pCurSpace->GetEntity((int64_t)msg.id目标资源);
-			if (!wpEntity.expired())
-				ref.m_sp采集->采集(*this, ref, wpEntity);
+			CHECK_RET_VOID(!wpEntity.expired());
+
+			if (!ref.m_sp采集)
+			{
+				Say("此单位无法采集资源");
+				return;
+			}
+
+			ref.m_sp采集->采集(*this, ref, wpEntity);
 		});
 }
+void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
+{
+	std::list<std::function<void()>> listFun;
+	ForEachSelected([this, &msg, &listFun](Entity& ref)
+		{
+			CHECK_NOTNULL_VOID(m_pCurSpace);
+			auto wpTarget = m_pCurSpace->GetEntity((int64_t)msg.id目标地堡);
+			CHECK_RET_VOID(!wpTarget.expired());
+			if (!ref.m_spAttack)
+			{
+				Say("此单位不可进入地堡");
+				return;
+			}
+			auto spTarget = wpTarget.lock();
+			if (!spTarget->m_sp地堡)
+			{
+				Say("目标不是地堡");
+				return;
+			}
+
+			listFun.emplace_back([&ref, &spTarget, this]() { spTarget->m_sp地堡->进(*m_pCurSpace, ref.Id); });
+		});
+
+	for (auto& fun : listFun)
+	{
+		fun();
+	}
+}
+
 
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
@@ -227,6 +261,9 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 	case 兵厂:
 		造活动单位Component::AddComponet(*spNewEntity, *this, 类型);
 		break;
+	case 地堡:
+		地堡Component::AddComponet(*spNewEntity, *this);
+		break;
 	case 民房:break;
 	}
 	DefenceComponent::AddComponent(*spNewEntity);
@@ -325,6 +362,7 @@ void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& o
 	case MsgId::AddRole:RecvMsg<MsgAddRole>(obj); break;
 	case MsgId::AddBuilding:RecvMsg<MsgAddBuilding>(obj); break;
 	case MsgId::采集:RecvMsg<Msg采集>(obj); break;
+	case MsgId::进地堡:RecvMsg<Msg进地堡>(obj); break;
 	case MsgId::Gate转发:
 		LOG(ERROR) << "不能再转发";
 		assert(false);

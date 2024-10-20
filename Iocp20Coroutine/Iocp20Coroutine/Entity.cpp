@@ -74,7 +74,7 @@ bool Entity::IsEnemy(const Entity& refEntity)
 void Entity::OnDestroy()
 {
 	LOG(INFO) << "µ÷ÓÃEntity::OnDestroy";
-	Broadcast(MsgDelRoleRet((uint64_t)this));
+	BroadcastLeave();
 
 	if (m_spAttack)
 		m_spAttack->TryCancel();
@@ -87,6 +87,11 @@ void Entity::OnDestroy()
 
 	if (m_cancelDelete)
 		m_cancelDelete();
+}
+
+void Entity::BroadcastLeave()
+{
+	Broadcast(MsgDelRoleRet(Id));
 }
 
 const std::string& Entity::NickName()

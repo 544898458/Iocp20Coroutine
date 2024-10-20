@@ -224,6 +224,7 @@
     <ClCompile Include="临时阻挡Component.cpp" />
     <ClCompile Include="单人剧情.cpp" />
     <ClCompile Include="单位.cpp" />
+    <ClCompile Include="地堡Component.cpp" />
     <ClCompile Include="资源Component.cpp" />
     <ClCompile Include="造活动单位Component.cpp" />
     <ClCompile Include="采集Component.cpp" />
@@ -336,6 +337,7 @@
     <ClInclude Include="临时阻挡Component.h" />
     <ClInclude Include="单人剧情.h" />
     <ClInclude Include="单位.h" />
+    <ClInclude Include="地堡Component.h" />
     <ClInclude Include="资源Component.h" />
     <ClInclude Include="造活动单位Component.h" />
     <ClInclude Include="采集Component.h" />

@@ -57,6 +57,7 @@ private:
 	void OnRecv(const MsgAddRole& msg);
 	void OnRecv(const MsgAddBuilding& msg);
 	void OnRecv(const Msg采集& msg);
+	void OnRecv(const Msg进地堡& msg);
 
 	void ForEachSelected(std::function<void(Entity& ref)> fun);
 	//CoTask<int> CoAddRole();

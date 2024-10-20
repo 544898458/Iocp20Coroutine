@@ -53,6 +53,7 @@ enum MsgId
 	GateDeleteSessionResponce,
 	采集,
 	资源,
+	进地堡,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -273,6 +274,12 @@ struct Msg采集
 	MSGPACK_DEFINE(msg, id目标资源);
 };
 
+struct Msg进地堡
+{
+	MsgHead msg{ .id = 进地堡 };
+	double id目标地堡;//TypeScript只有FLOAT64,没有POSITIVE_INTEGER和NEGATIVE_INTEGER
+	MSGPACK_DEFINE(msg, id目标地堡);
+};
 struct Msg资源
 {
 	MsgHead msg{ .id = 资源 };

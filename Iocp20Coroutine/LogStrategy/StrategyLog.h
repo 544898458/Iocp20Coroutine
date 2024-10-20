@@ -28,6 +28,15 @@ class StrategyLog
 		return false;\
 	}\
 }
+
+#define CHECK_RET_VOID( EXP ) \
+{\
+	if (!(EXP)) \
+	{\
+		LOG(ERROR)<< #EXP ;\
+		return ;\
+	}\
+}
 #define CHECK_NOTNULL_RET_FALSE( PTR ) \
 {\
 	if (nullptr == (PTR)) \
