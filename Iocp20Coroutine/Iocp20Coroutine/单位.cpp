@@ -14,7 +14,8 @@ namespace 单位
 	std::unordered_map<活动单位类型, 活动单位配置> g_map活动单位配置 =
 	{
 		{工程车,{{"工程车"	, "altman-yellow"	},{ 3,0}, 8	} },
-		{兵,	{{"兵"		, "altman-blue"		},{ 5,6}, 15	} },
+		{兵,	{{"兵"		, "altman-blue"		},{ 5,6}, 15} },
+		{近战兵,{{"近战兵"	, "axe-yellow"		},{ 8,8}, 18} },
 	};
 	std::unordered_map<资源类型, 资源单位配置> g_map资源单位配置 =
 	{

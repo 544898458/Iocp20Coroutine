@@ -186,7 +186,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 	if (配置.消耗.u32消耗燃气矿 > m_u32燃气矿)
 	{
 		std::ostringstream oss;
-		oss << "燃气矿不足" << 配置.消耗.u32消耗燃气矿;
+		oss << "燃气矿不足" << 配置.消耗.u32消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
 		Say(oss.str());
 		co_return 0;
 	}

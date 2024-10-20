@@ -9,7 +9,7 @@ enum 建筑单位类型;
 class BuildingComponent
 {
 public:
-	BuildingComponent(PlayerGateSession_Game& refSession, const 建筑单位类型 &类型);
+	BuildingComponent(PlayerGateSession_Game& refSession, const 建筑单位类型 &类型, Entity &refEntity);
 	void TryCancel(Entity& refEntity);
 	void 造兵(PlayerGateSession_Game&, Entity& refEntity);
 	typedef CoTaskBool(*Fun造兵)(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity);
@@ -24,6 +24,7 @@ private:
 	
 	//CoTask<int> m_coAddMoney;
 	//FunCancel m_cancelAddMoney;
+	Entity& m_refEntity;
 	CoTaskCancel m_TaskCancel造兵;
 };
 
