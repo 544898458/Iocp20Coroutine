@@ -59,8 +59,9 @@ MSGPACK_ADD_ENUM(MsgId);
 enum 建筑单位类型
 {
 	基地,//指挥中心(Command Center),用来造工程车()
-	兵厂,//兵营Barracks，用来造兵
+	兵厂,//兵营(Barracks)，用来造兵
 	民房,//供给站(Supply Depot)
+	地堡,//掩体; 地堡(Bunker),可以进兵
 };
 MSGPACK_ADD_ENUM(建筑单位类型);
 

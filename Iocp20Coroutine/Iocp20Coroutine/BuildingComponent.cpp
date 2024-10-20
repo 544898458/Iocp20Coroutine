@@ -1,15 +1,8 @@
 #include "pch.h"
 #include "BuildingComponent.h"
 #include "Entity.h"
-#include "../CoRoutine/CoRpc.h"
-#include "../CoRoutine/CoTimer.h"
-#include "AiCo.h"
 #include "PlayerComponent.h"
 #include "PlayerGateSession_Game.h"
-#include "µ¥Î».h"
-#include "AttackComponent.h"
-#include "DefenceComponent.h"
-#include "²É¼¯Component.h"
 #include "ÁÙÊ±×èµ²Component.h"
 
 void BuildingComponent::AddComponent(Entity& refThis, PlayerGateSession_Game& refSession, const ½¨Öşµ¥Î»ÀàĞÍ ÀàĞÍ, float f°ë±ß³¤)
@@ -27,115 +20,5 @@ BuildingComponent::BuildingComponent(PlayerGateSession_Game& refSession, const ½
 	//}
 	//m_coAddMoney = AiCo::AddMoney(refSession, m_cancelAddMoney);
 	//m_coAddMoney.Run();
-	switch (ÀàĞÍ)
-	{
-	case »ùµØ:m_set¿ÉÔìÀàĞÍ.insert(¹¤³Ì³µ); break;
-	case ±ø³§:
-		m_set¿ÉÔìÀàĞÍ.insert(±ø);
-		m_set¿ÉÔìÀàĞÍ.insert(½üÕ½±ø);
-		break;
-	default:
-		break;
-	}
-}
-
-void BuildingComponent::TryCancel(Entity& refEntity)
-{
-	m_TaskCancelÔì±ø.TryCancel();
-}
-
-void BuildingComponent::Ôì±ø(PlayerGateSession_Game& refGateSession, Entity& refEntity, const »î¶¯µ¥Î»ÀàĞÍ ÀàĞÍ)
-{
-	//CHECK_VOID(m_funÔì»î¶¯µ¥Î»);
-	if (refGateSession.»î¶¯µ¥Î»°üÀ¨ÖÆÔì¶ÓÁĞÖĞµÄ() >= refGateSession.»î¶¯µ¥Î»ÉÏÏŞ())
-	{
-		refGateSession.Say("Ãñ·¿²»×ã"); //Additional supply depots required.ĞèÒª¸ü¶àµÄÊ³ÌÃ
-		return;
-	}
-	if(m_set¿ÉÔìÀàĞÍ.end()==m_set¿ÉÔìÀàĞÍ.find(ÀàĞÍ))
-	{
-		refGateSession.Say("Ôì²»ÁËÕâÖÖµ¥Î»");
-		return;
-	}
-
-	m_listµÈ´ıÔì.emplace_back(ÀàĞÍ);//++m_iµÈ´ıÔì±øÊı;
-	m_TaskCancelÔì±ø.TryRun(CoÔì»î¶¯µ¥Î»(*this, refGateSession, refEntity));
-}
-
-CoTaskBool BuildingComponent::CoÔì»î¶¯µ¥Î»(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity)
-{
-	while (!refThis.m_listµÈ´ıÔì.empty())
-	{
-		const auto ÀàĞÍ(refThis.m_listµÈ´ıÔì.front());
-		µ¥Î»::»î¶¯µ¥Î»ÅäÖÃ ÅäÖÃ;
-		if (!µ¥Î»::Find»î¶¯µ¥Î»ÅäÖÃ(ÀàĞÍ, ÅäÖÃ))
-		{
-			co_return{};
-		}
-		using namespace std;
-		const auto posBuilding = refEntity.m_Pos;
-		Position pos = { posBuilding.x + std::rand() % 10, posBuilding.z + 3 };
-		bool CrowdTool¿ÉÕ¾Á¢(const Position & refPos);
-		if (!CrowdTool¿ÉÕ¾Á¢(pos))
-		{
-			refGateSession.Say("´Ë´¦²»¿É·ÅÖÃ");
-			if (co_await CoTimer::Wait(1s, refThis.m_TaskCancelÔì±ø.cancel))
-			{
-				co_return{};
-			}
-			continue;
-		}
-
-		//ÏÈ¿ÛÇ®
-		const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, ÅäÖÃ.ÏûºÄ.u16ÏûºÄ¾§Ìå¿ó, false, refThis.m_TaskCancelÔì±ø.cancel);
-		if (stop)
-		{
-			LOG(WARNING) << "Ğ­³ÌRPC´ò¶Ï,error=" << responce.error << ",finalMoney=" << responce.finalMoney << ",rpcSn=" << responce.msg.rpcSnId;
-			co_return{};
-		}
-		//ºÄÊ±
-		if (co_await CoTimer::Wait(1s, refThis.m_TaskCancelÔì±ø.cancel))
-		{
-			co_return{};
-		}
-
-		LOG(INFO) << "Ğ­³ÌRPC·µ»Ø,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
-		CHECK_NOTNULL_CO_RET_0(refGateSession.m_pCurSpace);
-		auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string&>(
-			pos, *refGateSession.m_pCurSpace, ÅäÖÃ.ÅäÖÃ.strPrefabName, ÅäÖÃ.ÅäÖÃ.strName);
-		spNewEntity->m_f¾¯½ä¾àÀë = ÅäÖÃ.f¾¯½ä¾àÀë;
-		spNewEntity->AddComponentPlayer(refGateSession);
-		AttackComponent::AddComponent(*spNewEntity,ÀàĞÍ);
-		DefenceComponent::AddComponent(*spNewEntity);
-		refGateSession.m_setSpEntity.insert(spNewEntity);//×Ô¼º¿ØÖÆµÄµ¥Î»
-		refGateSession.m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//È«µØÍ¼µ¥Î»
-		
-		switch (ÀàĞÍ)
-		{
-		case ¹¤³Ì³µ:
-			²É¼¯Component::AddComponent(*spNewEntity);
-			refGateSession.Say("¹¤³Ì³µ¿ÉÒÔ¿ª¹¤ÁË!");//SCV, good to go, sir. SCV¿ÉÒÔ¿ª¹¤ÁË
-			break;
-		case ±ø:
-			refGateSession.Say("ÌıËµÓĞÈËÒªÂòÎÒµÄ¹·Í·£¿");//You want a piece of me, boy?ÏëÒªÎÒµÄÒ»²¿·ÖÂğ£¬Ğ¡×Ó£¿
-			break;
-		case ½üÕ½±ø:
-			refGateSession.Say("ÌıËµÓĞÈËÒªÎÒµÄ¸«Í·£¿");//You want a piece of me, boy?ÏëÒªÎÒµÄÒ»²¿·ÖÂğ£¬Ğ¡×Ó£¿
-			break;
-
-		default:break;
-		}
-
-		if (refThis.m_listµÈ´ıÔì.empty())
-		{
-			LOG(ERROR) << "err";
-			assert(false);
-			co_return{};
-		}
-
-		refThis.m_listµÈ´ıÔì.pop_front();//--refThis.m_iµÈ´ıÔì±øÊı;
-
-		spNewEntity->BroadcastEnter();
-		refGateSession.Send×ÊÔ´();
-	}
+	
 }

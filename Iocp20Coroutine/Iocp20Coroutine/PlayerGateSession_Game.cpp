@@ -17,6 +17,7 @@
 #include "单位.h"
 #include "单人剧情.h"
 #include <sstream>
+#include "造活动单位Component.h"
 /// <summary>
 /// GameSvr通过GateSvr透传给游戏客户端
 /// </summary>
@@ -83,10 +84,10 @@ void PlayerGateSession_Game::Say(const std::string& str)
 
 void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 {
-	ForEachSelected([this,&msg](Entity& ref)
+	ForEachSelected([this, &msg](Entity& ref)
 		{
-			if (ref.m_spBuilding)
-				ref.m_spBuilding->造兵(*this, ref, msg.类型);
+			if (ref.m_sp造活动单位)
+				ref.m_sp造活动单位->造兵(*this, ref, msg.类型);
 		});
 }
 
@@ -216,6 +217,14 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 	//spNewEntity->AddComponentAttack();
 	spNewEntity->AddComponentPlayer(*this);
 	BuildingComponent::AddComponent(*spNewEntity, *this, 类型, 配置.f半边长);
+	switch (类型)
+	{
+	case 基地:
+	case 兵厂:
+		造活动单位Component::AddComponet(*spNewEntity, *this, 类型);
+		break;
+	case 民房:break;
+	}
 	DefenceComponent::AddComponent(*spNewEntity);
 	//spNewEntity->m_spBuilding->m_fun造活动单位 = 配置.fun造兵;
 	m_setSpEntity.insert(spNewEntity);//自己控制的单位
@@ -257,6 +266,7 @@ void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
 		auto wpEntity = m_pCurSpace->GetEntity(id);
 		if (wpEntity.expired())
 			continue;
+
 		auto spEntity = wpEntity.lock();
 		switch (spEntity->m_spAttack->m_类型)
 		{
@@ -396,9 +406,9 @@ uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
 	uint16_t 制造队列中的单位 = 0;
 	for (const auto& refEntity : m_setSpEntity)
 	{
-		if (refEntity->m_spBuilding)
+		if (refEntity->m_sp造活动单位)
 		{
-			制造队列中的单位 += (uint16_t)refEntity->m_spBuilding->m_list等待造.size();//m_i等待造兵数;
+			制造队列中的单位 += (uint16_t)refEntity->m_sp造活动单位->等待造Count();//m_i等待造兵数;
 
 		}
 		else

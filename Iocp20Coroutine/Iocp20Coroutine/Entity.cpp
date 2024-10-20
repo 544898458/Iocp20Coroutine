@@ -15,6 +15,7 @@
 #include "BuildingComponent.h"
 #include "PlayerGateSession_Game.h"
 #include "采集Component.h"
+#include "造活动单位Component.h"
 
 using namespace std;
 
@@ -78,8 +79,8 @@ void Entity::OnDestroy()
 	if (m_spAttack)
 		m_spAttack->TryCancel();
 
-	if (m_spBuilding)
-		m_spBuilding->TryCancel(*this);
+	if (m_sp造活动单位)
+		m_sp造活动单位->TryCancel(*this);
 
 	if (m_sp采集)
 		m_sp采集->m_TaskCancel.TryCancel();
