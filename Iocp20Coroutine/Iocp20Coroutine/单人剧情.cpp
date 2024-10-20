@@ -64,8 +64,8 @@ namespace 单人剧情
 			co_return 0;
 
 			refGateSession.Say("很好！现在给您刷了一个晶体矿，请点击晶体矿，让工程车在晶体矿和基地之间搬运晶体矿");
-			资源Component::Add(refSpace, 晶体矿);
-			资源Component::Add(refSpace, 燃气矿);
+			资源Component::Add(refSpace, 晶体矿, { 20,0 });
+			资源Component::Add(refSpace, 燃气矿, { 20,30 });
 
 			if (std::get<0>(co_await CoEvent<MyEvent::开始采集晶体矿>::Wait(funCancel)))
 				co_return 0;
