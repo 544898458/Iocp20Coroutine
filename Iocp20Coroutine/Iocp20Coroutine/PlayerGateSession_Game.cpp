@@ -114,6 +114,30 @@ void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
 			ref.m_sp采集->采集(*this, ref, wpEntity);
 		});
 }
+
+void PlayerGateSession_Game::OnRecv(const Msg出地堡& msg)
+{
+	CHECK_NOTNULL_VOID(m_pCurSpace);
+	auto wpTarget = m_pCurSpace->GetEntity((int64_t)msg.id地堡);
+	//msg.vecId地堡内单位.size();
+	CHECK_RET_VOID(!wpTarget.expired());
+	auto spTarget = wpTarget.lock();
+	if (!spTarget->m_sp地堡)
+	{
+		Say("目标不是地堡");
+		return;
+	}
+	auto list = spTarget->m_sp地堡->m_listSpEntity;
+	spTarget->m_sp地堡->m_listSpEntity.clear();
+	for (auto& sp : list)
+	{
+		m_pCurSpace->m_mapEntity.insert({ sp->Id, sp });
+		sp->BroadcastEnter();
+	}
+	list.clear();
+
+}
+
 void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 {
 	std::list<std::function<void()>> listFun;
@@ -122,15 +146,16 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 			CHECK_NOTNULL_VOID(m_pCurSpace);
 			auto wpTarget = m_pCurSpace->GetEntity((int64_t)msg.id目标地堡);
 			CHECK_RET_VOID(!wpTarget.expired());
-			if (!ref.m_spAttack)
-			{
-				Say("此单位不可进入地堡");
-				return;
-			}
 			auto spTarget = wpTarget.lock();
 			if (!spTarget->m_sp地堡)
 			{
 				Say("目标不是地堡");
+				return;
+			}
+
+			if (!ref.m_spAttack)
+			{
+				Say("此单位不可进入地堡");
 				return;
 			}
 
@@ -363,6 +388,7 @@ void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& o
 	case MsgId::AddBuilding:RecvMsg<MsgAddBuilding>(obj); break;
 	case MsgId::采集:RecvMsg<Msg采集>(obj); break;
 	case MsgId::进地堡:RecvMsg<Msg进地堡>(obj); break;
+	case MsgId::出地堡:RecvMsg<Msg出地堡>(obj); break;
 	case MsgId::Gate转发:
 		LOG(ERROR) << "不能再转发";
 		assert(false);

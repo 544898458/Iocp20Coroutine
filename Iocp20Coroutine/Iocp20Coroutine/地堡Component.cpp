@@ -14,7 +14,8 @@ void µØ±¤Component::½ø(Space& refSpace, uint64_t idEntity)
 	auto wp = refSpace.GetEntity(idEntity);
 	CHECK_RET_VOID(!wp.expired());
 	auto sp = wp.lock();
-	m_vecSpEntity.push_back(sp);
+	sp->OnDestroy();
+	m_listSpEntity.push_back(sp);
 	refSpace.m_mapEntity.erase(idEntity);
-	sp->BroadcastLeave();
+	//sp->BroadcastLeave();
 }

@@ -54,6 +54,7 @@ enum MsgId
 	采集,
 	资源,
 	进地堡,
+	出地堡,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -280,6 +281,15 @@ struct Msg进地堡
 	double id目标地堡;//TypeScript只有FLOAT64,没有POSITIVE_INTEGER和NEGATIVE_INTEGER
 	MSGPACK_DEFINE(msg, id目标地堡);
 };
+
+struct Msg出地堡
+{
+	MsgHead msg{ .id = 出地堡 };
+	double id地堡;//TypeScript只有FLOAT64,没有POSITIVE_INTEGER和NEGATIVE_INTEGER
+	std::vector<uint64_t> vecId地堡内单位;
+	MSGPACK_DEFINE(msg, id地堡, vecId地堡内单位);
+};
+
 struct Msg资源
 {
 	MsgHead msg{ .id = 资源 };

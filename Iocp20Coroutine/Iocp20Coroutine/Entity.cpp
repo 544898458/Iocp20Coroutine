@@ -46,8 +46,8 @@ void Entity::Hurt(int hp)
 	if (IsDead())
 	{
 		this->Broadcast(MsgChangeSkeleAnim(*this, "died", false));//²¥·ÅËÀÍö¶¯×÷
-		m_coWaitDelete = AiCo::WaitDelete(shared_from_this(), m_cancelDelete);
-		m_coWaitDelete.Run();
+		AiCo::WaitDelete(shared_from_this(), m_cancelDelete).RunNew();
+		//m_coWaitDelete.Run();
 	}
 }
 

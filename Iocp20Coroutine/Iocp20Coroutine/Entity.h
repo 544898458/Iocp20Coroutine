@@ -38,7 +38,7 @@ public:
 	bool IsEnemy(const Entity& refEntity);
 	Position m_Pos;
 	int m_eulerAnglesY = 0;
-	CoTask<int> m_coWaitDelete;
+	//CoTask<int> m_coWaitDelete;
 	FunCancel m_cancelDelete;
 
 	const uint64_t Id;
