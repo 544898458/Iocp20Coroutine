@@ -19,6 +19,9 @@
 #include <sstream>
 #include "造活动单位Component.h"
 #include "地堡Component.h"
+#include "走Component.h"
+
+
 /// <summary>
 /// GameSvr通过GateSvr透传给游戏客户端
 /// </summary>
@@ -131,8 +134,9 @@ void PlayerGateSession_Game::OnRecv(const Msg出地堡& msg)
 	spTarget->m_sp地堡->m_listSpEntity.clear();
 	for (auto& sp : list)
 	{
-		m_pCurSpace->m_mapEntity.insert({ sp->Id, sp });
-		sp->BroadcastEnter();
+		//m_pCurSpace->m_mapEntity.insert({ sp->Id, sp });
+		//sp->BroadcastEnter();
+		//地堡Component::Co走进地堡()
 	}
 	list.clear();
 
@@ -178,15 +182,19 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 	CHECK_NOTNULL_VOID(m_pCurSpace);
 	ForEachSelected([this, targetX, targetZ](Entity& ref)
 		{
-			if (ref.m_spAttack)
-			{
-				if (ref.m_sp采集)
-					ref.m_sp采集->m_TaskCancel.TryCancel();
+			if (!ref.m_sp走)
+				return;
 
+			if (ref.m_sp采集)
+				ref.m_sp采集->m_TaskCancel.TryCancel();
+
+			if (ref.m_spAttack)
 				ref.m_spAttack->TryCancel();
-				ref.m_spAttack->WalkToPos手动控制(Position(targetX, targetZ));
-				Say("走走走!");//Go! Go! Go!
-			}
+
+			ref.m_sp走->TryCancel();
+			ref.m_sp走->WalkToPos手动控制(Position(targetX, targetZ));
+			Say("走走走!");//Go! Go! Go!
+
 		});
 }
 
