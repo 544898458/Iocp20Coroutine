@@ -80,7 +80,7 @@ void AttackComponent::Update()
 		Entity &refTarget = *wpEntity.lock();
 		if (m_refEntity.DistanceLessEqual(refTarget, m_refEntity.m_f攻击距离))
 		{
-			TryCancel();
+			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
 			m_coAttack = AiCo::Attack(m_refEntity.shared_from_this(), wpEntity.lock(), m_cancel);
 			m_coAttack.Run();
@@ -88,7 +88,7 @@ void AttackComponent::Update()
 		}
 		else if (m_refEntity.DistanceLessEqual(refTarget, m_refEntity.m_f警戒距离) && !走Component::正在走(refTarget) && (!m_refEntity.m_sp采集 || m_refEntity.m_sp采集->m_TaskCancel.co.Finished()))
 		{
-			TryCancel();
+			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
 			//m_coWalk.Run();
 			//assert(m_coWalk.Finished());//20240205
@@ -107,7 +107,7 @@ void AttackComponent::Update()
 
 	if (!m_refEntity.m_spPlayer && !走Component::正在走(m_refEntity))//怪随机走
 	{
-		TryCancel();
+		走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 		//assert(m_coWalk.Finished());//20240205
 		assert(m_coAttack.Finished());//20240205
 

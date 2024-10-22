@@ -20,7 +20,7 @@
 #include "造活动单位Component.h"
 #include "地堡Component.h"
 #include "走Component.h"
-
+#include "PlayerComponent.h"
 
 /// <summary>
 /// GameSvr通过GateSvr透传给游戏客户端
@@ -114,7 +114,7 @@ void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
 				return;
 			}
 
-			ref.m_sp采集->采集(*this, ref, wpEntity);
+			ref.m_sp采集->采集(*this, wpEntity);
 		});
 }
 
@@ -134,12 +134,10 @@ void PlayerGateSession_Game::OnRecv(const Msg出地堡& msg)
 	spTarget->m_sp地堡->m_listSpEntity.clear();
 	for (auto& sp : list)
 	{
-		//m_pCurSpace->m_mapEntity.insert({ sp->Id, sp });
-		//sp->BroadcastEnter();
-		//地堡Component::Co走进地堡()
+		m_pCurSpace->m_mapEntity.insert({ sp->Id, sp });
+		sp->BroadcastEnter();
 	}
 	list.clear();
-
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
@@ -163,7 +161,11 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 				return;
 			}
 
-			listFun.emplace_back([&ref, &spTarget, this]() { spTarget->m_sp地堡->进(*m_pCurSpace, ref.Id); });
+			listFun.emplace_back([&ref, &wpTarget, this]()
+				{
+					if (ref.m_sp走)
+						ref.m_sp走->走进地堡(wpTarget);
+				});
 		});
 
 	for (auto& fun : listFun)
@@ -286,7 +288,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(
 		pos, *m_pCurSpace, 配置.配置.strPrefabName, 配置.配置.strName);
 	//spNewEntity->AddComponentAttack();
-	spNewEntity->AddComponentPlayer(*this);
+	PlayerComponent::AddComponent(*spNewEntity,*this);
 	BuildingComponent::AddComponent(*spNewEntity, *this, 类型, 配置.f半边长);
 	switch (类型)
 	{

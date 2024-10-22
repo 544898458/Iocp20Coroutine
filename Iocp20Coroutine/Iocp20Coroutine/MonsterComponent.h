@@ -8,6 +8,7 @@ class MonsterComponent
 public:
 	MonsterComponent(Entity&);
 	static void AddMonster(Space& refSpace);
+	static void AddComponent(Entity& refEntity);
 //private:
 	CoTask<int> m_coIdle;
 };

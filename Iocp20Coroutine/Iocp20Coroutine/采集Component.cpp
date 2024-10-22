@@ -10,17 +10,19 @@
 #include "MyEvent.h"
 #include "AttackComponent.h"
 #include "PlayerGateSession_Game.h"
+#include "走Component.h"
 
-采集Component::采集Component() : m_携带矿类型(晶体矿)
+采集Component::采集Component(Entity &refEntity) : m_携带矿类型(晶体矿), m_refEntity(refEntity)
 {
 }
 
-void 采集Component::采集(PlayerGateSession_Game& refGateSession, Entity& refThis, WpEntity wp目标资源)
+void 采集Component::采集(PlayerGateSession_Game& refGateSession, WpEntity wp目标资源)
 {
-	m_TaskCancel.TryRun( Co采集(refGateSession, refThis, wp目标资源));
+	走Component::Cancel所有包含走路的协程(m_refEntity);
+	m_TaskCancel.TryRun( Co采集(refGateSession, wp目标资源));
 }
 
-CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, Entity& refThis, WpEntity wp目标资源)
+CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntity wp目标资源)
 {
 	using namespace std;
 	while (true)
@@ -33,7 +35,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, Entity&
 		CHECK_CO_RET_FALSE(sp资源);
 		
 
-		auto wpEntity基地 = refThis.m_refSpace.Get最近的Entity(refThis, false,
+		auto wpEntity基地 = m_refEntity.m_refSpace.Get最近的Entity(m_refEntity, false,
 			[](const Entity& ref)
 			{
 				return ref.m_spBuilding && ref.m_spBuilding->m_类型 == 基地;//找离自己最近的基地
@@ -48,7 +50,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, Entity&
 
 		if (Max携带矿() <= m_u32携带矿)//装满了，回基地放矿
 		{
-			if (refThis.DistanceLessEqual(*wpEntity基地.lock(), refThis.m_f攻击距离))//在基地附近，满载矿，全部放进基地（直接加钱）
+			if (m_refEntity.DistanceLessEqual(*wpEntity基地.lock(), m_refEntity.m_f攻击距离))//在基地附近，满载矿，全部放进基地（直接加钱）
 			{
 				if (co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//把矿放进基地耗时
 					co_return true;
@@ -72,8 +74,8 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, Entity&
 			}
 
 			//离基地太远，走向基地
-			refThis.m_spAttack->TryCancel();
-			if (co_await AiCo::WalkToTarget(refThis.shared_from_this(), wpEntity基地.lock(), m_TaskCancel.cancel, false))
+			m_refEntity.m_spAttack->TryCancel();
+			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity基地.lock(), m_TaskCancel.cancel, false))
 				co_return true;//中断，可能打怪去了
 
 			continue;
@@ -81,7 +83,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, Entity&
 
 		//还没装满，还要继续去采矿
 		
-		if (refThis.DistanceLessEqual(*sp目标资源, refThis.m_f攻击距离))//在目标矿附近
+		if (m_refEntity.DistanceLessEqual(*sp目标资源, m_refEntity.m_f攻击距离))//在目标矿附近
 		{
 			CoEvent<MyEvent::开始采集晶体矿>::OnRecvEvent(false, {});
 			if(co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//采矿1个矿耗时
@@ -95,14 +97,14 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, Entity&
 		}
 
 		//距离目标矿太远，走向晶体矿
-		refThis.m_spAttack->TryCancel();
-		if (co_await AiCo::WalkToTarget(refThis.shared_from_this(), wp目标资源.lock(), m_TaskCancel.cancel, false))
+		//m_refEntity.m_spAttack->TryCancel();
+		if (co_await AiCo::WalkToTarget(m_refEntity, wp目标资源.lock(), m_TaskCancel.cancel, false))
 			co_return true;//中断
 	}
 }
 
 void 采集Component::AddComponent(Entity& refEntity)
 {
-	refEntity.m_sp采集 = std::make_shared<采集Component>();
+	refEntity.m_sp采集 = std::make_shared<采集Component,Entity&>(refEntity);
 }
 

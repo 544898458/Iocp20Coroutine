@@ -148,12 +148,12 @@ namespace AiCo
 		co_return false;
 	}
 
-	CoTaskBool WalkToTarget(SpEntity spThis, SpEntity spTarget, FunCancel& funCancel, const bool b检查警戒距离)
+	CoTaskBool WalkToTarget(Entity &refThis, SpEntity spTarget, FunCancel& funCancel, const bool b检查警戒距离)
 	{
-		RecastNavigationCrowd rnc(*spThis, spTarget->m_Pos);
+		RecastNavigationCrowd rnc(refThis, spTarget->m_Pos);
 		KeepCancel kc(funCancel);
 
-		spThis->Broadcast(MsgChangeSkeleAnim(*spTarget, "run"));
+		refThis.Broadcast(MsgChangeSkeleAnim(*spTarget, "run"));
 		Position posOld;
 		while (true)
 		{
@@ -162,23 +162,23 @@ namespace AiCo
 				LOG(INFO) << "走向" << spTarget << "的协程取消了";
 				co_return true;
 			}
-			if (spThis->IsDead())
+			if (refThis.IsDead())
 			{
 				LOG(INFO) << "自己阵亡，走向[" << spTarget->NickName() << "]的协程取消了";
-				if (spThis->m_spPlayer)
-					spThis->m_spPlayer->Say("自己阵亡");
+				if (refThis.m_spPlayer)
+					refThis.m_spPlayer->Say("自己阵亡");
 
-				co_return true;
+				co_return false;
 			}
-			if (b检查警戒距离 && !spThis->DistanceLessEqual(*spTarget, spThis->m_f警戒距离))
+			if (b检查警戒距离 && !refThis.DistanceLessEqual(*spTarget, refThis.m_f警戒距离))
 			{
 				LOG(INFO) << "离开自己的警戒距离" << spTarget << "的协程取消了";
-				co_return true;
+				co_return false;
 			}
-			if (spThis->DistanceLessEqual(*spTarget, spThis->m_f攻击距离))
+			if (refThis.DistanceLessEqual(*spTarget, refThis.m_f攻击距离))
 			{
 				//LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
-				spThis->Broadcast(MsgChangeSkeleAnim(*spTarget, "idle"));
+				refThis.Broadcast(MsgChangeSkeleAnim(*spTarget, "idle"));
 				co_return false;
 			}
 
@@ -188,12 +188,12 @@ namespace AiCo
 				posOld = spTarget->m_Pos;
 			}
 
-			if (!MoveStep(*spThis, spTarget->m_Pos))
+			if (!MoveStep(refThis, spTarget->m_Pos))
 			{
-				co_return true;
+				co_return false;
 			}
 		}
-		LOG(INFO) << "走向目标协程结束:" << spThis->m_Pos;
+		LOG(INFO) << "走向目标协程结束:" << refThis.m_Pos;
 		co_return false;
 	}
 	CoTask<int> WaitDelete(SpEntity spThis, FunCancel& funCancel)

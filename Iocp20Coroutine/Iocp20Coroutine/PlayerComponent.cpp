@@ -5,9 +5,9 @@
 #include "PlayerGateSession_Game.h"
 #include "../IocpNetwork/StrConv.h"
 
-void Entity::AddComponentPlayer(PlayerGateSession_Game &refSession)
+void PlayerComponent::AddComponent(Entity& refEntity, PlayerGateSession_Game& refSession)
 {
-	m_spPlayer = std::make_shared<PlayerComponent, PlayerGateSession_Game&>(refSession);
+	refEntity.m_spPlayer = std::make_shared<PlayerComponent, PlayerGateSession_Game&>(refSession);
 }
 
 void PlayerComponent::Say(const std::string& str)

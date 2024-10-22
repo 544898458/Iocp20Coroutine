@@ -8,6 +8,8 @@
 #include "AiCo.h"
 #include "AttackComponent.h"
 #include "DefenceComponent.h"
+#include "PlayerComponent.h"
+#include "走Component.h"
 
 void 造活动单位Component::AddComponet(Entity &refEntity,PlayerGateSession_Game &refGateSession, const 建筑单位类型 类型)
 {
@@ -94,9 +96,10 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 		auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string&>(
 			pos, *refGateSession.m_pCurSpace, 配置.配置.strPrefabName, 配置.配置.strName);
 		spNewEntity->m_f警戒距离 = 配置.f警戒距离;
-		spNewEntity->AddComponentPlayer(refGateSession);
+		PlayerComponent::AddComponent(*spNewEntity,refGateSession);
 		AttackComponent::AddComponent(*spNewEntity, 类型);
 		DefenceComponent::AddComponent(*spNewEntity);
+		走Component::AddComponent(*spNewEntity);
 		refGateSession.m_setSpEntity.insert(spNewEntity);//自己控制的单位
 		refGateSession.m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 

@@ -56,8 +56,6 @@ public:
 	std::string m_strEntityName;
 
 	//静态ECS，没有基类强转子类
-	void AddComponentPlayer(PlayerGateSession_Game& refSession);
-	void AddComponentMonster();
 	std::shared_ptr<PlayerComponent> m_spPlayer;
 	std::shared_ptr<AttackComponent> m_spAttack;
 	std::shared_ptr<DefenceComponent> m_spDefence;

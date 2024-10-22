@@ -5,10 +5,11 @@
 #include "AttackComponent.h"
 #include "DefenceComponent.h"
 #include "Space.h"
+#include "走Component.h"
 
-void Entity::AddComponentMonster()
+void MonsterComponent::AddComponent(Entity &refEntity)
 {
-	m_spMonster = std::make_shared<MonsterComponent, Entity&>(*this);
+	refEntity.m_spMonster = std::make_shared<MonsterComponent, Entity&>(refEntity);
 }
 
 MonsterComponent::MonsterComponent(Entity& refThis)
@@ -27,7 +28,8 @@ void MonsterComponent::AddMonster(Space& refSpace)
 	SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ -50.0 }, refSpace, "altman-red", "怪");
 	AttackComponent::AddComponent(*spEntityMonster,兵);
 	DefenceComponent::AddComponent(*spEntityMonster);
-	spEntityMonster->AddComponentMonster();
+	走Component::AddComponent(*spEntityMonster);
+	AddComponent(*spEntityMonster);
 	spEntityMonster->m_f警戒距离 = 20;
 	spEntityMonster->m_速度每帧移动距离 = 0.2f;
 	refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster });

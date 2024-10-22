@@ -15,7 +15,7 @@ namespace AiCo
 	CoTask<int> Attack(SpEntity spEntity, SpEntity spDefencer, FunCancel& cancel);
 	CoTask<int> Idle(SpEntity spEntity, FunCancel& funCancel);
 	CoTaskBool WalkToPos(SpEntity spThis, const Position &posTarget, FunCancel& funCancel);
-	CoTaskBool WalkToTarget(SpEntity spThis, SpEntity spEntity, FunCancel& funCancel, const bool b¼ì²é¾¯½ä¾àÀë = true);
+	CoTaskBool WalkToTarget(Entity &refThis, SpEntity spEntity, FunCancel& funCancel, const bool b¼ì²é¾¯½ä¾àÀë = true);
 	CoTask<int> WaitDelete(SpEntity spThis, FunCancel& funCancel);
 	CoTask<int> SpawnMonster(Space& refSpace, FunCancel& funCancel);
 	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, int32_t changeMoney, bool addMoney, FunCancel& funCancel);
