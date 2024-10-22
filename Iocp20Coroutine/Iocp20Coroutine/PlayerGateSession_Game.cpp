@@ -242,17 +242,17 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 		return;
 	}
 	iterNew->Run();*/
-	CoAddBuilding(msg.类型).RunNew();
+	CoAddBuilding(msg.类型, msg.pos).RunNew();
 }
 
-CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
+CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, const Position pos)
 {
 	单位::建筑单位配置 配置;
 	if (!单位::Find建筑单位配置(类型, 配置))
 	{
 		co_return 0;
 	}
-	Position pos = { 35,float(std::rand() % 60) - 30 };
+	//Position pos = { 35,float(std::rand() % 60) - 30 };
 	if (!可放置建筑(pos, 配置.f半边长))
 	{
 		Say("此处不可放置");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
@@ -288,7 +288,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型)
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(
 		pos, *m_pCurSpace, 配置.配置.strPrefabName, 配置.配置.strName);
 	//spNewEntity->AddComponentAttack();
-	PlayerComponent::AddComponent(*spNewEntity,*this);
+	PlayerComponent::AddComponent(*spNewEntity, *this);
 	BuildingComponent::AddComponent(*spNewEntity, *this, 类型, 配置.f半边长);
 	switch (类型)
 	{
@@ -503,16 +503,16 @@ uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
 
 }
 
-bool PlayerGateSession_Game::可放置建筑(const Position& pos, float f半边长)
+bool PlayerGateSession_Game::可放置建筑(const Position& refPos, float f半边长)
 {
 	bool CrowdTool可站立(const Position & refPos);
 
-	if (!CrowdTool可站立(pos))return false;
+	if (!CrowdTool可站立(refPos))return false;
 
-	if (!CrowdTool可站立({ pos.x - f半边长 ,pos.z + f半边长 }))return false;
-	if (!CrowdTool可站立({ pos.x - f半边长 ,pos.z - f半边长 }))return false;
-	if (!CrowdTool可站立({ pos.x + f半边长 ,pos.z + f半边长 }))return false;
-	if (!CrowdTool可站立({ pos.x + f半边长 ,pos.z - f半边长 }))return false;
+	if (!CrowdTool可站立({ refPos.x - f半边长 ,refPos.z + f半边长 }))return false;
+	if (!CrowdTool可站立({ refPos.x - f半边长 ,refPos.z - f半边长 }))return false;
+	if (!CrowdTool可站立({ refPos.x + f半边长 ,refPos.z + f半边长 }))return false;
+	if (!CrowdTool可站立({ refPos.x + f半边长 ,refPos.z - f半边长 }))return false;
 
 	//遍历全地图所有建筑判断重叠
 	CHECK_NOTNULL_RET_FALSE(m_pCurSpace);
@@ -520,7 +520,7 @@ bool PlayerGateSession_Game::可放置建筑(const Position& pos, float f半边长)
 	{
 		const auto& refPosOld = kv.second->m_Pos;
 		bool CrowdTool判断单位重叠(const Position & refPosOld, const Position & refPosNew, const float f半边长);
-		if (CrowdTool判断单位重叠(pos, refPosOld, f半边长))
+		if (CrowdTool判断单位重叠(refPos, refPosOld, f半边长))
 			return false;
 	}
 	return true;

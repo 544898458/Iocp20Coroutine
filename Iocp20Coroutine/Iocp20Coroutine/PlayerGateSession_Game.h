@@ -62,7 +62,7 @@ private:
 
 	void ForEachSelected(std::function<void(Entity& ref)> fun);
 	//CoTask<int> CoAddRole();
-	CoTask<int> CoAddBuilding(const 建筑单位类型 类型);
+	CoTask<int> CoAddBuilding(const 建筑单位类型 类型, const Position pos);
 
 	//std::vector<CoTask<int>>	m_vecCoRpc;
 	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;

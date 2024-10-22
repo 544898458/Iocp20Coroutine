@@ -9,7 +9,7 @@ struct Position
 {
 	float x;
 	float z;
-
+	MSGPACK_DEFINE(x, z);
 	bool operator==(const Position& refRight)const
 	{
 		return x == refRight.x && z == refRight.z;
@@ -135,7 +135,8 @@ struct MsgAddBuilding
 {
 	MsgHead msg;
 	建筑单位类型 类型;
-	MSGPACK_DEFINE(msg, 类型);
+	Position pos;
+	MSGPACK_DEFINE(msg, 类型, pos);
 };
 
 struct MsgChangeMoney
