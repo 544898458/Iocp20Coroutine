@@ -14,6 +14,7 @@
 #include "MonsterComponent.h"
 #include "RecastNavigationCrowd.h"
 #include "AttackComponent.h"
+#include "DefenceComponent.h"
 
 template<class T> void SendToWorldSvr(const T& msg, const uint64_t idGateSession);
 
@@ -31,57 +32,7 @@ namespace AiCo
 			}
 		}
 	}
-
-
-	CoTask<int> Attack(SpEntity spThis, SpEntity spDefencer, FunCancel& cancel)
-	{
-		KeepCancel kc(cancel);
-
-		if (spThis->IsDead())
-			co_return 0;//自己死亡
-
-		if (spDefencer->IsDead())
-			co_return 0;//目标死亡
-
-		spThis->Broadcast(MsgChangeSkeleAnim(*spThis, "attack"));//播放攻击动作
-
-		using namespace std;
-
-
-		const std::tuple<std::chrono::milliseconds, int> arrWaitHurt[] =
-		{	//三段伤害{每段前摇时长，伤害值}
-			{3000ms,1},
-			{500ms,3},
-			{500ms,10}
-		};
-
-		for (auto wait_hurt : arrWaitHurt)
-		{
-			if (co_await CoTimer::Wait(std::get<0>(wait_hurt), cancel))//等x秒	前摇
-				co_return 0;//协程取消
-
-			if (spThis->IsDead())
-				co_return 0;//自己死亡，协程取消
-
-			if (!spThis->DistanceLessEqual(*spDefencer, spThis->m_f攻击距离))
-				break;//要执行后摇
-
-			if (spDefencer->IsDead())
-				break;//要执行后摇
-
-			spDefencer->Hurt(std::get<1>(wait_hurt));//第n次让对方伤1
-		}
-
-		if (co_await CoTimer::Wait(3000ms, cancel))//等3秒	后摇
-			co_return 0;//协程取消
-
-		if (!spThis->IsDead())
-		{
-			spThis->Broadcast(MsgChangeSkeleAnim(*spThis, "idle"));//播放休闲待机动作
-		}
-
-		co_return 0;//协程正常退出
-	}
+		
 	/// <summary>
 	/// 
 	/// </summary>
@@ -96,7 +47,7 @@ namespace AiCo
 		if (std::abs(localTarget.x - x) < step && std::abs(localTarget.z - z) < step)
 		{
 			//LOG(INFO) << "已走到" << localTarget.x << "," << localTarget.z << "附近，协程正常退出";
-			refThis.Broadcast(MsgChangeSkeleAnim(refThis, "idle"));
+			refThis.BroadcastChangeSkeleAnim("idle");
 			return false;
 		}
 
@@ -111,7 +62,7 @@ namespace AiCo
 		//}
 
 		refThis.m_eulerAnglesY = CalculateAngle(refThis.m_Pos, localTarget);
-		refThis.Broadcast(MsgNotifyPos(refThis));
+		refThis.BroadcastNotifyPos();
 
 		return true;
 	}
@@ -121,7 +72,7 @@ namespace AiCo
 		RecastNavigationCrowd rnc(*spThis, posTarget);
 		KeepCancel kc(funCancel);
 		const auto posLocalTarget = posTarget;
-		spThis->Broadcast(MsgChangeSkeleAnim(*spThis, "run"));
+		spThis->BroadcastChangeSkeleAnim("run");
 		CoEvent<MyEvent::MoveEntity>::OnRecvEvent(false, { spThis->weak_from_this() });
 		while (true)
 		{
@@ -153,7 +104,7 @@ namespace AiCo
 		RecastNavigationCrowd rnc(refThis, spTarget->m_Pos);
 		KeepCancel kc(funCancel);
 
-		refThis.Broadcast(MsgChangeSkeleAnim(*spTarget, "run"));
+		refThis.BroadcastChangeSkeleAnim("run");
 		Position posOld;
 		while (true)
 		{
@@ -178,7 +129,7 @@ namespace AiCo
 			if (refThis.DistanceLessEqual(*spTarget, refThis.m_f攻击距离))
 			{
 				//LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
-				refThis.Broadcast(MsgChangeSkeleAnim(*spTarget, "idle"));
+				refThis.BroadcastChangeSkeleAnim("idle");
 				co_return false;
 			}
 
@@ -195,17 +146,6 @@ namespace AiCo
 		}
 		LOG(INFO) << "走向目标协程结束:" << refThis.m_Pos;
 		co_return false;
-	}
-	CoTask<int> WaitDelete(SpEntity spThis, FunCancel& funCancel)
-	{
-		KeepCancel kc(funCancel);
-		using namespace std;
-		if (co_await CoTimer::Wait(3s, funCancel))//服务器主工作线程大循环，每次循环触发一次
-		{
-			LOG(INFO) << "WaitDelete协程取消了";
-		}
-		spThis->m_bNeedDelete = true;
-		co_return 0;
 	}
 	CoTask<int> SpawnMonster(Space& refSpace, FunCancel& funCancel)
 	{

@@ -79,7 +79,7 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 		}
 
 		//先扣钱
-		const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, 配置.消耗.u16消耗晶体矿, false, m_TaskCancel造活动单位.cancel);
+		const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, 配置.制造.u16消耗晶体矿, false, m_TaskCancel造活动单位.cancel);
 		if (stop)
 		{
 			LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney << ",rpcSn=" << responce.msg.rpcSnId;
@@ -98,7 +98,7 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 		spNewEntity->m_f警戒距离 = 配置.f警戒距离;
 		PlayerComponent::AddComponent(*spNewEntity,refGateSession);
 		AttackComponent::AddComponent(*spNewEntity, 类型);
-		DefenceComponent::AddComponent(*spNewEntity);
+		DefenceComponent::AddComponent(*spNewEntity, 配置.制造.u16初始Hp);
 		走Component::AddComponent(*spNewEntity);
 		refGateSession.m_setSpEntity.insert(spNewEntity);//自己控制的单位
 		refGateSession.m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位

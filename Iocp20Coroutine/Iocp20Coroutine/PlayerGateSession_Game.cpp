@@ -258,28 +258,28 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, const
 		Say("此处不可放置");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
 		co_return 0;
 	}
-	if (配置.消耗.u16消耗燃气矿 > m_u32燃气矿)
+	if (配置.建造.u16消耗燃气矿 > m_u32燃气矿)
 	{
 		std::ostringstream oss;
-		oss << "燃气矿不足" << 配置.消耗.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
+		oss << "燃气矿不足" << 配置.建造.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
 		Say(oss.str());
 		co_return 0;
 	}
-	m_u32燃气矿 -= 配置.消耗.u16消耗燃气矿;
+	m_u32燃气矿 -= 配置.建造.u16消耗燃气矿;
 	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());//不能存对象，扩容可能导致引用和指针失效
-	auto [stop, responce] = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 配置.消耗.u16消耗晶体矿 },
+	auto [stop, responce] = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 配置.建造.u16消耗晶体矿 },
 		[this](const MsgChangeMoney& ref) {SendToWorldSvr<MsgChangeMoney>(ref, m_idPlayerGateSession); }, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	if (stop)
 	{
-		m_u32燃气矿 += 配置.消耗.u16消耗燃气矿;//返还燃气矿
+		m_u32燃气矿 += 配置.建造.u16消耗燃气矿;//返还燃气矿
 		co_return 0;
 	}
 	if (0 != responce.error)
 	{
 		//LOG(WARNING) << "扣钱失败,error=" << responce.error;
-		m_u32燃气矿 += 配置.消耗.u16消耗燃气矿;//返还燃气矿
-		Say("晶体矿矿不足" + 配置.消耗.u16消耗晶体矿);
+		m_u32燃气矿 += 配置.建造.u16消耗燃气矿;//返还燃气矿
+		Say("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
 		co_return 0;
 	}
 
@@ -301,7 +301,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, const
 		break;
 	case 民房:break;
 	}
-	DefenceComponent::AddComponent(*spNewEntity);
+	DefenceComponent::AddComponent(*spNewEntity, 配置.建造.u16初始Hp);
 	//spNewEntity->m_spBuilding->m_fun造活动单位 = 配置.fun造兵;
 	m_setSpEntity.insert(spNewEntity);//自己控制的单位
 	m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位

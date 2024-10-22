@@ -218,12 +218,12 @@ struct MsgNotifyPos
 	float x;
 	float z;
 	int eulerAnglesY;
-	int hp;
+	int hp = 0;
 	MSGPACK_DEFINE(msg, entityId, x, z, eulerAnglesY, hp);
 };
 struct MsgChangeSkeleAnim
 {
-	MsgChangeSkeleAnim(Entity& ref, std::string name, bool loop = true) :entityId((uint64_t)&ref), loop(loop), clipName(name) {}
+	MsgChangeSkeleAnim(Entity& ref, const std::string &refName, bool loop) :entityId((uint64_t)&ref), loop(loop), clipName(refName) {}
 	MsgHead msg{ .id = ChangeSkeleAnim };
 	uint64_t entityId;
 	bool loop;

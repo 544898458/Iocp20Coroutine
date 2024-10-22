@@ -13,7 +13,7 @@ class AttackComponent;
 class DefenceComponent;
 class 采集Component;
 class 资源Component;
-class 地堡Component; 
+class 地堡Component;
 class 走Component;
 class 临时阻挡Component;
 class 造活动单位Component;
@@ -26,8 +26,7 @@ public:
 	Entity(const Position& pos, Space& refSpace, const std::string& strPrefabName, const std::string& strEntityName);
 	Entity(const Entity&) = delete;
 	void Update();
-	void Hurt(int);
-	bool IsDead()const { return m_hp <= 0; }
+	bool IsDead()const;
 	bool NeedDelete()const { return m_bNeedDelete; }
 	bool DistanceLessEqual(const Entity& refEntity, float fDistance);
 	float DistancePow2(const Entity& refEntity)const;
@@ -35,6 +34,9 @@ public:
 	void BroadcastLeave();
 	const std::string& NickName();
 	void BroadcastEnter();
+	void BroadcastNotifyPos();
+	void BroadcastChangeSkeleAnim(const std::string& refAniClipName, bool loop = true);
+	CoTaskBool CoDelayDelete();
 	template<class T> void Broadcast(const T& msg);
 	bool IsEnemy(const Entity& refEntity);
 	Position m_Pos;
@@ -44,7 +46,6 @@ public:
 
 	const uint64_t Id;
 	bool m_bNeedDelete = false;
-	int m_hp = 20;
 	float m_f警戒距离 = 30;
 	float m_速度每帧移动距离 = 0.5f;//每帧多少米
 	const float m_f攻击距离 = 5.0f;

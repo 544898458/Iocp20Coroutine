@@ -9,6 +9,7 @@ public:
 	AttackComponent(Entity& refEntity, const 活动单位类型 类型);
 	void TryCancel();
 	void Update();
+	CoTask<int> CoAttack(WpEntity wpDefencer, FunCancel& cancel);
 	static void AddComponent(Entity& refEntity, const 活动单位类型 类型);
 	CoTask<int> m_coAttack;
 	FunCancel m_cancel;

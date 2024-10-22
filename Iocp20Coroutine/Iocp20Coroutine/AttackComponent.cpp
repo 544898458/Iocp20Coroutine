@@ -10,6 +10,8 @@
 #include "PlayerGateSession_Game.h"
 #include "采集Component.h"
 #include "走Component.h"
+#include "../CoRoutine/CoTimer.h"
+#include "DefenceComponent.h"
 
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
 void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型)
@@ -82,7 +84,7 @@ void AttackComponent::Update()
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
-			m_coAttack = AiCo::Attack(m_refEntity.shared_from_this(), wpEntity.lock(), m_cancel);
+			m_coAttack = CoAttack(wpEntity.lock(), m_cancel);
 			m_coAttack.Run();
 			return;
 		}
@@ -119,3 +121,56 @@ void AttackComponent::Update()
 	}
 }
 
+
+CoTask<int> AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
+{
+	KeepCancel kc(cancel);
+
+	if (m_refEntity.IsDead())
+		co_return 0;//自己死亡
+
+	m_refEntity.BroadcastChangeSkeleAnim("attack");//播放攻击动作
+
+	using namespace std;
+	
+	const std::tuple<std::chrono::milliseconds, int> arrWaitHurt[] =
+	{	//三段伤害{每段前摇时长，伤害值}
+		{3000ms,1},
+		{500ms,3},
+		{500ms,10}
+	};
+
+	for (auto wait_hurt : arrWaitHurt)
+	{
+		if (co_await CoTimer::Wait(std::get<0>(wait_hurt), cancel))//等x秒	前摇
+			co_return 0;//协程取消
+
+		if (m_refEntity.IsDead())
+			co_return 0;//自己死亡，不再后摇
+
+		if (wpDefencer.expired())
+			break;//要执行后摇
+
+		auto spDefencer = wpDefencer.lock();
+		if (spDefencer->IsDead())
+			break;//要执行后摇
+
+		if (!m_refEntity.DistanceLessEqual(*spDefencer, m_refEntity.m_f攻击距离))
+			break;//要执行后摇
+
+		if (!spDefencer->m_spDefence)
+			break;//目标打不了
+
+		m_refEntity.m_spDefence->Hurt(std::get<1>(wait_hurt));//第n次让对方伤1
+	}
+
+	if (co_await CoTimer::Wait(3000ms, cancel))//等3秒	后摇
+		co_return 0;//协程取消
+
+	if (!m_refEntity.IsDead())
+	{
+		m_refEntity.BroadcastChangeSkeleAnim("idle");//播放休闲待机动作
+	}
+
+	co_return 0;//协程正常退出
+}

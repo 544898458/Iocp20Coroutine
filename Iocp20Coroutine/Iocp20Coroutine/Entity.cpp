@@ -16,6 +16,7 @@
 #include "PlayerGateSession_Game.h"
 #include "采集Component.h"
 #include "造活动单位Component.h"
+#include "DefenceComponent.h"
 
 using namespace std;
 
@@ -34,21 +35,11 @@ float Entity::DistancePow2(const Entity& refEntity)const
 	return this->m_Pos.DistancePow2(refEntity.m_Pos);
 }
 
-void Entity::Hurt(int hp)
+bool Entity::IsDead() const 
 {
-	CHECK_GE(hp, 0);
-	if (IsDead())
-		return;
-
-	this->m_hp -= hp;
-
-	this->Broadcast(MsgNotifyPos(*this));
-	if (IsDead())
-	{
-		this->Broadcast(MsgChangeSkeleAnim(*this, "died", false));//播放死亡动作
-		AiCo::WaitDelete(shared_from_this(), m_cancelDelete).RunNew();
-		//m_coWaitDelete.Run();
-	}
+	if (!m_spDefence)
+		return false;
+	return m_spDefence->IsDead();
 }
 
 //主线程单线程执行
@@ -107,14 +98,37 @@ const std::string& Entity::NickName()
 void Entity::BroadcastEnter()
 {
 	Broadcast(MsgAddRoleRet(*this));//自己广播给别人
-	Broadcast(MsgNotifyPos(*this));
+	BroadcastNotifyPos();
 	CoEvent<MyEvent::AddEntity>::OnRecvEvent(false, { weak_from_this() });
+}
+
+void Entity::BroadcastNotifyPos()
+{
+	Broadcast(MsgNotifyPos(*this));
+}
+
+void Entity::BroadcastChangeSkeleAnim(const std::string& refAniClipName, bool loop)
+{
+	Broadcast(MsgChangeSkeleAnim(*this, refAniClipName, loop));//播放死亡动作
 }
 
 template<class T>
 void Entity::Broadcast(const T& msg)
 {
 	m_refSpace.Broadcast(msg);
+}
+
+CoTaskBool Entity::CoDelayDelete()
+{
+	using namespace std;
+	if (co_await CoTimer::Wait(3s, m_cancelDelete))//服务器主工作线程大循环，每次循环触发一次
+	{
+		LOG(INFO) << "WaitDelete协程取消了";
+		co_return true;
+	}
+
+	m_bNeedDelete = true;
+	co_return false;
 }
 
 template void Entity::Broadcast(const MsgAddRoleRet& msg);
