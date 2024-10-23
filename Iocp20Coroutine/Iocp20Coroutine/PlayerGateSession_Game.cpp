@@ -136,6 +136,7 @@ void PlayerGateSession_Game::OnRecv(const Msg³öµØ±¤& msg)
 	{
 		m_pCurSpace->m_mapEntity.insert({ sp->Id, sp });
 		sp->BroadcastEnter();
+		sp->m_wpOwner.reset();
 	}
 	list.clear();
 }

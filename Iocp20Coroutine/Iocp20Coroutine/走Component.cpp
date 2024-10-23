@@ -33,7 +33,9 @@ bool 走Component::正在走(Entity& refEntity)
 
 void 走Component::WalkToTarget(SpEntity spTarget)
 {
+	assert(!m_cancel);
 	m_coWalk = AiCo::WalkToTarget(m_refEntity, spTarget, m_cancel);
+	m_coWalk.Run();
 }
 
 bool 走Component::WalkToTarget(Entity& refThis, SpEntity spTarget)
@@ -45,6 +47,7 @@ bool 走Component::WalkToTarget(Entity& refThis, SpEntity spTarget)
 
 void 走Component::WalkToPos(const Position& posTarget)
 {
+	assert(!m_cancel);
 	m_coWalk = AiCo::WalkToPos(m_refEntity.shared_from_this(), posTarget, m_cancel);
 	m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 }
@@ -81,6 +84,7 @@ void 走Component::WalkToPos手动控制(const Position& posTarget)
 		assert(m_refEntity.m_spAttack->m_coAttack.Finished());//20240205
 	}
 	/*m_coStop = false;*/
+	assert(!m_cancel);
 	m_coWalk手动控制 = AiCo::WalkToPos(m_refEntity.shared_from_this(), posTarget, m_cancel);
 	m_coWalk手动控制.Run();//协程离开开始运行（运行到第一个co_await
 }
@@ -126,13 +130,14 @@ CoTaskBool 走Component::Co走进地堡(WpEntity wpEntity地堡)
 		if (!spEntity地堡->m_sp地堡)
 			co_return false;
 
-		if (m_refEntity.DistanceLessEqual(*spEntity地堡, m_refEntity.m_f攻击距离))
+		if (m_refEntity.DistanceLessEqual(*spEntity地堡, m_refEntity.攻击距离()))
 		{
 			spEntity地堡->m_sp地堡->进(m_refEntity.m_refSpace, m_refEntity.Id);
 
 			co_return false;
 		}
 
+		assert(!m_cancel);
 		if (co_await AiCo::WalkToTarget(m_refEntity, spEntity地堡, m_cancel, false))
 			co_return true;
 

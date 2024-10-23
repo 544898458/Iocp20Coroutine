@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "地堡Component.h"
+#include "AttackComponent.h"
 #include "Entity.h"
 #include "Space.h"
 
@@ -15,7 +16,17 @@ void 地堡Component::进(Space& refSpace, uint64_t idEntity)
 	CHECK_RET_VOID(!wp.expired());
 	auto sp = wp.lock();
 	sp->OnDestroy();
+	sp->m_wpOwner = sp->weak_from_this();
 	m_listSpEntity.push_back(sp);
 	refSpace.m_mapEntity.erase(idEntity);
 	//sp->BroadcastLeave();
+}
+
+void 地堡Component::Update()
+{
+	for (auto& sp : m_listSpEntity) 
+	{
+		if (sp->m_spAttack)
+			sp->m_spAttack->Update();
+	}
 }

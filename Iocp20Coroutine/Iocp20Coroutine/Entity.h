@@ -2,6 +2,7 @@
 #include "../CoRoutine/CoTask.h"
 #include <functional>
 #include "MyMsgQueue.h"
+#include "SpEntity.h"
 //#include "PlayerComponent.h"
 class Space;
 class GameSvrSession;
@@ -48,7 +49,7 @@ public:
 	bool m_bNeedDelete = false;
 	float m_f警戒距离 = 30;
 	float m_速度每帧移动距离 = 0.5f;//每帧多少米
-	const float m_f攻击距离 = 5.0f;
+	float 攻击距离()const;
 
 	std::string m_strPrefabName;
 	/// <summary>
@@ -68,7 +69,10 @@ public:
 	std::shared_ptr<走Component> m_sp走;
 	std::shared_ptr<临时阻挡Component> m_sp临时阻挡;
 	std::shared_ptr<造活动单位Component> m_sp造活动单位;
-
+	/// <summary>
+	/// 地堡或运输机
+	/// </summary>
+	WpEntity m_wpOwner;
 	//private:
 	Space& m_refSpace;
 };

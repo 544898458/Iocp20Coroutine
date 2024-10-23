@@ -743,7 +743,9 @@ void CrowdToolState::setMoveTarget(const float* p, bool adjust)
 	}
 	else
 	{
-		navquery->findNearestPoly(p, halfExtents, filter, &m_targetRef, m_targetPos);
+		float arrHalfExtents[] = { 5,5,5 };
+		navquery->findNearestPoly(p, arrHalfExtents, filter, &m_targetRef, m_targetPos);
+		//navquery->findNearestPoly(p, halfExtents, filter, &m_targetRef, m_targetPos);
 
 		if (m_agentDebug.idx != -1)
 		{
@@ -1016,7 +1018,7 @@ void CrowdTool::handleClick(const float* s, const float* p, bool shift)
 		else
 		{
 			// Add
-			m_state->addAgent(p,3.5f);
+			m_state->addAgent(p, 3.5f);
 		}
 	}
 	else if (m_mode == TOOLMODE_MOVE_TARGET)

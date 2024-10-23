@@ -30,6 +30,7 @@ namespace 单位
 		单位配置 配置;
 		制造配置 制造;
 		float f警戒距离;
+		float f攻击距离;
 	};
 
 	struct 资源单位配置

@@ -17,6 +17,7 @@
 #include "采集Component.h"
 #include "造活动单位Component.h"
 #include "DefenceComponent.h"
+#include "地堡Component.h"
 
 using namespace std;
 
@@ -47,6 +48,9 @@ void Entity::Update()
 {
 	if (m_spAttack)
 		m_spAttack->Update();
+
+	if (m_sp地堡)
+		m_sp地堡->Update();
 }
 
 bool Entity::IsEnemy(const Entity& refEntity)
@@ -61,6 +65,13 @@ bool Entity::IsEnemy(const Entity& refEntity)
 	return &m_spPlayer->m_refSession != &refEntity.m_spPlayer->m_refSession;
 }
 
+float Entity::攻击距离() const
+{
+	if( m_spAttack)
+		return m_spAttack->m_f攻击距离;
+
+	return 0;
+}
 
 void Entity::OnDestroy()
 {
@@ -90,8 +101,16 @@ const std::string& Entity::NickName()
 	if (m_spPlayer)
 		return m_spPlayer->m_refSession.NickName();
 
-	static const std::string str("坏人");
-	return str;
+	if (m_sp资源)
+	{
+		static const std::string str("资源");
+		return str;
+	}
+
+	{
+		static const std::string str("敌人");
+		return str;
+	}
 }
 
 

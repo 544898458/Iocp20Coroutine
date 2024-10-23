@@ -126,7 +126,7 @@ namespace AiCo
 				LOG(INFO) << "离开自己的警戒距离" << spTarget << "的协程取消了";
 				co_return false;
 			}
-			if (refThis.DistanceLessEqual(*spTarget, refThis.m_f攻击距离))
+			if (refThis.DistanceLessEqual(*spTarget, refThis.攻击距离()))
 			{
 				//LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
 				refThis.BroadcastChangeSkeleAnim("idle");

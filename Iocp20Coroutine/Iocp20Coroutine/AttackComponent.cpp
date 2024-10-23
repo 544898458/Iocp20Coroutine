@@ -24,6 +24,18 @@ void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型)
 	//m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
 }
 
+float AttackComponent::攻击距离() const
+{
+	if (m_refEntity.m_wpOwner.expired())
+		return m_f攻击距离;
+
+	auto spOwner = m_refEntity.m_wpOwner.lock();
+	if (!spOwner->m_spAttack)
+		return m_f攻击距离;
+
+	return spOwner->m_spAttack->m_f攻击距离 + m_f攻击距离;
+}
+
 inline AttackComponent::AttackComponent(Entity& refEntity, const 活动单位类型 类型) :m_refEntity(refEntity), m_类型(类型)
 {
 
@@ -79,8 +91,8 @@ void AttackComponent::Update()
 	const auto& wpEntity = m_refEntity.m_refSpace.Get最近的Entity(m_refEntity, true, [](const Entity& ref)->bool {return nullptr != ref.m_spDefence; });
 	if (!wpEntity.expired())
 	{
-		Entity &refTarget = *wpEntity.lock();
-		if (m_refEntity.DistanceLessEqual(refTarget, m_refEntity.m_f攻击距离))
+		Entity& refTarget = *wpEntity.lock();
+		if (m_refEntity.DistanceLessEqual(refTarget, 攻击距离()))
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
@@ -88,7 +100,7 @@ void AttackComponent::Update()
 			m_coAttack.Run();
 			return;
 		}
-		else if (m_refEntity.DistanceLessEqual(refTarget, m_refEntity.m_f警戒距离) && !走Component::正在走(refTarget) && (!m_refEntity.m_sp采集 || m_refEntity.m_sp采集->m_TaskCancel.co.Finished()))
+		else if (m_refEntity.m_wpOwner.expired() && m_refEntity.DistanceLessEqual(refTarget, m_refEntity.m_f警戒距离) && !走Component::正在走(m_refEntity) && (!m_refEntity.m_sp采集 || m_refEntity.m_sp采集->m_TaskCancel.co.Finished()))
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
@@ -102,7 +114,7 @@ void AttackComponent::Update()
 			}
 
 			走Component::WalkToTarget(m_refEntity, wpEntity.lock());
-			
+
 			return;
 		}
 	}
@@ -132,12 +144,12 @@ CoTask<int> AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 	m_refEntity.BroadcastChangeSkeleAnim("attack");//播放攻击动作
 
 	using namespace std;
-	
+
 	const std::tuple<std::chrono::milliseconds, int> arrWaitHurt[] =
 	{	//三段伤害{每段前摇时长，伤害值}
-		{3000ms,1},
-		{500ms,3},
-		{500ms,10}
+		{300ms,1},
+		{50ms,3},
+		{50ms,10}
 	};
 
 	for (auto wait_hurt : arrWaitHurt)
@@ -155,16 +167,16 @@ CoTask<int> AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 		if (spDefencer->IsDead())
 			break;//要执行后摇
 
-		if (!m_refEntity.DistanceLessEqual(*spDefencer, m_refEntity.m_f攻击距离))
+		if (!m_refEntity.DistanceLessEqual(*spDefencer, 攻击距离()))
 			break;//要执行后摇
 
 		if (!spDefencer->m_spDefence)
 			break;//目标打不了
 
-		m_refEntity.m_spDefence->Hurt(std::get<1>(wait_hurt));//第n次让对方伤1
+		spDefencer->m_spDefence->Hurt(std::get<1>(wait_hurt));//第n次让对方伤1
 	}
 
-	if (co_await CoTimer::Wait(3000ms, cancel))//等3秒	后摇
+	if (co_await CoTimer::Wait(1000ms, cancel))//等3秒	后摇
 		co_return 0;//协程取消
 
 	if (!m_refEntity.IsDead())

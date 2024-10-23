@@ -50,7 +50,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 
 		if (Max携带矿() <= m_u32携带矿)//装满了，回基地放矿
 		{
-			if (m_refEntity.DistanceLessEqual(*wpEntity基地.lock(), m_refEntity.m_f攻击距离))//在基地附近，满载矿，全部放进基地（直接加钱）
+			if (m_refEntity.DistanceLessEqual(*wpEntity基地.lock(), m_refEntity.攻击距离()))//在基地附近，满载矿，全部放进基地（直接加钱）
 			{
 				if (co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//把矿放进基地耗时
 					co_return true;
@@ -83,7 +83,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 
 		//还没装满，还要继续去采矿
 		
-		if (m_refEntity.DistanceLessEqual(*sp目标资源, m_refEntity.m_f攻击距离))//在目标矿附近
+		if (m_refEntity.DistanceLessEqual(*sp目标资源, m_refEntity.攻击距离()))//在目标矿附近
 		{
 			CoEvent<MyEvent::开始采集晶体矿>::OnRecvEvent(false, {});
 			if(co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//采矿1个矿耗时
