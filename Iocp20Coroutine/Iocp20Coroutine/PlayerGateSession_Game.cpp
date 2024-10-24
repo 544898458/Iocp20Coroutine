@@ -309,9 +309,16 @@ void PlayerGateSession_Game::EnterSpace(Space& refSpace, const std::string& strN
 	m_strNickName = strNickName;
 	for (const auto& [id, spEntity] : refSpace.m_mapEntity)//所有地图上的实体发给自己
 	{
+		LOG(INFO) << spEntity->NickName() << ",发给单人," << spEntity->Id;
 		Send(MsgAddRoleRet(*spEntity));
 		Send(MsgNotifyPos(*spEntity));
 	}
+
+	SpEntity spEntityViewPort = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ 0.0 }, refSpace, "smoke", "视口");
+	refSpace.m_mapEntity.insert({ spEntityViewPort->Id, spEntityViewPort });
+	//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
+	PlayerComponent::AddComponent(*spEntityViewPort, *this);
+	spEntityViewPort->BroadcastEnter();
 
 	CoEvent<PlayerGateSession_Game*>::OnRecvEvent(false, this);
 	单人剧情::Co(m_Space单人剧情, m_funCancel单人剧情, *this).RunNew();
