@@ -75,7 +75,6 @@ float Entity::攻击距离() const
 
 void Entity::OnDestroy()
 {
-	LOG(INFO) << "调用Entity::OnDestroy," << Id;
 	BroadcastLeave();
 
 	if (m_spAttack)
@@ -90,6 +89,9 @@ void Entity::OnDestroy()
 	if (m_sp地堡)
 		m_sp地堡->OnDestroy();
 
+	if (m_sp临时阻挡)
+		m_sp临时阻挡.reset();
+
 
 	if (m_cancelDelete)
 		m_cancelDelete();
@@ -97,6 +99,7 @@ void Entity::OnDestroy()
 
 void Entity::BroadcastLeave()
 {
+	LOG(INFO) << NickName() << "调用Entity::BroadcastLeave," << Id;
 	Broadcast(MsgDelRoleRet(Id));
 }
 
@@ -120,6 +123,7 @@ const std::string& Entity::NickName()
 
 void Entity::BroadcastEnter()
 {
+	LOG(INFO) << NickName() << "调用Entity::BroadcastEnter," << Id;
 	Broadcast(MsgAddRoleRet(*this));//自己广播给别人
 	BroadcastNotifyPos();
 	CoEvent<MyEvent::AddEntity>::OnRecvEvent(false, { weak_from_this() });
