@@ -8,9 +8,13 @@ class Space;
 class 地堡Component
 {
 public:
+	地堡Component(Entity &ref):m_refEntity(ref){}
 	static void AddComponet(Entity& refEntity, PlayerGateSession_Game& refGateSession);
+	void OnDestroy();
 	void 进(Space& refSpace, uint64_t idEntity);
 	void Update();
+	void 全都出地堡();
+	Entity& m_refEntity;
 	std::list<SpEntity> m_listSpEntity;
 };
 

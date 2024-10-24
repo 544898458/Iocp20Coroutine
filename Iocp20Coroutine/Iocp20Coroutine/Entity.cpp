@@ -75,7 +75,7 @@ float Entity::攻击距离() const
 
 void Entity::OnDestroy()
 {
-	LOG(INFO) << "调用Entity::OnDestroy";
+	LOG(INFO) << "调用Entity::OnDestroy," << Id;
 	BroadcastLeave();
 
 	if (m_spAttack)
@@ -86,6 +86,10 @@ void Entity::OnDestroy()
 
 	if (m_sp采集)
 		m_sp采集->m_TaskCancel.TryCancel();
+
+	if (m_sp地堡)
+		m_sp地堡->OnDestroy();
+
 
 	if (m_cancelDelete)
 		m_cancelDelete();

@@ -130,15 +130,7 @@ void PlayerGateSession_Game::OnRecv(const Msg出地堡& msg)
 		Say("目标不是地堡");
 		return;
 	}
-	auto list = spTarget->m_sp地堡->m_listSpEntity;
-	spTarget->m_sp地堡->m_listSpEntity.clear();
-	for (auto& sp : list)
-	{
-		m_pCurSpace->m_mapEntity.insert({ sp->Id, sp });
-		sp->BroadcastEnter();
-		sp->m_wpOwner.reset();
-	}
-	list.clear();
+	spTarget->m_sp地堡->全都出地堡();
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)

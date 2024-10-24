@@ -6,7 +6,12 @@
 
 void 地堡Component::AddComponet(Entity& refEntity, PlayerGateSession_Game& refGateSession)
 {
-	refEntity.m_sp地堡 = std::make_shared<地堡Component>();
+	refEntity.m_sp地堡 = std::make_shared<地堡Component,Entity&>(refEntity);
+}
+
+void 地堡Component::OnDestroy()
+{
+	全都出地堡();
 }
 
 void 地堡Component::进(Space& refSpace, uint64_t idEntity)
@@ -29,4 +34,17 @@ void 地堡Component::Update()
 		if (sp->m_spAttack)
 			sp->m_spAttack->Update();
 	}
+}
+
+void 地堡Component::全都出地堡()
+{
+	auto list = m_listSpEntity;
+	m_listSpEntity.clear();
+	for (auto& sp : list)
+	{
+		m_refEntity.m_refSpace.m_mapEntity.insert({ sp->Id, sp });
+		sp->BroadcastEnter();
+		sp->m_wpOwner.reset();
+	}
+	list.clear();
 }
