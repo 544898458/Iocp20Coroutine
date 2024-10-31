@@ -92,16 +92,17 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 		}
 
 		LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
-		CHECK_NOTNULL_CO_RET_0(refGateSession.m_pCurSpace);
+		CHECK_CO_RET_0(!refGateSession.m_wpSpace.expired());
+		auto sp = refGateSession.m_wpSpace.lock();
 		auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string&>(
-			pos, *refGateSession.m_pCurSpace, 配置.配置.strPrefabName, 配置.配置.strName);
+			pos, *sp, 配置.配置.strPrefabName, 配置.配置.strName);
 		spNewEntity->m_f警戒距离 = 配置.f警戒距离;
 		PlayerComponent::AddComponent(*spNewEntity,refGateSession);
 		AttackComponent::AddComponent(*spNewEntity, 类型);
 		DefenceComponent::AddComponent(*spNewEntity, 配置.制造.u16初始Hp);
 		走Component::AddComponent(*spNewEntity);
 		refGateSession.m_setSpEntity.insert(spNewEntity);//自己控制的单位
-		refGateSession.m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
+		sp->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 		switch (类型)
 		{

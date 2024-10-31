@@ -461,6 +461,9 @@
     <ClInclude Include="走Component.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="SpSpace.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\websocketfiles-master\src\string_helper.inl">

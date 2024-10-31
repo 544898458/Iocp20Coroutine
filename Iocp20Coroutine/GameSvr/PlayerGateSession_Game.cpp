@@ -104,8 +104,8 @@ void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
 {
 	ForEachSelected([this, &msg](Entity& ref)
 		{
-			CHECK_NOTNULL_VOID(m_pCurSpace);
-			auto wpEntity = m_pCurSpace->GetEntity((int64_t)msg.id目标资源);
+			CHECK_VOID(!m_wpSpace.expired());
+			auto wpEntity = m_wpSpace.lock()->GetEntity((int64_t)msg.id目标资源);
 			CHECK_RET_VOID(!wpEntity.expired());
 
 			if (!ref.m_sp采集)
@@ -120,8 +120,8 @@ void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
 
 void PlayerGateSession_Game::OnRecv(const Msg出地堡& msg)
 {
-	CHECK_NOTNULL_VOID(m_pCurSpace);
-	auto wpTarget = m_pCurSpace->GetEntity((int64_t)msg.id地堡);
+	CHECK_VOID(!m_wpSpace.expired());
+	auto wpTarget = m_wpSpace.lock()->GetEntity((int64_t)msg.id地堡);
 	//msg.vecId地堡内单位.size();
 	CHECK_RET_VOID(!wpTarget.expired());
 	auto spTarget = wpTarget.lock();
@@ -138,8 +138,8 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 	std::list<std::function<void()>> listFun;
 	ForEachSelected([this, &msg, &listFun](Entity& ref)
 		{
-			CHECK_NOTNULL_VOID(m_pCurSpace);
-			auto wpTarget = m_pCurSpace->GetEntity((int64_t)msg.id目标地堡);
+			CHECK_VOID(!m_wpSpace.expired());
+			auto wpTarget = m_wpSpace.lock()->GetEntity((int64_t)msg.id目标地堡);
 			CHECK_RET_VOID(!wpTarget.expired());
 			auto spTarget = wpTarget.lock();
 			if (!spTarget->m_sp地堡)
@@ -174,7 +174,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
-	CHECK_NOTNULL_VOID(m_pCurSpace);
+	CHECK_VOID(!m_wpSpace.expired());
 	ForEachSelected([this, targetX, targetZ](Entity& ref)
 		{
 			if (!ref.m_sp走)
@@ -195,11 +195,12 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 
 void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fun)
 {
-	CHECK_NOTNULL_VOID(m_pCurSpace);
+	CHECK_VOID(!m_wpSpace.expired());
+	auto sp = m_wpSpace.lock();
 	for (const auto id : m_listSelectedEntity)
 	{
-		auto itFind = m_pCurSpace->m_mapEntity.find(id);
-		if (itFind == m_pCurSpace->m_mapEntity.end())
+		auto itFind = sp->m_mapEntity.find(id);
+		if (itFind == sp->m_mapEntity.end())
 		{
 			LOG(INFO) << "选中的实体不存在:" << id;
 			//assert(false);
@@ -277,9 +278,10 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, const
 	}
 
 	//加建筑
-	CHECK_NOTNULL_CO_RET_0(m_pCurSpace);
+	CHECK_CO_RET_0(!m_wpSpace.expired());
+	auto spSpace = m_wpSpace.lock();
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(
-		pos, *m_pCurSpace, 配置.配置.strPrefabName, 配置.配置.strName);
+		pos, *spSpace, 配置.配置.strPrefabName, 配置.配置.strName);
 	//spNewEntity->AddComponentAttack();
 	PlayerComponent::AddComponent(*spNewEntity, *this);
 	BuildingComponent::AddComponent(*spNewEntity, *this, 类型, 配置.f半边长);
@@ -297,31 +299,34 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, const
 	DefenceComponent::AddComponent(*spNewEntity, 配置.建造.u16初始Hp);
 	//spNewEntity->m_spBuilding->m_fun造活动单位 = 配置.fun造兵;
 	m_setSpEntity.insert(spNewEntity);//自己控制的单位
-	m_pCurSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
+	spSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 	spNewEntity->BroadcastEnter();
 	co_return 0;
 }
 
-void PlayerGateSession_Game::EnterSpace(Space& refSpace, const std::string& strNickName)
+void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace, const std::string& strNickName)
 {
-	m_pCurSpace = &refSpace;
+	assert(m_wpSpace.expired());
+	assert(!wpSpace.expired());
+	m_wpSpace = wpSpace;
+	auto sp = m_wpSpace.lock();
 	m_strNickName = strNickName;
-	for (const auto& [id, spEntity] : refSpace.m_mapEntity)//所有地图上的实体发给自己
+	for (const auto& [id, spEntity] : sp->m_mapEntity)//所有地图上的实体发给自己
 	{
 		LOG(INFO) << spEntity->NickName() << ",发给单人," << spEntity->Id;
 		Send(MsgAddRoleRet(*spEntity));
 		Send(MsgNotifyPos(*spEntity));
 	}
 
-	SpEntity spEntityViewPort = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ 0.0 }, refSpace, "smoke", "视口");
-	refSpace.m_mapEntity.insert({ spEntityViewPort->Id, spEntityViewPort });
+	SpEntity spEntityViewPort = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ 0.0 }, *sp, "smoke", "视口");
+	sp->m_mapEntity.insert({ spEntityViewPort->Id, spEntityViewPort });
 	//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 	PlayerComponent::AddComponent(*spEntityViewPort, *this);
 	spEntityViewPort->BroadcastEnter();
 
 	CoEvent<PlayerGateSession_Game*>::OnRecvEvent(false, this);
-	单人剧情::Co(m_Space单人剧情, m_funCancel单人剧情, *this).RunNew();
+	单人剧情::Co(*sp, m_funCancel单人剧情, *this).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgSay& msg)
@@ -333,13 +338,13 @@ void PlayerGateSession_Game::OnRecv(const MsgSay& msg)
 
 void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
 {
-	CHECK_NOTNULL_VOID(m_pCurSpace);
+	CHECK_VOID(!m_wpSpace.expired());
 	LOG(INFO) << "收到选择:" << msg.ids.size();
 	m_listSelectedEntity.clear();
 	std::transform(msg.ids.begin(), msg.ids.end(), std::back_inserter(m_listSelectedEntity), [](const double& id) {return uint64_t(id); });
 	for (const auto id : m_listSelectedEntity)
 	{
-		auto wpEntity = m_pCurSpace->GetEntity(id);
+		auto wpEntity = m_wpSpace.lock()->GetEntity(id);
 		if (wpEntity.expired())
 			continue;
 
@@ -380,9 +385,9 @@ void PlayerGateSession_Game::RecvMsg(const msgpack::object& obj)
 		return;
 	}
 }
-extern Space g_Space无限刷怪;
+
 PlayerGateSession_Game::PlayerGateSession_Game(GameSvrSession& ref, uint64_t idPlayerGateSession) :
-	m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession), m_Space单人剧情(g_Space无限刷怪)
+	m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession)
 {
 
 }
@@ -455,7 +460,7 @@ void PlayerGateSession_Game::Process()
 	//		break;
 	//	}
 	//}
-	m_Space单人剧情.Update();
+	//m_Space单人剧情.Update();
 }
 
 
@@ -515,8 +520,8 @@ bool PlayerGateSession_Game::可放置建筑(const Position& refPos, float f半边长)
 	if (!CrowdTool可站立({ refPos.x + f半边长 ,refPos.z - f半边长 }))return false;
 
 	//遍历全地图所有建筑判断重叠
-	CHECK_NOTNULL_RET_FALSE(m_pCurSpace);
-	for (const auto& kv : m_pCurSpace->m_mapEntity)
+	CHECK_RET_FALSE(!m_wpSpace.expired());
+	for (const auto& kv : m_wpSpace.lock()->m_mapEntity)
 	{
 		const auto& refPosOld = kv.second->m_Pos;
 		bool CrowdTool判断单位重叠(const Position & refPosOld, const Position & refPosNew, const float f半边长);

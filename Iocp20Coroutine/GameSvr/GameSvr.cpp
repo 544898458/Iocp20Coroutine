@@ -21,12 +21,11 @@ void GameSvr::OnAdd(Session&)
 void GameSvr::OnDel()
 {
 }
-extern Space g_Space无限刷怪;
 void GameSvr::Update()
 {
 	m_Sessions.Update([this]()
 		{
-			g_Space无限刷怪.Update();
+			Space::StaticUpdate();
 		});
 	
 	/*

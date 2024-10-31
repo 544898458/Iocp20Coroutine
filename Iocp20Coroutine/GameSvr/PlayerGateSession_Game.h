@@ -23,7 +23,7 @@ public:
 	template<class T> void Send(const T& ref);
 	void Say(const std::string& str);
 	const std::string& NickName()const { return m_strNickName; }
-	void EnterSpace(Space& refSpace, const std::string& strNickName);
+	void EnterSpace(WpSpace wpSpace, const std::string& strNickName);
 	void Send资源();
 	uint16_t 活动单位上限() const;
 	uint16_t 活动单位包括制造队列中的() const;
@@ -32,11 +32,10 @@ public:
 
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
-	Space& m_Space单人剧情;
 	/// <summary>
 	/// 当前这个玩家在哪个Space里
 	/// </summary>
-	Space* m_pCurSpace = nullptr;
+	WpSpace m_wpSpace;
 	/// <summary>
 	/// 加入Space空间的实体（玩家角色）
 	/// </summary>

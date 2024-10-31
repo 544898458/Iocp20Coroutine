@@ -335,6 +335,7 @@
     <ClInclude Include="PlayerSystem.h" />
     <ClInclude Include="SpEntity.h" />
     <ClInclude Include="ClientSession_GameToWorld.h" />
+    <ClInclude Include="SpSpace.h" />
     <ClInclude Include="临时阻挡Component.h" />
     <ClInclude Include="单人剧情.h" />
     <ClInclude Include="单位.h" />

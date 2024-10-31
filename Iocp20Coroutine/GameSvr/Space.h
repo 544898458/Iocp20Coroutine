@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "SpEntity.h"
 #include "Entity.h"
+#include "SpSpace.h"
 
 //class GameSvr;
 /// <summary>
@@ -52,9 +53,12 @@ public:
 			});
 		return iterMin->second->weak_from_this();
 	}
-	void Update();
+	static WpSpace AddSpace(const uint8_t idSpace);
+	static WpSpace GetSpace(const uint8_t idSpace);
+	static void StaticUpdate();
 private:
 	void EraseEntity(const bool bForceEraseAll);
+	void Update();
 	//GameSvr * const m_pServer;
 };
 

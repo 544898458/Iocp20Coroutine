@@ -91,7 +91,6 @@ void SendToWorldSvr(const T& refMsg, const uint64_t idGateSession)
 }
 template void SendToWorldSvr(const MsgSay& msg, const uint64_t idGateSession);
 template void SendToWorldSvr(const MsgChangeMoney& msg, const uint64_t idGateSession);
-Space g_Space无限刷怪;
 
 ///*
 int main(void)
@@ -134,9 +133,10 @@ int main(void)
 	extern std::function<void(MsgSay const&)> m_funBroadcast;
 	m_funBroadcast = [&accept](const MsgSay& msg) {accept.m_Server.m_Sessions.Broadcast(msg); };
 
+	auto wpSpace无限刷怪 = Space::AddSpace(1);
 
 	FunCancel funCancelSpawnMonster;
-	AiCo::SpawnMonster(g_Space无限刷怪, funCancelSpawnMonster).RunNew();
+	AiCo::SpawnMonster(*wpSpace无限刷怪.lock(), funCancelSpawnMonster).RunNew();
 	
 	//主逻辑工作线程
 	using namespace std;

@@ -183,7 +183,7 @@ void GameSvrSession::OnRecv(const MsgGateAddSession& msg, const uint64_t idGateC
 	}
 
 	//pair.first->second.EnterSpace(m_pServer->m_Space无限刷怪);
-	pair.first->second->EnterSpace(pair.first->second->m_Space单人剧情, msg.nickName);
+	pair.first->second->EnterSpace(Space::GetSpace(1), msg.nickName);
 }
 
 void GameSvrSession::OnRecv(const MsgGateDeleteSession& msg, const uint64_t idGateClientSession)

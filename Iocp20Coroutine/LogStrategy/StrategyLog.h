@@ -20,6 +20,15 @@ class StrategyLog
 		co_return 0;\
 	}\
 }
+
+#define CHECK_CO_RET_0( EXP ) \
+{\
+	if (!(EXP)) \
+	{\
+		LOG(ERROR)<< #EXP<< "is false";\
+		co_return 0;\
+	}\
+}
 #define CHECK_RET_FALSE( EXP ) \
 {\
 	if (!(EXP)) \
