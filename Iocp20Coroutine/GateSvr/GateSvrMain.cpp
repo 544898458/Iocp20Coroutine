@@ -11,12 +11,12 @@
 //#include "../IocpNetwork/StrConv.h"
 #include "GateServer.h"
 #include "ClientSession_GateToGame.h"
-#include "../Iocp20Coroutine/MyMsgQueue.h"
+#include "../GameSvr/MyMsgQueue.h"
 #include <memory>
 #include "../LogStrategy/StrategyLog.h"
 #include "ClientSession_GateToWorld.h"
 #include "../IocpNetwork/WsaStartUp.h"
-#include "../Iocp20Coroutine/AllPort.h"
+#include "../GameSvr/AllPort.h"
 
 std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GateToGame>> g_ConnectToGameSvr;
 bool g_running(true);

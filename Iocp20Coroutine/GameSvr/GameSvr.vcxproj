@@ -24,7 +24,7 @@
     <ProjectGuid>{3e7788b7-b4d5-47b4-a8e9-ffb3b3b3ef32}</ProjectGuid>
     <RootNamespace>ConsoleApplication1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Iocp20Coroutine</ProjectName>
+    <ProjectName>GameSvr</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -250,7 +250,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GameSvr.cpp" />
     <ClCompile Include="GameSvrSession.cpp" />
-    <ClCompile Include="Iocp20Coroutine.cpp" />
+    <ClCompile Include="GameSvrApp.cpp" />
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

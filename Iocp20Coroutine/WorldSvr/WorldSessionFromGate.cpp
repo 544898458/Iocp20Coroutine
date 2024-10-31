@@ -5,7 +5,7 @@
 #include "WorldSvrAcceptGate.h"
 //#include "../IocpNetwork/WebSocketSessionTemplate.h"
 #include "../websocketfiles-master/src/ws_endpoint.cpp"
-#include "../Iocp20Coroutine/MyMsgQueue.h"
+#include "../GameSvr/MyMsgQueue.h"
 #include "../IocpNetwork/StrConv.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 #include "../CoRoutine/CoDb.h"

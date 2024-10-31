@@ -17,7 +17,7 @@
 #include "../CoRoutine/CoDbTemplate.h"
 #include "DbPlayer.h"
 #include "../IocpNetwork/WsaStartUp.h"
-#include "../Iocp20Coroutine/AllPort.h"
+#include "../GameSvr/AllPort.h"
 BOOL g_running = TRUE;
 BOOL WINAPI fun(DWORD dwCtrlType)
 {

@@ -60,7 +60,7 @@
     <ClCompile Include="mainGpp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Iocp20Coroutine.cpp">
+    <ClCompile Include="GameSvrApp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\websocketfiles-master\src\main.cpp">

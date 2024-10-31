@@ -3,7 +3,7 @@
 #include "../IocpNetwork/ListenSocketCompletionKeyTemplate.h"
 #include "../IocpNetwork/SessionSocketCompletionKeyTemplate.h"
 #include <msgpack.hpp>
-#include "../Iocp20Coroutine/MyMsgQueue.h"
+#include "../GameSvr/MyMsgQueue.h"
 #include "../IocpNetwork/StrConv.h"
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 #include "../IocpNetwork/MsgPack.h"

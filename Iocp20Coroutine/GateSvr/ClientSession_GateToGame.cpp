@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ClientSession_GateToGame.h"
 #include "../IocpNetwork/SessionSocketCompletionKeyTemplate.h"
-#include "../Iocp20Coroutine/MyMsgQueue.h"
+#include "../GameSvr/MyMsgQueue.h"
 
 //template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WorldClientSession, WorldClient >(HANDLE hIocp, SOCKET socketListen, WorldClient&);
 template Iocp::SessionSocketCompletionKey<ClientSession_GateToGame>;

@@ -1,5 +1,5 @@
 #pragma once
-#include "../Iocp20Coroutine/MyMsgQueue.h"
+#include "../GameSvr/MyMsgQueue.h"
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 #include <set>
 class WorldSessionFromGate;

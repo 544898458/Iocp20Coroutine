@@ -5,7 +5,7 @@
 #include <msgpack.hpp>
 #include "../IocpNetwork/MsgPack.h"
 #include "../IocpNetwork/MsgQueueMsgPack.h"
-#include "../Iocp20Coroutine/MyMsgQueue.h"
+#include "../GameSvr/MyMsgQueue.h"
 class WorldSvrAcceptGame;
 class WorldSessionFromGame
 {

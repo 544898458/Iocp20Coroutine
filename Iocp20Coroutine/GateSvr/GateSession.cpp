@@ -4,7 +4,7 @@
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 #include "../IocpNetwork/WebSocketSessionTemplate.h"
 #include "../websocketfiles-master/src/ws_endpoint.cpp"
-#include "../Iocp20Coroutine/MyMsgQueue.h"
+#include "../GameSvr/MyMsgQueue.h"
 #include "GateServer.h"
 #include "../IocpNetwork/SessionsTemplate.h"
 #include "../CoRoutine/CoRpc.h"

@@ -1,7 +1,7 @@
 #pragma once
 #include "../IocpNetwork/WebSocketSession.h"
 #include <deque>
-#include "../Iocp20Coroutine/MyMsgQueue.h"
+#include "../GameSvr/MyMsgQueue.h"
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 class GateServer;
 /// <summary>
