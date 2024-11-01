@@ -14,34 +14,39 @@
 #include "AttackComponent.h"
 #include "MyMsgQueue.h"
 
-CrowdToolState& GetCrowdTool()
+std::shared_ptr<CrowdToolState> CreateCrowdToolState()
 {
-	static CrowdToolState* p;
-	if (nullptr == p)
-	{
-		auto pSample = new Sample_TempObstacles();
-		pSample->loadAll("all_tiles_tilecache.bin");
-		pSample->m_navQuery->init(pSample->m_navMesh, 2048);
-		p = new CrowdToolState();
-		p->init(pSample);
-	}
-	return *p;
+	return std::make_shared<CrowdToolState>();
+}
+//
+//CrowdToolState& GetCrowdTool()
+//{
+//	static CrowdToolState* p;
+//	if (nullptr == p)
+//	{
+//		auto pSample = new Sample_TempObstacles();
+//		pSample->loadAll("all_tiles_tilecache.bin");
+//		pSample->m_navQuery->init(pSample->m_navMesh, 2048);
+//		p = new CrowdToolState();
+//		p->init(pSample);
+//	}
+//	return *p;
+//}
+
+int CrowToolAddAgent(CrowdToolState& ref, float arrF[], float fSpeed)
+{
+	return ref.addAgent(arrF, fSpeed);
 }
 
-int CrowToolAddAgent(float arrF[], float fSpeed)
+void CrowToolRemoveAgent(CrowdToolState& ref, int idx)
 {
-	return GetCrowdTool().addAgent(arrF, fSpeed);
-}
-
-void CrowToolRemoveAgent(int idx)
-{
-	GetCrowdTool().removeAgent(idx);
+	ref.removeAgent(idx);
 }
 
 
-uint32_t CrowToolAdd方块阻挡(float arrF[], float f半边长)
+uint32_t CrowToolAdd方块阻挡(CrowdToolState& ref, float arrF[], float f半边长)
 {
-	auto* pSample_TempObstacles = dynamic_cast<Sample_TempObstacles*>(GetCrowdTool().m_sample);
+	auto* pSample_TempObstacles = dynamic_cast<Sample_TempObstacles*>(ref.m_sample);
 	float arrMin[] = { arrF[0] - f半边长 , arrF[1] - f半边长 , arrF[2] - f半边长 };
 	float arrMax[] = { arrF[0] + f半边长 , arrF[1] + f半边长 , arrF[2] + f半边长 };
 	uint32_t u32Ret(0);
@@ -50,9 +55,9 @@ uint32_t CrowToolAdd方块阻挡(float arrF[], float f半边长)
 	return u32Ret;
 }
 
-bool CrowToolRemove阻挡(const uint32_t u32DtObstacleRef)
+bool CrowToolRemove阻挡(CrowdToolState& ref, const uint32_t u32DtObstacleRef)
 {
-	auto* pSample_TempObstacles = dynamic_cast<Sample_TempObstacles*>(GetCrowdTool().m_sample);
+	auto* pSample_TempObstacles = dynamic_cast<Sample_TempObstacles*>(ref.m_sample);
 	const auto result = pSample_TempObstacles->m_tileCache->removeObstacle(u32DtObstacleRef);
 	const auto ret = DT_SUCCESS == result;
 	assert(ret);
@@ -60,13 +65,13 @@ bool CrowToolRemove阻挡(const uint32_t u32DtObstacleRef)
 }
 
 std::unordered_map<int, uint64_t> m_mapEntityId;
-extern Space g_Space无限刷怪;
-void CrowToolUpdate()
+
+void CrowToolUpdate(Space& ref)
 {
 	const float SIM_RATE = 10;
 	const float DELTA_TIME = 1.0f / SIM_RATE;
-	GetCrowdTool().handleUpdate(DELTA_TIME);
-	auto m_sample = GetCrowdTool().m_sample;
+	ref.m_spCrowdToolState->handleUpdate(DELTA_TIME);
+	auto m_sample = ref.m_spCrowdToolState->m_sample;
 	m_sample->handleUpdate(DELTA_TIME);
 	duDebugDraw& dd = m_sample->getDebugDraw();
 	const float rad = m_sample->getAgentRadius();
@@ -91,7 +96,7 @@ void CrowToolUpdate()
 
 		//duDebugDrawCircle(&dd, pos[0], pos[1], pos[2], radius, col, 2.0f);
 		const auto idEntity = m_mapEntityId[i];
-		auto spEntity = g_Space无限刷怪.GetEntity(idEntity);
+		auto spEntity = ref.GetEntity(idEntity);
 		if (spEntity.expired())
 		{
 			LOG(WARNING) << "要删才行";
@@ -105,15 +110,14 @@ void CrowToolUpdate()
 	}
 }
 
-void CrowdToolSetMoveTarget(const float* p, const int idx)
+void CrowdToolSetMoveTarget(CrowdToolState& ref, const float* p, const int idx)
 {
-	GetCrowdTool().m_agentDebug.idx = idx;
-	GetCrowdTool().setMoveTarget(p, false);
+	ref.m_agentDebug.idx = idx;
+	ref.setMoveTarget(p, false);
 }
 
-bool CrowdTool可站立(const Position& refPos)
+bool CrowdTool可站立(CrowdToolState& refCrowTool, const Position& refPos)
 {
-	auto& refCrowTool = GetCrowdTool();
 	dtNavMeshQuery* navquery = refCrowTool.m_sample->getNavMeshQuery();
 	CHECK_NOTNULL_RET_FALSE(navquery);
 
@@ -127,7 +131,7 @@ bool CrowdTool可站立(const Position& refPos)
 		return false;
 	Position posNew = { tgt[0],tgt[2] };
 	return refPos.DistanceLessEqual(posNew, 0.5f);
-		//return true;
+	//return true;
 }
 
 bool CrowdTool判断单位重叠(const Position& refPosOld, const Position& refPosNew, const float f半边长)
@@ -143,7 +147,7 @@ RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& 
 {
 	float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z };
 	assert(AttackComponent::INVALID_AGENT_IDX == refEntity.m_spAttack->m_idxCrowdAgent);
-	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF, refEntity.m_速度每帧移动距离 * 10);
+	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(*refEntity.m_refSpace.m_spCrowdToolState, arrF, refEntity.m_速度每帧移动距离 * 10);
 	assert(AttackComponent::INVALID_AGENT_IDX != m_refEntity.m_spAttack->m_idxCrowdAgent);
 	m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
 
@@ -152,7 +156,7 @@ RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& 
 
 RecastNavigationCrowd::~RecastNavigationCrowd()
 {
-	CrowToolRemoveAgent(m_refEntity.m_spAttack->m_idxCrowdAgent);
+	CrowToolRemoveAgent(*m_refEntity.m_refSpace.m_spCrowdToolState, m_refEntity.m_spAttack->m_idxCrowdAgent);
 	m_refEntity.m_spAttack->m_idxCrowdAgent = AttackComponent::INVALID_AGENT_IDX;
 }
 
@@ -164,6 +168,6 @@ void RecastNavigationCrowd::SetMoveTarget(const Position& posTarget)
 	{
 		LOG(ERROR) << "可能超过容量";
 	}
-	CrowdToolSetMoveTarget(arrF, m_refEntity.m_spAttack->m_idxCrowdAgent);
+	CrowdToolSetMoveTarget(*m_refEntity.m_refSpace.m_spCrowdToolState, arrF, m_refEntity.m_spAttack->m_idxCrowdAgent);
 }
 

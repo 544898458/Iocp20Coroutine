@@ -6,7 +6,7 @@
 #include "SpEntity.h"
 #include "Entity.h"
 #include "SpSpace.h"
-
+class CrowdToolState;
 //class GameSvr;
 /// <summary>
 /// Go”Ô—‘GoWorldøÚº‹Space/Entity£¨œ‡µ±”⁄C#”Ô—‘ETøÚº‹Scene/Unit
@@ -14,7 +14,7 @@
 class Space final
 {
 public:
-	Space() = default;
+	Space();
 	Space(const Space&) = delete;
 	~Space();
 	template<class T>
@@ -56,10 +56,13 @@ public:
 	static WpSpace AddSpace(const uint8_t idSpace);
 	static WpSpace GetSpace(const uint8_t idSpace);
 	static void StaticUpdate();
+
+	std::shared_ptr<CrowdToolState> m_spCrowdToolState;
 private:
 	void EraseEntity(const bool bForceEraseAll);
 	void Update();
 	//GameSvr * const m_pServer;
+	
 };
 
 //Space(GameSvr* pServer) = default;

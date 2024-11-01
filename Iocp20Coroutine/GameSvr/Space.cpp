@@ -4,6 +4,12 @@
 #include "PlayerComponent.h"
 #include "GameSvrSession.h"
 
+Space::Space()
+{
+	std::shared_ptr<CrowdToolState> CreateCrowdToolState();
+	m_spCrowdToolState = CreateCrowdToolState();
+}
+
 Space::~Space()
 {
 	EraseEntity(true);
@@ -25,6 +31,38 @@ WpEntity Space::GetEntity(const int64_t id)
 void Space::Update()
 {
 	EraseEntity(false);
+
+	void CrowToolUpdate(Space & ref);
+	CrowToolUpdate(*this);
+}
+
+std::unordered_map<uint8_t, SpSpace> g_mapSpace;
+WpSpace Space::AddSpace(const uint8_t idSpace)
+{
+	auto wpOld = GetSpace(idSpace);
+	if (!wpOld.expired())
+		return wpOld;
+
+	auto [iterNew,bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space>() });
+	assert(bOk);
+	return iterNew->second;
+}
+
+WpSpace Space::GetSpace(const uint8_t idSpace)
+{
+	auto iterFind = g_mapSpace.find(idSpace);
+	if (g_mapSpace.end() == iterFind)
+		return {};
+		
+	return iterFind->second;
+}
+
+void Space::StaticUpdate()
+{
+	for (auto [id, sp] : g_mapSpace)
+	{
+		sp->Update();
+	}
 }
 
 void Space::EraseEntity(const bool bForceEraseAll)

@@ -167,10 +167,9 @@ int main(void)
 
 		accept.m_Server.Update();
 		g_ConnectToWorldSvr->Session.Process();
+		Space::StaticUpdate();
 		CoTimer::Update();
 		CoTask<int>::Process();
-		void CrowToolUpdate();
-		CrowToolUpdate();
 	}
 
 	if (funCancelSpawnMonster)
