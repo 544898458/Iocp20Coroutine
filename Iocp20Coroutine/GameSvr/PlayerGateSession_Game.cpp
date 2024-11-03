@@ -510,14 +510,16 @@ uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
 
 bool PlayerGateSession_Game::可放置建筑(const Position& refPos, float f半边长)
 {
-	bool CrowdTool可站立(const Position & refPos);
+	bool CrowdTool可站立(CrowdToolState& refCrowTool, const Position & refPos);
 
-	if (!CrowdTool可站立(refPos))return false;
+	CHECK_FALSE(!m_wpSpace.expired());
+	auto& refCrowdToolState = *m_wpSpace.lock()->m_spCrowdToolState;
+	if (!CrowdTool可站立(refCrowdToolState, refPos))return false;
 
-	if (!CrowdTool可站立({ refPos.x - f半边长 ,refPos.z + f半边长 }))return false;
-	if (!CrowdTool可站立({ refPos.x - f半边长 ,refPos.z - f半边长 }))return false;
-	if (!CrowdTool可站立({ refPos.x + f半边长 ,refPos.z + f半边长 }))return false;
-	if (!CrowdTool可站立({ refPos.x + f半边长 ,refPos.z - f半边长 }))return false;
+	if (!CrowdTool可站立(refCrowdToolState, { refPos.x - f半边长 ,refPos.z + f半边长 }))return false;
+	if (!CrowdTool可站立(refCrowdToolState, { refPos.x - f半边长 ,refPos.z - f半边长 }))return false;
+	if (!CrowdTool可站立(refCrowdToolState, { refPos.x + f半边长 ,refPos.z + f半边长 }))return false;
+	if (!CrowdTool可站立(refCrowdToolState, { refPos.x + f半边长 ,refPos.z - f半边长 }))return false;
 
 	//遍历全地图所有建筑判断重叠
 	CHECK_RET_FALSE(!m_wpSpace.expired());
@@ -528,5 +530,6 @@ bool PlayerGateSession_Game::可放置建筑(const Position& refPos, float f半边长)
 		if (CrowdTool判断单位重叠(refPos, refPosOld, f半边长))
 			return false;
 	}
+
 	return true;
 }

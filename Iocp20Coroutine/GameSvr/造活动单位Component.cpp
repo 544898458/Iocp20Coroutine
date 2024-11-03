@@ -67,8 +67,11 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 		using namespace std;
 		const auto posBuilding = m_refEntity.m_Pos;
 		Position pos = { posBuilding.x + std::rand() % 10, posBuilding.z + 3 };
-		bool CrowdTool可站立(const Position & refPos);
-		if (!CrowdTool可站立(pos))
+		bool CrowdTool可站立(CrowdToolState& refCrowTool, const Position & refPos);
+		CHECK_CO_RET_FALSE(!refGateSession.m_wpSpace.expired());
+		auto& refCrowdToolState = *refGateSession.m_wpSpace.lock()->m_spCrowdToolState;
+
+		if (!CrowdTool可站立(refCrowdToolState, pos))
 		{
 			refGateSession.Say("此处不可放置");
 			if (co_await CoTimer::Wait(1s, m_TaskCancel造活动单位.cancel))
