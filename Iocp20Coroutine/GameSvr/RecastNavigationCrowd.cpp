@@ -69,8 +69,6 @@ bool CrowToolRemove阻挡(CrowdToolState& ref, const uint32_t u32DtObstacleRef)
 	return ret;
 }
 
-std::unordered_map<int, uint64_t> m_mapEntityId;
-
 void CrowToolUpdate(Space& ref)
 {
 	const float SIM_RATE = 10;
@@ -100,7 +98,7 @@ void CrowToolUpdate(Space& ref)
 		//	col = duRGBA(255,0,0,128);
 
 		//duDebugDrawCircle(&dd, pos[0], pos[1], pos[2], radius, col, 2.0f);
-		const auto idEntity = m_mapEntityId[i];
+		const auto idEntity = ref.m_mapEntityId[i];
 		auto spEntity = ref.GetEntity(idEntity);
 		if (spEntity.expired())
 		{
@@ -154,7 +152,7 @@ RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& 
 	assert(AttackComponent::INVALID_AGENT_IDX == refEntity.m_spAttack->m_idxCrowdAgent);
 	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(*refEntity.m_refSpace.m_spCrowdToolState, arrF, refEntity.m_速度每帧移动距离 * 10);
 	assert(AttackComponent::INVALID_AGENT_IDX != m_refEntity.m_spAttack->m_idxCrowdAgent);
-	m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
+	refEntity.m_refSpace.m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
 
 	SetMoveTarget(posTarget);
 }

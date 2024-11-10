@@ -43,7 +43,7 @@ WpSpace Space::AddSpace(const uint8_t idSpace)
 	if (!wpOld.expired())
 		return wpOld;
 
-	auto [iterNew,bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space>() });
+	auto [iterNew, bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space>() });
 	assert(bOk);
 	return iterNew->second;
 }
@@ -53,7 +53,7 @@ WpSpace Space::GetSpace(const uint8_t idSpace)
 	auto iterFind = g_mapSpace.find(idSpace);
 	if (g_mapSpace.end() == iterFind)
 		return {};
-		
+
 	return iterFind->second;
 }
 

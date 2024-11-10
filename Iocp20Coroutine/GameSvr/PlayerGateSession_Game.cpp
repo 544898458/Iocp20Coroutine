@@ -167,11 +167,17 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 	}
 }
 
-
 void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
 {
 	LOG(INFO) << "希望进Space:" << msg.idSapce;
 	EnterSpace(Space::GetSpace(msg.idSapce), this->NickName());
+}
+
+void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
+{
+	m_spSpace单人剧情副本 = std::make_shared<Space>();
+	EnterSpace(m_spSpace单人剧情副本, this->NickName());
+	单人剧情::Co(*m_spSpace单人剧情副本, m_funCancel单人剧情, *this).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
@@ -331,7 +337,6 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace, const std::string& strN
 	spEntityViewPort->BroadcastEnter();
 
 	CoEvent<PlayerGateSession_Game*>::OnRecvEvent(false, this);
-	单人剧情::Co(*sp, m_funCancel单人剧情, *this).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgSay& msg)
@@ -402,6 +407,7 @@ void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& o
 	switch (idMsg)
 	{
 	case MsgId::进Space:RecvMsg<Msg进Space>(obj); break;
+	case MsgId::进单人剧情副本:RecvMsg<Msg进单人剧情副本>(obj); break;
 	case MsgId::Move:RecvMsg<MsgMove>(obj); break;
 	case MsgId::Say:RecvMsg<MsgSay >(obj); break;
 	case MsgId::SelectRoles:RecvMsg<MsgSelectRoles>(obj); break;
@@ -435,38 +441,9 @@ void PlayerGateSession_Game::Process()
 			LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
 		}
 	}
-	//{
-	//	const auto oldSize = m_vecCoRpc.size();
-	//	std::erase_if(m_vecCoRpc, [](CoTask<int>& refCo)->bool {return refCo.Finished(); });
-	//	const auto newSize = m_vecCoRpc.size();
-	//	if (oldSize != newSize)
-	//	{
-	//		LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
-	//	}
-	//}
 
-	//while (true)
-	//{
-	//	const MsgId msgId = this->m_MsgQueue.PopMsg();
-	//	if (MsgId::Invalid_0 == msgId)//没有消息可处理
-	//		break;
-
-	//	switch (msgId)
-	//	{
-	//	case MsgId::Login:this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &PlayerGateSession::OnRecv); break;
-	//	case MsgId::Move:this->m_MsgQueue.OnRecv(this->m_queueMove, *this, &PlayerGateSession::OnRecv); break;
-	//	case MsgId::Say:this->m_MsgQueue.OnRecv(this->m_queueSay, *this, &PlayerGateSession::OnRecv); break;
-	//	case MsgId::SelectRoles:this->m_MsgQueue.OnRecv(this->m_queueSelectRoles, *this, &PlayerGateSession::OnRecv); break;
-	//	case MsgId::AddRole:this->m_MsgQueue.OnRecv(this->m_queueAddRole, *this, &PlayerGateSession::OnRecv); break;
-	//	case MsgId::AddBuilding:this->m_MsgQueue.OnRecv(this->m_queueAddBuilding, *this, &PlayerGateSession::OnRecv); break;
-	//		//case MsgId::Gate转发:this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &OnRecv); break;
-	//	default:
-	//		LOG(ERROR) << "msgId:" << msgId;
-	//		assert(false);
-	//		break;
-	//	}
-	//}
-	//m_Space单人剧情.Update();
+	if (m_spSpace单人剧情副本)
+		m_spSpace单人剧情副本->StaticUpdate();
 }
 
 

@@ -37,7 +37,7 @@ namespace 单人剧情
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
 
-		refGateSession.Say("请单击选中基地（暗红色特效表示选中），然后点击“造兵”按钮,2秒后会在基地旁造出一个工程车");
+		refGateSession.Say("请单击选中基地（暗红色特效表示选中），然后点击“造工程车”按钮,2秒后会在基地旁造出一个工程车");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;

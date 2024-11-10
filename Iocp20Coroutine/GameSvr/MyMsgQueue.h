@@ -56,6 +56,7 @@ enum MsgId
 	进地堡,
 	出地堡,
 	进Space,
+	进单人剧情副本,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -306,4 +307,10 @@ struct Msg进Space
 	MsgHead msg{ .id = 进Space};
 	uint32_t idSapce;
 	MSGPACK_DEFINE(msg, idSapce);
+};
+
+struct Msg进单人剧情副本
+{
+	MsgHead msg{ .id = 进单人剧情副本 };
+	MSGPACK_DEFINE(msg);
 };

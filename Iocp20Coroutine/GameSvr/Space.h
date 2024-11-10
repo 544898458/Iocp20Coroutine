@@ -57,12 +57,14 @@ public:
 	static WpSpace AddSpace(const uint8_t idSpace);
 	static WpSpace GetSpace(const uint8_t idSpace);
 	static void StaticUpdate();
+	void Update();
 	bool CrowdToolø…’æ¡¢(const Position& refPos);
 
 	std::shared_ptr<CrowdToolState> m_spCrowdToolState;
+	std::unordered_map<int, uint64_t> m_mapEntityId;
 private:
 	void EraseEntity(const bool bForceEraseAll);
-	void Update();
+	
 	//GameSvr * const m_pServer;
 	
 };

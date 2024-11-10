@@ -36,6 +36,7 @@ public:
 	/// 当前这个玩家在哪个Space里
 	/// </summary>
 	WpSpace m_wpSpace;
+	SpSpace m_spSpace单人剧情副本;
 	/// <summary>
 	/// 加入Space空间的实体（玩家角色）
 	/// </summary>
@@ -51,6 +52,7 @@ private:
 /// </summary>
 /// <param name="msg"></param>
 	void OnRecv(const Msg进Space& msg);
+	void OnRecv(const Msg进单人剧情副本& msg);
 	void OnRecv(const MsgMove& msg);
 	void OnRecv(const MsgSay& msg);
 	void OnRecv(const MsgSelectRoles& msg);
