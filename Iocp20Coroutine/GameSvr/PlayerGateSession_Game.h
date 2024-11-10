@@ -50,6 +50,7 @@ private:
 /// 主逻辑线程（控制台界面线程）调用
 /// </summary>
 /// <param name="msg"></param>
+	void OnRecv(const Msg进Space& msg);
 	void OnRecv(const MsgMove& msg);
 	void OnRecv(const MsgSay& msg);
 	void OnRecv(const MsgSelectRoles& msg);

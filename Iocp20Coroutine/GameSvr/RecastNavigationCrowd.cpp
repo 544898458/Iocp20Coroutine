@@ -16,7 +16,12 @@
 
 std::shared_ptr<CrowdToolState> CreateCrowdToolState()
 {
-	return std::make_shared<CrowdToolState>();
+	auto sp = std::make_shared<CrowdToolState>();
+	auto pSample = new Sample_TempObstacles();
+	pSample->loadAll("all_tiles_tilecache.bin");
+	pSample->m_navQuery->init(pSample->m_navMesh, 2048);
+	sp->init(pSample);
+	return sp;
 }
 //
 //CrowdToolState& GetCrowdTool()

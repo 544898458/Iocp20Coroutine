@@ -53,6 +53,7 @@ public:
 			});
 		return iterMin->second->weak_from_this();
 	}
+	//SpaceId£º1ÎÞÏÞË¢¹Ö
 	static WpSpace AddSpace(const uint8_t idSpace);
 	static WpSpace GetSpace(const uint8_t idSpace);
 	static void StaticUpdate();

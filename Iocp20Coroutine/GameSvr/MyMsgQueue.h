@@ -55,6 +55,7 @@ enum MsgId
 	资源,
 	进地堡,
 	出地堡,
+	进Space,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -298,4 +299,11 @@ struct Msg资源
 	uint32_t 活动单位;
 	uint32_t 活动单位上限;
 	MSGPACK_DEFINE(msg, 燃气矿, 活动单位, 活动单位上限);
+};
+
+struct Msg进Space
+{
+	MsgHead msg{ .id = 进Space};
+	uint32_t idSapce;
+	MSGPACK_DEFINE(msg, idSapce);
 };

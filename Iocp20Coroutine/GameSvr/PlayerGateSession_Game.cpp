@@ -168,6 +168,10 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 }
 
 
+void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
+{
+	LOG(INFO) << "希望进Space:" << msg.idSapce;
+}
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 {
