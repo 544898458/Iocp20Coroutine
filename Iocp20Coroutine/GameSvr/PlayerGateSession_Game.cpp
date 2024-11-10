@@ -171,6 +171,7 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
 {
 	LOG(INFO) << "希望进Space:" << msg.idSapce;
+	EnterSpace(Space::GetSpace(msg.idSapce), this->NickName());
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
@@ -400,6 +401,7 @@ void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& o
 {
 	switch (idMsg)
 	{
+	case MsgId::进Space:RecvMsg<Msg进Space>(obj); break;
 	case MsgId::Move:RecvMsg<MsgMove>(obj); break;
 	case MsgId::Say:RecvMsg<MsgSay >(obj); break;
 	case MsgId::SelectRoles:RecvMsg<MsgSelectRoles>(obj); break;
@@ -514,16 +516,14 @@ uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
 
 bool PlayerGateSession_Game::可放置建筑(const Position& refPos, float f半边长)
 {
-	bool CrowdTool可站立(CrowdToolState& refCrowTool, const Position & refPos);
-
+	
 	CHECK_FALSE(!m_wpSpace.expired());
-	auto& refCrowdToolState = *m_wpSpace.lock()->m_spCrowdToolState;
-	if (!CrowdTool可站立(refCrowdToolState, refPos))return false;
-
-	if (!CrowdTool可站立(refCrowdToolState, { refPos.x - f半边长 ,refPos.z + f半边长 }))return false;
-	if (!CrowdTool可站立(refCrowdToolState, { refPos.x - f半边长 ,refPos.z - f半边长 }))return false;
-	if (!CrowdTool可站立(refCrowdToolState, { refPos.x + f半边长 ,refPos.z + f半边长 }))return false;
-	if (!CrowdTool可站立(refCrowdToolState, { refPos.x + f半边长 ,refPos.z - f半边长 }))return false;
+	auto spSpace = m_wpSpace.lock();
+	
+	if (!spSpace->CrowdTool可站立({ refPos.x - f半边长 ,refPos.z + f半边长 }))return false;
+	if (!spSpace->CrowdTool可站立({ refPos.x - f半边长 ,refPos.z - f半边长 }))return false;
+	if (!spSpace->CrowdTool可站立({ refPos.x + f半边长 ,refPos.z + f半边长 }))return false;
+	if (!spSpace->CrowdTool可站立({ refPos.x + f半边长 ,refPos.z - f半边长 }))return false;
 
 	//遍历全地图所有建筑判断重叠
 	CHECK_RET_FALSE(!m_wpSpace.expired());

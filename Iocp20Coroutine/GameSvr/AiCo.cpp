@@ -32,7 +32,7 @@ namespace AiCo
 			}
 		}
 	}
-		
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -68,6 +68,11 @@ namespace AiCo
 	}
 	CoTaskBool WalkToPos(SpEntity spThis, const Position& posTarget, FunCancel& funCancel)
 	{
+		if (!spThis->m_refSpace.CrowdToolø…’æ¡¢(posTarget))
+		{
+			LOG(INFO) << posTarget << "≤ªø…’æ¡¢";
+			co_return false;
+		}
 		const auto posOld = spThis->m_Pos;
 		RecastNavigationCrowd rnc(*spThis, posTarget);
 		KeepCancel kc(funCancel);
@@ -99,7 +104,7 @@ namespace AiCo
 		co_return false;
 	}
 
-	CoTaskBool WalkToTarget(Entity &refThis, SpEntity spTarget, FunCancel& funCancel, const bool bºÏ≤ÈæØΩ‰æ‡¿Î)
+	CoTaskBool WalkToTarget(Entity& refThis, SpEntity spTarget, FunCancel& funCancel, const bool bºÏ≤ÈæØΩ‰æ‡¿Î)
 	{
 		RecastNavigationCrowd rnc(refThis, spTarget->m_Pos);
 		KeepCancel kc(funCancel);

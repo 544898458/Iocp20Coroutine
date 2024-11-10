@@ -57,6 +57,7 @@ public:
 	static WpSpace AddSpace(const uint8_t idSpace);
 	static WpSpace GetSpace(const uint8_t idSpace);
 	static void StaticUpdate();
+	bool CrowdToolø…’æ¡¢(const Position& refPos);
 
 	std::shared_ptr<CrowdToolState> m_spCrowdToolState;
 private:

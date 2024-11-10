@@ -65,6 +65,12 @@ void Space::StaticUpdate()
 	}
 }
 
+bool Space::CrowdTool可站立(const Position& refPos)
+{
+	bool CrowdTool可站立(CrowdToolState & refCrowTool, const Position & refPos);
+	return CrowdTool可站立(*m_spCrowdToolState, refPos);
+}
+
 void Space::EraseEntity(const bool bForceEraseAll)
 {
 	for (auto iter = m_mapEntity.begin(); iter != m_mapEntity.end(); )
