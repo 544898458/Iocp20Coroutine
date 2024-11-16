@@ -133,7 +133,7 @@ bool CrowdTool¿ÉÕ¾Á¢(CrowdToolState& refCrowTool, const Position& refPos)
 	if (DT_SUCCESS != navquery->findNearestPoly(p, halfExtents, &filter, &ref, tgt))
 		return false;
 	Position posNew = { tgt[0],tgt[2] };
-	return refPos.DistanceLessEqual(posNew, 0.5f);
+	return refPos.DistanceLessEqual(posNew, 0.1f);
 	//return true;
 }
 
