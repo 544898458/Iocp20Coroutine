@@ -58,6 +58,7 @@ enum MsgId
 	进Space,
 	进单人剧情副本,
 	显示界面,
+	离开Space,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -336,3 +337,10 @@ struct Msg显示界面
 	MSGPACK_DEFINE(msg,ui);
 };
 MSGPACK_ADD_ENUM(Msg显示界面::界面类型);
+
+
+struct Msg离开Space
+{
+	MsgHead msg{ .id = 离开Space };
+	MSGPACK_DEFINE(msg);
+};

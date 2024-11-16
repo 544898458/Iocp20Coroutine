@@ -45,15 +45,15 @@ public:
 	/// </summary>
 	std::set<SpEntity> m_setSpEntity;
 
-	uint32_t m_u32燃气矿 = 0;
+	uint32_t m_u32燃气矿 = 100;
 
 private:
 
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);
 	/// <summary>
-/// 主逻辑线程（控制台界面线程）调用
-/// </summary>
-/// <param name="msg"></param>
+	/// 主逻辑线程（控制台界面线程）调用
+	/// </summary>
+	/// <param name="msg"></param>
 	void OnRecv(const Msg进Space& msg);
 	void OnRecv(const Msg进单人剧情副本& msg);
 	void OnRecv(const MsgMove& msg);
@@ -64,6 +64,8 @@ private:
 	void OnRecv(const Msg采集& msg);
 	void OnRecv(const Msg进地堡& msg);
 	void OnRecv(const Msg出地堡& msg);
+
+	void 离开Space();
 
 	void ForEachSelected(std::function<void(Entity& ref)> fun);
 	//CoTask<int> CoAddRole();

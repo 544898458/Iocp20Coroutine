@@ -44,6 +44,15 @@ void PlayerGateSession_Game::Send(const T& ref)
 }
 
 
+template void PlayerGateSession_Game::Send(const MsgAddRoleRet&);
+template void PlayerGateSession_Game::Send(const MsgNotifyPos&);
+template void PlayerGateSession_Game::Send(const MsgChangeSkeleAnim&);
+template void PlayerGateSession_Game::Send(const MsgSay&);
+template void PlayerGateSession_Game::Send(const MsgDelRoleRet&);
+template void PlayerGateSession_Game::Send(const MsgNotifyMoney&);
+template void PlayerGateSession_Game::Send(const Msg显示界面&);
+
+
 void PlayerGateSession_Game::OnDestroy()
 {
 	for (auto sp : m_setSpEntity)
@@ -178,6 +187,7 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 
 void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
 {
+	离开Space();
 	LOG(INFO) << "希望进Space:" << msg.idSapce;
 	EnterSpace(Space::GetSpace(msg.idSapce), this->NickName());
 }
@@ -329,6 +339,13 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, const
 	co_return 0;
 }
 
+void PlayerGateSession_Game::离开Space()
+{
+	m_wpSpace.reset();
+	m_spSpace单人剧情副本.reset();
+	Send<Msg离开Space>({});
+}
+
 void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace, const std::string& strNickName)
 {
 	assert(m_wpSpace.expired());
@@ -388,14 +405,6 @@ void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
 		}
 	}
 }
-
-template void PlayerGateSession_Game::Send(const MsgAddRoleRet&);
-template void PlayerGateSession_Game::Send(const MsgNotifyPos&);
-template void PlayerGateSession_Game::Send(const MsgChangeSkeleAnim&);
-template void PlayerGateSession_Game::Send(const MsgSay&);
-template void PlayerGateSession_Game::Send(const MsgDelRoleRet&);
-template void PlayerGateSession_Game::Send(const MsgNotifyMoney&);
-
 
 template<class T_Msg>
 void PlayerGateSession_Game::RecvMsg(const msgpack::object& obj)
