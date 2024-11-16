@@ -18,6 +18,7 @@
 #include "造活动单位Component.h"
 #include "DefenceComponent.h"
 #include "地堡Component.h"
+#include "走Component.h"
 
 using namespace std;
 
@@ -85,6 +86,9 @@ void Entity::OnDestroy()
 
 	if (m_sp采集)
 		m_sp采集->m_TaskCancel.TryCancel();
+
+	if (m_sp走)
+		m_sp走->TryCancel();
 
 	if (m_sp地堡)
 		m_sp地堡->OnDestroy();

@@ -20,7 +20,12 @@ void µØ±¤Component::½ø(Space& refSpace, uint64_t idEntity)
 	auto wp = refSpace.GetEntity(idEntity);
 	CHECK_RET_VOID(!wp.expired());
 	auto sp = wp.lock();
-	sp->OnDestroy();
+	if (sp->IsDead())
+	{
+		assert(false);
+		return;
+	}
+	sp->BroadcastLeave();//OnDestroy();
 	sp->m_wpOwner = sp->weak_from_this();
 	m_listSpEntity.push_back(sp);
 	refSpace.m_mapEntity.erase(idEntity);

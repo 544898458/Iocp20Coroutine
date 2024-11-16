@@ -341,6 +341,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, const
 
 void PlayerGateSession_Game::离开Space()
 {
+	OnDestroy();
 	m_wpSpace.reset();
 	m_spSpace单人剧情副本.reset();
 	Send<Msg离开Space>({});

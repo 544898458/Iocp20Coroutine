@@ -34,6 +34,7 @@ bool 走Component::正在走(Entity& refEntity)
 void 走Component::WalkToTarget(SpEntity spTarget)
 {
 	assert(!m_cancel);
+	assert(m_coWalk.Finished());
 	m_coWalk = AiCo::WalkToTarget(m_refEntity, spTarget, m_cancel);
 	m_coWalk.Run();
 }
@@ -48,6 +49,7 @@ bool 走Component::WalkToTarget(Entity& refThis, SpEntity spTarget)
 void 走Component::WalkToPos(const Position& posTarget)
 {
 	assert(!m_cancel);
+	assert(m_coWalk.Finished());
 	m_coWalk = AiCo::WalkToPos(m_refEntity.shared_from_this(), posTarget, m_cancel);
 	m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 }
@@ -118,12 +120,15 @@ void 走Component::走进地堡(WpEntity wpEntity地堡)
 		m_refEntity.m_spAttack->TryCancel();
 
 	Cancel所有包含走路的协程(m_refEntity);
+	assert(!m_cancel);
+	assert(m_coWalk.Finished());
 	m_coWalk = Co走进地堡(wpEntity地堡);
 	m_coWalk.Run();
 }
 
 CoTaskBool 走Component::Co走进地堡(WpEntity wpEntity地堡)
 {
+	KeepCancel kc(m_cancel);
 	while (!wpEntity地堡.expired())
 	{
 		auto spEntity地堡 = wpEntity地堡.lock();
