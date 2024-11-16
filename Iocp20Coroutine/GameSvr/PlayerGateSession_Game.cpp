@@ -492,6 +492,10 @@ uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
 	uint16_t 制造队列中的单位 = 0;
 	for (const auto& refEntity : m_setSpEntity)
 	{
+		if (nullptr == refEntity->m_spDefence)
+		{
+			continue;//不可攻击的自己的单位，是视口
+		}
 		if (refEntity->m_sp造活动单位)
 		{
 			制造队列中的单位 += (uint16_t)refEntity->m_sp造活动单位->等待造Count();//m_i等待造兵数;

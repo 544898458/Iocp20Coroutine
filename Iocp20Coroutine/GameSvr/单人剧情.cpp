@@ -72,7 +72,7 @@ namespace 单人剧情
 		}
 
 		refGateSession.Say系统("很好！现在给您刷了一个晶体矿，请点击晶体矿，让工程车在晶体矿和基地之间搬运晶体矿");
-		资源Component::Add(refSpace, 晶体矿, { pos基地.x,pos基地.z - 50 });
+		资源Component::Add(refSpace, 晶体矿, { pos基地.x,pos基地.z - 20 });
 		资源Component::Add(refSpace, 燃气矿, { pos基地.x + 30,pos基地.z });
 
 		if (std::get<0>(co_await CoEvent<MyEvent::开始采集晶体矿>::Wait(funCancel)))
@@ -105,6 +105,48 @@ namespace 单人剧情
 		refGateSession.Say系统("现在已给您刷了一个怪，控制兵走到怪附近，兵会自动打怪");
 		MonsterComponent::AddMonster(refSpace);
 
+		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
+			co_return 0;
+
+		refGateSession.Say系统("您的兵阵亡了。可以造多点兵去围攻敌人");
+
+		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref)
+			{
+				auto spEntity = ref.wpEntity.lock();
+				if (&spEntity->m_refSpace != &refSpace)
+					return false;
+
+				return !spEntity->m_spPlayer;//怪物阵亡
+			})))
+		{
+			co_return 0;
+		}
+
+		refGateSession.Say系统("恭喜您消灭了敌人！现在给您刷了10个敌人。您可以造地堡,让兵进入地堡中，立足防守，再伺机进攻");
+		MonsterComponent::AddMonster(refSpace, 10);
+
+		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref)
+			{
+				auto spEntity = ref.wpEntity.lock();
+				if (&spEntity->m_refSpace != &refSpace)
+					return false;
+
+				for (const auto [k, v] : refSpace.m_mapEntity)
+				{
+					if (v->IsDead())
+						continue;
+
+					if (nullptr == v->m_spPlayer)
+						return false;//还有怪活着
+				}
+
+				return true;
+			})))
+		{
+			co_return 0;
+		}
+
+		refGateSession.Say系统("您取得了胜利！您是指挥天才！");
 		co_return 0;
 	}
 }

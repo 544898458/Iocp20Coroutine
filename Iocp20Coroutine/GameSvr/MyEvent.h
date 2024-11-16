@@ -17,7 +17,10 @@ namespace MyEvent
 	};
 	struct 晶体矿已运回基地
 	{
-
+	};
+	struct 单位阵亡
+	{
+		WpEntity wpEntity;
 	};
 	bool SameSpace(const WpEntity& refWpEntity, const Space& refSpace, PlayerGateSession_Game& refGateSession);
 }

@@ -173,7 +173,7 @@ CoTask<int> AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 		if (!spDefencer->m_spDefence)
 			break;//目标打不了
 
-		spDefencer->m_spDefence->Hurt(std::get<1>(wait_hurt));//第n次让对方伤1
+		spDefencer->m_spDefence->受伤(std::get<1>(wait_hurt));//第n次让对方伤1
 	}
 
 	if (co_await CoTimer::Wait(1000ms, cancel))//等3秒	后摇
