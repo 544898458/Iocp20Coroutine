@@ -10,7 +10,7 @@ public:
 	void TryCancel();
 	void Update();
 	CoTask<int> CoAttack(WpEntity wpDefencer, FunCancel& cancel);
-	static void AddComponent(Entity& refEntity, const 活动单位类型 类型);
+	static void AddComponent(Entity& refEntity, const 活动单位类型 类型, const float f攻击距离);
 	float 攻击距离()const;
 	CoTask<int> m_coAttack;
 	FunCancel m_cancel;
@@ -18,6 +18,6 @@ public:
 	int m_idxCrowdAgent = INVALID_AGENT_IDX;
 	Entity& m_refEntity;
 	const 活动单位类型 m_类型;
-	const float m_f攻击距离 = 5.0f;
+	float m_f攻击距离 = 5.0f;
 };
 

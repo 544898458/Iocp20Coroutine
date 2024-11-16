@@ -77,6 +77,10 @@ void PlayerGateSession_Game::OnDestroy()
 
 	if (m_funCancel单人剧情)
 		m_funCancel单人剧情();
+
+	m_wpSpace.reset();
+	m_spSpace单人剧情副本.reset();
+	Send<Msg离开Space>({});
 }
 
 void PlayerGateSession_Game::Erase(SpEntity& spEntity)
@@ -187,7 +191,7 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 
 void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
 {
-	离开Space();
+	OnDestroy();
 	LOG(INFO) << "希望进Space:" << msg.idSapce;
 	EnterSpace(Space::GetSpace(msg.idSapce), this->NickName());
 }
@@ -337,14 +341,6 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, const
 
 	spNewEntity->BroadcastEnter();
 	co_return 0;
-}
-
-void PlayerGateSession_Game::离开Space()
-{
-	OnDestroy();
-	m_wpSpace.reset();
-	m_spSpace单人剧情副本.reset();
-	Send<Msg离开Space>({});
 }
 
 void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace, const std::string& strNickName)

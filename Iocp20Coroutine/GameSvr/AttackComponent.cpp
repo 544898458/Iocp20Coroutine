@@ -14,10 +14,11 @@
 #include "DefenceComponent.h"
 
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
-void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型)
+void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, const float f攻击距离)
 {
 	CHECK_VOID(!refEntity.m_spAttack);
 	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&, const 活动单位类型>(refEntity, std::forward<const 活动单位类型&&>(类型));
+	refEntity.m_spAttack->m_f攻击距离 = f攻击距离;
 	//float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z};
 	//int CrowToolAddAgent(float arrF[]);
 	//refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);

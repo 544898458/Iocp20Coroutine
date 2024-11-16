@@ -101,7 +101,7 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 			pos, *sp, 配置.配置.strPrefabName, 配置.配置.strName);
 		spNewEntity->m_f警戒距离 = 配置.f警戒距离;
 		PlayerComponent::AddComponent(*spNewEntity,refGateSession);
-		AttackComponent::AddComponent(*spNewEntity, 类型);
+		AttackComponent::AddComponent(*spNewEntity, 类型, 配置.f攻击距离);
 		DefenceComponent::AddComponent(*spNewEntity, 配置.制造.u16初始Hp);
 		走Component::AddComponent(*spNewEntity);
 		refGateSession.m_setSpEntity.insert(spNewEntity);//自己控制的单位

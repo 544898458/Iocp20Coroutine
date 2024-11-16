@@ -65,8 +65,6 @@ private:
 	void OnRecv(const Msg进地堡& msg);
 	void OnRecv(const Msg出地堡& msg);
 
-	void 离开Space();
-
 	void ForEachSelected(std::function<void(Entity& ref)> fun);
 	//CoTask<int> CoAddRole();
 	CoTask<int> CoAddBuilding(const 建筑单位类型 类型, const Position pos);

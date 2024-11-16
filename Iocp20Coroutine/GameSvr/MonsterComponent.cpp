@@ -28,8 +28,8 @@ void MonsterComponent::AddMonster(Space& refSpace, const int count)
 	for (int i = 0; i < count; ++i)
 	{
 		SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ -30.0 }, refSpace, "altman-red", "π÷");
-		AttackComponent::AddComponent(*spEntityMonster, ±¯);
-		DefenceComponent::AddComponent(*spEntityMonster, 16);
+		AttackComponent::AddComponent(*spEntityMonster, ±¯, 8);
+		DefenceComponent::AddComponent(*spEntityMonster, 20);
 		◊ﬂComponent::AddComponent(*spEntityMonster);
 		AddComponent(*spEntityMonster);
 		spEntityMonster->m_fæØΩ‰æ‡¿Î = 20;
