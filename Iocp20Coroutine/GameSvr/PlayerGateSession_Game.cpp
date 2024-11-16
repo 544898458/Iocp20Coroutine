@@ -450,7 +450,7 @@ void PlayerGateSession_Game::Process()
 	}
 
 	if (m_spSpace单人剧情副本)
-		m_spSpace单人剧情副本->StaticUpdate();
+		m_spSpace单人剧情副本->Update();
 }
 
 
