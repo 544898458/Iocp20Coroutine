@@ -136,6 +136,9 @@ namespace 单人剧情
 					if (v->IsDead())
 						continue;
 
+					if (nullptr == v->m_spMonster)
+						continue;
+
 					if (nullptr == v->m_spPlayer)
 						return false;//还有怪活着
 				}

@@ -103,7 +103,7 @@ void CrowToolUpdate(Space& ref)
 		if (spEntity.expired())
 		{
 			LOG(WARNING) << "ÒªÉ¾²ÅÐÐ";
-			assert(false);
+			//assert(false);
 			continue;
 		}
 		auto sp = spEntity.lock();
