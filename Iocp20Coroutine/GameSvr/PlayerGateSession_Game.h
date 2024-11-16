@@ -21,7 +21,10 @@ public:
 	void OnDestroy();
 	void Erase(SpEntity& spEntity);
 	template<class T> void Send(const T& ref);
-	void Say(const std::string& str);
+	void Say(const std::string& str, const SayChannel channel);
+	void Say系统(const std::string& str);
+	void Say语音提示(const std::string& str);
+	
 	const std::string& NickName()const { return m_strNickName; }
 	void EnterSpace(WpSpace wpSpace, const std::string& strNickName);
 	void Send资源();

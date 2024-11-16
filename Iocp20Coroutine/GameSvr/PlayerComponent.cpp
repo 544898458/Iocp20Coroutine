@@ -10,7 +10,7 @@ void PlayerComponent::AddComponent(Entity& refEntity, PlayerGateSession_Game& re
 	refEntity.m_spPlayer = std::make_shared<PlayerComponent, PlayerGateSession_Game&>(refSession);
 }
 
-void PlayerComponent::Say(const std::string& str)
+void PlayerComponent::Say(const std::string& str, const SayChannel channel)
 {
-	m_refSession.Say(str);
+	m_refSession.Say(str, channel);
 }

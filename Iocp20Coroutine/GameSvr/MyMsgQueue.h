@@ -177,14 +177,22 @@ struct MsgMove
 	MSGPACK_DEFINE(msg, x, z);
 };
 
+enum SayChannel
+{
+	系统,
+	语音提示,
+};
+MSGPACK_ADD_ENUM(SayChannel);
+
 struct MsgSay
 {
-	MsgSay(const std::string& strContent) :content(strContent) {}
-	MsgSay() {}
 	MsgHead msg{ .id = MsgId::Say };
 	std::string content;
-	MSGPACK_DEFINE(msg, content);
+
+	SayChannel channel = 系统;
+	MSGPACK_DEFINE(msg, content, channel);
 };
+
 
 struct MsgSelectRoles
 {

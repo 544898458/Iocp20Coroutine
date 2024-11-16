@@ -81,9 +81,18 @@ void PlayerGateSession_Game::Erase(SpEntity& spEntity)
 	m_setSpEntity.erase(spEntity);
 }
 
-void PlayerGateSession_Game::Say(const std::string& str)
+void PlayerGateSession_Game::Say(const std::string& str, const SayChannel channel)
 {
-	Send(MsgSay(StrConv::GbkToUtf8(str)));
+	Send< MsgSay>({ .content = StrConv::GbkToUtf8(str),.channel = channel });
+}
+void PlayerGateSession_Game::Say系统(const std::string& str)
+{
+	Say(str, SayChannel::系统);
+}
+
+void PlayerGateSession_Game::Say语音提示(const std::string& str)
+{
+	Say(str, SayChannel::语音提示);
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
@@ -92,7 +101,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 		{
 			if (!ref.m_sp造活动单位)
 			{
-				Say("造不了");
+				Say系统("造不了");
 				return;
 			}
 
@@ -110,7 +119,7 @@ void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
 
 			if (!ref.m_sp采集)
 			{
-				Say("此单位无法采集资源");
+				Say系统("此单位无法采集资源");
 				return;
 			}
 
@@ -127,7 +136,7 @@ void PlayerGateSession_Game::OnRecv(const Msg出地堡& msg)
 	auto spTarget = wpTarget.lock();
 	if (!spTarget->m_sp地堡)
 	{
-		Say("目标不是地堡");
+		Say系统("目标不是地堡");
 		return;
 	}
 	spTarget->m_sp地堡->全都出地堡();
@@ -144,13 +153,13 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 			auto spTarget = wpTarget.lock();
 			if (!spTarget->m_sp地堡)
 			{
-				Say("目标不是地堡");
+				Say系统("目标不是地堡");
 				return;
 			}
 
 			if (!ref.m_spAttack)
 			{
-				Say("此单位不可进入地堡");
+				Say系统("此单位不可进入地堡");
 				return;
 			}
 
@@ -187,7 +196,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 	const auto targetZ = msg.z;
 	if (m_wpSpace.expired())
 	{
-		Say("还没进地图");
+		Say系统("还没进地图");
 		return;
 	}
 	ForEachSelected([this, targetX, targetZ](Entity& ref)
@@ -203,7 +212,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 
 			ref.m_sp走->TryCancel();
 			ref.m_sp走->WalkToPos手动控制(Position(targetX, targetZ));
-			Say("走走走!");//Go! Go! Go!
+			Say语音提示("走走走!");//Go! Go! Go!
 
 		});
 }
@@ -264,14 +273,14 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, const
 	//Position pos = { 35,float(std::rand() % 60) - 30 };
 	if (!可放置建筑(pos, 配置.f半边长))
 	{
-		Say("此处不可放置");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
+		Say系统("此处不可放置");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
 		co_return 0;
 	}
 	if (配置.建造.u16消耗燃气矿 > m_u32燃气矿)
 	{
 		std::ostringstream oss;
 		oss << "燃气矿不足" << 配置.建造.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
-		Say(oss.str());
+		Say系统(oss.str());
 		co_return 0;
 	}
 	m_u32燃气矿 -= 配置.建造.u16消耗燃气矿;
@@ -288,7 +297,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, const
 	{
 		//LOG(WARNING) << "扣钱失败,error=" << responce.error;
 		m_u32燃气矿 += 配置.建造.u16消耗燃气矿;//返还燃气矿
-		Say("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
+		Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
 		co_return 0;
 	}
 
@@ -328,7 +337,7 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace, const std::string& strN
 	auto sp = m_wpSpace.lock();
 	m_strNickName = strNickName;
 
-	Send<Msg进Space>({.idSapce=1});
+	Send<Msg进Space>({ .idSapce = 1 });
 
 	for (const auto& [id, spEntity] : sp->m_mapEntity)//所有地图上的实体发给自己
 	{
@@ -370,9 +379,9 @@ void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
 		{
 			switch (spEntity->m_spAttack->m_类型)
 			{
-			case 兵:Say("待命中!"); break;//Standing by. 待命中
-			case 近战兵:Say("准备行动!"); break;//Checked up and good to go. 检查完毕，准备动身
-			case 工程车:Say("老大!"); break;//Commander.
+			case 兵:Say语音提示("待命中!"); break;//Standing by. 待命中
+			case 近战兵:Say语音提示("准备行动!"); break;//Checked up and good to go. 检查完毕，准备动身
+			case 工程车:Say语音提示("老大!"); break;//Commander.
 			default:break;
 			}
 		}

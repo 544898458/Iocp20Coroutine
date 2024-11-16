@@ -90,7 +90,7 @@ namespace AiCo
 			{
 				LOG(INFO) << "自己阵亡，走向" << posLocalTarget << "的协程取消了";
 				if (spThis->m_spPlayer)
-					spThis->m_spPlayer->Say("自己阵亡");
+					spThis->m_spPlayer->Say("自己阵亡", SayChannel::系统);
 
 				co_return true;
 			}
@@ -122,7 +122,7 @@ namespace AiCo
 			{
 				LOG(INFO) << "自己阵亡，走向[" << spTarget->NickName() << "]的协程取消了";
 				if (refThis.m_spPlayer)
-					refThis.m_spPlayer->Say("自己阵亡");
+					refThis.m_spPlayer->Say("自己阵亡", SayChannel::系统);
 
 				co_return false;
 			}

@@ -35,12 +35,12 @@ void 造活动单位Component::造兵(PlayerGateSession_Game& refGateSession, Entity& r
 	//CHECK_VOID(m_fun造活动单位);
 	if (refGateSession.活动单位包括制造队列中的() >= refGateSession.活动单位上限())
 	{
-		refGateSession.Say("民房不足"); //Additional supply depots required.需要更多的食堂
+		refGateSession.Say系统("民房不足"); //Additional supply depots required.需要更多的食堂
 		return;
 	}
 	if (m_set可造类型.end() == m_set可造类型.find(类型))
 	{
-		refGateSession.Say("造不了这种单位");
+		refGateSession.Say系统("造不了这种单位");
 		return;
 	}
 
@@ -73,7 +73,7 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 
 		if (!CrowdTool可站立(refCrowdToolState, pos))
 		{
-			refGateSession.Say("此处不可放置");
+			refGateSession.Say语音提示("此处不可放置");
 			if (co_await CoTimer::Wait(1s, m_TaskCancel造活动单位.cancel))
 			{
 				co_return{};
@@ -111,13 +111,13 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 		{
 		case 工程车:
 			采集Component::AddComponent(*spNewEntity);
-			refGateSession.Say("工程车可以开工了!");//SCV, good to go, sir. SCV可以开工了
+			refGateSession.Say语音提示("工程车可以开工了!");//SCV, good to go, sir. SCV可以开工了
 			break;
 		case 兵:
-			refGateSession.Say("听说有人要买我的狗头？");//You want a piece of me, boy?想要我的一部分吗，小子？
+			refGateSession.Say语音提示("听说有人要买我的狗头？");//You want a piece of me, boy?想要我的一部分吗，小子？
 			break;
 		case 近战兵:
-			refGateSession.Say("听说有人要我的斧头？");//You want a piece of me, boy?想要我的一部分吗，小子？
+			refGateSession.Say语音提示("听说有人要我的斧头？");//You want a piece of me, boy?想要我的一部分吗，小子？
 			break;
 
 		default:break;

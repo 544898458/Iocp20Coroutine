@@ -68,7 +68,7 @@ void 走Component::WalkToPos手动控制(const Position& posTarget)
 	if (m_refEntity.IsDead())
 	{
 		if (m_refEntity.m_spPlayer)
-			m_refEntity.m_spPlayer->Say("自己阵亡,不能走");
+			m_refEntity.m_spPlayer->Say("自己阵亡,不能走", SayChannel::系统);
 
 		return;
 	}
