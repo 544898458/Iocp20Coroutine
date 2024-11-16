@@ -348,6 +348,7 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace, const std::string& strN
 
 	SpEntity spEntityViewPort = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ 0.0 }, *sp, "smoke", "йс©з");
 	sp->m_mapEntity.insert({ spEntityViewPort->Id, spEntityViewPort });
+	m_setSpEntity.insert(spEntityViewPort);
 	//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 	PlayerComponent::AddComponent(*spEntityViewPort, *this);
 	spEntityViewPort->BroadcastEnter();
