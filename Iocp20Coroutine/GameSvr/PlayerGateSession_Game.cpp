@@ -185,7 +185,11 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
 	const auto targetX = msg.x;
 	const auto targetZ = msg.z;
-	CHECK_VOID(!m_wpSpace.expired());
+	if (m_wpSpace.expired())
+	{
+		Say("还没进地图");
+		return;
+	}
 	ForEachSelected([this, targetX, targetZ](Entity& ref)
 		{
 			if (!ref.m_sp走)
@@ -323,6 +327,9 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace, const std::string& strN
 	m_wpSpace = wpSpace;
 	auto sp = m_wpSpace.lock();
 	m_strNickName = strNickName;
+
+	Send<Msg进Space>({.idSapce=1});
+
 	for (const auto& [id, spEntity] : sp->m_mapEntity)//所有地图上的实体发给自己
 	{
 		LOG(INFO) << spEntity->NickName() << ",发给单人," << spEntity->Id;
@@ -493,10 +500,10 @@ uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
 
 bool PlayerGateSession_Game::可放置建筑(const Position& refPos, float f半边长)
 {
-	
+
 	CHECK_FALSE(!m_wpSpace.expired());
 	auto spSpace = m_wpSpace.lock();
-	
+
 	if (!spSpace->CrowdTool可站立({ refPos.x - f半边长 ,refPos.z + f半边长 }))return false;
 	if (!spSpace->CrowdTool可站立({ refPos.x - f半边长 ,refPos.z - f半边长 }))return false;
 	if (!spSpace->CrowdTool可站立({ refPos.x + f半边长 ,refPos.z + f半边长 }))return false;

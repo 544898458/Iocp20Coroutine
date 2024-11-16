@@ -150,8 +150,8 @@ void GameSvrSession::OnRecv(const MsgGate转发& msg转发)
 		auto iter = m_mapPlayerGateSession.find(msg转发.gateClientSessionId);
 		if (m_mapPlayerGateSession.end() == iter)
 		{
-			LOG(ERROR) << "ERR";
-			assert(false);
+			LOG(ERROR) << "player" << msg转发.gateClientSessionId << "还没进m_mapPlayerGateSession";
+			//assert(false);
 			return;
 		}
 

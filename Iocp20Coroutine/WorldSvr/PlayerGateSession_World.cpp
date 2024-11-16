@@ -19,9 +19,15 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 {
 	auto utf8Name = msg.name;
 	auto gbkName = StrConv::Utf8ToGbk(msg.name);
-	auto& refDb = *co_await DbPlayer::CoGet绝不返回空(gbkName);
 	MsgLoginResponce msgResponce;
 	msgResponce.msg.rpcSnId = msg.msg.rpcSnId;
+	if (gbkName.empty())
+	{
+		msgResponce.result = MsgLoginResponce::NameErr;
+		SendToGate转发(msgResponce);
+		co_return 0;
+	}
+	auto& refDb = *co_await DbPlayer::CoGet绝不返回空(gbkName);
 	if (refDb.pwd != msg.pwd)
 	{
 		msgResponce.result = MsgLoginResponce::PwdErr;

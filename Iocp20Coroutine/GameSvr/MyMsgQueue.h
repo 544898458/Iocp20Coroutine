@@ -119,6 +119,7 @@ struct MsgLoginResponce
 		OK,
 		Busy,
 		PwdErr,
+		NameErr,
 	};
 	Error  result = OK;
 
