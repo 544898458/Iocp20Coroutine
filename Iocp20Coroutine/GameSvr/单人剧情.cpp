@@ -150,6 +150,7 @@ namespace 单人剧情
 		}
 
 		refGateSession.Say系统("您取得了胜利！您是指挥天才！");
+		refGateSession.Send<Msg显示界面>({.ui = Msg显示界面::选择地图});
 		co_return 0;
 	}
 }

@@ -57,6 +57,7 @@ enum MsgId
 	出地堡,
 	进Space,
 	进单人剧情副本,
+	显示界面,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -323,3 +324,15 @@ struct Msg进单人剧情副本
 	MsgHead msg{ .id = 进单人剧情副本 };
 	MSGPACK_DEFINE(msg);
 };
+
+struct Msg显示界面
+{
+	MsgHead msg{ .id = 显示界面 };
+	enum 界面类型
+	{
+		选择地图,
+	};
+	界面类型 ui;
+	MSGPACK_DEFINE(msg,ui);
+};
+MSGPACK_ADD_ENUM(Msg显示界面::界面类型);
