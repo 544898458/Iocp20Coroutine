@@ -57,7 +57,12 @@ void PlayerGateSession_Game::OnDestroy()
 {
 	for (auto sp : m_setSpEntity)
 	{
-		sp->m_refSpace.m_mapEntity.erase((int64_t)sp.get());
+		auto countErase = sp->m_refSpace.m_mapEntity.erase((int64_t)sp.get());
+		if (countErase <= 0)
+		{
+			LOG(INFO) << "可能是地堡里的兵" << sp->NickName();
+			continue;
+		}
 		LOG(INFO) << "m_mapEntity.size=" << sp->m_refSpace.m_mapEntity.size();
 		sp->OnDestroy();
 	}
