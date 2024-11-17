@@ -55,6 +55,7 @@ private:
 	/// </summary>
 	/// <param name="msg"></param>
 	void OnRecv(const Msg进Space& msg);
+	void OnRecv(const Msg离开Space& msg);
 	void OnRecv(const Msg进单人剧情副本& msg);
 	void OnRecv(const MsgMove& msg);
 	void OnRecv(const MsgSay& msg);

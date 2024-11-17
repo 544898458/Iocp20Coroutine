@@ -196,6 +196,12 @@ void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
 	EnterSpace(Space::GetSpace(msg.idSapce), this->NickName());
 }
 
+void PlayerGateSession_Game::OnRecv(const Msg离开Space& msg)
+{
+	LOG(INFO) << "希望离开Space:";// << msg.idSapce;
+	OnDestroy();
+}
+
 void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
 {
 	m_spSpace单人剧情副本 = std::make_shared<Space>();
@@ -430,6 +436,7 @@ void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& o
 	switch (idMsg)
 	{
 	case MsgId::进Space:RecvMsg<Msg进Space>(obj); break;
+	case MsgId::离开Space:RecvMsg<Msg离开Space>(obj); break;
 	case MsgId::进单人剧情副本:RecvMsg<Msg进单人剧情副本>(obj); break;
 	case MsgId::Move:RecvMsg<MsgMove>(obj); break;
 	case MsgId::Say:RecvMsg<MsgSay >(obj); break;
