@@ -11,7 +11,8 @@ void 地堡Component::AddComponet(Entity& refEntity, PlayerGateSession_Game& refGa
 
 void 地堡Component::OnDestroy()
 {
-	全都出地堡();
+	//全都出地堡();
+	m_listSpEntity.clear();
 }
 
 void 地堡Component::进(Space& refSpace, uint64_t idEntity)

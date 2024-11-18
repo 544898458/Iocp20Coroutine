@@ -83,9 +83,12 @@ void PlayerGateSession_Game::OnDestroy()
 	if (m_funCancel单人剧情)
 		m_funCancel单人剧情();
 
+	const bool b离开 = !m_wpSpace.expired();
 	m_wpSpace.reset();
 	m_spSpace单人剧情副本.reset();
-	Send<Msg离开Space>({});
+
+	if(b离开)
+		Send<Msg离开Space>({});
 }
 
 void PlayerGateSession_Game::Erase(SpEntity& spEntity)
