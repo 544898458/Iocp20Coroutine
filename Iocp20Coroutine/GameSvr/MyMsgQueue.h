@@ -59,6 +59,7 @@ enum MsgId
 	进单人剧情副本,
 	显示界面,
 	离开Space,
+	Entity描述,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -343,4 +344,12 @@ struct Msg离开Space
 {
 	MsgHead msg{ .id = 离开Space };
 	MSGPACK_DEFINE(msg);
+};
+
+struct MsgEntity描述
+{
+	MsgHead msg{ .id = Entity描述};
+	uint64_t idEntity;
+	std::string str描述;
+	MSGPACK_DEFINE(msg, idEntity, str描述);
 };

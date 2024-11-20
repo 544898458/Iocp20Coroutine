@@ -4,21 +4,45 @@
 #include "PlayerComponent.h"
 #include "PlayerGateSession_Game.h"
 #include "临时阻挡Component.h"
+#include "../CoRoutine/CoTimer.h"
+#include "../IocpNetwork/StrConv.h"
 
 void BuildingComponent::AddComponent(Entity& refThis, PlayerGateSession_Game& refSession, const 建筑单位类型 类型, float f半边长)
 {
-	refThis.m_spBuilding = std::make_shared<BuildingComponent, PlayerGateSession_Game&, const 建筑单位类型&,Entity&>(refSession, 类型,refThis);
+	refThis.m_spBuilding = std::make_shared<BuildingComponent, PlayerGateSession_Game&, const 建筑单位类型&, Entity&>(refSession, 类型, refThis);
 	临时阻挡Component::AddComponent(refThis, f半边长);
 }
 
-BuildingComponent::BuildingComponent(PlayerGateSession_Game& refSession, const 建筑单位类型& 类型, Entity &refEntity) :m_类型(类型), m_refEntity(refEntity)
+BuildingComponent::BuildingComponent(PlayerGateSession_Game& refSession, const 建筑单位类型& 类型, Entity& refEntity) :m_类型(类型), m_refEntity(refEntity)
 {
 	//if (!m_coAddMoney.Finished())
 	//{
 	//	LOG(INFO) << "前一个造建筑协程还没返回";
 	//	return;
 	//}
-	//m_coAddMoney = AiCo::AddMoney(refSession, m_cancelAddMoney);
-	//m_coAddMoney.Run();
-	
+	Co建造过程(m_cancel建造).RunNew();
+}
+
+CoTaskBool BuildingComponent::Co建造过程(FunCancel& cancel)
+{
+	KeepCancel kc(cancel);
+
+	const int MAX建造百分比 = 100;
+	while (MAX建造百分比 > this->m_n建造进度百分比)
+	{
+		if (co_await CoTimer::WaitNextUpdate(cancel))
+			co_return 0;
+
+		++this->m_n建造进度百分比;
+
+		std::ostringstream oss;
+		if (MAX建造百分比 <= this->m_n建造进度百分比)
+			oss << "建造完成";
+		else
+			oss << "正在建造:" << this->m_n建造进度百分比 << "%";
+
+		this->m_refEntity.Broadcast<MsgEntity描述>({ .idEntity = this->m_refEntity.Id, .str描述 = StrConv::GbkToUtf8(oss.str()) });
+	}
+
+	co_return 0;
 }

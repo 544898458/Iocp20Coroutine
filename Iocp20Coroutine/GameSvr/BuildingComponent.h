@@ -17,8 +17,10 @@ public:
 	static void AddComponent(Entity& refThis, PlayerGateSession_Game& refSession, const 建筑单位类型 类型, float f半边长);
 	
 private:
+	CoTaskBool Co建造过程(FunCancel& cancel);
 	//CoTask<int> m_coAddMoney;
-	//FunCancel m_cancelAddMoney;
+	FunCancel m_cancel建造;
+	int m_n建造进度百分比 = 0;
 	Entity& m_refEntity;
 };
 
