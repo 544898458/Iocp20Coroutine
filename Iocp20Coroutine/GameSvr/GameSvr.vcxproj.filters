@@ -276,6 +276,9 @@
     <ClCompile Include="走Component.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="造建筑Component.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -462,6 +465,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="SpSpace.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="造建筑Component.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

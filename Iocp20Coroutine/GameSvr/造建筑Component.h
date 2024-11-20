@@ -1,0 +1,17 @@
+#pragma once
+#include <unordered_set>
+
+class PlayerGateSession_Game;
+class Entity;
+enum 建筑单位类型;
+enum 活动单位类型;
+class 造建筑Component
+{
+public:
+	static void AddComponet(Entity& refEntity, PlayerGateSession_Game& refGateSession, const 活动单位类型 类型);
+	造建筑Component(PlayerGateSession_Game& refSession, Entity& refEntity, const 活动单位类型 类型);
+private:
+	std::unordered_set<建筑单位类型> m_set可造类型;
+
+};
+

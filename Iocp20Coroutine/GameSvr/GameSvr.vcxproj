@@ -227,6 +227,7 @@
     <ClCompile Include="地堡Component.cpp" />
     <ClCompile Include="资源Component.cpp" />
     <ClCompile Include="走Component.cpp" />
+    <ClCompile Include="造建筑Component.cpp" />
     <ClCompile Include="造活动单位Component.cpp" />
     <ClCompile Include="采集Component.cpp" />
     <ClInclude Include="..\CoRoutine\CoLock.h" />
@@ -342,6 +343,7 @@
     <ClInclude Include="地堡Component.h" />
     <ClInclude Include="资源Component.h" />
     <ClInclude Include="走Component.h" />
+    <ClInclude Include="造建筑Component.h" />
     <ClInclude Include="造活动单位Component.h" />
     <ClInclude Include="采集Component.h" />
   </ItemGroup>
