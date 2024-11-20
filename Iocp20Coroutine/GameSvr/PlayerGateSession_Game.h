@@ -32,6 +32,8 @@ public:
 	uint16_t 活动单位包括制造队列中的() const;
 
 	bool 可放置建筑(const Position& pos, float f半边长);
+	CoTask<int> CoAddBuilding(const 建筑单位类型 类型, const Position pos);
+
 
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
@@ -68,8 +70,7 @@ private:
 
 	void ForEachSelected(std::function<void(Entity& ref)> fun);
 	//CoTask<int> CoAddRole();
-	CoTask<int> CoAddBuilding(const 建筑单位类型 类型, const Position pos);
-
+	
 	//std::vector<CoTask<int>>	m_vecCoRpc;
 	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;
 	bool m_bLoginOk = false;

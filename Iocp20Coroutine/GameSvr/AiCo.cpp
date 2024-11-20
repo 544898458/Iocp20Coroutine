@@ -66,19 +66,19 @@ namespace AiCo
 
 		return true;
 	}
-	CoTaskBool WalkToPos(SpEntity spThis, const Position& posTarget, FunCancel& funCancel)
+	CoTaskBool WalkToPos(Entity &refThis, const Position& posTarget, FunCancel& funCancel)
 	{
-		if (!spThis->m_refSpace.CrowdTool可站立(posTarget))
+		if (!refThis.m_refSpace.CrowdTool可站立(posTarget))
 		{
 			LOG(INFO) << posTarget << "不可站立";
 			co_return false;
 		}
-		const auto posOld = spThis->m_Pos;
-		RecastNavigationCrowd rnc(*spThis, posTarget);
+		const auto posOld = refThis.m_Pos;
+		RecastNavigationCrowd rnc(refThis, posTarget);
 		KeepCancel kc(funCancel);
 		const auto posLocalTarget = posTarget;
-		spThis->BroadcastChangeSkeleAnim("run");
-		CoEvent<MyEvent::MoveEntity>::OnRecvEvent(false, { spThis->weak_from_this() });
+		refThis.BroadcastChangeSkeleAnim("run");
+		CoEvent<MyEvent::MoveEntity>::OnRecvEvent(false, { refThis.weak_from_this() });
 		while (true)
 		{
 			if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
@@ -86,16 +86,16 @@ namespace AiCo
 				LOG(INFO) << "走向" << posLocalTarget << "的协程取消了";
 				co_return true;
 			}
-			if (spThis->IsDead())
+			if (refThis.IsDead())
 			{
 				LOG(INFO) << "自己阵亡，走向" << posLocalTarget << "的协程取消了";
-				if (spThis->m_spPlayer)
-					spThis->m_spPlayer->Say("自己阵亡", SayChannel::系统);
+				if (refThis.m_spPlayer)
+					refThis.m_spPlayer->Say("自己阵亡", SayChannel::系统);
 
 				co_return true;
 			}
 
-			if (!MoveStep(*spThis, posLocalTarget))
+			if (!MoveStep(refThis, posLocalTarget))
 			{
 				co_return false;
 			}

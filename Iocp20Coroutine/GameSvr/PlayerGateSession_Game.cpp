@@ -277,18 +277,6 @@ template<class T> void SendToWorldSvr(const T& msg, const uint64_t idGateSession
 
 void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 {
-	//if (!m_coRpc.Finished())
-	//{
-	//	LOG(WARNING) << "m_coRpc前一个协程还没结束";
-	//	return;
-	//}
-	/*auto iterNew = m_vecCoRpc.insert(m_vecCoRpc.end(), CoAddBuilding(msg.类型));
-	if (iterNew == m_vecCoRpc.end())
-	{
-		LOG(ERROR) << "err";
-		return;
-	}
-	iterNew->Run();*/
 	CoAddBuilding(msg.类型, msg.pos).RunNew();
 }
 

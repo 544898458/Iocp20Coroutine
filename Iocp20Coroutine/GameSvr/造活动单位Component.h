@@ -21,6 +21,5 @@ private:
 	std::unordered_set<活动单位类型> m_set可造类型;
 	std::list<活动单位类型> m_list等待造;//int m_i等待造兵数 = 0;
 	Entity& m_refEntity;
-
 };
 
