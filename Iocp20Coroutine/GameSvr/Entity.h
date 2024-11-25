@@ -18,6 +18,7 @@ class 地堡Component;
 class 走Component;
 class 临时阻挡Component;
 class 造活动单位Component;
+class 造建筑Component;
 class PlayerGateSession_Game;
 
 
@@ -69,6 +70,7 @@ public:
 	std::shared_ptr<走Component> m_sp走;
 	std::shared_ptr<临时阻挡Component> m_sp临时阻挡;
 	std::shared_ptr<造活动单位Component> m_sp造活动单位;
+	std::shared_ptr<造建筑Component> m_sp造建筑;
 	/// <summary>
 	/// 地堡或运输机
 	/// </summary>

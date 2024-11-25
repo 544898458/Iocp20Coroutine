@@ -18,6 +18,7 @@
 #include "单人剧情.h"
 #include <sstream>
 #include "造活动单位Component.h"
+#include "造建筑Component.h"
 #include "地堡Component.h"
 #include "走Component.h"
 #include "PlayerComponent.h"
@@ -277,7 +278,17 @@ template<class T> void SendToWorldSvr(const T& msg, const uint64_t idGateSession
 
 void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 {
-	CoAddBuilding(msg.类型, msg.pos).RunNew();
+	//CoAddBuilding(msg.类型, msg.pos).RunNew();
+	ForEachSelected([this, msg](Entity& ref)
+		{
+			if (!ref.m_sp造建筑)
+			{
+				Say系统("造不了");
+				return;
+			}
+
+			ref.m_sp造建筑->Co造建筑(msg.pos, msg.类型).RunNew();
+		});
 }
 
 CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, const Position pos)

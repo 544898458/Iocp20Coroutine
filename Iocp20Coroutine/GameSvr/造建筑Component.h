@@ -1,10 +1,12 @@
 #pragma once
 #include <unordered_set>
+#include "../CoRoutine/CoTask.h"
 
 class PlayerGateSession_Game;
 class Entity;
 enum 建筑单位类型;
 enum 活动单位类型;
+struct Position;
 class 造建筑Component
 {
 public:

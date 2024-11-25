@@ -50,7 +50,7 @@ void 走Component::WalkToPos(const Position& posTarget)
 {
 	assert(!m_cancel);
 	assert(m_coWalk.Finished());
-	m_coWalk = AiCo::WalkToPos(m_refEntity.shared_from_this(), posTarget, m_cancel);
+	m_coWalk = AiCo::WalkToPos(m_refEntity, posTarget, m_cancel);
 	m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 }
 
@@ -87,7 +87,7 @@ void 走Component::WalkToPos手动控制(const Position& posTarget)
 	}
 	/*m_coStop = false;*/
 	assert(!m_cancel);
-	m_coWalk手动控制 = AiCo::WalkToPos(m_refEntity.shared_from_this(), posTarget, m_cancel);
+	m_coWalk手动控制 = AiCo::WalkToPos(m_refEntity, posTarget, m_cancel);
 	m_coWalk手动控制.Run();//协程离开开始运行（运行到第一个co_await
 }
 
