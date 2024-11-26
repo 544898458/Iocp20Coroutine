@@ -39,34 +39,24 @@ namespace AiCo
 	/// <param name="refThis"></param>
 	/// <param name="localTarget"></param>
 	/// <returns>是否还要走下一步</returns>
-	bool MoveStep(Entity& refThis, const Position localTarget)
+	bool 已走到目标附近(Entity& refThis, const Position localTarget, const float f距离目标小于此距离停下 = 0)
 	{
-		const float step = refThis.m_速度每帧移动距离;
+		const float step = std::max(refThis.m_速度每帧移动距离, f距离目标小于此距离停下);
 		float& x = refThis.m_Pos.x;
 		float& z = refThis.m_Pos.z;
 		if (std::abs(localTarget.x - x) < step && std::abs(localTarget.z - z) < step)
 		{
 			//LOG(INFO) << "已走到" << localTarget.x << "," << localTarget.z << "附近，协程正常退出";
 			refThis.BroadcastChangeSkeleAnim("idle");
-			return false;
+			return true;
 		}
-
-		//if (std::abs(localTarget.x - x) >= step)
-		//{
-		//	x += localTarget.x < x ? -step : step;
-		//}
-
-		//if (std::abs(localTarget.z - z) >= step)
-		//{
-		//	z += localTarget.z < z ? -step : step;
-		//}
 
 		refThis.m_eulerAnglesY = CalculateAngle(refThis.m_Pos, localTarget);
 		refThis.BroadcastNotifyPos();
 
-		return true;
+		return false;
 	}
-	CoTaskBool WalkToPos(Entity &refThis, const Position& posTarget, FunCancel& funCancel)
+	CoTaskBool WalkToPos(Entity& refThis, const Position& posTarget, FunCancel& funCancel, const float f距离目标小于此距离停下)
 	{
 		if (!refThis.m_refSpace.CrowdTool可站立(posTarget))
 		{
@@ -95,7 +85,7 @@ namespace AiCo
 				co_return true;
 			}
 
-			if (!MoveStep(refThis, posLocalTarget))
+			if (已走到目标附近(refThis, posLocalTarget, f距离目标小于此距离停下))
 			{
 				co_return false;
 			}
@@ -144,7 +134,7 @@ namespace AiCo
 				posOld = spTarget->m_Pos;
 			}
 
-			if (!MoveStep(refThis, spTarget->m_Pos))
+			if (已走到目标附近(refThis, spTarget->m_Pos))
 			{
 				co_return false;
 			}

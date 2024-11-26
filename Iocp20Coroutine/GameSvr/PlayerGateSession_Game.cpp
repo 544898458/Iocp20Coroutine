@@ -341,7 +341,7 @@ CoTask<int> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, const
 	{
 	case 基地:
 	case 兵厂:
-		造活动单位Component::AddComponet(*spNewEntity, *this, 类型);
+		造活动单位Component::AddComponent(*spNewEntity, *this, 类型);
 		break;
 	case 地堡:
 		地堡Component::AddComponet(*spNewEntity, *this);

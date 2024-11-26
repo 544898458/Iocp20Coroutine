@@ -1,21 +1,31 @@
 #pragma once
 #include "../CoRoutine/CoTask.h"
 #include <unordered_set>
+#include "SpEntity.h"
+
 enum 活动单位类型;
 enum 建筑单位类型;
 class PlayerGateSession_Game;
 class Entity;
+struct Position;
+
+namespace 单位
+{
+	struct 活动单位配置;
+}
 
 class 造活动单位Component
 {
 public:
-	static void AddComponet(Entity& refEntity, PlayerGateSession_Game& refGateSession, const 建筑单位类型 类型);
+	static void AddComponent(Entity& refEntity, PlayerGateSession_Game& refGateSession, const 建筑单位类型 类型);
 	造活动单位Component(PlayerGateSession_Game& refSession, Entity& refEntity, const 建筑单位类型 类型);
 	void 造兵(PlayerGateSession_Game&, Entity& refEntity, const 活动单位类型 类型);
 	void TryCancel(Entity& refEntity);
 	uint16_t 等待造Count()const;
+	static SpEntity 造活动单位(PlayerGateSession_Game& refGateSession, const Position& pos, const 单位::活动单位配置& 配置, const 活动单位类型 类型);
 private:
 	CoTaskBool Co造活动单位(PlayerGateSession_Game& refGateSession);
+	
 private:
 	CoTaskCancel m_TaskCancel造活动单位;
 	std::unordered_set<活动单位类型> m_set可造类型;

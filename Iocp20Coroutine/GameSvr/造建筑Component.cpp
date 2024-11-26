@@ -6,8 +6,9 @@
 #include "PlayerComponent.h"
 #include "PlayerGateSession_Game.h"
 
-void 造建筑Component::AddComponet(Entity& refEntity, PlayerGateSession_Game& refGateSession, const 活动单位类型 类型)
+void 造建筑Component::AddComponent(Entity& refEntity, PlayerGateSession_Game& refGateSession, const 活动单位类型 类型)
 {
+	refEntity.m_sp造建筑 = std::make_shared<造建筑Component, PlayerGateSession_Game&, Entity&, const 活动单位类型>(refGateSession, refEntity, std::forward<const 活动单位类型&&>(类型));
 }
 
 造建筑Component::造建筑Component(PlayerGateSession_Game& refSession, Entity& refEntity, const 活动单位类型 类型) :m_refEntity(refEntity)
@@ -25,14 +26,14 @@ void 造建筑Component::AddComponet(Entity& refEntity, PlayerGateSession_Game& ref
 	}
 }
 
-CoTaskBool 造建筑Component::Co造建筑(const Position& refPos, const 建筑单位类型 类型)
+CoTaskBool 造建筑Component::Co造建筑(const Position refPos, const 建筑单位类型 类型)
 {
 	if (m_set可造类型.end() == m_set可造类型.find(类型))
 	{
 		co_return true;
 	}
 	//先走到目标点
-	if (co_await AiCo::WalkToPos(m_refEntity, refPos, m_cancel造建筑))
+	if (co_await AiCo::WalkToPos(m_refEntity, refPos, m_cancel造建筑, 5))
 		co_return true;
 
 	//然后开始扣钱建造

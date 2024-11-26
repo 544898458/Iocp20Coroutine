@@ -2,6 +2,7 @@
 #include "造活动单位Component.h"
 #include "PlayerGateSession_Game.h"
 #include "采集Component.h"
+#include "造建筑Component.h"
 #include "单位.h"
 #include "../CoRoutine/CoRpc.h"
 #include "../CoRoutine/CoTimer.h"
@@ -11,12 +12,12 @@
 #include "PlayerComponent.h"
 #include "走Component.h"
 
-void 造活动单位Component::AddComponet(Entity &refEntity,PlayerGateSession_Game &refGateSession, const 建筑单位类型 类型)
+void 造活动单位Component::AddComponent(Entity& refEntity, PlayerGateSession_Game& refGateSession, const 建筑单位类型 类型)
 {
 	refEntity.m_sp造活动单位 = std::make_shared<造活动单位Component, PlayerGateSession_Game&, Entity&, const 建筑单位类型 >(refGateSession, refEntity, std::forward<const 建筑单位类型&&>(类型));
 }
 
-造活动单位Component::造活动单位Component(PlayerGateSession_Game& refSession, Entity& refEntity, const 建筑单位类型 类型):m_refEntity(refEntity)
+造活动单位Component::造活动单位Component(PlayerGateSession_Game& refSession, Entity& refEntity, const 建筑单位类型 类型) :m_refEntity(refEntity)
 {
 	switch (类型)
 	{
@@ -67,7 +68,7 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 		using namespace std;
 		const auto posBuilding = m_refEntity.m_Pos;
 		Position pos = { posBuilding.x + std::rand() % 10, posBuilding.z + 3 };
-		bool CrowdTool可站立(CrowdToolState& refCrowTool, const Position & refPos);
+		bool CrowdTool可站立(CrowdToolState & refCrowTool, const Position & refPos);
 		CHECK_CO_RET_FALSE(!refGateSession.m_wpSpace.expired());
 		auto& refCrowdToolState = *refGateSession.m_wpSpace.lock()->m_spCrowdToolState;
 
@@ -96,32 +97,7 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 
 		LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 		CHECK_CO_RET_0(!refGateSession.m_wpSpace.expired());
-		auto sp = refGateSession.m_wpSpace.lock();
-		auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string&>(
-			pos, *sp, 配置.配置.strPrefabName, 配置.配置.strName);
-		spNewEntity->m_f警戒距离 = 配置.f警戒距离;
-		PlayerComponent::AddComponent(*spNewEntity,refGateSession);
-		AttackComponent::AddComponent(*spNewEntity, 类型, 配置.f攻击距离);
-		DefenceComponent::AddComponent(*spNewEntity, 配置.制造.u16初始Hp);
-		走Component::AddComponent(*spNewEntity);
-		refGateSession.m_setSpEntity.insert(spNewEntity);//自己控制的单位
-		sp->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
-
-		switch (类型)
-		{
-		case 工程车:
-			采集Component::AddComponent(*spNewEntity);
-			refGateSession.Say语音提示("工程车可以开工了!");//SCV, good to go, sir. SCV可以开工了
-			break;
-		case 兵:
-			refGateSession.Say语音提示("听说有人要买我的狗头？");//You want a piece of me, boy?想要我的一部分吗，小子？
-			break;
-		case 近战兵:
-			refGateSession.Say语音提示("听说有人要我的斧头？");//You want a piece of me, boy?想要我的一部分吗，小子？
-			break;
-
-		default:break;
-		}
+		SpEntity spNewEntity = 造活动单位(refGateSession, pos, 配置, 类型);
 
 		if (m_list等待造.empty())
 		{
@@ -131,13 +107,46 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 		}
 
 		m_list等待造.pop_front();//--refThis.m_i等待造兵数;
-
-		spNewEntity->BroadcastEnter();
-		refGateSession.Send资源();
 	}
+}
+
+SpEntity 造活动单位Component::造活动单位(PlayerGateSession_Game& refGateSession, const Position& pos, const 单位::活动单位配置& 配置, const 活动单位类型 类型)
+{
+	auto sp = refGateSession.m_wpSpace.lock();
+	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string&>(
+		pos, *sp, 配置.配置.strPrefabName, 配置.配置.strName);
+	spNewEntity->m_f警戒距离 = 配置.f警戒距离;
+	PlayerComponent::AddComponent(*spNewEntity, refGateSession);
+	AttackComponent::AddComponent(*spNewEntity, 类型, 配置.f攻击距离);
+	DefenceComponent::AddComponent(*spNewEntity, 配置.制造.u16初始Hp);
+	走Component::AddComponent(*spNewEntity);
+	refGateSession.m_setSpEntity.insert(spNewEntity);//自己控制的单位
+	sp->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
+
+	switch (类型)
+	{
+	case 工程车:
+		采集Component::AddComponent(*spNewEntity);
+		造建筑Component::AddComponent(*spNewEntity, refGateSession, 类型);
+		refGateSession.Say语音提示("工程车可以开工了!");//SCV, good to go, sir. SCV可以开工了
+		break;
+	case 兵:
+		refGateSession.Say语音提示("听说有人要买我的狗头？");//You want a piece of me, boy?想要我的一部分吗，小子？
+		break;
+	case 近战兵:
+		refGateSession.Say语音提示("听说有人要我的斧头？");//You want a piece of me, boy?想要我的一部分吗，小子？
+		break;
+
+	default:break;
+	}
+
+	spNewEntity->BroadcastEnter();
+	refGateSession.Send资源();
+
+	return spNewEntity;
 }
 
 uint16_t 造活动单位Component::等待造Count()const
 {
-	return (uint16_t)m_list等待造.size(); 
+	return (uint16_t)m_list等待造.size();
 }

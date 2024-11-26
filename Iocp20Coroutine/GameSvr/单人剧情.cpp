@@ -8,6 +8,8 @@
 #include "资源Component.h"
 #include "MonsterComponent.h"
 #include "PlayerComponent.h"
+#include "造活动单位Component.h"
+#include "单位.h"
 
 namespace 单人剧情
 {
@@ -30,7 +32,12 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(2s, funCancel))
 			co_return 0;
 
-		refGateSession.Say系统("请单击“造基地”按钮，3秒后就能造出一个基地");
+		const 活动单位类型 类型(活动单位类型::工程车);
+		单位::活动单位配置 配置;
+		单位::Find活动单位配置(类型, 配置);
+		SpEntity sp工程车 = 造活动单位Component::造活动单位(refGateSession, { 30,30 }, 配置, 类型);
+
+		refGateSession.Say系统("请单击“工程车”选中，然后单击“造基地”按钮，再点击空白地面，3秒后就能造出一个基地");
 
 		const auto funSameSpace = [&refSpace, &refGateSession](const MyEvent::AddEntity& refAddEntity) { return MyEvent::SameSpace(refAddEntity.wpEntity, refSpace, refGateSession); };
 
