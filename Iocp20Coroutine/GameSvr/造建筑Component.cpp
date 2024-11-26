@@ -5,6 +5,8 @@
 #include "Entity.h"
 #include "PlayerComponent.h"
 #include "PlayerGateSession_Game.h"
+#include "../CoRoutine/CoTimer.h"
+#include "../IocpNetwork/StrConv.h"
 
 void Ôì½¨ÖşComponent::AddComponent(Entity& refEntity, PlayerGateSession_Game& refGateSession, const »î¶¯µ¥Î»ÀàĞÍ ÀàĞÍ)
 {
@@ -30,13 +32,46 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position refPos, const ½¨Öşµ¥Î»ÀàĞÍ À
 {
 	if (m_set¿ÉÔìÀàĞÍ.end() == m_set¿ÉÔìÀàĞÍ.find(ÀàĞÍ))
 	{
-		co_return true;
+		co_return false;
 	}
+
 	//ÏÈ×ßµ½Ä¿±êµã
 	if (co_await AiCo::WalkToPos(m_refEntity, refPos, m_cancelÔì½¨Öş, 5))
 		co_return true;
 
 	//È»ºó¿ªÊ¼¿ÛÇ®½¨Ôì
-	co_await m_refEntity.m_spPlayer->m_refSession.CoAddBuilding(ÀàĞÍ, refPos);
-	co_return true;
+	auto spEntity½¨Öş = co_await m_refEntity.m_spPlayer->m_refSession.CoAddBuilding(ÀàĞÍ, refPos);
+	if( co_await Co½¨Ôì¹ı³Ì(spEntity½¨Öş, m_cancelÔì½¨Öş))
+		co_return true;
+
+	co_return false;
 }
+
+CoTaskBool Ôì½¨ÖşComponent::Co½¨Ôì¹ı³Ì(WpEntity wpEntity½¨Öş, FunCancel& cancel)
+{
+	KeepCancel kc(cancel);
+	std::weak_ptr<BuildingComponent> wpBuilding(wpEntity½¨Öş.lock()->m_spBuilding);
+	
+	while (!wpBuilding.expired() && MAX½¨Ôì°Ù·Ö±È > wpBuilding.lock()->m_n½¨Ôì½ø¶È°Ù·Ö±È)
+	{
+		if (co_await CoTimer::WaitNextUpdate(cancel))
+			co_return true;
+		if (wpBuilding.expired())
+			co_return true;
+
+		BuildingComponent& refBuilding = *wpBuilding.lock();
+		++refBuilding.m_n½¨Ôì½ø¶È°Ù·Ö±È;
+
+		std::ostringstream oss;
+		if (MAX½¨Ôì°Ù·Ö±È <= refBuilding.m_n½¨Ôì½ø¶È°Ù·Ö±È)
+			oss << "½¨ÔìÍê³É";
+		else
+			oss << "ÕıÔÚ½¨Ôì:" << refBuilding.m_n½¨Ôì½ø¶È°Ù·Ö±È << "%";
+
+		assert(!wpEntity½¨Öş.expired());
+		wpEntity½¨Öş.lock()->Broadcast<MsgEntityÃèÊö>({.idEntity = this->m_refEntity.Id, .strÃèÊö = StrConv::GbkToUtf8(oss.str())});
+	}
+
+	co_return 0;
+}
+

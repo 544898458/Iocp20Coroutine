@@ -32,7 +32,7 @@ public:
 	uint16_t 活动单位包括制造队列中的() const;
 
 	bool 可放置建筑(const Position& pos, float f半边长);
-	CoTask<int> CoAddBuilding(const 建筑单位类型 类型, const Position pos);
+	CoTask<SpEntity> CoAddBuilding(const 建筑单位类型 类型, const Position pos);
 
 
 	uint32_t m_snRecv = 0;

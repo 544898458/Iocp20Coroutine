@@ -20,14 +20,18 @@ BuildingComponent::BuildingComponent(PlayerGateSession_Game& refSession, const ½
 	//	LOG(INFO) << "Ç°Ò»¸öÔì½¨ÖşĞ­³Ì»¹Ã»·µ»Ø";
 	//	return;
 	//}
-	Co½¨Ôì¹ı³Ì(m_cancel½¨Ôì).RunNew();
+	//Co½¨Ôì¹ı³Ì(m_cancel½¨Ôì).RunNew();
 }
 
+/// <summary>
+/// ²»ĞèÒªÕ¼ÓÃ¹¤³Ì³µµÄ½¨Ôì£¨³æ×å/Òì³æ ºÍ Éñ×å/ĞÇÁé µÄ½¨ÖşÖÆÔì¶¼ÊÇ×Ô¶¯µÄ£©
+/// </summary>
+/// <param name="cancel"></param>
+/// <returns></returns>
 CoTaskBool BuildingComponent::Co½¨Ôì¹ı³Ì(FunCancel& cancel)
 {
 	KeepCancel kc(cancel);
 
-	const int MAX½¨Ôì°Ù·Ö±È = 100;
 	while (MAX½¨Ôì°Ù·Ö±È > this->m_n½¨Ôì½ø¶È°Ù·Ö±È)
 	{
 		if (co_await CoTimer::WaitNextUpdate(cancel))
