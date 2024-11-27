@@ -240,7 +240,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 			if (ref.m_spAttack)
 				ref.m_spAttack->TryCancel();
 
-			ref.m_sp走->TryCancel();
+			走Component::Cancel所有包含走路的协程(ref);
 			ref.m_sp走->WalkToPos手动控制(Position(targetX, targetZ));
 			Say语音提示("走走走!");//Go! Go! Go!
 
