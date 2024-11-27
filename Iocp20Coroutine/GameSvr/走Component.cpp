@@ -8,6 +8,7 @@
 #include "Space.h"
 #include "地堡Component.h"
 #include "采集Component.h"
+#include "造建筑Component.h"
 
 void 走Component::AddComponent(Entity& refEntity)
 {
@@ -156,4 +157,5 @@ void 走Component::Cancel所有包含走路的协程(Entity& refEntity)
 	if (refEntity.m_spAttack)	refEntity.m_spAttack->TryCancel();
 	if (refEntity.m_sp采集)		refEntity.m_sp采集->m_TaskCancel.TryCancel();
 	if (refEntity.m_sp走)		refEntity.m_sp走->TryCancel();
+	if (refEntity.m_sp造建筑)	refEntity.m_sp造建筑->TryCancel();
 }

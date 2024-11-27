@@ -287,6 +287,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 				return;
 			}
 
+			走Component::Cancel所有包含走路的协程(ref); //TryCancel();
 			ref.m_sp造建筑->Co造建筑(msg.pos, msg.类型).RunNew();
 		});
 }

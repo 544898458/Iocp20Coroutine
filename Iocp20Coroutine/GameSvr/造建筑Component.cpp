@@ -69,9 +69,21 @@ CoTaskBool 造建筑Component::Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel)
 			oss << "正在建造:" << refBuilding.m_n建造进度百分比 << "%";
 
 		assert(!wpEntity建筑.expired());
-		wpEntity建筑.lock()->Broadcast<MsgEntity描述>({.idEntity = this->m_refEntity.Id, .str描述 = StrConv::GbkToUtf8(oss.str())});
+		wpEntity建筑.lock()->Broadcast<MsgEntity描述>({.idEntity = wpEntity建筑.lock()->Id, .str描述 = StrConv::GbkToUtf8(oss.str())});
 	}
 
 	co_return 0;
 }
 
+void 造建筑Component::TryCancel()
+{
+	if (m_cancel造建筑)
+	{
+		//LOG(INFO) << "调用m_cancel";
+		m_cancel造建筑();
+	}
+	else
+	{
+		
+	}
+}
