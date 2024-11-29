@@ -50,3 +50,9 @@ CoTaskBool BuildingComponent::Co建造过程(FunCancel& cancel)
 
 	co_return 0;
 }
+
+bool BuildingComponent::已造好() const
+{
+	return m_n建造进度百分比 >= MAX建造百分比;
+
+}

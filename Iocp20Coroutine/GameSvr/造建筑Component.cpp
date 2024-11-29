@@ -41,17 +41,25 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position refPos, const ½¨Öşµ¥Î»ÀàĞÍ À
 
 	//È»ºó¿ªÊ¼¿ÛÇ®½¨Ôì
 	auto spEntity½¨Öş = co_await m_refEntity.m_spPlayer->m_refSession.CoAddBuilding(ÀàĞÍ, refPos);
-	if( co_await Co½¨Ôì¹ı³Ì(spEntity½¨Öş, m_cancelÔì½¨Öş))
+	if(!spEntity½¨Öş)
+		co_return false;
+
+	if (co_await Co½¨Ôì¹ı³Ì(spEntity½¨Öş, m_cancelÔì½¨Öş))
 		co_return true;
 
 	co_return false;
+}
+
+void BroadcastEntityÃèÊö(Entity& refEntity, const std::string& refStrGbk)
+{
+	refEntity.Broadcast<MsgEntityÃèÊö>({ .idEntity = refEntity.Id, .strÃèÊö = StrConv::GbkToUtf8(refStrGbk) });
 }
 
 CoTaskBool Ôì½¨ÖşComponent::Co½¨Ôì¹ı³Ì(WpEntity wpEntity½¨Öş, FunCancel& cancel)
 {
 	KeepCancel kc(cancel);
 	std::weak_ptr<BuildingComponent> wpBuilding(wpEntity½¨Öş.lock()->m_spBuilding);
-	
+
 	while (!wpBuilding.expired() && MAX½¨Ôì°Ù·Ö±È > wpBuilding.lock()->m_n½¨Ôì½ø¶È°Ù·Ö±È)
 	{
 		if (co_await CoTimer::WaitNextUpdate(cancel))
@@ -69,7 +77,7 @@ CoTaskBool Ôì½¨ÖşComponent::Co½¨Ôì¹ı³Ì(WpEntity wpEntity½¨Öş, FunCancel& cancel)
 			oss << "ÕıÔÚ½¨Ôì:" << refBuilding.m_n½¨Ôì½ø¶È°Ù·Ö±È << "%";
 
 		assert(!wpEntity½¨Öş.expired());
-		wpEntity½¨Öş.lock()->Broadcast<MsgEntityÃèÊö>({.idEntity = wpEntity½¨Öş.lock()->Id, .strÃèÊö = StrConv::GbkToUtf8(oss.str())});
+		BroadcastEntityÃèÊö(*wpEntity½¨Öş.lock(), oss.str());
 	}
 
 	co_return 0;
@@ -84,6 +92,6 @@ void Ôì½¨ÖşComponent::TryCancel()
 	}
 	else
 	{
-		
+
 	}
 }

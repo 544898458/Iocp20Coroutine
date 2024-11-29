@@ -45,6 +45,12 @@ void 造活动单位Component::造兵(PlayerGateSession_Game& refGateSession, Entity& r
 		return;
 	}
 
+	if (!m_refEntity.m_spBuilding->已造好())
+	{
+		refGateSession.Say系统("建筑还没造好");
+		return;
+	}
+
 	m_list等待造.emplace_back(类型);//++m_i等待造兵数;
 	m_TaskCancel造活动单位.TryRun(Co造活动单位(refGateSession));
 }
