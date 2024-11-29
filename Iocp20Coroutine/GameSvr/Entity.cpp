@@ -36,6 +36,10 @@ float Entity::DistancePow2(const Entity& refEntity)const
 {
 	return this->m_Pos.DistancePow2(refEntity.m_Pos);
 }
+float Entity::Distance(const Entity& refEntity)const
+{
+	return std::sqrtf(DistancePow2(refEntity));
+}
 
 bool Entity::IsDead() const 
 {

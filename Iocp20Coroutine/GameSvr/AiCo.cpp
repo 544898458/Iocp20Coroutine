@@ -56,7 +56,7 @@ namespace AiCo
 
 		return false;
 	}
-	CoTaskBool WalkToPos(Entity& refThis, const Position& posTarget, FunCancel& funCancel, const float f距离目标小于此距离停下)
+	CoTaskBool WalkToPos(Entity& refThis, const Position posTarget, FunCancel& funCancel, const float f距离目标小于此距离停下)
 	{
 		if (!refThis.m_refSpace.CrowdTool可站立(posTarget))
 		{
@@ -89,6 +89,8 @@ namespace AiCo
 			{
 				co_return false;
 			}
+			void BroadcastEntity描述(Entity & refEntity, const std::string & refStrGbk);
+			BroadcastEntity描述(refThis, std::format("距离目标{0}米", refThis.m_Pos.Distance(posTarget)));
 		}
 		LOG(INFO) << "走向目标协程结束:" << posTarget;
 		co_return false;
@@ -138,6 +140,8 @@ namespace AiCo
 			{
 				co_return false;
 			}
+			void BroadcastEntity描述(Entity & refEntity, const std::string & refStrGbk);
+			BroadcastEntity描述(refThis, std::format("距离目标{0}米", refThis.Distance(*spTarget)));
 		}
 		LOG(INFO) << "走向目标协程结束:" << refThis.m_Pos;
 		co_return false;

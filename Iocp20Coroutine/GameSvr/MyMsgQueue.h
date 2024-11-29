@@ -24,6 +24,10 @@ struct Position
 	{
 		return std::pow(x - refPos.x, fExponent) + std::pow(z - refPos.z, fExponent);
 	}
+	float Distance(const Position& refPos)const
+	{
+		return std::sqrtf(DistancePow2(refPos));
+	}
 };
 template <class _Traits>
 std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const Position& _ref)
@@ -237,7 +241,7 @@ struct MsgNotifyPos
 };
 struct MsgChangeSkeleAnim
 {
-	MsgChangeSkeleAnim(Entity& ref, const std::string &refName, bool loop) :entityId((uint64_t)&ref), loop(loop), clipName(refName) {}
+	MsgChangeSkeleAnim(Entity& ref, const std::string& refName, bool loop) :entityId((uint64_t)&ref), loop(loop), clipName(refName) {}
 	MsgHead msg{ .id = ChangeSkeleAnim };
 	uint64_t entityId;
 	bool loop;
@@ -316,7 +320,7 @@ struct Msg资源
 
 struct Msg进Space
 {
-	MsgHead msg{ .id = 进Space};
+	MsgHead msg{ .id = 进Space };
 	uint32_t idSapce;
 	MSGPACK_DEFINE(msg, idSapce);
 };
@@ -335,7 +339,7 @@ struct Msg显示界面
 		选择地图,
 	};
 	界面类型 ui;
-	MSGPACK_DEFINE(msg,ui);
+	MSGPACK_DEFINE(msg, ui);
 };
 MSGPACK_ADD_ENUM(Msg显示界面::界面类型);
 
@@ -348,7 +352,7 @@ struct Msg离开Space
 
 struct MsgEntity描述
 {
-	MsgHead msg{ .id = Entity描述};
+	MsgHead msg{ .id = Entity描述 };
 	uint64_t idEntity;
 	std::string str描述;
 	MSGPACK_DEFINE(msg, idEntity, str描述);

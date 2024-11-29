@@ -32,6 +32,7 @@ public:
 	bool NeedDelete()const { return m_bNeedDelete; }
 	bool DistanceLessEqual(const Entity& refEntity, float fDistance);
 	float DistancePow2(const Entity& refEntity)const;
+	float Distance(const Entity& refEntity)const;
 	void OnDestroy();
 	void BroadcastLeave();
 	const std::string& NickName();
