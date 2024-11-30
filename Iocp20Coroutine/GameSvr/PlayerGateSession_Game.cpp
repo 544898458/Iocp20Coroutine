@@ -212,11 +212,32 @@ void PlayerGateSession_Game::OnRecv(const Msg离开Space& msg)
 	OnDestroy();
 }
 
+typedef CoTask<int>(*funCo副本剧情)(Space& refSpace, FunCancel& funCancel, PlayerGateSession_Game& refGateSession);
+struct 副本配置
+{
+	std::string str寻路文件名;
+	funCo副本剧情 funCo剧情;
+};
+
+std::unordered_map<单人剧情副本ID, 副本配置> g_map副本配置 =
+{
+	{训练战,{"all_tiles_tilecache.bin",单人剧情::Co训练战}},
+	{防守战,{"防守战.bin",单人剧情::Co防守战}},
+};
+
 void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
 {
-	m_spSpace单人剧情副本 = std::make_shared<Space>();
+	const auto itFind = g_map副本配置.find(msg.id);
+	if (itFind == g_map副本配置.end())
+	{
+		assert(false);
+		return;
+	}
+	const auto& ref配置 = itFind->second;
+	m_spSpace单人剧情副本 = std::make_shared<Space,const std::string&>(ref配置.str寻路文件名);
 	EnterSpace(m_spSpace单人剧情副本, this->NickName());
-	单人剧情::Co(*m_spSpace单人剧情副本, m_funCancel单人剧情, *this).RunNew();
+
+	ref配置.funCo剧情(*m_spSpace单人剧情副本, m_funCancel单人剧情, *this).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
@@ -245,7 +266,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 			else
 				ref.m_sp走->WalkToPos手动控制(msg.pos);
 
-			Say语音提示("走走走!");//Go! Go! Go!
+			Say语音提示("上上上!");//Go! Go! Go!
 
 		});
 }

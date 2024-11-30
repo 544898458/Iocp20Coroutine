@@ -14,11 +14,11 @@
 #include "AttackComponent.h"
 #include "MyMsgQueue.h"
 
-std::shared_ptr<CrowdToolState> CreateCrowdToolState()
+std::shared_ptr<CrowdToolState> CreateCrowdToolState(const std::string &stf寻路文件)
 {
 	auto sp = std::make_shared<CrowdToolState>();
 	auto pSample = new Sample_TempObstacles();
-	pSample->loadAll("all_tiles_tilecache.bin");
+	pSample->loadAll(stf寻路文件.c_str());
 	pSample->m_navQuery->init(pSample->m_navMesh, 2048);
 	sp->init(pSample);
 	return sp;

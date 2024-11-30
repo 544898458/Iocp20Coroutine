@@ -4,10 +4,10 @@
 #include "PlayerComponent.h"
 #include "GameSvrSession.h"
 
-Space::Space()
+Space::Space(const std::string& stf寻路文件)
 {
-	std::shared_ptr<CrowdToolState> CreateCrowdToolState();
-	m_spCrowdToolState = CreateCrowdToolState();
+	std::shared_ptr<CrowdToolState> CreateCrowdToolState(const std::string & stf寻路文件);
+	m_spCrowdToolState = CreateCrowdToolState(stf寻路文件);
 }
 
 Space::~Space()
@@ -43,7 +43,7 @@ WpSpace Space::AddSpace(const uint8_t idSpace)
 	if (!wpOld.expired())
 		return wpOld;
 
-	auto [iterNew, bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space>() });
+	auto [iterNew, bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space>("all_tiles_tilecache.bin")});
 	assert(bOk);
 	return iterNew->second;
 }

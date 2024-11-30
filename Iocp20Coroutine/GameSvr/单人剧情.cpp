@@ -14,20 +14,10 @@
 namespace 单人剧情
 {
 
-	CoTask<int> Co(Space& refSpace, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
+	CoTask<int> Co训练战(Space& refSpace, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
-		//PlayerGateSession_Game* pPlayerGateSession = nullptr;
-		//{
-		//	auto [stop, p] = co_await CoEvent<PlayerGateSession_Game*>::Wait(funCancel);
-		//	if (stop)
-		//		co_return 0;
-
-		//	pPlayerGateSession = p;
-		//}
-
-		//CHECK_NOTNULL_CO_RET_0(pPlayerGateSession);
 		refGateSession.Say系统("欢迎来到即时策略游戏单人剧情");
 		if (co_await CoTimer::Wait(2s, funCancel))
 			co_return 0;
@@ -157,7 +147,23 @@ namespace 单人剧情
 		}
 
 		refGateSession.Say系统("您取得了胜利！您是指挥天才！");
-		refGateSession.Send<Msg显示界面>({.ui = Msg显示界面::选择地图});
+		refGateSession.Send<Msg显示界面>({ .ui = Msg显示界面::选择地图 });
+		co_return 0;
+	}
+
+	CoTask<int> Co防守战(Space& refSpace, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
+	{
+		KeepCancel kc(funCancel);
+		using namespace std;
+		refGateSession.Say系统("防守战：只要守住，就是胜利！");
+		if (co_await CoTimer::Wait(2s, funCancel))
+			co_return 0;
+
+		const 活动单位类型 类型(活动单位类型::工程车);
+		单位::活动单位配置 配置;
+		单位::Find活动单位配置(类型, 配置);
+		SpEntity sp工程车 = 造活动单位Component::造活动单位(refGateSession, { -30, 30 }, 配置, 类型);
+
 		co_return 0;
 	}
 }

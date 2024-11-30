@@ -325,10 +325,18 @@ struct Msg进Space
 	MSGPACK_DEFINE(msg, idSapce);
 };
 
+enum 单人剧情副本ID
+{
+	训练战,
+	防守战
+};
+MSGPACK_ADD_ENUM(单人剧情副本ID);
+
 struct Msg进单人剧情副本
 {
 	MsgHead msg{ .id = 进单人剧情副本 };
-	MSGPACK_DEFINE(msg);
+	单人剧情副本ID id;
+	MSGPACK_DEFINE(msg,id);
 };
 
 struct Msg显示界面

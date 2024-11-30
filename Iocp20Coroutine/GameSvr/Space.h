@@ -14,7 +14,7 @@ class CrowdToolState;
 class Space final
 {
 public:
-	Space();
+	Space(const std::string& stfÑ°Â·ÎÄ¼þ);
 	Space(const Space&) = delete;
 	~Space();
 	template<class T>
