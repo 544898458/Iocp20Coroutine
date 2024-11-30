@@ -1,0 +1,10 @@
+#pragma once
+
+class Entity;
+
+namespace EntitySystem
+{
+	void BroadcastEntity√Ë ˆ(Entity& refEntity, const std::string& refStrGbk);
+	void BroadcastChangeSkeleAnimIdle(Entity& refEntity);
+};
+

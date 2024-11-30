@@ -11,6 +11,7 @@
 #include "DefenceComponent.h"
 #include "PlayerComponent.h"
 #include "走Component.h"
+#include "EntitySystem.h"
 
 void 造活动单位Component::AddComponent(Entity& refEntity, PlayerGateSession_Game& refGateSession, const 建筑单位类型 类型)
 {
@@ -96,9 +97,18 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 			co_return{};
 		}
 		//耗时
-		if (co_await CoTimer::Wait(1s, m_TaskCancel造活动单位.cancel))
+		//if (co_await CoTimer::Wait(1s, m_TaskCancel造活动单位.cancel))
+		//{
+		//	co_return{};
+		//}
+		const int MAX进度 = 10;
+		for (int i = 0; i < 10; ++i)
 		{
-			co_return{};
+			if (co_await CoTimer::WaitNextUpdate(m_TaskCancel造活动单位.cancel))
+			{
+				co_return{};
+			}
+			EntitySystem::BroadcastEntity描述(m_refEntity, std::format("待造队列{0},当前单位进度{1}/{2}", m_list等待造.size(), i, MAX进度));
 		}
 
 		LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
@@ -114,6 +124,8 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 
 		m_list等待造.pop_front();//--refThis.m_i等待造兵数;
 	}
+
+	EntitySystem::BroadcastEntity描述(m_refEntity, "造完了");
 }
 
 SpEntity 造活动单位Component::造活动单位(PlayerGateSession_Game& refGateSession, const Position& pos, const 单位::活动单位配置& 配置, const 活动单位类型 类型)

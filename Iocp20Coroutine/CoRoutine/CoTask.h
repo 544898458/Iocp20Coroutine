@@ -419,6 +419,10 @@ struct CoTaskCancel
 	CoTaskBool co;
 	FunCancel cancel;
 	void TryCancel();
+	/// <summary>
+	/// 如果协程还未结束就不会执行新的
+	/// </summary>
+	/// <param name="ref"></param>
 	void TryRun(CoTaskBool&& ref)
 	{
 		if (co.Finished())

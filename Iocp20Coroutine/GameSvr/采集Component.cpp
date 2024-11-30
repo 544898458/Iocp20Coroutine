@@ -11,6 +11,7 @@
 #include "AttackComponent.h"
 #include "PlayerGateSession_Game.h"
 #include "走Component.h"
+#include "EntitySystem.h"
 
 采集Component::采集Component(Entity& refEntity) : m_携带矿类型(晶体矿), m_refEntity(refEntity)
 {
@@ -93,8 +94,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 				m_u32携带矿;
 
 			++m_u32携带矿;
-			void BroadcastEntity描述(Entity & refEntity, const std::string & refStrGbk);
-			BroadcastEntity描述(m_refEntity, std::format("已采集{0}",m_u32携带矿));
+			EntitySystem::BroadcastEntity描述(m_refEntity, std::format("已采集{0}",m_u32携带矿));
 			continue;
 		}
 

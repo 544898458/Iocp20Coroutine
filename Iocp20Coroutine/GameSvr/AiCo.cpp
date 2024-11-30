@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "AiCo.h"
 #include "Entity.h"
+#include "EntitySystem.h"
 #include "../CoRoutine/CoTimer.h"
 #include "../CoRoutine/CoRpc.h"
 #include "../CoRoutine/CoEvent.h"
@@ -47,7 +48,7 @@ namespace AiCo
 		if (std::abs(localTarget.x - x) < step && std::abs(localTarget.z - z) < step)
 		{
 			//LOG(INFO) << "已走到" << localTarget.x << "," << localTarget.z << "附近，协程正常退出";
-			refThis.BroadcastChangeSkeleAnim("idle");
+			EntitySystem::BroadcastChangeSkeleAnimIdle(refThis);
 			return true;
 		}
 
@@ -87,10 +88,11 @@ namespace AiCo
 
 			if (已走到目标附近(refThis, posLocalTarget, f距离目标小于此距离停下))
 			{
+				EntitySystem::BroadcastEntity描述(refThis, "已走到目标附近");
 				co_return false;
 			}
-			void BroadcastEntity描述(Entity & refEntity, const std::string & refStrGbk);
-			BroadcastEntity描述(refThis, std::format("距离目标{0}米", refThis.m_Pos.Distance(posTarget)));
+			
+			EntitySystem::BroadcastEntity描述(refThis, std::format("距离目标{0}米", refThis.m_Pos.Distance(posTarget)));
 		}
 		LOG(INFO) << "走向目标协程结束:" << posTarget;
 		co_return false;
@@ -126,7 +128,8 @@ namespace AiCo
 			if (refThis.DistanceLessEqual(*spTarget, refThis.攻击距离()))
 			{
 				//LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
-				refThis.BroadcastChangeSkeleAnim("idle");
+				EntitySystem::BroadcastChangeSkeleAnimIdle(refThis);
+				EntitySystem::BroadcastEntity描述(refThis, "已走到目标附近");
 				co_return false;
 			}
 
@@ -140,8 +143,7 @@ namespace AiCo
 			{
 				co_return false;
 			}
-			void BroadcastEntity描述(Entity & refEntity, const std::string & refStrGbk);
-			BroadcastEntity描述(refThis, std::format("距离目标{0}米", refThis.Distance(*spTarget)));
+			EntitySystem::BroadcastEntity描述(refThis, std::format("距离目标{0}米", refThis.Distance(*spTarget)));
 		}
 		LOG(INFO) << "走向目标协程结束:" << refThis.m_Pos;
 		co_return false;

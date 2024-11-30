@@ -218,6 +218,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\ValueHistory.cpp" />
+    <ClCompile Include="EntitySystem.cpp" />
     <ClCompile Include="RecastNavigationCrowd.cpp" />
     <ClCompile Include="Sample_TempObstacles.cpp" />
     <ClCompile Include="DefenceComponent.cpp" />
@@ -322,6 +323,7 @@
     <ClInclude Include="AiCo.h" />
     <ClInclude Include="AttackComponent.h" />
     <ClInclude Include="BuildingComponent.h" />
+    <ClInclude Include="EntitySystem.h" />
     <ClInclude Include="RecastNavigationCrowd.h" />
     <ClInclude Include="Sample_TempObstacles.h" />
     <ClInclude Include="DefenceComponent.h" />

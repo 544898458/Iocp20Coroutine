@@ -3,6 +3,7 @@
 #include "µ¥Î».h"
 #include "AiCo.h"
 #include "Entity.h"
+#include "EntitySystem.h"
 #include "PlayerComponent.h"
 #include "PlayerGateSession_Game.h"
 #include "../CoRoutine/CoTimer.h"
@@ -50,11 +51,6 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position refPos, const ½¨Öşµ¥Î»ÀàĞÍ À
 	co_return false;
 }
 
-void BroadcastEntityÃèÊö(Entity& refEntity, const std::string& refStrGbk)
-{
-	refEntity.Broadcast<MsgEntityÃèÊö>({ .idEntity = refEntity.Id, .strÃèÊö = StrConv::GbkToUtf8(refStrGbk) });
-}
-
 CoTaskBool Ôì½¨ÖşComponent::Co½¨Ôì¹ı³Ì(WpEntity wpEntity½¨Öş, FunCancel& cancel)
 {
 	KeepCancel kc(cancel);
@@ -77,7 +73,7 @@ CoTaskBool Ôì½¨ÖşComponent::Co½¨Ôì¹ı³Ì(WpEntity wpEntity½¨Öş, FunCancel& cancel)
 			oss << "ÕıÔÚ½¨Ôì:" << refBuilding.m_n½¨Ôì½ø¶È°Ù·Ö±È << "%";
 
 		assert(!wpEntity½¨Öş.expired());
-		BroadcastEntityÃèÊö(*wpEntity½¨Öş.lock(), oss.str());
+		EntitySystem::BroadcastEntityÃèÊö(*wpEntity½¨Öş.lock(), oss.str());
 	}
 
 	co_return 0;

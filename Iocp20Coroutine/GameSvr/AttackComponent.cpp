@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "AttackComponent.h"
 #include "Entity.h"
+#include "EntitySystem.h"
 #include "PlayerComponent.h"
 #include "MonsterComponent.h"
 #include "../IocpNetwork/StrConv.h"
@@ -182,7 +183,7 @@ CoTask<int> AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 
 	if (!m_refEntity.IsDead())
 	{
-		m_refEntity.BroadcastChangeSkeleAnim("idle");//播放休闲待机动作
+		EntitySystem::BroadcastChangeSkeleAnimIdle(m_refEntity);//播放休闲待机动作
 	}
 
 	co_return 0;//协程正常退出
