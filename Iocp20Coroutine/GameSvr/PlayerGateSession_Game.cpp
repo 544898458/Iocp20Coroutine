@@ -221,15 +221,14 @@ void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 {
-	LOG(INFO) << "收到点击坐标:" << msg.x << "," << msg.z;
-	const auto targetX = msg.x;
-	const auto targetZ = msg.z;
+	LOG(INFO) << "收到点击坐标:" << msg.pos;
+	const auto pos = msg.pos;
 	if (m_wpSpace.expired())
 	{
 		Say系统("还没进地图");
 		return;
 	}
-	ForEachSelected([this, targetX, targetZ](Entity& ref)
+	ForEachSelected([this, msg](Entity& ref)
 		{
 			if (!ref.m_sp走)
 				return;
@@ -241,7 +240,11 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 				ref.m_spAttack->TryCancel();
 
 			走Component::Cancel所有包含走路的协程(ref);
-			ref.m_sp走->WalkToPos手动控制(Position(targetX, targetZ));
+			if (msg.b遇到敌人自动攻击)
+				ref.m_sp走->WalkToPos(msg.pos);
+			else
+				ref.m_sp走->WalkToPos手动控制(msg.pos);
+
 			Say语音提示("走走走!");//Go! Go! Go!
 
 		});
