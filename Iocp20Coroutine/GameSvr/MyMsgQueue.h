@@ -179,9 +179,9 @@ struct MsgNotifyMoney
 struct MsgMove
 {
 	MsgHead msg;
-	float x;
-	float z;
-	MSGPACK_DEFINE(msg, x, z);
+	Position pos;
+	bool b遇到敌人自动攻击;
+	MSGPACK_DEFINE(msg, pos, b遇到敌人自动攻击);
 };
 
 enum SayChannel

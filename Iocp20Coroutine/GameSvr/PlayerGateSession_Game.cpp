@@ -523,11 +523,11 @@ uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
 			制造队列中的单位 += (uint16_t)refEntity->m_sp造活动单位->等待造Count();//m_i等待造兵数;
 
 		}
-		else
-		{
-			++制造队列中的单位;
-		}
 
+		if (refEntity->m_spBuilding)
+			continue;//民房
+
+		++制造队列中的单位;
 	}
 
 	return 制造队列中的单位;

@@ -123,7 +123,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 			if (sp资源->m_类型 != m_携带矿类型)
 			{
 				m_u32携带矿 = 0;
-				sp资源->m_类型 = m_携带矿类型;
+				m_携带矿类型 = sp资源->m_类型;
 			}
 
 			--sp资源->m_可采集数量;

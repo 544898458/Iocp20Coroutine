@@ -70,8 +70,8 @@ void AttackComponent::Update()
 	if (!m_coAttack.Finished())
 		return;//表示不允许打断
 
-	//if (!m_coWalk手动控制.Finished())
-	//	return;//表示不允许打断
+	if (m_refEntity.m_sp走 && !m_refEntity.m_sp走->m_coWalk手动控制.Finished())
+		return;//表示不允许打断
 
 	if (m_refEntity.IsDead())
 		return;
