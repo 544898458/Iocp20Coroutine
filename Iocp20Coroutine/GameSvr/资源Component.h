@@ -8,5 +8,6 @@ public:
 	static void Add(Space& refSpace, const 资源类型 类型, const Position& refPosition);
 	资源Component(const 资源类型 类型) :m_类型(类型) {}
 	const 资源类型 m_类型;
+	int m_可采集数量 = 200;
 };
 

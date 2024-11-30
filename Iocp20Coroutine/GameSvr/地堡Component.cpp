@@ -3,6 +3,7 @@
 #include "AttackComponent.h"
 #include "Entity.h"
 #include "Space.h"
+#include "EntitySystem.h"
 
 void 地堡Component::AddComponet(Entity& refEntity, PlayerGateSession_Game& refGateSession)
 {
@@ -31,6 +32,7 @@ void 地堡Component::进(Space& refSpace, uint64_t idEntity)
 	m_listSpEntity.push_back(sp);
 	refSpace.m_mapEntity.erase(idEntity);
 	//sp->BroadcastLeave();
+	EntitySystem::BroadcastEntity描述(m_refEntity, std::format("地堡内有{0}人", m_listSpEntity.size()));
 }
 
 void 地堡Component::Update()

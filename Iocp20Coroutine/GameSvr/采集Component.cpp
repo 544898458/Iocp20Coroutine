@@ -23,19 +23,21 @@ void 采集Component::采集(PlayerGateSession_Game& refGateSession, WpEntity wp目标
 	m_TaskCancel.TryRun(Co采集(refGateSession, wp目标资源));
 }
 
+std::tuple<std::shared_ptr<Entity>, std::shared_ptr<资源Component>> Get目标资源(WpEntity& refWp目标资源)
+{
+	if (refWp目标资源.expired())
+		return { {},{} };
+
+	auto sp目标资源 = refWp目标资源.lock();
+	auto sp资源 = sp目标资源->m_sp资源;
+	return { sp目标资源 ,sp资源 };
+}
+
 CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntity wp目标资源)
 {
 	using namespace std;
 	while (true)
 	{
-		if (wp目标资源.expired())
-			co_return false;//目标资源没了
-
-		auto sp目标资源 = wp目标资源.lock();
-		auto sp资源 = sp目标资源->m_sp资源;
-		CHECK_CO_RET_FALSE(sp资源);
-
-
 		auto wpEntity基地 = m_refEntity.m_refSpace.Get最近的Entity(m_refEntity, false,
 			[](const Entity& ref)
 			{
@@ -58,6 +60,10 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 
 				auto addMoney = m_u32携带矿;
 				m_u32携带矿 = 0;
+				auto [_, sp资源] = Get目标资源(wp目标资源);
+				if (!sp资源)
+					co_return false;//目标资源没了
+
 				if (sp资源->m_类型 == 晶体矿)
 				{
 					const auto& [stop, _] = co_await AiCo::ChangeMoney(refGateSession, addMoney, true, m_TaskCancel.cancel);
@@ -83,25 +89,53 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 		}
 
 		//还没装满，还要继续去采矿
-
-		if (m_refEntity.DistanceLessEqual(*sp目标资源, m_refEntity.攻击距离()))//在目标矿附近
 		{
+			{
+				auto [spEntity资源, _] = Get目标资源(wp目标资源);
+				if (!spEntity资源)
+					co_return false;//目标资源没了
+
+				if (!m_refEntity.DistanceLessEqual(*spEntity资源, m_refEntity.攻击距离()))
+				{
+					//距离目标矿太远，走向晶体矿
+					//m_refEntity.m_spAttack->TryCancel();
+					if (co_await AiCo::WalkToTarget(m_refEntity, wp目标资源.lock(), m_TaskCancel.cancel, false))
+						co_return true;//中断
+				}
+			}
+
+			//在目标矿附近
+
 			CoEvent<MyEvent::开始采集晶体矿>::OnRecvEvent(false, {});
 			if (co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//采矿1个矿耗时
 				co_return true;//中断
 
+			auto [spEntity资源, sp资源] = Get目标资源(wp目标资源);
+			if (!spEntity资源 || !sp资源)
+				co_return false;//目标资源没了
+
+			if (sp资源->m_可采集数量 <= 0)
+			{
+				spEntity资源->CoDelayDelete().RunNew();
+				co_return false;//目标资源已采空
+			}
+
 			if (sp资源->m_类型 != m_携带矿类型)
-				m_u32携带矿;
+			{
+				m_u32携带矿 = 0;
+				sp资源->m_类型 = m_携带矿类型;
+			}
+
+			--sp资源->m_可采集数量;
+			EntitySystem::BroadcastEntity描述(*spEntity资源, std::format("剩余:{0}", sp资源->m_可采集数量));
 
 			++m_u32携带矿;
-			EntitySystem::BroadcastEntity描述(m_refEntity, std::format("已采集{0}",m_u32携带矿));
+			EntitySystem::BroadcastEntity描述(m_refEntity, std::format("已采集{0}", m_u32携带矿));
 			continue;
-		}
 
-		//距离目标矿太远，走向晶体矿
-		//m_refEntity.m_spAttack->TryCancel();
-		if (co_await AiCo::WalkToTarget(m_refEntity, wp目标资源.lock(), m_TaskCancel.cancel, false))
-			co_return true;//中断
+
+
+		}
 	}
 }
 
