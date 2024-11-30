@@ -9,6 +9,7 @@
 #include "地堡Component.h"
 #include "采集Component.h"
 #include "造建筑Component.h"
+#include "BuildingComponent.h"
 
 void 走Component::AddComponent(Entity& refEntity)
 {
@@ -70,8 +71,7 @@ void 走Component::WalkToPos手动控制(const Position& posTarget)
 	//return;
 	if (m_refEntity.IsDead())
 	{
-		if (m_refEntity.m_spPlayer)
-			m_refEntity.m_spPlayer->Say("自己阵亡,不能走", SayChannel::系统);
+		PlayerComponent::Say(m_refEntity, "自己阵亡,不能走", SayChannel::系统);
 
 		return;
 	}
@@ -117,6 +117,18 @@ void 走Component::TryCancel()
 
 void 走Component::走进地堡(WpEntity wpEntity地堡)
 {
+	if (wpEntity地堡.expired())
+		return;
+
+	if (!wpEntity地堡.lock()->m_spBuilding)
+		return;
+
+	if (!wpEntity地堡.lock()->m_spBuilding->已造好())
+	{
+		PlayerComponent::Say(m_refEntity, "还没建好", SayChannel::系统);
+		return;
+	}
+
 	if (m_refEntity.m_spAttack)
 		m_refEntity.m_spAttack->TryCancel();
 

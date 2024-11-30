@@ -80,8 +80,7 @@ namespace AiCo
 			if (refThis.IsDead())
 			{
 				LOG(INFO) << "自己阵亡，走向" << posLocalTarget << "的协程取消了";
-				if (refThis.m_spPlayer)
-					refThis.m_spPlayer->Say("自己阵亡", SayChannel::系统);
+				PlayerComponent::Say(refThis, "自己阵亡", SayChannel::系统);
 
 				co_return true;
 			}
@@ -115,8 +114,7 @@ namespace AiCo
 			if (refThis.IsDead())
 			{
 				LOG(INFO) << "自己阵亡，走向[" << spTarget->NickName() << "]的协程取消了";
-				if (refThis.m_spPlayer)
-					refThis.m_spPlayer->Say("自己阵亡", SayChannel::系统);
+				PlayerComponent::Say(refThis, "自己阵亡", SayChannel::系统);
 
 				co_return false;
 			}
