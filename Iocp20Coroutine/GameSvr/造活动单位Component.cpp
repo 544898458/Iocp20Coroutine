@@ -67,6 +67,7 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 	while (!m_list等待造.empty())
 	{
 		const auto 类型(m_list等待造.front());
+		m_list等待造.pop_front();//--refThis.m_i等待造兵数;
 		单位::活动单位配置 配置;
 		if (!单位::Find活动单位配置(类型, 配置))
 		{
@@ -115,14 +116,12 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 		CHECK_CO_RET_0(!refGateSession.m_wpSpace.expired());
 		SpEntity spNewEntity = 造活动单位(refGateSession, pos, 配置, 类型);
 
-		if (m_list等待造.empty())
-		{
-			LOG(ERROR) << "err";
-			assert(false);
-			co_return{};
-		}
-
-		m_list等待造.pop_front();//--refThis.m_i等待造兵数;
+		//if (m_list等待造.empty())
+		//{
+		//	LOG(ERROR) << "err";
+		//	assert(false);
+		//	co_return{};
+		//}
 	}
 
 	EntitySystem::BroadcastEntity描述(m_refEntity, "造完了");

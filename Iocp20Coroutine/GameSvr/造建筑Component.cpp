@@ -74,6 +74,8 @@ CoTaskBool 造建筑Component::Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel)
 
 		assert(!wpEntity建筑.expired());
 		EntitySystem::BroadcastEntity描述(*wpEntity建筑.lock(), oss.str());
+		if (m_refEntity.m_spPlayer)
+			m_refEntity.m_spPlayer->m_refSession.Send资源();
 	}
 
 	co_return 0;

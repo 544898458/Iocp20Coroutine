@@ -496,8 +496,8 @@ uint16_t PlayerGateSession_Game::活动单位上限() const
 	uint16_t result = 0;
 	for (const auto& refEntity : m_setSpEntity)
 	{
-		if (!refEntity->m_spBuilding)
-			continue;
+		if (!refEntity->m_spBuilding)continue;
+		if (!refEntity->m_spBuilding->已造好())continue;
 
 		switch (refEntity->m_spBuilding->m_类型)
 		{
