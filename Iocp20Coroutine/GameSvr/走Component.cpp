@@ -117,6 +117,9 @@ void 走Component::TryCancel()
 
 void 走Component::走进地堡(WpEntity wpEntity地堡)
 {
+	if (m_refEntity.m_spAttack)	
+		m_refEntity.m_spAttack->TryCancel();
+
 	if (wpEntity地堡.expired())
 		return;
 

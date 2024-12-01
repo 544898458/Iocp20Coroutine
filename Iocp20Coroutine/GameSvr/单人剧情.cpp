@@ -12,6 +12,7 @@
 #include "造活动单位Component.h"
 #include "走Component.h"
 #include "单位.h"
+#include "AiCo.h"
 
 namespace 单人剧情
 {
@@ -164,12 +165,14 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(1s, funCancel))
 			co_return 0;
 
+		co_await AiCo::ChangeMoney(refGateSession, 1000, true, funCancel);
+
 		const 活动单位类型 类型(活动单位类型::工程车);
 		单位::活动单位配置 配置;
 		单位::Find活动单位配置(类型, 配置);
 		SpEntity sp工程车 = 造活动单位Component::造活动单位(refGateSession, { -30, 30 }, 配置, 类型);
 
-		for (int i = 0; i < 10; ++i)
+		for (int i = 0; i < 15; ++i)
 		{
 			if (co_await CoTimer::Wait(10s, funCancel))
 				co_return 0;

@@ -53,7 +53,7 @@ AttackComponent::AttackComponent(Entity& refEntity, const 活动单位类型 类型) :
 {
 }
 
-void AttackComponent::TryCancel(const bool bDestroy)
+void AttackComponent::TryCancel()
 {
 	if (m_cancelAttack)
 	{
@@ -61,7 +61,7 @@ void AttackComponent::TryCancel(const bool bDestroy)
 		m_cancelAttack();
 	}
 
-	if(bDestroy)
+	//if(bDestroy)
 		m_TaskCancel.TryCancel();
 }
 

@@ -83,7 +83,7 @@ void Entity::OnDestroy()
 	BroadcastLeave();
 
 	if (m_spAttack)
-		m_spAttack->TryCancel(true);
+		m_spAttack->TryCancel();
 
 	if (m_sp造活动单位)
 		m_sp造活动单位->TryCancel(*this);

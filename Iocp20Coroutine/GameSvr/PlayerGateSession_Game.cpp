@@ -258,7 +258,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 				ref.m_sp采集->m_TaskCancel.TryCancel();
 
 			if (ref.m_spAttack)
-				ref.m_spAttack->TryCancel(true);
+				ref.m_spAttack->TryCancel();
 
 			走Component::Cancel所有包含走路的协程(ref);
 			if (msg.b遇到敌人自动攻击)

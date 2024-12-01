@@ -7,7 +7,7 @@ class AttackComponent final
 {
 public:
 	AttackComponent(Entity& refEntity, const 活动单位类型 类型);
-	void TryCancel(const bool bDestroy = false);
+	void TryCancel();
 	void Update();
 	CoTaskBool Co(FunCancel& funCancel);
 	CoTaskBool CoAttack(WpEntity wpDefencer, FunCancel& cancel);
