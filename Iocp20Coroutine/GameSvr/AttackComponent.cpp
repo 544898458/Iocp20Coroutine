@@ -38,9 +38,19 @@ float AttackComponent::攻击距离() const
 	return spOwner->m_spAttack->m_f攻击距离 + m_f攻击距离;
 }
 
-AttackComponent::AttackComponent(Entity& refEntity, const 活动单位类型 类型) :m_refEntity(refEntity), m_类型(类型)
+Position 怪物闲逛(const Position &refOld)
 {
-	m_TaskCancel.TryRun(Co(m_TaskCancel.cancel));
+	auto posTarget = refOld;
+	posTarget.x += std::rand() % 11 - 5;//随机走
+	posTarget.z += std::rand() % 11 - 5;
+	return posTarget;
+}
+
+AttackComponent::AttackComponent(Entity& refEntity, const 活动单位类型 类型) :
+	m_refEntity(refEntity), 
+	m_类型(类型),
+	m_fun空闲走向此处(怪物闲逛)
+{
 }
 
 void AttackComponent::TryCancel(const bool bDestroy)
@@ -57,7 +67,23 @@ void AttackComponent::TryCancel(const bool bDestroy)
 
 void AttackComponent::Update()
 {
+	m_TaskCancel.TryRun(Co(m_TaskCancel.cancel));
+	if (!m_TaskCancel.co.Finished())
+		return;//正在攻击或走向攻击位置
 
+	if (!m_refEntity.m_spPlayer && !走Component::正在走(m_refEntity))//怪随机走
+	{
+		走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
+		//assert(m_coWalk.Finished());//20240205
+		//assert(m_coAttack.Finished());//20240205
+
+
+		auto posTarget = m_fun空闲走向此处(m_refEntity.m_Pos);
+		//m_coWalk = AiCo::WalkToPos(m_refEntity.shared_from_this(), posTarget, m_cancel);
+		走Component::WalkToPos(m_refEntity, posTarget);
+		//co_await AiCo::WalkToPos(m_refEntity, posTarget, funCancel);
+		return ;
+	}
 }
 
 CoTaskBool AttackComponent::Co(FunCancel &funCancel)
@@ -65,17 +91,17 @@ CoTaskBool AttackComponent::Co(FunCancel &funCancel)
 	KeepCancel kc(funCancel);
 	while (true) 
 	{
-		if (co_await CoTimer::WaitNextUpdate(funCancel))
-			co_return true;
+		//if (co_await CoTimer::WaitNextUpdate(funCancel))
+		//	co_return true;
 
 		//if (!m_coAttack.Finished())
 		//	continue;//表示不允许打断
 
 		if (m_refEntity.m_sp走 && !m_refEntity.m_sp走->m_coWalk手动控制.Finished())
-			continue;//表示不允许打断
+			co_return false;;//表示不允许打断
 
 		if (m_refEntity.IsDead())
-			continue;
+			co_return false;;
 
 		const auto& wpEntity = m_refEntity.m_refSpace.Get最近的Entity(m_refEntity, true, [](const Entity& ref)->bool {return nullptr != ref.m_spDefence; });
 		if (!wpEntity.expired())
@@ -94,10 +120,6 @@ CoTaskBool AttackComponent::Co(FunCancel &funCancel)
 			{
 				走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
-				//m_coWalk.Run();
-				//assert(m_coWalk.Finished());//20240205
-				//assert(m_coAttack.Finished());//20240205
-				/*m_coStop = false;*/
 				if (m_refEntity.m_sp采集)
 				{
 					m_refEntity.m_sp采集->m_TaskCancel.TryCancel();
@@ -105,26 +127,12 @@ CoTaskBool AttackComponent::Co(FunCancel &funCancel)
 
 				//走Component::WalkToTarget(m_refEntity, wpEntity.lock());
 				co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), funCancel);
-
 				continue;
 			}
 		}
-
-		if (!m_refEntity.m_spPlayer && !走Component::正在走(m_refEntity))//怪随机走
-		{
-			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
-			//assert(m_coWalk.Finished());//20240205
-			//assert(m_coAttack.Finished());//20240205
-
-			auto posTarget = m_refEntity.m_Pos;
-			posTarget.x += std::rand() % 11 - 5;//随机走
-			posTarget.z += std::rand() % 11 - 5;
-			//m_coWalk = AiCo::WalkToPos(m_refEntity.shared_from_this(), posTarget, m_cancel);
-			走Component::WalkToPos(m_refEntity, posTarget);
-			//co_await AiCo::WalkToPos(m_refEntity, posTarget, funCancel);
-			continue;
-		}
+		co_return false;
 	}
+	co_return false;
 }
 
 

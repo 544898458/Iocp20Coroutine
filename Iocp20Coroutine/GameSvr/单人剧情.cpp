@@ -8,6 +8,7 @@
 #include "资源Component.h"
 #include "MonsterComponent.h"
 #include "PlayerComponent.h"
+#include "AttackComponent.h"
 #include "造活动单位Component.h"
 #include "走Component.h"
 #include "单位.h"
@@ -151,7 +152,10 @@ namespace 单人剧情
 		refGateSession.Send<Msg显示界面>({ .ui = Msg显示界面::选择地图 });
 		co_return 0;
 	}
-
+	Position 怪物闲逛(const Position& refOld)
+	{
+		return { -30,30 };
+	}
 	CoTask<int> Co防守战(Space& refSpace, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
 	{
 		KeepCancel kc(funCancel);
@@ -173,28 +177,30 @@ namespace 单人剧情
 			auto vecEneity = MonsterComponent::AddMonster(refSpace, { 48,-48 }, i);
 			for (auto& spEntity : vecEneity)
 			{
-				if (spEntity->m_sp走)
-					spEntity->m_sp走->WalkToPos({ -30, 30 });
+				//if (spEntity->m_sp走)
+					//spEntity->m_sp走->WalkToPos({ -30, 30 });
+
+				spEntity->m_spAttack->m_fun空闲走向此处 = 怪物闲逛;
 			}
 		}
 
-		while (true)
-		{
-			if (co_await CoTimer::Wait(5s, funCancel))
-				co_return 0;
+		//while (true)
+		//{
+		//	if (co_await CoTimer::Wait(5s, funCancel))
+		//		co_return 0;
 
-			for (auto [id, spEntity] : refSpace.m_mapEntity)
-			{
-				if (spEntity->m_spPlayer)
-					continue;
+		//	for (auto [id, spEntity] : refSpace.m_mapEntity)
+		//	{
+		//		if (spEntity->m_spPlayer)
+		//			continue;
 
-				if (spEntity->m_sp走)//让空闲的怪走向目标
-				{
-					走Component::Cancel所有包含走路的协程(*spEntity); //TryCancel();
-					spEntity->m_sp走->WalkToPos({ -30, 30 });
-				}
-			}
-		}
+		//		if (spEntity->m_sp走)//让空闲的怪走向目标
+		//		{
+		//			走Component::Cancel所有包含走路的协程(*spEntity); //TryCancel();
+		//			spEntity->m_sp走->WalkToPos({ -30, 30 });
+		//		}
+		//	}
+		//}
 
 		co_return 0;
 	}
