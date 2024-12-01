@@ -84,7 +84,7 @@ void 走Component::WalkToPos手动控制(const Position& posTarget)
 	if (m_refEntity.m_spAttack)
 	{
 		m_refEntity.m_spAttack->TryCancel();
-		assert(m_refEntity.m_spAttack->m_coAttack.Finished());//20240205
+		//assert(m_refEntity.m_spAttack->m_coAttack.Finished());//20240205
 	}
 	/*m_coStop = false;*/
 	assert(!m_cancel);
@@ -103,7 +103,7 @@ void 走Component::TryCancel()
 	else
 	{
 		//LOG(INFO) << "m_cancel是空的，没有要取消的协程";
-		if (!m_coWalk.Finished() || (m_refEntity.m_spMonster && !m_refEntity.m_spMonster->m_coIdle.Finished()) || !m_coWalk手动控制.Finished())
+		if (!m_coWalk.Finished() || !m_coWalk手动控制.Finished())
 		{
 			LOG(ERROR) << "协程没结束，却提前清空了m_cancel";
 			assert(false);
@@ -166,7 +166,7 @@ CoTaskBool 走Component::Co走进地堡(WpEntity wpEntity地堡)
 
 void 走Component::Cancel所有包含走路的协程(Entity& refEntity)
 {
-	if (refEntity.m_spAttack)	refEntity.m_spAttack->TryCancel();
+	//if (refEntity.m_spAttack)	refEntity.m_spAttack->TryCancel();
 	if (refEntity.m_sp采集)		refEntity.m_sp采集->m_TaskCancel.TryCancel();
 	if (refEntity.m_sp走)		refEntity.m_sp走->TryCancel();
 	if (refEntity.m_sp造建筑)	refEntity.m_sp造建筑->TryCancel();

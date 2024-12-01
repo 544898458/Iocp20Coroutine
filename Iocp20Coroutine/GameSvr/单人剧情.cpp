@@ -9,6 +9,7 @@
 #include "MonsterComponent.h"
 #include "PlayerComponent.h"
 #include "造活动单位Component.h"
+#include "走Component.h"
 #include "单位.h"
 
 namespace 单人剧情
@@ -100,7 +101,7 @@ namespace 单人剧情
 			co_return 0;
 
 		refGateSession.Say系统("现在已给您刷了一个怪，控制兵走到怪附近，兵会自动打怪");
-		MonsterComponent::AddMonster(refSpace);
+		MonsterComponent::AddMonster(refSpace, { -30.0 });
 
 		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
 			co_return 0;
@@ -120,7 +121,7 @@ namespace 单人剧情
 		}
 
 		refGateSession.Say系统("恭喜您消灭了敌人！现在给您刷了10个敌人。您可以造地堡,让兵进入地堡中，立足防守，再伺机进攻");
-		MonsterComponent::AddMonster(refSpace, 10);
+		MonsterComponent::AddMonster(refSpace, { -30.0 }, 10);
 
 		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref)
 			{
@@ -156,13 +157,44 @@ namespace 单人剧情
 		KeepCancel kc(funCancel);
 		using namespace std;
 		refGateSession.Say系统("防守战：只要守住，就是胜利！");
-		if (co_await CoTimer::Wait(2s, funCancel))
+		if (co_await CoTimer::Wait(1s, funCancel))
 			co_return 0;
 
 		const 活动单位类型 类型(活动单位类型::工程车);
 		单位::活动单位配置 配置;
 		单位::Find活动单位配置(类型, 配置);
 		SpEntity sp工程车 = 造活动单位Component::造活动单位(refGateSession, { -30, 30 }, 配置, 类型);
+
+		for (int i = 0; i < 20; ++i)
+		{
+			if (co_await CoTimer::Wait(10s, funCancel))
+				co_return 0;
+
+			auto vecEneity = MonsterComponent::AddMonster(refSpace, { 48,-48 }, i);
+			for (auto& spEntity : vecEneity)
+			{
+				if (spEntity->m_sp走)
+					spEntity->m_sp走->WalkToPos({ -30, 30 });
+			}
+		}
+
+		while (true)
+		{
+			if (co_await CoTimer::Wait(5s, funCancel))
+				co_return 0;
+
+			for (auto [id, spEntity] : refSpace.m_mapEntity)
+			{
+				if (spEntity->m_spPlayer)
+					continue;
+
+				if (spEntity->m_sp走)//让空闲的怪走向目标
+				{
+					走Component::Cancel所有包含走路的协程(*spEntity); //TryCancel();
+					spEntity->m_sp走->WalkToPos({ -30, 30 });
+				}
+			}
+		}
 
 		co_return 0;
 	}

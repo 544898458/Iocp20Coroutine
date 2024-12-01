@@ -406,7 +406,7 @@ struct CoAwaiter
 	bool m_bAwaitReady = false;
 private:
 	long m_sn;
-	T_Result m_Result;//可等待对象的返回值
+	T_Result m_Result = {};//可等待对象的返回值
 	KeepCancel m_Kc;
 	std::coroutine_handle<> m_hAwaiter;
 };

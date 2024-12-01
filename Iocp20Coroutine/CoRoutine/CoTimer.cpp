@@ -88,8 +88,9 @@ namespace CoTimer
 			auto itFind = g_NextUpdate.find(sn);
 			if (itFind == g_NextUpdate.end())
 			{
-				assert(false);
-				return;
+				//assert(false);
+				//LOG(WARING) << "N";	下面的Run里可能删除g_NextUpdate.erase(sn);
+				continue;
 			}
 			itFind->second.Run(false);
 			g_NextUpdate.erase(sn);

@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "Space.h"
 #include "EntitySystem.h"
+#include "PlayerComponent.h"
 
 void 地堡Component::AddComponet(Entity& refEntity, PlayerGateSession_Game& refGateSession)
 {
@@ -18,6 +19,12 @@ void 地堡Component::OnDestroy()
 
 void 地堡Component::进(Space& refSpace, uint64_t idEntity)
 {
+	if (m_listSpEntity.size() >= 10)
+	{
+		PlayerComponent::Say(m_refEntity, "地堡人满了", SayChannel::系统);
+		return;
+	}
+
 	//从地图上删除，记录在地堡内
 	auto wp = refSpace.GetEntity(idEntity);
 	CHECK_RET_VOID(!wp.expired());

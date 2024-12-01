@@ -19,15 +19,16 @@ MonsterComponent::MonsterComponent(Entity& refThis)
 		LOG(ERROR) << "m_spAttack";
 		return;
 	}
-	m_coIdle = AiCo::Idle(refThis.shared_from_this(), refThis.m_spAttack->m_cancel);
-	m_coIdle.Run();
+	//m_coIdle = AiCo::Idle(refThis.shared_from_this(), refThis.m_spAttack->m_cancel);
+	//m_coIdle.Run();
 }
 
-void MonsterComponent::AddMonster(Space& refSpace, const int count)
+std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const Position &refPos, const int count)
 {
+	std::vector<SpEntity> vecRet;
 	for (int i = 0; i < count; ++i)
 	{
-		SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ -30.0 }, refSpace, "altman-red", "¹Ö");
+		SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(refPos, refSpace, "altman-red", "¹Ö");
 		AttackComponent::AddComponent(*spEntityMonster, ±ø, 8);
 		DefenceComponent::AddComponent(*spEntityMonster, 20);
 		×ßComponent::AddComponent(*spEntityMonster);
@@ -37,5 +38,7 @@ void MonsterComponent::AddMonster(Space& refSpace, const int count)
 		refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster });
 		//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 		spEntityMonster->BroadcastEnter();
+		vecRet.emplace_back(spEntityMonster);
 	}
+	return vecRet;
 }
