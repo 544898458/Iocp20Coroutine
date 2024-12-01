@@ -10,7 +10,7 @@ public:
 	void TryCancel(const bool bDestroy = false);
 	void Update();
 	CoTaskBool Co(FunCancel& funCancel);
-	CoTask<int> CoAttack(WpEntity wpDefencer, FunCancel& cancel);
+	CoTaskBool CoAttack(WpEntity wpDefencer, FunCancel& cancel);
 	static void AddComponent(Entity& refEntity, const 活动单位类型 类型, const float f攻击距离);
 	float 攻击距离()const;
 	//CoTask<int> m_coAttack;

@@ -156,7 +156,7 @@ public:
 		if (!m_hCoroutine.done())
 			return false;
 
-		LOG(INFO) << m_desc << "协程已退出" << m_hCoroutine.address();
+		//LOG(INFO) << m_desc << "协程已退出" << m_hCoroutine.address();
 		m_hCoroutine.destroy();
 		m_hCoroutine = nullptr;
 

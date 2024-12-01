@@ -67,6 +67,9 @@ void AttackComponent::TryCancel(const bool bDestroy)
 
 void AttackComponent::Update()
 {
+	if (m_refEntity.IsDead())
+		return;
+
 	m_TaskCancel.TryRun(Co(m_TaskCancel.cancel));
 	if (!m_TaskCancel.co.Finished())
 		return;//正在攻击或走向攻击位置
@@ -98,10 +101,10 @@ CoTaskBool AttackComponent::Co(FunCancel &funCancel)
 		//	continue;//表示不允许打断
 
 		if (m_refEntity.m_sp走 && !m_refEntity.m_sp走->m_coWalk手动控制.Finished())
-			co_return false;;//表示不允许打断
+			co_return false;//表示不允许打断
 
 		if (m_refEntity.IsDead())
-			co_return false;;
+			co_return false;
 
 		const auto& wpEntity = m_refEntity.m_refSpace.Get最近的Entity(m_refEntity, true, [](const Entity& ref)->bool {return nullptr != ref.m_spDefence; });
 		if (!wpEntity.expired())
@@ -111,7 +114,9 @@ CoTaskBool AttackComponent::Co(FunCancel &funCancel)
 			{
 				走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
-				co_await CoAttack(wpEntity.lock(), m_cancelAttack);
+				if (co_await CoAttack(wpEntity.lock(), m_cancelAttack))
+					co_return true;
+
 				continue;
 			}
 			else if (m_refEntity.m_wpOwner.expired() && m_refEntity.DistanceLessEqual(refTarget, m_refEntity.m_f警戒距离) &&
@@ -126,7 +131,9 @@ CoTaskBool AttackComponent::Co(FunCancel &funCancel)
 				}
 
 				//走Component::WalkToTarget(m_refEntity, wpEntity.lock());
-				co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), funCancel);
+				if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), funCancel))
+					co_return true;
+
 				continue;
 			}
 		}
@@ -136,12 +143,12 @@ CoTaskBool AttackComponent::Co(FunCancel &funCancel)
 }
 
 
-CoTask<int> AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
+CoTaskBool AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 {
 	KeepCancel kc(cancel);
 
 	if (m_refEntity.IsDead())
-		co_return 0;//自己死亡
+		co_return false;//自己死亡
 
 	m_refEntity.BroadcastChangeSkeleAnim("attack");//播放攻击动作
 
@@ -151,16 +158,16 @@ CoTask<int> AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 	{	//三段伤害{每段前摇时长，伤害值}
 		{300ms,1},
 		{50ms,3},
-		{50ms,10}
+		{50ms,5}
 	};
 
 	for (auto wait_hurt : arrWaitHurt)
 	{
 		if (co_await CoTimer::Wait(std::get<0>(wait_hurt), cancel))//等x秒	前摇
-			co_return 0;//协程取消
+			co_return true;//协程取消
 
 		if (m_refEntity.IsDead())
-			co_return 0;//自己死亡，不再后摇
+			co_return false;//自己死亡，不再后摇
 
 		if (wpDefencer.expired())
 			break;//要执行后摇
@@ -179,12 +186,12 @@ CoTask<int> AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 	}
 
 	if (co_await CoTimer::Wait(1000ms, cancel))//等3秒	后摇
-		co_return 0;//协程取消
+		co_return true;//协程取消
 
 	if (!m_refEntity.IsDead())
 	{
 		EntitySystem::BroadcastChangeSkeleAnimIdle(m_refEntity);//播放休闲待机动作
 	}
 
-	co_return 0;//协程正常退出
+	co_return false;//协程正常退出
 }

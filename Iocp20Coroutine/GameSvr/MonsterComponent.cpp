@@ -30,7 +30,7 @@ std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const Positi
 	{
 		SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(refPos, refSpace, "altman-red", "π÷");
 		AttackComponent::AddComponent(*spEntityMonster, ±¯, 8);
-		DefenceComponent::AddComponent(*spEntityMonster, 20);
+		DefenceComponent::AddComponent(*spEntityMonster, 50);
 		◊ﬂComponent::AddComponent(*spEntityMonster);
 		AddComponent(*spEntityMonster);
 		spEntityMonster->m_fæØΩ‰æ‡¿Î = 20;
