@@ -145,13 +145,13 @@ SpEntity 造活动单位Component::造活动单位(PlayerGateSession_Game& refGateSession,
 	case 工程车:
 		采集Component::AddComponent(*spNewEntity);
 		造建筑Component::AddComponent(*spNewEntity, refGateSession, 类型);
-		refGateSession.Say语音提示("工程车可以开工了!");//SCV, good to go, sir. SCV可以开工了
+		refGateSession.播放声音("TSCRdy00");//refGateSession.Say语音提示("工程车可以开工了!");//SCV, good to go, sir. SCV可以开工了
 		break;
 	case 兵:
-		refGateSession.Say语音提示("听说有人要买我的狗头？");//You want a piece of me, boy?想要我的一部分吗，小子？
+		refGateSession.播放声音("TMaRdy00");//refGateSession.Say语音提示("听说有人要买我的狗头？");//You want a piece of me, boy?想要我的一部分吗，小子？
 		break;
 	case 近战兵:
-		refGateSession.Say语音提示("听说有人要我的斧头？");//You want a piece of me, boy?想要我的一部分吗，小子？
+		refGateSession.播放声音("tfbRdy00");//refGateSession.Say语音提示("听说有人要我的斧头？");//You want a piece of me, boy?想要我的一部分吗，小子？
 		break;
 
 	default:break;

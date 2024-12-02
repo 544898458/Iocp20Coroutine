@@ -169,3 +169,4 @@ CoTaskBool Entity::CoDelayDelete()
 template void Entity::Broadcast(const MsgAddRoleRet& msg);
 template void Entity::Broadcast(const MsgDelRoleRet& msg);
 template void Entity::Broadcast(const MsgEntity√Ë ˆ& msg);
+template void Entity::Broadcast(const Msg≤•∑≈…˘“Ù& msg);

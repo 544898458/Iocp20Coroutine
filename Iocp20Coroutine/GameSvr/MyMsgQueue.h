@@ -64,6 +64,7 @@ enum MsgId
 	ÏÔÊ¾½çÃæ,
 	Àë¿ªSpace,
 	EntityÃèÊö,
+	²¥·ÅÉùÒô,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -364,4 +365,11 @@ struct MsgEntityÃèÊö
 	uint64_t idEntity;
 	std::string strÃèÊö;
 	MSGPACK_DEFINE(msg, idEntity, strÃèÊö);
+};
+
+struct Msg²¥·ÅÉùÒô
+{
+	MsgHead msg{ .id = ²¥·ÅÉùÒô};
+	std::string strÉùÒô;
+	MSGPACK_DEFINE(msg, strÉùÒô);
 };

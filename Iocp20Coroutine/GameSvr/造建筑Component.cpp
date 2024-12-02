@@ -36,6 +36,8 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position refPos, const ½¨Öşµ¥Î»ÀàĞÍ À
 		co_return false;
 	}
 
+	PlayerComponent::²¥·ÅÉùÒô(m_refEntity, "TSCYes01");
+
 	//ÏÈ×ßµ½Ä¿±êµã
 	if (co_await AiCo::WalkToPos(m_refEntity, refPos, m_cancelÔì½¨Öş, 5))
 		co_return true;
@@ -53,6 +55,8 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position refPos, const ½¨Öşµ¥Î»ÀàĞÍ À
 
 CoTaskBool Ôì½¨ÖşComponent::Co½¨Ôì¹ı³Ì(WpEntity wpEntity½¨Öş, FunCancel& cancel)
 {
+	PlayerComponent::²¥·ÅÉùÒô(m_refEntity, "TSCTra00");
+
 	KeepCancel kc(cancel);
 	std::weak_ptr<BuildingComponent> wpBuilding(wpEntity½¨Öş.lock()->m_spBuilding);
 

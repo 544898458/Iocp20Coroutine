@@ -266,9 +266,32 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 			else
 				ref.m_sp走->WalkToPos手动控制(msg.pos);
 
-			Say语音提示("上上上!");//Go! Go! Go!
-
+			if (ref.m_spAttack)
+			{
+				switch (ref.m_spAttack->m_类型)
+				{
+				case 兵:播放声音("TMaYes00"); break;//Standing by. 待命中
+				case 近战兵:播放声音("tfbYes03"); break;//Checked up and good to go. 检查完毕，准备动身
+				case 工程车:播放声音("TSCYes00"); break;
+				default:break;
+				}
+			}
+			//else if (ref.m_spBuilding) 
+			//{
+			//	switch (ref.m_spBuilding->m_类型)
+			//	{
+			//	case 基地:播放声音("tcsWht00"); break;
+			//	case 兵厂:播放声音("tclWht00"); break;
+			//	default:
+			//		break;
+			//	}
+			//}
 		});
+}
+
+void PlayerGateSession_Game::播放声音(const std::string& refStr声音)
+{
+	Send<Msg播放声音>({ .str声音 = refStr声音 });
 }
 
 void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fun)
@@ -433,10 +456,21 @@ void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
 		{
 			switch (spEntity->m_spAttack->m_类型)
 			{
-			case 兵:Say语音提示("待命中!"); break;//Standing by. 待命中
-			case 近战兵:Say语音提示("准备行动!"); break;//Checked up and good to go. 检查完毕，准备动身
-			case 工程车:Say语音提示("老大!"); break;//Commander.
+			case 兵:播放声音("TMaPss00"); break;// Say语音提示("待命中!"); break;//Standing by. 待命中
+			case 近战兵:播放声音("tfbPss00"); break;//Say语音提示("准备行动!"); break;//Checked up and good to go. 检查完毕，准备动身
+			case 工程车:播放声音("TSCPss00"); break;//Commander.
 			default:break;
+			}
+		}
+		else if (spEntity->m_spBuilding)
+		{
+			switch (spEntity->m_spBuilding->m_类型)
+			{
+			case 基地:播放声音("tcsWht00"); break;
+			case 兵厂:播放声音("tddWht00"); break;
+			case 民房:播放声音("tclWht00"); break;
+			default:
+				break;
 			}
 		}
 	}

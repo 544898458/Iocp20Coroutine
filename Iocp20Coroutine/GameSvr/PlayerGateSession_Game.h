@@ -33,7 +33,7 @@ public:
 
 	bool 可放置建筑(const Position& pos, float f半边长);
 	CoTask<SpEntity> CoAddBuilding(const 建筑单位类型 类型, const Position pos);
-
+	void 播放声音(const std::string& refStr声音);
 
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
@@ -50,7 +50,6 @@ public:
 	uint32_t m_u32燃气矿 = 100;
 
 private:
-
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);
 	/// <summary>
 	/// 主逻辑线程（控制台界面线程）调用

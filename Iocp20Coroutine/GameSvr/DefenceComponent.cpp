@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "DefenceComponent.h"
 #include "Entity.h"
+#include "EntitySystem.h"
 #include "AiCo.h"
 #include "../CoRoutine/CoEvent.h"
 #include "MyEvent.h"
+#include "AttackComponent.h"
 
 DefenceComponent::DefenceComponent(Entity& refEntity) :m_refEntity(refEntity)
 {
@@ -29,6 +31,17 @@ void DefenceComponent::受伤(int hp)
 	if (IsDead())
 	{
 		m_refEntity.BroadcastChangeSkeleAnim("died", false);//播放死亡动作
+		if (m_refEntity.m_spAttack)
+		{
+			switch (m_refEntity.m_spAttack->m_类型)
+			{
+			case 兵:EntitySystem::Broadcast播放声音(m_refEntity, "TMaDth00"); break;//Standing by. 待命中
+			case 近战兵:EntitySystem::Broadcast播放声音(m_refEntity, "TFbDth00"); break;//Checked up and good to go. 检查完毕，准备动身
+			case 工程车:EntitySystem::Broadcast播放声音(m_refEntity, "TSCDth00"); break;
+			default:
+				break;
+			}
+		}
 		m_refEntity.CoDelayDelete().RunNew();
 		CoEvent<MyEvent::单位阵亡>::OnRecvEvent(false, { .wpEntity = m_refEntity.weak_from_this() });
 	}
