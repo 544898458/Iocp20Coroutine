@@ -59,6 +59,7 @@ public:
 	static void StaticUpdate();
 	void Update();
 	bool CrowdToolø…’æ¡¢(const Position& refPos);
+	bool CrowdToolFindNerestPos(Position& refPos);
 
 	std::shared_ptr<CrowdToolState> m_spCrowdToolState;
 	std::unordered_map<int, uint64_t> m_mapEntityId;

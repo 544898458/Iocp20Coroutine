@@ -165,16 +165,22 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(1s, funCancel))
 			co_return 0;
 
-		co_await AiCo::ChangeMoney(refGateSession, 1000, true, funCancel);
+		//co_await AiCo::ChangeMoney(refGateSession, 1000, true, funCancel);
+		{
+			const 活动单位类型 类型(活动单位类型::工程车);
+			单位::活动单位配置 配置;
+			单位::Find活动单位配置(类型, 配置);
+			SpEntity sp工程车 = 造活动单位Component::造活动单位(refGateSession, { -30, 30 }, 配置, 类型);
 
-		const 活动单位类型 类型(活动单位类型::工程车);
-		单位::活动单位配置 配置;
-		单位::Find活动单位配置(类型, 配置);
-		SpEntity sp工程车 = 造活动单位Component::造活动单位(refGateSession, { -30, 30 }, 配置, 类型);
+			资源Component::Add(refSpace, 晶体矿, { -20, 30 });
+			资源Component::Add(refSpace, 晶体矿, { -25, 25});
+			资源Component::Add(refSpace, 燃气矿, { -25, 30 });
+			资源Component::Add(refSpace, 燃气矿, { -20, 25 });
 
+		}
 		for (int i = 0; i < 15; ++i)
 		{
-			if (co_await CoTimer::Wait(10s, funCancel))
+			if (co_await CoTimer::Wait(20s, funCancel))
 				co_return 0;
 
 			auto vecEneity = MonsterComponent::AddMonster(refSpace, { 48,-48 }, i);

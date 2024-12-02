@@ -82,6 +82,7 @@ void AttackComponent::Update()
 
 
 		auto posTarget = m_fun空闲走向此处(m_refEntity.m_Pos);
+		m_refEntity.m_refSpace.CrowdToolFindNerestPos(posTarget);
 		//m_coWalk = AiCo::WalkToPos(m_refEntity.shared_from_this(), posTarget, m_cancel);
 		走Component::WalkToPos(m_refEntity, posTarget);
 		//co_await AiCo::WalkToPos(m_refEntity, posTarget, funCancel);

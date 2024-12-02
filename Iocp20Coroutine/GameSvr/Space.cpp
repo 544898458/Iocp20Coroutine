@@ -43,7 +43,7 @@ WpSpace Space::AddSpace(const uint8_t idSpace)
 	if (!wpOld.expired())
 		return wpOld;
 
-	auto [iterNew, bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space>("all_tiles_tilecache.bin")});
+	auto [iterNew, bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space>("all_tiles_tilecache.bin") });
 	assert(bOk);
 	return iterNew->second;
 }
@@ -69,6 +69,12 @@ bool Space::CrowdTool可站立(const Position& refPos)
 {
 	bool CrowdTool可站立(CrowdToolState & refCrowTool, const Position & refPos);
 	return CrowdTool可站立(*m_spCrowdToolState, refPos);
+}
+
+bool Space::CrowdToolFindNerestPos(Position& refPos)
+{
+	bool CrowdToolFindNerestPos(CrowdToolState & refCrowTool, Position & refPos);
+	return CrowdToolFindNerestPos(*m_spCrowdToolState, refPos);
 }
 
 void Space::EraseEntity(const bool bForceEraseAll)

@@ -90,11 +90,26 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 			continue;
 		}
 
+		if (配置.制造.u16消耗燃气矿 > refGateSession.m_u32燃气矿)
+		{
+			//std::ostringstream oss;
+			refGateSession.播放声音("tadErr01");//oss << "燃气矿不足" << 配置.建造.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
+			//Say系统(oss.str());
+			co_return{};
+		}
+		refGateSession.m_u32燃气矿 -= 配置.制造.u16消耗燃气矿;
+
 		//先扣钱
 		const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, 配置.制造.u16消耗晶体矿, false, m_TaskCancel造活动单位.cancel);
 		if (stop)
 		{
 			LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney << ",rpcSn=" << responce.msg.rpcSnId;
+			co_return{};
+		}
+		if (0 != responce.error)
+		{
+			refGateSession.m_u32燃气矿 += 配置.制造.u16消耗燃气矿;
+			refGateSession.播放声音("tadErr00");//Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
 			co_return{};
 		}
 		//耗时

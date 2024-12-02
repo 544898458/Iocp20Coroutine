@@ -119,7 +119,8 @@ void CrowdToolSetMoveTarget(CrowdToolState& ref, const float* p, const int idx)
 	ref.setMoveTarget(p, false);
 }
 
-bool CrowdTool可站立(CrowdToolState& refCrowTool, const Position& refPos)
+
+bool CrowdToolFindNerestPos(CrowdToolState& refCrowTool, Position& refPos)
 {
 	dtNavMeshQuery* navquery = refCrowTool.m_sample->getNavMeshQuery();
 	CHECK_NOTNULL_RET_FALSE(navquery);
@@ -132,9 +133,18 @@ bool CrowdTool可站立(CrowdToolState& refCrowTool, const Position& refPos)
 	dtVcopy(tgt, p);
 	if (DT_SUCCESS != navquery->findNearestPoly(p, halfExtents, &filter, &ref, tgt))
 		return false;
-	Position posNew = { tgt[0],tgt[2] };
-	return refPos.DistanceLessEqual(posNew, 0.1f);
-	//return true;
+
+	refPos = { tgt[0],tgt[2] };
+	return true;
+}
+
+bool CrowdTool可站立(CrowdToolState& refCrowTool, const Position& refPos)
+{
+	Position pos(refPos);
+	if (!CrowdToolFindNerestPos(refCrowTool, pos))
+		return false;
+
+	return refPos.DistanceLessEqual(pos, 0.1f);
 }
 
 bool CrowdTool判断单位重叠(const Position& refPosOld, const Position& refPosNew, const float f半边长)

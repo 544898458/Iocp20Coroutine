@@ -349,14 +349,14 @@ CoTask<SpEntity> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, 
 	//Position pos = { 35,float(std::rand() % 60) - 30 };
 	if (!可放置建筑(pos, 配置.f半边长))
 	{
-		Say系统("此处不可放置");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
+		播放声音("TSCErr00");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
 		co_return{};
 	}
 	if (配置.建造.u16消耗燃气矿 > m_u32燃气矿)
 	{
-		std::ostringstream oss;
-		oss << "燃气矿不足" << 配置.建造.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
-		Say系统(oss.str());
+		//std::ostringstream oss;
+		播放声音("tadErr01");//oss << "燃气矿不足" << 配置.建造.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
+		//Say系统(oss.str());
 		co_return{};
 	}
 	m_u32燃气矿 -= 配置.建造.u16消耗燃气矿;
@@ -373,7 +373,8 @@ CoTask<SpEntity> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, 
 	{
 		//LOG(WARNING) << "扣钱失败,error=" << responce.error;
 		m_u32燃气矿 += 配置.建造.u16消耗燃气矿;//返还燃气矿
-		Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
+		播放声音("tadErr00");//Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
+		
 		co_return{};
 	}
 
