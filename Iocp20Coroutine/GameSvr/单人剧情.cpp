@@ -178,9 +178,9 @@ namespace 单人剧情
 			资源Component::Add(refSpace, 燃气矿, { -20, 25 });
 
 		}
-		for (int i = 0; i < 15; ++i)
+		for (int i = 0; i < 20; ++i)
 		{
-			if (co_await CoTimer::Wait(20s, funCancel))
+			if (co_await CoTimer::Wait(10s, funCancel))
 				co_return 0;
 
 			auto vecEneity = MonsterComponent::AddMonster(refSpace, { 48,-48 }, i);

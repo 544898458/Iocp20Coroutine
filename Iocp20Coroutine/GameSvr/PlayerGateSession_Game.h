@@ -47,7 +47,7 @@ public:
 	/// </summary>
 	std::set<SpEntity> m_setSpEntity;
 
-	uint32_t m_u32È¼Æø¿ó = 100;
+	uint32_t m_u32È¼Æø¿ó = 10;
 
 private:
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);

@@ -37,7 +37,7 @@ void 造活动单位Component::造兵(PlayerGateSession_Game& refGateSession, Entity& r
 	//CHECK_VOID(m_fun造活动单位);
 	if (refGateSession.活动单位包括制造队列中的() >= refGateSession.活动单位上限())
 	{
-		refGateSession.Say系统("民房不足"); //Additional supply depots required.需要更多的食堂
+		refGateSession.播放声音("tadErr02"); //Additional supply depots required.需要更多的食堂
 		return;
 	}
 	if (m_set可造类型.end() == m_set可造类型.find(类型))
