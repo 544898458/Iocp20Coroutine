@@ -52,7 +52,7 @@ namespace AiCo
 			return true;
 		}
 
-		refThis.m_eulerAnglesY = CalculateAngle(refThis.m_Pos, localTarget);
+		//refThis.m_eulerAnglesY = CalculateAngle(refThis.m_Pos, localTarget);
 		refThis.BroadcastNotifyPos();
 
 		return false;

@@ -14,7 +14,7 @@ void EntitySystem::BroadcastChangeSkeleAnimIdle(Entity& refEntity)
 	refEntity.BroadcastChangeSkeleAnim("idle");
 }
 
-void EntitySystem::Broadcast²¥·ÅÉùÒô(Entity& refEntity, const std::string& refStrÉùÒô)
+void EntitySystem::Broadcast²¥·ÅÉùÒô(Entity& refEntity, const std::string& refStrÉùÒô, const std::string& strÎÄ±¾)
 {
-	refEntity.Broadcast<Msg²¥·ÅÉùÒô>({ .strÉùÒô = refStrÉùÒô });
+	refEntity.Broadcast<Msg²¥·ÅÉùÒô>({ .strÉùÒô = refStrÉùÒô, .strÎÄ±¾ = StrConv::GbkToUtf8(strÎÄ±¾) });
 }

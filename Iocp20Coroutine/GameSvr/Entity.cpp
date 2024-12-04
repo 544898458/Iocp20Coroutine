@@ -41,7 +41,7 @@ float Entity::Distance(const Entity& refEntity)const
 	return std::sqrtf(DistancePow2(refEntity));
 }
 
-bool Entity::IsDead() const 
+bool Entity::IsDead() const
 {
 	if (!m_spDefence)
 		return false;
@@ -72,7 +72,7 @@ bool Entity::IsEnemy(const Entity& refEntity)
 
 float Entity::攻击距离() const
 {
-	if( m_spAttack)
+	if (m_spAttack)
 		return m_spAttack->m_f攻击距离;
 
 	return 0;
@@ -155,6 +155,9 @@ void Entity::Broadcast(const T& msg)
 
 CoTaskBool Entity::CoDelayDelete()
 {
+	if (m_sp地堡)
+		m_sp地堡->OnBeforeDelayDelete();
+
 	using namespace std;
 	if (co_await CoTimer::Wait(3s, m_cancelDelete))//服务器主工作线程大循环，每次循环触发一次
 	{

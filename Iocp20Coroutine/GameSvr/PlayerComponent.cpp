@@ -11,10 +11,16 @@ void PlayerComponent::Say(Entity& refEntity, const std::string& str, const SayCh
 		refEntity.m_spPlayer->Say(str, channel);
 }
 
-void PlayerComponent::播放声音(Entity& refEntity, const std::string& refStr声音)
+void PlayerComponent::播放声音(Entity& refEntity, const std::string& refStr声音, const std::string& str文本)
 {
 	if (refEntity.m_spPlayer)
-		refEntity.m_spPlayer->m_refSession.播放声音(refStr声音);
+		refEntity.m_spPlayer->m_refSession.播放声音(refStr声音, str文本);
+}
+
+void PlayerComponent::Send资源(Entity& refEntity)
+{
+	if (refEntity.m_spPlayer)
+		refEntity.m_spPlayer->m_refSession.Send资源();
 }
 
 void PlayerComponent::AddComponent(Entity& refEntity, PlayerGateSession_Game& refSession)

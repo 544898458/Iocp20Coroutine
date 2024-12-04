@@ -5,6 +5,7 @@
 #include "Entity.h"
 #include "EntitySystem.h"
 #include "PlayerComponent.h"
+#include "AttackComponent.h"
 #include "PlayerGateSession_Game.h"
 #include "../CoRoutine/CoTimer.h"
 #include "../IocpNetwork/StrConv.h"
@@ -12,6 +13,14 @@
 void ‘ÏΩ®÷˛Component::AddComponent(Entity& refEntity, PlayerGateSession_Game& refGateSession, const ªÓ∂Øµ•Œª¿‡–Õ ¿‡–Õ)
 {
 	refEntity.m_sp‘ÏΩ®÷˛ = std::make_shared<‘ÏΩ®÷˛Component, PlayerGateSession_Game&, Entity&, const ªÓ∂Øµ•Œª¿‡–Õ>(refGateSession, refEntity, std::forward<const ªÓ∂Øµ•Œª¿‡–Õ&&>(¿‡–Õ));
+}
+
+bool ‘ÏΩ®÷˛Component::’˝‘⁄Ω®‘Ï(Entity& refEntity)
+{
+	if (!refEntity.m_sp‘ÏΩ®÷˛)
+		return false;
+
+	return refEntity.m_sp‘ÏΩ®÷˛->m_cancel‘ÏΩ®÷˛.operator bool();
 }
 
 ‘ÏΩ®÷˛Component::‘ÏΩ®÷˛Component(PlayerGateSession_Game& refSession, Entity& refEntity, const ªÓ∂Øµ•Œª¿‡–Õ ¿‡–Õ) :m_refEntity(refEntity)
@@ -44,7 +53,7 @@ CoTaskBool ‘ÏΩ®÷˛Component::Co‘ÏΩ®÷˛(const Position refPos, const Ω®÷˛µ•Œª¿‡–Õ ¿
 
 	//»ª∫Ûø™ ºø€«ÆΩ®‘Ï
 	auto spEntityΩ®÷˛ = co_await m_refEntity.m_spPlayer->m_refSession.CoAddBuilding(¿‡–Õ, refPos);
-	if(!spEntityΩ®÷˛)
+	if (!spEntityΩ®÷˛)
 		co_return false;
 
 	if (co_await CoΩ®‘Ïπ˝≥Ã(spEntityΩ®÷˛, m_cancel‘ÏΩ®÷˛))
@@ -82,6 +91,14 @@ CoTaskBool ‘ÏΩ®÷˛Component::CoΩ®‘Ïπ˝≥Ã(WpEntity wpEntityΩ®÷˛, FunCancel& cancel)
 			m_refEntity.m_spPlayer->m_refSession.Send◊ ‘¥();
 	}
 
+	if (m_refEntity.m_spAttack)
+	{
+		switch (m_refEntity.m_spAttack->m_¿‡–Õ)
+		{
+		case π§≥Ã≥µ:PlayerComponent::≤•∑≈…˘“Ù(m_refEntity, "TSCUpd00"); break;
+		default:break;
+		}
+	}
 	co_return 0;
 }
 

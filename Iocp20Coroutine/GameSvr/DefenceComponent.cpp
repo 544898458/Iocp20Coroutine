@@ -6,6 +6,8 @@
 #include "../CoRoutine/CoEvent.h"
 #include "MyEvent.h"
 #include "AttackComponent.h"
+#include "PlayerComponent.h"
+#include "BuildingComponent.h"
 
 DefenceComponent::DefenceComponent(Entity& refEntity) :m_refEntity(refEntity)
 {
@@ -35,15 +37,29 @@ void DefenceComponent::受伤(int hp)
 		{
 			switch (m_refEntity.m_spAttack->m_类型)
 			{
-			case 兵:EntitySystem::Broadcast播放声音(m_refEntity, "TMaDth00"); break;//Standing by. 待命中
-			case 近战兵:EntitySystem::Broadcast播放声音(m_refEntity, "TFbDth00"); break;//Checked up and good to go. 检查完毕，准备动身
+			case 兵:EntitySystem::Broadcast播放声音(m_refEntity, "TMaDth00"); break;
+			case 近战兵:EntitySystem::Broadcast播放声音(m_refEntity, "TFbDth00"); break;
 			case 工程车:EntitySystem::Broadcast播放声音(m_refEntity, "TSCDth00"); break;
 			default:
 				break;
 			}
 		}
+		else if (m_refEntity.m_spBuilding)
+		{
+			switch (m_refEntity.m_spBuilding->m_类型)
+			{
+			case 基地:EntitySystem::Broadcast播放声音(m_refEntity, "explo4"); break;
+			//case 兵厂:EntitySystem::Broadcast播放声音(""); break;
+			//case 民房:EntitySystem::Broadcast播放声音(""); break;
+			//case 地堡:EntitySystem::Broadcast播放声音("explo4"); break;
+			default:
+				EntitySystem::Broadcast播放声音(m_refEntity, "EXPLOMED"); break;
+				break;
+			}
+		}
 		m_refEntity.CoDelayDelete().RunNew();
 		CoEvent<MyEvent::单位阵亡>::OnRecvEvent(false, { .wpEntity = m_refEntity.weak_from_this() });
+		PlayerComponent::Send资源(m_refEntity);
 	}
 }
 

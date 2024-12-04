@@ -22,6 +22,7 @@
 #include "地堡Component.h"
 #include "走Component.h"
 #include "PlayerComponent.h"
+#include "资源Component.h"
 
 /// <summary>
 /// GameSvr通过GateSvr透传给游戏客户端
@@ -234,7 +235,7 @@ void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
 		return;
 	}
 	const auto& ref配置 = itFind->second;
-	m_spSpace单人剧情副本 = std::make_shared<Space,const std::string&>(ref配置.str寻路文件名);
+	m_spSpace单人剧情副本 = std::make_shared<Space, const std::string&>(ref配置.str寻路文件名);
 	EnterSpace(m_spSpace单人剧情副本, this->NickName());
 
 	ref配置.funCo剧情(*m_spSpace单人剧情副本, m_funCancel单人剧情, *this).RunNew();
@@ -253,6 +254,12 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 		{
 			if (!ref.m_sp走)
 				return;
+
+			if (造建筑Component::正在建造(ref))
+			{
+				PlayerComponent::播放声音(ref, "BUZZ", "正在建造，不能移动");
+				return;
+			}
 
 			if (ref.m_sp采集)
 				ref.m_sp采集->m_TaskCancel.TryCancel();
@@ -289,9 +296,9 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 		});
 }
 
-void PlayerGateSession_Game::播放声音(const std::string& refStr声音)
+void PlayerGateSession_Game::播放声音(const std::string& refStr声音, const std::string& str文本)
 {
-	Send<Msg播放声音>({ .str声音 = refStr声音 });
+	Send<Msg播放声音>({ .str声音 = refStr声音, .str文本 = StrConv::GbkToUtf8(str文本) });
 }
 
 void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fun)
@@ -328,6 +335,12 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 	//CoAddBuilding(msg.类型, msg.pos).RunNew();
 	ForEachSelected([this, msg](Entity& ref)
 		{
+			if (造建筑Component::正在建造(ref))
+			{
+				PlayerComponent::播放声音(ref, "BUZZ", "正在建造，不能建造");
+				return;
+			}
+
 			if (!ref.m_sp造建筑)
 			{
 				Say系统("造不了");
@@ -349,13 +362,13 @@ CoTask<SpEntity> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, 
 	//Position pos = { 35,float(std::rand() % 60) - 30 };
 	if (!可放置建筑(pos, 配置.f半边长))
 	{
-		播放声音("TSCErr00");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
+		播放声音("TSCErr00", "有阻挡，无法建造");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
 		co_return{};
 	}
 	if (配置.建造.u16消耗燃气矿 > m_u32燃气矿)
 	{
 		//std::ostringstream oss;
-		播放声音("tadErr01");//oss << "燃气矿不足" << 配置.建造.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
+		播放声音("tadErr01", "燃气矿不足，无法建造");// << 配置.建造.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
 		//Say系统(oss.str());
 		co_return{};
 	}
@@ -373,10 +386,12 @@ CoTask<SpEntity> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, 
 	{
 		//LOG(WARNING) << "扣钱失败,error=" << responce.error;
 		m_u32燃气矿 += 配置.建造.u16消耗燃气矿;//返还燃气矿
-		播放声音("tadErr00");//Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
-		
+		播放声音("tadErr00", "晶体矿矿不足无法建造");//Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
+
 		co_return{};
 	}
+
+	Send资源();
 
 	//加建筑
 	CHECK_CO_RET_0(!m_wpSpace.expired());
@@ -471,6 +486,16 @@ void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
 			case 兵厂:播放声音("tddWht00"); break;
 			case 民房:播放声音("tclWht00"); break;
 			default:
+				break;
+			}
+		}
+		else if (spEntity->m_sp资源) {
+			switch (spEntity->m_sp资源->m_类型)
+			{
+			case 晶体矿:
+			case 燃气矿:
+			default:
+				播放声音("BUTTON");
 				break;
 			}
 		}

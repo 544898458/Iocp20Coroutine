@@ -371,5 +371,6 @@ struct Msg播放声音
 {
 	MsgHead msg{ .id = 播放声音};
 	std::string str声音;
-	MSGPACK_DEFINE(msg, str声音);
+	std::string str文本;
+	MSGPACK_DEFINE(msg, str声音, str文本);
 };

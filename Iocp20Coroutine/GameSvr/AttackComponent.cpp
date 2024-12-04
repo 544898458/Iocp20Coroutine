@@ -157,10 +157,16 @@ CoTaskBool AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 
 	const std::tuple<std::chrono::milliseconds, int> arrWaitHurt[] =
 	{	//三段伤害{每段前摇时长，伤害值}
-		{300ms,1},
-		{50ms,3},
-		{50ms,5}
+		{300ms,2},
+		{200ms,3},
+		//{50ms,5}
 	};
+
+	switch (m_类型)
+	{
+	case 兵:EntitySystem::Broadcast播放声音(m_refEntity, "TMaFir00"); break;
+	case 近战兵:EntitySystem::Broadcast播放声音(m_refEntity, "Tfrshoot"); break;
+	}
 
 	for (auto wait_hurt : arrWaitHurt)
 	{

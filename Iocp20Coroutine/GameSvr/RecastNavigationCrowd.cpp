@@ -92,7 +92,7 @@ void CrowToolUpdate(Space& ref)
 
 		const float radius = ag->params.radius;
 		const float* pos = ag->npos;
-
+		const float* vel = ag->vel;
 		unsigned int col = duRGBA(0, 0, 0, 32);
 		//if (m_agentDebug.idx == i)
 		//	col = duRGBA(255,0,0,128);
@@ -108,7 +108,7 @@ void CrowToolUpdate(Space& ref)
 		}
 		auto sp = spEntity.lock();
 		sp->m_Pos = { pos[0] ,pos[2] };
-
+		sp->m_eulerAnglesY = CalculateAngle(vel[0], vel[2]);
 		//sp->Broadcast(MsgNotifyPos(*sp));
 	}
 }

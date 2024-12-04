@@ -37,7 +37,7 @@ void 造活动单位Component::造兵(PlayerGateSession_Game& refGateSession, Entity& r
 	//CHECK_VOID(m_fun造活动单位);
 	if (refGateSession.活动单位包括制造队列中的() >= refGateSession.活动单位上限())
 	{
-		refGateSession.播放声音("tadErr02"); //Additional supply depots required.需要更多的食堂
+		refGateSession.播放声音("tadErr02", "民房不足"); //Additional supply depots required.需要更多的食堂
 		return;
 	}
 	if (m_set可造类型.end() == m_set可造类型.find(类型))
@@ -85,6 +85,7 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 			refGateSession.Say语音提示("此处不可放置");
 			if (co_await CoTimer::Wait(1s, m_TaskCancel造活动单位.cancel))
 			{
+				m_list等待造.clear();
 				co_return{};
 			}
 			continue;
@@ -93,8 +94,9 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 		if (配置.制造.u16消耗燃气矿 > refGateSession.m_u32燃气矿)
 		{
 			//std::ostringstream oss;
-			refGateSession.播放声音("tadErr01");//oss << "燃气矿不足" << 配置.建造.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
+			refGateSession.播放声音("tadErr01", "燃气矿不足");//(low error beep) Insufficient Vespene Gas.气矿不足 
 			//Say系统(oss.str());
+			m_list等待造.clear();
 			co_return{};
 		}
 		refGateSession.m_u32燃气矿 -= 配置.制造.u16消耗燃气矿;
@@ -104,12 +106,14 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 		if (stop)
 		{
 			LOG(WARNING) << "协程RPC打断,error=" << responce.error << ",finalMoney=" << responce.finalMoney << ",rpcSn=" << responce.msg.rpcSnId;
+			m_list等待造.clear();
 			co_return{};
 		}
 		if (0 != responce.error)
 		{
 			refGateSession.m_u32燃气矿 += 配置.制造.u16消耗燃气矿;
-			refGateSession.播放声音("tadErr00");//Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
+			refGateSession.播放声音("tadErr00", "晶体矿矿不足");//Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
+			m_list等待造.clear();
 			co_return{};
 		}
 		//耗时
@@ -120,8 +124,9 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 		const int MAX进度 = 10;
 		for (int i = 0; i < 10; ++i)
 		{
-			if (co_await CoTimer::WaitNextUpdate(m_TaskCancel造活动单位.cancel))
+			if (co_await CoTimer::Wait(300ms, m_TaskCancel造活动单位.cancel))
 			{
+				m_list等待造.clear();
 				co_return{};
 			}
 			EntitySystem::BroadcastEntity描述(m_refEntity, std::format("待造队列{0},当前单位进度{1}/{2}", m_list等待造.size(), i, MAX进度));

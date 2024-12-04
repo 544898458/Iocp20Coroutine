@@ -12,6 +12,7 @@
 #include "PlayerGateSession_Game.h"
 #include "走Component.h"
 #include "EntitySystem.h"
+#include "PlayerComponent.h"
 
 采集Component::采集Component(Entity& refEntity) : m_携带矿类型(晶体矿), m_refEntity(refEntity)
 {
@@ -20,6 +21,7 @@
 void 采集Component::采集(PlayerGateSession_Game& refGateSession, WpEntity wp目标资源)
 {
 	走Component::Cancel所有包含走路的协程(m_refEntity);
+	PlayerComponent::播放声音(m_refEntity, "TSCYes02");
 	m_TaskCancel.TryRun(Co采集(refGateSession, wp目标资源));
 }
 
