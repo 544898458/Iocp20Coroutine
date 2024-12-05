@@ -483,7 +483,7 @@ void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
 			switch (spEntity->m_spBuilding->m_类型)
 			{
 			case 基地:播放声音("tcsWht00"); break;
-			case 兵厂:播放声音("tddWht00"); break;
+			case 兵厂:播放声音("tacWht00"); break; 
 			case 民房:播放声音("tclWht00"); break;
 			default:
 				break;

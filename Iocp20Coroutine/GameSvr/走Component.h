@@ -23,6 +23,7 @@ public:
 
 	CoTaskBool m_coWalk;
 	CoTaskBool m_coWalk手动控制;
+	CoTaskBool m_coWalk进地堡;
 	FunCancel m_cancel;
 
 private:

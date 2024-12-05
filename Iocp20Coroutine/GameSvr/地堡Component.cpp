@@ -35,7 +35,7 @@ void 地堡Component::进(Space& refSpace, uint64_t idEntity)
 	auto sp = wp.lock();
 	if (sp->IsDead())
 	{
-		assert(false);
+		LOG(INFO) << "阵亡单位不能进地堡";//assert(false);
 		return;
 	}
 	sp->BroadcastLeave();//OnDestroy();

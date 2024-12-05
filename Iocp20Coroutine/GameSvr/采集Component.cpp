@@ -13,6 +13,7 @@
 #include "走Component.h"
 #include "EntitySystem.h"
 #include "PlayerComponent.h"
+#include "造建筑Component.h"
 
 采集Component::采集Component(Entity& refEntity) : m_携带矿类型(晶体矿), m_refEntity(refEntity)
 {
@@ -20,6 +21,11 @@
 
 void 采集Component::采集(PlayerGateSession_Game& refGateSession, WpEntity wp目标资源)
 {
+	if (造建筑Component::正在建造(m_refEntity))
+	{
+		PlayerComponent::播放声音(m_refEntity, "BUZZ", "正在建造，不能采集");
+		return;
+	}
 	走Component::Cancel所有包含走路的协程(m_refEntity);
 	PlayerComponent::播放声音(m_refEntity, "TSCYes02");
 	m_TaskCancel.TryRun(Co采集(refGateSession, wp目标资源));
@@ -126,6 +132,15 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 			{
 				m_u32携带矿 = 0;
 				m_携带矿类型 = sp资源->m_类型;
+			}
+			if (0 == m_u32携带矿)
+			{
+				switch (sp资源->m_类型)
+				{
+				case 晶体矿:PlayerComponent::播放声音(m_refEntity, "TSCMin00"); break;
+				case 燃气矿:PlayerComponent::播放声音(m_refEntity, "TSCMin01"); break;
+				default:break;
+				}
 			}
 
 			--sp资源->m_可采集数量;

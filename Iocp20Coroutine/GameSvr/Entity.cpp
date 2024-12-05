@@ -19,6 +19,7 @@
 #include "DefenceComponent.h"
 #include "地堡Component.h"
 #include "走Component.h"
+#include "造建筑Component.h"
 
 using namespace std;
 
@@ -82,6 +83,7 @@ void Entity::OnDestroy()
 {
 	BroadcastLeave();
 
+	//应该用proxy库同意调用下面的，免得忘了
 	if (m_spAttack)
 		m_spAttack->TryCancel();
 
@@ -100,6 +102,8 @@ void Entity::OnDestroy()
 	if (m_sp临时阻挡)
 		m_sp临时阻挡.reset();
 
+	if (m_sp造建筑)
+		m_sp造建筑->TryCancel();
 
 	if (m_cancelDelete)
 		m_cancelDelete();

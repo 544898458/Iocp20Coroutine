@@ -12,12 +12,13 @@ struct Position;
 /// <summary>
 /// 此单位可以造建筑（工程车、工蜂、探机）
 /// </summary>
-class 造建筑Component
+class 造建筑Component final
 {
 public:
 	static void AddComponent(Entity& refEntity, PlayerGateSession_Game& refGateSession, const 活动单位类型 类型);
 	static bool 正在建造(Entity& refEntity);
 	造建筑Component(PlayerGateSession_Game& refSession, Entity& refEntity, const 活动单位类型 类型);
+	~造建筑Component();
 	CoTaskBool Co造建筑(const Position refPos, const 建筑单位类型 类型);
 	void TryCancel();
 private:

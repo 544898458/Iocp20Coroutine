@@ -38,6 +38,11 @@ bool 造建筑Component::正在建造(Entity& refEntity)
 	}
 }
 
+造建筑Component::~造建筑Component()
+{
+	assert(!m_cancel造建筑.operator bool());
+}
+
 CoTaskBool 造建筑Component::Co造建筑(const Position refPos, const 建筑单位类型 类型)
 {
 	if (m_set可造类型.end() == m_set可造类型.find(类型))
@@ -77,6 +82,10 @@ CoTaskBool 造建筑Component::Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel)
 			co_return true;
 
 		BuildingComponent& refBuilding = *wpBuilding.lock();
+
+		if (refBuilding.m_n建造进度百分比 > 0 && 0 == refBuilding.m_n建造进度百分比 % 20)
+			PlayerComponent::播放声音(m_refEntity, "EDrRep00");//Repair
+
 		++refBuilding.m_n建造进度百分比;
 
 		std::ostringstream oss;

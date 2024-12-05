@@ -117,7 +117,7 @@ void 走Component::TryCancel()
 
 void 走Component::走进地堡(WpEntity wpEntity地堡)
 {
-	if (m_refEntity.m_spAttack)	
+	if (m_refEntity.m_spAttack)
 		m_refEntity.m_spAttack->TryCancel();
 
 	if (wpEntity地堡.expired())
@@ -128,7 +128,13 @@ void 走Component::走进地堡(WpEntity wpEntity地堡)
 
 	if (!wpEntity地堡.lock()->m_spBuilding->已造好())
 	{
-		PlayerComponent::Say(m_refEntity, "还没建好", SayChannel::系统);
+		PlayerComponent::播放声音(m_refEntity, "BUZZ", "地堡还没造好，不能进地堡");
+		return;
+	}
+
+	if (造建筑Component::正在建造(m_refEntity))
+	{
+		PlayerComponent::播放声音(m_refEntity, "BUZZ", "正在建造，不能进地堡");
 		return;
 	}
 
@@ -137,9 +143,9 @@ void 走Component::走进地堡(WpEntity wpEntity地堡)
 
 	Cancel所有包含走路的协程(m_refEntity);
 	assert(!m_cancel);
-	assert(m_coWalk.Finished());
-	m_coWalk = Co走进地堡(wpEntity地堡);
-	m_coWalk.Run();
+	assert(m_coWalk进地堡.Finished());
+	m_coWalk进地堡 = Co走进地堡(wpEntity地堡);
+	m_coWalk进地堡.Run();
 }
 
 CoTaskBool 走Component::Co走进地堡(WpEntity wpEntity地堡)

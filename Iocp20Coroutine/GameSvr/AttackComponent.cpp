@@ -11,6 +11,7 @@
 #include "PlayerGateSession_Game.h"
 #include "采集Component.h"
 #include "走Component.h"
+#include "造建筑Component.h"
 #include "../CoRoutine/CoTimer.h"
 #include "DefenceComponent.h"
 
@@ -38,7 +39,7 @@ float AttackComponent::攻击距离() const
 	return spOwner->m_spAttack->m_f攻击距离 + m_f攻击距离;
 }
 
-Position 怪物闲逛(const Position &refOld)
+Position 怪物闲逛(const Position& refOld)
 {
 	auto posTarget = refOld;
 	posTarget.x += std::rand() % 11 - 5;//随机走
@@ -47,7 +48,7 @@ Position 怪物闲逛(const Position &refOld)
 }
 
 AttackComponent::AttackComponent(Entity& refEntity, const 活动单位类型 类型) :
-	m_refEntity(refEntity), 
+	m_refEntity(refEntity),
 	m_类型(类型),
 	m_fun空闲走向此处(怪物闲逛)
 {
@@ -62,7 +63,7 @@ void AttackComponent::TryCancel()
 	}
 
 	//if(bDestroy)
-		m_TaskCancel.TryCancel();
+	m_TaskCancel.TryCancel();
 }
 
 void AttackComponent::Update()
@@ -86,25 +87,35 @@ void AttackComponent::Update()
 		//m_coWalk = AiCo::WalkToPos(m_refEntity.shared_from_this(), posTarget, m_cancel);
 		走Component::WalkToPos(m_refEntity, posTarget);
 		//co_await AiCo::WalkToPos(m_refEntity, posTarget, funCancel);
-		return ;
+		return;
 	}
 }
+bool AttackComponent::可以攻击()
+{
+	if (m_refEntity.m_sp走 && !m_refEntity.m_sp走->m_coWalk手动控制.Finished())
+		return false;//表示不允许打断
 
-CoTaskBool AttackComponent::Co(FunCancel &funCancel)
+	if (m_refEntity.IsDead())
+		return false;
+
+	if (造建筑Component::正在建造(m_refEntity))
+		return false;
+
+	if (m_refEntity.m_sp走)
+	{
+		if (!m_refEntity.m_sp走->m_coWalk手动控制.Finished() ||
+			!m_refEntity.m_sp走->m_coWalk进地堡.Finished())
+			return false;//表示不允许打断
+	}
+	return true;
+}
+
+CoTaskBool AttackComponent::Co(FunCancel& funCancel)
 {
 	KeepCancel kc(funCancel);
-	while (true) 
+	while (true)
 	{
-		//if (co_await CoTimer::WaitNextUpdate(funCancel))
-		//	co_return true;
-
-		//if (!m_coAttack.Finished())
-		//	continue;//表示不允许打断
-
-		if (m_refEntity.m_sp走 && !m_refEntity.m_sp走->m_coWalk手动控制.Finished())
-			co_return false;//表示不允许打断
-
-		if (m_refEntity.IsDead())
+		if (!可以攻击())
 			co_return false;
 
 		const auto& wpEntity = m_refEntity.m_refSpace.Get最近的Entity(m_refEntity, true, [](const Entity& ref)->bool {return nullptr != ref.m_spDefence; });

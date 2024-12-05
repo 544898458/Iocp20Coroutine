@@ -22,7 +22,7 @@ class 造建筑Component;
 class PlayerGateSession_Game;
 
 
-class Entity :public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
+class Entity final:public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
 public:
 	Entity(const Position& pos, Space& refSpace, const std::string& strPrefabName, const std::string& strEntityName);

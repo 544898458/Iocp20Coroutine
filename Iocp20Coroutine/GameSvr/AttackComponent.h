@@ -23,5 +23,7 @@ public:
 	CoTaskCancel m_TaskCancel;
 	typedef Position (*Fun空闲走向目标)(const Position&);
 	Fun空闲走向目标 m_fun空闲走向此处;
+private:
+	bool 可以攻击();
 };
 
