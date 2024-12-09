@@ -91,7 +91,7 @@ namespace AiCo
 				co_return false;
 			}
 
-			EntitySystem::BroadcastEntity描述(refThis, std::format("距离目标{0}米", refThis.m_Pos.Distance(posTarget)));
+			EntitySystem::BroadcastEntity描述(refThis, std::format("距离目标{0}米", (int)refThis.m_Pos.Distance(posTarget)));
 		}
 		LOG(INFO) << "走向目标协程结束:" << posTarget;
 		co_return false;
