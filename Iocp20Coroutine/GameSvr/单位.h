@@ -24,15 +24,25 @@ namespace 单位
 		/// </summary>
 		float f半边长;
 	};
-
+	struct 战斗配置
+	{
+		float f警戒距离;
+		float f攻击距离;
+		float f伤害;
+	};
 	struct 活动单位配置
 	{
 		单位配置 配置;
 		制造配置 制造;
-		float f警戒距离;
-		float f攻击距离;
+		战斗配置 战斗;
 	};
-
+	struct 怪配置
+	{
+		单位配置 配置;
+		战斗配置 战斗;
+		uint16_t u16初始Hp;
+	};
+	
 	struct 资源单位配置
 	{
 		单位配置 配置;
@@ -41,5 +51,6 @@ namespace 单位
 	bool Find建筑单位配置(const 建筑单位类型 类型, 建筑单位配置& refOut);
 	bool Find活动单位配置(const 活动单位类型 类型, 活动单位配置& refOut);
 	bool Find资源单位配置(const 资源类型 类型, 资源单位配置& refOut);
+	bool Find怪配置(const 活动单位类型 类型, 怪配置& refOut);
 };
 

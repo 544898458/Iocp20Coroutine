@@ -74,6 +74,10 @@
     <IncludePath>$(SolutionDir)\glog\include;$(SolutionDir)\msgpack-c-cpp-2.1.2\include;$($(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\glog\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(SolutionDir)\msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;$(SolutionDir)\VisualLeakDetector\include;$(SolutionDir)/recastnavigation-main/DetourTileCache/Include;$(SolutionDir)\recastnavigation-main\Detour\Include;$(ProjectDir);$(SolutionDir)\recastnavigation-main\DetourCrowd\Include;$(SolutionDir)\recastnavigation-main\RecastDemo\Include;$(SolutionDir)\recastnavigation-main\Recast\Include;$(SolutionDir)\recastnavigation-main\DebugUtils\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)\glog\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -123,8 +127,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;GLOG_NO_ABBREVIATED_SEVERITIES;GLOG_USE_GLOG_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,6 +165,7 @@
     <ClCompile Include="GateSvrMain.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ClientSession_GateToWorld.cpp" />
   </ItemGroup>

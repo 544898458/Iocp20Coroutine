@@ -374,8 +374,9 @@ CoTask<SpEntity> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, 
 	}
 	m_u32燃气矿 -= 配置.建造.u16消耗燃气矿;
 	auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());//不能存对象，扩容可能导致引用和指针失效
-	auto [stop, responce] = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 配置.建造.u16消耗晶体矿 },
-		[this](const MsgChangeMoney& ref) {SendToWorldSvr<MsgChangeMoney>(ref, m_idPlayerGateSession); }, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	//auto [stop, responce] = co_await CoRpc<MsgChangeMoneyResponce>::Send<MsgChangeMoney>({ .changeMoney = 配置.建造.u16消耗晶体矿 },
+	//	[this](const MsgChangeMoney& ref) {SendToWorldSvr<MsgChangeMoney>(ref, m_idPlayerGateSession); }, **iterNew);//以同步编程的方式，向另一个服务器发送请求并等待返回
+	auto [stop, responce] = co_await AiCo::ChangeMoney(*this, 配置.建造.u16消耗晶体矿, false, **iterNew);
 	LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 	if (stop)
 	{
@@ -418,6 +419,7 @@ CoTask<SpEntity> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, 
 	spSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 	spNewEntity->BroadcastEnter();
+	Send资源();
 	co_return spNewEntity;
 }
 

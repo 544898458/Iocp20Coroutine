@@ -72,8 +72,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)\msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;$(SolutionDir)\VisualLeakDetector\include;$(SolutionDir)/recastnavigation-main/DetourTileCache/Include;$(SolutionDir)\recastnavigation-main\Detour\Include;$(ProjectDir);$(SolutionDir)\recastnavigation-main\DetourCrowd\Include;$(SolutionDir)\recastnavigation-main\RecastDemo\Include;$(SolutionDir)\recastnavigation-main\Recast\Include;$(SolutionDir)\recastnavigation-main\DebugUtils\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;$(SolutionDir)\VisualLeakDetector\include;$(SolutionDir)/recastnavigation-main/DetourTileCache/Include;$(SolutionDir)\recastnavigation-main\Detour\Include;$(ProjectDir);$(SolutionDir)\recastnavigation-main\DetourCrowd\Include;$(SolutionDir)\recastnavigation-main\RecastDemo\Include;$(SolutionDir)\recastnavigation-main\Recast\Include;$(SolutionDir)\recastnavigation-main\DebugUtils\Include;$(SolutionDir)\msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;$(SolutionDir)\VisualLeakDetector\include;$(SolutionDir)/recastnavigation-main/DetourTileCache/Include;$(SolutionDir)\recastnavigation-main\Detour\Include;$(ProjectDir);$(SolutionDir)\recastnavigation-main\DetourCrowd\Include;$(SolutionDir)\recastnavigation-main\RecastDemo\Include;$(SolutionDir)\recastnavigation-main\Recast\Include;$(SolutionDir)\recastnavigation-main\DebugUtils\Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\glog\lib;$(SolutionDir)\VisualLeakDetector\lib\Win64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(SolutionDir)\msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;$(SolutionDir)\VisualLeakDetector\include;$(SolutionDir)/recastnavigation-main/DetourTileCache/Include;$(SolutionDir)\recastnavigation-main\Detour\Include;$(ProjectDir);$(SolutionDir)\recastnavigation-main\DetourCrowd\Include;$(SolutionDir)\recastnavigation-main\RecastDemo\Include;$(SolutionDir)\recastnavigation-main\Recast\Include;$(SolutionDir)\recastnavigation-main\DebugUtils\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(SolutionDir)\glog\lib;$(SolutionDir)\VisualLeakDetector\lib\Win64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -126,8 +130,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CONSOLE;GLOG_NO_ABBREVIATED_SEVERITIES;GLOG_USE_GLOG_EXPORT;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,17 +144,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\CoRoutine\CoLock.cpp" />
+    <ClCompile Include="..\CoRoutine\CoLock.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\CoRoutine\CoRpc.cpp" />
-    <ClCompile Include="..\CoRoutine\CoTask.cpp" />
+    <ClCompile Include="..\CoRoutine\CoTask.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\CoRoutine\CoTimer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\Client.cpp" />
     <ClCompile Include="..\IocpNetwork\MsgQueue.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\recastnavigation-main\DebugUtils\Source\DebugDraw.cpp" />
+    <ClCompile Include="..\recastnavigation-main\DebugUtils\Source\DetourDebugDraw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DebugUtils\Source\RecastDebugDraw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DebugUtils\Source\RecastDump.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\recastnavigation-main\DetourCrowd\Source\DetourCrowd.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -203,10 +224,12 @@
     <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\InputGeom.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">_CRT_SECURE_NO_WARNINGS;_CONSOLE;GLOG_NO_ABBREVIATED_SEVERITIES;GLOG_USE_GLOG_EXPORT;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\MeshLoaderObj.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">_CRT_SECURE_NO_WARNINGS;_CONSOLE;GLOG_NO_ABBREVIATED_SEVERITIES;GLOG_USE_GLOG_EXPORT;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\PerfTimer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -216,8 +239,42 @@
     <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\Sample_TempObstacles.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\recastnavigation-main\RecastDemo\Source\ValueHistory.cpp" />
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\Recast.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastAlloc.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastArea.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastAssert.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastContour.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastFilter.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastLayers.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastMesh.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastMeshDetail.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastRasterization.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastRegion.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="EntitySystem.cpp" />
     <ClCompile Include="RecastNavigationCrowd.cpp" />
     <ClCompile Include="Sample_TempObstacles.cpp" />
@@ -261,6 +318,7 @@
     <ClCompile Include="MyEvent.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PlayerGateSession_Game.cpp" />
@@ -300,6 +358,7 @@
     </ClCompile>
     <ClCompile Include="mainGpp.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="MyMsgQueue.cpp" />
     <ClCompile Include="Space.cpp" />
@@ -308,6 +367,7 @@
     </ClCompile>
     <ClCompile Include="..\websocketfiles-master\src\main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\websocketfiles-master\src\sha1_portable.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

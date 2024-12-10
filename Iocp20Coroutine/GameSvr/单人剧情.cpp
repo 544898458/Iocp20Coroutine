@@ -103,7 +103,7 @@ namespace 单人剧情
 			co_return 0;
 
 		refGateSession.Say系统("现在已给您刷了一个怪，控制兵走到怪附近，兵会自动打怪");
-		MonsterComponent::AddMonster(refSpace, { -30.0 });
+		MonsterComponent::AddMonster(refSpace, 兵, { -30.0 });
 
 		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
 			co_return 0;
@@ -123,7 +123,7 @@ namespace 单人剧情
 		}
 
 		refGateSession.Say系统("恭喜您消灭了敌人！现在给您刷了10个敌人。您可以造地堡,让兵进入地堡中，立足防守，再伺机进攻");
-		MonsterComponent::AddMonster(refSpace, { -30.0 }, 10);
+		MonsterComponent::AddMonster(refSpace, 兵, { -30.0 }, 10);
 
 		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref)
 			{
@@ -165,7 +165,7 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(1s, funCancel))
 			co_return 0;
 
-		co_await AiCo::ChangeMoney(refGateSession, 20, true, funCancel);
+		co_await AiCo::ChangeMoney(refGateSession, 100, true, funCancel);
 		{
 			const 活动单位类型 类型(活动单位类型::工程车);
 			单位::活动单位配置 配置;
@@ -183,7 +183,7 @@ namespace 单人剧情
 			if (co_await CoTimer::Wait(16s, funCancel))
 				co_return 0;
 
-			auto vecEneity = MonsterComponent::AddMonster(refSpace, { 48,-48 }, i);
+			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 兵 : 近战兵, { 48,-48 }, i);
 			for (auto& spEntity : vecEneity)
 			{
 				//if (spEntity->m_sp走)

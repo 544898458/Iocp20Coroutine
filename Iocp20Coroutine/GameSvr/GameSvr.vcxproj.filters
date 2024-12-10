@@ -282,6 +282,48 @@
     <ClCompile Include="EntitySystem.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\Recast.cpp">
+      <Filter>RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DebugUtils\Source\RecastDump.cpp">
+      <Filter>RecastNavigation\DebugUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastAlloc.cpp">
+      <Filter>RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastAssert.cpp">
+      <Filter>RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DebugUtils\Source\DetourDebugDraw.cpp">
+      <Filter>RecastNavigation\DebugUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\DebugUtils\Source\RecastDebugDraw.cpp">
+      <Filter>RecastNavigation\DebugUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastFilter.cpp">
+      <Filter>RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastArea.cpp">
+      <Filter>RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastContour.cpp">
+      <Filter>RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastLayers.cpp">
+      <Filter>RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastMesh.cpp">
+      <Filter>RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastMeshDetail.cpp">
+      <Filter>RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastRasterization.cpp">
+      <Filter>RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastRegion.cpp">
+      <Filter>RecastNavigation\Recast</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">

@@ -14,29 +14,39 @@
 #include "造建筑Component.h"
 #include "../CoRoutine/CoTimer.h"
 #include "DefenceComponent.h"
+#include "BuildingComponent.h"
+#include "单位.h"
 
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
-void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, const float f攻击距离)
+void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, const float f攻击距离, const float f伤害)
 {
 	CHECK_VOID(!refEntity.m_spAttack);
 	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&, const 活动单位类型>(refEntity, std::forward<const 活动单位类型&&>(类型));
 	refEntity.m_spAttack->m_f攻击距离 = f攻击距离;
+	refEntity.m_spAttack->m_f伤害 = f伤害;
 	//float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z};
 	//int CrowToolAddAgent(float arrF[]);
 	//refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);
 	//m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
 }
 
-float AttackComponent::攻击距离() const
+float AttackComponent::攻击距离(const Entity& refTarget) const
 {
+	float f目标半径 = 0;
+	if (refTarget.m_spBuilding)
+	{
+		单位::建筑单位配置 配置;
+		if (单位::Find建筑单位配置(refTarget.m_spBuilding->m_类型, 配置))
+			f目标半径 += 配置.f半边长;
+	}
 	if (m_refEntity.m_wpOwner.expired())
-		return m_f攻击距离;
+		return m_f攻击距离 + f目标半径;
 
 	auto spOwner = m_refEntity.m_wpOwner.lock();
 	if (!spOwner->m_spAttack)
-		return m_f攻击距离;
+		return m_f攻击距离 + f目标半径;
 
-	return spOwner->m_spAttack->m_f攻击距离 + m_f攻击距离;
+	return spOwner->m_spAttack->m_f攻击距离 + m_f攻击距离 + f目标半径;
 }
 
 Position 怪物闲逛(const Position& refOld)
@@ -122,7 +132,10 @@ CoTaskBool AttackComponent::Co(FunCancel& funCancel)
 		if (!wpEntity.expired())
 		{
 			Entity& refTarget = *wpEntity.lock();
-			if (m_refEntity.DistanceLessEqual(refTarget, 攻击距离()))
+
+
+
+			if (m_refEntity.DistanceLessEqual(refTarget, 攻击距离(refTarget)))
 			{
 				走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
@@ -169,7 +182,7 @@ CoTaskBool AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 	const std::tuple<std::chrono::milliseconds, int> arrWaitHurt[] =
 	{	//三段伤害{每段前摇时长，伤害值}
 		{300ms,2},
-		{200ms,3},
+		{200ms,m_f伤害},
 		//{50ms,5}
 	};
 
@@ -194,7 +207,7 @@ CoTaskBool AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 		if (spDefencer->IsDead())
 			break;//要执行后摇
 
-		if (!m_refEntity.DistanceLessEqual(*spDefencer, 攻击距离()))
+		if (!m_refEntity.DistanceLessEqual(*spDefencer, 攻击距离(*spDefencer)))
 			break;//要执行后摇
 
 		if (!spDefencer->m_spDefence)

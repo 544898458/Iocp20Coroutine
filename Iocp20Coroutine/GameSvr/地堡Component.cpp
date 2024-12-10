@@ -13,6 +13,9 @@ void µØ±¤Component::AddComponet(Entity& refEntity, PlayerGateSession_Game& refGa
 
 void µØ±¤Component::OnDestroy()
 {
+	for (auto& sp : m_listSpEntity)
+		sp->OnDestroy();
+
 	m_listSpEntity.clear();
 }
 

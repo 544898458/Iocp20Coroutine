@@ -16,6 +16,7 @@
 #include "RecastNavigationCrowd.h"
 #include "AttackComponent.h"
 #include "DefenceComponent.h"
+#include "单位.h"
 
 template<class T> void SendToWorldSvr(const T& msg, const uint64_t idGateSession);
 
@@ -87,11 +88,11 @@ namespace AiCo
 
 			if (已走到目标附近(refThis, posLocalTarget, f距离目标小于此距离停下))
 			{
-				EntitySystem::BroadcastEntity描述(refThis, "已走到目标附近");
+				//EntitySystem::BroadcastEntity描述(refThis, "已走到目标附近");
 				co_return false;
 			}
 
-			EntitySystem::BroadcastEntity描述(refThis, std::format("距离目标{0}米", (int)refThis.m_Pos.Distance(posTarget)));
+			//EntitySystem::BroadcastEntity描述(refThis, std::format("距目标{0}米", (int)refThis.m_Pos.Distance(posTarget)));
 		}
 		LOG(INFO) << "走向目标协程结束:" << posTarget;
 		co_return false;
@@ -127,7 +128,7 @@ namespace AiCo
 			{
 				//LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
 				EntitySystem::BroadcastChangeSkeleAnimIdle(refThis);
-				EntitySystem::BroadcastEntity描述(refThis, "已走到目标附近");
+				//EntitySystem::BroadcastEntity描述(refThis, "已走到目标附近");
 				co_return false;
 			}
 
@@ -141,7 +142,7 @@ namespace AiCo
 			{
 				co_return false;
 			}
-			EntitySystem::BroadcastEntity描述(refThis, std::format("距离目标{0}米", refThis.Distance(*spTarget)));
+			//EntitySystem::BroadcastEntity描述(refThis, std::format("距目标{0}米", (int)refThis.Distance(*spTarget)));
 		}
 		LOG(INFO) << "走向目标协程结束:" << refThis.m_Pos;
 		co_return false;
@@ -151,17 +152,9 @@ namespace AiCo
 		KeepCancel kc(funCancel);
 		using namespace std;
 
-		while (!co_await CoTimer::Wait(5000ms, funCancel))
+		for (int i = 0; i < 100 && !co_await CoTimer::Wait(20s, funCancel); ++i)
 		{
-			//SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string& >({ -30.0 }, refSpace, "altman-red");
-			//spEntityMonster->AddComponentAttack();
-			//spEntityMonster->AddComponentMonster();
-			//spEntityMonster->m_f警戒距离 = 20;
-			//spEntityMonster->m_f移动速度 = 0.2f;
-			//refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster });
-			////LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
-			//spEntityMonster->BroadcastEnter();
-			MonsterComponent::AddMonster(refSpace, { -30.0 });
+			MonsterComponent::AddMonster(refSpace, 兵, { -30.0 });
 		}
 		LOG(INFO) << "停止刷怪协程";
 		co_return 0;
