@@ -91,13 +91,16 @@ void WorldSessionFromGate::OnRecv(const MsgGate转发& msg转发)
 	LOG(INFO) << obj;
 
 	auto iter = g_mapPlayerGateSession.find(msg转发.gateClientSessionId);
-
-
 	switch (msg.id)
 	{
 	case MsgId::GateDeleteSession:
 	{
 		assert(g_mapPlayerGateSession.end() != iter);
+		if (g_mapPlayerGateSession.end() == iter)
+		{
+			LOG(WARNING) << "不符合协议的黑客攻击";//可用telnet向端口发数据模拟
+			return;
+		}
 		auto& refPlayerGateSession = iter->second;
 		{
 			auto iterFind = g_mapPlayerNickNameGateSessionId.find(refPlayerGateSession.NickName());

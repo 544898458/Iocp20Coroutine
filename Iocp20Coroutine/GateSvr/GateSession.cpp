@@ -52,6 +52,10 @@ void GateSession::OnRecvWsPack(const void* buf, const int len)
 template<> std::deque<MsgLogin>& GateSession::GetQueue() { return m_queueLogin; }
 void GateSession::OnRecv(const MsgLogin& msg)
 {
+	if (msg.name.empty())
+	{
+		m_refSession.m_refSession.CloseSocket();
+	}
 	LOG(INFO) << "GameSvr·¢À´µÇÂ¼";
 	if (!m_coLogin.Finished() || m_bLoginOk)
 	{
