@@ -165,7 +165,12 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(1s, funCancel))
 			co_return 0;
 
-		co_await AiCo::ChangeMoney(refGateSession, 100, true, funCancel);
+		auto [stop, msgResponce] = co_await AiCo::ChangeMoney(refGateSession, 100, true, funCancel);
+		if (stop)
+		{
+			LOG(WARNING) << "ChangeMoney,协程取消";
+			co_return 0;
+		}
 		{
 			const 活动单位类型 类型(活动单位类型::工程车);
 			单位::活动单位配置 配置;

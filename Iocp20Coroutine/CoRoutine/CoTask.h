@@ -251,6 +251,10 @@ public:
 	void operator=(CoTask&& other)noexcept
 	{
 		assert(FinishedNoLock());
+		if (m_hCoroutine)
+		{
+			TryClear();//20241212
+		}
 		m_hCoroutine = other.m_hCoroutine;
 		other.m_hCoroutine = nullptr;
 	}

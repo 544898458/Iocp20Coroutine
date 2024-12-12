@@ -71,6 +71,11 @@ bool CrowToolRemove阻挡(CrowdToolState& ref, const uint32_t u32DtObstacleRef)
 
 void CrowToolUpdate(Space& ref)
 {
+	if (!ref.m_spCrowdToolState)
+	{
+		LOG(ERROR) << "没有寻路组件";
+		return;
+	}
 	const float SIM_RATE = 10;
 	const float DELTA_TIME = 1.0f / SIM_RATE;
 	ref.m_spCrowdToolState->handleUpdate(DELTA_TIME);
@@ -158,6 +163,11 @@ bool CrowdTool判断单位重叠(const Position& refPosOld, const Position& refPosNew,
 
 RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& posTarget) :m_refEntity(refEntity)
 {
+	if (!refEntity.m_refSpace.m_spCrowdToolState)
+	{
+		LOG(ERROR) << "m_spCrowdToolState";
+		return;
+	}
 	float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z };
 	assert(AttackComponent::INVALID_AGENT_IDX == refEntity.m_spAttack->m_idxCrowdAgent);
 	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(*refEntity.m_refSpace.m_spCrowdToolState, arrF, refEntity.m_速度每帧移动距离 * 10);
@@ -169,6 +179,11 @@ RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& 
 
 RecastNavigationCrowd::~RecastNavigationCrowd()
 {
+	if (!m_refEntity.m_refSpace.m_spCrowdToolState)
+	{
+		LOG(ERROR) << "m_spCrowdToolState";
+		return;
+	}
 	CrowToolRemoveAgent(*m_refEntity.m_refSpace.m_spCrowdToolState, m_refEntity.m_spAttack->m_idxCrowdAgent);
 	m_refEntity.m_spAttack->m_idxCrowdAgent = AttackComponent::INVALID_AGENT_IDX;
 }

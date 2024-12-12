@@ -67,12 +67,22 @@ void Space::StaticUpdate()
 
 bool Space::CrowdTool可站立(const Position& refPos)
 {
+	if (!m_spCrowdToolState)
+	{
+		LOG(ERROR) << "m_spCrowdToolState";
+		return true;
+	}
 	bool CrowdTool可站立(CrowdToolState & refCrowTool, const Position & refPos);
 	return CrowdTool可站立(*m_spCrowdToolState, refPos);
 }
 
 bool Space::CrowdToolFindNerestPos(Position& refPos)
 {
+	if (!m_spCrowdToolState)
+	{
+		LOG(ERROR) << "m_spCrowdToolState";
+		return false;
+	}
 	bool CrowdToolFindNerestPos(CrowdToolState & refCrowTool, Position & refPos);
 	return CrowdToolFindNerestPos(*m_spCrowdToolState, refPos);
 }

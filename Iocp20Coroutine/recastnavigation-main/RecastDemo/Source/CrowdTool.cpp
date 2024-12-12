@@ -137,6 +137,7 @@ CrowdToolState::CrowdToolState() :
 CrowdToolState::~CrowdToolState()
 {
 	dtFreeObstacleAvoidanceDebugData(m_vod);
+	delete m_sample;//20241212
 }
 
 void CrowdToolState::init(class Sample* sample)

@@ -7,11 +7,22 @@
 {
 	float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z };
 	uint32_t CrowToolAdd·½¿é×èµ²(CrowdToolState & ref, float arrF[], float f°ë±ß³¤);
+	if (!refEntity.m_refSpace.m_spCrowdToolState)
+	{
+		LOG(ERROR) << "m_spCrowdToolState";
+		return;
+	}
 	m_u32DtObstacleRef = CrowToolAdd·½¿é×èµ²(*refEntity.m_refSpace.m_spCrowdToolState, arrF, f°ë±ß³¤);
 }
 
 ÁÙÊ±×èµ²Component::~ÁÙÊ±×èµ²Component()
 {
+	if (!m_refSpace.m_spCrowdToolState)
+	{
+		LOG(ERROR) << "m_spCrowdToolState";
+		return;
+	}
+
 	bool CrowToolRemove×èµ²(CrowdToolState & ref, const uint32_t u32DtObstacleRef);
 	CrowToolRemove×èµ²(*m_refSpace.m_spCrowdToolState, m_u32DtObstacleRef);
 }
