@@ -22,15 +22,23 @@ namespace 单人剧情
 		KeepCancel kc(funCancel);
 		using namespace std;
 		refGateSession.Say系统("欢迎来到即时策略游戏单人剧情");
+
+		auto [stop, msgResponce] = co_await AiCo::ChangeMoney(refGateSession, 50, true, funCancel);
+		if (stop)
+		{
+			LOG(WARNING) << "ChangeMoney,协程取消";
+			co_return 0;
+		}
+
 		if (co_await CoTimer::Wait(2s, funCancel))
 			co_return 0;
 
 		const 活动单位类型 类型(活动单位类型::工程车);
 		单位::活动单位配置 配置;
 		单位::Find活动单位配置(类型, 配置);
-		SpEntity sp工程车 = 造活动单位Component::造活动单位(refGateSession, { 30,30 }, 配置, 类型);
+		SpEntity sp工程车 = 造活动单位Component::造活动单位(refGateSession, { 10,10 }, 配置, 类型);
 
-		refGateSession.Say系统("请单击“工程车”选中，然后单击“造基地”按钮，再点击空白地面，3秒后就能造出一个基地");
+		refGateSession.Say系统("请单击“工程车”选中，然后单击“造基地”按钮，再点击空白地面，10秒后就能造出一个基地");
 
 		const auto funSameSpace = [&refSpace, &refGateSession](const MyEvent::AddEntity& refAddEntity) { return MyEvent::SameSpace(refAddEntity.wpEntity, refSpace, refGateSession); };
 
@@ -43,12 +51,17 @@ namespace 单人剧情
 			pos基地 = addEvent.wpEntity.lock()->m_Pos;
 		}
 
-		refGateSession.Say系统("请单击选中基地（暗红色特效表示选中），然后点击“造工程车”按钮,2秒后会在基地旁造出一个工程车");
+
+		if (co_await CoTimer::Wait(10s, funCancel))
+			co_return 0;
+
+
+		refGateSession.Say系统("请单击选中基地（圆环特效表示选中），然后点击“造工程车”按钮,5秒后会在基地旁造出一个工程车");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
 
-		refGateSession.Say系统("现在您有一辆工程车了，单击选中您的工程车，再点击地面，命令它走向目标点");
+		refGateSession.Say系统("现在您有一辆工程车了，单击选中您的工程车，再点击空旷地面，命令它走向目标点");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace, &refGateSession](const MyEvent::MoveEntity& ref)
 			{
@@ -73,26 +86,37 @@ namespace 单人剧情
 
 		refGateSession.Say系统("很好！现在给您刷了一个晶体矿，请点击晶体矿，让工程车在晶体矿和基地之间搬运晶体矿");
 		资源Component::Add(refSpace, 晶体矿, { pos基地.x,pos基地.z - 20 });
-		资源Component::Add(refSpace, 燃气矿, { pos基地.x + 30,pos基地.z });
+		资源Component::Add(refSpace, 燃气矿, { pos基地.x + 15,pos基地.z });
 
 		if (std::get<0>(co_await CoEvent<MyEvent::开始采集晶体矿>::Wait(funCancel)))
 			co_return 0;
 
-		refGateSession.Say系统("很好！您的工程车正在采集晶体矿，请等他把晶体矿运回基地");
-
+		refGateSession.Say系统("很好！您的工程车正在采集晶体矿，请等他把晶体矿运回基地。现在，请选中另一辆工程车去采集燃气矿");
 		if (std::get<0>(co_await CoEvent<MyEvent::晶体矿已运回基地>::Wait(funCancel)))
 			co_return 0;
 
 		refGateSession.Say系统("您的工程车已把第一车晶体矿运到基地，请查看左上角晶体矿数量变化");
 
-		if (co_await CoTimer::Wait(3s, funCancel))
+		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
-		refGateSession.Say系统("请单击“造兵厂”按钮");
+		refGateSession.Say系统("等您存够20晶体矿后，请选中一辆工程车，然后单击“造民房”按钮，再点击一次空旷地面");
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
 
-		refGateSession.Say系统("请单击选中兵厂（暗红色特效表示选中），然后点击“造兵”按钮,2秒后会在兵厂旁造出一个兵");
+		refGateSession.Say系统("很好，民房可以提升您的人口上限");
+
+		if (co_await CoTimer::Wait(3s, funCancel))
+			co_return 0;
+
+		refGateSession.Say系统("等您存够30晶体矿后，请选中一辆工程车，然后单击“造兵厂”按钮，再点击一次空旷地面");
+		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
+			co_return 0;
+
+		if (co_await CoTimer::Wait(10s, funCancel))
+			co_return 0;
+
+		refGateSession.Say系统("请单击选中兵厂（圆环特效表示选中），然后点击“造兵”按钮,10秒后会在兵厂旁造出一个兵");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
@@ -102,8 +126,8 @@ namespace 单人剧情
 		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace](const MyEvent::MoveEntity& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
 			co_return 0;
 
-		refGateSession.Say系统("现在已给您刷了一个怪，控制兵走到怪附近，兵会自动打怪");
-		MonsterComponent::AddMonster(refSpace, 兵, { -30.0 });
+		refGateSession.Say系统("现在已给您刷了一个怪，控制兵走到怪附近，兵会自动打怪.您可以点右下角“取消选中”然后拖动地面看看其它地方");
+		MonsterComponent::AddMonster(refSpace, 兵, { -30.20 });
 
 		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
 			co_return 0;
@@ -122,7 +146,7 @@ namespace 单人剧情
 			co_return 0;
 		}
 
-		refGateSession.Say系统("恭喜您消灭了敌人！现在给您刷了10个敌人。您可以造地堡,让兵进入地堡中，立足防守，再伺机进攻");
+		refGateSession.Say系统("恭喜您消灭了敌人！现在左边屏幕外给您刷了10个敌人。您可以造地堡,让兵进入地堡中，立足防守，再伺机进攻");
 		MonsterComponent::AddMonster(refSpace, 兵, { -30.0 }, 10);
 
 		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref)

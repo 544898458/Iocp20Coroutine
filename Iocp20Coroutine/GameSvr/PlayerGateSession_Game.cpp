@@ -205,6 +205,12 @@ void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
 	OnDestroy();
 	LOG(INFO) << "希望进Space:" << msg.idSapce;
 	EnterSpace(Space::GetSpace(msg.idSapce), this->NickName());
+	{
+		const 活动单位类型 类型(活动单位类型::工程车);
+		单位::活动单位配置 配置;
+		单位::Find活动单位配置(类型, 配置);
+		SpEntity sp工程车 = 造活动单位Component::造活动单位(*this, { 10,10 }, 配置, 类型);
+	}
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg离开Space& msg)
