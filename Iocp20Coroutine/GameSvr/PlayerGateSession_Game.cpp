@@ -23,6 +23,7 @@
 #include "走Component.h"
 #include "PlayerComponent.h"
 #include "资源Component.h"
+#include "../CoRoutine/CoTimer.h"
 
 /// <summary>
 /// GameSvr通过GateSvr透传给游戏客户端
@@ -205,7 +206,7 @@ CoTaskBool PlayerGateSession_Game::Co进多人联机地图()
 	const 活动单位类型 类型(活动单位类型::工程车);
 	单位::活动单位配置 配置;
 	单位::Find活动单位配置(类型, 配置);
-	SpEntity sp工程车 = 造活动单位Component::造活动单位(*this, Position(std::rand() % 50 - 25, std::rand() % 50 - 25), 配置, 类型);
+	SpEntity sp工程车 = 造活动单位Component::造活动单位(*this, Position(std::rand() % 100 - 50, std::rand() % 50 - 25), 配置, 类型);
 
 	Send设置视口(*sp工程车);
 	auto [stop, msgResponce] = co_await AiCo::ChangeMoney(*this, 0, true, m_funCancel进地图);
@@ -218,6 +219,21 @@ CoTaskBool PlayerGateSession_Game::Co进多人联机地图()
 		if (std::get<0>(co_await AiCo::ChangeMoney(*this, u16初始晶体矿, true, m_funCancel进地图)))
 			co_return true;
 	}
+
+	using namespace std;
+	const auto seconds消息间隔 = 10s;
+	Say("这是每个玩家都可以自由共同进入的场景，分布有一些资源和少量的怪，资源的再生速度很慢", SayChannel::系统);
+	if (co_await CoTimer::Wait(seconds消息间隔, m_funCancel进地图)) co_return false;
+	Say("您开局只有一台工程车，工程车可以建造建筑，建筑中可以产出活动单位", SayChannel::系统);
+	if (co_await CoTimer::Wait(seconds消息间隔, m_funCancel进地图)) co_return false;
+	Say("一旦您退出此场景或断线，您在此场景中的所有单位都会消失", SayChannel::系统);
+	if (co_await CoTimer::Wait(seconds消息间隔 , m_funCancel进地图)) co_return false;
+	Say("其他玩家是您的敌人，他们可能会向您进攻！", SayChannel::系统);
+	if (co_await CoTimer::Wait(seconds消息间隔 , m_funCancel进地图)) co_return false;
+	Say("如果局势对您不利，您可以退出此场景再次进入，就有机会东山再起！", SayChannel::系统);
+	if (co_await CoTimer::Wait(seconds消息间隔 , m_funCancel进地图)) co_return false;
+	Say("请施展您的指挥艺术吧，加油！", SayChannel::系统);
+
 	co_return false;
 }
 void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
@@ -324,7 +340,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 
 void PlayerGateSession_Game::播放声音(const std::string& refStr声音, const std::string& str文本)
 {
-	Send<Msg播放声音>({ .str声音 = refStr声音, .str文本 = StrConv::GbkToUtf8(str文本) });
+	Send<Msg播放声音>({ .str声音 = StrConv::GbkToUtf8(refStr声音), .str文本 = StrConv::GbkToUtf8(str文本) });
 }
 
 void PlayerGateSession_Game::Send设置视口(const Entity& refEntity)
@@ -393,13 +409,14 @@ CoTask<SpEntity> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, 
 	//Position pos = { 35,float(std::rand() % 60) - 30 };
 	if (!可放置建筑(pos, 配置.f半边长))
 	{
-		播放声音("TSCErr00", "有阻挡，无法建造");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
+		//播放声音("TSCErr00", "有阻挡，无法建造");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
+		播放声音("语音/无法在这里建造可爱版", "有阻挡，无法建造");
 		co_return{};
 	}
 	if (配置.建造.u16消耗燃气矿 > m_u32燃气矿)
 	{
 		//std::ostringstream oss;
-		播放声音("tadErr01", "燃气矿不足，无法建造");// << 配置.建造.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
+		播放声音("语音/燃气矿不足可爱版", "燃气矿不足，无法建造");// << 配置.建造.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
 		//Say系统(oss.str());
 		co_return{};
 	}
@@ -418,7 +435,7 @@ CoTask<SpEntity> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, 
 	{
 		//LOG(WARNING) << "扣钱失败,error=" << responce.error;
 		m_u32燃气矿 += 配置.建造.u16消耗燃气矿;//返还燃气矿
-		播放声音("tadErr00", "晶体矿矿不足无法建造");//Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
+		播放声音("语音/晶体矿不足可爱版", "晶体矿不足无法建造");//Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
 
 		co_return{};
 	}

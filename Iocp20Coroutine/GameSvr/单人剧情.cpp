@@ -23,7 +23,7 @@ namespace 单人剧情
 		using namespace std;
 		refGateSession.Say系统("欢迎来到即时策略游戏单人剧情");
 
-		auto [stop, msgResponce] = co_await AiCo::ChangeMoney(refGateSession, 50, true, funCancel);
+		auto [stop, msgResponce] = co_await AiCo::ChangeMoney(refGateSession, 100, true, funCancel);
 		if (stop)
 		{
 			LOG(WARNING) << "ChangeMoney,协程取消";
@@ -213,6 +213,7 @@ namespace 单人剧情
 			if (co_await CoTimer::Wait(16s, funCancel))
 				co_return 0;
 
+			refGateSession.Say系统( std::format("第{0}波敌人正向您走来",i+1));
 			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 兵 : 近战兵, { 48,-48 }, i);
 			for (auto& spEntity : vecEneity)
 			{

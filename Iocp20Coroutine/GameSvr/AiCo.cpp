@@ -148,7 +148,7 @@ namespace AiCo
 		LOG(INFO) << "走向目标协程结束:" << refThis.m_Pos;
 		co_return false;
 	}
-	CoTask<int> SpawnMonster(Space& refSpace, FunCancel& funCancel)
+	CoTask<int> 多人联机地图(Space& refSpace, FunCancel& funCancel)
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
@@ -160,7 +160,9 @@ namespace AiCo
 				const Rect rect = { {-100, -100},{100, 100} };
 				const Position pos = { rect.pos左上.x + std::rand() % rect.宽Int32(), rect.pos左上.z + std::rand() % rect.高Int32() };
 				资源Component::Add(refSpace, 燃气矿, pos);
+				资源Component::Add(refSpace, 晶体矿, { pos.x + 10,pos.z });
 				资源Component::Add(refSpace, 晶体矿, { pos.x,pos.z + 10 });
+				资源Component::Add(refSpace, 晶体矿, { pos.x,pos.z - 10 });
 
 			}
 			if (refSpace.Get怪物单位数() < 5)

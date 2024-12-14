@@ -94,7 +94,7 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 		if (配置.制造.u16消耗燃气矿 > refGateSession.m_u32燃气矿)
 		{
 			//std::ostringstream oss;
-			refGateSession.播放声音("tadErr01", "燃气矿不足");//(low error beep) Insufficient Vespene Gas.气矿不足 
+			refGateSession.播放声音("语音/燃气矿不足正经版", "燃气矿不足");//(low error beep) Insufficient Vespene Gas.气矿不足 
 			//Say系统(oss.str());
 			m_list等待造.clear();
 			co_return{};
@@ -112,7 +112,7 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 		if (0 != responce.error)
 		{
 			refGateSession.m_u32燃气矿 += 配置.制造.u16消耗燃气矿;
-			refGateSession.播放声音("tadErr00", "晶体矿矿不足");//Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
+			refGateSession.播放声音("语音/晶体矿不足正经版", "晶体矿矿不足");//Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
 			m_list等待造.clear();
 			co_return{};
 		}

@@ -136,7 +136,7 @@ int main(void)
 	auto wpSpace无限刷怪 = Space::AddSpace(1);
 
 	FunCancel funCancelSpawnMonster;
-	AiCo::SpawnMonster(*wpSpace无限刷怪.lock(), funCancelSpawnMonster).RunNew();
+	AiCo::多人联机地图(*wpSpace无限刷怪.lock(), funCancelSpawnMonster).RunNew();
 	
 	//主逻辑工作线程
 	using namespace std;
