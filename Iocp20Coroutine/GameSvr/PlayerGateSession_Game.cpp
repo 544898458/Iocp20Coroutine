@@ -83,8 +83,8 @@ void PlayerGateSession_Game::OnDestroy()
 		{
 		});*/
 
-	if (m_funCancel单人剧情)
-		m_funCancel单人剧情();
+	if (m_funCancel进地图)
+		m_funCancel进地图();
 
 	const bool b离开 = !m_wpSpace.expired();
 	m_wpSpace.reset();
@@ -200,16 +200,36 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 	}
 }
 
+CoTaskBool PlayerGateSession_Game::Co进多人联机地图()
+{
+	const 活动单位类型 类型(活动单位类型::工程车);
+	单位::活动单位配置 配置;
+	单位::Find活动单位配置(类型, 配置);
+	SpEntity sp工程车 = 造活动单位Component::造活动单位(*this, Position(std::rand() % 50 - 25, std::rand() % 50 - 25), 配置, 类型);
+
+	Send设置视口(*sp工程车);
+	auto [stop, msgResponce] = co_await AiCo::ChangeMoney(*this, 0, true, m_funCancel进地图);
+	if (stop)
+		co_return true;
+
+	const uint16_t u16初始晶体矿(100);
+	if (msgResponce.finalMoney < u16初始晶体矿)
+	{
+		if (std::get<0>(co_await AiCo::ChangeMoney(*this, u16初始晶体矿, true, m_funCancel进地图)))
+			co_return true;
+	}
+	co_return false;
+}
 void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
 {
 	OnDestroy();
 	LOG(INFO) << "希望进Space:" << msg.idSapce;
-	EnterSpace(Space::GetSpace(msg.idSapce), this->NickName());
+	EnterSpace(Space::GetSpace(msg.idSapce));
 	{
-		const 活动单位类型 类型(活动单位类型::工程车);
-		单位::活动单位配置 配置;
-		单位::Find活动单位配置(类型, 配置);
-		SpEntity sp工程车 = 造活动单位Component::造活动单位(*this, { 10,10 }, 配置, 类型);
+		if (m_funCancel进地图)
+			m_funCancel进地图();
+
+		Co进多人联机地图().RunNew();
 	}
 }
 
@@ -242,9 +262,9 @@ void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
 	}
 	const auto& ref配置 = itFind->second;
 	m_spSpace单人剧情副本 = std::make_shared<Space, const std::string&>(ref配置.str寻路文件名);
-	EnterSpace(m_spSpace单人剧情副本, this->NickName());
+	EnterSpace(m_spSpace单人剧情副本);
 
-	ref配置.funCo剧情(*m_spSpace单人剧情副本, m_funCancel单人剧情, *this).RunNew();
+	ref配置.funCo剧情(*m_spSpace单人剧情副本, m_funCancel进地图, *this).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
@@ -305,6 +325,11 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 void PlayerGateSession_Game::播放声音(const std::string& refStr声音, const std::string& str文本)
 {
 	Send<Msg播放声音>({ .str声音 = refStr声音, .str文本 = StrConv::GbkToUtf8(str文本) });
+}
+
+void PlayerGateSession_Game::Send设置视口(const Entity& refEntity)
+{
+	Send<Msg设置视口>({ .pos视口 = refEntity.m_Pos});
 }
 
 void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fun)
@@ -429,13 +454,12 @@ CoTask<SpEntity> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, 
 	co_return spNewEntity;
 }
 
-void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace, const std::string& strNickName)
+void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 {
 	assert(m_wpSpace.expired());
 	assert(!wpSpace.expired());
 	m_wpSpace = wpSpace;
 	auto sp = m_wpSpace.lock();
-	m_strNickName = strNickName;
 
 	Send<Msg进Space>({ .idSapce = 1 });
 
@@ -491,7 +515,7 @@ void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
 			switch (spEntity->m_spBuilding->m_类型)
 			{
 			case 基地:播放声音("tcsWht00"); break;
-			case 兵厂:播放声音("tacWht00"); break; 
+			case 兵厂:播放声音("tacWht00"); break;
 			case 民房:播放声音("tclWht00"); break;
 			default:
 				break;
@@ -526,8 +550,8 @@ void PlayerGateSession_Game::RecvMsg(const msgpack::object& obj)
 	}
 }
 
-PlayerGateSession_Game::PlayerGateSession_Game(GameSvrSession& ref, uint64_t idPlayerGateSession) :
-	m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession)
+PlayerGateSession_Game::PlayerGateSession_Game(GameSvrSession& ref, uint64_t idPlayerGateSession, const std::string& strNickName) :
+	m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession), m_strNickName(strNickName)
 {
 
 }

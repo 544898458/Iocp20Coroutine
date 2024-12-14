@@ -13,7 +13,7 @@ class GameSvrSession;
 class PlayerGateSession_Game
 {
 public:
-	PlayerGateSession_Game(GameSvrSession& ref, uint64_t idPlayerGateSession);
+	PlayerGateSession_Game(GameSvrSession& ref, uint64_t idPlayerGateSession, const std::string& strNickName);
 	PlayerGateSession_Game(const PlayerGateSession_Game&) = delete;
 	PlayerGateSession_Game(PlayerGateSession_Game&& ref) = delete;
 	void RecvMsg(const MsgId idMsg, const msgpack::object& obj);
@@ -26,7 +26,7 @@ public:
 	void Say语音提示(const std::string& str);
 	
 	const std::string& NickName()const { return m_strNickName; }
-	void EnterSpace(WpSpace wpSpace, const std::string& strNickName);
+	void EnterSpace(WpSpace wpSpace);
 	void Send资源();
 	uint16_t 活动单位上限() const;
 	uint16_t 活动单位包括制造队列中的() const;
@@ -35,6 +35,7 @@ public:
 	CoTask<SpEntity> CoAddBuilding(const 建筑单位类型 类型, const Position pos);
 	void 播放声音(const std::string& refStr声音, const std::string& str文本 = "");
 
+	void Send设置视口(const Entity& refEntity);
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
 	/// <summary>
@@ -68,7 +69,7 @@ private:
 	void OnRecv(const Msg出地堡& msg);
 
 	void ForEachSelected(std::function<void(Entity& ref)> fun);
-	//CoTask<int> CoAddRole();
+	CoTaskBool Co进多人联机地图();
 	
 	//std::vector<CoTask<int>>	m_vecCoRpc;
 	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;
@@ -79,6 +80,6 @@ private:
 	std::list<uint64_t> m_listSelectedEntity;
 	std::string m_strNickName;
 	uint32_t m_snSend = 0;
-	FunCancel m_funCancel单人剧情;
+	FunCancel m_funCancel进地图;
 };
 

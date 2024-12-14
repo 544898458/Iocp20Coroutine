@@ -190,6 +190,7 @@ CoTaskBool AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 	{
 	case 兵:EntitySystem::Broadcast播放声音(m_refEntity, "TMaFir00"); break;
 	case 近战兵:EntitySystem::Broadcast播放声音(m_refEntity, "Tfrshoot"); break;
+	case 工程车:EntitySystem::Broadcast播放声音(m_refEntity, "TSCMin00"); break;
 	}
 
 	for (auto wait_hurt : arrWaitHurt)

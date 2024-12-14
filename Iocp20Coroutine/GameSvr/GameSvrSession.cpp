@@ -174,7 +174,8 @@ void GameSvrSession::OnRecv(const MsgGateAddSession& msg, const uint64_t idGateC
 		m_mapPlayerGateSession.erase(iterOld);
 	}
 
-	auto pair = m_mapPlayerGateSession.insert({ idGateClientSession, std::make_shared<PlayerGateSession_Game,GameSvrSession&,uint64_t>(*this,(uint64_t)idGateClientSession) });
+	auto pair = m_mapPlayerGateSession.insert({ idGateClientSession,
+		std::make_shared<PlayerGateSession_Game,GameSvrSession&,uint64_t,const std::string&>(*this,(uint64_t)idGateClientSession,msg.nickName) });
 	if (!pair.second)
 	{
 		LOG(ERROR) << "ERR";
@@ -192,7 +193,7 @@ void GameSvrSession::OnRecv(const MsgGateDeleteSession& msg, const uint64_t idGa
 	if (m_mapPlayerGateSession.end() == iterOld)
 	{
 		LOG(ERROR) << "err";
-		assert(false);
+		//assert(false);
 		return;
 	}
 

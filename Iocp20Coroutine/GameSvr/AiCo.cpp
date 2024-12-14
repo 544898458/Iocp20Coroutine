@@ -17,6 +17,7 @@
 #include "AttackComponent.h"
 #include "DefenceComponent.h"
 #include "单位.h"
+#include "资源Component.h"
 
 template<class T> void SendToWorldSvr(const T& msg, const uint64_t idGateSession);
 
@@ -151,14 +152,34 @@ namespace AiCo
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
-
-		for (int i = 0; i < 100 && !co_await CoTimer::Wait(20s, funCancel); ++i)
+		do
 		{
-			MonsterComponent::AddMonster(refSpace, 兵, { -30.0 });
-		}
-		LOG(INFO) << "停止刷怪协程";
+			//如果资源少于10个，就刷
+			if (refSpace.Get资源单位数(燃气矿) < 10)
+			{
+				const Rect rect = { {-100, -100},{100, 100} };
+				const Position pos = { rect.pos左上.x + std::rand() % rect.宽Int32(), rect.pos左上.z + std::rand() % rect.高Int32() };
+				资源Component::Add(refSpace, 燃气矿, pos);
+				资源Component::Add(refSpace, 晶体矿, { pos.x,pos.z + 10 });
+
+			}
+			if (refSpace.Get怪物单位数() < 5)
+			{
+				const Rect rect = { {-100, -100},{100, 100} };
+				const Position pos = { rect.pos左上.x + std::rand() % rect.宽Int32(), rect.pos左上.z + std::rand() % rect.高Int32() };
+				MonsterComponent::AddMonster(refSpace, 兵, pos);
+
+			}
+			//for (int i = 0; i < 100 && !co_await CoTimer::Wait(20s, funCancel); ++i)
+			//{
+			//	MonsterComponent::AddMonster(refSpace, 兵, { -30.0 });
+			//}
+		} while (!co_await CoTimer::Wait(2s, funCancel));
+
+		LOG(INFO) << "停止";
 		co_return 0;
 	}
+
 	CoTask<std::tuple<bool, MsgChangeMoneyResponce>> ChangeMoney(PlayerGateSession_Game& refSession, int32_t changeMoney, bool addMoney, FunCancel& funCancel)
 	{
 		if (changeMoney < 0)

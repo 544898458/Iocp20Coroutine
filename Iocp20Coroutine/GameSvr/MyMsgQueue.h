@@ -29,6 +29,27 @@ struct Position
 		return std::sqrtf(DistancePow2(refPos));
 	}
 };
+struct Rect
+{
+	Position pos左上;
+	Position pos右下;
+	float 宽()const
+	{
+		return pos右下.x - pos左上.x;
+	}
+	int32_t 宽Int32()const
+	{
+		return (int32_t)宽();
+	}
+	float 高()const
+	{
+		return pos右下.z - pos左上.z;
+	}
+	int32_t 高Int32()const
+	{
+		return (int32_t)高();
+	}
+};
 template <class _Traits>
 std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const Position& _ref)
 {
@@ -65,6 +86,7 @@ enum MsgId
 	离开Space,
 	Entity描述,
 	播放声音,
+	设置视口,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -337,7 +359,7 @@ struct Msg进单人剧情副本
 {
 	MsgHead msg{ .id = 进单人剧情副本 };
 	单人剧情副本ID id;
-	MSGPACK_DEFINE(msg,id);
+	MSGPACK_DEFINE(msg, id);
 };
 
 struct Msg显示界面
@@ -369,8 +391,15 @@ struct MsgEntity描述
 
 struct Msg播放声音
 {
-	MsgHead msg{ .id = 播放声音};
+	MsgHead msg{ .id = 播放声音 };
 	std::string str声音;
 	std::string str文本;
 	MSGPACK_DEFINE(msg, str声音, str文本);
+};
+
+struct Msg设置视口
+{
+	MsgHead msg{ .id = 设置视口 };
+	Position pos视口;
+	MSGPACK_DEFINE(msg, pos视口);
 };

@@ -36,7 +36,7 @@ namespace 单人剧情
 		const 活动单位类型 类型(活动单位类型::工程车);
 		单位::活动单位配置 配置;
 		单位::Find活动单位配置(类型, 配置);
-		SpEntity sp工程车 = 造活动单位Component::造活动单位(refGateSession, { 10,10 }, 配置, 类型);
+		SpEntity sp工程车 = 造活动单位Component::造活动单位(refGateSession, { 5,10 }, 配置, 类型);
 
 		refGateSession.Say系统("请单击“工程车”选中，然后单击“造基地”按钮，再点击空白地面，10秒后就能造出一个基地");
 
@@ -155,19 +155,20 @@ namespace 单人剧情
 				if (&spEntity->m_refSpace != &refSpace)
 					return false;
 
-				for (const auto [k, v] : refSpace.m_mapEntity)
-				{
-					if (v->IsDead())
-						continue;
+				return 0 == refSpace.Get怪物单位数();
+				//for (const auto [k, v] : refSpace.m_mapEntity)
+				//{
+				//	if (v->IsDead())
+				//		continue;
 
-					if (nullptr == v->m_spMonster)
-						continue;
+				//	if (nullptr == v->m_spMonster)
+				//		continue;
 
-					if (nullptr == v->m_spPlayer)
-						return false;//还有怪活着
-				}
+				//	if (nullptr == v->m_spPlayer)
+				//		return false;//还有怪活着
+				//}
 
-				return true;
+				//return true;
 			})))
 		{
 			co_return 0;

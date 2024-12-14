@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "PlayerComponent.h"
 #include "GameSvrSession.h"
+#include "资源Component.h"
 
 Space::Space(const std::string& stf寻路文件)
 {
@@ -109,4 +110,45 @@ void Space::EraseEntity(const bool bForceEraseAll)
 		spEntity->OnDestroy();
 		iter = m_mapEntity.erase(iter);
 	}
+}
+
+int Space::Get怪物单位数()
+{
+	return Get单位数([](const Entity& refEntity)
+		{
+			if (refEntity.IsDead())
+				return false;
+
+			if (nullptr == refEntity.m_spMonster)
+				return false;
+
+			if (refEntity.m_spPlayer)//属于玩家制的单位
+				return false;
+
+			return true;
+		});
+}
+
+int Space::Get资源单位数(const 资源类型 类型)
+{
+	return Get单位数([类型](const Entity& refEntity)
+		{
+			if (nullptr == refEntity.m_sp资源)
+				return false;
+
+			return 类型 == refEntity.m_sp资源->m_类型;
+		});
+}
+int Space::Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位)
+{
+	int i32单位数(0);
+	for (const auto [k, spEntity] : m_mapEntity)
+	{
+		if (fun是否统计此单位 && !fun是否统计此单位(*spEntity))
+			continue;
+
+		++i32单位数;
+	}
+
+	return i32单位数;
 }
