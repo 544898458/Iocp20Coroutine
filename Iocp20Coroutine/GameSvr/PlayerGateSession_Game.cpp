@@ -126,7 +126,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 		{
 			if (!ref.m_sp造活动单位)
 			{
-				Say系统("造不了");
+				PlayerComponent::播放声音(ref, "BUZZ", "造不了");
 				return;
 			}
 
@@ -227,11 +227,11 @@ CoTaskBool PlayerGateSession_Game::Co进多人联机地图()
 	Say("您开局只有一台工程车，工程车可以建造建筑，建筑中可以产出活动单位", SayChannel::系统);
 	if (co_await CoTimer::Wait(seconds消息间隔, m_funCancel进地图)) co_return false;
 	Say("一旦您退出此场景或断线，您在此场景中的所有单位都会消失", SayChannel::系统);
-	if (co_await CoTimer::Wait(seconds消息间隔 , m_funCancel进地图)) co_return false;
+	if (co_await CoTimer::Wait(seconds消息间隔, m_funCancel进地图)) co_return false;
 	Say("其他玩家是您的敌人，他们可能会向您进攻！", SayChannel::系统);
-	if (co_await CoTimer::Wait(seconds消息间隔 , m_funCancel进地图)) co_return false;
+	if (co_await CoTimer::Wait(seconds消息间隔, m_funCancel进地图)) co_return false;
 	Say("如果局势对您不利，您可以退出此场景再次进入，就有机会东山再起！", SayChannel::系统);
-	if (co_await CoTimer::Wait(seconds消息间隔 , m_funCancel进地图)) co_return false;
+	if (co_await CoTimer::Wait(seconds消息间隔, m_funCancel进地图)) co_return false;
 	Say("请施展您的指挥艺术吧，加油！", SayChannel::系统);
 
 	co_return false;
@@ -345,7 +345,7 @@ void PlayerGateSession_Game::播放声音(const std::string& refStr声音, const std::
 
 void PlayerGateSession_Game::Send设置视口(const Entity& refEntity)
 {
-	Send<Msg设置视口>({ .pos视口 = refEntity.m_Pos});
+	Send<Msg设置视口>({ .pos视口 = refEntity.m_Pos });
 }
 
 void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fun)
@@ -390,7 +390,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 
 			if (!ref.m_sp造建筑)
 			{
-				Say系统("造不了");
+				PlayerComponent::播放声音(ref, "BUZZ", "造不了这种建筑");
 				return;
 			}
 
