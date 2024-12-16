@@ -4,6 +4,7 @@
 #include "PlayerComponent.h"
 #include "GameSvrSession.h"
 #include "资源Component.h"
+#include "PlayerComponent.h"
 
 Space::Space(const std::string& stf寻路文件)
 {
@@ -137,6 +138,23 @@ int Space::Get资源单位数(const 资源类型 类型)
 				return false;
 
 			return 类型 == refEntity.m_sp资源->m_类型;
+		});
+}
+
+int Space::Get玩家单位数(const PlayerGateSession_Game& ref)
+{
+	return Get单位数([&ref](const Entity& refEntity)
+		{
+			if (nullptr == refEntity.m_spPlayer)
+				return false;
+
+			if (&ref != &refEntity.m_spPlayer->m_refSession)
+				return false;
+
+			if(!refEntity.m_spDefence)
+				return false;//视口
+
+			return true;
 		});
 }
 int Space::Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位)

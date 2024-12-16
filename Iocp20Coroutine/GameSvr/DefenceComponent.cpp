@@ -9,15 +9,14 @@
 #include "PlayerComponent.h"
 #include "BuildingComponent.h"
 
-DefenceComponent::DefenceComponent(Entity& refEntity) :m_refEntity(refEntity)
+DefenceComponent::DefenceComponent(Entity& refEntity, const int i32HpMax) : m_refEntity(refEntity), m_i32HpMax(i32HpMax), m_hp(i32HpMax)
 {
 }
 
 void DefenceComponent::AddComponent(Entity& refEntity, uint16_t u16≥ı ºHp)
 {
 	CHECK_VOID(!refEntity.m_spDefence);
-	refEntity.m_spDefence = std::make_shared<DefenceComponent, Entity&>(refEntity);
-	refEntity.m_spDefence->m_hp = u16≥ı ºHp;
+	refEntity.m_spDefence = std::make_shared<DefenceComponent, Entity&, const int>(refEntity,u16≥ı ºHp);
 }
 
 

@@ -65,6 +65,7 @@ public:
 	std::unordered_map<int, uint64_t> m_mapEntityId;
 	int Get怪物单位数();
 	int Get资源单位数(const 资源类型 类型);
+	int Get玩家单位数(const PlayerGateSession_Game& ref);
 	int Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位);
 private:
 	void EraseEntity(const bool bForceEraseAll);

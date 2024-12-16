@@ -156,31 +156,33 @@ namespace 单人剧情
 					return false;
 
 				return 0 == refSpace.Get怪物单位数();
-				//for (const auto [k, v] : refSpace.m_mapEntity)
-				//{
-				//	if (v->IsDead())
-				//		continue;
-
-				//	if (nullptr == v->m_spMonster)
-				//		continue;
-
-				//	if (nullptr == v->m_spPlayer)
-				//		return false;//还有怪活着
-				//}
-
-				//return true;
 			})))
 		{
 			co_return 0;
 		}
 
-		refGateSession.Say系统("您取得了胜利！您真是指挥天才！");
+		refGateSession.播放声音("音效/YouWin", "您取得了胜利！您真是指挥天才！");
+
 		refGateSession.Send<Msg显示界面>({ .ui = Msg显示界面::选择地图 });
 		co_return 0;
 	}
 	Position 怪物闲逛(const Position& refOld)
 	{
 		return { -30,30 };
+	}
+	bool Is战斗结束(Space& refSpace, PlayerGateSession_Game& refGateSession)
+	{
+		if (0 == refSpace.Get怪物单位数())
+		{
+			refGateSession.播放声音("音效/YouWin", "您守住了！您真是指挥天才！");
+			return true;
+		}
+		if (0 == refSpace.Get玩家单位数(refGateSession))
+		{
+			refGateSession.播放声音("音效/YouLose", "胜败乃兵家常事，请点击右上角“退出场景”离开，然后再次点击“防守战”，就可以重新来过。");
+			return true;
+		}
+		return false;
 	}
 	CoTask<int> Co防守战(Space& refSpace, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
 	{
@@ -213,7 +215,10 @@ namespace 单人剧情
 			if (co_await CoTimer::Wait(20s, funCancel))
 				co_return 0;
 
-			refGateSession.Say系统( std::format("第{0}波敌人正向您走来",i));
+			if (1 < i && Is战斗结束(refSpace, refGateSession))
+				co_return 0;
+
+			refGateSession.Say系统(std::format("第{0}波敌人正向您走来", i));
 			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 兵 : 近战兵, { 48,-48 }, i);
 			for (auto& spEntity : vecEneity)
 			{
@@ -224,24 +229,22 @@ namespace 单人剧情
 			}
 		}
 
-		//while (true)
-		//{
-		//	if (co_await CoTimer::Wait(5s, funCancel))
-		//		co_return 0;
-
-		//	for (auto [id, spEntity] : refSpace.m_mapEntity)
+		//if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref)
 		//	{
-		//		if (spEntity->m_spPlayer)
-		//			continue;
+		//		auto spEntity = ref.wpEntity.lock();
+		//		if (&spEntity->m_refSpace != &refSpace)
+		//			return false;
 
-		//		if (spEntity->m_sp走)//让空闲的怪走向目标
-		//		{
-		//			走Component::Cancel所有包含走路的协程(*spEntity); //TryCancel();
-		//			spEntity->m_sp走->WalkToPos({ -30, 30 });
-		//		}
-		//	}
+		//		return 0 == refSpace.Get怪物单位数();
+		//	})))
+		//{
+		//	co_return 0;
 		//}
-
+		while (!co_await CoTimer::Wait(5s, funCancel))
+		{
+			if (Is战斗结束)
+				co_return 0;
+		}
 		co_return 0;
 	}
 }

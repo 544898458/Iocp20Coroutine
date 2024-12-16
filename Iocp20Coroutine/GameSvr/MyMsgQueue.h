@@ -240,7 +240,8 @@ struct MsgAddRoleRet
 	std::string nickName;
 	std::string entityName;
 	std::string prefabName;
-	MSGPACK_DEFINE(msg, entityId, nickName, entityName, prefabName);
+	int32_t	i32HpMax;
+	MSGPACK_DEFINE(msg, entityId, nickName, entityName, prefabName, i32HpMax);
 };
 
 struct MsgDelRoleRet
