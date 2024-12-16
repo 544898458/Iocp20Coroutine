@@ -210,11 +210,13 @@ namespace 单人剧情
 			资源Component::Add(refSpace, 燃气矿, { -20, 20 });
 
 		}
+
+		refGateSession.Say系统("5秒后将出现第1波怪");
+		if (co_await CoTimer::Wait(5s, funCancel))
+			co_return 0;
+
 		for (int i = 1; i < 20; ++i)
 		{
-			if (co_await CoTimer::Wait(20s, funCancel))
-				co_return 0;
-
 			if (1 < i && Is战斗结束(refSpace, refGateSession))
 				co_return 0;
 
@@ -227,6 +229,9 @@ namespace 单人剧情
 
 				spEntity->m_spAttack->m_fun空闲走向此处 = 怪物闲逛;
 			}
+
+			if (co_await CoTimer::Wait(20s, funCancel))
+				co_return 0;
 		}
 
 		//if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref)

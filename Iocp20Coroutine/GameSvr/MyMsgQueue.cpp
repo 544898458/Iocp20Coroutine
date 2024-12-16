@@ -26,6 +26,6 @@ MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :
 	nickName(StrConv::GbkToUtf8(ref.NickName())),
 	entityName(StrConv::GbkToUtf8(ref.m_strEntityName)),
 	prefabName(ref.m_strPrefabName),
-	i32HpMax(ref.m_spDefence->m_i32HpMax)
+	i32HpMax(ref.m_spDefence ? ref.m_spDefence->m_i32HpMax : 0)
 {
 }
