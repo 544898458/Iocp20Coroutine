@@ -101,8 +101,15 @@ namespace AiCo
 
 	CoTaskBool WalkToTarget(Entity& refThis, SpEntity spTarget, FunCancel& funCancel, const bool b检查警戒距离)
 	{
-		RecastNavigationCrowd rnc(refThis, spTarget->m_Pos);
+		auto posTarget = spTarget->m_Pos;
+		{
+			const auto ok = refThis.m_refSpace.CrowdToolFindNerestPos(posTarget);
+			assert(ok);
+		}
+		RecastNavigationCrowd rnc(refThis, posTarget);
 		KeepCancel kc(funCancel);
+		const float f建筑半边长 = BuildingComponent::建筑半边长(*spTarget);
+		
 
 		refThis.BroadcastChangeSkeleAnim("run");
 		Position posOld;
@@ -125,7 +132,7 @@ namespace AiCo
 				LOG(INFO) << "离开自己的警戒距离" << spTarget << "的协程取消了";
 				co_return false;
 			}
-			if (refThis.DistanceLessEqual(*spTarget, refThis.攻击距离()))
+			if (refThis.DistanceLessEqual(*spTarget, refThis.攻击距离() + f建筑半边长))
 			{
 				//LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
 				EntitySystem::BroadcastChangeSkeleAnimIdle(refThis);

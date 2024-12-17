@@ -131,8 +131,8 @@ bool CrowdToolFindNerestPos(CrowdToolState& refCrowTool, Position& refPos)
 	CHECK_NOTNULL_RET_FALSE(navquery);
 
 	dtQueryFilter filter;
-	const float* halfExtents = refCrowTool.m_sample->m_crowd->getQueryExtents();
-	float tgt[3];
+	const float halfExtents[] = { 10, 5, 10 };//refCrowTool.m_sample->m_crowd->getQueryExtents();
+	float tgt[3] = { 0 };
 	dtPolyRef ref;
 	float p[] = { refPos.x,0,refPos.z };
 	dtVcopy(tgt, p);

@@ -22,7 +22,7 @@ namespace 单位
 		/// <summary>
 		/// 静态阻挡（园的半径或正方形的半边长）
 		/// </summary>
-		float f半边长;
+		float f半边长 = 0;
 	};
 	struct 战斗配置
 	{

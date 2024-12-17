@@ -32,21 +32,19 @@ void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, c
 
 float AttackComponent::攻击距离(const Entity& refTarget) const
 {
-	float f目标半径 = 0;
-	if (refTarget.m_spBuilding)
-	{
-		单位::建筑单位配置 配置;
-		if (单位::Find建筑单位配置(refTarget.m_spBuilding->m_类型, 配置))
-			f目标半径 += 配置.f半边长;
-	}
+	const float f建筑半边长 = BuildingComponent::建筑半边长(refTarget);
+	
 	if (m_refEntity.m_wpOwner.expired())
-		return m_f攻击距离 + f目标半径;
+		return m_f攻击距离 + f建筑半边长;//普通战斗单位
 
 	auto spOwner = m_refEntity.m_wpOwner.lock();
 	if (!spOwner->m_spAttack)
-		return m_f攻击距离 + f目标半径;
+	{
+		assert(false);
+		return m_f攻击距离 + f建筑半边长;
+	}
 
-	return spOwner->m_spAttack->m_f攻击距离 + m_f攻击距离 + f目标半径;
+	return spOwner->m_spAttack->m_f攻击距离 + m_f攻击距离 + f建筑半边长;//地堡
 }
 
 Position 怪物闲逛(const Position& refOld)

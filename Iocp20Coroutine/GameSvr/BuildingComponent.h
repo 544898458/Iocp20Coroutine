@@ -18,6 +18,7 @@ public:
 	CoTaskBool Co建造过程(FunCancel& cancel);
 	int m_n建造进度百分比 = 0;
 	bool 已造好()const;
+	static float 建筑半边长(const Entity& refEntity);
 private:
 
 	//CoTask<int> m_coAddMoney;

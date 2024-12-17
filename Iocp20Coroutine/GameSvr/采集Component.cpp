@@ -14,6 +14,7 @@
 #include "EntitySystem.h"
 #include "PlayerComponent.h"
 #include "造建筑Component.h"
+#include "单位.h"
 
 采集Component::采集Component(Entity& refEntity) : m_携带矿类型(晶体矿), m_refEntity(refEntity)
 {
@@ -58,10 +59,10 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 				co_return true;
 			continue;
 		}
-
+		
 		if (Max携带矿() <= m_u32携带矿)//装满了，回基地放矿
 		{
-			if (m_refEntity.DistanceLessEqual(*wpEntity基地.lock(), m_refEntity.攻击距离()))//在基地附近，满载矿，全部放进基地（直接加钱）
+			if (m_refEntity.DistanceLessEqual(*wpEntity基地.lock(), m_refEntity.攻击距离() + BuildingComponent::建筑半边长(*wpEntity基地.lock())))//在基地附近，满载矿，全部放进基地（直接加钱）
 			{
 				if (co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//把矿放进基地耗时
 					co_return true;

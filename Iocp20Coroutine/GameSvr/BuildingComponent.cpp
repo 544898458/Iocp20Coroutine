@@ -6,6 +6,7 @@
 #include "临时阻挡Component.h"
 #include "../CoRoutine/CoTimer.h"
 #include "../IocpNetwork/StrConv.h"
+#include "单位.h"
 
 void BuildingComponent::AddComponent(Entity& refThis, PlayerGateSession_Game& refSession, const 建筑单位类型 类型, float f半边长)
 {
@@ -55,4 +56,17 @@ bool BuildingComponent::已造好() const
 {
 	return m_n建造进度百分比 >= MAX建造百分比;
 
+}
+
+float BuildingComponent::建筑半边长(const Entity& refEntity)
+{
+	单位::建筑单位配置 配置;
+	if (!refEntity.m_spBuilding)
+		return 0;
+
+	if (单位::Find建筑单位配置(refEntity.m_spBuilding->m_类型, 配置))
+		return 配置.f半边长;
+
+	assert(false);
+	return 0;
 }
