@@ -31,9 +31,9 @@ void DefenceComponent::受伤(int hp)
 	m_refEntity.BroadcastNotifyPos();
 	if (IsDead())
 	{
-		m_refEntity.BroadcastChangeSkeleAnim("died", false);//播放死亡动作
 		if (m_refEntity.m_spAttack)
 		{
+			m_refEntity.BroadcastChangeSkeleAnim("died", false);//播放死亡动作
 			switch (m_refEntity.m_spAttack->m_类型)
 			{
 			case 兵:EntitySystem::Broadcast播放声音(m_refEntity, "TMaDth00"); break;
@@ -47,7 +47,10 @@ void DefenceComponent::受伤(int hp)
 		{
 			switch (m_refEntity.m_spBuilding->m_类型)
 			{
-			case 基地:EntitySystem::Broadcast播放声音(m_refEntity, "explo4"); break;
+			case 基地:
+				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
+				m_refEntity.BroadcastChangeSkeleAnim("die", false);//播放死亡动作
+				break;
 			//case 兵厂:EntitySystem::Broadcast播放声音(""); break;
 			//case 民房:EntitySystem::Broadcast播放声音(""); break;
 			//case 地堡:EntitySystem::Broadcast播放声音("explo4"); break;

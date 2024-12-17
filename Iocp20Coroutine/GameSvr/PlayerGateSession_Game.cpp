@@ -682,7 +682,8 @@ bool PlayerGateSession_Game::可放置建筑(const Position& refPos, float f半边长)
 	CHECK_RET_FALSE(!m_wpSpace.expired());
 	for (const auto& kv : m_wpSpace.lock()->m_mapEntity)
 	{
-		const auto& refPosOld = kv.second->m_Pos;
+		auto &refEntity = *kv.second;
+		const auto& refPosOld = refEntity.m_Pos;
 		bool CrowdTool判断单位重叠(const Position & refPosOld, const Position & refPosNew, const float f半边长);
 		if (CrowdTool判断单位重叠(refPos, refPosOld, f半边长))
 			return false;

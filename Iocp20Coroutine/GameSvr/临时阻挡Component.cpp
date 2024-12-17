@@ -34,6 +34,6 @@ bool 還奀郯結Component::AddComponent(Entity& refEntity, float f圉晚酗)
 		assert(false);
 		return false;
 	}
-	refEntity.m_sp還奀郯結 = std::make_shared<還奀郯結Component, Entity&, float>(refEntity, 2.0f);
+	refEntity.m_sp還奀郯結 = std::make_shared<還奀郯結Component, Entity&, const float&>(refEntity, f圉晚酗);
 	return true;
 }

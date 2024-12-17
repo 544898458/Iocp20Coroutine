@@ -43,7 +43,7 @@ bool Ôì½¨ÖşComponent::ÕıÔÚ½¨Ôì(Entity& refEntity)
 	assert(!m_cancelÔì½¨Öş.operator bool());
 }
 
-CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position refPos, const ½¨Öşµ¥Î»ÀàĞÍ ÀàĞÍ)
+CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position pos, const ½¨Öşµ¥Î»ÀàĞÍ ÀàĞÍ)
 {
 	if (m_set¿ÉÔìÀàĞÍ.end() == m_set¿ÉÔìÀàĞÍ.find(ÀàĞÍ))
 	{
@@ -53,11 +53,22 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position refPos, const ½¨Öşµ¥Î»ÀàĞÍ À
 	PlayerComponent::²¥·ÅÉùÒô(m_refEntity, "TSCYes01");
 
 	//ÏÈ×ßµ½Ä¿±êµã
-	if (co_await AiCo::WalkToPos(m_refEntity, refPos, m_cancelÔì½¨Öş, 5))
+	µ¥Î»::½¨Öşµ¥Î»ÅäÖÃ ÅäÖÃ;
+	if (!µ¥Î»::Find½¨Öşµ¥Î»ÅäÖÃ(ÀàĞÍ, ÅäÖÃ))
+	{
+		assert(false);
+		co_return true;
+	}
+	if (!m_refEntity.m_spAttack)
+	{
+		assert(false);
+		co_return true;
+	}
+	if (co_await AiCo::WalkToPos(m_refEntity, pos, m_cancelÔì½¨Öş, ÅäÖÃ.f°ë±ß³¤ + m_refEntity.m_spAttack->m_f¹¥»÷¾àÀë))
 		co_return true;
 
 	//È»ºó¿ªÊ¼¿ÛÇ®½¨Ôì
-	auto spEntity½¨Öş = co_await m_refEntity.m_spPlayer->m_refSession.CoAddBuilding(ÀàĞÍ, refPos);
+	auto spEntity½¨Öş = co_await m_refEntity.m_spPlayer->m_refSession.CoAddBuilding(ÀàĞÍ, pos);
 	if (!spEntity½¨Öş)
 		co_return false;
 

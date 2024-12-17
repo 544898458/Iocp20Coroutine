@@ -152,12 +152,13 @@ bool CrowdTool可站立(CrowdToolState& refCrowTool, const Position& refPos)
 	return refPos.DistanceLessEqual(pos, 0.1f);
 }
 
-bool CrowdTool判断单位重叠(const Position& refPosOld, const Position& refPosNew, const float f半边长)
+bool CrowdTool判断单位重叠(const Position& refPosOld, const Position& refPosNew, const float fNew半边长)
 {
-	const float arrMinNew[] = { refPosNew.x - f半边长,0,refPosNew.z - f半边长 };
-	const float arrMaxNew[] = { refPosNew.x + f半边长,0,refPosNew.z + f半边长 };
-	const float arrMinOld[] = { refPosOld.x - f半边长,0,refPosOld.z - f半边长 };
-	const float arrMaxOld[] = { refPosOld.x + f半边长,0,refPosOld.z + f半边长 };
+	const float f普通单位半边长 = 0.5;
+	const float arrMinNew[] = { refPosNew.x - fNew半边长,refPosNew.z - fNew半边长 };
+	const float arrMaxNew[] = { refPosNew.x + fNew半边长,refPosNew.z + fNew半边长 };
+	const float arrMinOld[] = { refPosOld.x - f普通单位半边长,refPosOld.z - f普通单位半边长 };
+	const float arrMaxOld[] = { refPosOld.x + f普通单位半边长,refPosOld.z + f普通单位半边长 };
 	return dtOverlapBounds(arrMinOld, arrMaxOld, arrMinNew, arrMaxNew);
 }
 
