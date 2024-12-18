@@ -16,5 +16,5 @@ void EntitySystem::BroadcastChangeSkeleAnimIdle(Entity& refEntity)
 
 void EntitySystem::Broadcast播放声音(Entity& refEntity, const std::string& refStr声音, const std::string& str文本)
 {
-	refEntity.Broadcast<Msg播放声音>({ .str声音 = refStr声音, .str文本 = StrConv::GbkToUtf8(str文本) });
+	refEntity.Broadcast<Msg播放声音>({ .str声音 = StrConv::GbkToUtf8(refStr声音), .str文本 = StrConv::GbkToUtf8(str文本) });
 }

@@ -192,6 +192,7 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(1s, funCancel))
 			co_return 0;
 
+		refGateSession.m_u32燃气矿 += 20;
 		auto [stop, msgResponce] = co_await AiCo::ChangeMoney(refGateSession, 100, true, funCancel);
 		if (stop)
 		{
@@ -199,11 +200,13 @@ namespace 单人剧情
 			co_return 0;
 		}
 		{
-			const 活动单位类型 类型(活动单位类型::工程车);
-			单位::活动单位配置 配置;
-			单位::Find活动单位配置(类型, 配置);
-			SpEntity sp工程车 = 造活动单位Component::造活动单位(refGateSession, { -30, 30 }, 配置, 类型);
-
+			{
+				const 活动单位类型 类型(活动单位类型::工程车);
+				单位::活动单位配置 配置;
+				单位::Find活动单位配置(类型, 配置);
+				造活动单位Component::造活动单位(refGateSession, { -30, 30 }, 配置, 类型);
+			}
+	
 			资源Component::Add(refSpace, 晶体矿, { -20, 35 });
 			资源Component::Add(refSpace, 晶体矿, { -26, 20 });
 			资源Component::Add(refSpace, 燃气矿, { -29, 35 });
@@ -211,7 +214,7 @@ namespace 单人剧情
 
 		}
 
-		refGateSession.Say系统("5秒后将出现第1波怪");
+		refGateSession.Say系统("5秒后将出现第1波怪。您可以造几个地堡，让兵进驻地堡");
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 

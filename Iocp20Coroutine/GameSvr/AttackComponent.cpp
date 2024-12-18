@@ -33,7 +33,7 @@ void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, c
 float AttackComponent::攻击距离(const Entity& refTarget) const
 {
 	const float f建筑半边长 = BuildingComponent::建筑半边长(refTarget);
-	
+
 	if (m_refEntity.m_wpOwner.expired())
 		return m_f攻击距离 + f建筑半边长;//普通战斗单位
 
@@ -179,14 +179,17 @@ CoTaskBool AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 
 	const std::tuple<std::chrono::milliseconds, int> arrWaitHurt[] =
 	{	//三段伤害{每段前摇时长，伤害值}
-		{300ms,2},
-		{200ms,m_f伤害},
+		//{300ms,2},
+		{900ms,m_f伤害},
 		//{50ms,5}
 	};
 
 	switch (m_类型)
 	{
-	case 兵:EntitySystem::Broadcast播放声音(m_refEntity, "TMaFir00"); break;
+	case 兵:
+		if (!m_refEntity.m_spPlayer)
+			EntitySystem::Broadcast播放声音(m_refEntity, "TMaFir00");
+		break;
 	case 近战兵:EntitySystem::Broadcast播放声音(m_refEntity, "Tfrshoot"); break;
 	case 工程车:EntitySystem::Broadcast播放声音(m_refEntity, "TSCMin00"); break;
 	}
@@ -212,10 +215,13 @@ CoTaskBool AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 		if (!spDefencer->m_spDefence)
 			break;//目标打不了
 
-		spDefencer->m_spDefence->受伤(std::get<1>(wait_hurt));//第n次让对方伤1
+		if (m_refEntity.m_spPlayer && m_类型 == 兵)
+			EntitySystem::Broadcast播放声音(m_refEntity, "音效/TTaFir00");
+
+		spDefencer->m_spDefence->受伤(std::get<1>(wait_hurt));//第n次让对方伤
 	}
 
-	if (co_await CoTimer::Wait(1000ms, cancel))//等3秒	后摇
+	if (co_await CoTimer::Wait(800ms, cancel))//后摇
 		co_return true;//协程取消
 
 	if (!m_refEntity.IsDead())

@@ -203,6 +203,12 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 
 CoTaskBool PlayerGateSession_Game::Co进多人联机地图()
 {
+	{
+		const 活动单位类型 类型(活动单位类型::兵);
+		单位::活动单位配置 配置;
+		单位::Find活动单位配置(类型, 配置);
+		造活动单位Component::造活动单位(*this, { -25, 30 }, 配置, 类型);
+	}
 	const 活动单位类型 类型(活动单位类型::工程车);
 	单位::活动单位配置 配置;
 	单位::Find活动单位配置(类型, 配置);
