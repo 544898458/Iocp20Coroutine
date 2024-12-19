@@ -49,6 +49,11 @@ struct Rect
 	{
 		return (int32_t)高();
 	}
+	bool 包含此点(const Position& pos)const
+	{
+		return pos左上.x < pos.x && pos.z < pos右下.z &&
+			pos.x < pos右下.x && pos.z < pos右下.z;
+	}
 };
 template <class _Traits>
 std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const Position& _ref)
@@ -87,6 +92,7 @@ enum MsgId
 	Entity描述,
 	播放声音,
 	设置视口,
+	框选
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -227,7 +233,7 @@ struct MsgSay
 struct MsgSelectRoles
 {
 	MsgSelectRoles() {}
-	MsgHead msg{ .id = MsgId::Say };
+	MsgHead msg{ .id = MsgId::SelectRoles };
 	std::vector<double> ids;//TypeScript只有FLOAT64,没有POSITIVE_INTEGER和NEGATIVE_INTEGER
 	MSGPACK_DEFINE(msg, ids);
 };
@@ -403,4 +409,12 @@ struct Msg设置视口
 	MsgHead msg{ .id = 设置视口 };
 	Position pos视口;
 	MSGPACK_DEFINE(msg, pos视口);
+};
+
+struct Msg框选
+{
+	MsgHead msg{ .id = 框选 };
+	Position pos起始;//都是世界坐标
+	Position pos结束;
+	MSGPACK_DEFINE(msg, pos起始, pos结束);
 };

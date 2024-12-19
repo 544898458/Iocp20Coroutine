@@ -46,7 +46,7 @@ public:
 	/// <summary>
 	/// 加入Space空间的实体（玩家角色）
 	/// </summary>
-	std::map<uint64_t,WpEntity> m_setWpEntity;
+	std::map<uint64_t,WpEntity> m_mapWpEntity;
 
 	uint32_t m_u32燃气矿 = 10;
 
@@ -67,6 +67,13 @@ private:
 	void OnRecv(const Msg采集& msg);
 	void OnRecv(const Msg进地堡& msg);
 	void OnRecv(const Msg出地堡& msg);
+	void OnRecv(const Msg框选& msg);
+
+	void 选中单位(const std::vector<uint64_t>& vecId);
+
+	void Send选中音效(const Entity& refEntity);
+
+	void Send选中单位Responce();
 
 	void ForEachSelected(std::function<void(Entity& ref)> fun);
 	CoTaskBool Co进多人联机地图();
