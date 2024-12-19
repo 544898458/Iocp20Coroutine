@@ -161,7 +161,7 @@ SpEntity 造活动单位Component::造活动单位(PlayerGateSession_Game& refGateSession,
 	AttackComponent::AddComponent(*spNewEntity, 类型, 配置.战斗.f攻击距离, 配置.战斗.f伤害);
 	DefenceComponent::AddComponent(*spNewEntity, 配置.制造.u16初始Hp);
 	走Component::AddComponent(*spNewEntity);
-	refGateSession.m_setSpEntity.insert(spNewEntity);//自己控制的单位
+	refGateSession.m_setWpEntity[spNewEntity->Id]=(spNewEntity);//自己控制的单位
 	sp->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 	switch (类型)

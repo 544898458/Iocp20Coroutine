@@ -131,13 +131,11 @@ CoTaskBool AttackComponent::Co(FunCancel& funCancel)
 		{
 			Entity& refTarget = *wpEntity.lock();
 
-
-
 			if (m_refEntity.DistanceLessEqual(refTarget, 攻击距离(refTarget)))
 			{
 				走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
-				if (co_await CoAttack(wpEntity.lock(), m_cancelAttack))
+				if (co_await CoAttack(wpEntity, m_cancelAttack))
 					co_return true;
 
 				continue;

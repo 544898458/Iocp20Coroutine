@@ -49,6 +49,11 @@ bool Entity::IsDead() const
 	return m_spDefence->IsDead();
 }
 
+Entity::~Entity()
+{
+	LOG(INFO) << Id;
+}
+
 //主线程单线程执行
 void Entity::Update()
 {
@@ -106,7 +111,14 @@ void Entity::OnDestroy()
 		m_sp造建筑->TryCancel();
 
 	if (m_cancelDelete)
+	{
+		LOG(INFO) << "取消删除协程";
 		m_cancelDelete();
+	}
+	else
+	{
+		LOG(INFO) << "没有删除协程";
+	}
 }
 
 void Entity::BroadcastLeave()
@@ -159,6 +171,11 @@ void Entity::Broadcast(const T& msg)
 
 CoTaskBool Entity::CoDelayDelete()
 {
+	LOG(INFO) << "开始删除延时自己的协程";
+	assert(!m_cancelDelete);//不可并行
+	if (m_cancelDelete)
+		m_cancelDelete();
+
 	if (m_sp地堡)
 		m_sp地堡->OnBeforeDelayDelete();
 

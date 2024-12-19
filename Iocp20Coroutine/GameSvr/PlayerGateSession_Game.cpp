@@ -59,9 +59,11 @@ template void PlayerGateSession_Game::Send(const MsgEntity描述&);
 
 void PlayerGateSession_Game::OnDestroy()
 {
-	for (auto sp : m_setSpEntity)
+	for (auto [_, wp] : m_setWpEntity)
 	{
-		auto countErase = sp->m_refSpace.m_mapEntity.erase((int64_t)sp.get());
+		assert(!wp.expired());
+		auto sp = wp.lock();
+		auto countErase = sp->m_refSpace.m_mapEntity.erase(sp->Id);
 		if (countErase <= 0)
 		{
 			LOG(INFO) << "可能是地堡里的兵" << sp->NickName();
@@ -71,7 +73,7 @@ void PlayerGateSession_Game::OnDestroy()
 		sp->OnDestroy();
 	}
 
-	m_setSpEntity.clear();
+	m_setWpEntity.clear();
 
 	for (auto& sp : m_vecFunCancel)
 	{
@@ -95,15 +97,15 @@ void PlayerGateSession_Game::OnDestroy()
 		Send<Msg离开Space>({});
 }
 
-void PlayerGateSession_Game::Erase(SpEntity& spEntity)
+void PlayerGateSession_Game::Erase(uint64_t u64Id)
 {
-	if (!m_setSpEntity.contains(spEntity))
+	if (!m_setWpEntity.contains(u64Id))
 	{
 		LOG(WARNING) << "ERR";
 		return;
 	}
 
-	m_setSpEntity.erase(spEntity);
+	m_setWpEntity.erase(u64Id);
 }
 
 void PlayerGateSession_Game::Say(const std::string& str, const SayChannel channel)
@@ -203,18 +205,20 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 
 CoTaskBool PlayerGateSession_Game::Co进多人联机地图()
 {
+	auto pos出生 = Position(std::rand() % 100 - 50, std::rand() % 50 - 25);
 	{
 		const 活动单位类型 类型(活动单位类型::兵);
 		单位::活动单位配置 配置;
 		单位::Find活动单位配置(类型, 配置);
-		造活动单位Component::造活动单位(*this, { -25, 30 }, 配置, 类型);
+		造活动单位Component::造活动单位(*this, { pos出生.x, pos出生.z + 6 }, 配置, 类型);
 	}
 	const 活动单位类型 类型(活动单位类型::工程车);
 	单位::活动单位配置 配置;
 	单位::Find活动单位配置(类型, 配置);
-	SpEntity sp工程车 = 造活动单位Component::造活动单位(*this, Position(std::rand() % 100 - 50, std::rand() % 50 - 25), 配置, 类型);
-
-	Send设置视口(*sp工程车);
+	{
+		SpEntity sp工程车 = 造活动单位Component::造活动单位(*this, pos出生, 配置, 类型);
+		Send设置视口(*sp工程车);
+	}
 	auto [stop, msgResponce] = co_await AiCo::ChangeMoney(*this, 0, true, m_funCancel进地图);
 	if (stop)
 		co_return true;
@@ -368,7 +372,13 @@ void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fu
 			continue;
 		}
 		auto& spEntity = itFind->second;
-		if (m_setSpEntity.end() == std::find_if(m_setSpEntity.begin(), m_setSpEntity.end(), [&spEntity](const auto& sp) {return sp == spEntity; }))
+		if (m_setWpEntity.end() == std::find_if(m_setWpEntity.begin(), m_setWpEntity.end(), [&spEntity](const auto& kv)
+			{
+				auto& wp = kv.second;
+				assert(!wp.expired());
+				auto sp = wp.lock();
+				return sp == spEntity;
+			}))
 		{
 			LOG(ERROR) << id << "不是自己的单位，不能操作";
 			continue;
@@ -469,7 +479,7 @@ CoTask<SpEntity> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, 
 	}
 	DefenceComponent::AddComponent(*spNewEntity, 配置.建造.u16初始Hp);
 	//spNewEntity->m_spBuilding->m_fun造活动单位 = 配置.fun造兵;
-	m_setSpEntity.insert(spNewEntity);//自己控制的单位
+	m_setWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
 	spSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 
 	spNewEntity->BroadcastEnter();
@@ -495,7 +505,7 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 
 	SpEntity spEntityViewPort = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ 0.0 }, *sp, "smoke", "视口");
 	sp->m_mapEntity.insert({ spEntityViewPort->Id, spEntityViewPort });
-	m_setSpEntity.insert(spEntityViewPort);
+	m_setWpEntity[spEntityViewPort->Id] = (spEntityViewPort);
 	//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 	PlayerComponent::AddComponent(*spEntityViewPort, *this);
 	spEntityViewPort->BroadcastEnter();
@@ -633,8 +643,10 @@ void PlayerGateSession_Game::Send资源()
 uint16_t PlayerGateSession_Game::活动单位上限() const
 {
 	uint16_t result = 0;
-	for (const auto& refEntity : m_setSpEntity)
+	for (const auto& [_, wp] : m_setWpEntity)
 	{
+		assert(!wp.expired());
+		const auto& refEntity = wp.lock();
 		if (!refEntity->m_spBuilding)continue;
 		if (!refEntity->m_spBuilding->已造好())continue;
 
@@ -651,8 +663,10 @@ uint16_t PlayerGateSession_Game::活动单位上限() const
 uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
 {
 	uint16_t 制造队列中的单位 = 0;
-	for (const auto& refEntity : m_setSpEntity)
+	for (const auto& [_, wp] : m_setWpEntity)
 	{
+		assert(!wp.expired());
+		const auto& refEntity = wp.lock();
 		if (nullptr == refEntity->m_spDefence)
 		{
 			continue;//不可攻击的自己的单位，是视口
@@ -688,7 +702,7 @@ bool PlayerGateSession_Game::可放置建筑(const Position& refPos, float f半边长)
 	CHECK_RET_FALSE(!m_wpSpace.expired());
 	for (const auto& kv : m_wpSpace.lock()->m_mapEntity)
 	{
-		auto &refEntity = *kv.second;
+		auto& refEntity = *kv.second;
 		const auto& refPosOld = refEntity.m_Pos;
 		bool CrowdTool判断单位重叠(const Position & refPosOld, const Position & refPosNew, const float f半边长);
 		if (CrowdTool判断单位重叠(refPos, refPosOld, f半边长))

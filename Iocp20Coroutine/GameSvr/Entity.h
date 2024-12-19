@@ -27,6 +27,7 @@ class Entity final:public std::enable_shared_from_this<Entity>//±ØÐë¹«ÓÐ¼Ì³Ð£¬·ñ
 public:
 	Entity(const Position& pos, Space& refSpace, const std::string& strPrefabName, const std::string& strEntityName);
 	Entity(const Entity&) = delete;
+	~Entity();
 	void Update();
 	bool IsDead()const;
 	bool NeedDelete()const { return m_bNeedDelete; }

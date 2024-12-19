@@ -104,7 +104,7 @@ void Space::EraseEntity(const bool bForceEraseAll)
 
 		if (spEntity->m_spPlayer)
 		{
-			spEntity->m_spPlayer->m_refSession.Erase(spEntity);
+			spEntity->m_spPlayer->m_refSession.Erase(spEntity->Id);
 		}
 
 		LOG(INFO) << "É¾³ý¶ÔÏó," << spEntity->NickName() << ",pEntity=" << spEntity << ",É¾³ýÇ°Ê£Óà" << m_mapEntity.size();

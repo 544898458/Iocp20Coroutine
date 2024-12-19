@@ -19,7 +19,7 @@ public:
 	void RecvMsg(const MsgId idMsg, const msgpack::object& obj);
 	void Process();
 	void OnDestroy();
-	void Erase(SpEntity& spEntity);
+	void Erase(uint64_t u64Id);
 	template<class T> void Send(const T& ref);
 	void Say(const std::string& str, const SayChannel channel);
 	void Say系统(const std::string& str);
@@ -46,7 +46,7 @@ public:
 	/// <summary>
 	/// 加入Space空间的实体（玩家角色）
 	/// </summary>
-	std::set<SpEntity> m_setSpEntity;
+	std::map<uint64_t,WpEntity> m_setWpEntity;
 
 	uint32_t m_u32燃气矿 = 10;
 
