@@ -172,9 +172,9 @@ void Entity::Broadcast(const T& msg)
 CoTaskBool Entity::CoDelayDelete()
 {
 	LOG(INFO) << "开始删除延时自己的协程";
-	assert(!m_cancelDelete);//不可并行
+	//assert(!m_cancelDelete);//不可并行
 	if (m_cancelDelete)
-		m_cancelDelete();
+		co_return false;
 
 	if (m_sp地堡)
 		m_sp地堡->OnBeforeDelayDelete();

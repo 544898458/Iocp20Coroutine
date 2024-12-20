@@ -51,8 +51,9 @@ struct Rect
 	}
 	bool 包含此点(const Position& pos)const
 	{
-		return pos左上.x < pos.x && pos.z < pos右下.z &&
-			pos.x < pos右下.x && pos.z < pos右下.z;
+		return
+			pos左上.x < pos.x && pos.x < pos右下.x &&
+			pos左上.z < pos.z && pos.z < pos右下.z;
 	}
 };
 template <class _Traits>

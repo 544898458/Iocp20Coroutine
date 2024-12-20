@@ -62,7 +62,12 @@ void PlayerGateSession_Game::OnDestroy()
 {
 	for (auto [_, wp] : m_mapWpEntity)
 	{
-		assert(!wp.expired());
+		//assert(!wp.expired());
+		if (wp.expired())
+		{
+			LOG(ERROR) << "删了单位，但是这里没删";
+			continue;
+		}
 		auto sp = wp.lock();
 		auto countErase = sp->m_refSpace.m_mapEntity.erase(sp->Id);
 		if (countErase <= 0)
@@ -303,7 +308,8 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 		Say系统("还没进地图");
 		return;
 	}
-	ForEachSelected([this, msg](Entity& ref)
+	bool b已播放声音(false);
+	ForEachSelected([this, msg, &b已播放声音](Entity& ref)
 		{
 			if (!ref.m_sp走)
 				return;
@@ -326,6 +332,10 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 			else
 				ref.m_sp走->WalkToPos手动控制(msg.pos);
 
+			if (b已播放声音)
+				return;
+
+			b已播放声音 = true;
 			if (ref.m_spAttack)
 			{
 				switch (ref.m_spAttack->m_类型)
@@ -722,8 +732,8 @@ void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
 		if (!spEntity->m_wpOwner.expired())
 			continue;//地堡内
 
-		if (spEntity->m_spBuilding)
-			continue;//不可框选建筑单位
+		//if (spEntity->m_spBuilding)
+		//	continue;//不可框选建筑单位
 		
 		if (EntitySystem::Is视口(*spEntity))
 			continue;
