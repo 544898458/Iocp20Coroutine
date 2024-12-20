@@ -22,37 +22,7 @@ public:
 
 	std::map<int64_t, SpEntity> m_mapEntity;
 	WpEntity GetEntity(const int64_t id);
-	WpEntity Get最近的Entity(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件 )
-	{
-		std::vector<std::pair<int64_t, SpEntity>> vecEnemy;
-		std::copy_if(m_mapEntity.begin(), m_mapEntity.end(), std::back_inserter(vecEnemy),
-			[bFindEnemy, &refEntity, &fun符合条件](const auto& pair)
-			{
-				auto& sp = pair.second;
-				CHECK_FALSE(sp);
-				const auto bEnemy = sp->IsEnemy(refEntity);
-				if (bEnemy != bFindEnemy)
-					return false;
-
-				if (fun符合条件 && !fun符合条件(*sp))
-					return false;
-
-				return sp.get() != &refEntity && !sp->IsDead();
-			});
-
-		if (vecEnemy.empty())
-		{
-			return {};
-		}
-
-		auto iterMin = std::min_element(vecEnemy.begin(), vecEnemy.end(), [&refEntity](const auto& pair1, const auto& pair2)
-			{
-				auto& sp1 = pair1.second;
-				auto& sp2 = pair2.second;
-				return refEntity.DistancePow2(*sp1) < refEntity.DistancePow2(*sp2);
-			});
-		return iterMin->second->weak_from_this();
-	}
+	WpEntity Get最近的Entity(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件 );
 	//SpaceId：1无限刷怪
 	static WpSpace AddSpace(const uint8_t idSpace);
 	static WpSpace GetSpace(const uint8_t idSpace);
@@ -67,32 +37,14 @@ public:
 	int Get资源单位数(const 资源类型 类型);
 	int Get玩家单位数(const PlayerGateSession_Game& ref);
 	int Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位);
+	void AddEntity(SpEntity& spNewEntity);
 private:
 	void EraseEntity(const bool bForceEraseAll);
-
 	
+	std::vector<int> GetEntity能看到的格子(const Entity &refEntity);
 	
-	//GameSvr * const m_pServer;
-	
+	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map能看到这一格;
 };
 
-//Space(GameSvr* pServer) = default;
+
 class PlayerGateSession_Game;
-template<class T>
-void Space::Broadcast(const T& msg)
-{
-	std::set<PlayerGateSession_Game*> setEntity;
-	for (const auto& [k, spEntity] : m_mapEntity)
-	{
-		assert(spEntity);
-
-		if (!spEntity->m_spPlayer)
-			continue;
-
-		if (setEntity.find(&spEntity->m_spPlayer->m_refSession) != setEntity.end())
-			continue;
-
-		spEntity->m_spPlayer->m_refSession.Send(msg);
-		setEntity.insert(&spEntity->m_spPlayer->m_refSession);
-	}
-}

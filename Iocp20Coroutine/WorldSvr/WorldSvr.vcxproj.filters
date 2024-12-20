@@ -19,6 +19,9 @@
     <Filter Include="IocpNetwork">
       <UniqueIdentifier>{a89406d5-9808-4afc-8b5e-acde63084d8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MiniDump">
+      <UniqueIdentifier>{44e9de85-807b-43ef-9065-5ea1120100d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WorldSvrMain.cpp">
@@ -83,6 +86,9 @@
     </ClCompile>
     <ClCompile Include="DbPlayer.cpp">
       <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MiniDump\MiniDump.cpp">
+      <Filter>MiniDump</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoLock.h">
       <Filter>CoRountine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MiniDump\MiniDump.h">
+      <Filter>MiniDump</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

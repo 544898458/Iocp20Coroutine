@@ -159,6 +159,9 @@
     <ClCompile Include="..\IocpNetwork\MsgQueue.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\MiniDump\MiniDump.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\recastnavigation-main\DebugUtils\Source\DebugDraw.cpp" />
     <ClCompile Include="..\recastnavigation-main\DebugUtils\Source\DetourDebugDraw.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -275,6 +278,7 @@
     <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastRegion.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="AoiComponent.cpp" />
     <ClCompile Include="EntitySystem.cpp" />
     <ClCompile Include="RecastNavigationCrowd.cpp" />
     <ClCompile Include="Sample_TempObstacles.cpp" />
@@ -301,6 +305,7 @@
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\WsaStartUp.cpp" />
     <ClCompile Include="AiCo.cpp" />
+    <ClInclude Include="..\MiniDump\MiniDump.h" />
     <ClInclude Include="AllPort.h">
       <FileType>CppCode</FileType>
     </ClInclude>
@@ -381,6 +386,7 @@
     </ClCompile>
     <ClInclude Include="..\IocpNetwork\WsaStartUp.h" />
     <ClInclude Include="AiCo.h" />
+    <ClInclude Include="AoiComponent.h" />
     <ClInclude Include="AttackComponent.h" />
     <ClInclude Include="BuildingComponent.h" />
     <ClInclude Include="EntitySystem.h" />

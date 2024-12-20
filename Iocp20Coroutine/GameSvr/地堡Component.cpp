@@ -64,7 +64,8 @@ void 地堡Component::全都出地堡()
 	m_listSpEntity.clear();
 	for (auto& sp : list)
 	{
-		m_refEntity.m_refSpace.m_mapEntity.insert({ sp->Id, sp });
+		//m_refEntity.m_refSpace.m_mapEntity.insert({ sp->Id, sp });
+		m_refEntity.m_refSpace.AddEntity(sp);
 		sp->BroadcastEnter();
 		sp->m_wpOwner.reset();
 	}

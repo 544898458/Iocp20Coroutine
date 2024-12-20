@@ -196,7 +196,7 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 				return;
 			}
 
-			listFun.emplace_back([&ref, &wpTarget, this]()
+			listFun.emplace_back([&ref, wpTarget, this]()
 				{
 					if (ref.m_sp走)
 						ref.m_sp走->走进地堡(wpTarget);
@@ -415,6 +415,19 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 				return;
 			}
 
+			if (ref.m_spAttack)
+			{
+				if (ref.m_spAttack->m_cancelAttack)
+				{
+					LOG(INFO) << "正在攻击不能建造";
+					return;
+				}
+				if (ref.m_spAttack->m_TaskCancel.cancel)
+				{
+					LOG(INFO) << "正在走向攻击目标不能建造";
+					return;
+				}
+			}
 			if (!ref.m_sp造建筑)
 			{
 				PlayerComponent::播放声音(ref, "BUZZ", "造不了这种建筑");
@@ -491,7 +504,8 @@ CoTask<SpEntity> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, 
 	DefenceComponent::AddComponent(*spNewEntity, 配置.建造.u16初始Hp);
 	//spNewEntity->m_spBuilding->m_fun造活动单位 = 配置.fun造兵;
 	m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
-	spSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
+	//spSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
+	spSpace->AddEntity(spNewEntity);
 
 	spNewEntity->BroadcastEnter();
 	Send资源();
@@ -515,10 +529,11 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	}
 
 	SpEntity spEntityViewPort = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ 0.0 }, *sp, "smoke", "视口");
-	sp->m_mapEntity.insert({ spEntityViewPort->Id, spEntityViewPort });
+	//sp->m_mapEntity.insert({ spEntityViewPort->Id, spEntityViewPort });
 	m_mapWpEntity[spEntityViewPort->Id] = (spEntityViewPort);
 	//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 	PlayerComponent::AddComponent(*spEntityViewPort, *this);
+	sp->AddEntity(spEntityViewPort);
 	spEntityViewPort->BroadcastEnter();
 
 	CoEvent<PlayerGateSession_Game*>::OnRecvEvent(false, this);

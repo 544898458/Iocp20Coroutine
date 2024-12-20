@@ -18,6 +18,8 @@
 #include "DbPlayer.h"
 #include "../IocpNetwork/WsaStartUp.h"
 #include "../GameSvr/AllPort.h"
+#include "../MiniDump/MiniDump.h"
+
 BOOL g_running = TRUE;
 BOOL WINAPI fun(DWORD dwCtrlType)
 {
@@ -56,6 +58,9 @@ GameSvr,GateSvr,WorldSvr都可以做，
 
 int main()
 {
+	MiniDump::Install("WorldSvr");
+	//memset((void*)12341324, 23423, 234234);
+
 	FLAGS_alsologtostderr = true;//是否将日志输出到文件和stderr
 	FLAGS_colorlogtostdout = true;
 	FLAGS_colorlogtostderr = true;//20240216

@@ -154,6 +154,9 @@
     <ClCompile Include="..\IocpNetwork\StrConv.cpp" />
     <ClCompile Include="..\IocpNetwork\ThreadPool.cpp" />
     <ClCompile Include="..\IocpNetwork\WsaStartUp.cpp" />
+    <ClCompile Include="..\MiniDump\MiniDump.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\websocketfiles-master\src\base64.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\sha1_portable.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\string_helper.cpp" />
@@ -195,6 +198,7 @@
     <ClInclude Include="..\IocpNetwork\WebSocketSession.h" />
     <ClInclude Include="..\IocpNetwork\WebSocketSessionTemplate.h" />
     <ClInclude Include="..\IocpNetwork\WsaStartUp.h" />
+    <ClInclude Include="..\MiniDump\MiniDump.h" />
     <ClInclude Include="..\websocketfiles-master\src\base64.h" />
     <ClInclude Include="..\websocketfiles-master\src\sha1.h" />
     <ClInclude Include="..\websocketfiles-master\src\string_helper.h" />

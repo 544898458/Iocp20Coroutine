@@ -193,6 +193,15 @@ namespace 单人剧情
 			co_return 0;
 
 		refGateSession.m_u32燃气矿 += 20;
+		{
+			refGateSession.m_u32燃气矿 += 200;
+			auto [stop, msgResponce] = co_await AiCo::ChangeMoney(refGateSession, 1000, true, funCancel);
+			if (stop)
+			{
+				LOG(WARNING) << "ChangeMoney,协程取消";
+				co_return 0;
+			}
+		}
 		auto [stop, msgResponce] = co_await AiCo::ChangeMoney(refGateSession, 100, true, funCancel);
 		if (stop)
 		{
@@ -218,13 +227,13 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
-		for (int i = 1; i < 20; ++i)
+		for (int i = 1; i < 8; ++i)
 		{
 			if (1 < i && Is战斗结束(refSpace, refGateSession))
 				co_return 0;
 
 			refGateSession.Say系统(std::format("第{0}波敌人正向您走来", i));
-			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 兵 : 近战兵, { 48,-48 }, i);
+			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 兵 : 近战兵, { 48,-48 }, i*20);
 			for (auto& spEntity : vecEneity)
 			{
 				//if (spEntity->m_sp走)

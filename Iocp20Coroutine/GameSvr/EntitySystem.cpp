@@ -27,5 +27,9 @@ bool EntitySystem::IsÊÓ¿Ú(const Entity& refEntity)
 	if (!refEntity.m_spPlayer)
 		return false;
 
+	assert(refEntity.m_upAoi);
+	if (!refEntity.m_upAoi)
+		return false;
+
 	return true;
 }

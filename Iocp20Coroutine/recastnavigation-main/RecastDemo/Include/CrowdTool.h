@@ -68,7 +68,7 @@ public:
 	dtObstacleAvoidanceDebugData* m_vod;
 	
 	static const int AGENT_MAX_TRAIL = 64;
-	static const int MAX_AGENTS = 1024;// 128;
+	static const int MAX_AGENTS = 1024*16;// 128;
 	struct AgentTrail
 	{
 		float trail[AGENT_MAX_TRAIL*3];

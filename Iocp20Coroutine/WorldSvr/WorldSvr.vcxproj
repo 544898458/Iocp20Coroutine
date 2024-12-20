@@ -179,6 +179,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\WsaStartUp.cpp" />
+    <ClCompile Include="..\MiniDump\MiniDump.cpp" />
     <ClCompile Include="DbPlayer.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -214,6 +215,7 @@
     <ClInclude Include="..\IocpNetwork\StrConv.h" />
     <ClInclude Include="..\IocpNetwork\ThreadPool.h" />
     <ClInclude Include="..\IocpNetwork\WsaStartUp.h" />
+    <ClInclude Include="..\MiniDump\MiniDump.h" />
     <ClInclude Include="DbPlayer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerGateSession_World.h" />

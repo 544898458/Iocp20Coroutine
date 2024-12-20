@@ -95,7 +95,7 @@ void WorldSessionFromGate::OnRecv(const MsgGate转发& msg转发)
 	{
 	case MsgId::GateDeleteSession:
 	{
-		assert(g_mapPlayerGateSession.end() != iter);
+		//assert(g_mapPlayerGateSession.end() != iter);
 		if (g_mapPlayerGateSession.end() == iter)
 		{
 			LOG(WARNING) << "不符合协议的黑客攻击";//可用telnet向端口发数据模拟

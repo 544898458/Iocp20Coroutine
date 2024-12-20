@@ -18,7 +18,7 @@ void 资源Component::Add(Space& refSpace, const 资源类型 类型, const Position& re
 
 	SpEntity spEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(
 		refPosition, refSpace, 配置.配置.strPrefabName, 配置.配置.strName);
-	refSpace.m_mapEntity.insert({ spEntity->Id ,spEntity });
+	refSpace.AddEntity(spEntity);
 	//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 	spEntity->m_sp资源 = std::make_shared<资源Component, const 资源类型>(std::forward<const 资源类型&&>(类型));
 	临时阻挡Component::AddComponent(*spEntity, 0.5f);

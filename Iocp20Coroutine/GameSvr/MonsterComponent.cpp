@@ -40,7 +40,8 @@ std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const ªÓ∂Øµ•
 		AddComponent(*spEntityMonster);
 		spEntityMonster->m_fæØΩ‰æ‡¿Î = ≈‰÷√.’Ω∂∑.fæØΩ‰æ‡¿Î;
 		spEntityMonster->m_ÀŸ∂»√ø÷°“∆∂Øæ‡¿Î = 0.2f;
-		refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster });
+		//refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster });
+		refSpace.AddEntity(spEntityMonster);
 		//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 		spEntityMonster->BroadcastEnter();
 		vecRet.emplace_back(spEntityMonster);

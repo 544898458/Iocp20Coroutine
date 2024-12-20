@@ -22,6 +22,9 @@
     <Filter Include="CoRoutine">
       <UniqueIdentifier>{6e1fd412-5353-486d-8c4b-0f5c23c61ab6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MiniDump">
+      <UniqueIdentifier>{4e9fa87e-24b5-4eee-bcdb-3352d2e0917d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GateSvrMain.cpp">
@@ -95,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="..\CoRoutine\CoRpc.cpp">
       <Filter>CoRoutine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MiniDump\MiniDump.cpp">
+      <Filter>MiniDump</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoEvent.h">
       <Filter>CoRoutine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MiniDump\MiniDump.h">
+      <Filter>MiniDump</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

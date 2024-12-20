@@ -5,6 +5,8 @@
 #include "GameSvrSession.h"
 #include "资源Component.h"
 #include "PlayerComponent.h"
+#include "AoiComponent.h"
+#include "AttackComponent.h"
 
 Space::Space(const std::string& stf寻路文件)
 {
@@ -28,6 +30,43 @@ WpEntity Space::GetEntity(const int64_t id)
 	}
 	CHECK_DEFAULT(itFind->second);
 	return itFind->second->weak_from_this();
+}
+
+inline WpEntity Space::Get最近的Entity(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件)
+{
+	if (!refEntity.m_upAoi)
+		return{};
+
+
+	std::vector<std::pair<int64_t, WpEntity>> vecEnemy;
+	std::copy_if(refEntity.m_upAoi->m_map我能看到的.begin(), refEntity.m_upAoi->m_map我能看到的.end(), std::back_inserter(vecEnemy),
+		[bFindEnemy, &refEntity, &fun符合条件](const auto& pair)
+		{
+			auto& wp = pair.second;
+			CHECK_FALSE(!wp.expired());
+			Entity& ref = *wp.lock();
+			const auto bEnemy = ref.IsEnemy(refEntity);
+			if (bEnemy != bFindEnemy)
+				return false;
+
+			if (fun符合条件 && !fun符合条件(ref))
+				return false;
+
+			return &ref != &refEntity && !ref.IsDead();
+		});
+
+	if (vecEnemy.empty())
+	{
+		return {};
+	}
+
+	auto iterMin = std::min_element(vecEnemy.begin(), vecEnemy.end(), [&refEntity](const auto& pair1, const auto& pair2)
+		{
+			auto& sp1 = pair1.second;
+			auto& sp2 = pair2.second;
+			return refEntity.DistancePow2(*sp1) < refEntity.DistancePow2(*sp2);
+		});
+	return iterMin->second->weak_from_this();
 }
 
 void Space::Update()
@@ -113,6 +152,46 @@ void Space::EraseEntity(const bool bForceEraseAll)
 	}
 }
 
+std::tuple<int, int, int> 格子(const Position& refPos)
+{
+	const uint8_t u8格子正方形边长 = 10;
+	const uint16_t u16X坐标放大倍数 = 10000;//z坐标不能超过9999
+	const int32_t i32格子X = ((int)refPos.x) / u8格子正方形边长;
+	const int32_t i32格子Z = ((int)refPos.z) / u8格子正方形边长;
+	const int32_t i32格子ID = i32格子X * u16X坐标放大倍数 + i32格子Z;
+	return { i32格子ID ,i32格子X, i32格子Z };
+}
+
+
+std::tuple<int, int, int> 格子(const Entity& refEntity)
+{
+	return 格子(refEntity.m_Pos);
+}
+
+std::vector<int> Space::GetEntity能看到的格子(const Entity& refEntity)
+{
+	std::vector<int> vec;
+	const auto [i32格子Id, i32格子X, i32格子Z] = 格子(refEntity);
+	if (!refEntity.m_upAoi)
+		return {};
+
+	int i32视野范围 = refEntity.m_upAoi->m_i32视野范围;
+	if (refEntity.m_spAttack)
+		i32视野范围 = std::max<int>(refEntity.m_spAttack->m_f警戒距离, i32视野范围);
+
+	++i32视野范围;
+	for (int x = i32格子X - i32视野范围; x < i32格子X + i32视野范围; ++x)
+	{
+		for (int z = i32格子Z - i32视野范围; z < i32格子Z + i32视野范围; ++z)
+		{
+			const auto [id, _, __] = 格子({ (float)x,(float)z });
+			vec.push_back(id);
+		}
+	}
+
+	return vec;
+}
+
 int Space::Get怪物单位数()
 {
 	return Get单位数([](const Entity& refEntity)
@@ -151,7 +230,7 @@ int Space::Get玩家单位数(const PlayerGateSession_Game& ref)
 			if (&ref != &refEntity.m_spPlayer->m_refSession)
 				return false;
 
-			if(!refEntity.m_spDefence)
+			if (!refEntity.m_spDefence)
 				return false;//视口
 
 			return true;
@@ -169,4 +248,10 @@ int Space::Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位
 	}
 
 	return i32单位数;
+}
+
+void Space::AddEntity(SpEntity& spNewEntity)
+{
+	m_mapEntity.insert({ spNewEntity->Id ,spNewEntity });//全地图单位
+	AoiComponent::Add(*this, *spNewEntity);
 }

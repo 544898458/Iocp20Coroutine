@@ -17,6 +17,7 @@
 #include "PlayerGateSession_Game.h"
 #include "../IocpNetwork/WsaStartUp.h"
 #include "AllPort.h"
+#include "../MiniDump/MiniDump.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")
@@ -92,9 +93,11 @@ void SendToWorldSvr(const T& refMsg, const uint64_t idGateSession)
 template void SendToWorldSvr(const MsgSay& msg, const uint64_t idGateSession);
 template void SendToWorldSvr(const MsgChangeMoney& msg, const uint64_t idGateSession);
 
-///*
+LONG WINAPI UnhandledExceptionFilter_SpawDmp(struct _EXCEPTION_POINTERS* ExceptionInfo);
 int main(void)
 {
+	MiniDump::Install("GameSvr");
+	//memset((void*)12341324, 23423, 234234);
 	//屏蔽控制台最小按钮和关闭按钮
 	HWND hwnd = GetConsoleWindow();
 	HMENU hmenu = GetSystemMenu(hwnd, false);
@@ -181,4 +184,3 @@ int main(void)
 	//system(0);
 	return 0;
 }
-//*/

@@ -19,6 +19,7 @@ class 走Component;
 class 临时阻挡Component;
 class 造活动单位Component;
 class 造建筑Component;
+class AoiComponent;
 class PlayerGateSession_Game;
 
 
@@ -50,10 +51,8 @@ public:
 
 	const uint64_t Id;
 	bool m_bNeedDelete = false;
-	float m_f警戒距离 = 30;
 	float m_速度每帧移动距离 = 0.5f;//每帧多少米
 	float 攻击距离()const;
-
 	std::string m_strPrefabName;
 	/// <summary>
 	/// 兵、兵厂、怪
@@ -73,6 +72,7 @@ public:
 	std::shared_ptr<临时阻挡Component> m_sp临时阻挡;
 	std::shared_ptr<造活动单位Component> m_sp造活动单位;
 	std::shared_ptr<造建筑Component> m_sp造建筑;
+	std::unique_ptr<AoiComponent> m_upAoi;
 	/// <summary>
 	/// 地堡或运输机
 	/// </summary>

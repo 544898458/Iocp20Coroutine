@@ -17,6 +17,7 @@
 #include "ClientSession_GateToWorld.h"
 #include "../IocpNetwork/WsaStartUp.h"
 #include "../GameSvr/AllPort.h"
+#include "../MiniDump/MiniDump.h"
 
 std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GateToGame>> g_ConnectToGameSvr;
 bool g_running(true);
@@ -87,6 +88,9 @@ void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 
 int main()
 {
+	MiniDump::Install("GateSvr");
+	//memset((void*)12341324, 23423, 234234);
+
 	FLAGS_alsologtostderr = true;//是否将日志输出到文件和stderr
 	FLAGS_colorlogtostdout = true;
 	FLAGS_colorlogtostderr = true;//20240216

@@ -49,6 +49,9 @@
     <Filter Include="RecastNavigation\RecastDemo\Contrib">
       <UniqueIdentifier>{1c9a54c2-5f97-40af-901e-7716536a2acc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MiniDump">
+      <UniqueIdentifier>{8427d678-7bf9-4ffd-b30d-c9e095094e2f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Space.cpp">
@@ -324,6 +327,12 @@
     <ClCompile Include="..\recastnavigation-main\Recast\Source\RecastRegion.cpp">
       <Filter>RecastNavigation\Recast</Filter>
     </ClCompile>
+    <ClCompile Include="..\MiniDump\MiniDump.cpp">
+      <Filter>MiniDump</Filter>
+    </ClCompile>
+    <ClCompile Include="AoiComponent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -516,6 +525,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="EntitySystem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MiniDump\MiniDump.h">
+      <Filter>MiniDump</Filter>
+    </ClInclude>
+    <ClInclude Include="AoiComponent.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

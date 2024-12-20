@@ -20,6 +20,7 @@
 #include "地堡Component.h"
 #include "走Component.h"
 #include "造建筑Component.h"
+#include "AoiComponent.h"
 
 using namespace std;
 
@@ -119,6 +120,9 @@ void Entity::OnDestroy()
 	{
 		LOG(INFO) << "没有删除协程";
 	}
+
+	if (m_upAoi)
+		m_upAoi->OnDestory();
 }
 
 void Entity::BroadcastLeave()
@@ -166,7 +170,23 @@ void Entity::BroadcastChangeSkeleAnim(const std::string& refAniClipName, bool lo
 template<class T>
 void Entity::Broadcast(const T& msg)
 {
-	m_refSpace.Broadcast(msg);
+	if (!m_upAoi)
+		return;
+
+	for (auto [k, wp] : m_upAoi->m_map能看到我的)
+	{
+		assert(!wp.expired());
+		if (wp.expired())
+		{
+			LOG(ERROR) << "";
+			continue;
+		}
+		auto& refEntity = *wp.lock();
+		if (refEntity.m_spPlayer)
+			refEntity.m_spPlayer->m_refSession.Send(msg);
+	}
+
+	//m_refSpace.Broadcast(msg);
 }
 
 CoTaskBool Entity::CoDelayDelete()
