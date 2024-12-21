@@ -32,6 +32,19 @@ WpEntity Space::GetEntity(const int64_t id)
 	return itFind->second->weak_from_this();
 }
 
+WpEntity Space::Get最近的Entity支持地堡中的单位(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件)
+{
+	WpEntity wp = refEntity.m_wpOwner;
+	if (!GetEntity(refEntity.Id).expired())
+	{
+		wp = refEntity.weak_from_this();
+	}
+	if (wp.expired())
+		return {};
+
+	return Get最近的Entity(*wp.lock(), bFindEnemy, fun符合条件);
+}
+
 WpEntity Space::Get最近的Entity(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件)
 {
 	if (!refEntity.m_upAoi)
@@ -209,8 +222,8 @@ int Space::Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位
 	return i32单位数;
 }
 
-void Space::AddEntity(SpEntity& spNewEntity)
+void Space::AddEntity(SpEntity& spNewEntity, const int32_t i32视野范围)
 {
 	m_mapEntity.insert({ spNewEntity->Id ,spNewEntity });//全地图单位
-	AoiComponent::Add(*this, *spNewEntity);
+	AoiComponent::Add(*this, *spNewEntity,i32视野范围);
 }

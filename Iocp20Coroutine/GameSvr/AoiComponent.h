@@ -7,7 +7,13 @@ struct Position;
 class AoiComponent
 {
 public:
-	static void Add(Space& refSpace, Entity& refEntity);
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="refSpace"></param>
+	/// <param name="refEntity"></param>
+	/// <param name="i32视野范围">如果是0就用警戒范围当成视野范围</param>
+	static void Add(Space& refSpace, Entity& refEntity, const int32_t i32视野范围);
 	static std::tuple<int, int, int> 格子(const Position& refPos);
 	static std::tuple<int, int, int> 格子(const Entity& refEntity);
 	static int 格子Id(const int32_t i32格子X, const int32_t i32格子Z);

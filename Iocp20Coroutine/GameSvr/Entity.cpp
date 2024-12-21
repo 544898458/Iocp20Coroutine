@@ -21,6 +21,7 @@
 #include "走Component.h"
 #include "造建筑Component.h"
 #include "AoiComponent.h"
+#include "EntitySystem.h"
 
 using namespace std;
 
@@ -192,15 +193,17 @@ void Entity::Broadcast(const T& msg)
 	if (!m_upAoi)
 		return;
 
-	for (auto [k, wp] : m_upAoi->m_map能看到我的)
+	auto wp = m_wpOwner;
+	if (wp.expired())
+		wp = weak_from_this();
+
+	for (auto [k, wp] : wp.lock()->m_upAoi->m_map能看到我的)
 	{
-		assert(!wp.expired());
-		if (wp.expired())
-		{
-			LOG(ERROR) << "";
-			continue;
-		}
+		CHECK_WP_CONTINUE(wp);
 		auto& refEntity = *wp.lock();
+		if (!EntitySystem::Is视口(refEntity))
+			continue;
+
 		if (refEntity.m_spPlayer)
 			refEntity.m_spPlayer->m_refSession.Send(msg);
 	}

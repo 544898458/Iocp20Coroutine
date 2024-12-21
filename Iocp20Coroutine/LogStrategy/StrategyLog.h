@@ -89,3 +89,22 @@ class StrategyLog
 	if (!exp)\
 		return false;\
 }
+
+#define CHECK_WP_CONTINUE( wp ) \
+{\
+	if (wp.expired()) \
+	{\
+		LOG(ERROR)<< #wp<< ",expired";\
+		assert(false);\
+		continue;\
+	}\
+}
+#define CHECK_AOI_CONTINUE( ref ) \
+{\
+	if (!(ref).m_upAoi) \
+	{\
+		LOG(ERROR)<< #ref << ",m_upAoi";\
+		assert(false);\
+		continue;\
+	}\
+}

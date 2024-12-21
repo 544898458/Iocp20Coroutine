@@ -47,7 +47,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 	using namespace std;
 	while (true)
 	{
-		auto wpEntity基地 = m_refEntity.m_refSpace.Get最近的Entity(m_refEntity, false,
+		auto wpEntity基地 = m_refEntity.m_refSpace.Get最近的Entity支持地堡中的单位(m_refEntity, false,
 			[](const Entity& ref)
 			{
 				return ref.m_spBuilding && ref.m_spBuilding->m_类型 == 基地;//找离自己最近的基地

@@ -127,7 +127,7 @@ CoTaskBool AttackComponent::Co(FunCancel& funCancel)
 		if (!可以攻击())
 			co_return false;
 
-		const auto& wpEntity = m_refEntity.m_refSpace.Get最近的Entity(m_refEntity, true, [](const Entity& ref)->bool {return nullptr != ref.m_spDefence; });
+		const auto wpEntity = m_refEntity.m_refSpace.Get最近的Entity支持地堡中的单位(m_refEntity, true, [](const Entity& ref)->bool {return nullptr != ref.m_spDefence; });
 		if (!wpEntity.expired())
 		{
 			Entity& refTarget = *wpEntity.lock();

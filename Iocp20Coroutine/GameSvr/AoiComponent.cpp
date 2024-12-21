@@ -4,29 +4,13 @@
 #include "EntitySystem.h"
 #include "Space.h"
 #include "AttackComponent.h"
-void AoiComponent::Add(Space& refSpace, Entity& refEntity)
+void AoiComponent::Add(Space& refSpace, Entity& refEntity, const int32_t i32视野范围)
 {
 	refEntity.m_upAoi.reset(new AoiComponent(refSpace, refEntity));// std::make_unique<AoiComponent>();
+	refEntity.m_upAoi->m_i32视野范围 = i32视野范围;
 	refEntity.m_upAoi->进入Space();
 }
-#define CHECK_WP_CONTINUE( wp ) \
-{\
-	if (wp.expired()) \
-	{\
-		LOG(ERROR)<< #wp<< ",expired";\
-		assert(false);\
-		continue;\
-	}\
-}
-#define CHECK_AOI_CONTINUE( ref ) \
-{\
-	if (!(ref).m_upAoi) \
-	{\
-		LOG(ERROR)<< #ref << ",m_upAoi";\
-		assert(false);\
-		continue;\
-	}\
-}
+
 void AoiComponent::能看到这一格的人都看到我()
 {
 	const auto [id, _, __] = 格子(m_refEntity);
@@ -44,7 +28,7 @@ void AoiComponent::能看到这一格的人都看到我()
 		CHECK_WP_CONTINUE(wp);
 		auto& refEntity = *wp.lock();
 		CHECK_AOI_CONTINUE(refEntity);
-		refEntity.m_upAoi->m_map我能看到的[m_refEntity.Id] = m_refEntity.weak_from_this();
+		refEntity.m_upAoi->看到(m_refEntity);
 	}
 }
 void AoiComponent::能看到这一格的人都看不到我()
@@ -56,8 +40,7 @@ void AoiComponent::能看到这一格的人都看不到我()
 		CHECK_WP_CONTINUE(wp);
 		auto& refEntity = *wp.lock();
 		CHECK_AOI_CONTINUE(refEntity);
-		const auto sizeErase = refEntity.m_upAoi->m_map我能看到的.erase(m_refEntity.Id);// = m_refEntity.weak_from_this();
-		assert(1 == sizeErase);
+		refEntity.m_upAoi->看不到(m_refEntity);
 	}
 
 	{
@@ -71,17 +54,15 @@ void AoiComponent::能看到这一格的人都看不到我()
 }
 void AoiComponent::进入Space()
 {
-	看到这些格子(能看到的格子Vec());
 	能看到这一格的人都看到我();
+	看到这些格子(能看到的格子Vec());
 }
 
 
 void AoiComponent::离开Space()
 {
 	看不到这些格子(能看到的格子Vec());
-	const auto [id, _, __] = 格子(m_refEntity);
-	const auto sizeErase = m_refEntity.m_refSpace.m_map在这一格里[id].erase(m_refEntity.Id);
-	assert(1 == sizeErase);
+	能看到这一格的人都看不到我();
 }
 void AoiComponent::看到(Entity& refEntity被看)
 {
@@ -163,35 +144,36 @@ void AoiComponent::OnBeforeChangePos(const Position& posNew)
 }
 void AoiComponent::OnDestory()
 {
-	for (auto [k, wp] : m_map我能看到的)
-	{
-		assert(!wp.expired());
-		if (wp.expired())
-			continue;
+	离开Space();
+	//for (auto [k, wp] : m_map我能看到的)
+	//{
+	//	assert(!wp.expired());
+	//	if (wp.expired())
+	//		continue;
 
-		auto sp = wp.lock();
-		assert(sp->m_upAoi);
-		if (!sp->m_upAoi)
-			continue;
+	//	auto sp = wp.lock();
+	//	assert(sp->m_upAoi);
+	//	if (!sp->m_upAoi)
+	//		continue;
 
-		sp->m_upAoi->m_map能看到我的.erase(m_refEntity.Id);
-	}
-	m_map我能看到的.clear();
+	//	sp->m_upAoi->m_map能看到我的.erase(m_refEntity.Id);
+	//}
+	//m_map我能看到的.clear();
 
-	for (auto [k, wp] : m_map能看到我的)
-	{
-		assert(!wp.expired());
-		if (wp.expired())
-			continue;
+	//for (auto [k, wp] : m_map能看到我的)
+	//{
+	//	assert(!wp.expired());
+	//	if (wp.expired())
+	//		continue;
 
-		auto sp = wp.lock();
-		assert(sp->m_upAoi);
-		if (!sp->m_upAoi)
-			continue;
+	//	auto sp = wp.lock();
+	//	assert(sp->m_upAoi);
+	//	if (!sp->m_upAoi)
+	//		continue;
 
-		sp->m_upAoi->m_map我能看到的.erase(m_refEntity.Id);
-	}
-	m_map能看到我的.clear();
+	//	sp->m_upAoi->m_map我能看到的.erase(m_refEntity.Id);
+	//}
+	//m_map能看到我的.clear();
 }
 
 AoiComponent::AoiComponent(Space& refSpace, Entity& refEntity) :m_refSpace(refSpace), m_refEntity(refEntity)
@@ -203,7 +185,7 @@ const uint8_t u8格子正方形边长 = 10;
 int AoiComponent::格子Id(const int32_t i32格子X, const int32_t i32格子Z)
 {
 	const uint16_t u16X坐标放大倍数 = 10000;//z坐标不能超过9999
-	const int32_t i32格子ID = i32格子X * u16X坐标放大倍数 + i32格子Z;
+	const int32_t i32格子ID = (u16X坐标放大倍数 + i32格子X) * u16X坐标放大倍数 + (u16X坐标放大倍数 + i32格子Z);
 	return i32格子ID;
 }
 std::tuple<int, int, int> AoiComponent::格子(const Position& refPos)

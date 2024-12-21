@@ -5,6 +5,7 @@
 #include "Space.h"
 #include "EntitySystem.h"
 #include "PlayerComponent.h"
+#include "AoiComponent.h"
 
 void 地堡Component::AddComponet(Entity& refEntity, PlayerGateSession_Game& refGateSession)
 {
@@ -46,6 +47,8 @@ void 地堡Component::进(Space& refSpace, uint64_t idEntity)
 	m_listSpEntity.push_back(sp);
 	refSpace.m_mapEntity.erase(idEntity);
 	//sp->BroadcastLeave();
+	if (sp->m_upAoi)
+		sp->m_upAoi->离开Space();
 	EntitySystem::BroadcastEntity描述(m_refEntity, std::format("地堡内有{0}人", m_listSpEntity.size()));
 }
 

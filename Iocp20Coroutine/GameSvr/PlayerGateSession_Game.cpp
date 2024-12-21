@@ -533,7 +533,7 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	m_mapWpEntity[spEntityViewPort->Id] = (spEntityViewPort);
 	//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 	PlayerComponent::AddComponent(*spEntityViewPort, *this);
-	sp->AddEntity(spEntityViewPort);
+	sp->AddEntity(spEntityViewPort, 100);
 	spEntityViewPort->BroadcastEnter();
 
 	CoEvent<PlayerGateSession_Game*>::OnRecvEvent(false, this);
@@ -738,18 +738,16 @@ void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
 		auto wpEntity = refSpace.GetEntity(id);
 		if (wpEntity.expired())
 		{
-			LOG(ERROR) << "错";
+			LOG(WARNING) << "可能选中了已进地堡的兵";
 			continue;
 		}
-
 		auto spEntity = wpEntity.lock();
-
 		if (!spEntity->m_wpOwner.expired())
 			continue;//地堡内
 
 		//if (spEntity->m_spBuilding)
 		//	continue;//不可框选建筑单位
-		
+
 		if (EntitySystem::Is视口(*spEntity))
 			continue;
 
