@@ -88,6 +88,10 @@ void Entity::SetPos(const Position& refNewPos)
 		m_upAoi->OnBeforeChangePos(refNewPos);
 	}
 	m_Pos = refNewPos;
+	if (m_upAoi)
+	{
+		m_upAoi->OnAfterChangePos();
+	}
 }
 
 float Entity::攻击距离() const
@@ -111,7 +115,7 @@ void Entity::OnDestroy()
 
 	//应该用proxy库同意调用下面的，免得忘了
 	if (m_spAttack)
-		m_spAttack->TryCancel();
+		m_spAttack->TryCancel(true);
 
 	if (m_sp造活动单位)
 		m_sp造活动单位->TryCancel(*this);
@@ -197,10 +201,11 @@ void Entity::Broadcast(const T& msg)
 	if (wp.expired())
 		wp = weak_from_this();
 
-	for (auto [k, wp] : wp.lock()->m_upAoi->m_map能看到我的)
+	auto &ref自己或Owner = *wp.lock();
+	for (auto [k, wp能看到我] : ref自己或Owner.m_upAoi->m_map能看到我的)
 	{
-		CHECK_WP_CONTINUE(wp);
-		auto& refEntity = *wp.lock();
+		CHECK_WP_CONTINUE(wp能看到我);
+		auto& refEntity = *wp能看到我.lock();
 		if (!EntitySystem::Is视口(refEntity))
 			continue;
 

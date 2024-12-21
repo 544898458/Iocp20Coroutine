@@ -29,23 +29,18 @@ void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, c
 	//int CrowToolAddAgent(float arrF[]);
 	//refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);
 	//m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
+	refEntity.m_spAttack->Co顶层().RunNew();
 }
 
 float AttackComponent::攻击距离(const Entity& refTarget) const
 {
-	const float f建筑半边长 = BuildingComponent::建筑半边长(refTarget);
+	const float f目标建筑半边长 = BuildingComponent::建筑半边长(refTarget);
 
 	if (m_refEntity.m_wpOwner.expired())
-		return m_f攻击距离 + f建筑半边长;//普通战斗单位
+		return m_f攻击距离 + f目标建筑半边长;//普通战斗单位
 
 	auto spOwner = m_refEntity.m_wpOwner.lock();
-	if (!spOwner->m_spAttack)
-	{
-		assert(false);
-		return m_f攻击距离 + f建筑半边长;
-	}
-
-	return spOwner->m_spAttack->m_f攻击距离 + m_f攻击距离 + f建筑半边长;//地堡
+	return m_f攻击距离 + f目标建筑半边长 + BuildingComponent::建筑半边长(*spOwner);
 }
 
 Position 怪物闲逛(const Position& refOld)
@@ -63,7 +58,7 @@ AttackComponent::AttackComponent(Entity& refEntity, const 活动单位类型 类型) :
 {
 }
 
-void AttackComponent::TryCancel()
+void AttackComponent::TryCancel(const bool bDestroy)
 {
 	if (m_cancelAttack)
 	{
@@ -71,34 +66,42 @@ void AttackComponent::TryCancel()
 		m_cancelAttack();
 	}
 
-	//if(bDestroy)
 	m_TaskCancel.TryCancel();
+
+	if (bDestroy && m_funCancel顶层)
+		m_funCancel顶层();
+}
+
+CoTaskBool AttackComponent::Co顶层()
+{
+	using namespace std;
+	//while (!co_await CoTimer::Wait(1000ms, m_funCancel顶层))
+	while (!co_await CoTimer::WaitNextUpdate(m_funCancel顶层))
+	{
+		if (m_refEntity.IsDead())
+			co_return false;
+
+
+		if (m_b搜索新的目标 && co_await Co走向警戒范围内的目标然后攻击(m_TaskCancel.cancel))
+			continue;
+
+		if (!m_refEntity.m_spPlayer && !走Component::正在走(m_refEntity))//怪随机走
+		{
+			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
+
+			auto posTarget = m_fun空闲走向此处(m_refEntity.Pos());
+			m_refEntity.m_refSpace.CrowdToolFindNerestPos(posTarget);
+			走Component::WalkToPos(m_refEntity, posTarget);
+			continue;
+		}
+	}
+	co_return true;
 }
 
 void AttackComponent::Update()
 {
-	if (m_refEntity.IsDead())
-		return;
-
-	m_TaskCancel.TryRun(Co(m_TaskCancel.cancel));
-	if (!m_TaskCancel.co.Finished())
-		return;//正在攻击或走向攻击位置
-
-	if (!m_refEntity.m_spPlayer && !走Component::正在走(m_refEntity))//怪随机走
-	{
-		走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
-		//assert(m_coWalk.Finished());//20240205
-		//assert(m_coAttack.Finished());//20240205
-
-
-		auto posTarget = m_fun空闲走向此处(m_refEntity.Pos());
-		m_refEntity.m_refSpace.CrowdToolFindNerestPos(posTarget);
-		//m_coWalk = AiCo::WalkToPos(m_refEntity.shared_from_this(), posTarget, m_cancel);
-		走Component::WalkToPos(m_refEntity, posTarget);
-		//co_await AiCo::WalkToPos(m_refEntity, posTarget, funCancel);
-		return;
-	}
 }
+
 bool AttackComponent::可以攻击()
 {
 	if (m_refEntity.m_sp走 && !m_refEntity.m_sp走->m_coWalk手动控制.Finished())
@@ -119,7 +122,7 @@ bool AttackComponent::可以攻击()
 	return true;
 }
 
-CoTaskBool AttackComponent::Co(FunCancel& funCancel)
+CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 {
 	KeepCancel kc(funCancel);
 	while (true)
@@ -128,39 +131,43 @@ CoTaskBool AttackComponent::Co(FunCancel& funCancel)
 			co_return false;
 
 		const auto wpEntity = m_refEntity.m_refSpace.Get最近的Entity支持地堡中的单位(m_refEntity, true, [](const Entity& ref)->bool {return nullptr != ref.m_spDefence; });
-		if (!wpEntity.expired())
+		if (wpEntity.expired())
 		{
-			Entity& refTarget = *wpEntity.lock();
-
-			if (m_refEntity.DistanceLessEqual(refTarget, 攻击距离(refTarget)))
-			{
-				走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
-
-				if (co_await CoAttack(wpEntity, m_cancelAttack))
-					co_return true;
-
-				continue;
-			}
-			else if (m_refEntity.m_wpOwner.expired() && m_refEntity.DistanceLessEqual(refTarget, m_refEntity.警戒距离()) &&
-				//!走Component::正在走(m_refEntity) && 
-				(!m_refEntity.m_sp采集 || m_refEntity.m_sp采集->m_TaskCancel.co.Finished()))
-			{
-				走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
-
-				if (m_refEntity.m_sp采集)
-				{
-					m_refEntity.m_sp采集->m_TaskCancel.TryCancel();
-				}
-
-				//走Component::WalkToTarget(m_refEntity, wpEntity.lock());
-				if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), funCancel))
-					co_return true;
-
-				continue;
-			}
+			m_b搜索新的目标 = false;//警戒范围内没有目标
+			co_return false;
 		}
+
+		Entity& refTarget = *wpEntity.lock();
+
+		if (m_refEntity.DistanceLessEqual(refTarget, 攻击距离(refTarget)))
+		{
+			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
+
+			if (co_await CoAttack(wpEntity, m_cancelAttack))
+				co_return true;
+
+			continue;
+		}
+		else if (m_refEntity.m_wpOwner.expired() && m_refEntity.DistanceLessEqual(refTarget, m_refEntity.警戒距离()) &&
+			//!走Component::正在走(m_refEntity) && 
+			(!m_refEntity.m_sp采集 || m_refEntity.m_sp采集->m_TaskCancel.co.Finished()))
+		{
+			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
+
+			if (m_refEntity.m_sp采集)
+			{
+				m_refEntity.m_sp采集->m_TaskCancel.TryCancel();
+			}
+
+			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), funCancel))
+				co_return true;
+
+			continue;
+		}
+
 		co_return false;
 	}
+
 	co_return false;
 }
 

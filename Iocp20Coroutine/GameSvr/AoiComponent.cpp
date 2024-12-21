@@ -14,6 +14,11 @@ void AoiComponent::Add(Space& refSpace, Entity& refEntity, const int32_t i32ÊÓÒ°
 void AoiComponent::ÄÜ¿´µ½ÕâÒ»¸ñµÄÈË¶¼¿´µ½ÎÒ()
 {
 	const auto [id, _, __] = ¸ñ×Ó(m_refEntity);
+	ÄÜ¿´µ½ÕâÒ»¸ñµÄÈË¶¼¿´µ½ÎÒ(id);
+}
+
+void AoiComponent::ÄÜ¿´µ½ÕâÒ»¸ñµÄÈË¶¼¿´µ½ÎÒ(const int id)
+{
 	{
 		const auto [iter, ok] = m_refEntity.m_refSpace.m_mapÔÚÕâÒ»¸ñÀï[id].insert({ m_refEntity.Id,m_refEntity.weak_from_this() });
 		assert(ok);
@@ -70,8 +75,17 @@ void AoiComponent::¿´µ½(Entity& refEntity±»¿´)
 	if (!refEntity±»¿´.m_upAoi)//µÆËşÄ£ĞÍ£¬Ïà»¥¼Ç×¡
 		return;
 
-	refEntity±»¿´.m_upAoi->m_mapÄÜ¿´µ½ÎÒµÄ[m_refEntity.Id] = m_refEntity.weak_from_this();
-	m_refEntity.m_upAoi->m_mapÎÒÄÜ¿´µ½µÄ[refEntity±»¿´.Id] = refEntity±»¿´.weak_from_this();
+	{
+		const auto [iter, ok] = refEntity±»¿´.m_upAoi->m_mapÄÜ¿´µ½ÎÒµÄ.insert({ m_refEntity.Id, m_refEntity.weak_from_this() });
+		assert(ok);
+	}
+	{
+		const auto [iter, ok] = m_refEntity.m_upAoi->m_mapÎÒÄÜ¿´µ½µÄ.insert({ refEntity±»¿´.Id, refEntity±»¿´.weak_from_this() });
+		assert(ok);
+
+		if (m_refEntity.m_spAttack)
+			m_refEntity.m_spAttack->m_bËÑË÷ĞÂµÄÄ¿±ê = true;
+	}
 }
 
 void AoiComponent::¿´²»µ½(Entity& refEntity±»¿´)
@@ -80,8 +94,14 @@ void AoiComponent::¿´²»µ½(Entity& refEntity±»¿´)
 	if (!refEntity±»¿´.m_upAoi)//µÆËşÄ£ĞÍ£¬Ïà»¥¼Ç×¡
 		return;
 
-	refEntity±»¿´.m_upAoi->m_mapÄÜ¿´µ½ÎÒµÄ.erase(m_refEntity.Id);// ] = m_refEntity.weak_from_this();
-	m_refEntity.m_upAoi->m_mapÎÒÄÜ¿´µ½µÄ.erase(refEntity±»¿´.Id);// ] = refEntity±»¿´.weak_from_this();
+	{
+		const auto sizeErase = refEntity±»¿´.m_upAoi->m_mapÄÜ¿´µ½ÎÒµÄ.erase(m_refEntity.Id);// ] = m_refEntity.weak_from_this();
+		assert(sizeErase);
+	}
+	{
+		const auto sizeErase = m_refEntity.m_upAoi->m_mapÎÒÄÜ¿´µ½µÄ.erase(refEntity±»¿´.Id);// ] = refEntity±»¿´.weak_from_this();
+		assert(sizeErase);
+	}
 }
 
 void AoiComponent::¿´µ½ÕâĞ©¸ñ×Ó(const std::vector<int32_t>& vecĞÂÔö¿´µ½µÄ¸ñ×ÓId)
@@ -122,6 +142,11 @@ void AoiComponent::¿´²»µ½ÕâĞ©¸ñ×Ó(const std::vector<int32_t>& vecÉ¾³ı²»ÔÙ¿´µ½µÄÀ
 	}
 }
 
+void AoiComponent::OnAfterChangePos()
+{
+	
+}
+
 void AoiComponent::OnBeforeChangePos(const Position& posNew)
 {
 	const auto [idOld, _, ____] = ¸ñ×Ó(m_refEntity);
@@ -136,11 +161,11 @@ void AoiComponent::OnBeforeChangePos(const Position& posNew)
 	std::set_difference(setÄÜ¿´µ½New.begin(), setÄÜ¿´µ½New.end(), setÄÜ¿´µ½Old.begin(), setÄÜ¿´µ½Old.end(), std::back_inserter(vecĞÂÔö¿´µ½µÄ¸ñ×Ó));
 	std::set_difference(setÄÜ¿´µ½Old.begin(), setÄÜ¿´µ½Old.end(), setÄÜ¿´µ½New.begin(), setÄÜ¿´µ½New.end(), std::back_inserter(vecÉ¾³ı²»»áÔÙ¿´µ½µÄ¸ñ×Ó));
 
-	¿´µ½ÕâĞ©¸ñ×Ó(vecĞÂÔö¿´µ½µÄ¸ñ×Ó);
 	¿´²»µ½ÕâĞ©¸ñ×Ó(vecÉ¾³ı²»»áÔÙ¿´µ½µÄ¸ñ×Ó);
+	ÄÜ¿´µ½ÕâÒ»¸ñµÄÈË¶¼¿´²»µ½ÎÒ();
 
-	m_refSpace.m_mapÔÚÕâÒ»¸ñÀï[idOld].erase(m_refEntity.Id);
-	m_refSpace.m_mapÔÚÕâÒ»¸ñÀï[idNew][m_refEntity.Id] = m_refEntity.weak_from_this();
+	¿´µ½ÕâĞ©¸ñ×Ó(vecĞÂÔö¿´µ½µÄ¸ñ×Ó);
+	ÄÜ¿´µ½ÕâÒ»¸ñµÄÈË¶¼¿´µ½ÎÒ(idNew);
 }
 void AoiComponent::OnDestory()
 {

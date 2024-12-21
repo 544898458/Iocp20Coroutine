@@ -27,6 +27,11 @@ void 地堡Component::OnBeforeDelayDelete()
 
 void 地堡Component::进(Space& refSpace, uint64_t idEntity)
 {
+	if (m_refEntity.IsDead())
+	{
+		PlayerComponent::Say(m_refEntity, "地堡已摧毁不可再进入", SayChannel::系统);
+		return;
+	}
 	if (m_listSpEntity.size() >= 10)
 	{
 		PlayerComponent::Say(m_refEntity, "地堡人满了", SayChannel::系统);
@@ -42,8 +47,9 @@ void 地堡Component::进(Space& refSpace, uint64_t idEntity)
 		LOG(INFO) << "阵亡单位不能进地堡";//assert(false);
 		return;
 	}
+	sp->SetPos(m_refEntity.Pos());
 	sp->BroadcastLeave();//OnDestroy();
-	sp->m_wpOwner = sp->weak_from_this();
+	sp->m_wpOwner = m_refEntity.weak_from_this();
 	m_listSpEntity.push_back(sp);
 	refSpace.m_mapEntity.erase(idEntity);
 	//sp->BroadcastLeave();

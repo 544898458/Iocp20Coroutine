@@ -24,13 +24,23 @@ namespace MsgPack
 		std::string str(buffer.str());
 		CHECK_GE_VOID(UINT16_MAX, str.size());
 		const uint16_t usSize = (uint16_t)str.size();
-		ByteQueueSend sendBuff;
-		if (bWriteSize)
-			sendBuff.queue.Enqueue(&usSize, sizeof(usSize));
+		if (!bWriteSize)
+		{
+			refFun(str.data(), usSize);
+			return;
+		}
 
-		sendBuff.queue.Enqueue(str.data(), usSize);
-		const auto&& [bufAll, lenAll] = sendBuff.BuildSendBuf();
-		refFun(bufAll, lenAll);
+		//ByteQueueSend sendBuff;
+		//sendBuff.queue.Enqueue(&usSize, sizeof(usSize));
+		//sendBuff.queue.Enqueue(str.data(), usSize);
+		//const auto&& [bufAll, lenAll] = sendBuff.BuildSendBuf();
+		//refFun(bufAll, lenAll);
+		//上面代码太慢了
+		static std::vector<char> vec(1024 * 16);
+		vec.resize(sizeof(usSize) + usSize);
+		*(uint16_t*)&vec[0] = usSize;
+		memcpy(&vec[2], str.data(), usSize);
+		refFun(&vec[0], vec.size());
 	}
 };
 

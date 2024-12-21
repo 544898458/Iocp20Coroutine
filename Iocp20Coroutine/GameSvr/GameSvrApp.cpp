@@ -140,30 +140,35 @@ int main(void)
 
 	FunCancel funCancelSpawnMonster;
 	AiCo::多人联机地图(*wpSpace无限刷怪.lock(), funCancelSpawnMonster).RunNew();
-	
+
 	//主逻辑工作线程
 	using namespace std;
 	std::chrono::system_clock::time_point timeLast = std::chrono::system_clock::now();
 
-	std::chrono::milliseconds msSleep = 100ms;
-	const std::chrono::milliseconds ms10Frame = 1s;
+	const std::chrono::system_clock::duration msSleep目标 = 100ms;
+	std::chrono::system_clock::duration msSleep = msSleep目标;
+	const uint8_t u8Frames = 10;
+	const std::chrono::system_clock::duration ms10Frame = msSleep * u8Frames;
+	const std::chrono::system_clock::duration ms10Frame_1X1 = ms10Frame + msSleep * (u8Frames / 10);
+	const std::chrono::system_clock::duration ms10Frame_0X9 = ms10Frame - msSleep * (u8Frames / 10);
 	int i = 0;
 	while (g_running)
 	{
 		++i;
-		if (i >= 10)
+		if (i >= u8Frames)
 		{
 			i = 0;
 			auto now = std::chrono::system_clock::now();
 			std::chrono::duration duration = now - timeLast;
 			timeLast = now;
-			if (duration > ms10Frame)
+			if (duration > ms10Frame_1X1)
 			{
-				if (msSleep > 0ms)
-					--msSleep;
+				msSleep -= std::min(msSleep, (duration - ms10Frame) / u8Frames);
 			}
-			else
-				++msSleep;
+			else if (duration < ms10Frame_0X9)
+			{
+				msSleep += std::min(msSleep目标, (ms10Frame - duration) / u8Frames);
+			}
 		}
 		if (msSleep > 0ms)
 			std::this_thread::sleep_for(msSleep);

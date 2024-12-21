@@ -227,7 +227,7 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
-		for (int i = 1; i < 8; ++i)
+		for (int i = 1; i < 20; ++i)
 		{
 			if (1 < i && Is战斗结束(refSpace, refGateSession))
 				co_return 0;

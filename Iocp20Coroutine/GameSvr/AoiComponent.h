@@ -22,10 +22,12 @@ public:
 	std::set<int32_t> 能看到的格子(const Position& pos) const;
 	std::vector<int32_t> 能看到的格子Vec() const;
 	void 能看到这一格的人都看到我();
+	void 能看到这一格的人都看到我(const int id);
 	void 能看到这一格的人都看不到我();
 	void 看到这些格子(const std::vector<int32_t>& vec新增看到的格子Id);
 	void 看不到这些格子(const std::vector<int32_t>& vec删除不再看到的老格子Id);
 	void OnBeforeChangePos(const Position& posNew);
+	void OnAfterChangePos();
 	void 进入Space();
 	void 离开Space();
 	void 看到(Entity& refEntity被看);

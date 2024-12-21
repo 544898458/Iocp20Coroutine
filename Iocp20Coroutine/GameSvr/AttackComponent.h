@@ -7,9 +7,9 @@ class AttackComponent final
 {
 public:
 	AttackComponent(Entity& refEntity, const 活动单位类型 类型);
-	void TryCancel();
+	void TryCancel(const bool bDestroy=false);
 	void Update();
-	CoTaskBool Co(FunCancel& funCancel);
+	CoTaskBool Co走向警戒范围内的目标然后攻击(FunCancel& funCancel);
 	CoTaskBool CoAttack(WpEntity wpDefencer, FunCancel& cancel);
 	static void AddComponent(Entity& refEntity, const 活动单位类型 类型, const float f攻击距离, const float f伤害, const float f警戒距离);
 	float 攻击距离(const Entity& refTarget)const;
@@ -25,8 +25,10 @@ public:
 	typedef Position (*Fun空闲走向目标)(const Position&);
 	Fun空闲走向目标 m_fun空闲走向此处;
 	float m_f警戒距离 = 30;
-
+	FunCancel m_funCancel顶层;
+	bool m_b搜索新的目标 = true;
 private:
 	bool 可以攻击();
+	CoTaskBool Co顶层();
 };
 
