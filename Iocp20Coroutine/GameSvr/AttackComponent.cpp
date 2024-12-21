@@ -18,10 +18,11 @@
 #include "单位.h"
 
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
-void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, const float f攻击距离, const float f伤害, const float f警戒距离)
+void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, const float f攻击距离, const float f伤害, const float f警戒距离, const std::chrono::system_clock::duration dura)
 {
 	CHECK_VOID(!refEntity.m_spAttack);
-	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&, const 活动单位类型>(refEntity, std::forward<const 活动单位类型&&>(类型));
+	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&, const 活动单位类型, const std::chrono::system_clock::duration>(
+		refEntity, std::forward<const 活动单位类型&&>(类型), std::forward<const std::chrono::system_clock::duration&&>(dura));
 	refEntity.m_spAttack->m_f攻击距离 = f攻击距离;
 	refEntity.m_spAttack->m_f警戒距离 = f警戒距离;
 	refEntity.m_spAttack->m_f伤害 = f伤害;
@@ -50,11 +51,12 @@ Position 怪物闲逛(const Position& refOld)
 	posTarget.z += std::rand() % 11 - 5;
 	return posTarget;
 }
-
-AttackComponent::AttackComponent(Entity& refEntity, const 活动单位类型 类型) :
+using namespace std;
+AttackComponent::AttackComponent(Entity& refEntity, const 活动单位类型 类型, const std::chrono::system_clock::duration dura) :
 	m_refEntity(refEntity),
 	m_类型(类型),
-	m_fun空闲走向此处(怪物闲逛)
+	m_fun空闲走向此处(怪物闲逛),
+	m_dura前摇(dura)
 {
 }
 
@@ -179,14 +181,19 @@ CoTaskBool AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 	if (m_refEntity.IsDead())
 		co_return false;//自己死亡
 
-	m_refEntity.BroadcastChangeSkeleAnim("attack");//播放攻击动作
+	switch (m_类型)
+	{
+	case 三色坦克:m_refEntity.BroadcastChangeSkeleAnim("attack_loop"); break;
+	default:m_refEntity.BroadcastChangeSkeleAnim("attack");break;
+	}
+	
 
 	using namespace std;
 
-	const std::tuple<std::chrono::milliseconds, int> arrWaitHurt[] =
+	const std::tuple<std::chrono::system_clock::duration, int> arrWaitHurt[] =
 	{	//三段伤害{每段前摇时长，伤害值}
 		//{300ms,2},
-		{900ms,m_f伤害},
+		{m_dura前摇,m_f伤害},
 		//{50ms,5}
 	};
 
@@ -198,6 +205,7 @@ CoTaskBool AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 		break;
 	case 近战兵:EntitySystem::Broadcast播放声音(m_refEntity, "Tfrshoot"); break;
 	case 工程车:EntitySystem::Broadcast播放声音(m_refEntity, "TSCMin00"); break;
+	case 三色坦克:EntitySystem::Broadcast播放声音(m_refEntity, "音效/TTaFi200"); break;
 	}
 
 	for (auto wait_hurt : arrWaitHurt)

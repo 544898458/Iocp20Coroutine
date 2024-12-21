@@ -19,7 +19,7 @@ namespace CoTimer
 	/// <param name="milli"></param>
 	/// <param name="cancel"></param>
 	/// <returns>true表示中途取消</returns>
-	CoAwaiterBool& Wait(const std::chrono::milliseconds& milli, FunCancel& cancel)
+	CoAwaiterBool& Wait(const std::chrono::system_clock::duration& milli, FunCancel& cancel)
 	{
 		//g_multiTimer.insert({ std::chrono::steady_clock::now() + milli,Wait2() });
 		//co_await(*g_multiTimer.begin()).second;

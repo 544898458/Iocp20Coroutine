@@ -29,6 +29,8 @@ namespace 单位
 		float f警戒距离;
 		float f攻击距离;
 		float f伤害;
+		float f每帧移动距离;
+		std::chrono::system_clock::duration dura普攻前摇;
 	};
 	struct 活动单位配置
 	{

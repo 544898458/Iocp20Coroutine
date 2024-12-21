@@ -26,6 +26,7 @@ void 造活动单位Component::AddComponent(Entity& refEntity, PlayerGateSession_Game
 	case 兵厂:
 		m_set可造类型.insert(兵);
 		m_set可造类型.insert(近战兵);
+		m_set可造类型.insert(三色坦克);
 		break;
 	default:
 		break;
@@ -157,12 +158,12 @@ SpEntity 造活动单位Component::造活动单位(PlayerGateSession_Game& refGateSession,
 	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string&>(
 		pos, *sp, 配置.配置.strPrefabName, 配置.配置.strName);
 	PlayerComponent::AddComponent(*spNewEntity, refGateSession);
-	AttackComponent::AddComponent(*spNewEntity, 类型, 配置.战斗.f攻击距离, 配置.战斗.f伤害, 配置.战斗.f警戒距离);
+	AttackComponent::AddComponent(*spNewEntity, 类型, 配置.战斗.f攻击距离, 配置.战斗.f伤害, 配置.战斗.f警戒距离, 配置.战斗.dura普攻前摇);
 	DefenceComponent::AddComponent(*spNewEntity, 配置.制造.u16初始Hp);
 	走Component::AddComponent(*spNewEntity);
 	refGateSession.m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
 	sp->AddEntity(spNewEntity);//全地图单位
-
+	spNewEntity->m_速度每帧移动距离 = 配置.战斗.f每帧移动距离;
 	switch (类型)
 	{
 	case 工程车:

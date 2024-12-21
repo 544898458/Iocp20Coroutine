@@ -34,12 +34,12 @@ std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const ªÓ∂Øµ•
 	{
 		SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(
 			refPos, refSpace, ≈‰÷√.≈‰÷√.strPrefabName, ≈‰÷√.≈‰÷√.strName);
-		AttackComponent::AddComponent(*spEntityMonster, ¿‡–Õ, ≈‰÷√.’Ω∂∑.fπ•ª˜æ‡¿Î, ≈‰÷√.’Ω∂∑.f…À∫¶, ≈‰÷√.’Ω∂∑.fæØΩ‰æ‡¿Î);
+		AttackComponent::AddComponent(*spEntityMonster, ¿‡–Õ, ≈‰÷√.’Ω∂∑.fπ•ª˜æ‡¿Î, ≈‰÷√.’Ω∂∑.f…À∫¶, ≈‰÷√.’Ω∂∑.fæØΩ‰æ‡¿Î, ≈‰÷√.’Ω∂∑.dura∆’π•«∞“°);
 		DefenceComponent::AddComponent(*spEntityMonster, ≈‰÷√.u16≥ı ºHp);
 		◊ﬂComponent::AddComponent(*spEntityMonster);
 		AddComponent(*spEntityMonster);
 		//spEntityMonster->m_fæØΩ‰æ‡¿Î = ≈‰÷√.’Ω∂∑.fæØΩ‰æ‡¿Î;
-		spEntityMonster->m_ÀŸ∂»√ø÷°“∆∂Øæ‡¿Î = 0.2f;
+		spEntityMonster->m_ÀŸ∂»√ø÷°“∆∂Øæ‡¿Î = ≈‰÷√.’Ω∂∑.f√ø÷°“∆∂Øæ‡¿Î;
 		//refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster });
 		refSpace.AddEntity(spEntityMonster);
 		//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();

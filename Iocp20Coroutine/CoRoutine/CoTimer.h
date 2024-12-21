@@ -5,7 +5,7 @@
 #include"CoTask.h"
 namespace CoTimer
 {
-	CoAwaiterBool& Wait(const std::chrono::milliseconds &, FunCancel& cancel);
+	CoAwaiterBool& Wait(const std::chrono::system_clock::duration&, FunCancel& cancel);
 	CoAwaiterBool& WaitNextUpdate(FunCancel& cancel);
 	void Update();
 };
