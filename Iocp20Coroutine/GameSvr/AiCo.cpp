@@ -127,7 +127,7 @@ namespace AiCo
 
 				co_return false;
 			}
-			if (b检查警戒距离 && !refThis.DistanceLessEqual(*spTarget, refThis.m_f警戒距离))
+			if (b检查警戒距离 && !refThis.DistanceLessEqual(*spTarget, refThis.警戒距离()))
 			{
 				LOG(INFO) << "离开自己的警戒距离" << spTarget << "的协程取消了";
 				co_return false;

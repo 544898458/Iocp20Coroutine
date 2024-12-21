@@ -38,12 +38,12 @@ public:
 	int Get玩家单位数(const PlayerGateSession_Game& ref);
 	int Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位);
 	void AddEntity(SpEntity& spNewEntity);
+	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map能看到这一格;
+	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map在这一格里;
 private:
 	void EraseEntity(const bool bForceEraseAll);
 	
-	std::vector<int> GetEntity能看到的格子(const Entity &refEntity);
 	
-	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map能看到这一格;
 };
 
 

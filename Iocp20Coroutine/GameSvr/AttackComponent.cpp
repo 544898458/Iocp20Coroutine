@@ -18,11 +18,12 @@
 #include "单位.h"
 
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
-void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, const float f攻击距离, const float f伤害)
+void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, const float f攻击距离, const float f伤害, const float f警戒距离)
 {
 	CHECK_VOID(!refEntity.m_spAttack);
 	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&, const 活动单位类型>(refEntity, std::forward<const 活动单位类型&&>(类型));
 	refEntity.m_spAttack->m_f攻击距离 = f攻击距离;
+	refEntity.m_spAttack->m_f警戒距离 = f警戒距离;
 	refEntity.m_spAttack->m_f伤害 = f伤害;
 	//float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z};
 	//int CrowToolAddAgent(float arrF[]);
@@ -140,7 +141,7 @@ CoTaskBool AttackComponent::Co(FunCancel& funCancel)
 
 				continue;
 			}
-			else if (m_refEntity.m_wpOwner.expired() && m_refEntity.DistanceLessEqual(refTarget, m_refEntity.m_f警戒距离) &&
+			else if (m_refEntity.m_wpOwner.expired() && m_refEntity.DistanceLessEqual(refTarget, m_refEntity.警戒距离()) &&
 				//!走Component::正在走(m_refEntity) && 
 				(!m_refEntity.m_sp采集 || m_refEntity.m_sp采集->m_TaskCancel.co.Finished()))
 			{

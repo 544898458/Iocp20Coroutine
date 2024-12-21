@@ -53,6 +53,7 @@ public:
 	bool m_bNeedDelete = false;
 	float m_速度每帧移动距离 = 0.5f;//每帧多少米
 	float 攻击距离()const;
+	float 警戒距离()const;
 	std::string m_strPrefabName;
 	/// <summary>
 	/// 兵、兵厂、怪

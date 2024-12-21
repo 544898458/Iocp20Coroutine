@@ -84,6 +84,13 @@ float Entity::¹¥»÷¾àÀë() const
 
 	return 0;
 }
+float Entity::¾¯½ä¾àÀë() const
+{
+	if (m_spAttack)
+		return m_spAttack->m_f¾¯½ä¾àÀë;
+
+	return 0;
+}
 
 void Entity::OnDestroy()
 {

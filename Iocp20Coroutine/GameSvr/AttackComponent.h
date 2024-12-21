@@ -11,7 +11,7 @@ public:
 	void Update();
 	CoTaskBool Co(FunCancel& funCancel);
 	CoTaskBool CoAttack(WpEntity wpDefencer, FunCancel& cancel);
-	static void AddComponent(Entity& refEntity, const »î¶¯µ¥Î»ÀàÐÍ ÀàÐÍ, const float f¹¥»÷¾àÀë, const float fÉËº¦);
+	static void AddComponent(Entity& refEntity, const »î¶¯µ¥Î»ÀàÐÍ ÀàÐÍ, const float f¹¥»÷¾àÀë, const float fÉËº¦, const float f¾¯½ä¾àÀë);
 	float ¹¥»÷¾àÀë(const Entity& refTarget)const;
 	//CoTask<int> m_coAttack;
 	FunCancel m_cancelAttack;
