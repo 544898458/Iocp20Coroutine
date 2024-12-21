@@ -44,7 +44,8 @@ public:
 	CoTaskBool CoDelayDelete();
 	template<class T> void Broadcast(const T& msg);
 	bool IsEnemy(const Entity& refEntity);
-	Position m_Pos;
+	const Position& Pos()const { return m_Pos; }
+	void SetPos(const Position& refNewPos);
 	int m_eulerAnglesY = 0;
 	//CoTask<int> m_coWaitDelete;
 	FunCancel m_cancelDelete;
@@ -80,6 +81,9 @@ public:
 	WpEntity m_wpOwner;
 	//private:
 	Space& m_refSpace;
+private:
+	Position m_Pos;
+
 };
 
 //x,y就是坐标系中的坐标，如（4，4）答案就是45°

@@ -31,12 +31,12 @@ Entity::Entity(const Position& pos, Space& space, const std::string& strPrefabNa
 
 bool Entity::DistanceLessEqual(const Entity& refEntity, float fDistance)
 {
-	return this->m_Pos.DistanceLessEqual(refEntity.m_Pos, fDistance);
+	return this->Pos().DistanceLessEqual(refEntity.Pos(), fDistance);
 }
 
 float Entity::DistancePow2(const Entity& refEntity)const
 {
-	return this->m_Pos.DistancePow2(refEntity.m_Pos);
+	return this->Pos().DistancePow2(refEntity.Pos());
 }
 float Entity::Distance(const Entity& refEntity)const
 {
@@ -75,6 +75,18 @@ bool Entity::IsEnemy(const Entity& refEntity)
 
 	//都是玩家单位
 	return &m_spPlayer->m_refSession != &refEntity.m_spPlayer->m_refSession;
+}
+
+void Entity::SetPos(const Position& refNewPos)
+{
+	if (m_Pos == refNewPos)
+		return;
+
+	if (m_upAoi)
+	{
+		m_upAoi->OnBeforeChangePos(refNewPos);
+	}
+	m_Pos = refNewPos;
 }
 
 float Entity::攻击距离() const

@@ -5,7 +5,7 @@
 
 ÁÙÊ±×èµ²Component::ÁÙÊ±×èµ²Component(Entity& refEntity, float f°ë±ß³¤):m_refSpace(refEntity.m_refSpace)
 {
-	float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z };
+	float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z };
 	uint32_t CrowToolAdd·½¿é×èµ²(CrowdToolState & ref, float arrF[], float f°ë±ß³¤);
 	if (!refEntity.m_refSpace.m_spCrowdToolState)
 	{

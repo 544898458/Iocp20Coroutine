@@ -74,7 +74,7 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 			co_return{};
 		}
 		using namespace std;
-		const auto posBuilding = m_refEntity.m_Pos;
+		const auto posBuilding = m_refEntity.Pos();
 		Position pos = { posBuilding.x + std::rand() % 10, posBuilding.z + +std::rand() % 10 };
 		{
 			const auto ok = m_refEntity.m_refSpace.CrowdToolFindNerestPos(pos);

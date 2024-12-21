@@ -16,7 +16,7 @@ public:
 	void OnBeforeChangePos(const Position& posNew);
 	void 进入Space();
 	void 离开Space();
-	void Add看到(Entity& refEntity);
+	void 看到(Entity& refEntity被看);
 	void 看不到(Entity& refEntity被看);
 	void OnDestory();
 	std::unordered_map<uint64_t, WpEntity> m_map我能看到的;

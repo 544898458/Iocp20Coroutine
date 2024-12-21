@@ -36,7 +36,7 @@ void AoiComponent::进入Space()
 		CHECK_WP_CONTINUE(wp);
 		auto& refEntity = *wp.lock();
 		CHECK_AOI_CONTINUE(refEntity)
-		refEntity.m_upAoi->Add看到(m_refEntity);
+		refEntity.m_upAoi->看到(m_refEntity);
 	}
 
 	const auto vecMap = 能看到的格子里的Entity();
@@ -45,11 +45,11 @@ void AoiComponent::进入Space()
 		CHECK_WP_CONTINUE(wp);
 		auto& refEntity = *wp.lock();
 		CHECK_AOI_CONTINUE(refEntity);
-		Add看到(refEntity);
+		看到(refEntity);
 	}
 }
 
-void AoiComponent::Add看到(Entity& refEntity被看)
+void AoiComponent::看到(Entity& refEntity被看)
 {
 	assert(refEntity被看.m_upAoi);
 	if (!refEntity被看.m_upAoi)//灯塔模型，相互记住
@@ -123,7 +123,7 @@ void AoiComponent::OnBeforeChangePos(const Position& posNew)
 			auto &refEntity = *wp.lock();
 			CHECK_AOI_CONTINUE(refEntity);
 			
-			m_refEntity.m_upAoi->Add看到(refEntity);
+			m_refEntity.m_upAoi->看到(refEntity);
 		}
 
 		m_refSpace.m_map能看到这一格[id][m_refEntity.Id] = m_refEntity.weak_from_this();
@@ -140,7 +140,8 @@ void AoiComponent::OnBeforeChangePos(const Position& posNew)
 			m_refEntity.m_upAoi->看不到(refEntity);
 		}
 
-		m_refSpace.m_map能看到这一格[id].erase(m_refEntity.Id);// = m_refEntity.weak_from_this();
+		const auto size删除数 = m_refSpace.m_map能看到这一格[id].erase(m_refEntity.Id);// = m_refEntity.weak_from_this();
+		assert(1 == size删除数);
 	}
 
 	m_refSpace.m_map在这一格里[idOld].erase(m_refEntity.Id);
@@ -197,7 +198,7 @@ std::tuple<int, int, int> AoiComponent::格子(const Position& refPos)
 
 std::tuple<int, int, int> AoiComponent::格子(const Entity& refEntity)
 {
-	return 格子(refEntity.m_Pos);
+	return 格子(refEntity.Pos());
 }
 
 
@@ -218,7 +219,7 @@ std::unordered_map<uint64_t, WpEntity> AoiComponent::能看到的格子里的Entity() co
 }
 std::unordered_set<int32_t> AoiComponent::能看到的格子() const
 {
-	return 能看到的格子(m_refEntity.m_Pos);
+	return 能看到的格子(m_refEntity.Pos());
 }
 std::unordered_set<int32_t> AoiComponent::能看到的格子(const Position& pos) const
 {

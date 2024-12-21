@@ -48,7 +48,7 @@ namespace 单人剧情
 			if (stop)
 				co_return 0;
 
-			pos基地 = addEvent.wpEntity.lock()->m_Pos;
+			pos基地 = addEvent.wpEntity.lock()->Pos();
 		}
 
 
@@ -127,7 +127,7 @@ namespace 单人剧情
 			co_return 0;
 
 		refGateSession.Say系统("现在已在左边给您刷了一个怪，控制兵走到怪附近，兵会自动打怪。您可以点右下角“取消选中”然后拖动地面看看怪在哪里");
-		MonsterComponent::AddMonster(refSpace, 兵, { -30.20 });
+		MonsterComponent::AddMonster(refSpace, 兵, { -30,20 });
 
 		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
 			co_return 0;
@@ -215,7 +215,7 @@ namespace 单人剧情
 				单位::Find活动单位配置(类型, 配置);
 				造活动单位Component::造活动单位(refGateSession, { -30, 30 }, 配置, 类型);
 			}
-	
+
 			资源Component::Add(refSpace, 晶体矿, { -20, 35 });
 			资源Component::Add(refSpace, 晶体矿, { -26, 20 });
 			资源Component::Add(refSpace, 燃气矿, { -29, 35 });
@@ -233,7 +233,7 @@ namespace 单人剧情
 				co_return 0;
 
 			refGateSession.Say系统(std::format("第{0}波敌人正向您走来", i));
-			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 兵 : 近战兵, { 48,-48 }, i*20);
+			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 兵 : 近战兵, { 48,-48 }, i * 20);
 			for (auto& spEntity : vecEneity)
 			{
 				//if (spEntity->m_sp走)

@@ -112,7 +112,7 @@ void CrowToolUpdate(Space& ref)
 			continue;
 		}
 		auto sp = spEntity.lock();
-		sp->m_Pos = { pos[0] ,pos[2] };
+		sp->SetPos({pos[0] ,pos[2]});
 		sp->m_eulerAnglesY = CalculateAngle(vel[0], vel[2]);
 		//sp->Broadcast(MsgNotifyPos(*sp));
 	}
@@ -169,7 +169,7 @@ RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& 
 		LOG(ERROR) << "m_spCrowdToolState";
 		return;
 	}
-	float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z };
+	float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z };
 	assert(AttackComponent::INVALID_AGENT_IDX == refEntity.m_spAttack->m_idxCrowdAgent);
 	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(*refEntity.m_refSpace.m_spCrowdToolState, arrF, refEntity.m_速度每帧移动距离 * 10);
 	assert(AttackComponent::INVALID_AGENT_IDX != m_refEntity.m_spAttack->m_idxCrowdAgent);

@@ -15,7 +15,7 @@
 #include "DefenceComponent.h"
 
 
-MsgNotifyPos::MsgNotifyPos(Entity& ref) : entityId(ref.Id), x(ref.m_Pos.x), z(ref.m_Pos.z), eulerAnglesY(ref.m_eulerAnglesY)
+MsgNotifyPos::MsgNotifyPos(Entity& ref) : entityId(ref.Id), x(ref.Pos().x), z(ref.Pos().z), eulerAnglesY(ref.m_eulerAnglesY)
 {
 	if (ref.m_spDefence)
 		hp = ref.m_spDefence->m_hp;

@@ -366,7 +366,7 @@ void PlayerGateSession_Game::播放声音(const std::string& refStr声音, const std::
 
 void PlayerGateSession_Game::Send设置视口(const Entity& refEntity)
 {
-	Send<Msg设置视口>({ .pos视口 = refEntity.m_Pos });
+	Send<Msg设置视口>({ .pos视口 = refEntity.Pos() });
 }
 
 void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fun)
@@ -692,7 +692,7 @@ bool PlayerGateSession_Game::可放置建筑(const Position& refPos, float f半边长)
 	for (const auto& kv : m_wpSpace.lock()->m_mapEntity)
 	{
 		auto& refEntity = *kv.second;
-		const auto& refPosOld = refEntity.m_Pos;
+		const auto& refPosOld = refEntity.Pos();
 		bool CrowdTool判断单位重叠(const Position & refPosOld, const Position & refPosNew, const float f半边长);
 		if (CrowdTool判断单位重叠(refPos, refPosOld, f半边长))
 			return false;
@@ -716,7 +716,7 @@ void PlayerGateSession_Game::OnRecv(const Msg框选& msg)
 		}
 
 		auto& refEntity = *wpEntity.lock();
-		if (rect.包含此点(refEntity.m_Pos))
+		if (rect.包含此点(refEntity.Pos()))
 			vec.push_back(refEntity.Id);
 	}
 	选中单位(vec);

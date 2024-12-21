@@ -25,7 +25,7 @@ void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, c
 	refEntity.m_spAttack->m_f攻击距离 = f攻击距离;
 	refEntity.m_spAttack->m_f警戒距离 = f警戒距离;
 	refEntity.m_spAttack->m_f伤害 = f伤害;
-	//float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z};
+	//float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z};
 	//int CrowToolAddAgent(float arrF[]);
 	//refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);
 	//m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
@@ -91,7 +91,7 @@ void AttackComponent::Update()
 		//assert(m_coAttack.Finished());//20240205
 
 
-		auto posTarget = m_fun空闲走向此处(m_refEntity.m_Pos);
+		auto posTarget = m_fun空闲走向此处(m_refEntity.Pos());
 		m_refEntity.m_refSpace.CrowdToolFindNerestPos(posTarget);
 		//m_coWalk = AiCo::WalkToPos(m_refEntity.shared_from_this(), posTarget, m_cancel);
 		走Component::WalkToPos(m_refEntity, posTarget);

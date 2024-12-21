@@ -15,7 +15,7 @@ void 走Component::AddComponent(Entity& refEntity)
 {
 	CHECK_VOID(!refEntity.m_sp走);
 	refEntity.m_sp走 = std::make_shared<走Component, Entity&>(refEntity);
-	//float arrF[] = { refEntity.m_Pos.x,0,refEntity.m_Pos.z};
+	//float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z};
 	//int CrowToolAddAgent(float arrF[]);
 	//refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);
 	//m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;

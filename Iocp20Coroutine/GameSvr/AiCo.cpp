@@ -45,8 +45,8 @@ namespace AiCo
 	bool 已走到目标附近(Entity& refThis, const Position localTarget, const float f距离目标小于此距离停下 = 0)
 	{
 		const float step = std::max(refThis.m_速度每帧移动距离, f距离目标小于此距离停下);
-		float& x = refThis.m_Pos.x;
-		float& z = refThis.m_Pos.z;
+		auto& x = refThis.Pos().x;
+		auto & z = refThis.Pos().z;
 		if (std::abs(localTarget.x - x) < step && std::abs(localTarget.z - z) < step)
 		{
 			//LOG(INFO) << "已走到" << localTarget.x << "," << localTarget.z << "附近，协程正常退出";
@@ -54,7 +54,7 @@ namespace AiCo
 			return true;
 		}
 
-		//refThis.m_eulerAnglesY = CalculateAngle(refThis.m_Pos, localTarget);
+		//refThis.m_eulerAnglesY = CalculateAngle(refThis.Pos(), localTarget);
 		refThis.BroadcastNotifyPos();
 
 		return false;
@@ -66,7 +66,7 @@ namespace AiCo
 			LOG(INFO) << posTarget << "不可站立";
 			co_return false;
 		}
-		const auto posOld = refThis.m_Pos;
+		const auto posOld = refThis.Pos();
 		RecastNavigationCrowd rnc(refThis, posTarget);
 		KeepCancel kc(funCancel);
 		const auto posLocalTarget = posTarget;
@@ -93,7 +93,7 @@ namespace AiCo
 				co_return false;
 			}
 
-			//EntitySystem::BroadcastEntity描述(refThis, std::format("距目标{0}米", (int)refThis.m_Pos.Distance(posTarget)));
+			//EntitySystem::BroadcastEntity描述(refThis, std::format("距目标{0}米", (int)refThis.Pos().Distance(posTarget)));
 		}
 		LOG(INFO) << "走向目标协程结束:" << posTarget;
 		co_return false;
@@ -101,7 +101,7 @@ namespace AiCo
 
 	CoTaskBool WalkToTarget(Entity& refThis, SpEntity spTarget, FunCancel& funCancel, const bool b检查警戒距离)
 	{
-		auto posTarget = spTarget->m_Pos;
+		auto posTarget = spTarget->Pos();
 		{
 			const auto ok = refThis.m_refSpace.CrowdToolFindNerestPos(posTarget);
 			assert(ok);
@@ -140,19 +140,19 @@ namespace AiCo
 				co_return false;
 			}
 
-			if (posOld != spTarget->m_Pos)
+			if (posOld != spTarget->Pos())
 			{
-				rnc.SetMoveTarget(spTarget->m_Pos);
-				posOld = spTarget->m_Pos;
+				rnc.SetMoveTarget(spTarget->Pos());
+				posOld = spTarget->Pos();
 			}
 
-			if (已走到目标附近(refThis, spTarget->m_Pos))
+			if (已走到目标附近(refThis, spTarget->Pos()))
 			{
 				co_return false;
 			}
 			//EntitySystem::BroadcastEntity描述(refThis, std::format("距目标{0}米", (int)refThis.Distance(*spTarget)));
 		}
-		LOG(INFO) << "走向目标协程结束:" << refThis.m_Pos;
+		LOG(INFO) << "走向目标协程结束:" << refThis.Pos();
 		co_return false;
 	}
 	CoTask<int> 多人联机地图(Space& refSpace, FunCancel& funCancel)
