@@ -27,28 +27,62 @@ void AoiComponent::Add(Space& refSpace, Entity& refEntity)
 		continue;\
 	}\
 }
-void AoiComponent::进入Space()
+void AoiComponent::能看到这一格的人都看到我()
 {
-	const auto [i32格子Id, i32格子X, i32格子Z] = AoiComponent::格子(m_refEntity);
-	auto& refMapWp能看到这一格 = m_refSpace.m_map能看到这一格[i32格子Id];
+	const auto [id, _, __] = 格子(m_refEntity);
+	{
+		const auto [iter, ok] = m_refEntity.m_refSpace.m_map在这一格里[id].insert({ m_refEntity.Id,m_refEntity.weak_from_this() });
+		assert(ok);
+	}
+	auto& refMapWp能看到这一格 = m_refEntity.m_refSpace.m_map能看到这一格[id];
+	//{
+	//	const auto [iter, ok] = refMapWp能看到这一格.insert({ m_refEntity.Id,m_refEntity.weak_from_this() });
+	//	assert(ok);
+	//}
 	for (auto [k, wp] : refMapWp能看到这一格)
 	{
 		CHECK_WP_CONTINUE(wp);
 		auto& refEntity = *wp.lock();
-		CHECK_AOI_CONTINUE(refEntity)
-		refEntity.m_upAoi->看到(m_refEntity);
+		CHECK_AOI_CONTINUE(refEntity);
+		refEntity.m_upAoi->m_map我能看到的[m_refEntity.Id] = m_refEntity.weak_from_this();
 	}
-
-	const auto vecMap = 能看到的格子里的Entity();
-	for (auto [k, wp] : vecMap)
+}
+void AoiComponent::能看到这一格的人都看不到我()
+{
+	const auto [id, _, __] = 格子(m_refEntity);
+	auto& refMapWp能看到这一格 = m_refEntity.m_refSpace.m_map能看到这一格[id];
+	for (auto [k, wp] : refMapWp能看到这一格)
 	{
 		CHECK_WP_CONTINUE(wp);
 		auto& refEntity = *wp.lock();
 		CHECK_AOI_CONTINUE(refEntity);
-		看到(refEntity);
+		const auto sizeErase = refEntity.m_upAoi->m_map我能看到的.erase(m_refEntity.Id);// = m_refEntity.weak_from_this();
+		assert(1 == sizeErase);
 	}
+
+	{
+		const auto sizeErase = m_refEntity.m_refSpace.m_map在这一格里[id].erase(m_refEntity.Id);// , m_refEntity.weak_from_this() });
+		assert(1 == sizeErase);
+	}
+	//{
+	//	const auto [iter, ok] = refMapWp能看到这一格.insert({ m_refEntity.Id,m_refEntity.weak_from_this() });
+	//	assert(ok);
+	//}
+}
+void AoiComponent::进入Space()
+{
+	看到这些格子(能看到的格子Vec());
+	能看到这一格的人都看到我();
 }
 
+
+void AoiComponent::离开Space()
+{
+	看不到这些格子(能看到的格子Vec());
+	const auto [id, _, __] = 格子(m_refEntity);
+	const auto sizeErase = m_refEntity.m_refSpace.m_map在这一格里[id].erase(m_refEntity.Id);
+	assert(1 == sizeErase);
+}
 void AoiComponent::看到(Entity& refEntity被看)
 {
 	assert(refEntity被看.m_upAoi);
@@ -69,34 +103,41 @@ void AoiComponent::看不到(Entity& refEntity被看)
 	m_refEntity.m_upAoi->m_map我能看到的.erase(refEntity被看.Id);// ] = refEntity被看.weak_from_this();
 }
 
-
-void AoiComponent::离开Space()
+void AoiComponent::看到这些格子(const std::vector<int32_t>& vec新增看到的格子Id)
 {
-	const auto [i32格子Id, i32格子X, i32格子Z] = AoiComponent::格子(m_refEntity);
-	auto& refMapWp能看到这一格 = m_refSpace.m_map能看到这一格[i32格子Id];
-	for (auto [k, wp] : refMapWp能看到这一格)
+	for (const auto id : vec新增看到的格子Id)
 	{
-		CHECK_WP_CONTINUE(wp);
-		auto& refEntity = *wp.lock();
-		if (!refEntity.m_upAoi)
+		auto& refMapWp = m_refSpace.m_map在这一格里[id];
+		for (auto [k, wp] : refMapWp)
 		{
-			LOG(ERROR) << "";
-			assert(false);
-			continue;
+			CHECK_WP_CONTINUE(wp);
+			auto& refEntity = *wp.lock();
+			CHECK_AOI_CONTINUE(refEntity);
+
+			m_refEntity.m_upAoi->看到(refEntity);
 		}
 
-		refEntity.m_upAoi->看不到(m_refEntity);
+		auto [iter, ok] = m_refSpace.m_map能看到这一格[id].insert({ m_refEntity.Id, m_refEntity.weak_from_this() });
+		assert(ok);
 	}
+}
 
-	const auto vecMap = 能看到的格子里的Entity();
-	for (auto [k, wp] : vecMap)
+void AoiComponent::看不到这些格子(const std::vector<int32_t>& vec删除不再看到的老格子Id)
+{
+	for (const auto id : vec删除不再看到的老格子Id)
 	{
-		CHECK_WP_CONTINUE(wp);
-		auto& refEntity = *wp.lock();
-		if (!refEntity.m_upAoi)
-			continue;//资源或中立动物之类
+		auto& refMapWp = m_refSpace.m_map在这一格里[id];
+		for (auto [k, wp] : refMapWp)
+		{
+			CHECK_WP_CONTINUE(wp);
+			auto& refEntity = *wp.lock();
+			CHECK_AOI_CONTINUE(refEntity);
 
-		看不到(refEntity);
+			m_refEntity.m_upAoi->看不到(refEntity);
+		}
+
+		const auto size删除数 = m_refSpace.m_map能看到这一格[id].erase(m_refEntity.Id);// = m_refEntity.weak_from_this();
+		assert(1 == size删除数);
 	}
 }
 
@@ -114,38 +155,11 @@ void AoiComponent::OnBeforeChangePos(const Position& posNew)
 	std::set_difference(set能看到New.begin(), set能看到New.end(), set能看到Old.begin(), set能看到Old.end(), std::back_inserter(vec新增看到的格子));
 	std::set_difference(set能看到Old.begin(), set能看到Old.end(), set能看到New.begin(), set能看到New.end(), std::back_inserter(vec删除不会再看到的格子));
 
-	for (const auto id : vec新增看到的格子)
-	{
-		auto& refMapWp = m_refSpace.m_map在这一格里[id];
-		for (auto [k, wp] : refMapWp)
-		{
-			CHECK_WP_CONTINUE(wp);
-			auto &refEntity = *wp.lock();
-			CHECK_AOI_CONTINUE(refEntity);
-			
-			m_refEntity.m_upAoi->看到(refEntity);
-		}
-
-		m_refSpace.m_map能看到这一格[id][m_refEntity.Id] = m_refEntity.weak_from_this();
-	}
-	for (const auto id : vec删除不会再看到的格子)
-	{
-		auto& refMapWp = m_refSpace.m_map在这一格里[id];
-		for (auto [k, wp] : refMapWp)
-		{
-			CHECK_WP_CONTINUE(wp);
-			auto& refEntity = *wp.lock();
-			CHECK_AOI_CONTINUE(refEntity);
-
-			m_refEntity.m_upAoi->看不到(refEntity);
-		}
-
-		const auto size删除数 = m_refSpace.m_map能看到这一格[id].erase(m_refEntity.Id);// = m_refEntity.weak_from_this();
-		assert(1 == size删除数);
-	}
+	看到这些格子(vec新增看到的格子);
+	看不到这些格子(vec删除不会再看到的格子);
 
 	m_refSpace.m_map在这一格里[idOld].erase(m_refEntity.Id);
-	m_refSpace.m_map在这一格里[idNew][m_refEntity.Id]=m_refEntity.weak_from_this();
+	m_refSpace.m_map在这一格里[idNew][m_refEntity.Id] = m_refEntity.weak_from_this();
 }
 void AoiComponent::OnDestory()
 {
@@ -186,12 +200,18 @@ AoiComponent::AoiComponent(Space& refSpace, Entity& refEntity) :m_refSpace(refSp
 
 const uint8_t u8格子正方形边长 = 10;
 
+int AoiComponent::格子Id(const int32_t i32格子X, const int32_t i32格子Z)
+{
+	const uint16_t u16X坐标放大倍数 = 10000;//z坐标不能超过9999
+	const int32_t i32格子ID = i32格子X * u16X坐标放大倍数 + i32格子Z;
+	return i32格子ID;
+}
 std::tuple<int, int, int> AoiComponent::格子(const Position& refPos)
 {
 	const uint16_t u16X坐标放大倍数 = 10000;//z坐标不能超过9999
 	const int32_t i32格子X = ((int)refPos.x) / u8格子正方形边长;
 	const int32_t i32格子Z = ((int)refPos.z) / u8格子正方形边长;
-	const int32_t i32格子ID = i32格子X * u16X坐标放大倍数 + i32格子Z;
+	const int32_t i32格子ID = 格子Id(i32格子X, i32格子Z);
 	return { i32格子ID ,i32格子X, i32格子Z };
 }
 
@@ -202,28 +222,37 @@ std::tuple<int, int, int> AoiComponent::格子(const Entity& refEntity)
 }
 
 
-std::unordered_map<uint64_t, WpEntity> AoiComponent::能看到的格子里的Entity() const
+std::unordered_map<int, std::unordered_map<uint64_t, WpEntity>> AoiComponent::能看到的格子里的Entity() const
 {
-	std::unordered_map<uint64_t, WpEntity> map;
+	std::unordered_map<int, std::unordered_map<uint64_t, WpEntity>> map;
 	const auto set = 能看到的格子();
 	for (const auto id : set)
 	{
 		auto mapWp = m_refSpace.m_map在这一格里[id];
 		for (auto [k, wp] : mapWp)
 		{
-			auto [iter, ok] = map.insert({ k,wp });
+			auto [iter, ok] = map[id].insert({ k,wp });
 			assert(ok);
 		}
 	}
 	return map;
 }
-std::unordered_set<int32_t> AoiComponent::能看到的格子() const
+
+std::vector<int32_t> AoiComponent::能看到的格子Vec() const
+{
+	std::vector<int32_t> vec;
+	const auto set = 能看到的格子();
+	std::copy(set.begin(), set.end(), std::back_inserter(vec));
+	return vec;
+}
+
+std::set<int32_t> AoiComponent::能看到的格子() const
 {
 	return 能看到的格子(m_refEntity.Pos());
 }
-std::unordered_set<int32_t> AoiComponent::能看到的格子(const Position& pos) const
+std::set<int32_t> AoiComponent::能看到的格子(const Position& pos) const
 {
-	std::unordered_set<int32_t> set;
+	std::set<int32_t> set;
 	const auto [i32格子Id, i32格子X, i32格子Z] = AoiComponent::格子(pos);
 
 	int i32视野范围 = m_i32视野范围;
@@ -233,13 +262,13 @@ std::unordered_set<int32_t> AoiComponent::能看到的格子(const Position& pos) cons
 	i32视野范围 /= u8格子正方形边长;
 	++i32视野范围;//上面去掉小数了，这里加一点
 
-	for (int x = i32格子X - i32视野范围; x < i32格子X + i32视野范围; ++x)
+	for (int x = i32格子X - i32视野范围; x <= i32格子X + i32视野范围; ++x)
 	{
-		for (int z = i32格子Z - i32视野范围; z < i32格子Z + i32视野范围; ++z)
+		for (int z = i32格子Z - i32视野范围; z <= i32格子Z + i32视野范围; ++z)
 		{
-			const auto [id, _, __] = 格子({ (float)x,(float)z });
+			const auto id = 格子Id(x, z);
 			const auto [iter, ok] = set.insert(id);
-			assert(ok);
+			assert(ok); //bool值则表示是否插入了该元素
 		}
 	}
 
