@@ -61,6 +61,11 @@ namespace AiCo
 	}
 	CoTaskBool WalkToPos(Entity& refThis, const Position posTarget, FunCancel& funCancel, const float f距离目标小于此距离停下)
 	{
+		if (refThis.IsDead())
+		{
+			LOG(WARNING) << posTarget << ",已阵亡不用走";
+			co_return false;
+		}
 		if (!refThis.m_refSpace.CrowdTool可站立(posTarget))
 		{
 			LOG(INFO) << posTarget << "不可站立";
@@ -101,6 +106,12 @@ namespace AiCo
 
 	CoTaskBool WalkToTarget(Entity& refThis, SpEntity spTarget, FunCancel& funCancel, const bool b检查警戒距离)
 	{
+		if (refThis.IsDead())
+		{
+			LOG(WARNING) << refThis.NickName() << ",已阵亡不用走";
+			co_return false;
+		}
+
 		auto posTarget = spTarget->Pos();
 		{
 			const auto ok = refThis.m_refSpace.CrowdToolFindNerestPos(posTarget);

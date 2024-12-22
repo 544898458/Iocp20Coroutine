@@ -4,6 +4,8 @@
 #include "EntitySystem.h"
 #include "Space.h"
 #include "AttackComponent.h"
+#include "µØ±¤Component.h"
+
 void AoiComponent::Add(Space& refSpace, Entity& refEntity, const int32_t i32ÊÓÒ°·¶Î§)
 {
 	refEntity.m_upAoi.reset(new AoiComponent(refSpace, refEntity));// std::make_unique<AoiComponent>();
@@ -66,6 +68,11 @@ void AoiComponent::½øÈëSpace()
 
 void AoiComponent::Àë¿ªSpace()
 {
+	if (m_refSpace.GetEntity(m_refEntity.Id).expired())
+	{
+		LOG(INFO) << "¿ÉÄÜÔÚµØ±¤ÖÐ";
+		return;
+	}
 	¿´²»µ½ÕâÐ©¸ñ×Ó(ÄÜ¿´µ½µÄ¸ñ×ÓVec());
 	ÄÜ¿´µ½ÕâÒ»¸ñµÄÈË¶¼¿´²»µ½ÎÒ();
 }
@@ -84,7 +91,18 @@ void AoiComponent::¿´µ½(Entity& refEntity±»¿´)
 		assert(ok);
 
 		if (m_refEntity.m_spAttack)
+		{
 			m_refEntity.m_spAttack->m_bËÑË÷ÐÂµÄÄ¿±ê = true;
+		}
+		else if (m_refEntity.m_spµØ±¤) {
+			for (auto sp : m_refEntity.m_spµØ±¤->m_listSpEntity)
+			{
+				if (sp->m_spAttack)
+				{
+					sp->m_spAttack->m_bËÑË÷ÐÂµÄÄ¿±ê = true;
+				}
+			}
+		}
 	}
 }
 
@@ -144,7 +162,7 @@ void AoiComponent::¿´²»µ½ÕâÐ©¸ñ×Ó(const std::vector<int32_t>& vecÉ¾³ý²»ÔÙ¿´µ½µÄÀ
 
 void AoiComponent::OnAfterChangePos()
 {
-	
+
 }
 
 void AoiComponent::OnBeforeChangePos(const Position& posNew)

@@ -49,12 +49,13 @@ void 地堡Component::进(Space& refSpace, uint64_t idEntity)
 	}
 	sp->SetPos(m_refEntity.Pos());
 	sp->BroadcastLeave();//OnDestroy();
-	sp->m_wpOwner = m_refEntity.weak_from_this();
-	m_listSpEntity.push_back(sp);
-	refSpace.m_mapEntity.erase(idEntity);
-	//sp->BroadcastLeave();
 	if (sp->m_upAoi)
 		sp->m_upAoi->离开Space();
+
+	refSpace.m_mapEntity.erase(idEntity);
+	m_listSpEntity.push_back(sp);
+	sp->m_wpOwner = m_refEntity.weak_from_this();
+
 	EntitySystem::BroadcastEntity描述(m_refEntity, std::format("地堡内有{0}人", m_listSpEntity.size()));
 }
 

@@ -15,10 +15,10 @@
 #include "../CoRoutine/CoTimer.h"
 #include "DefenceComponent.h"
 #include "BuildingComponent.h"
-
+#include "AoiComponent.h"
 
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
-void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, const 单位::战斗配置 &配置)
+void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, const 单位::战斗配置& 配置)
 {
 	CHECK_VOID(!refEntity.m_spAttack);
 	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&, const 活动单位类型, const 单位::战斗配置&>(
@@ -43,7 +43,14 @@ float AttackComponent::攻击距离(const Entity& refTarget) const
 	auto spOwner = m_refEntity.m_wpOwner.lock();
 	return m_战斗配置.f攻击距离 + f目标建筑半边长 + BuildingComponent::建筑半边长(*spOwner);
 }
+float AttackComponent::攻击距离() const
+{
+	if (m_refEntity.m_wpOwner.expired())
+		return m_战斗配置.f攻击距离;//普通战斗单位
 
+	auto spOwner = m_refEntity.m_wpOwner.lock();
+	return m_战斗配置.f攻击距离 + BuildingComponent::建筑半边长(*spOwner);
+}
 Position 怪物闲逛(const Position& refOld)
 {
 	auto posTarget = refOld;
@@ -52,7 +59,7 @@ Position 怪物闲逛(const Position& refOld)
 	return posTarget;
 }
 using namespace std;
-AttackComponent::AttackComponent(Entity& refEntity, const 活动单位类型 类型, const 单位::战斗配置& 配置):
+AttackComponent::AttackComponent(Entity& refEntity, const 活动单位类型 类型, const 单位::战斗配置& 配置) :
 	m_refEntity(refEntity),
 	m_类型(类型),
 	m_fun空闲走向此处(怪物闲逛),
@@ -145,8 +152,16 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
-			if (co_await CoAttack(wpEntity, m_cancelAttack))
-				co_return true;
+			if (m_类型 == 三色坦克)
+			{
+				if (co_await CoAttack位置(refTarget.Pos(), m_cancelAttack))
+					co_return true;
+			}
+			else
+			{
+				if (co_await CoAttack目标(wpEntity, m_cancelAttack))
+					co_return true;
+			}
 
 			continue;
 		}
@@ -211,52 +226,111 @@ void AttackComponent::播放攻击音效()
 	if (!m_战斗配置.str攻击音效.empty())
 		EntitySystem::Broadcast播放声音(m_refEntity, m_战斗配置.str攻击音效);
 }
-CoTaskBool AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
+
+#define CHECK_终止攻击目标流程 \
+		if (m_refEntity.IsDead())\
+			co_return false;\
+		if (wpDefencer.expired())\
+			break;\
+		if (wpDefencer.lock()->IsDead())\
+			break;\
+
+
+CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 {
 	KeepCancel kc(cancel);
-
-	if (m_refEntity.IsDead())
-		co_return false;//自己死亡
-
-
-	if (wpDefencer.expired())
-		co_return false;
-
-	m_refEntity.m_eulerAnglesY = CalculateAngle(m_refEntity.Pos(), wpDefencer.lock()->Pos());
-	m_refEntity.BroadcastNotifyPos();
-	播放前摇动作();
-
-	if (0s < m_战斗配置.dura开始播放攻击动作 && co_await CoTimer::Wait(m_战斗配置.dura开始播放攻击动作, cancel))
-		co_return true;//协程取消
-
-	播放攻击动作();
-	if (0s < m_战斗配置.dura开始伤害 && co_await CoTimer::Wait(m_战斗配置.dura开始伤害, cancel))
-		co_return true;//协程取消
-
-
 	do
 	{
-		if (m_refEntity.IsDead())
-			co_return false;//自己死亡，不再后摇
+		CHECK_终止攻击目标流程;
 
-		if (wpDefencer.expired())
+		m_refEntity.m_eulerAnglesY = CalculateAngle(m_refEntity.Pos(), wpDefencer.lock()->Pos());
+		m_refEntity.BroadcastNotifyPos();
+		播放前摇动作();
+
+		if (0s < m_战斗配置.dura开始播放攻击动作 && co_await CoTimer::Wait(m_战斗配置.dura开始播放攻击动作, cancel))
+			co_return true;//协程取消
+
+		CHECK_终止攻击目标流程;
+
+		播放攻击动作();
+		if (0s < m_战斗配置.dura开始伤害 && co_await CoTimer::Wait(m_战斗配置.dura开始伤害, cancel))
+			co_return true;//协程取消
+
+		CHECK_终止攻击目标流程;
+
+		auto& refDefencer = *wpDefencer.lock();
+		if (!m_refEntity.DistanceLessEqual(refDefencer, 攻击距离(refDefencer)))
 			break;//要执行后摇
 
-		auto spDefencer = wpDefencer.lock();
-		if (spDefencer->IsDead())
-			break;//要执行后摇
-
-		if (!m_refEntity.DistanceLessEqual(*spDefencer, 攻击距离(*spDefencer)))
-			break;//要执行后摇
-
-		if (!spDefencer->m_spDefence)
+		if (!refDefencer.m_spDefence)
 			break;//目标打不了
 
-		//if (m_refEntity.m_spPlayer && m_类型 == 兵)
-		//	EntitySystem::Broadcast播放声音(m_refEntity, "音效/TTaFir00");
 		播放攻击音效();
 
-		spDefencer->m_spDefence->受伤(m_战斗配置.f伤害);
+		refDefencer.m_spDefence->受伤(m_战斗配置.f伤害);
+	} while (false);
+
+	if (co_await CoTimer::Wait(800ms, cancel))//后摇
+		co_return true;//协程取消
+
+	if (!m_refEntity.IsDead())
+	{
+		EntitySystem::BroadcastChangeSkeleAnimIdle(m_refEntity);//播放休闲待机动作
+	}
+
+	co_return false;//协程正常退出
+}
+
+
+#define CHECK_终止攻击位置流程 \
+		if (m_refEntity.IsDead())\
+			co_return false;\
+
+CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, FunCancel& cancel)
+{
+	KeepCancel kc(cancel);
+	do
+	{
+		CHECK_终止攻击位置流程;
+
+		m_refEntity.m_eulerAnglesY = CalculateAngle(m_refEntity.Pos(), posTarget);
+		m_refEntity.BroadcastNotifyPos();
+		播放前摇动作();
+
+		if (0s < m_战斗配置.dura开始播放攻击动作 && co_await CoTimer::Wait(m_战斗配置.dura开始播放攻击动作, cancel))
+			co_return true;//协程取消
+
+		CHECK_终止攻击位置流程;
+
+		播放攻击动作();
+		if (0s < m_战斗配置.dura开始伤害 && co_await CoTimer::Wait(m_战斗配置.dura开始伤害, cancel))
+			co_return true;//协程取消
+
+		CHECK_终止攻击位置流程;
+
+		if (!m_refEntity.Pos().DistanceLessEqual(posTarget, 攻击距离()))
+			break;//要执行后摇
+
+		播放攻击音效();
+		{
+			SpEntity spEntity特效 = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(
+				posTarget, m_refEntity.m_refSpace, "特效/黄光爆闪", "特效");
+			m_refEntity.m_refSpace.AddEntity(spEntity特效, 0);
+			spEntity特效->BroadcastEnter();
+			spEntity特效->CoDelayDelete().RunNew();
+		}
+		assert(m_refEntity.m_upAoi);
+		if (m_refEntity.m_upAoi)
+		{
+			for (auto [k, wp] : m_refEntity.m_upAoi->m_map我能看到的)
+			{
+				CHECK_WP_CONTINUE(wp);
+				auto& refDefencer = *wp.lock();
+				if (refDefencer.m_spDefence && refDefencer.Pos().DistanceLessEqual(posTarget, 5))
+					refDefencer.m_spDefence->受伤(m_战斗配置.f伤害);
+			}
+		}
+
 	} while (false);
 
 	if (co_await CoTimer::Wait(800ms, cancel))//后摇

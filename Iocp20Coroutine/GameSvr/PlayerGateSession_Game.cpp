@@ -69,14 +69,16 @@ void PlayerGateSession_Game::OnDestroy()
 			continue;
 		}
 		auto sp = wp.lock();
-		auto countErase = sp->m_refSpace.m_mapEntity.erase(sp->Id);
-		if (countErase <= 0)
+		
+		if (sp->m_refSpace.GetEntity(sp->Id).expired())
 		{
 			LOG(INFO) << "可能是地堡里的兵" << sp->NickName();
 			continue;
 		}
 		LOG(INFO) << "m_mapEntity.size=" << sp->m_refSpace.m_mapEntity.size();
 		sp->OnDestroy();
+		auto countErase = sp->m_refSpace.m_mapEntity.erase(sp->Id);
+		assert(1 == countErase);
 	}
 
 	m_mapWpEntity.clear();
@@ -529,9 +531,7 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	}
 
 	SpEntity spEntityViewPort = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ 0.0 }, *sp, "smoke", "视口");
-	//sp->m_mapEntity.insert({ spEntityViewPort->Id, spEntityViewPort });
 	m_mapWpEntity[spEntityViewPort->Id] = (spEntityViewPort);
-	//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 	PlayerComponent::AddComponent(*spEntityViewPort, *this);
 	sp->AddEntity(spEntityViewPort, 100);
 	spEntityViewPort->BroadcastEnter();
