@@ -34,7 +34,7 @@ std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const ªÓ∂Øµ•
 	{
 		SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(
 			refPos, refSpace, ≈‰÷√.≈‰÷√.strPrefabName, ≈‰÷√.≈‰÷√.strName);
-		AttackComponent::AddComponent(*spEntityMonster, ¿‡–Õ, ≈‰÷√.’Ω∂∑.fπ•ª˜æ‡¿Î, ≈‰÷√.’Ω∂∑.f…À∫¶, ≈‰÷√.’Ω∂∑.fæØΩ‰æ‡¿Î, ≈‰÷√.’Ω∂∑.dura∆’π•«∞“°);
+		AttackComponent::AddComponent(*spEntityMonster, ¿‡–Õ, ≈‰÷√.’Ω∂∑);
 		DefenceComponent::AddComponent(*spEntityMonster, ≈‰÷√.u16≥ı ºHp);
 		◊ﬂComponent::AddComponent(*spEntityMonster);
 		AddComponent(*spEntityMonster);

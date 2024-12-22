@@ -15,17 +15,17 @@
 #include "../CoRoutine/CoTimer.h"
 #include "DefenceComponent.h"
 #include "BuildingComponent.h"
-#include "单位.h"
+
 
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
-void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, const float f攻击距离, const float f伤害, const float f警戒距离, const std::chrono::system_clock::duration dura)
+void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, const 单位::战斗配置 &配置)
 {
 	CHECK_VOID(!refEntity.m_spAttack);
-	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&, const 活动单位类型, const std::chrono::system_clock::duration>(
-		refEntity, std::forward<const 活动单位类型&&>(类型), std::forward<const std::chrono::system_clock::duration&&>(dura));
-	refEntity.m_spAttack->m_f攻击距离 = f攻击距离;
-	refEntity.m_spAttack->m_f警戒距离 = f警戒距离;
-	refEntity.m_spAttack->m_f伤害 = f伤害;
+	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&, const 活动单位类型, const 单位::战斗配置&>(
+		refEntity, std::forward<const 活动单位类型&&>(类型), 配置);
+	//refEntity.m_spAttack->m_f攻击距离 = f攻击距离;
+	//refEntity.m_spAttack->m_f警戒距离 = f警戒距离;
+	//refEntity.m_spAttack->m_f伤害 = f伤害;
 	//float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z};
 	//int CrowToolAddAgent(float arrF[]);
 	//refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);
@@ -38,10 +38,10 @@ float AttackComponent::攻击距离(const Entity& refTarget) const
 	const float f目标建筑半边长 = BuildingComponent::建筑半边长(refTarget);
 
 	if (m_refEntity.m_wpOwner.expired())
-		return m_f攻击距离 + f目标建筑半边长;//普通战斗单位
+		return m_战斗配置.f攻击距离 + f目标建筑半边长;//普通战斗单位
 
 	auto spOwner = m_refEntity.m_wpOwner.lock();
-	return m_f攻击距离 + f目标建筑半边长 + BuildingComponent::建筑半边长(*spOwner);
+	return m_战斗配置.f攻击距离 + f目标建筑半边长 + BuildingComponent::建筑半边长(*spOwner);
 }
 
 Position 怪物闲逛(const Position& refOld)
@@ -52,11 +52,11 @@ Position 怪物闲逛(const Position& refOld)
 	return posTarget;
 }
 using namespace std;
-AttackComponent::AttackComponent(Entity& refEntity, const 活动单位类型 类型, const std::chrono::system_clock::duration dura) :
+AttackComponent::AttackComponent(Entity& refEntity, const 活动单位类型 类型, const 单位::战斗配置& 配置):
 	m_refEntity(refEntity),
 	m_类型(类型),
 	m_fun空闲走向此处(怪物闲逛),
-	m_dura前摇(dura)
+	m_战斗配置(配置)
 {
 }
 
@@ -173,7 +173,44 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 	co_return false;
 }
 
+void AttackComponent::播放前摇动作()
+{
+	//switch (m_类型)
+	//{
+	//case 三色坦克:m_refEntity.BroadcastChangeSkeleAnim("attack_loop"); break;
+	//default:m_refEntity.BroadcastChangeSkeleAnim("attack"); break;
+	//}
+	if (!m_战斗配置.str前摇动作.empty())
+		m_refEntity.BroadcastChangeSkeleAnim(m_战斗配置.str前摇动作);
+}
 
+void AttackComponent::播放攻击动作()
+{
+	//switch (m_类型)
+	//{
+	//case 三色坦克:m_refEntity.BroadcastChangeSkeleAnim("attack_loop"); break;
+	//default:m_refEntity.BroadcastChangeSkeleAnim("attack"); break;
+	//}
+	if (!m_战斗配置.str攻击动作.empty())
+		m_refEntity.BroadcastChangeSkeleAnim(m_战斗配置.str攻击动作);
+}
+
+void AttackComponent::播放攻击音效()
+{
+	//switch (m_类型)
+	//{
+	//case 兵:
+	//	if (!m_refEntity.m_spPlayer)
+	//		EntitySystem::Broadcast播放声音(m_refEntity, "TMaFir00");
+	//	break;
+	//case 近战兵:EntitySystem::Broadcast播放声音(m_refEntity, "Tfrshoot"); break;
+	//case 工程车:EntitySystem::Broadcast播放声音(m_refEntity, "TSCMin00"); break;
+	//case 三色坦克:EntitySystem::Broadcast播放声音(m_refEntity, "音效/TTaFi200"); break;
+	//}
+
+	if (!m_战斗配置.str攻击音效.empty())
+		EntitySystem::Broadcast播放声音(m_refEntity, m_战斗配置.str攻击音效);
+}
 CoTaskBool AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 {
 	KeepCancel kc(cancel);
@@ -181,38 +218,24 @@ CoTaskBool AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 	if (m_refEntity.IsDead())
 		co_return false;//自己死亡
 
-	switch (m_类型)
+
+	if (wpDefencer.expired())
+		co_return false;
+
+	m_refEntity.m_eulerAnglesY = CalculateAngle(m_refEntity.Pos(), wpDefencer.lock()->Pos());
+	m_refEntity.BroadcastNotifyPos();
+	播放前摇动作();
+
+	if (0s < m_战斗配置.dura开始播放攻击动作 && co_await CoTimer::Wait(m_战斗配置.dura开始播放攻击动作, cancel))
+		co_return true;//协程取消
+
+	播放攻击动作();
+	if (0s < m_战斗配置.dura开始伤害 && co_await CoTimer::Wait(m_战斗配置.dura开始伤害, cancel))
+		co_return true;//协程取消
+
+
+	do
 	{
-	case 三色坦克:m_refEntity.BroadcastChangeSkeleAnim("attack_loop"); break;
-	default:m_refEntity.BroadcastChangeSkeleAnim("attack");break;
-	}
-	
-
-	using namespace std;
-
-	const std::tuple<std::chrono::system_clock::duration, int> arrWaitHurt[] =
-	{	//三段伤害{每段前摇时长，伤害值}
-		//{300ms,2},
-		{m_dura前摇,m_f伤害},
-		//{50ms,5}
-	};
-
-	switch (m_类型)
-	{
-	case 兵:
-		if (!m_refEntity.m_spPlayer)
-			EntitySystem::Broadcast播放声音(m_refEntity, "TMaFir00");
-		break;
-	case 近战兵:EntitySystem::Broadcast播放声音(m_refEntity, "Tfrshoot"); break;
-	case 工程车:EntitySystem::Broadcast播放声音(m_refEntity, "TSCMin00"); break;
-	case 三色坦克:EntitySystem::Broadcast播放声音(m_refEntity, "音效/TTaFi200"); break;
-	}
-
-	for (auto wait_hurt : arrWaitHurt)
-	{
-		if (co_await CoTimer::Wait(std::get<0>(wait_hurt), cancel))//等x秒	前摇
-			co_return true;//协程取消
-
 		if (m_refEntity.IsDead())
 			co_return false;//自己死亡，不再后摇
 
@@ -229,11 +252,12 @@ CoTaskBool AttackComponent::CoAttack(WpEntity wpDefencer, FunCancel& cancel)
 		if (!spDefencer->m_spDefence)
 			break;//目标打不了
 
-		if (m_refEntity.m_spPlayer && m_类型 == 兵)
-			EntitySystem::Broadcast播放声音(m_refEntity, "音效/TTaFir00");
+		//if (m_refEntity.m_spPlayer && m_类型 == 兵)
+		//	EntitySystem::Broadcast播放声音(m_refEntity, "音效/TTaFir00");
+		播放攻击音效();
 
-		spDefencer->m_spDefence->受伤(std::get<1>(wait_hurt));//第n次让对方伤
-	}
+		spDefencer->m_spDefence->受伤(m_战斗配置.f伤害);
+	} while (false);
 
 	if (co_await CoTimer::Wait(800ms, cancel))//后摇
 		co_return true;//协程取消

@@ -97,14 +97,14 @@ void Entity::SetPos(const Position& refNewPos)
 float Entity::¹¥»÷¾àÀë() const
 {
 	if (m_spAttack)
-		return m_spAttack->m_f¹¥»÷¾àÀë;
+		return m_spAttack->m_Õ½¶·ÅäÖÃ.f¹¥»÷¾àÀë;
 
 	return 0;
 }
 float Entity::¾¯½ä¾àÀë() const
 {
 	if (m_spAttack)
-		return m_spAttack->m_f¾¯½ä¾àÀë;
+		return m_spAttack->m_Õ½¶·ÅäÖÃ.f¾¯½ä¾àÀë;
 
 	return 0;
 }

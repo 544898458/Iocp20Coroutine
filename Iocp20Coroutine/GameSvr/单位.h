@@ -30,7 +30,12 @@ namespace 单位
 		float f攻击距离;
 		float f伤害;
 		float f每帧移动距离;
-		std::chrono::system_clock::duration dura普攻前摇;
+		std::string str前摇动作;
+		std::chrono::system_clock::duration dura开始播放攻击动作;
+		std::string str攻击动作;
+		std::chrono::system_clock::duration dura开始伤害;
+		std::string str攻击音效;
+		
 	};
 	struct 活动单位配置
 	{

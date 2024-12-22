@@ -64,7 +64,7 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 建筑单位类型 类型
 		assert(false);
 		co_return true;
 	}
-	if (co_await AiCo::WalkToPos(m_refEntity, pos, m_cancel造建筑, 配置.f半边长 + m_refEntity.m_spAttack->m_f攻击距离))
+	if (co_await AiCo::WalkToPos(m_refEntity, pos, m_cancel造建筑, 配置.f半边长 + m_refEntity.m_spAttack->m_战斗配置.f攻击距离))
 		co_return true;
 
 	//然后开始扣钱建造

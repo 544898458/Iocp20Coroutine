@@ -233,7 +233,7 @@ namespace 单人剧情
 				co_return 0;
 
 			refGateSession.Say系统(std::format("第{0}波敌人正向您走来", i));
-			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 兵 : 近战兵, { 48,-48 }, i * 20);
+			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 兵 : 近战兵, { 48,-48 }, i * 5);
 			for (auto& spEntity : vecEneity)
 			{
 				//if (spEntity->m_sp走)
