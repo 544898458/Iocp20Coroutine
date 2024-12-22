@@ -47,19 +47,35 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 	using namespace std;
 	while (true)
 	{
-		auto wpEntity基地 = m_refEntity.m_refSpace.Get最近的Entity支持地堡中的单位(m_refEntity, false,
-			[](const Entity& ref)
-			{
-				return ref.m_spBuilding && ref.m_spBuilding->m_类型 == 基地;//找离自己最近的基地
-			});
+		//auto wpEntity基地 = m_refEntity.m_refSpace.Get最近的Entity支持地堡中的单位(m_refEntity, false,
+		//	[](const Entity& ref)
+		//	{
+		//		return ref.m_spBuilding && ref.m_spBuilding->m_类型 == 基地;//找离自己最近的基地
+		//	});
+		CHECK_CO_RET_FALSE(m_refEntity.m_spPlayer);
 
+		int min距离的平方 = std::numeric_limits<int>::max();
+		WpEntity wpEntity基地;
+		for (const auto [id, wp] : m_refEntity.m_spPlayer->m_refSession.m_mapWpEntity)
+		{
+			CHECK_WP_CONTINUE(wp);
+			const auto& refEntity = *wp.lock();
+			if (!refEntity.m_spBuilding || refEntity.m_spBuilding->m_类型 != 基地)//找离自己最近的基地
+				continue;
+
+			const auto pow2 = m_refEntity.DistancePow2(refEntity);
+			if (min距离的平方 <= pow2)
+				continue;
+
+			min距离的平方 = pow2;
+			wpEntity基地 = wp;
+		}
 		if (wpEntity基地.expired())
 		{
 			if (co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//自己连一个基地都没有，等一会儿再试
 				co_return true;
 			continue;
 		}
-		
 		if (Max携带矿() <= m_u32携带矿)//装满了，回基地放矿
 		{
 			if (m_refEntity.DistanceLessEqual(*wpEntity基地.lock(), m_refEntity.攻击距离() + BuildingComponent::建筑半边长(*wpEntity基地.lock())))//在基地附近，满载矿，全部放进基地（直接加钱）
