@@ -15,10 +15,10 @@ public:
 	void 播放攻击动作();
 	void 播放攻击音效();
 	CoTaskBool CoAttack目标(WpEntity wpDefencer, FunCancel& cancel);
-	CoTaskBool CoAttack位置(const Position pos, FunCancel& cancel);
+	CoTaskBool CoAttack位置(const Position pos, const float f目标建筑半边长, FunCancel& cancel);
 	static void AddComponent(Entity& refEntity, const 活动单位类型 类型, const 单位::战斗配置& 配置);
 	float 攻击距离(const Entity& refTarget)const;
-	float 攻击距离() const;
+	float 攻击距离(const float f目标建筑半边长) const;
 	//CoTask<int> m_coAttack;
 	FunCancel m_cancelAttack;
 	static const int INVALID_AGENT_IDX = -1;//0是合法值

@@ -3,6 +3,8 @@
 #include <functional>
 #include "MyMsgQueue.h"
 #include "SpEntity.h"
+#include "单位.h"
+
 //#include "PlayerComponent.h"
 class Space;
 class GameSvrSession;
@@ -26,7 +28,7 @@ class PlayerGateSession_Game;
 class Entity final:public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
 public:
-	Entity(const Position& pos, Space& refSpace, const std::string& strPrefabName, const std::string& strEntityName);
+	Entity(const Position& pos, Space& refSpace, const 单位::单位配置& ref配置);
 	Entity(const Entity&) = delete;
 	~Entity();
 	void Update();
@@ -55,11 +57,8 @@ public:
 	float m_速度每帧移动距离 = 0.5f;//每帧多少米
 	float 攻击距离()const;
 	float 警戒距离()const;
-	std::string m_strPrefabName;
-	/// <summary>
-	/// 兵、兵厂、怪
-	/// </summary>
-	std::string m_strEntityName;
+
+	单位::单位配置 m_配置;
 
 	//静态ECS，没有基类强转子类
 	std::shared_ptr<PlayerComponent> m_spPlayer;

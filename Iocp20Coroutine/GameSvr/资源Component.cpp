@@ -16,8 +16,8 @@ void 资源Component::Add(Space& refSpace, const 资源类型 类型, const Position& re
 		return;
 	}
 
-	SpEntity spEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(
-		refPosition, refSpace, 配置.配置.strPrefabName, 配置.配置.strName);
+	SpEntity spEntity = std::make_shared<Entity, const Position&, Space&, const 单位::单位配置&>(
+		refPosition, refSpace, 配置.配置);
 	refSpace.AddEntity(spEntity);
 	//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 	spEntity->m_sp资源 = std::make_shared<资源Component, const 资源类型>(std::forward<const 资源类型&&>(类型));

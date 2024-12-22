@@ -25,8 +25,8 @@
 
 using namespace std;
 
-Entity::Entity(const Position& pos, Space& space, const std::string& strPrefabName, const std::string& strEntityName) :
-	Id((uint64_t)this), m_strPrefabName(strPrefabName), m_refSpace(space), m_Pos(pos), m_strEntityName(strEntityName)
+Entity::Entity(const Position& pos, Space& space, const µ•Œª::µ•Œª≈‰÷√& ref≈‰÷√) :
+	Id((uint64_t)this), m_≈‰÷√(ref≈‰÷√), m_refSpace(space), m_Pos(pos)
 {
 }
 

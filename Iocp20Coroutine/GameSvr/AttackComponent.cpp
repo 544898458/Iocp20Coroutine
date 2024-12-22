@@ -36,20 +36,15 @@ void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, c
 float AttackComponent::攻击距离(const Entity& refTarget) const
 {
 	const float f目标建筑半边长 = BuildingComponent::建筑半边长(refTarget);
-
+	return 攻击距离(f目标建筑半边长);
+}
+float AttackComponent::攻击距离(const float f目标建筑半边长) const
+{
 	if (m_refEntity.m_wpOwner.expired())
 		return m_战斗配置.f攻击距离 + f目标建筑半边长;//普通战斗单位
 
 	auto spOwner = m_refEntity.m_wpOwner.lock();
 	return m_战斗配置.f攻击距离 + f目标建筑半边长 + BuildingComponent::建筑半边长(*spOwner);
-}
-float AttackComponent::攻击距离() const
-{
-	if (m_refEntity.m_wpOwner.expired())
-		return m_战斗配置.f攻击距离;//普通战斗单位
-
-	auto spOwner = m_refEntity.m_wpOwner.lock();
-	return m_战斗配置.f攻击距离 + BuildingComponent::建筑半边长(*spOwner);
 }
 Position 怪物闲逛(const Position& refOld)
 {
@@ -154,7 +149,7 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 
 			if (m_类型 == 三色坦克)
 			{
-				if (co_await CoAttack位置(refTarget.Pos(), m_cancelAttack))
+				if (co_await CoAttack位置(refTarget.Pos(), BuildingComponent::建筑半边长(refTarget), m_cancelAttack))
 					co_return true;
 			}
 			else
@@ -286,7 +281,7 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 		if (m_refEntity.IsDead())\
 			co_return false;\
 
-CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, FunCancel& cancel)
+CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f目标建筑半边长, FunCancel& cancel)
 {
 	KeepCancel kc(cancel);
 	do
@@ -308,13 +303,13 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, FunCancel& ca
 
 		CHECK_终止攻击位置流程;
 
-		if (!m_refEntity.Pos().DistanceLessEqual(posTarget, 攻击距离()))
+		if (!m_refEntity.Pos().DistanceLessEqual(posTarget, 攻击距离(f目标建筑半边长)))
 			break;//要执行后摇
 
 		播放攻击音效();
 		{
-			SpEntity spEntity特效 = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(
-				posTarget, m_refEntity.m_refSpace, "特效/黄光爆闪", "特效");
+			SpEntity spEntity特效 = std::make_shared<Entity, const Position&, Space&, const 单位::单位配置&>(
+				posTarget, m_refEntity.m_refSpace, { "特效" ,"特效/黄光爆闪","" });
 			m_refEntity.m_refSpace.AddEntity(spEntity特效, 0);
 			spEntity特效->BroadcastEnter();
 			spEntity特效->CoDelayDelete().RunNew();

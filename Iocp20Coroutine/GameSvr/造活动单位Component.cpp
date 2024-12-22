@@ -155,8 +155,8 @@ CoTaskBool 造活动单位Component::Co造活动单位(PlayerGateSession_Game& refGateSess
 SpEntity 造活动单位Component::造活动单位(PlayerGateSession_Game& refGateSession, const Position& pos, const 单位::活动单位配置& 配置, const 活动单位类型 类型)
 {
 	auto sp = refGateSession.m_wpSpace.lock();
-	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string&>(
-		pos, *sp, 配置.配置.strPrefabName, 配置.配置.strName);
+	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位::单位配置&>(
+		pos, *sp, 配置.配置);
 	PlayerComponent::AddComponent(*spNewEntity, refGateSession);
 	AttackComponent::AddComponent(*spNewEntity, 类型, 配置.战斗);
 	DefenceComponent::AddComponent(*spNewEntity, 配置.制造.u16初始Hp);

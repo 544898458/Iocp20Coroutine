@@ -69,7 +69,7 @@ void PlayerGateSession_Game::OnDestroy()
 			continue;
 		}
 		auto sp = wp.lock();
-		
+
 		if (sp->m_refSpace.GetEntity(sp->Id).expired())
 		{
 			LOG(INFO) << "可能是地堡里的兵" << sp->NickName();
@@ -345,6 +345,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 				case 兵:播放声音("TMaYes00"); break;//Standing by. 待命中
 				case 近战兵:播放声音("tfbYes03"); break;//Checked up and good to go. 检查完毕，准备动身
 				case 工程车:播放声音("TSCYes00"); break;
+				case 三色坦克:播放声音("音效/ttayes01"); break;
 				default:break;
 				}
 			}
@@ -487,8 +488,8 @@ CoTask<SpEntity> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, 
 	//加建筑
 	CHECK_CO_RET_0(!m_wpSpace.expired());
 	auto spSpace = m_wpSpace.lock();
-	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >(
-		pos, *spSpace, 配置.配置.strPrefabName, 配置.配置.strName);
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位::单位配置& >(
+		pos, *spSpace, 配置.配置);
 	//spNewEntity->AddComponentAttack();
 	PlayerComponent::AddComponent(*spNewEntity, *this);
 	BuildingComponent::AddComponent(*spNewEntity, *this, 类型, 配置.f半边长);
@@ -530,275 +531,278 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 		Send(MsgNotifyPos(*spEntity));
 	}
 
-	SpEntity spEntityViewPort = std::make_shared<Entity, const Position&, Space&, const std::string&, const std::string& >({ 0.0 }, *sp, "smoke", "视口");
+	SpEntity spEntityViewPort = std::make_shared<Entity, const Position&, Space&, const 单位::单位配置&>(
+		{ 0.0 }, *sp, { "视口","smoke", "" });
 	m_mapWpEntity[spEntityViewPort->Id] = (spEntityViewPort);
 	PlayerComponent::AddComponent(*spEntityViewPort, *this);
 	sp->AddEntity(spEntityViewPort, 100);
 	spEntityViewPort->BroadcastEnter();
 
 	CoEvent<PlayerGateSession_Game*>::OnRecvEvent(false, this);
-}
-
-void PlayerGateSession_Game::OnRecv(const MsgSay& msg)
-{
-	auto utf8Content = StrConv::Utf8ToGbk(msg.content);
-	LOG(INFO) << "收到聊天:" << utf8Content;
-	SendToWorldSvr<MsgSay>(msg, m_idPlayerGateSession);
-}
-
-void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
-{
-	CHECK_VOID(!m_wpSpace.expired());
-	LOG(INFO) << "收到选择:" << msg.ids.size();
-	std::vector<uint64_t> listSelectedEntity;
-	std::transform(msg.ids.begin(), msg.ids.end(), std::back_inserter(listSelectedEntity), [](const double& id) {return uint64_t(id); });
-	选中单位(listSelectedEntity);
-}
-
-template<class T_Msg>
-void PlayerGateSession_Game::RecvMsg(const msgpack::object& obj)
-{
-	try
-	{
-		const auto msg = obj.as<T_Msg>();
-		OnRecv(msg);
 	}
-	catch (const msgpack::type_error& error)
+
+		void PlayerGateSession_Game::OnRecv(const MsgSay& msg)
 	{
-		LOG(ERROR) << typeid(T_Msg).name() << ",反序列化失败," << error.what();
-		assert(false);
-		return;
+		auto utf8Content = StrConv::Utf8ToGbk(msg.content);
+		LOG(INFO) << "收到聊天:" << utf8Content;
+		SendToWorldSvr<MsgSay>(msg, m_idPlayerGateSession);
 	}
-}
 
-PlayerGateSession_Game::PlayerGateSession_Game(GameSvrSession& ref, uint64_t idPlayerGateSession, const std::string& strNickName) :
-	m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession), m_strNickName(strNickName)
-{
-
-}
-
-void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& obj)
-{
-	switch (idMsg)
+	void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
 	{
-	case MsgId::进Space:RecvMsg<Msg进Space>(obj); break;
-	case MsgId::离开Space:RecvMsg<Msg离开Space>(obj); break;
-	case MsgId::进单人剧情副本:RecvMsg<Msg进单人剧情副本>(obj); break;
-	case MsgId::Move:RecvMsg<MsgMove>(obj); break;
-	case MsgId::Say:RecvMsg<MsgSay >(obj); break;
-	case MsgId::SelectRoles:RecvMsg<MsgSelectRoles>(obj); break;
-	case MsgId::AddRole:RecvMsg<MsgAddRole>(obj); break;
-	case MsgId::AddBuilding:RecvMsg<MsgAddBuilding>(obj); break;
-	case MsgId::采集:RecvMsg<Msg采集>(obj); break;
-	case MsgId::进地堡:RecvMsg<Msg进地堡>(obj); break;
-	case MsgId::出地堡:RecvMsg<Msg出地堡>(obj); break;
-	case MsgId::框选:RecvMsg<Msg框选>(obj); break;
-	case MsgId::Gate转发:
-		LOG(ERROR) << "不能再转发";
-		assert(false);
-		break;
-	default:
-		LOG(ERROR) << "没处理msgId:" << idMsg;
-		assert(false);
-		break;
+		CHECK_VOID(!m_wpSpace.expired());
+		LOG(INFO) << "收到选择:" << msg.ids.size();
+		std::vector<uint64_t> listSelectedEntity;
+		std::transform(msg.ids.begin(), msg.ids.end(), std::back_inserter(listSelectedEntity), [](const double& id) {return uint64_t(id); });
+		选中单位(listSelectedEntity);
 	}
-}
 
-void PlayerGateSession_Game::Process()
-{
+	template<class T_Msg>
+	void PlayerGateSession_Game::RecvMsg(const msgpack::object& obj)
 	{
-		const auto oldSize = m_vecFunCancel.size();
-		std::erase_if(m_vecFunCancel, [](std::shared_ptr<FunCancel>& sp)->bool
+		try
+		{
+			const auto msg = obj.as<T_Msg>();
+			OnRecv(msg);
+		}
+		catch (const msgpack::type_error& error)
+		{
+			LOG(ERROR) << typeid(T_Msg).name() << ",反序列化失败," << error.what();
+			assert(false);
+			return;
+		}
+	}
+
+	PlayerGateSession_Game::PlayerGateSession_Game(GameSvrSession& ref, uint64_t idPlayerGateSession, const std::string& strNickName) :
+		m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession), m_strNickName(strNickName)
+	{
+
+	}
+
+	void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& obj)
+	{
+		switch (idMsg)
+		{
+		case MsgId::进Space:RecvMsg<Msg进Space>(obj); break;
+		case MsgId::离开Space:RecvMsg<Msg离开Space>(obj); break;
+		case MsgId::进单人剧情副本:RecvMsg<Msg进单人剧情副本>(obj); break;
+		case MsgId::Move:RecvMsg<MsgMove>(obj); break;
+		case MsgId::Say:RecvMsg<MsgSay >(obj); break;
+		case MsgId::SelectRoles:RecvMsg<MsgSelectRoles>(obj); break;
+		case MsgId::AddRole:RecvMsg<MsgAddRole>(obj); break;
+		case MsgId::AddBuilding:RecvMsg<MsgAddBuilding>(obj); break;
+		case MsgId::采集:RecvMsg<Msg采集>(obj); break;
+		case MsgId::进地堡:RecvMsg<Msg进地堡>(obj); break;
+		case MsgId::出地堡:RecvMsg<Msg出地堡>(obj); break;
+		case MsgId::框选:RecvMsg<Msg框选>(obj); break;
+		case MsgId::Gate转发:
+			LOG(ERROR) << "不能再转发";
+			assert(false);
+			break;
+		default:
+			LOG(ERROR) << "没处理msgId:" << idMsg;
+			assert(false);
+			break;
+		}
+	}
+
+	void PlayerGateSession_Game::Process()
+	{
+		{
+			const auto oldSize = m_vecFunCancel.size();
+			std::erase_if(m_vecFunCancel, [](std::shared_ptr<FunCancel>& sp)->bool
+				{
+					return !(*sp).operator bool();
+				});
+			const auto newSize = m_vecFunCancel.size();
+			if (oldSize != newSize)
 			{
-				return !(*sp).operator bool();
-			});
-		const auto newSize = m_vecFunCancel.size();
-		if (oldSize != newSize)
-		{
-			LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
-		}
-	}
-
-	if (m_spSpace单人剧情副本)
-		m_spSpace单人剧情副本->Update();
-}
-
-
-void PlayerGateSession_Game::Send资源()
-{
-	Send<Msg资源>({ .燃气矿 = m_u32燃气矿,.活动单位 = 活动单位包括制造队列中的(),.活动单位上限 = 活动单位上限() });
-}
-
-uint16_t PlayerGateSession_Game::活动单位上限() const
-{
-	uint16_t result = 0;
-	for (const auto& [_, wp] : m_mapWpEntity)
-	{
-		assert(!wp.expired());
-		const auto& refEntity = wp.lock();
-		if (!refEntity->m_spBuilding)continue;
-		if (!refEntity->m_spBuilding->已造好())continue;
-
-		switch (refEntity->m_spBuilding->m_类型)
-		{
-		case 民房:result += 5; break;
-		case 基地:result += 2; break;
-		default:break;
-		}
-	}
-	return result;
-}
-
-uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
-{
-	uint16_t 制造队列中的单位 = 0;
-	for (const auto& [_, wp] : m_mapWpEntity)
-	{
-		assert(!wp.expired());
-		const auto& refEntity = *wp.lock();
-		if (EntitySystem::Is视口(refEntity))
-		{
-			continue;//不可攻击的自己的单位，是视口
-		}
-		if (refEntity.m_sp造活动单位)
-		{
-			制造队列中的单位 += (uint16_t)refEntity.m_sp造活动单位->等待造Count();//m_i等待造兵数;
-
+				LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
+			}
 		}
 
-		if (refEntity.m_spBuilding)
-			continue;//民房
-
-		++制造队列中的单位;
+		if (m_spSpace单人剧情副本)
+			m_spSpace单人剧情副本->Update();
 	}
 
-	return 制造队列中的单位;
 
-}
-
-bool PlayerGateSession_Game::可放置建筑(const Position& refPos, float f半边长)
-{
-
-	CHECK_FALSE(!m_wpSpace.expired());
-	auto spSpace = m_wpSpace.lock();
-
-	if (!spSpace->CrowdTool可站立({ refPos.x - f半边长 ,refPos.z + f半边长 }))return false;
-	if (!spSpace->CrowdTool可站立({ refPos.x - f半边长 ,refPos.z - f半边长 }))return false;
-	if (!spSpace->CrowdTool可站立({ refPos.x + f半边长 ,refPos.z + f半边长 }))return false;
-	if (!spSpace->CrowdTool可站立({ refPos.x + f半边长 ,refPos.z - f半边长 }))return false;
-
-	//遍历全地图所有建筑判断重叠
-	CHECK_RET_FALSE(!m_wpSpace.expired());
-	for (const auto& kv : m_wpSpace.lock()->m_mapEntity)
+	void PlayerGateSession_Game::Send资源()
 	{
-		auto& refEntity = *kv.second;
-		const auto& refPosOld = refEntity.Pos();
-		bool CrowdTool判断单位重叠(const Position & refPosOld, const Position & refPosNew, const float f半边长);
-		if (CrowdTool判断单位重叠(refPos, refPosOld, f半边长))
-			return false;
+		Send<Msg资源>({ .燃气矿 = m_u32燃气矿,.活动单位 = 活动单位包括制造队列中的(),.活动单位上限 = 活动单位上限() });
 	}
 
-	return true;
-}
-
-void PlayerGateSession_Game::OnRecv(const Msg框选& msg)
-{
-	const Position pos左上(std::min(msg.pos起始.x, msg.pos结束.x), std::min(msg.pos起始.z, msg.pos结束.z));
-	const Position pos右下(std::max(msg.pos起始.x, msg.pos结束.x), std::max(msg.pos起始.z, msg.pos结束.z));
-	const Rect rect = { pos左上,pos右下 };
-	std::vector<uint64_t> vec;
-	for (const auto [k, wpEntity] : m_mapWpEntity)
+	uint16_t PlayerGateSession_Game::活动单位上限() const
 	{
-		if (wpEntity.expired())
+		uint16_t result = 0;
+		for (const auto& [_, wp] : m_mapWpEntity)
+		{
+			assert(!wp.expired());
+			const auto& refEntity = wp.lock();
+			if (!refEntity->m_spBuilding)continue;
+			if (!refEntity->m_spBuilding->已造好())continue;
+
+			switch (refEntity->m_spBuilding->m_类型)
+			{
+			case 民房:result += 5; break;
+			case 基地:result += 2; break;
+			default:break;
+			}
+		}
+		return result;
+	}
+
+	uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
+	{
+		uint16_t 制造队列中的单位 = 0;
+		for (const auto& [_, wp] : m_mapWpEntity)
+		{
+			assert(!wp.expired());
+			const auto& refEntity = *wp.lock();
+			if (EntitySystem::Is视口(refEntity))
+			{
+				continue;//不可攻击的自己的单位，是视口
+			}
+			if (refEntity.m_sp造活动单位)
+			{
+				制造队列中的单位 += (uint16_t)refEntity.m_sp造活动单位->等待造Count();//m_i等待造兵数;
+
+			}
+
+			if (refEntity.m_spBuilding)
+				continue;//民房
+
+			++制造队列中的单位;
+		}
+
+		return 制造队列中的单位;
+
+	}
+
+	bool PlayerGateSession_Game::可放置建筑(const Position& refPos, float f半边长)
+	{
+
+		CHECK_FALSE(!m_wpSpace.expired());
+		auto spSpace = m_wpSpace.lock();
+
+		if (!spSpace->CrowdTool可站立({ refPos.x - f半边长 ,refPos.z + f半边长 }))return false;
+		if (!spSpace->CrowdTool可站立({ refPos.x - f半边长 ,refPos.z - f半边长 }))return false;
+		if (!spSpace->CrowdTool可站立({ refPos.x + f半边长 ,refPos.z + f半边长 }))return false;
+		if (!spSpace->CrowdTool可站立({ refPos.x + f半边长 ,refPos.z - f半边长 }))return false;
+
+		//遍历全地图所有建筑判断重叠
+		CHECK_RET_FALSE(!m_wpSpace.expired());
+		for (const auto& kv : m_wpSpace.lock()->m_mapEntity)
+		{
+			auto& refEntity = *kv.second;
+			const auto& refPosOld = refEntity.Pos();
+			bool CrowdTool判断单位重叠(const Position & refPosOld, const Position & refPosNew, const float f半边长);
+			if (CrowdTool判断单位重叠(refPos, refPosOld, f半边长))
+				return false;
+		}
+
+		return true;
+	}
+
+	void PlayerGateSession_Game::OnRecv(const Msg框选& msg)
+	{
+		const Position pos左上(std::min(msg.pos起始.x, msg.pos结束.x), std::min(msg.pos起始.z, msg.pos结束.z));
+		const Position pos右下(std::max(msg.pos起始.x, msg.pos结束.x), std::max(msg.pos起始.z, msg.pos结束.z));
+		const Rect rect = { pos左上,pos右下 };
+		std::vector<uint64_t> vec;
+		for (const auto [k, wpEntity] : m_mapWpEntity)
+		{
+			if (wpEntity.expired())
+			{
+				LOG(ERROR) << "";
+				continue;
+			}
+
+			auto& refEntity = *wpEntity.lock();
+			if (rect.包含此点(refEntity.Pos()))
+				vec.push_back(refEntity.Id);
+		}
+		选中单位(vec);
+	}
+
+	void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
+	{
+		m_listSelectedEntity.clear();
+		bool b已发送选中音效(false);
+		//for (const auto [k, wp] : m_mapWpEntity)
+		if (m_wpSpace.expired())
 		{
 			LOG(ERROR) << "";
-			continue;
+			return;
 		}
+		auto& refSpace = *m_wpSpace.lock();
+		for (const auto id : vecId)
+		{
+			auto wpEntity = refSpace.GetEntity(id);
+			if (wpEntity.expired())
+			{
+				LOG(WARNING) << "可能选中了已进地堡的兵";
+				continue;
+			}
+			auto spEntity = wpEntity.lock();
+			if (!spEntity->m_wpOwner.expired())
+				continue;//地堡内
 
-		auto& refEntity = *wpEntity.lock();
-		if (rect.包含此点(refEntity.Pos()))
-			vec.push_back(refEntity.Id);
+			//if (spEntity->m_spBuilding)
+			//	continue;//不可框选建筑单位
+
+			if (EntitySystem::Is视口(*spEntity))
+				continue;
+
+			m_listSelectedEntity.push_back(spEntity->Id);
+			if (!b已发送选中音效)
+			{
+				b已发送选中音效 = true;
+				Send选中音效(*spEntity);
+			}
+		}
+		Send选中单位Responce();
 	}
-	选中单位(vec);
-}
 
-void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
-{
-	m_listSelectedEntity.clear();
-	bool b已发送选中音效(false);
-	//for (const auto [k, wp] : m_mapWpEntity)
-	if (m_wpSpace.expired())
+	void PlayerGateSession_Game::Send选中音效(const Entity& refEntity)
 	{
-		LOG(ERROR) << "";
-		return;
+		if (refEntity.m_spAttack)
+		{
+			//switch (refEntity.m_spAttack->m_类型)
+			//{
+			//case 兵:播放声音("TMaPss00"); break;// Say语音提示("待命中!"); break;//Standing by. 待命中
+			//case 近战兵:播放声音("tfbPss00"); break;//Say语音提示("准备行动!"); break;//Checked up and good to go. 检查完毕，准备动身
+			//case 工程车:播放声音("TSCPss00"); break;//Commander.
+			//default:break;
+			//}
+			播放声音(refEntity.m_配置.str选中音效);
+		}
+		else if (refEntity.m_spBuilding)
+		{
+			//switch (refEntity.m_spBuilding->m_类型)
+			//{
+			//case 基地:播放声音("tcsWht00"); break;
+			//case 兵厂:播放声音("tacWht00"); break;
+			//case 民房:播放声音("tclWht00"); break;
+			//default:
+			//	break;
+			//}
+			播放声音(refEntity.m_配置.str选中音效);
+		}
+		else if (refEntity.m_sp资源) {
+			switch (refEntity.m_sp资源->m_类型)
+			{
+			case 晶体矿:
+			case 燃气矿:
+			default:
+				播放声音("音效/BUTTON");
+				break;
+			}
+		}
 	}
-	auto& refSpace = *m_wpSpace.lock();
-	for (const auto id : vecId)
+
+	void PlayerGateSession_Game::Send选中单位Responce()
 	{
-		auto wpEntity = refSpace.GetEntity(id);
-		if (wpEntity.expired())
-		{
-			LOG(WARNING) << "可能选中了已进地堡的兵";
-			continue;
-		}
-		auto spEntity = wpEntity.lock();
-		if (!spEntity->m_wpOwner.expired())
-			continue;//地堡内
-
-		//if (spEntity->m_spBuilding)
-		//	continue;//不可框选建筑单位
-
-		if (EntitySystem::Is视口(*spEntity))
-			continue;
-
-		m_listSelectedEntity.push_back(spEntity->Id);
-		if (!b已发送选中音效)
-		{
-			b已发送选中音效 = true;
-			Send选中音效(*spEntity);
-		}
+		MsgSelectRoles msgResponse;
+		msgResponse.ids.insert(msgResponse.ids.end(), m_listSelectedEntity.begin(), m_listSelectedEntity.end());
+		Send(msgResponse);
 	}
-	Send选中单位Responce();
-}
-
-void PlayerGateSession_Game::Send选中音效(const Entity& refEntity)
-{
-	if (refEntity.m_spAttack)
-	{
-		switch (refEntity.m_spAttack->m_类型)
-		{
-		case 兵:播放声音("TMaPss00"); break;// Say语音提示("待命中!"); break;//Standing by. 待命中
-		case 近战兵:播放声音("tfbPss00"); break;//Say语音提示("准备行动!"); break;//Checked up and good to go. 检查完毕，准备动身
-		case 工程车:播放声音("TSCPss00"); break;//Commander.
-		default:break;
-		}
-	}
-	else if (refEntity.m_spBuilding)
-	{
-		switch (refEntity.m_spBuilding->m_类型)
-		{
-		case 基地:播放声音("tcsWht00"); break;
-		case 兵厂:播放声音("tacWht00"); break;
-		case 民房:播放声音("tclWht00"); break;
-		default:
-			break;
-		}
-	}
-	else if (refEntity.m_sp资源) {
-		switch (refEntity.m_sp资源->m_类型)
-		{
-		case 晶体矿:
-		case 燃气矿:
-		default:
-			播放声音("BUTTON");
-			break;
-		}
-	}
-}
-
-void PlayerGateSession_Game::Send选中单位Responce()
-{
-	MsgSelectRoles msgResponse;
-	msgResponse.ids.insert(msgResponse.ids.end(), m_listSelectedEntity.begin(), m_listSelectedEntity.end());
-	Send(msgResponse);
-}
