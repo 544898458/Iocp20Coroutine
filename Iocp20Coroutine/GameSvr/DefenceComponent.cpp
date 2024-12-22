@@ -33,23 +33,25 @@ void DefenceComponent::受伤(int hp)
 	{
 		if (m_refEntity.m_spAttack)
 		{
-			switch (m_refEntity.m_spAttack->m_类型)
-			{
-			case 兵:
-				EntitySystem::Broadcast播放声音(m_refEntity, "TMaDth00"); 
-				m_refEntity.BroadcastChangeSkeleAnim(m_refEntity.m_spPlayer?"die01":"died", false);//播放死亡动作
-				break;
-			case 近战兵:
-				EntitySystem::Broadcast播放声音(m_refEntity, "TFbDth00"); 
-				m_refEntity.BroadcastChangeSkeleAnim("died", false);//播放死亡动作
-				break;
-			case 工程车:
-				EntitySystem::Broadcast播放声音(m_refEntity, "TSCDth00"); 
-				m_refEntity.BroadcastChangeSkeleAnim("died", false);//播放死亡动作
-				break;
-			default:
-				break;
-			}
+			EntitySystem::Broadcast播放声音(m_refEntity, m_refEntity.m_spAttack->m_战斗配置.str阵亡音效);
+			m_refEntity.BroadcastChangeSkeleAnim(m_refEntity.m_spAttack->m_战斗配置.str阵亡动作, false);//播放阵亡动作
+			//switch (m_refEntity.m_spAttack->m_类型)
+			//{
+			//case 兵:
+			//	EntitySystem::Broadcast播放声音(m_refEntity, "TMaDth00"); 
+			//	m_refEntity.BroadcastChangeSkeleAnim(m_refEntity.m_spPlayer?"die01":"died", false);//播放死亡动作
+			//	break;
+			//case 近战兵:
+			//	EntitySystem::Broadcast播放声音(m_refEntity, "TFbDth00"); 
+			//	m_refEntity.BroadcastChangeSkeleAnim("died", false);//播放死亡动作
+			//	break;
+			//case 工程车:
+			//	EntitySystem::Broadcast播放声音(m_refEntity, "TSCDth00"); 
+			//	m_refEntity.BroadcastChangeSkeleAnim("died", false);//播放死亡动作
+			//	break;
+			//default:
+			//	break;
+			//}
 		}
 		else if (m_refEntity.m_spBuilding)
 		{
