@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GateSvr", "GateSvr\GateSvr.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameSvr", "GameSvr\GameSvr.vcxproj", "{3E7788B7-B4D5-47B4-A8E9-FFB3B3B3EF32}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestSslTls", "TestSslTls\TestSslTls.vcxproj", "{708DEC9E-0F9C-4BF8-936E-DFC829FE8EBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{3E7788B7-B4D5-47B4-A8E9-FFB3B3B3EF32}.Release|x64.Build.0 = Release|x64
 		{3E7788B7-B4D5-47B4-A8E9-FFB3B3B3EF32}.Release|x86.ActiveCfg = Release|Win32
 		{3E7788B7-B4D5-47B4-A8E9-FFB3B3B3EF32}.Release|x86.Build.0 = Release|Win32
+		{708DEC9E-0F9C-4BF8-936E-DFC829FE8EBA}.Debug|x64.ActiveCfg = Debug|x64
+		{708DEC9E-0F9C-4BF8-936E-DFC829FE8EBA}.Debug|x64.Build.0 = Debug|x64
+		{708DEC9E-0F9C-4BF8-936E-DFC829FE8EBA}.Debug|x86.ActiveCfg = Debug|Win32
+		{708DEC9E-0F9C-4BF8-936E-DFC829FE8EBA}.Debug|x86.Build.0 = Debug|Win32
+		{708DEC9E-0F9C-4BF8-936E-DFC829FE8EBA}.Release|x64.ActiveCfg = Release|x64
+		{708DEC9E-0F9C-4BF8-936E-DFC829FE8EBA}.Release|x64.Build.0 = Release|x64
+		{708DEC9E-0F9C-4BF8-936E-DFC829FE8EBA}.Release|x86.ActiveCfg = Release|Win32
+		{708DEC9E-0F9C-4BF8-936E-DFC829FE8EBA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

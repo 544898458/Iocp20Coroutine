@@ -13,12 +13,26 @@ void WebSocketSession<T_Session>::OnInit(T_Server&server)
 	m_webSocketEndpoint.reset(new MyWebSocketEndpoint<T_Session, Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session> > >(&this->m_Session, &m_refSession));
 
 	this->m_Session.OnInit(server);
+	m_SslTls.Init();
 }
 template<class T_Session>
 int WebSocketSession< T_Session>::OnRecv(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, const void* buf, int len)
 {
-	m_webSocketEndpoint->from_wire(buf, len);
-	return len;
+	const auto i32已处理 = m_SslTls.处理前端发来的密文(buf, len);
+	
+	{
+		char buf密文[2048];
+		int len密文 = m_SslTls.获取准备发往前端的密文(buf密文);
+		Send密文(buf密文, len密文);
+	}
+
+	{
+		char buf明文[2048];
+		int len明文 = m_SslTls.读出已解密的明文(buf明文);
+		m_webSocketEndpoint->from_wire(buf明文, len明文);
+	}
+	
+	return i32已处理;
 }
 template<class T_Session>
 void WebSocketSession< T_Session>::OnDestroy()

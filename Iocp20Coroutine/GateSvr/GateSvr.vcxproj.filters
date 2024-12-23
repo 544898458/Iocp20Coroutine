@@ -25,6 +25,9 @@
     <Filter Include="MiniDump">
       <UniqueIdentifier>{4e9fa87e-24b5-4eee-bcdb-3352d2e0917d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="OpenSSL">
+      <UniqueIdentifier>{eac1c833-ac63-4f9e-b48c-0c9f7fe7e738}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GateSvrMain.cpp">
@@ -101,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="..\MiniDump\MiniDump.cpp">
       <Filter>MiniDump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\SslTlsSvr.cpp">
+      <Filter>IocpNetwork</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -211,6 +217,9 @@
     </ClInclude>
     <ClInclude Include="..\MiniDump\MiniDump.h">
       <Filter>MiniDump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\SslTlsSvr.h">
+      <Filter>IocpNetwork</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

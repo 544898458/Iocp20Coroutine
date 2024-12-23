@@ -52,6 +52,11 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 		//	{
 		//		return ref.m_spBuilding && ref.m_spBuilding->m_类型 == 基地;//找离自己最近的基地
 		//	});
+		if (m_refEntity.IsDead())
+		{
+			LOG(INFO) << "采集过程中自己阵亡";
+			co_return false;
+		}
 		CHECK_CO_RET_FALSE(m_refEntity.m_spPlayer);
 
 		int min距离的平方 = std::numeric_limits<int>::max();

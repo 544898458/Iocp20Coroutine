@@ -3,7 +3,7 @@
 #include "../websocketfiles-master/src/ws_endpoint.h"
 #include "SessionSocketCompletionKey.h"
 #include <deque>
-
+#include "SslTlsSvr.h"
 //void net_write_cb(char* buf, int64_t size, void* wd)
 //{
 //	static_cast<Iocp::
@@ -163,9 +163,25 @@ public:
 /// 从全局连接set里删除连接，从全局Space里删除实体
 /// </summary>
 	void OnDestroy();
-	void Send(const void* buf, const int len)
+	void Send密文(const void* buf, const int len)
 	{
 		m_webSocketEndpoint->Send(buf, len);
+	}
+	void Send(const void* buf, const int len)
+	{
+		{
+			const auto i32已处理明文= m_SslTls.把要发给前端的明文交给Ssl处理(buf, len);
+			if (i32已处理明文 != len)
+			{
+				LOG(ERROR) << "严重错误";
+				assert(false);
+			}
+		}
+		{
+			char buf密文[2048];
+			int len密文 = m_SslTls.获取准备发往前端的密文(buf密文);
+			Send密文(buf密文, len密文);
+		}
 	}
 	template<class T>
 	void Send(const T& ref)
@@ -180,6 +196,8 @@ public:
 	std::unique_ptr<MyWebSocketEndpoint<T_Session, Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>>> m_webSocketEndpoint;
 	Session& m_refSession;
 	T_Session m_Session;
+	
+	SslTlsSvr m_SslTls;
 private:
 
 

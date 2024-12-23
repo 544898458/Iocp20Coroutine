@@ -19,7 +19,7 @@ namespace 单位
 		{工程车,{{"工程车"	, "altman-yellow",		"TSCPss00"},{ 3, 0,20}, {8 , 4,  1,	0.4f,	"",		0s,				  "attack",		500ms,	 "TSCMin00",	 "TSCDth00","died"}}},
 		{兵,	{{"兵"		, "活动单位/步兵",		"TMaPss00"},{ 5, 2,15}, {20, 9,  3,	0.5f,	"",		0s,				  "attack",		900ms,	 "音效/TTaFir00","TMaDth00","die01"}}},
 		{近战兵,{{"近战兵"	, "axe-yellow",			"tfbPss00"},{ 8, 3,18}, {15, 4,  5,	0.5f,	"",		0s,				  "attack",		600ms,	 "Tfrshoot",	 "TMaDth00","died"}}},
-		{三色坦克,{{"三色坦克","活动单位/三色坦克",	"音效/ttapss00"},{20,10,60},{35,25, 50,	0.1f,	"idle",	5s,			 "attack_loop",		300ms,	 "音效/TTaFi200","音效/TTaDth00","die02"}}},
+		{三色坦克,{{"三色坦克","活动单位/三色坦克",	"语音/ttapss00"},{20,10,60},{35,25, 50,	0.1f,	"idle",	5s,			 "attack_loop",		300ms,	 "音效/TTaFi200","音效/TTaDth00","die02"}}},
 	};
 	std::unordered_map<活动单位类型, 怪配置> g_map怪配置 = {
 		//									 警距 攻距 伤  移速 前摇动作 dura开始播放攻击动作 攻击动作 dura开始伤害 攻击音效	阵亡音效 阵亡动作 血量

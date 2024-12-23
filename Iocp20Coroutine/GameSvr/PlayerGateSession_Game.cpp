@@ -345,7 +345,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 				case 兵:播放声音("TMaYes00"); break;//Standing by. 待命中
 				case 近战兵:播放声音("tfbYes03"); break;//Checked up and good to go. 检查完毕，准备动身
 				case 工程车:播放声音("TSCYes00"); break;
-				case 三色坦克:播放声音("音效/ttayes01"); break;
+				case 三色坦克:播放声音("语音/ttayes01"); break;
 				default:break;
 				}
 			}

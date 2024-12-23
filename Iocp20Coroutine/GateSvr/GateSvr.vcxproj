@@ -71,11 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)\glog\include;$(SolutionDir)\msgpack-c-cpp-2.1.2\include;$($(ProjectDir);$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\glog\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\glog\include;$(SolutionDir)\msgpack-c-cpp-2.1.2\include;$(SolutionDir)\OpenSsl340;$($(ProjectDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\glog\lib;$(SolutionDir)\VisualLeakDetector\lib\Win64;E:\Program Files\OpenSSL-Win64\lib\VC\x64\MD;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)\msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;$(SolutionDir)\VisualLeakDetector\include;$(SolutionDir)/recastnavigation-main/DetourTileCache/Include;$(SolutionDir)\recastnavigation-main\Detour\Include;$(ProjectDir);$(SolutionDir)\recastnavigation-main\DetourCrowd\Include;$(SolutionDir)\recastnavigation-main\RecastDemo\Include;$(SolutionDir)\recastnavigation-main\Recast\Include;$(SolutionDir)\recastnavigation-main\DebugUtils\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)\msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;$(SolutionDir)\VisualLeakDetector\include;$(SolutionDir)/recastnavigation-main/DetourTileCache/Include;$(SolutionDir)\recastnavigation-main\Detour\Include;$(ProjectDir);$(SolutionDir)\recastnavigation-main\DetourCrowd\Include;$(SolutionDir)\recastnavigation-main\RecastDemo\Include;$(SolutionDir)\recastnavigation-main\Recast\Include;$(SolutionDir)\recastnavigation-main\DebugUtils\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\OpenSsl340</IncludePath>
     <LibraryPath>$(SolutionDir)\glog\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -151,6 +151,10 @@
     <ClCompile Include="..\IocpNetwork\Overlapped.cpp" />
     <ClCompile Include="..\IocpNetwork\Server.cpp" />
     <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp" />
+    <ClCompile Include="..\IocpNetwork\SslTlsSvr.cpp">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\IocpNetwork\StrConv.cpp" />
     <ClCompile Include="..\IocpNetwork\ThreadPool.cpp" />
     <ClCompile Include="..\IocpNetwork\WsaStartUp.cpp" />
@@ -193,6 +197,7 @@
     <ClInclude Include="..\IocpNetwork\SessionSocketCompletionKeyTemplate.h" />
     <ClInclude Include="..\IocpNetwork\SessionsTemplate.h" />
     <ClInclude Include="..\IocpNetwork\SocketCompeletionKey.h" />
+    <ClInclude Include="..\IocpNetwork\SslTlsSvr.h" />
     <ClInclude Include="..\IocpNetwork\StrConv.h" />
     <ClInclude Include="..\IocpNetwork\ThreadPool.h" />
     <ClInclude Include="..\IocpNetwork\WebSocketSession.h" />

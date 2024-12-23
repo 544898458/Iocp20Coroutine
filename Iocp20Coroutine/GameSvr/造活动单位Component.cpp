@@ -177,6 +177,7 @@ SpEntity 造活动单位Component::造活动单位(PlayerGateSession_Game& refGateSession,
 	case 近战兵:
 		refGateSession.播放声音("tfbRdy00");//refGateSession.Say语音提示("听说有人要我的斧头？");//You want a piece of me, boy?想要我的一部分吗，小子？
 		break;
+	case 三色坦克:refGateSession.播放声音("语音/ttardy00");break;
 
 	default:break;
 	}
