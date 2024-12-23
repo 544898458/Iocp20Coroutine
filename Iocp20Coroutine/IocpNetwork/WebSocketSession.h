@@ -165,7 +165,8 @@ public:
 	void OnDestroy();
 	void Send密文(const void* buf, const int len)
 	{
-		m_webSocketEndpoint->Send(buf, len);
+		//m_webSocketEndpoint->Send(buf, len);
+		m_refSession.Send(buf, len);//
 	}
 	void Send(const void* buf, const int len)
 	{
@@ -178,7 +179,7 @@ public:
 			}
 		}
 		{
-			char buf密文[2048];
+			char buf密文[4096];
 			int len密文 = m_SslTls.获取准备发往前端的密文(buf密文);
 			Send密文(buf密文, len密文);
 		}

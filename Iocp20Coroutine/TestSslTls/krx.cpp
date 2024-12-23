@@ -186,7 +186,9 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 	}
 
 	/* the client doesn't have to send it's certificate */
-	SSL_CTX_set_verify(k->ctx, SSL_VERIFY_PEER, krx_ssl_verify_peer);
+	//SSL_CTX_set_verify(k->ctx, SSL_VERIFY_PEER, krx_ssl_verify_peer);
+	/* 服务器不验证客户端证书， 客户端可以不提供证书*/
+	SSL_CTX_set_verify(k->ctx, SSL_VERIFY_NONE, NULL);
 
 	/* enable srtp */
 	r = SSL_CTX_set_tlsext_use_srtp(k->ctx, "SRTP_AES128_CM_SHA1_80");
@@ -295,6 +297,12 @@ void krx_ssl_info_callback(const SSL* ssl, int where, int ret, const char* name)
 	SSL_WHERE_INFO(ssl, where, SSL_CB_LOOP, "LOOP");
 	SSL_WHERE_INFO(ssl, where, SSL_CB_HANDSHAKE_START, "HANDSHAKE START");
 	SSL_WHERE_INFO(ssl, where, SSL_CB_HANDSHAKE_DONE, "HANDSHAKE DONE");
+	SSL_WHERE_INFO(ssl, where, SSL_CB_ALERT, "SSL_CB_ALERT");
+	SSL_WHERE_INFO(ssl, where, SSL_CB_EXIT, "SSL_CB_EXIT");
+	SSL_WHERE_INFO(ssl, where, SSL_CB_READ, "SSL_CB_READ");
+	SSL_WHERE_INFO(ssl, where, SSL_CB_WRITE, "SSL_CB_WRITE");
+	SSL_WHERE_INFO(ssl, where, SSL_ST_ACCEPT, "SSL_ST_ACCEPT");
+	SSL_WHERE_INFO(ssl, where, SSL_ST_CONNECT, "SSL_ST_CONNECT");
 }
 
 int krx_ssl_handle_traffic(krx* from, krx* to) {

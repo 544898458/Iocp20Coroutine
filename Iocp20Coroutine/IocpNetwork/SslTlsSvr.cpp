@@ -6,7 +6,7 @@
 	openssl req -x509 -newkey rsa:2048 -days 3650 -nodes -keyout server-key.pem -out server-cert.pem
 
 */
-//#include "pch.h"
+#include <glog/logging.h>
 #include "SslTlsSvr.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -127,7 +127,7 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 	int r = 0;
 
 	/* create a new context using DTLS */
-	k->ctx = SSL_CTX_new(DTLS_method());
+	k->ctx = SSL_CTX_new(TLS_server_method());
 	if (!k->ctx) {
 		printf("Error: cannot create SSL_CTX.\n");
 		ERR_print_errors_fp(stderr);
@@ -144,6 +144,8 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 
 	/* the client doesn't have to send it's certificate */
 	SSL_CTX_set_verify(k->ctx, SSL_VERIFY_PEER, krx_ssl_verify_peer);
+	/* 服务器不验证客户端证书， 客户端可以不提供证书*/
+	//SSL_CTX_set_verify(k->ctx, SSL_VERIFY_NONE, NULL);
 
 	/* enable srtp */
 	r = SSL_CTX_set_tlsext_use_srtp(k->ctx, "SRTP_AES128_CM_SHA1_80");
@@ -162,7 +164,7 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 	/* certificate file; contains also the public key */
 	r = SSL_CTX_use_certificate_file(k->ctx, certfile, SSL_FILETYPE_PEM);
 	if (r != 1) {
-		printf("Error: cannot load certificate file.\n");
+		LOG(ERROR) << "Error: cannot load certificate file.";
 		ERR_print_errors_fp(stderr);
 		return -4;
 	}
@@ -252,6 +254,12 @@ void krx_ssl_info_callback(const SSL* ssl, int where, int ret, const char* name)
 	SSL_WHERE_INFO(ssl, where, SSL_CB_LOOP, "LOOP");
 	SSL_WHERE_INFO(ssl, where, SSL_CB_HANDSHAKE_START, "HANDSHAKE START");
 	SSL_WHERE_INFO(ssl, where, SSL_CB_HANDSHAKE_DONE, "HANDSHAKE DONE");
+	SSL_WHERE_INFO(ssl, where, SSL_CB_ALERT, "SSL_CB_ALERT");
+	SSL_WHERE_INFO(ssl, where, SSL_CB_EXIT, "SSL_CB_EXIT");
+	SSL_WHERE_INFO(ssl, where, SSL_CB_READ, "SSL_CB_READ");
+	SSL_WHERE_INFO(ssl, where, SSL_CB_WRITE, "SSL_CB_WRITE");
+	SSL_WHERE_INFO(ssl, where, SSL_ST_ACCEPT, "SSL_ST_ACCEPT");
+	SSL_WHERE_INFO(ssl, where, SSL_ST_CONNECT, "SSL_ST_CONNECT");
 }
 
 int krx_ssl_handle_traffic(krx* from, krx* to) {
@@ -302,7 +310,7 @@ int krx_ssl_shutdown(krx* k) {
 	return 0;
 }
 
-SslTlsSvr::SslTlsSvr():m_pServer(new krx)
+SslTlsSvr::SslTlsSvr() :m_pServer(new krx)
 {
 }
 
@@ -316,25 +324,36 @@ void SslTlsSvr::InitAll()
 {
 	krx_begin();
 }
-void SslTlsSvr::Init()
+void SslTlsSvr::Init(const bool bServer)
 {
 	/* init server. */
-	if (krx_ssl_ctx_init(m_pServer, "server") < 0) {
+	if (krx_ssl_ctx_init(m_pServer, bServer?"server":"client") < 0) {
 		exit(EXIT_FAILURE);
 	}
-	if (krx_ssl_init(m_pServer, 1, krx_ssl_server_info_callback) < 0) {
+	if (krx_ssl_init(m_pServer, bServer, bServer ? krx_ssl_server_info_callback: krx_ssl_client_info_callback) < 0) {
 		exit(EXIT_FAILURE);
 	}
 }
 
+SslTlsSvr g_Test;
 int SslTlsSvr::处理前端发来的密文(const void* buf, const int len)
 {
+	//g_Test.Init(false);
+	//g_Test.do_handshake();
+	//char buf密文[2048];
+	//const auto len密文 = g_Test.获取准备发往前端的密文(buf密文);
 	const int32_t i32已处理密文字节 = BIO_write(m_pServer->in_bio, buf, len);
+	//const int32_t i32已处理密文字节 = BIO_write(m_pServer->in_bio, buf密文, len密文);
 	if (i32已处理密文字节 > 0)
 	{
 		if (!SSL_is_init_finished(m_pServer->ssl))//还没握手，要回应握手
 		{
 			SSL_do_handshake(m_pServer->ssl);
+		}
+		else {
+			char buf明文[2048];
+			const auto read明文 = SSL_read(m_pServer->ssl, buf明文, sizeof(buf明文));
+			LOG(WARNING) << m_pServer->name << " read: " << read明文;
 		}
 	}
 	return i32已处理密文字节;
@@ -345,12 +364,17 @@ int SslTlsSvr::把要发给前端的明文交给Ssl处理(const void* buf, const int len)
 	return SSL_write(m_pServer->ssl, buf, len);
 }
 
+void SslTlsSvr::do_handshake()
+{
+	SSL_do_handshake(m_pServer->ssl);
+}
+
 
 template<int len>
 int SslTlsSvr::读出已解密的明文(char(&bufOut)[len])
 {
 	const int read = SSL_read(m_pServer->ssl, bufOut, sizeof(bufOut));
-	printf("%s read: %s\n", m_pServer->name, bufOut);
+	LOG(INFO) << m_pServer->name << " read: " << read;
 	return read;
 }
 
@@ -364,5 +388,5 @@ int SslTlsSvr::获取准备发往前端的密文(char(&bufOut)[len])
 	return BIO_read(m_pServer->out_bio, bufOut, sizeof(bufOut));
 }
 
-template int SslTlsSvr::获取准备发往前端的密文(char(&bufOut)[2048]);
-template int SslTlsSvr::读出已解密的明文(char(&bufOut)[2048]);
+template int SslTlsSvr::获取准备发往前端的密文(char(&bufOut)[4096]);
+template int SslTlsSvr::读出已解密的明文(char(&bufOut)[4096]);
