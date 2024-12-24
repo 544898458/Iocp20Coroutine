@@ -503,6 +503,7 @@ static void openssl_msg_cb(int write_p, int version, int content_type, const voi
 }
 static void openssl_info_callback(const SSL* s, int where, int ret)
 {
+	krx_ssl_info_callback(s, where, ret, "");
 	const char* str;
 	int w;
 
@@ -530,7 +531,7 @@ static void openssl_info_callback(const SSL* s, int where, int ret)
 			LOG(ERROR) << "SSL_LOG_EXIT, " << str << ":failed in, " << SSL_state_string_long(s);
 		}
 		else if (ret < 0) {
-			LOG(INFO) << ret <<"=ret,str =" << str << ",error in, " << SSL_state_string_long(s);
+			LOG(INFO) << ret << "=ret,str =" << str << ",error in, " << SSL_state_string_long(s);
 		}
 	}
 }
@@ -694,12 +695,12 @@ int SslTlsSvr::处理前端发来的密文(const void* buf, const int len)
 		{
 			SSL_do_handshake(m_pServer->ssl);
 		}
-		//else
-		//{
-		//	char buf明文[2048];
-		//	const auto read明文 = SSL_read(m_pServer->ssl, buf明文, sizeof(buf明文));
-		//	LOG(WARNING) << m_pServer->name << " read: " << read明文;
-		//}
+		else
+		{
+			char buf明文[2048];
+			const auto read明文 = SSL_read(m_pServer->ssl, buf明文, sizeof(buf明文));
+			LOG(WARNING) << m_pServer->name << "收到明文 read: " << read明文 << "," << buf明文;
+		}
 	}
 	return i32已处理密文字节;
 }

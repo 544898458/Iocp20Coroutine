@@ -18,6 +18,7 @@ void WebSocketSession<T_Session>::OnInit(T_Server& server)
 template<class T_Session>
 int WebSocketSession< T_Session>::OnRecv(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, const void* buf, int len)
 {
+	LOG(INFO) << "收到前端发来的密文,len=" << len;
 	const auto i32已处理 = m_SslTls.处理前端发来的密文(buf, len);
 
 	获取准备发往前端的密文并发给前端();
