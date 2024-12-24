@@ -56,7 +56,7 @@ void GateSession::OnRecv(const MsgLogin& msg)
 	{
 		m_refSession.m_refSession.CloseSocket();
 	}
-	LOG(INFO) << "GameSvr发来登录";
+	LOG(INFO) << "玩家发来登录";
 	if (!m_coLogin.Finished() || m_bLoginOk)
 	{
 		LOG(ERROR) << "m_coLogin.Finished=" << m_coLogin.Finished() << ",m_bLoginOk=" << m_bLoginOk;

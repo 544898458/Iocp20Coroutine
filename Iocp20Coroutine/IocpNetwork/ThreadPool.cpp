@@ -26,7 +26,7 @@ namespace Iocp
 			if (overlapped->needDeleteMe && overlapped->coTask.Finished())
 			{
 				LOG(INFO) << "É¾³ý" << overlapped->coTask.m_desc;
-				delete overlapped;
+				//delete overlapped;
 				overlapped = nullptr;
 			}
 		}

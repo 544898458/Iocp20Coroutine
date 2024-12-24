@@ -35,6 +35,7 @@ namespace Iocp
 		/// 只在连接Socket(Session)里用到。监听Socket(Accept)不会用到
 		/// </summary>
 		WSABUF wsabuf = { 0,nullptr };
+		char bufOutput[128];
 		enum SendState
 		{
 			SendState_Sleep,//沉睡，随时唤醒

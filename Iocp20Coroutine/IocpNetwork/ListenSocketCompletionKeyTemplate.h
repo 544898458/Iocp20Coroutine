@@ -5,26 +5,26 @@
 
 namespace Iocp {
 
-	template<class T_Session,class T_Server>
+	template<class T_Session, class T_Server>
 		requires requires(Iocp::SessionSocketCompletionKey<T_Session>& refCompletionKeySession, T_Session& refSession, T_Server& refServer)
 	{
 		requires std::is_same_v<void, decltype(refSession.OnInit(refServer))>;//void OnInit(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, T_Server&);
 	}
-	void ListenSocketCompletionKey::StartCoRoutine( HANDLE hIocp,SOCKET socketListen, T_Server &refServer)
+	void ListenSocketCompletionKey::StartCoRoutine(HANDLE hIocp, SOCKET socketListen, T_Server& refServer)
 	{
 		auto pAcceptOverlapped = new Overlapped();
 		pAcceptOverlapped->needDeleteMe = true;
-		pAcceptOverlapped->coTask = PostAccept<T_Session>(pAcceptOverlapped,hIocp, socketListen, refServer);
+		pAcceptOverlapped->coTask = PostAccept<T_Session>(pAcceptOverlapped, hIocp, socketListen, refServer);
 		pAcceptOverlapped->coTask.m_desc = "PostAccept";
 		pAcceptOverlapped->coTask.Run();
 	}
-	
+
 	template<class T_Session, class T_Server>
 	//	requires requires(T_Session& refSession, T_Server& refServer)
 	//{
 	//	requires std::is_same_v<void, decltype(refSession.OnInit(&refSession, refServer))>;//void MySession::OnInit(WebSocketSession<MySession>* pWsSession, MyServer& server)
 	//}
-	CoTask<Overlapped::YieldReturn> ListenSocketCompletionKey::PostAccept(Overlapped* pAcceptOverlapped,HANDLE hIocp, SOCKET socketListen, T_Server& refServer)
+	CoTask<Overlapped::YieldReturn> ListenSocketCompletionKey::PostAccept(Overlapped* pAcceptOverlapped, HANDLE hIocp, SOCKET socketListen, T_Server& refServer)
 	{
 		while (true)
 		{
@@ -40,7 +40,7 @@ namespace Iocp {
 				co_return Overlapped::Error;
 			}
 
-			LOG(INFO) << "AcceptEx成功";
+			LOG(INFO) << "AcceptEx成功,Socket=" << pAcceptOverlapped->socket;
 
 			if (async)
 			{

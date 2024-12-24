@@ -226,5 +226,8 @@
     <None Include="..\websocketfiles-master\src\string_helper.inl">
       <Filter>web_socket</Filter>
     </None>
+    <None Include="..\x64\Debug\崩溃41.dmp">
+      <Filter>IocpNetwork</Filter>
+    </None>
   </ItemGroup>
 </Project>

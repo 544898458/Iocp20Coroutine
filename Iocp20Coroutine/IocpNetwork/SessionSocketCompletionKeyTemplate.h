@@ -30,11 +30,11 @@ namespace Iocp {
 			sendOverlapped.coTask.m_desc = "PostSend";
 			sendOverlapped.coTask.Run();
 
-			notifySendOverlapped.pOverlapped= &sendOverlapped;
+			notifySendOverlapped.pOverlapped = &sendOverlapped;
 			notifySendOverlapped.OnComplete = &Overlapped::OnCompleteNotifySend;
 			sendOverlapped.coTask.m_desc = "NotifySend";
 			//PostQueuedCompletionStatus(m_hIocp, 0, (ULONG_PTR)this, &notifySendOverlapped.overlapped);
-			
+
 		}
 		{
 			//pRecvOverlapped = new Overlapped();
@@ -83,12 +83,12 @@ namespace Iocp {
 	template<class T_Session>
 	CoTask<Overlapped::YieldReturn> SessionSocketCompletionKey<T_Session>::PostRecv(Overlapped& pOverlapped)
 	{
-		LOG(INFO) << "调用PostRecv,this=" << this << ",ThreadId=" << GetCurrentThreadId();
+		LOG(INFO) << "调用PostRecv,this=" << this << ",Socket=" << Socket();
 		while (true)
 		{
 			if (!WSARecv(pOverlapped))
 			{
-				LOG(WARNING) << ("可能断网了,不再调用WSARecv\n");
+				LOG(WARNING) << "可能断网了,不再调用WSARecv,Socket=" << Socket();
 				CloseSocket();
 				//delete pOverlapped;
 				break;
@@ -116,7 +116,7 @@ namespace Iocp {
 			recvFinish = true;
 			if (!sendFinish)
 			{
-				LOG(INFO) << "PostRecv协程结束，但是sendOverlapped还没结束,GetCurrentThreadId=" << GetCurrentThreadId();
+				LOG(INFO) << "PostRecv协程结束，但是sendOverlapped还没结束,Socket=" << Socket();
 				PostNotifySend();
 				co_return Overlapped::Error;
 			}
@@ -133,7 +133,7 @@ namespace Iocp {
 		{
 			if (0 == Socket())
 			{
-				LOG(INFO) << "断线了,退出Send协程";
+				LOG(INFO) << "断线了,退出Send协程,0 == Socket()";
 				break;
 			}
 			bool needYield(false), callSend(false);
@@ -187,14 +187,14 @@ namespace Iocp {
 			sendFinish = true;
 			if (!recvFinish)
 			{
-				LOG(INFO) << "PostSend协程结束，但是recvOverlapped还没结束,GetCurrentThreadId=" << GetCurrentThreadId();
+				LOG(INFO) << "PostSend协程结束，但是recvOverlapped还没结束,Socket=" << Socket();
 				co_return Overlapped::Error;
 			}
 		}
 
 		//this->Session.OnDestroy();
 		//delete this;
-		LOG(INFO) << "PostSend协程结束,GetCurrentThreadId=" << GetCurrentThreadId();
+		LOG(INFO) << "PostSend协程结束,Socket=";// << Socket();
 		co_return Overlapped::OK;
 	}
 
@@ -228,7 +228,9 @@ namespace Iocp {
 			case WSAENOTSOCK:
 				LOG(WARNING) << "An operation was attempted on something that is not a socket.";
 				break;
-
+			case WSAECONNRESET:
+				LOG(WARNING) << "An existing connection was forcibly closed by the remote host.";
+				break;
 			}
 			LOG(WARNING) << "WSARecv重叠的操作未成功启动，并且不会发生完成指示。err=" << err << ",Socket=" << Socket();
 			return false;// 任何其他错误代码都指示重叠的操作未成功启动，并且不会发生完成指示。

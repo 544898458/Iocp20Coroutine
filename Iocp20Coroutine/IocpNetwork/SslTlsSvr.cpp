@@ -136,7 +136,8 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 	}
 
 	/* set our supported ciphers */
-	r = SSL_CTX_set_cipher_list(k->ctx, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
+	//r = SSL_CTX_set_cipher_list(k->ctx, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
+	r = SSL_CTX_set_cipher_list(k->ctx, "ALL:!aNULL");
 	if (r != 1) {
 		printf("Error: cannot set the cipher list.\n");
 		ERR_print_errors_fp(stderr);
@@ -144,7 +145,7 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 	}
 
 	/* the client doesn't have to send it's certificate */
-	//SSL_CTX_set_verify(k->ctx, SSL_VERIFY_PEER, krx_ssl_verify_peer);
+	SSL_CTX_set_verify(k->ctx, SSL_VERIFY_PEER, krx_ssl_verify_peer);
 	/* 服务器不验证客户端证书， 客户端可以不提供证书*/
 	//SSL_CTX_set_verify(k->ctx, SSL_VERIFY_NONE, NULL);
 
@@ -159,8 +160,10 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 	/* load key and certificate */
 	char certfile[1024];
 	char keyfile[1024];
-	sprintf(certfile, "./%s-cert.crt", keyname);
+	char chainfile[1024];
+	sprintf(certfile, "./%s-cert.pem", keyname);
 	sprintf(keyfile, "./%s-private.key", keyname);
+	sprintf(chainfile, "./%s-chain.crt", keyname);
 
 	/* certificate file; contains also the public key */
 	r = SSL_CTX_use_certificate_file(k->ctx, certfile, SSL_FILETYPE_PEM);
@@ -177,6 +180,13 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 		ERR_print_errors_fp(stderr);
 		return -5;
 	}
+
+	//r = SSL_CTX_use_certificate_chain_file(k->ctx, chainfile);
+	//if (r != 1) {
+	//	printf("Error: cannot load chain file.\n");
+	//	ERR_print_errors_fp(stderr);
+	//	return -15;
+	//}	
 
 	/* check if the private key is valid */
 	r = SSL_CTX_check_private_key(k->ctx);
@@ -695,12 +705,6 @@ int SslTlsSvr::处理前端发来的密文(const void* buf, const int len)
 		{
 			SSL_do_handshake(m_pServer->ssl);
 		}
-		else
-		{
-			char buf明文[2048];
-			const auto read明文 = SSL_read(m_pServer->ssl, buf明文, sizeof(buf明文));
-			LOG(WARNING) << m_pServer->name << "收到明文 read: " << read明文 << "," << buf明文;
-		}
 	}
 	return i32已处理密文字节;
 }
@@ -719,9 +723,14 @@ void SslTlsSvr::do_handshake()
 template<int len>
 int SslTlsSvr::读出已解密的明文(char(&bufOut)[len])
 {
-	const int read = SSL_read(m_pServer->ssl, bufOut, sizeof(bufOut));
-	LOG(INFO) << m_pServer->name << " read: " << read;
-	return read;
+	if (!SSL_is_init_finished(m_pServer->ssl))
+	{
+		return 0;
+	}
+
+	const int i32收到明文字节 = SSL_read(m_pServer->ssl, bufOut, sizeof(bufOut));
+	LOG(INFO) << m_pServer->name << ",收到明文字节:" << i32收到明文字节;
+	return i32收到明文字节;
 }
 
 template<int len>

@@ -23,6 +23,12 @@ int WebSocketSession< T_Session>::OnRecv(Iocp::SessionSocketCompletionKey<WebSoc
 
 	获取准备发往前端的密文并发给前端();
 
+	{
+		char buf明文[4096];
+		const auto i32读出明文字节 = m_SslTls.读出已解密的明文(buf明文);
+		if (0 < i32读出明文字节)
+			m_webSocketEndpoint->from_wire(buf明文, i32读出明文字节);
+	}
 	return i32已处理;
 }
 template<class T_Session>

@@ -6,14 +6,13 @@ namespace Iocp
 {
 	std::tuple<bool, bool> ListenSocketCompletionKey::AcceptEx(Overlapped* pAcceptOverlapped, SOCKET socketListen)
 	{
-		char str2[1];// = new char[1024];// = { 0 };
 		DWORD dwRecvcount = 0;
 		//int b = WSAGetLastError();
 		//OVERLAPPED* Overlapped = new OVERLAPPED();
 		pAcceptOverlapped->GetQueuedCompletionStatusReturn = ::AcceptEx(
 			socketListen,	//[in]侦听套接字。服务器应用程序在这个套接字上等待连接。
 			pAcceptOverlapped->socket,	//[in]将用于连接的套接字。此套接字必须不能已经绑定或者已经连接。
-			str2, //[in]指向一个缓冲区，该缓冲区用于接收新建连接的所发送数据的第一个块、该服务器的本地地址和客户端的远程地址。接收到的数据将被写入到缓冲区0偏移处，而地址随后写入。 该参数必须指定，如果此参数设置为NULL，将不会得到执行，也无法通过GetAcceptExSockaddrs函数获得本地或远程的地址。
+			pAcceptOverlapped->bufOutput, //[in]指向一个缓冲区，该缓冲区用于接收新建连接的所发送数据的第一个块、该服务器的本地地址和客户端的远程地址。接收到的数据将被写入到缓冲区0偏移处，而地址随后写入。 该参数必须指定，如果此参数设置为NULL，将不会得到执行，也无法通过GetAcceptExSockaddrs函数获得本地或远程的地址。
 			0,	//[in]lpOutputBuffer字节数，指定接收数据缓冲区lpOutputBuffer的大小。这一大小应不包括服务器的本地地址的大小或客户端的远程地址，他们被追加到输出缓冲区。如果dwReceiveDataLength是零，AcceptEx将不等待接收任何数据，而是尽快建立连接。
 			sizeof(struct sockaddr_in) + 16,//[in]为本地地址信息保留的字节数。此值必须比所用传输协议的最大地址大小长16个字节。
 			sizeof(struct sockaddr_in) + 16,//[in]为远程地址的信息保留的字节数。此值必须比所用传输协议的最大地址大小长16个字节。 该值不能为0。
