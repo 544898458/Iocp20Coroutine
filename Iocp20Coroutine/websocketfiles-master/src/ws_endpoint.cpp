@@ -120,7 +120,7 @@ int32_t WebSocketEndpoint<T_Callback, T_Data>::to_wire(const void* writebuf, int
 		return size;
 	}
 
-	nt_work_data_->Send(writebuf, (int)size);// , nt_work_data_);
+	nt_work_data_->SendWebSocket处理后的明文(writebuf, (int)size);// , nt_work_data_);
 	return 0;
 }
 template<class T_Callback, class T_Data>

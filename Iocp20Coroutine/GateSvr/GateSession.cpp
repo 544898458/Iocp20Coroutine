@@ -13,7 +13,7 @@
 template class Iocp::SessionSocketCompletionKey<GateSession::CompeletionKeySession>;
 template class MsgQueueMsgPack<GateSession::CompeletionKeySession>;
 template class WebSocketSession<GateSession>;
-template class WebSocketEndpoint<GateSession, Iocp::SessionSocketCompletionKey<GateSession::CompeletionKeySession> >;
+template class WebSocketEndpoint<GateSession, GateSession::CompeletionKeySession>;
 template void WebSocketSession<GateSession>::OnInit<GateServer>(GateServer& server);
 //int GateSession::OnRecv(CompeletionKeySession&, const void* buf, int len)
 //{

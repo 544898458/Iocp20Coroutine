@@ -163,12 +163,18 @@ public:
 /// 从全局连接set里删除连接，从全局Space里删除实体
 /// </summary>
 	void OnDestroy();
-	void Send密文(const void* buf, const int len)
-	{
-		//m_webSocketEndpoint->Send(buf, len);
-		m_refSession.Send(buf, len);//
-	}
+
+	/// <summary>
+	/// 发给WebSocket处理
+	/// </summary>
+	/// <param name="buf"></param>
+	/// <param name="len"></param>
 	void Send(const void* buf, const int len)
+	{
+		m_webSocketEndpoint->Send(buf, len);
+		//m_refSession.Send(buf, len);//
+	}
+	void SendWebSocket处理后的明文(const void* buf, const int len)
 	{
 		{
 			const auto i32已处理明文= m_SslTls.把要发给前端的明文交给Ssl处理(buf, len);
@@ -178,11 +184,16 @@ public:
 				assert(false);
 			}
 		}
-		{
-			char buf密文[4096];
-			int len密文 = m_SslTls.获取准备发往前端的密文(buf密文);
-			Send密文(buf密文, len密文);
-		}
+		获取准备发往前端的密文并发给前端();
+
+	}
+	void 获取准备发往前端的密文并发给前端()
+	{
+
+		char buf密文[4096];
+		int len密文 = m_SslTls.获取准备发往前端的密文(buf密文);
+		if (0 < len密文)
+			m_refSession.Send(buf密文, len密文);
 	}
 	template<class T>
 	void Send(const T& ref)
@@ -194,7 +205,7 @@ public:
 	/// <summary>
 	/// 开源WebSocket库
 	/// </summary>
-	std::unique_ptr<MyWebSocketEndpoint<T_Session, Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>>> m_webSocketEndpoint;
+	std::unique_ptr<MyWebSocketEndpoint<T_Session, WebSocketSession<T_Session>>> m_webSocketEndpoint;
 	Session& m_refSession;
 	T_Session m_Session;
 	
