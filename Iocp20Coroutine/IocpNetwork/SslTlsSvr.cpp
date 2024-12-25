@@ -145,9 +145,9 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 	}
 
 	/* the client doesn't have to send it's certificate */
-	SSL_CTX_set_verify(k->ctx, SSL_VERIFY_PEER, krx_ssl_verify_peer);
+	//SSL_CTX_set_verify(k->ctx, SSL_VERIFY_PEER, krx_ssl_verify_peer);
 	/* 服务器不验证客户端证书， 客户端可以不提供证书*/
-	//SSL_CTX_set_verify(k->ctx, SSL_VERIFY_NONE, NULL);
+	SSL_CTX_set_verify(k->ctx, SSL_VERIFY_NONE, NULL);
 
 	/* enable srtp */
 	r = SSL_CTX_set_tlsext_use_srtp(k->ctx, "SRTP_AES128_CM_SHA1_80");
