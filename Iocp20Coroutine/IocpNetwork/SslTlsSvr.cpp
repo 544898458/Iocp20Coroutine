@@ -161,9 +161,9 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 	char certfile[1024];
 	char keyfile[1024];
 	char chainfile[1024];
-	sprintf(certfile, "./%s-cert.pem", keyname);
-	sprintf(keyfile, "./%s-private.key", keyname);
-	sprintf(chainfile, "./%s-chain.crt", keyname);
+	sprintf(certfile, "./%s-cert.crt", keyname);//本网站域名专用证书	-cert
+	sprintf(keyfile, "./%s-private.key", keyname);//私钥	-key 
+	sprintf(chainfile, "./%s-chain.crt", keyname);//证书链：颁发机构的证书， -CAfile
 
 	/* certificate file; contains also the public key */
 	r = SSL_CTX_use_certificate_file(k->ctx, certfile, SSL_FILETYPE_PEM);
@@ -181,13 +181,6 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 		return -5;
 	}
 
-	//r = SSL_CTX_use_certificate_chain_file(k->ctx, chainfile);
-	//if (r != 1) {
-	//	printf("Error: cannot load chain file.\n");
-	//	ERR_print_errors_fp(stderr);
-	//	return -15;
-	//}	
-
 	/* check if the private key is valid */
 	r = SSL_CTX_check_private_key(k->ctx);
 	if (r != 1) {
@@ -195,6 +188,13 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 		ERR_print_errors_fp(stderr);
 		return -6;
 	}
+
+	//r = SSL_CTX_use_certificate_chain_file(k->ctx, chainfile);
+	//if (r != 1) {
+	//	printf("Error: cannot load chain file.\n");
+	//	ERR_print_errors_fp(stderr);
+	//	return -15;
+	//}
 
 	sprintf(k->name, "+ %s", keyname);
 

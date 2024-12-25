@@ -56,6 +56,9 @@ namespace Iocp {
 				case ERROR_OPERATION_ABORTED:
 					LOG(WARNING) << ("The I/O operation has been aborted because of either a thread exit or an application request.");
 					break;
+				case ERROR_NETNAME_DELETED:
+					LOG(WARNING) << "The specified network name is no longer available.";
+					break;
 				default:
 					LOG(WARNING) << "AcceptExÊ§°Ü,GetLastErrorReturn=" << pAcceptOverlapped->GetLastErrorReturn;
 					break;
