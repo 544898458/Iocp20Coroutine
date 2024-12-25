@@ -166,7 +166,8 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 	sprintf(chainfile, "./%s-chain.crt", keyname);//证书链：颁发机构的证书， -CAfile
 
 	/* certificate file; contains also the public key */
-	r = SSL_CTX_use_certificate_file(k->ctx, certfile, SSL_FILETYPE_PEM);
+	//r = SSL_CTX_use_certificate_file(k->ctx, certfile, SSL_FILETYPE_PEM);
+	r = SSL_CTX_use_certificate_chain_file(k->ctx, certfile);
 	if (r != 1) {
 		LOG(ERROR) << "Error: cannot load certificate file.";
 		ERR_print_errors_fp(stderr);
