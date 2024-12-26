@@ -33,7 +33,7 @@ namespace Iocp {
 			notifySendOverlapped.pOverlapped = &sendOverlapped;
 			sendOverlapped.pOverlapped = &notifySendOverlapped;
 			notifySendOverlapped.OnComplete = &Overlapped::OnCompleteNotifySend;
-			sendOverlapped.coTask.m_desc = "NotifySend";
+			notifySendOverlapped.coTask.m_desc = "NotifySend";
 			//PostQueuedCompletionStatus(m_hIocp, 0, (ULONG_PTR)this, &notifySendOverlapped.overlapped);
 
 		}

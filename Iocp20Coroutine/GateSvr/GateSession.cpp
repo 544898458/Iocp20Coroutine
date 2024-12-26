@@ -45,7 +45,7 @@ void GateSession::OnRecvWsPack(const void* buf, const int len)
 	catch (const msgpack::unpack_error& error)
 	{
 		LOG(WARNING) << "MsgPack½â°üÊ§°Ü:" << error.what();
-		assert(false);
+		//assert(false);
 	}
 
 }

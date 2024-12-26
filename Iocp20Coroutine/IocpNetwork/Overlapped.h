@@ -56,9 +56,19 @@ namespace Iocp
 			this->numberOfBytesTransferred = number_of_bytes;
 			this->GetQueuedCompletionStatusReturn = bGetQueuedCompletionStatusReturn;
 			this->GetLastErrorReturn = lastErr;
+			
 			if (this->coTask.Run())
 			{
 				LOG(INFO) << "协程结束";
+				LOG_IF(WARNING, OK != this->coTask.GetValue()) << "停止send";
+
+				LOG(INFO) << "Send协程结束，肯定断线了";
+				auto finalSendState = SendState_Sending;
+				const auto old =this->atomicSendState.load();
+				auto changed = this->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sleep);
+				//assert(changed);
+				LOG_IF(WARNING, !changed) << "finalSendState:" << finalSendState << ",old=" << old;
+				
 				return;
 			}
 			auto yiledValue = this->coTask.GetValue();
@@ -109,6 +119,9 @@ namespace Iocp
 			const auto yiledValue = this->pOverlapped->coTask.GetValue();
 			switch (yiledValue)
 			{
+			case OK:
+				LOG(INFO) << "已经停止发送，不用再次启动发送";
+				break;
 			case Sending:
 				//LOG(INFO) << "正在发送，不用启动";
 				break;

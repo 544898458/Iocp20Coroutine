@@ -157,6 +157,7 @@ public:
 			return false;
 
 		//LOG(INFO) << m_desc << "协程已退出" << m_hCoroutine.address();
+		TrySavePromiseValue();
 		m_hCoroutine.destroy();
 		m_hCoroutine = nullptr;
 
@@ -260,7 +261,17 @@ public:
 	}
 	~CoTask() { if (m_hCoroutine) m_hCoroutine.destroy(); }
 	//bool MoveNext() const { return m_hCoroutine && (m_hCoroutine.resume(), !m_hCoroutine.done()); }
-	T GetValue() const { return m_hCoroutine.promise().value; }
+	T GetValue()
+	{
+		TrySavePromiseValue();
+		return m_Value;
+	}
+	void TrySavePromiseValue()
+	{
+		if (m_hCoroutine)
+			m_Value = m_hCoroutine.promise().value;
+	}
+	T m_Value;
 };
 template<typename T>
 std::list<CoTask<T>> CoTask<T>::m_listCo;
@@ -418,7 +429,7 @@ private:
 typedef CoAwaiter<bool> CoAwaiterBool;
 //typedef CoTask<uint8_t> CoTaskUint8;
 typedef CoTask<bool> CoTaskBool;
-struct CoTaskCancel 
+struct CoTaskCancel
 {
 	CoTaskBool co;
 	FunCancel cancel;
