@@ -130,6 +130,16 @@ struct MsgHead
 	//}
 	static MsgHead GetMsgId(msgpack::object obj)
 	{
+		if (obj.type != MSGPACK_OBJECT_ARRAY)
+		{
+			LOG(WARNING) << "数据包头类型错:" << obj.type;
+			return {};
+		}
+		if (obj.via.array.size < 1)
+		{
+			LOG(WARNING) << "数据包头数组太小:" << obj.via.array.size;
+			return {};
+		}
 		return obj.via.array.ptr[0].as<MsgHead>();
 		//return obj.as<Msg>();
 		//return (MsgId)obj.via.array.ptr[0].via.array.ptr[0].via.i64;//没判断越界，要加try

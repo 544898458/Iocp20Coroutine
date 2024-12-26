@@ -17,7 +17,7 @@ namespace Iocp
 		//LOG(INFO) << "等GetQueuedCompletionStatus返回,port=" << port << ",GetCurrentThreadId=" << GetCurrentThreadId();
 		BOOL bFlag = GetQueuedCompletionStatus(m_hIocp, &number_of_bytes, (PULONG_PTR)&pCompletionKey, &lpOverlapped, INFINITE);//没完成就会卡在这里，正常
 		int lastErr = GetLastError();//可能是Socket强制关闭
-		//LOG(INFO) << "GetQueuedCompletionStatus返回lastErr=" << lastErr << ",pCompletionKey=" << pCompletionKey << ",number_of_bytes=" << number_of_bytes;
+		LOG(INFO) << "GetQueuedCompletionStatus返回lastErr=" << lastErr << ",pCompletionKey=" << pCompletionKey << ",number_of_bytes=" << number_of_bytes;
 
 		if (lpOverlapped != nullptr)
 		{
@@ -25,7 +25,13 @@ namespace Iocp
 			(overlapped->*overlapped->OnComplete)(pCompletionKey, m_hIocp, number_of_bytes, bFlag, lastErr);
 			if (overlapped->needDeleteMe && overlapped->coTask.Finished())
 			{
-				LOG(INFO) << "删除" << overlapped->coTask.m_desc;
+				LOG(INFO) << "删除:	" << overlapped->coTask.m_desc << ",pOverlapped=" << overlapped->pOverlapped;
+				if (overlapped->pOverlapped)
+				{
+					assert(overlapped->pOverlapped->pOverlapped == overlapped);
+					overlapped->pOverlapped->pOverlapped = nullptr;
+					overlapped->pOverlapped = nullptr;
+				}
 				delete overlapped;
 				overlapped = nullptr;
 			}

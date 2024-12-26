@@ -18,7 +18,7 @@ namespace Iocp {
 		pAcceptOverlapped->coTask.m_desc = "PostAccept";
 		pAcceptOverlapped->coTask.Run();
 	}
-
+	
 	template<class T_Session, class T_Server>
 	//	requires requires(T_Session& refSession, T_Server& refServer)
 	//{
@@ -37,7 +37,8 @@ namespace Iocp {
 				LOG(WARNING) << "AcceptEx失败，停止Accept";
 				closesocket(pAcceptOverlapped->socket);
 				pAcceptOverlapped->socket = NULL;
-				co_return Overlapped::Error;
+				//co_return Overlapped::Error;
+				continue;//20241226
 			}
 
 			LOG(INFO) << "AcceptEx成功,Socket=" << pAcceptOverlapped->socket;
@@ -46,7 +47,7 @@ namespace Iocp {
 			{
 				LOG(INFO) << "准备异步等待重叠AcceptEx完成,socket=" << pAcceptOverlapped->socket;
 				co_yield Overlapped::OK;
-				LOG(INFO) << "异步重叠AcceptEx完成,socket=" << pAcceptOverlapped->socket;
+				LOG(INFO) << "异步重叠AcceptEx完成,socket=" << pAcceptOverlapped->socket << ",async=" << async;
 			}
 
 			if (!pAcceptOverlapped->GetQueuedCompletionStatusReturn)
@@ -54,18 +55,23 @@ namespace Iocp {
 				switch (pAcceptOverlapped->GetLastErrorReturn)
 				{
 				case ERROR_OPERATION_ABORTED:
-					LOG(WARNING) << ("The I/O operation has been aborted because of either a thread exit or an application request.");
+					LOG(ERROR) << ("The I/O operation has been aborted because of either a thread exit or an application request.");
 					break;
 				case ERROR_NETNAME_DELETED:
-					LOG(WARNING) << "The specified network name is no longer available.";
+					LOG(ERROR) << "The specified network name is no longer available.";
+					break;
+				case ERROR_IO_PENDING:
+					LOG(ERROR) << "Overlapped I/O operation is in progress.";
 					break;
 				default:
-					LOG(WARNING) << "AcceptEx失败,GetLastErrorReturn=" << pAcceptOverlapped->GetLastErrorReturn;
+					LOG(ERROR) << "AcceptEx失败,GetLastErrorReturn=" << pAcceptOverlapped->GetLastErrorReturn;
+					//assert(false);
 					break;
 				}
 				closesocket(pAcceptOverlapped->socket);
 				pAcceptOverlapped->socket = NULL;
-				co_return Overlapped::Error;
+				//co_return Overlapped::Error;
+				continue;
 			}
 
 			//绑定到完成端口
@@ -76,10 +82,21 @@ namespace Iocp {
 			if (hPort1 != hIocp)
 			{
 				const int err = GetLastError();
-				LOG(ERROR) << "连上来的Socket关联到完成端口失败，Error=" << err;
+				switch (err)
+				{
+				case ERROR_INVALID_PARAMETER:
+					LOG(ERROR) << "The parameter is incorrect.";
+					break;
+				default:
+					LOG(ERROR) << "AcceptEx后的CreateIoCompletionPort失败,err=" << err;
+					//assert(false);
+					break;
+				}
+				LOG(ERROR) << "连上来的Socket关联到完成端口失败，Error=" << err << ",socket:"<< pAcceptOverlapped->socket;
 				//closesocket(pKey->socket);// all_socks[count]);
 				delete pNewCompleteKey;
-				co_return Overlapped::OK;
+				//co_return Overlapped::OK;
+				continue;
 			}
 			pNewCompleteKey->StartCoRoutine(hIocp);
 		}

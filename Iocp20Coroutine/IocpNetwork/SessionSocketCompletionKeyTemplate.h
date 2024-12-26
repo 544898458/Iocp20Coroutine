@@ -31,6 +31,7 @@ namespace Iocp {
 			sendOverlapped.coTask.Run();
 
 			notifySendOverlapped.pOverlapped = &sendOverlapped;
+			sendOverlapped.pOverlapped = &notifySendOverlapped;
 			notifySendOverlapped.OnComplete = &Overlapped::OnCompleteNotifySend;
 			sendOverlapped.coTask.m_desc = "NotifySend";
 			//PostQueuedCompletionStatus(m_hIocp, 0, (ULONG_PTR)this, &notifySendOverlapped.overlapped);
@@ -55,7 +56,7 @@ namespace Iocp {
 	{
 		if (this->sendOverlapped.coTask.Finished())
 		{
-			LOG(WARNING) << "Sending Failed";
+			LOG(WARNING) << "Sending Failed," << this;
 			return;
 		}
 
@@ -78,7 +79,7 @@ namespace Iocp {
 	bool SessionSocketCompletionKey<T_Session>::Finished()
 	{
 		std::lock_guard lock(lockFinish);
-		return recvFinish && sendFinish;
+		return recvFinish && sendFinish && this->sendOverlapped.atomicSendState.load() == Overlapped::SendState_Sleep;
 	}
 	template<class T_Session>
 	CoTask<Overlapped::YieldReturn> SessionSocketCompletionKey<T_Session>::PostRecv(Overlapped& pOverlapped)
@@ -133,7 +134,7 @@ namespace Iocp {
 		{
 			if (0 == Socket())
 			{
-				LOG(INFO) << "断线了,退出Send协程,0 == Socket()";
+				LOG(INFO) << "断线了,退出Send协程,0 == Socket()" << this;
 				break;
 			}
 			bool needYield(false), callSend(false);
@@ -147,7 +148,7 @@ namespace Iocp {
 			if (callSend)
 				LOG(INFO) << "准备异步等待WSASend结果";
 			else
-				LOG(INFO) << "等有数据再发WSASend" ;
+				LOG(INFO) << "等有数据再发WSASend";
 
 			LOG(INFO) << "开始异步等WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
 				<< ",callSend=" << callSend << ",wsabuf.len=" << overlapped.wsabuf.len
@@ -159,7 +160,7 @@ namespace Iocp {
 
 			if (!callSend)
 			{
-				//LOG(INFO) << ("有数据了，准备发WSASend\n");
+				LOG(INFO) << "有数据了，准备发WSASend" << this << "," << Socket();
 				continue;
 			}
 
@@ -193,6 +194,10 @@ namespace Iocp {
 
 		//this->Session.OnDestroy();
 		//delete this;
+		//using namespace std;
+		//std::this_thread::sleep_for(1s);
+		//assert(false);
+		LOG(INFO) << "PostSend协程结束,this=" << this;
 		LOG(INFO) << "PostSend协程结束,Socket=" << Socket();
 		co_return Overlapped::OK;
 	}
@@ -203,7 +208,7 @@ namespace Iocp {
 
 		//DWORD dwRecvCount(0);
 		refOverlapped.dwRecvcount = 0;
-		refOverlapped.dwFlag=0;
+		refOverlapped.dwFlag = 0;
 		refOverlapped.numberOfBytesTransferred = 0;
 		std::tie(refOverlapped.wsabuf.buf, refOverlapped.wsabuf.len) = this->recvBuf.BuildRecvBuf();
 		//refOverlapped.GetQueuedCompletionStatusReturn
@@ -232,7 +237,7 @@ namespace Iocp {
 				LOG(WARNING) << "An existing connection was forcibly closed by the remote host.";
 				break;
 			}
-			LOG(WARNING) << "WSARecv重叠的操作未成功启动，并且不会发生完成指示。err=" << err << ",Socket=" << Socket()<< ",dwRecvCount="<<refOverlapped.dwRecvcount;
+			LOG(WARNING) << "WSARecv重叠的操作未成功启动，并且不会发生完成指示。err=" << err << ",Socket=" << Socket() << ",dwRecvCount=" << refOverlapped.dwRecvcount;
 			return false;// 任何其他错误代码都指示重叠的操作未成功启动，并且不会发生完成指示。
 		}
 

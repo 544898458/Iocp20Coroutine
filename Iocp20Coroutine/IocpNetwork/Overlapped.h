@@ -41,7 +41,7 @@ namespace Iocp
 		enum SendState
 		{
 			SendState_Sleep,//沉睡，随时唤醒
-			SendState_Sending,//忙着发数据，不需要通知，只要王队列里塞数据就行了
+			SendState_Sending,//忙着发数据，不需要通知，只要往队列里塞数据就行了
 			SendState_SendBeforeSleep,//睡眠前最后一批发送，要通知，但是收到通知不一定执行协程（可能老协程还在运行）
 		};
 		/// <summary>
@@ -118,13 +118,13 @@ namespace Iocp
 				auto changed = this->pOverlapped->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sending);//激活
 				if (changed)
 				{
-					//LOG(INFO) << "激活沉睡的Send协程";
+					LOG(INFO) << "激活沉睡的Send协程";
 					PostQueuedCompletionStatus(port, 0, (ULONG_PTR)pKey, &this->pOverlapped->overlapped);
 					return;
 				}
 				if (finalSendState == SendState_Sending)
 				{
-					//LOG(INFO) << "Send协程正在等待发送结果";
+					LOG(INFO) << "Send协程正在等待发送结果";
 					return;
 				}
 				assert(finalSendState == SendState_SendBeforeSleep);
@@ -137,7 +137,7 @@ namespace Iocp
 				assert(changed);
 				if (changed)
 				{
-					//LOG(INFO) << "SendState_SendBeforeSleep,转,SendState_Sending";
+					LOG(INFO) << "SendState_SendBeforeSleep,转,SendState_Sending";
 					return;
 				}
 

@@ -10,7 +10,7 @@ SOCKET SocketCompeletionKey::Socket() const
 
 void SocketCompeletionKey::CloseSocket()
 {
-	LOG(WARNING) << "CloseSocket " << socket;
+	LOG(WARNING) << "CloseSocket " << socket << ",this:" << this;
 	closesocket(socket);
 	socket = NULL;
 }
