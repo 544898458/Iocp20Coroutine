@@ -37,3 +37,13 @@ bool 临时阻挡Component::AddComponent(Entity& refEntity, float f半边长)
 	refEntity.m_sp临时阻挡 = std::make_shared<临时阻挡Component, Entity&, const float&>(refEntity, f半边长);
 	return true;
 }
+
+活动单位走完路加阻挡::活动单位走完路加阻挡(Entity& refEntity) :m_refEntity(refEntity)
+{
+	m_refEntity.m_sp临时阻挡.reset();
+}
+
+活动单位走完路加阻挡::~活动单位走完路加阻挡()
+{
+	//临时阻挡Component::AddComponent(m_refEntity, 2);
+}

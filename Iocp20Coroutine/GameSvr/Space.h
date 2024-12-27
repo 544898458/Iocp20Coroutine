@@ -44,11 +44,12 @@ public:
 	/// <param name="i32视野范围">如果是0就用警戒范围当成视野范围</param>
 	void AddEntity(SpEntity& spNewEntity, const int32_t i32视野范围 = 0);
 	WpEntity Get最近的Entity支持地堡中的单位(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件);
+	WpEntity Get最近的Entity(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件);
 	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map能看到这一格;
 	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map在这一格里;
 private:
 	void EraseEntity(const bool bForceEraseAll);
-	WpEntity Get最近的Entity(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件);
+	
 
 };
 

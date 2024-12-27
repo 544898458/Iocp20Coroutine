@@ -176,15 +176,22 @@ public:
 	}
 	void SendWebSocket处理后的明文(const void* buf, const int len)
 	{
+		if (m_bSslTls)
 		{
-			const auto i32已处理明文= m_SslTls.把要发给前端的明文交给Ssl处理(buf, len);
-			if (i32已处理明文 != len)
 			{
-				LOG(ERROR) << "严重错误";
-				assert(false);
+				const auto i32已处理明文 = m_SslTls.把要发给前端的明文交给Ssl处理(buf, len);
+				if (i32已处理明文 != len)
+				{
+					LOG(ERROR) << "严重错误";
+					assert(false);
+				}
 			}
+			获取准备发往前端的密文并发给前端();
 		}
-		获取准备发往前端的密文并发给前端();
+		else
+		{
+			m_refSession.Send(buf, len);
+		}
 
 	}
 	void 获取准备发往前端的密文并发给前端()
@@ -214,6 +221,6 @@ public:
 	
 	SslTlsSvr m_SslTls;
 private:
-
+	const bool m_bSslTls = false;//wss或者ws
 
 };

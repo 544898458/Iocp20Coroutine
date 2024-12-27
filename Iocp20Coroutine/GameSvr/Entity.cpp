@@ -83,6 +83,9 @@ void Entity::SetPos(const Position& refNewPos)
 	if (m_Pos == refNewPos)
 		return;
 
+	if (m_spÁÙÊ±×èµ²)
+		m_spÁÙÊ±×èµ².reset();//ÒÆ¶¯ÁË£¬¿Ï¶¨ÒªÉ¾³ý×èµ²
+
 	if (m_upAoi)
 	{
 		m_upAoi->OnBeforeChangePos(refNewPos);

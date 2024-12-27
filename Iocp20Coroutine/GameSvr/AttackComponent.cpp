@@ -16,6 +16,7 @@
 #include "DefenceComponent.h"
 #include "BuildingComponent.h"
 #include "AoiComponent.h"
+#include "临时阻挡Component.h"
 
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
 void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, const 单位::战斗配置& 配置)
@@ -141,9 +142,15 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 			co_return false;
 		}
 
+		const auto wp最近的友方单位 = m_refEntity.m_refSpace.Get最近的Entity(m_refEntity, false, [](const Entity& ref)->bool {return nullptr != ref.m_spDefence; });
+		bool b距离友方单位太近 = false;
+		if (!wp最近的友方单位.expired())
+		{
+			b距离友方单位太近 = m_refEntity.DistanceLessEqual(*wp最近的友方单位.lock(), 0.6f);
+		}
 		Entity& refTarget = *wpEntity.lock();
 
-		if (m_refEntity.DistanceLessEqual(refTarget, 攻击距离(refTarget)))
+		if (m_refEntity.DistanceLessEqual(refTarget, 攻击距离(refTarget)) && !b距离友方单位太近)
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
@@ -230,10 +237,10 @@ void AttackComponent::播放攻击音效()
 		if (wpDefencer.lock()->IsDead())\
 			break;\
 
-
 CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 {
 	KeepCancel kc(cancel);
+	//活动单位临时阻挡 _(m_refEntity);
 	do
 	{
 		CHECK_终止攻击目标流程;
@@ -284,6 +291,8 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f目标建筑半边长, FunCancel& cancel)
 {
 	KeepCancel kc(cancel);
+	//活动单位临时阻挡 _(m_refEntity);
+
 	do
 	{
 		CHECK_终止攻击位置流程;

@@ -18,6 +18,7 @@
 #include "DefenceComponent.h"
 #include "单位.h"
 #include "资源Component.h"
+#include "临时阻挡Component.h"
 
 template<class T> void SendToWorldSvr(const T& msg, const uint64_t idGateSession);
 
@@ -72,6 +73,7 @@ namespace AiCo
 			co_return false;
 		}
 		const auto posOld = refThis.Pos();
+		活动单位走完路加阻挡 _(refThis);
 		RecastNavigationCrowd rnc(refThis, posTarget);
 		KeepCancel kc(funCancel);
 		const auto posLocalTarget = posTarget;
@@ -117,6 +119,7 @@ namespace AiCo
 			const auto ok = refThis.m_refSpace.CrowdToolFindNerestPos(posTarget);
 			assert(ok);
 		}
+		活动单位走完路加阻挡 _(refThis);
 		RecastNavigationCrowd rnc(refThis, posTarget);
 		KeepCancel kc(funCancel);
 		const float f建筑半边长 = BuildingComponent::建筑半边长(*spTarget);

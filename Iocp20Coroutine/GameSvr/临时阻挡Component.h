@@ -11,3 +11,10 @@ public:
 	Space& m_refSpace;
 };
 
+class 活动单位走完路加阻挡 final
+{
+public:
+	活动单位走完路加阻挡(Entity &refEntity);
+	~活动单位走完路加阻挡();
+	Entity& m_refEntity;
+};
