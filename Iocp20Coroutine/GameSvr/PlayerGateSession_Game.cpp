@@ -551,9 +551,11 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 
 void PlayerGateSession_Game::OnRecv(const MsgSay& msg)
 {
-	auto utf8Content = StrConv::Utf8ToGbk(msg.content);
-	LOG(INFO) << "收到聊天:" << utf8Content;
-	SendToWorldSvr<MsgSay>(msg, m_idPlayerGateSession);
+	MsgSay msg加名字 = msg;
+	auto strGbk = StrConv::Utf8ToGbk(msg加名字.content);
+	LOG(INFO) << "收到聊天:" << strGbk;
+	msg加名字.content = StrConv::GbkToUtf8(NickName() + " 说:" + strGbk);
+	SendToWorldSvr<MsgSay>(msg加名字, m_idPlayerGateSession);
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
