@@ -333,6 +333,9 @@
     <ClCompile Include="AoiComponent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerNickNameComponent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -531,6 +534,9 @@
       <Filter>MiniDump</Filter>
     </ClInclude>
     <ClInclude Include="AoiComponent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerNickNameComponent.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

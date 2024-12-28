@@ -22,7 +22,7 @@
 #include "造建筑Component.h"
 #include "AoiComponent.h"
 #include "EntitySystem.h"
-
+#include "PlayerNickNameComponent.h"
 using namespace std;
 
 Entity::Entity(const Position& pos, Space& space, const 单位::单位配置& ref配置) :
@@ -53,7 +53,7 @@ bool Entity::IsDead() const
 
 Entity::~Entity()
 {
-	LOG(INFO) << Id;
+	LOG(INFO) << "~Entity()," << Id;
 }
 
 //主线程单线程执行
@@ -68,14 +68,14 @@ void Entity::Update()
 
 bool Entity::IsEnemy(const Entity& refEntity)
 {
-	if (!m_spPlayer && !refEntity.m_spPlayer)
+	if (!m_spPlayerNickName && !refEntity.m_spPlayerNickName)
 		return false;//都是怪
 
-	if (!m_spPlayer || !refEntity.m_spPlayer)
+	if (!m_spPlayerNickName || !refEntity.m_spPlayerNickName)
 		return true;//有一个是怪
 
 	//都是玩家单位
-	return &m_spPlayer->m_refSession != &refEntity.m_spPlayer->m_refSession;
+	return m_spPlayerNickName->m_strNickName != refEntity.m_spPlayerNickName->m_strNickName;
 }
 
 void Entity::SetPos(const Position& refNewPos)
@@ -160,8 +160,8 @@ void Entity::BroadcastLeave()
 
 const std::string& Entity::NickName()
 {
-	if (m_spPlayer)
-		return m_spPlayer->m_refSession.NickName();
+	if (m_spPlayerNickName)
+		return m_spPlayerNickName->m_strNickName;
 
 	if (m_sp资源)
 	{
@@ -204,7 +204,7 @@ void Entity::Broadcast(const T& msg)
 	if (wp.expired())
 		wp = weak_from_this();
 
-	auto &ref自己或Owner = *wp.lock();
+	auto& ref自己或Owner = *wp.lock();
 	for (auto [k, wp能看到我] : ref自己或Owner.m_upAoi->m_map能看到我的)
 	{
 		CHECK_WP_CONTINUE(wp能看到我);

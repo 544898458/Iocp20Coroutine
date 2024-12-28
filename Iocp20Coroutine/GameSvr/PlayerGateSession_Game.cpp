@@ -69,16 +69,24 @@ void PlayerGateSession_Game::OnDestroy()
 			continue;
 		}
 		auto sp = wp.lock();
-
-		if (sp->m_refSpace.GetEntity(sp->Id).expired())
+		if (m_spSpace单人剧情副本 || EntitySystem::Is视口(*sp))
 		{
-			LOG(INFO) << "可能是地堡里的兵" << sp->NickName();
-			continue;
+			if (sp->m_refSpace.GetEntity(sp->Id).expired())
+			{
+				LOG(INFO) << "可能是地堡里的兵" << sp->NickName();
+				continue;
+			}
+			LOG(INFO) << "m_mapEntity.size=" << sp->m_refSpace.m_mapEntity.size();
+			sp->OnDestroy();
+			auto countErase = sp->m_refSpace.m_mapEntity.erase(sp->Id);
+			assert(1 == countErase);
 		}
-		LOG(INFO) << "m_mapEntity.size=" << sp->m_refSpace.m_mapEntity.size();
-		sp->OnDestroy();
-		auto countErase = sp->m_refSpace.m_mapEntity.erase(sp->Id);
-		assert(1 == countErase);
+		else
+		{
+			CHECK_RET_VOID(!m_wpSpace.expired());
+			sp->m_spPlayer.reset();
+			m_wpSpace.lock()->m_map已离线PlayerEntity[NickName()].insert({ sp->Id,sp });
+		}
 	}
 
 	m_mapWpEntity.clear();
@@ -267,12 +275,11 @@ void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
 	OnDestroy();
 	LOG(INFO) << "希望进Space:" << msg.idSapce;
 	EnterSpace(Space::GetSpace(msg.idSapce));
-	{
-		if (m_funCancel进地图)
-			m_funCancel进地图();
 
-		Co进多人联机地图().RunNew();
-	}
+	if (m_funCancel进地图)
+		m_funCancel进地图();
+
+	Co进多人联机地图().RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg离开Space& msg)
@@ -531,7 +538,19 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	auto sp = m_wpSpace.lock();
 
 	Send<Msg进Space>({ .idSapce = 1 });
+	{
+		auto mapOld = sp->m_map已离线PlayerEntity[NickName()];
+		for (auto [id, wp] : mapOld)
+		{
+			if (wp.expired())
+				continue;
 
+			auto sp = wp.lock();
+			PlayerComponent::AddComponent(*sp, *this);
+			m_mapWpEntity.insert({ sp->Id ,sp });
+		}
+		mapOld.clear();
+	}
 	for (const auto& [id, spEntity] : sp->m_mapEntity)//所有地图上的实体发给自己
 	{
 		LOG(INFO) << spEntity->NickName() << ",发给单人," << spEntity->Id;
@@ -761,6 +780,12 @@ void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
 		//	continue;//不可框选建筑单位
 
 		if (EntitySystem::Is视口(*spEntity))
+			continue;
+
+		if (!spEntity->m_spPlayer)
+			continue;
+
+		if (&spEntity->m_spPlayer->m_refSession != this)//不是自己的单位
 			continue;
 
 		m_listSelectedEntity.push_back(spEntity->Id);

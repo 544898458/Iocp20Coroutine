@@ -28,7 +28,7 @@ void 采集Component::采集(PlayerGateSession_Game& refGateSession, WpEntity wp目标
 		return;
 	}
 	走Component::Cancel所有包含走路的协程(m_refEntity);
-	PlayerComponent::播放声音(m_refEntity, "TSCYes02");
+	PlayerComponent::播放声音(m_refEntity, "语音/明白女声可爱版");
 	m_TaskCancel.TryRun(Co采集(refGateSession, wp目标资源));
 }
 

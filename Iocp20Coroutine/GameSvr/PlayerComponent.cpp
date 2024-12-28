@@ -4,6 +4,7 @@
 #include "GameSvrSession.h"
 #include "PlayerGateSession_Game.h"
 #include "../IocpNetwork/StrConv.h"
+#include "PlayerNickNameComponent.h"
 
 void PlayerComponent::Say(Entity& refEntity, const std::string& str, const SayChannel channel)
 {
@@ -26,6 +27,8 @@ void PlayerComponent::Send×ÊÔ´(Entity& refEntity)
 void PlayerComponent::AddComponent(Entity& refEntity, PlayerGateSession_Game& refSession)
 {
 	refEntity.m_spPlayer = std::make_shared<PlayerComponent, PlayerGateSession_Game&>(refSession);
+	if(!refEntity.m_spPlayerNickName)
+		refEntity.m_spPlayerNickName = std::make_shared<PlayerNickNameComponent, const std::string&>(refSession.NickName());
 }
 
 void PlayerComponent::Say(const std::string& str, const SayChannel channel)

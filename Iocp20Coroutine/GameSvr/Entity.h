@@ -10,6 +10,7 @@ class Space;
 class GameSvrSession;
 class GameSvr;
 class PlayerComponent;
+class PlayerNickNameComponent;
 class MonsterComponent;
 class BuildingComponent;
 class AttackComponent;
@@ -62,6 +63,7 @@ public:
 
 	//静态ECS，没有基类强转子类
 	std::shared_ptr<PlayerComponent> m_spPlayer;
+	std::shared_ptr<PlayerNickNameComponent> m_spPlayerNickName;
 	std::shared_ptr<AttackComponent> m_spAttack;
 	std::shared_ptr<DefenceComponent> m_spDefence;
 	std::shared_ptr<MonsterComponent> m_spMonster;

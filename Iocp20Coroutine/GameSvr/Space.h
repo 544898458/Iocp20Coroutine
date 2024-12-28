@@ -47,6 +47,8 @@ public:
 	WpEntity Get最近的Entity(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件);
 	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map能看到这一格;
 	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map在这一格里;
+
+	std::unordered_map<std::string, std::map<uint64_t, WpEntity>> m_map已离线PlayerEntity;
 private:
 	void EraseEntity(const bool bForceEraseAll);
 	

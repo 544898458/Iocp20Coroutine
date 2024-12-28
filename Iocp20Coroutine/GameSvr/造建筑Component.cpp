@@ -68,6 +68,7 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 建筑单位类型 类型
 		co_return true;
 
 	//然后开始扣钱建造
+	CHECK_CO_RET_FALSE(m_refEntity.m_spPlayer);
 	auto spEntity建筑 = co_await m_refEntity.m_spPlayer->m_refSession.CoAddBuilding(类型, pos);
 	if (!spEntity建筑)
 		co_return false;
@@ -107,8 +108,7 @@ CoTaskBool 造建筑Component::Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel)
 
 		assert(!wpEntity建筑.expired());
 		EntitySystem::BroadcastEntity描述(*wpEntity建筑.lock(), oss.str());
-		if (m_refEntity.m_spPlayer)
-			m_refEntity.m_spPlayer->m_refSession.Send资源();
+		PlayerComponent::Send资源(m_refEntity);
 	}
 
 	if (m_refEntity.m_spAttack)

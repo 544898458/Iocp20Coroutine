@@ -7,7 +7,7 @@
 #include "PlayerComponent.h"
 #include "AoiComponent.h"
 #include "AttackComponent.h"
-
+#include "PlayerNickNameComponent.h"
 Space::Space(const std::string& stf寻路文件)
 {
 	std::shared_ptr<CrowdToolState> CreateCrowdToolState(const std::string & stf寻路文件);
@@ -158,7 +158,7 @@ void Space::EraseEntity(const bool bForceEraseAll)
 			spEntity->m_spPlayer->m_refSession.Erase(spEntity->Id);
 		}
 
-		LOG(INFO) << "删除对象," << spEntity->NickName() << ",pEntity=" << spEntity << ",删除前剩余" << m_mapEntity.size();
+		LOG(INFO) << "删除过期对象," << spEntity->NickName() << ",Id=" << spEntity->Id << ",删除前剩余" << m_mapEntity.size();
 		spEntity->OnDestroy();
 		iter = m_mapEntity.erase(iter);
 	}
@@ -174,7 +174,7 @@ int Space::Get怪物单位数()
 			if (nullptr == refEntity.m_spMonster)
 				return false;
 
-			if (refEntity.m_spPlayer)//属于玩家制的单位
+			if (refEntity.m_spPlayerNickName)//属于玩家制的单位
 				return false;
 
 			return true;
@@ -196,10 +196,10 @@ int Space::Get玩家单位数(const PlayerGateSession_Game& ref)
 {
 	return Get单位数([&ref](const Entity& refEntity)
 		{
-			if (nullptr == refEntity.m_spPlayer)
+			if (nullptr == refEntity.m_spPlayerNickName)
 				return false;
 
-			if (&ref != &refEntity.m_spPlayer->m_refSession)
+			if (ref.NickName() != refEntity.m_spPlayerNickName->m_strNickName)
 				return false;
 
 			if (!refEntity.m_spDefence)

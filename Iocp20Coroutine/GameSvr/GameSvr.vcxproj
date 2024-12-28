@@ -280,6 +280,7 @@
     </ClCompile>
     <ClCompile Include="AoiComponent.cpp" />
     <ClCompile Include="EntitySystem.cpp" />
+    <ClCompile Include="PlayerNickNameComponent.cpp" />
     <ClCompile Include="RecastNavigationCrowd.cpp" />
     <ClCompile Include="Sample_TempObstacles.cpp" />
     <ClCompile Include="DefenceComponent.cpp" />
@@ -390,6 +391,7 @@
     <ClInclude Include="AttackComponent.h" />
     <ClInclude Include="BuildingComponent.h" />
     <ClInclude Include="EntitySystem.h" />
+    <ClInclude Include="PlayerNickNameComponent.h" />
     <ClInclude Include="RecastNavigationCrowd.h" />
     <ClInclude Include="Sample_TempObstacles.h" />
     <ClInclude Include="DefenceComponent.h" />

@@ -90,7 +90,7 @@ CoTaskBool AttackComponent::Co顶层()
 		if (m_b搜索新的目标 && co_await Co走向警戒范围内的目标然后攻击(m_TaskCancel.cancel))
 			continue;
 
-		if (!m_refEntity.m_spPlayer && !走Component::正在走(m_refEntity))//怪随机走
+		if (!m_refEntity.m_spPlayerNickName && !走Component::正在走(m_refEntity))//怪随机走
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
@@ -264,7 +264,7 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 
 		播放攻击音效();
 
-		refDefencer.m_spDefence->受伤(m_战斗配置.f伤害);
+		refDefencer.m_spDefence->受伤(m_战斗配置.i32伤害);
 	} while (false);
 
 	if (co_await CoTimer::Wait(800ms, cancel))//后摇
@@ -326,7 +326,7 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 				CHECK_WP_CONTINUE(wp);
 				auto& refDefencer = *wp.lock();
 				if (refDefencer.m_spDefence && refDefencer.Pos().DistanceLessEqual(posTarget, 5))
-					refDefencer.m_spDefence->受伤(m_战斗配置.f伤害);
+					refDefencer.m_spDefence->受伤(m_战斗配置.i32伤害);
 			}
 		}
 
