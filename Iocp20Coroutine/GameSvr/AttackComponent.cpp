@@ -142,12 +142,7 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 			co_return false;
 		}
 
-		const auto wp最近的友方单位 = m_refEntity.m_refSpace.Get最近的Entity(m_refEntity, false, [](const Entity& ref)->bool {return nullptr != ref.m_spDefence; });
-		bool b距离友方单位太近 = false;
-		if (!wp最近的友方单位.expired())
-		{
-			b距离友方单位太近 = m_refEntity.DistanceLessEqual(*wp最近的友方单位.lock(), 0.6f);
-		}
+		const bool b距离友方单位太近 = EntitySystem::距离友方单位太近(m_refEntity);
 		Entity& refTarget = *wpEntity.lock();
 
 		if (m_refEntity.DistanceLessEqual(refTarget, 攻击距离(refTarget)) && !b距离友方单位太近)

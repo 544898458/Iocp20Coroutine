@@ -16,7 +16,7 @@ DefenceComponent::DefenceComponent(Entity& refEntity, const int i32HpMax) : m_re
 void DefenceComponent::AddComponent(Entity& refEntity, uint16_t u16初始Hp)
 {
 	CHECK_VOID(!refEntity.m_spDefence);
-	refEntity.m_spDefence = std::make_shared<DefenceComponent, Entity&, const int>(refEntity,u16初始Hp);
+	refEntity.m_spDefence = std::make_shared<DefenceComponent, Entity&, const int>(refEntity, u16初始Hp);
 }
 
 
@@ -27,7 +27,7 @@ void DefenceComponent::受伤(int hp)
 		return;
 
 	this->m_hp -= hp;
-
+	播放基地正遭到攻击语音();
 	m_refEntity.BroadcastNotifyPos();
 	if (IsDead())
 	{
@@ -61,9 +61,9 @@ void DefenceComponent::受伤(int hp)
 				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
 				m_refEntity.BroadcastChangeSkeleAnim("die", false);//播放死亡动作
 				break;
-			//case 兵厂:EntitySystem::Broadcast播放声音(""); break;
-			//case 民房:EntitySystem::Broadcast播放声音(""); break;
-			//case 地堡:EntitySystem::Broadcast播放声音("explo4"); break;
+				//case 兵厂:EntitySystem::Broadcast播放声音(""); break;
+				//case 民房:EntitySystem::Broadcast播放声音(""); break;
+				//case 地堡:EntitySystem::Broadcast播放声音("explo4"); break;
 			default:
 				EntitySystem::Broadcast播放声音(m_refEntity, "EXPLOMED"); break;
 				break;
@@ -79,4 +79,28 @@ void DefenceComponent::受伤(int hp)
 bool DefenceComponent::IsDead() const
 {
 	return m_hp <= 0;
+}
+
+void DefenceComponent::播放基地正遭到攻击语音()
+{
+	if (m_refEntity.m_spBuilding)
+	{
+		switch (m_refEntity.m_spBuilding->m_类型)
+		{
+		case 基地:
+		{
+			const auto now = std::chrono::system_clock::now();
+			using namespace std;
+			if (now - m_time上次提醒基地正遭到进攻 > 60s)
+			{
+				m_time上次提醒基地正遭到进攻 = now;
+				PlayerComponent::播放声音(m_refEntity, "语音/基地正遭到进攻女声正经版");
+			}
+			break;
+		}
+		default:
+
+			break;
+		}
+	}
 }

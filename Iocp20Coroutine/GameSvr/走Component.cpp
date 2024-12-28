@@ -25,7 +25,7 @@ void 走Component::AddComponent(Entity& refEntity)
 {
 }
 
-bool 走Component::正在走(Entity& refEntity)
+bool 走Component::正在走(const Entity& refEntity)
 {
 	if (!refEntity.m_sp走)
 		return false;

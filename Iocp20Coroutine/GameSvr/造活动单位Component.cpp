@@ -38,7 +38,8 @@ void 造活动单位Component::造兵(PlayerGateSession_Game& refGateSession, Entity& r
 	//CHECK_VOID(m_fun造活动单位);
 	if (refGateSession.活动单位包括制造队列中的() >= refGateSession.活动单位上限())
 	{
-		refGateSession.播放声音("tadErr02", "民房不足"); //Additional supply depots required.需要更多的食堂
+		//refGateSession.播放声音("tadErr02", "民房不足"); //Additional supply depots required.需要更多的食堂
+		refGateSession.播放声音("语音/民房不足女声正经版", "民房不足");
 		return;
 	}
 	if (m_set可造类型.end() == m_set可造类型.find(类型))
@@ -169,7 +170,7 @@ SpEntity 造活动单位Component::造活动单位(PlayerGateSession_Game& refGateSession,
 	case 工程车:
 		采集Component::AddComponent(*spNewEntity);
 		造建筑Component::AddComponent(*spNewEntity, refGateSession, 类型);
-		refGateSession.播放声音("TSCRdy00");//refGateSession.Say语音提示("工程车可以开工了!");//SCV, good to go, sir. SCV可以开工了
+		refGateSession.播放声音("语音/工程车准备就绪女声可爱版");//refGateSession.Say语音提示("工程车可以开工了!");//SCV, good to go, sir. SCV可以开工了
 		break;
 	case 兵:
 		refGateSession.播放声音("TMaRdy00");//refGateSession.Say语音提示("听说有人要买我的狗头？");//You want a piece of me, boy?想要我的一部分吗，小子？

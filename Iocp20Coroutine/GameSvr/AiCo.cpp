@@ -47,7 +47,7 @@ namespace AiCo
 	{
 		const float step = std::max(refThis.m_速度每帧移动距离, f距离目标小于此距离停下);
 		auto& x = refThis.Pos().x;
-		auto & z = refThis.Pos().z;
+		auto& z = refThis.Pos().z;
 		if (std::abs(localTarget.x - x) < step && std::abs(localTarget.z - z) < step)
 		{
 			//LOG(INFO) << "已走到" << localTarget.x << "," << localTarget.z << "附近，协程正常退出";
@@ -123,7 +123,7 @@ namespace AiCo
 		RecastNavigationCrowd rnc(refThis, posTarget);
 		KeepCancel kc(funCancel);
 		const float f建筑半边长 = BuildingComponent::建筑半边长(*spTarget);
-		
+
 
 		refThis.BroadcastChangeSkeleAnim("run");
 		Position posOld;
@@ -146,7 +146,8 @@ namespace AiCo
 				LOG(INFO) << "离开自己的警戒距离" << spTarget << "的协程取消了";
 				co_return false;
 			}
-			if (refThis.DistanceLessEqual(*spTarget, refThis.攻击距离() + f建筑半边长))
+			const bool b距离友方单位太近 = EntitySystem::距离友方单位太近(refThis);
+			if (!b距离友方单位太近 && refThis.DistanceLessEqual(*spTarget, refThis.攻击距离() + f建筑半边长))
 			{
 				//LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
 				EntitySystem::BroadcastChangeSkeleAnimIdle(refThis);

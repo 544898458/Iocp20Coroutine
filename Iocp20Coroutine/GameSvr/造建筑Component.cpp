@@ -50,7 +50,7 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 建筑单位类型 类型
 		co_return false;
 	}
 
-	PlayerComponent::播放声音(m_refEntity, "TSCYes01");
+	PlayerComponent::播放声音(m_refEntity, "语音/明白女声可爱版");
 
 	//先走到目标点
 	单位::建筑单位配置 配置;
@@ -115,7 +115,7 @@ CoTaskBool 造建筑Component::Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel)
 	{
 		switch (m_refEntity.m_spAttack->m_类型)
 		{
-		case 工程车:PlayerComponent::播放声音(m_refEntity, "TSCUpd00"); break;
+		case 工程车:PlayerComponent::播放声音(m_refEntity, "语音/建造完成女声可爱版"); break;
 		default:break;
 		}
 	}

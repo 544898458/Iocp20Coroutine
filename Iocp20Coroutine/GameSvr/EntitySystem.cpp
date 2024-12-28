@@ -3,6 +3,9 @@
 #include "EntitySystem.h"
 #include "MyMsgQueue.h"
 #include "../IocpNetwork/StrConv.h"
+#include "Space.h"
+#include "走Component.h"
+#include "AttackComponent.h"
 
 void EntitySystem::BroadcastEntity描述(Entity& refEntity, const std::string& refStrGbk)
 {
@@ -23,7 +26,7 @@ bool EntitySystem::Is视口(const Entity& refEntity)
 {
 	if (refEntity.m_spDefence)
 		return false;
-	
+
 	if (!refEntity.m_spPlayer)
 		return false;
 
@@ -32,4 +35,25 @@ bool EntitySystem::Is视口(const Entity& refEntity)
 		return false;
 
 	return true;
+}
+
+bool EntitySystem::距离友方单位太近(Entity& refEntity)
+{
+	const auto wp最近的正在攻击的友方单位 = refEntity.m_refSpace.Get最近的Entity(refEntity, false,
+		[](const Entity& ref)->bool
+		{
+			if (nullptr == ref.m_spDefence)
+				return false;
+
+			if (!ref.m_spAttack)
+				return false;
+			
+			return (bool)ref.m_spAttack->m_cancelAttack;
+		});
+	bool b距离友方单位太近 = false;
+	if (!wp最近的正在攻击的友方单位.expired())
+	{
+		b距离友方单位太近 = refEntity.DistanceLessEqual(*wp最近的正在攻击的友方单位.lock(), 3);
+	}
+	return b距离友方单位太近;
 }
