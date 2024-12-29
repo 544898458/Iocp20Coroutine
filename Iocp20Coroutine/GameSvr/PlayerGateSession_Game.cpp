@@ -60,36 +60,8 @@ template void PlayerGateSession_Game::Send(const MsgEntity描述&);
 
 void PlayerGateSession_Game::OnDestroy()
 {
-	for (auto [_, wp] : m_mapWpEntity)
-	{
-		//assert(!wp.expired());
-		if (wp.expired())
-		{
-			LOG(ERROR) << "删了单位，但是这里没删";
-			continue;
-		}
-		auto sp = wp.lock();
-		if (m_spSpace单人剧情副本 || EntitySystem::Is视口(*sp))
-		{
-			if (sp->m_refSpace.GetEntity(sp->Id).expired())
-			{
-				LOG(INFO) << "可能是地堡里的兵" << sp->NickName();
-				continue;
-			}
-			LOG(INFO) << "m_mapEntity.size=" << sp->m_refSpace.m_mapEntity.size();
-			sp->OnDestroy();
-			auto countErase = sp->m_refSpace.m_mapEntity.erase(sp->Id);
-			assert(1 == countErase);
-		}
-		else
-		{
-			CHECK_RET_VOID(!m_wpSpace.expired());
-			sp->m_spPlayer.reset();
-			m_wpSpace.lock()->m_map已离线PlayerEntity[NickName()].insert({ sp->Id,sp });
-		}
-	}
-
-	m_mapWpEntity.clear();
+	if (!m_wpSpace.expired())
+		m_wpSpace.lock()->m_mapPlayer[NickName()].OnDestroy((bool)m_spSpace单人剧情副本, *m_wpSpace.lock(), NickName());
 
 	for (auto& sp : m_vecFunCancel)
 	{
@@ -117,16 +89,7 @@ void PlayerGateSession_Game::OnDestroy()
 		Send<Msg离开Space>({});
 }
 
-void PlayerGateSession_Game::Erase(uint64_t u64Id)
-{
-	if (!m_mapWpEntity.contains(u64Id))
-	{
-		LOG(WARNING) << "ERR";
-		return;
-	}
 
-	m_mapWpEntity.erase(u64Id);
-}
 
 void PlayerGateSession_Game::Say(const std::string& str, const SayChannel channel)
 {
@@ -307,7 +270,7 @@ bool Get副本配置(const 副本ID id, 副本配置& refOut)
 		assert(false);
 		return false;
 	}
-	
+
 	refOut = itFind->second;
 	return true;
 }
@@ -319,7 +282,7 @@ void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
 		const auto ok = Get副本配置(msg.id, 配置);
 		CHECK_RET_VOID(ok);
 	}
-	
+
 	m_spSpace单人剧情副本 = std::make_shared<Space, const 副本配置&>(配置);
 	EnterSpace(m_spSpace单人剧情副本);
 
@@ -411,7 +374,8 @@ void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fu
 			continue;
 		}
 		auto& spEntity = itFind->second;
-		if (m_mapWpEntity.end() == std::find_if(m_mapWpEntity.begin(), m_mapWpEntity.end(), [&spEntity](const auto& kv)
+		auto &refMap = sp->m_mapPlayer[NickName()].m_mapWpEntity;
+		if (refMap.end() == std::find_if(refMap.begin(), refMap.end(), [&spEntity](const auto& kv)
 			{
 				auto& wp = kv.second;
 				assert(!wp.expired());
@@ -531,7 +495,7 @@ CoTask<SpEntity> PlayerGateSession_Game::CoAddBuilding(const 建筑单位类型 类型, 
 	}
 	DefenceComponent::AddComponent(*spNewEntity, 配置.建造.u16初始Hp);
 	//spNewEntity->m_spBuilding->m_fun造活动单位 = 配置.fun造兵;
-	m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
+	spSpace->m_mapPlayer[NickName()].m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
 	//spSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 	spSpace->AddEntity(spNewEntity);
 
@@ -545,11 +509,11 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	assert(m_wpSpace.expired());
 	assert(!wpSpace.expired());
 	m_wpSpace = wpSpace;
-	auto sp = m_wpSpace.lock();
-
+	auto spSpace = m_wpSpace.lock();
+	
 	Send<Msg进Space>({ .idSapce = 1 });
 	{
-		auto mapOld = sp->m_map已离线PlayerEntity[NickName()];
+		auto mapOld = spSpace->m_map已离线PlayerEntity[NickName()];
 		for (auto [id, wp] : mapOld)
 		{
 			if (wp.expired())
@@ -557,11 +521,11 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 
 			auto sp = wp.lock();
 			PlayerComponent::AddComponent(*sp, *this);
-			m_mapWpEntity.insert({ sp->Id ,sp });
+			spSpace->m_mapPlayer[NickName()].m_mapWpEntity.insert({ sp->Id ,sp });
 		}
 		mapOld.clear();
 	}
-	for (const auto& [id, spEntity] : sp->m_mapEntity)//所有地图上的实体发给自己
+	for (const auto& [id, spEntity] : spSpace->m_mapEntity)//所有地图上的实体发给自己
 	{
 		LOG(INFO) << spEntity->NickName() << ",发给单人," << spEntity->Id;
 		Send(MsgAddRoleRet(*spEntity));
@@ -569,14 +533,14 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	}
 
 	SpEntity spEntityViewPort = std::make_shared<Entity, const Position&, Space&, const 单位::单位配置&>(
-		{ 0.0 }, *sp, { "视口","smoke", "" });
-	m_mapWpEntity[spEntityViewPort->Id] = (spEntityViewPort);
+		{ 0.0 }, *spSpace, { "视口","smoke", "" });
+	spSpace->m_mapPlayer[NickName()].m_mapWpEntity[spEntityViewPort->Id] = (spEntityViewPort);
 	PlayerComponent::AddComponent(*spEntityViewPort, *this);
 	{
-		const auto [k,ok] = sp->m_map视口.insert({ spEntityViewPort->Id ,spEntityViewPort });
+		const auto [k, ok] = spSpace->m_map视口.insert({ spEntityViewPort->Id ,spEntityViewPort });
 		CHECK_RET_VOID(ok);
 	}
-	sp->AddEntity(spEntityViewPort, 100);
+	spSpace->AddEntity(spEntityViewPort, 100);
 	spEntityViewPort->BroadcastEnter();
 
 	CoEvent<PlayerGateSession_Game*>::OnRecvEvent(false, this);
@@ -678,8 +642,11 @@ void PlayerGateSession_Game::Send资源()
 
 uint16_t PlayerGateSession_Game::活动单位上限() const
 {
+	if (m_wpSpace.expired())
+		return 0;
+
 	uint16_t result = 0;
-	for (const auto& [_, wp] : m_mapWpEntity)
+	for (const auto& [_, wp] : m_wpSpace.lock()->m_mapPlayer[NickName()].m_mapWpEntity)
 	{
 		assert(!wp.expired());
 		const auto& refEntity = wp.lock();
@@ -698,8 +665,13 @@ uint16_t PlayerGateSession_Game::活动单位上限() const
 
 uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
 {
+	if (m_wpSpace.expired())
+	{
+		return 0;
+	}
+
 	uint16_t 制造队列中的单位 = 0;
-	for (const auto& [_, wp] : m_mapWpEntity)
+	for (const auto& [_, wp] : m_wpSpace.lock()->m_mapPlayer[NickName()].m_mapWpEntity)
 	{
 		assert(!wp.expired());
 		const auto& refEntity = *wp.lock();
@@ -750,11 +722,14 @@ bool PlayerGateSession_Game::可放置建筑(const Position& refPos, float f半边长)
 
 void PlayerGateSession_Game::OnRecv(const Msg框选& msg)
 {
+	if (m_wpSpace.expired())
+		return;
+
 	const Position pos左上(std::min(msg.pos起始.x, msg.pos结束.x), std::min(msg.pos起始.z, msg.pos结束.z));
 	const Position pos右下(std::max(msg.pos起始.x, msg.pos结束.x), std::max(msg.pos起始.z, msg.pos结束.z));
 	const Rect rect = { pos左上,pos右下 };
 	std::vector<uint64_t> vec;
-	for (const auto [k, wpEntity] : m_mapWpEntity)
+	for (const auto [k, wpEntity] : m_wpSpace.lock()->m_mapPlayer[NickName()].m_mapWpEntity)
 	{
 		if (wpEntity.expired())
 		{
@@ -871,20 +846,20 @@ void PlayerGateSession_Game::OnRecv(const Msg玩家个人战局列表& msg)
 				StrConv::GbkToUtf8(sp->NickName()),
 				StrConv::GbkToUtf8(sp->m_spSpace单人剧情副本->m_配置.strSceneName)
 			});
-		}
-		Send(msgResponce);
 	}
+	Send(msgResponce);
+}
 
-	void PlayerGateSession_Game::OnRecv(const Msg进其他玩家个人战局& msg)
-	{
-		const auto strGbk = StrConv::Utf8ToGbk(msg.nickName其他玩家);
-		auto iterFind = std::find_if(m_refGameSvrSession.m_mapPlayerGateSession.begin(), m_refGameSvrSession.m_mapPlayerGateSession.end(),
-			[&strGbk](const auto& pair)->bool
-			{
-				return pair.second->NickName() == strGbk;
-			});
-		CHECK_RET_VOID(iterFind != m_refGameSvrSession.m_mapPlayerGateSession.end());
-		auto& refSp = iterFind->second->m_spSpace单人剧情副本;
-		CHECK_RET_VOID(refSp);
-		EnterSpace(refSp);
-	}
+void PlayerGateSession_Game::OnRecv(const Msg进其他玩家个人战局& msg)
+{
+	const auto strGbk = StrConv::Utf8ToGbk(msg.nickName其他玩家);
+	auto iterFind = std::find_if(m_refGameSvrSession.m_mapPlayerGateSession.begin(), m_refGameSvrSession.m_mapPlayerGateSession.end(),
+		[&strGbk](const auto& pair)->bool
+		{
+			return pair.second->NickName() == strGbk;
+		});
+	CHECK_RET_VOID(iterFind != m_refGameSvrSession.m_mapPlayerGateSession.end());
+	auto& refSp = iterFind->second->m_spSpace单人剧情副本;
+	CHECK_RET_VOID(refSp);
+	EnterSpace(refSp);
+}

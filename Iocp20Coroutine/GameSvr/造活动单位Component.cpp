@@ -162,7 +162,7 @@ SpEntity 造活动单位Component::造活动单位(PlayerGateSession_Game& refGateSession,
 	AttackComponent::AddComponent(*spNewEntity, 类型, 配置.战斗);
 	DefenceComponent::AddComponent(*spNewEntity, 配置.制造.u16初始Hp);
 	走Component::AddComponent(*spNewEntity);
-	refGateSession.m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
+	sp->m_mapPlayer[refGateSession.NickName()].m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
 	sp->AddEntity(spNewEntity);//全地图单位
 	spNewEntity->m_速度每帧移动距离 = 配置.战斗.f每帧移动距离;
 	switch (类型)

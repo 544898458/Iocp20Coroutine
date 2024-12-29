@@ -61,6 +61,17 @@ public:
 
 	std::unordered_map<std::string, std::map<uint64_t, WpEntity>> m_map已离线PlayerEntity;
 	std::unordered_map<uint64_t, WpEntity> m_map视口;
+	struct SpacePlayer
+	{
+		/// <summary>
+		/// 加入Space空间的实体（玩家角色）
+		/// </summary>
+		std::map<uint64_t, WpEntity> m_mapWpEntity;
+		void OnDestroy(const bool b单人副本,Space &refSpace,const std::string &refStrNickName);
+		void Erase(uint64_t u64Id);
+	};
+	//using SpSpacePlayer = std::shared_ptr<SpacePlayer> ;
+	std::unordered_map<std::string, SpacePlayer> m_mapPlayer;
 	const 副本配置 m_配置;
 private:
 	void EraseEntity(const bool bForceEraseAll);

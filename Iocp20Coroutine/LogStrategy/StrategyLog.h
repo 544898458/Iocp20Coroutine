@@ -72,14 +72,17 @@ class StrategyLog
 
 #define CHECK_GE_VOID( val1, val2) \
 {\
-	CHECK_GE(val1, val2);\
 	if (val1 < val2)\
+	{\
+		LOG(ERROR) << #val1 << ":" << val1 << ">=" << #val2 << ":" << val2 ;\
+		assert(false);\
 		return;\
+	}\
 }
 
 #define CHECK_VOID( exp ) \
 {\
-	CHECK(exp);\
+	LOG_IF(ERROR, !exp);\
 	if (!exp)\
 	{\
 		assert(false);\
@@ -89,7 +92,7 @@ class StrategyLog
 
 #define CHECK_CO_RET_FALSE( exp ) \
 {\
-	CHECK(exp);\
+	LOG_IF(ERROR, !exp);\
 	if (!exp)\
 	{\
 		assert(false);\
@@ -99,7 +102,7 @@ class StrategyLog
 
 #define CHECK_DEFAULT( exp ) \
 {\
-	CHECK(exp);\
+	LOG_IF(ERROR, !exp);\
 	if (!exp)\
 	{\
 		return {}; \
@@ -108,7 +111,7 @@ class StrategyLog
 
 #define CHECK_FALSE( exp ) \
 {\
-	CHECK(exp);\
+	LOG_IF(ERROR, !exp);\
 	if (!exp)\
 	{\
 		assert(false);\

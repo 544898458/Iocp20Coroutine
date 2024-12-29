@@ -19,7 +19,7 @@ public:
 	void RecvMsg(const MsgId idMsg, const msgpack::object& obj);
 	void Process();
 	void OnDestroy();
-	void Erase(uint64_t u64Id);
+	
 	template<class T> void Send(const T& ref);
 	void Say(const std::string& str, const SayChannel channel);
 	void Say系统(const std::string& str);
@@ -43,10 +43,6 @@ public:
 	/// </summary>
 	WpSpace m_wpSpace;
 	SpSpace m_spSpace单人剧情副本;
-	/// <summary>
-	/// 加入Space空间的实体（玩家角色）
-	/// </summary>
-	std::map<uint64_t,WpEntity> m_mapWpEntity;
 
 	uint32_t m_u32燃气矿 = 10;
 

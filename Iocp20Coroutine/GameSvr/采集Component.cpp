@@ -15,6 +15,7 @@
 #include "PlayerComponent.h"
 #include "造建筑Component.h"
 #include "单位.h"
+#include "PlayerNickNameComponent.h"
 
 采集Component::采集Component(Entity& refEntity) : m_携带矿类型(晶体矿), m_refEntity(refEntity)
 {
@@ -57,11 +58,16 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 			LOG(INFO) << "采集过程中自己阵亡";
 			co_return false;
 		}
-		CHECK_CO_RET_FALSE(m_refEntity.m_spPlayer);
 
-		int min距离的平方 = std::numeric_limits<int>::max();
+		if (!m_refEntity.m_spPlayerNickName)
+		{
+			LOG(WARNING) << "采集过程中玩家断线";
+			co_return false;
+		}
+
+		float min距离的平方 = std::numeric_limits<float>::max();
 		WpEntity wpEntity基地;
-		for (const auto [id, wp] : m_refEntity.m_spPlayer->m_refSession.m_mapWpEntity)
+		for (const auto [id, wp] : m_refEntity.m_refSpace.m_mapPlayer[m_refEntity.m_spPlayerNickName->m_strNickName].m_mapWpEntity)
 		{
 			CHECK_WP_CONTINUE(wp);
 			const auto& refEntity = *wp.lock();

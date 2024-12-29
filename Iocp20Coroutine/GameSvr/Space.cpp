@@ -160,9 +160,9 @@ void Space::EraseEntity(const bool bForceEraseAll)
 			continue;
 		}
 
-		if (spEntity->m_spPlayer)
+		if (spEntity->m_spPlayerNickName)
 		{
-			spEntity->m_spPlayer->m_refSession.Erase(spEntity->Id);
+			m_mapPlayer[spEntity->m_spPlayerNickName->m_strNickName].Erase(spEntity->Id);
 		}
 
 		LOG(INFO) << "删除过期对象," << spEntity->NickName() << ",Id=" << spEntity->Id << ",删除前剩余" << m_mapEntity.size();
@@ -252,4 +252,48 @@ void Space::OnDestory()
 {
 	所有玩家全退出();
 	EraseEntity(true);
+}
+
+void Space::SpacePlayer::OnDestroy(const bool b单人副本, Space& refSpace, const std::string& refStrNickName)
+{
+	for (auto [_, wp] : m_mapWpEntity)
+	{
+		//assert(!wp.expired());
+		if (wp.expired())
+		{
+			LOG(ERROR) << "删了单位，但是这里没删";
+			continue;
+		}
+		auto sp = wp.lock();
+		if (b单人副本 || EntitySystem::Is视口(*sp))
+		{
+			if (sp->m_refSpace.GetEntity(sp->Id).expired())
+			{
+				LOG(INFO) << "可能是地堡里的兵" << sp->NickName();
+				continue;
+			}
+			LOG(INFO) << "m_mapEntity.size=" << sp->m_refSpace.m_mapEntity.size();
+			sp->OnDestroy();
+			auto countErase = sp->m_refSpace.m_mapEntity.erase(sp->Id);
+			assert(1 == countErase);
+		}
+		else
+		{
+			sp->m_spPlayer.reset();
+			refSpace.m_map已离线PlayerEntity[refStrNickName].insert({ sp->Id,sp });
+		}
+	}
+
+	m_mapWpEntity.clear();
+}
+
+inline void Space::SpacePlayer::Erase(uint64_t u64Id)
+{
+	if (!m_mapWpEntity.contains(u64Id))
+	{
+		LOG(WARNING) << "ERR";
+		return;
+	}
+
+	m_mapWpEntity.erase(u64Id);
 }
