@@ -67,15 +67,22 @@ public:
 		/// 加入Space空间的实体（玩家角色）
 		/// </summary>
 		std::map<uint64_t, WpEntity> m_mapWpEntity;
+		uint32_t m_u32燃气矿 = 10;
+		uint32_t m_u32晶体矿 = 100;
+
 		void OnDestroy(const bool b单人副本,Space &refSpace,const std::string &refStrNickName);
 		void Erase(uint64_t u64Id);
 	};
 	//using SpSpacePlayer = std::shared_ptr<SpacePlayer> ;
 	std::unordered_map<std::string, SpacePlayer> m_mapPlayer;
+	static SpacePlayer& GetSpacePlayer(const Entity& ref);
+	SpEntity 造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer, const std::string& strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 活动单位类型 类型);
+
+	bool 可放置建筑(const Position& pos, float f半边长);
 	const 副本配置 m_配置;
 private:
 	void EraseEntity(const bool bForceEraseAll);
-	
+
 
 };
 

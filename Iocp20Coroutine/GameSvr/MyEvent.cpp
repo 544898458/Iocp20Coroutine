@@ -1,12 +1,13 @@
 #include "pch.h"
 #include "MyEvent.h"
 #include "Entity.h"
+#include "EntitySystem.h"
 #include "PlayerComponent.h"
 
-bool MyEvent::SameSpace(const WpEntity& refWpEntity, const Space& refSpace, PlayerGateSession_Game& refGateSession)
+bool MyEvent::SameSpace(const WpEntity& refWpEntity, const Space& refSpace, const std::string& stdNickName)
 {
 	auto sp = refWpEntity.lock();
-	if (!sp->m_spPlayer || &sp->m_spPlayer->m_refSession != &refGateSession)
+	if (EntitySystem::GetNickName(*sp) != stdNickName)
 		return false;
 
 	return &sp->m_refSpace == &refSpace;

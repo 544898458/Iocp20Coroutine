@@ -9,10 +9,13 @@
 #include "PlayerGateSession_Game.h"
 #include "../CoRoutine/CoTimer.h"
 #include "../IocpNetwork/StrConv.h"
+#include "造活动单位Component.h"
+#include "地堡Component.h"
+#include "DefenceComponent.h"
 
-void 造建筑Component::AddComponent(Entity& refEntity, PlayerGateSession_Game& refGateSession, const 活动单位类型 类型)
+void 造建筑Component::AddComponent(Entity& refEntity, const 活动单位类型 类型)
 {
-	refEntity.m_sp造建筑 = std::make_shared<造建筑Component, PlayerGateSession_Game&, Entity&, const 活动单位类型>(refGateSession, refEntity, std::forward<const 活动单位类型&&>(类型));
+	refEntity.m_sp造建筑 = std::make_shared<造建筑Component, Entity&, const 活动单位类型>(refEntity, std::forward<const 活动单位类型&&>(类型));
 }
 
 bool 造建筑Component::正在建造(Entity& refEntity)
@@ -23,7 +26,7 @@ bool 造建筑Component::正在建造(Entity& refEntity)
 	return refEntity.m_sp造建筑->m_cancel造建筑.operator bool();
 }
 
-造建筑Component::造建筑Component(PlayerGateSession_Game& refSession, Entity& refEntity, const 活动单位类型 类型) :m_refEntity(refEntity)
+造建筑Component::造建筑Component(Entity& refEntity, const 活动单位类型 类型) :m_refEntity(refEntity)
 {
 	switch (类型)
 	{
@@ -69,7 +72,7 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 建筑单位类型 类型
 
 	//然后开始扣钱建造
 	CHECK_CO_RET_FALSE(m_refEntity.m_spPlayer);
-	auto spEntity建筑 = co_await m_refEntity.m_spPlayer->m_refSession.CoAddBuilding(类型, pos);
+	auto spEntity建筑 = co_await CoAddBuilding(类型, pos);
 	if (!spEntity建筑)
 		co_return false;
 
@@ -133,4 +136,78 @@ void 造建筑Component::TryCancel()
 	{
 
 	}
+}
+
+
+CoTask<SpEntity> 造建筑Component::CoAddBuilding(const 建筑单位类型 类型, const Position pos)
+{
+	单位::建筑单位配置 配置;
+	if (!单位::Find建筑单位配置(类型, 配置))
+	{
+		co_return{};
+	}
+	//Position pos = { 35,float(std::rand() % 60) - 30 };
+	if (!m_refEntity.m_refSpace.可放置建筑(pos, 配置.f半边长))
+	{
+		//播放声音("TSCErr00", "有阻挡，无法建造");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
+		PlayerComponent::播放声音(m_refEntity, "语音/无法在这里建造可爱版", "有阻挡，无法建造");
+		co_return{};
+	}
+	if (配置.建造.u16消耗燃气矿 > Space::GetSpacePlayer(m_refEntity).m_u32燃气矿)
+	{
+		//std::ostringstream oss;
+		PlayerComponent::播放声音(m_refEntity, "语音/燃气矿不足可爱版", "燃气矿不足，无法建造");// << 配置.建造.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
+		//Say系统(oss.str());
+		co_return{};
+	}
+	Space::GetSpacePlayer(m_refEntity).m_u32燃气矿 -= 配置.建造.u16消耗燃气矿;
+	//auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());//不能存对象，扩容可能导致引用和指针失效
+	//auto [stop, responce] = co_await AiCo::ChangeMoney(*this, 配置.建造.u16消耗晶体矿, false, **iterNew);
+	//LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
+	//if (stop)
+	//{
+	//	m_u32燃气矿 += 配置.建造.u16消耗燃气矿;//返还燃气矿
+	//	co_return{};
+	//}
+	//if (0 != responce.error)
+	if (配置.建造.u16消耗晶体矿 > Space::GetSpacePlayer(m_refEntity).m_u32晶体矿)
+	{
+		//LOG(WARNING) << "扣钱失败,error=" << responce.error;
+		//m_u32燃气矿 += 配置.建造.u16消耗燃气矿;//返还燃气矿
+		PlayerComponent::播放声音(m_refEntity, "语音/晶体矿不足可爱版", "晶体矿不足无法建造");//Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
+
+		co_return{};
+	}
+	Space::GetSpacePlayer(m_refEntity).m_u32燃气矿 -= 配置.建造.u16消耗燃气矿;
+
+	PlayerComponent::Send资源(m_refEntity);
+
+	//加建筑
+	//CHECK_CO_RET_0(!m_wpSpace.expired());
+	//auto spSpace = m_wpSpace.lock();
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位::单位配置& >(
+		pos, m_refEntity.m_refSpace, 配置.配置);
+	//spNewEntity->AddComponentAttack();
+	PlayerComponent::AddComponent(*spNewEntity, m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity));
+	BuildingComponent::AddComponent(*spNewEntity, 类型, 配置.f半边长);
+	switch (类型)
+	{
+	case 基地:
+	case 兵厂:
+		造活动单位Component::AddComponent(*spNewEntity, 类型);
+		break;
+	case 地堡:
+		地堡Component::AddComponet(*spNewEntity);
+		break;
+	case 民房:break;
+	}
+	DefenceComponent::AddComponent(*spNewEntity, 配置.建造.u16初始Hp);
+	//spNewEntity->m_spBuilding->m_fun造活动单位 = 配置.fun造兵;
+	Space::GetSpacePlayer(m_refEntity).m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
+	//spSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
+	m_refEntity.m_refSpace.AddEntity(spNewEntity);
+
+	spNewEntity->BroadcastEnter();
+	PlayerComponent::Send资源(m_refEntity);
+	co_return spNewEntity;
 }

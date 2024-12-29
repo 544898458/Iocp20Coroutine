@@ -7,7 +7,7 @@
 #include "PlayerComponent.h"
 #include "AoiComponent.h"
 
-void 地堡Component::AddComponet(Entity& refEntity, PlayerGateSession_Game& refGateSession)
+void 地堡Component::AddComponet(Entity& refEntity)
 {
 	refEntity.m_sp地堡 = std::make_shared<地堡Component,Entity&>(refEntity);
 }

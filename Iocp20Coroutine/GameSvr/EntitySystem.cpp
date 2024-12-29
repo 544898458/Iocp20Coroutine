@@ -6,6 +6,7 @@
 #include "Space.h"
 #include "走Component.h"
 #include "AttackComponent.h"
+#include "PlayerNickNameComponent.h"
 
 void EntitySystem::BroadcastEntity描述(Entity& refEntity, const std::string& refStrGbk)
 {
@@ -56,4 +57,12 @@ bool EntitySystem::距离友方单位太近(Entity& refEntity)
 		b距离友方单位太近 = refEntity.DistanceLessEqual(*wp最近的正在攻击的友方单位.lock(), 3);
 	}
 	return b距离友方单位太近;
+}
+
+const std::string EntitySystem::GetNickName(Entity& refEntity)
+{
+	if (refEntity.m_spPlayerNickName)
+		return refEntity.m_spPlayerNickName->m_strNickName;
+
+	return {};
 }

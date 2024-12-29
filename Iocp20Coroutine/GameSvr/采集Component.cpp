@@ -110,7 +110,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 				}
 				else
 				{
-					refGateSession.m_u32燃气矿 += addMoney;
+					Space::GetSpacePlayer(m_refEntity).m_u32燃气矿 += addMoney;
 					refGateSession.Send资源();
 				}
 				continue;

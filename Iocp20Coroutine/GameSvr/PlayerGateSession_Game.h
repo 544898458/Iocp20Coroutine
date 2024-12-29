@@ -31,8 +31,6 @@ public:
 	uint16_t 活动单位上限() const;
 	uint16_t 活动单位包括制造队列中的() const;
 
-	bool 可放置建筑(const Position& pos, float f半边长);
-	CoTask<SpEntity> CoAddBuilding(const 建筑单位类型 类型, const Position pos);
 	void 播放声音(const std::string& refStr声音, const std::string& str文本 = "");
 
 	void Send设置视口(const Entity& refEntity);
@@ -43,8 +41,6 @@ public:
 	/// </summary>
 	WpSpace m_wpSpace;
 	SpSpace m_spSpace单人剧情副本;
-
-	uint32_t m_u32燃气矿 = 10;
 
 private:
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);

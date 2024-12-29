@@ -12,10 +12,22 @@ void PlayerComponent::Say(Entity& refEntity, const std::string& str, const SayCh
 		refEntity.m_spPlayer->Say(str, channel);
 }
 
+void PlayerComponent::Say系统(const std::shared_ptr<PlayerComponent>& spPlayer可能空, const std::string& str)
+{
+	if (spPlayer可能空)
+		spPlayer可能空->m_refSession.Say系统(str);
+}
+
 void PlayerComponent::播放声音(Entity& refEntity, const std::string& refStr声音, const std::string& str文本)
 {
 	if (refEntity.m_spPlayer)
 		refEntity.m_spPlayer->m_refSession.播放声音(refStr声音, str文本);
+}
+
+void 播放声音(SpPlayerComponent& spPlayer可能空, const std::string& refStr声音, const std::string& str文本)
+{
+	if (spPlayer可能空)
+		spPlayer可能空->m_refSession.播放声音(refStr声音, str文本);
 }
 
 void PlayerComponent::Send资源(Entity& refEntity)
@@ -24,14 +36,24 @@ void PlayerComponent::Send资源(Entity& refEntity)
 		refEntity.m_spPlayer->m_refSession.Send资源();
 }
 
-void PlayerComponent::AddComponent(Entity& refEntity, PlayerGateSession_Game& refSession)
+void PlayerComponent::AddComponent(Entity& refEntity, std::weak_ptr<PlayerComponent> wpPlayer, const std::string& strNickName)
 {
-	refEntity.m_spPlayer = std::make_shared<PlayerComponent, PlayerGateSession_Game&>(refSession);
-	if(!refEntity.m_spPlayerNickName)
-		refEntity.m_spPlayerNickName = std::make_shared<PlayerNickNameComponent, const std::string&>(refSession.NickName());
+	if (!wpPlayer.expired())
+		refEntity.m_spPlayer = std::make_shared<PlayerComponent, PlayerGateSession_Game&>(wpPlayer.lock()->m_refSession);
+
+	CHECK_RET_VOID(!strNickName.empty());
+	if (!strNickName.empty())
+		refEntity.m_spPlayerNickName = std::make_shared<PlayerNickNameComponent, const std::string&>(strNickName);
 }
 
 void PlayerComponent::Say(const std::string& str, const SayChannel channel)
 {
 	m_refSession.Say(str, channel);
+}
+
+template<class T>
+void PlayerComponent::Send(const std::shared_ptr<PlayerComponent>& spPlayer可能空, const T& ref)
+{
+	if (spPlayer可能空)
+		spPlayer可能空->m_refSession.Send(ref);
 }

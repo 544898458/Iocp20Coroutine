@@ -9,6 +9,10 @@
 #include "AttackComponent.h"
 #include "PlayerNickNameComponent.h"
 #include "EntitySystem.h"
+#include "DefenceComponent.h"
+#include "走Component.h"
+#include "采集Component.h"
+#include "造建筑Component.h"
 
 Space::Space(const 副本配置& ref) :m_配置(ref)
 {
@@ -145,6 +149,17 @@ bool Space::CrowdToolFindNerestPos(Position& refPos)
 	}
 	bool CrowdToolFindNerestPos(CrowdToolState & refCrowTool, Position & refPos);
 	return CrowdToolFindNerestPos(*m_spCrowdToolState, refPos);
+}
+
+Space::SpacePlayer& Space::GetSpacePlayer(const Entity& ref)
+{
+	if (ref.m_spPlayerNickName)
+		return ref.m_refSpace.m_mapPlayer[ref.m_spPlayerNickName->m_strNickName];
+
+	LOG(ERROR) << ref.Id << ",不是玩家";
+	assert(false);
+	static Space::SpacePlayer s_err;
+	return s_err;
 }
 
 void Space::EraseEntity(const bool bForceEraseAll)
@@ -296,4 +311,56 @@ inline void Space::SpacePlayer::Erase(uint64_t u64Id)
 	}
 
 	m_mapWpEntity.erase(u64Id);
+}
+
+
+SpEntity Space::造活动单位(std::shared_ptr<PlayerComponent> &refSpPlayer可能空, const std::string &strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 活动单位类型 类型)
+{
+	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位::单位配置&>(
+		pos, *this, 配置.配置);
+	PlayerComponent::AddComponent(*spNewEntity, refSpPlayer可能空, strNickName);
+	AttackComponent::AddComponent(*spNewEntity, 类型, 配置.战斗);
+	DefenceComponent::AddComponent(*spNewEntity, 配置.制造.u16初始Hp);
+	走Component::AddComponent(*spNewEntity);
+	m_mapPlayer[strNickName].m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
+	AddEntity(spNewEntity);//全地图单位
+	spNewEntity->m_速度每帧移动距离 = 配置.战斗.f每帧移动距离;
+	switch (类型)
+	{
+	case 工程车:
+		采集Component::AddComponent(*spNewEntity);
+		造建筑Component::AddComponent(*spNewEntity, 类型);
+		PlayerComponent::播放声音(*spNewEntity, "语音/工程车准备就绪女声可爱版"); //refGateSession.Say语音提示("工程车可以开工了!");//SCV, good to go, sir. SCV可以开工了
+		break;
+	case 兵:PlayerComponent::播放声音(*spNewEntity, "TMaRdy00"); break;//refGateSession.Say语音提示("听说有人要买我的狗头？");//You want a piece of me, boy?想要我的一部分吗，小子？
+	case 近战兵:PlayerComponent::播放声音(*spNewEntity, "tfbRdy00"); break;//refGateSession.Say语音提示("听说有人要我的斧头？");//You want a piece of me, boy?想要我的一部分吗，小子？
+	case 三色坦克:PlayerComponent::播放声音(*spNewEntity, "语音/ttardy00"); break;
+	default:break;
+	}
+
+	spNewEntity->BroadcastEnter();
+	PlayerComponent::Send资源(*spNewEntity);
+
+	return spNewEntity;
+}
+
+
+bool Space::可放置建筑(const Position& refPos, float f半边长)
+{
+	if (!CrowdTool可站立({ refPos.x - f半边长 ,refPos.z + f半边长 }))return false;
+	if (!CrowdTool可站立({ refPos.x - f半边长 ,refPos.z - f半边长 }))return false;
+	if (!CrowdTool可站立({ refPos.x + f半边长 ,refPos.z + f半边长 }))return false;
+	if (!CrowdTool可站立({ refPos.x + f半边长 ,refPos.z - f半边长 }))return false;
+
+	//遍历全地图所有建筑判断重叠
+	for (const auto& kv : m_mapEntity)
+	{
+		auto& refEntity = *kv.second;
+		const auto& refPosOld = refEntity.Pos();
+		bool CrowdTool判断单位重叠(const Position & refPosOld, const Position & refPosNew, const float f半边长);
+		if (CrowdTool判断单位重叠(refPos, refPosOld, f半边长))
+			return false;
+	}
+
+	return true;
 }

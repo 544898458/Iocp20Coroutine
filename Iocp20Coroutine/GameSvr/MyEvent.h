@@ -22,6 +22,6 @@ namespace MyEvent
 	{
 		WpEntity wpEntity;
 	};
-	bool SameSpace(const WpEntity& refWpEntity, const Space& refSpace, PlayerGateSession_Game& refGateSession);
+	bool SameSpace(const WpEntity& refWpEntity, const Space& refSpace, const std::string& stdNickName);
 }
 

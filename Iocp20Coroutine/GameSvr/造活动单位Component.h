@@ -17,14 +17,13 @@ namespace 单位
 class 造活动单位Component
 {
 public:
-	static void AddComponent(Entity& refEntity, PlayerGateSession_Game& refGateSession, const 建筑单位类型 类型);
-	造活动单位Component(PlayerGateSession_Game& refSession, Entity& refEntity, const 建筑单位类型 类型);
+	static void AddComponent(Entity& refEntity, const 建筑单位类型 类型);
+	造活动单位Component(Entity& refEntity, const 建筑单位类型 类型);
 	void 造兵(PlayerGateSession_Game&, Entity& refEntity, const 活动单位类型 类型);
 	void TryCancel(Entity& refEntity);
 	uint16_t 等待造Count()const;
-	static SpEntity 造活动单位(PlayerGateSession_Game& refGateSession, const Position& pos, const 单位::活动单位配置& 配置, const 活动单位类型 类型);
 private:
-	CoTaskBool Co造活动单位(PlayerGateSession_Game& refGateSession);
+	CoTaskBool Co造活动单位();
 	
 private:
 	CoTaskCancel m_TaskCancel造活动单位;
