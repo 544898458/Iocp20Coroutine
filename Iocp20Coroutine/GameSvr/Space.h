@@ -7,6 +7,15 @@
 #include "Entity.h"
 #include "SpSpace.h"
 class CrowdToolState;
+struct 副本配置
+{
+	typedef CoTask<int>(*funCo副本剧情)(Space& refSpace, FunCancel& funCancel, PlayerGateSession_Game& refGateSession);
+
+	std::string str寻路文件名;
+	std::string strSceneName;
+	funCo副本剧情 funCo剧情;
+};
+
 //class GameSvr;
 /// <summary>
 /// Go语言GoWorld框架Space/Entity，相当于C#语言ET框架Scene/Unit
@@ -14,7 +23,7 @@ class CrowdToolState;
 class Space final
 {
 public:
-	Space(const std::string& stf寻路文件);
+	Space(const 副本配置 &ref配置);// std::string& stf寻路文件);
 	Space(const Space&) = delete;
 	~Space();
 	template<class T>
@@ -43,12 +52,16 @@ public:
 	/// <param name="spNewEntity"></param>
 	/// <param name="i32视野范围">如果是0就用警戒范围当成视野范围</param>
 	void AddEntity(SpEntity& spNewEntity, const int32_t i32视野范围 = 0);
+	void 所有玩家全退出();
+	void OnDestory();
 	WpEntity Get最近的Entity支持地堡中的单位(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件);
 	WpEntity Get最近的Entity(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件);
 	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map能看到这一格;
 	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map在这一格里;
 
 	std::unordered_map<std::string, std::map<uint64_t, WpEntity>> m_map已离线PlayerEntity;
+	std::unordered_map<uint64_t, WpEntity> m_map视口;
+	const 副本配置 m_配置;
 private:
 	void EraseEntity(const bool bForceEraseAll);
 	

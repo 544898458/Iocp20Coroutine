@@ -116,6 +116,11 @@ void Entity::OnDestroy()
 {
 	BroadcastLeave();
 
+	if (EntitySystem::Is视口(*this))
+	{
+		const auto sizeCount = m_refSpace.m_map视口.erase(Id);
+		assert(1 == sizeCount);
+	}
 	//应该用proxy库同意调用下面的，免得忘了
 	if (m_spAttack)
 		m_spAttack->TryCancel(true);

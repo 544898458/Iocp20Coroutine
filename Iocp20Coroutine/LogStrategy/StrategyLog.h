@@ -9,6 +9,7 @@ class StrategyLog
 	if (nullptr == (PTR)) \
 	{\
 		LOG(ERROR)<< #PTR << ",is null";\
+		assert(false);\
 		return;\
 	}\
 }
@@ -17,6 +18,7 @@ class StrategyLog
 	if (nullptr == (PTR)) \
 	{\
 		LOG(ERROR)<< #PTR << ",is null";\
+		assert(false);\
 		co_return 0;\
 	}\
 }
@@ -26,6 +28,7 @@ class StrategyLog
 	if (!(EXP)) \
 	{\
 		LOG(ERROR)<< #EXP<< "is false";\
+		assert(false);\
 		co_return 0;\
 	}\
 }
@@ -34,6 +37,7 @@ class StrategyLog
 	if (!(EXP)) \
 	{\
 		LOG(ERROR)<< #EXP ;\
+		assert(false);\
 		return false;\
 	}\
 }
@@ -43,7 +47,17 @@ class StrategyLog
 	if (!(EXP)) \
 	{\
 		LOG(ERROR)<< #EXP ;\
+		assert(false);\
 		return ;\
+	}\
+}
+#define CHECK_RET_DEFAULT( EXP ) \
+{\
+	if (!(EXP)) \
+	{\
+		LOG(ERROR)<< #EXP ;\
+		assert(false);\
+		return {};\
 	}\
 }
 #define CHECK_NOTNULL_RET_FALSE( PTR ) \
@@ -51,6 +65,7 @@ class StrategyLog
 	if (nullptr == (PTR)) \
 	{\
 		LOG(ERROR)<< #PTR << ",is null";\
+		assert(false);\
 		return false;\
 	}\
 }
@@ -66,28 +81,39 @@ class StrategyLog
 {\
 	CHECK(exp);\
 	if (!exp)\
-		return;\
+	{\
+		assert(false);\
+		return; \
+	}\
 }
 
 #define CHECK_CO_RET_FALSE( exp ) \
 {\
 	CHECK(exp);\
 	if (!exp)\
-		co_return false;\
+	{\
+		assert(false);\
+		co_return false; \
+	}\
 }
 
 #define CHECK_DEFAULT( exp ) \
 {\
 	CHECK(exp);\
 	if (!exp)\
-		return {};\
+	{\
+		return {}; \
+	}\
 }
 
 #define CHECK_FALSE( exp ) \
 {\
 	CHECK(exp);\
 	if (!exp)\
-		return false;\
+	{\
+		assert(false);\
+		return false; \
+	}\
 }
 
 #define CHECK_WP_CONTINUE( wp ) \

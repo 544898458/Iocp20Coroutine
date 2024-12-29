@@ -84,7 +84,11 @@ void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 
 	auto pSession = g_upGateSvr->m_Server.m_Sessions.GetSession(gateSessionId);
 	//auto pSession = (GateSession*)gateSessionId;
-	CHECK_NOTNULL_VOID(pSession);
+	if (nullptr == pSession)
+	{
+		LOG(ERROR) << "找不到GateSession，可能早已断线:" << gateSessionId;
+		return;
+	}
 	if (pSession->Session.m_Session.m_bLoginOk)
 	{
 		pSession->Session.m_Session.m_refSession.Send(buf, len);

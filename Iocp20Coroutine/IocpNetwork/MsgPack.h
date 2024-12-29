@@ -40,7 +40,7 @@ namespace MsgPack
 		vec.resize(sizeof(usSize) + usSize);
 		*(uint16_t*)&vec[0] = usSize;
 		memcpy(&vec[2], str.data(), usSize);
-		refFun(&vec[0], vec.size());
+		refFun(&vec[0], (int)vec.size());
 	}
 };
 

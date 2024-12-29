@@ -25,7 +25,7 @@
 #include "资源Component.h"
 #include "../CoRoutine/CoTimer.h"
 #include "EntitySystem.h"
-
+#include "PlayerNickNameComponent.h"
 /// <summary>
 /// GameSvr通过GateSvr透传给游戏客户端
 /// </summary>
@@ -42,7 +42,7 @@ void PlayerGateSession_Game::Send(const T& ref)
 			MsgGate转发 msg(buf, len, m_idPlayerGateSession, m_snSend);
 			MsgPack::SendMsgpack(msg, [this](const void* buf转发, int len转发)
 				{
-					this->m_refSession.SendToGate(buf转发, len转发);
+					this->m_refGameSvrSession.SendToGate(buf转发, len转发);
 				});
 		}, false);
 }
@@ -107,7 +107,11 @@ void PlayerGateSession_Game::OnDestroy()
 
 	const bool b离开 = !m_wpSpace.expired();
 	m_wpSpace.reset();
-	m_spSpace单人剧情副本.reset();
+	if (m_spSpace单人剧情副本)
+	{
+		m_spSpace单人剧情副本->OnDestory();
+		m_spSpace单人剧情副本.reset();
+	}
 
 	if (b离开)
 		Send<Msg离开Space>({});
@@ -221,7 +225,7 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 
 CoTaskBool PlayerGateSession_Game::Co进多人联机地图()
 {
-	auto pos出生 = Position(std::rand() % 100 - 50, std::rand() % 50 - 25);
+	auto pos出生 = Position(std::rand() % 100 - 50.f, std::rand() % 50 - 25.f);
 	{
 		const 活动单位类型 类型(活动单位类型::兵);
 		单位::活动单位配置 配置;
@@ -260,7 +264,7 @@ CoTaskBool PlayerGateSession_Game::Co进多人联机地图()
 	if (co_await CoTimer::Wait(seconds消息间隔, m_funCancel进地图)) co_return false;
 	Say("您开局只有一台工程车，工程车可以建造建筑，建筑中可以产出活动单位", SayChannel::系统);
 	if (co_await CoTimer::Wait(seconds消息间隔, m_funCancel进地图)) co_return false;
-	Say("一旦您退出此场景或断线，您在此场景中的所有单位都会消失", SayChannel::系统);
+	Say("一旦您退出此场景或断线后，您在此场景中的所有单位可能会因为缺少指挥而遭到攻击", SayChannel::系统);
 	if (co_await CoTimer::Wait(seconds消息间隔, m_funCancel进地图)) co_return false;
 	Say("其他玩家是您的敌人，他们可能会向您进攻！", SayChannel::系统);
 	if (co_await CoTimer::Wait(seconds消息间隔, m_funCancel进地图)) co_return false;
@@ -288,32 +292,38 @@ void PlayerGateSession_Game::OnRecv(const Msg离开Space& msg)
 	OnDestroy();
 }
 
-typedef CoTask<int>(*funCo副本剧情)(Space& refSpace, FunCancel& funCancel, PlayerGateSession_Game& refGateSession);
-struct 副本配置
+std::unordered_map<副本ID, 副本配置> g_map副本配置 =
 {
-	std::string str寻路文件名;
-	funCo副本剧情 funCo剧情;
+	{训练战,{"all_tiles_tilecache.bin",		"scene战斗",	单人剧情::Co训练战}},
+	{防守战,{"防守战.bin",					"scene防守战",	单人剧情::Co防守战}},
+	{多人联机地图,{"all_tiles_tilecache.bin","scene战斗",	{}}},
 };
 
-std::unordered_map<单人剧情副本ID, 副本配置> g_map副本配置 =
+bool Get副本配置(const 副本ID id, 副本配置& refOut)
 {
-	{训练战,{"all_tiles_tilecache.bin",单人剧情::Co训练战}},
-	{防守战,{"防守战.bin",单人剧情::Co防守战}},
-};
-
-void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
-{
-	const auto itFind = g_map副本配置.find(msg.id);
+	const auto itFind = g_map副本配置.find(id);
 	if (itFind == g_map副本配置.end())
 	{
 		assert(false);
-		return;
+		return false;
 	}
-	const auto& ref配置 = itFind->second;
-	m_spSpace单人剧情副本 = std::make_shared<Space, const std::string&>(ref配置.str寻路文件名);
+	
+	refOut = itFind->second;
+	return true;
+}
+
+void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
+{
+	副本配置 配置;
+	{
+		const auto ok = Get副本配置(msg.id, 配置);
+		CHECK_RET_VOID(ok);
+	}
+	
+	m_spSpace单人剧情副本 = std::make_shared<Space, const 副本配置&>(配置);
 	EnterSpace(m_spSpace单人剧情副本);
 
-	ref配置.funCo剧情(*m_spSpace单人剧情副本, m_funCancel进地图, *this).RunNew();
+	配置.funCo剧情(*m_spSpace单人剧情副本, m_funCancel进地图, *this).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
@@ -562,6 +572,10 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 		{ 0.0 }, *sp, { "视口","smoke", "" });
 	m_mapWpEntity[spEntityViewPort->Id] = (spEntityViewPort);
 	PlayerComponent::AddComponent(*spEntityViewPort, *this);
+	{
+		const auto [k,ok] = sp->m_map视口.insert({ spEntityViewPort->Id ,spEntityViewPort });
+		CHECK_RET_VOID(ok);
+	}
 	sp->AddEntity(spEntityViewPort, 100);
 	spEntityViewPort->BroadcastEnter();
 
@@ -603,7 +617,7 @@ void PlayerGateSession_Game::RecvMsg(const msgpack::object& obj)
 }
 
 PlayerGateSession_Game::PlayerGateSession_Game(GameSvrSession& ref, uint64_t idPlayerGateSession, const std::string& strNickName) :
-	m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession), m_strNickName(strNickName)
+	m_refGameSvrSession(ref), m_idPlayerGateSession(idPlayerGateSession), m_strNickName(strNickName)
 {
 
 }
@@ -624,6 +638,8 @@ void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& o
 	case MsgId::进地堡:RecvMsg<Msg进地堡>(obj); break;
 	case MsgId::出地堡:RecvMsg<Msg出地堡>(obj); break;
 	case MsgId::框选:RecvMsg<Msg框选>(obj); break;
+	case MsgId::玩家个人战局列表:RecvMsg<Msg玩家个人战局列表>(obj); break;
+	case MsgId::进其他玩家个人战局:RecvMsg<Msg进其他玩家个人战局>(obj); break;
 	case MsgId::Gate转发:
 		LOG(ERROR) << "不能再转发";
 		assert(false);
@@ -841,3 +857,34 @@ void PlayerGateSession_Game::Send选中单位Responce()
 	msgResponse.ids.insert(msgResponse.ids.end(), m_listSelectedEntity.begin(), m_listSelectedEntity.end());
 	Send(msgResponse);
 }
+
+void PlayerGateSession_Game::OnRecv(const Msg玩家个人战局列表& msg)
+{
+	Msg玩家个人战局列表Responce msgResponce;
+	for (const auto [id, sp] : m_refGameSvrSession.m_mapPlayerGateSession)
+	{
+		if (!sp->m_spSpace单人剧情副本)
+			continue;
+
+		msgResponce.vec个人战局中的玩家.push_back(
+			{
+				StrConv::GbkToUtf8(sp->NickName()),
+				StrConv::GbkToUtf8(sp->m_spSpace单人剧情副本->m_配置.strSceneName)
+			});
+		}
+		Send(msgResponce);
+	}
+
+	void PlayerGateSession_Game::OnRecv(const Msg进其他玩家个人战局& msg)
+	{
+		const auto strGbk = StrConv::Utf8ToGbk(msg.nickName其他玩家);
+		auto iterFind = std::find_if(m_refGameSvrSession.m_mapPlayerGateSession.begin(), m_refGameSvrSession.m_mapPlayerGateSession.end(),
+			[&strGbk](const auto& pair)->bool
+			{
+				return pair.second->NickName() == strGbk;
+			});
+		CHECK_RET_VOID(iterFind != m_refGameSvrSession.m_mapPlayerGateSession.end());
+		auto& refSp = iterFind->second->m_spSpace单人剧情副本;
+		CHECK_RET_VOID(refSp);
+		EnterSpace(refSp);
+	}

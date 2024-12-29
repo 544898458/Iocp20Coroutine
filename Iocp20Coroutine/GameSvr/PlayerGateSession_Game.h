@@ -68,6 +68,8 @@ private:
 	void OnRecv(const Msg进地堡& msg);
 	void OnRecv(const Msg出地堡& msg);
 	void OnRecv(const Msg框选& msg);
+	void OnRecv(const Msg玩家个人战局列表& msg);
+	void OnRecv(const Msg进其他玩家个人战局& msg);
 
 	void 选中单位(const std::vector<uint64_t>& vecId);
 
@@ -75,6 +77,7 @@ private:
 
 	void Send选中单位Responce();
 
+	
 	void ForEachSelected(std::function<void(Entity& ref)> fun);
 	CoTaskBool Co进多人联机地图();
 	
@@ -82,7 +85,7 @@ private:
 	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;
 	bool m_bLoginOk = false;
 
-	GameSvrSession& m_refSession;
+	GameSvrSession& m_refGameSvrSession;
 
 	std::list<uint64_t> m_listSelectedEntity;
 	std::string m_strNickName;

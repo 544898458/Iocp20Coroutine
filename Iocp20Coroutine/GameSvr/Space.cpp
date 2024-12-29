@@ -8,15 +8,16 @@
 #include "AoiComponent.h"
 #include "AttackComponent.h"
 #include "PlayerNickNameComponent.h"
-Space::Space(const std::string& stf寻路文件)
+#include "EntitySystem.h"
+
+Space::Space(const 副本配置& ref) :m_配置(ref)
 {
 	std::shared_ptr<CrowdToolState> CreateCrowdToolState(const std::string & stf寻路文件);
-	m_spCrowdToolState = CreateCrowdToolState(stf寻路文件);
+	m_spCrowdToolState = CreateCrowdToolState(ref.str寻路文件名);
 }
 
 Space::~Space()
 {
-	EraseEntity(true);
 }
 
 WpEntity Space::GetEntity(const int64_t id)
@@ -96,7 +97,13 @@ WpSpace Space::AddSpace(const uint8_t idSpace)
 	if (!wpOld.expired())
 		return wpOld;
 
-	auto [iterNew, bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space>("all_tiles_tilecache.bin") });
+	副本配置 配置;
+	{
+		bool Get副本配置(const 副本ID id, 副本配置 & refOut);
+		const auto ok = Get副本配置(多人联机地图, 配置);
+		CHECK_RET_DEFAULT(ok);
+	}
+	auto [iterNew, bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space,const 副本配置&>(配置) });
 	assert(bOk);
 	return iterNew->second;
 }
@@ -225,5 +232,24 @@ int Space::Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位
 void Space::AddEntity(SpEntity& spNewEntity, const int32_t i32视野范围)
 {
 	m_mapEntity.insert({ spNewEntity->Id ,spNewEntity });//全地图单位
-	AoiComponent::Add(*this, *spNewEntity,i32视野范围);
+	AoiComponent::Add(*this, *spNewEntity, i32视野范围);
+}
+
+void Space::所有玩家全退出()
+{
+	auto map = m_map视口;
+	for (auto [id, wp] : map)//迭代过程会删除	m_map视口	项
+	{
+		CHECK_WP_CONTINUE(wp);
+		auto& ref视口 = *wp.lock();
+		CHECK_RET_VOID(EntitySystem::Is视口(ref视口));
+		CHECK_RET_VOID(ref视口.m_spPlayer);
+		ref视口.m_spPlayer->m_refSession.OnDestroy();//旁观的人退出
+	}
+}
+
+void Space::OnDestory()
+{
+	所有玩家全退出();
+	EraseEntity(true);
 }

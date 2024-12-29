@@ -52,6 +52,7 @@ public:
 	uint32_t m_snRecv = 0;
 
 	Session& m_refSession;
+	std::map<uint64_t, std::shared_ptr<PlayerGateSession_Game>> m_mapPlayerGateSession;
 private:
 	void OnRecvPack(const void* buf, const int len);
 	void OnRecv(const MsgGate×ª·¢& msg);
@@ -65,6 +66,5 @@ private:
 	//std::deque<MsgGateAddSession> m_queueGateAddSession;
 	//std::deque<MsgGateDeleteSession> m_queueGateDeleteSession;
 
-	std::map<uint64_t, std::shared_ptr<PlayerGateSession_Game>> m_mapPlayerGateSession;
 	MsgQueueMsgPack<GameSvrSession> m_MsgQueue;
 };

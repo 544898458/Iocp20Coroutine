@@ -93,7 +93,9 @@ enum MsgId
 	Entity描述,
 	播放声音,
 	设置视口,
-	框选
+	框选,
+	玩家个人战局列表,
+	进其他玩家个人战局,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -367,17 +369,18 @@ struct Msg进Space
 	MSGPACK_DEFINE(msg, idSapce);
 };
 
-enum 单人剧情副本ID
+enum 副本ID
 {
 	训练战,
-	防守战
+	防守战,
+	多人联机地图,
 };
-MSGPACK_ADD_ENUM(单人剧情副本ID);
+MSGPACK_ADD_ENUM(副本ID);
 
 struct Msg进单人剧情副本
 {
 	MsgHead msg{ .id = 进单人剧情副本 };
-	单人剧情副本ID id;
+	副本ID id;
 	MSGPACK_DEFINE(msg, id);
 };
 
@@ -429,4 +432,32 @@ struct Msg框选
 	Position pos起始;//都是世界坐标
 	Position pos结束;
 	MSGPACK_DEFINE(msg, pos起始, pos结束);
+};
+
+struct Msg玩家个人战局列表
+{
+	MsgHead msg{ .id = 玩家个人战局列表 };
+	MSGPACK_DEFINE(msg);
+};
+
+
+struct 玩家场景
+{
+	std::string nickName;
+	std::string sceneName;
+	MSGPACK_DEFINE(nickName, sceneName);
+};
+
+struct Msg玩家个人战局列表Responce
+{
+	MsgHead msg{ .id = 玩家个人战局列表 };
+	std::vector<玩家场景> vec个人战局中的玩家;
+	MSGPACK_DEFINE(msg, vec个人战局中的玩家);
+};
+
+struct Msg进其他玩家个人战局
+{
+	MsgHead msg{ .id = 进其他玩家个人战局 };
+	std::string nickName其他玩家;
+	MSGPACK_DEFINE(msg, nickName其他玩家);
 };
