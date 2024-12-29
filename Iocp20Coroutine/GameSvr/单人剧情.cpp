@@ -193,6 +193,7 @@ namespace 单人剧情
 			co_return 0;
 
 		refSpace.GetSpacePlayer(ref视口).m_u32燃气矿 += 1000;
+		refSpace.GetSpacePlayer(ref视口).m_u32晶体矿+= 300;
 		{
 			//refSpace.m_mapPlayer[refGateSession.NickName()].m_u32燃气矿 += 200;
 			//auto [stop, msgResponce] = co_await AiCo::ChangeMoney(refGateSession, 1000, true, funCancel);

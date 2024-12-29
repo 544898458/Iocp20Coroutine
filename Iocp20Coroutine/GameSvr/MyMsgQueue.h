@@ -360,7 +360,7 @@ struct Msg资源
 	uint32_t 燃气矿;
 	uint32_t 活动单位;
 	uint32_t 活动单位上限;
-	MSGPACK_DEFINE(msg, 燃气矿, 活动单位, 活动单位上限);
+	MSGPACK_DEFINE(msg, 晶体矿, 燃气矿, 活动单位, 活动单位上限);
 };
 
 struct Msg进Space

@@ -94,7 +94,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 				if (co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//把矿放进基地耗时
 					co_return true;
 
-				auto addMoney = m_u32携带矿;
+				const auto u32携带矿 = m_u32携带矿;
 				m_u32携带矿 = 0;
 				auto [_, sp资源] = Get目标资源(wp目标资源);
 				if (!sp资源)
@@ -102,15 +102,15 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 
 				if (sp资源->m_类型 == 晶体矿)
 				{
-					const auto& [stop, _] = co_await AiCo::ChangeMoney(refGateSession, addMoney, true, m_TaskCancel.cancel);
-					if (stop)
-						co_return true;
-
+					//const auto& [stop, _] = co_await AiCo::ChangeMoney(refGateSession, addMoney, true, m_TaskCancel.cancel);
+					//if (stop)
+					//	co_return true;
+					Space::GetSpacePlayer(m_refEntity).m_u32晶体矿 += u32携带矿;
 					CoEvent<MyEvent::晶体矿已运回基地>::OnRecvEvent(false, {});
 				}
 				else
 				{
-					Space::GetSpacePlayer(m_refEntity).m_u32燃气矿 += addMoney;
+					Space::GetSpacePlayer(m_refEntity).m_u32燃气矿 += u32携带矿;
 					refGateSession.Send资源();
 				}
 				continue;

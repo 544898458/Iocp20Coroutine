@@ -178,7 +178,7 @@ CoTask<SpEntity> 造建筑Component::CoAddBuilding(const 建筑单位类型 类型, const P
 
 		co_return{};
 	}
-	Space::GetSpacePlayer(m_refEntity).m_u32燃气矿 -= 配置.建造.u16消耗燃气矿;
+	Space::GetSpacePlayer(m_refEntity).m_u32晶体矿-= 配置.建造.u16消耗晶体矿;
 
 	PlayerComponent::Send资源(m_refEntity);
 

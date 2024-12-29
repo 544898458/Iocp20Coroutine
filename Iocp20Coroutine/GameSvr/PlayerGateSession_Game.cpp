@@ -188,40 +188,51 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 
 CoTaskBool PlayerGateSession_Game::Co进多人联机地图(WpEntity wp视口)
 {
-	CHECK_WP_CO_RET_FALSE(m_wpSpace);
-	auto pos出生 = Position(std::rand() % 100 - 50.f, std::rand() % 50 - 25.f);
 	{
-		const 活动单位类型 类型(活动单位类型::兵);
-		单位::活动单位配置 配置;
-		单位::Find活动单位配置(类型, 配置);
-		m_wpSpace.lock()->造活动单位(wp视口.lock()->m_spPlayer, NickName(), { pos出生.x, pos出生.z + 6 }, 配置, 类型);
-	}
-	{
-		const 活动单位类型 类型(活动单位类型::三色坦克);
-		单位::活动单位配置 配置;
-		单位::Find活动单位配置(类型, 配置);
+		CHECK_WP_CO_RET_FALSE(m_wpSpace);
+		CHECK_WP_CO_RET_FALSE(wp视口);
+		auto& refSpace = *m_wpSpace.lock();
+		auto& ref视口 = *wp视口.lock();
+		auto pos出生 = Position(std::rand() % 100 - 50.f, std::rand() % 50 - 25.f);
+		{
+			const 活动单位类型 类型(活动单位类型::兵);
+			单位::活动单位配置 配置;
+			单位::Find活动单位配置(类型, 配置);
+			refSpace.造活动单位(ref视口.m_spPlayer, NickName(), { pos出生.x, pos出生.z + 6 }, 配置, 类型);
+		}
+		{
+			const 活动单位类型 类型(活动单位类型::三色坦克);
+			单位::活动单位配置 配置;
+			单位::Find活动单位配置(类型, 配置);
 
-		m_wpSpace.lock()->造活动单位(wp视口.lock()->m_spPlayer, NickName(), { pos出生.x + 6, pos出生.z }, 配置, 类型);
-	}
-	{
-		const 活动单位类型 类型(活动单位类型::工程车);
-		单位::活动单位配置 配置;
-		单位::Find活动单位配置(类型, 配置);
+			refSpace.造活动单位(ref视口.m_spPlayer, NickName(), { pos出生.x + 6, pos出生.z }, 配置, 类型);
+		}
+		{
+			const 活动单位类型 类型(活动单位类型::工程车);
+			单位::活动单位配置 配置;
+			单位::Find活动单位配置(类型, 配置);
 
-		SpEntity sp工程车 = m_wpSpace.lock()->造活动单位(wp视口.lock()->m_spPlayer, NickName(), pos出生, 配置, 类型);
-		Send设置视口(*sp工程车);
-	}
-	auto [stop, msgResponce] = co_await AiCo::ChangeMoney(*this, 0, true, m_funCancel进地图);
-	if (stop)
-		co_return true;
+			SpEntity sp工程车 = refSpace.造活动单位(ref视口.m_spPlayer, NickName(), pos出生, 配置, 类型);
+			Send设置视口(*sp工程车);
+		}
+		//auto [stop, msgResponce] = co_await AiCo::ChangeMoney(*this, 0, true, m_funCancel进地图);
+		//if (stop)
+		//	co_return true;
 
-	const uint16_t u16初始晶体矿(100);
-	if (msgResponce.finalMoney < u16初始晶体矿)
-	{
-		if (std::get<0>(co_await AiCo::ChangeMoney(*this, u16初始晶体矿, true, m_funCancel进地图)))
-			co_return true;
+		const uint16_t u16初始晶体矿(1000);
+		auto& refSpacePlayer = refSpace.GetSpacePlayer(ref视口);
+		if (refSpacePlayer.m_u32晶体矿 < u16初始晶体矿)
+		{
+			refSpacePlayer.m_u32晶体矿 += u16初始晶体矿;
+			refSpacePlayer.m_u32燃气矿 += u16初始晶体矿;
+			PlayerComponent::Send资源(ref视口);
+		}
+		//if (msgResponce.finalMoney < u16初始晶体矿)
+		//{
+			//if (std::get<0>(co_await AiCo::ChangeMoney(*this, u16初始晶体矿, true, m_funCancel进地图)))
+			//	co_return true;
+		//}
 	}
-
 	using namespace std;
 	const auto seconds消息间隔 = 10s;
 	Say("这是每个玩家都可以自由共同进入的场景，分布有一些资源和少量的怪，资源的再生速度很慢", SayChannel::系统);
@@ -569,8 +580,8 @@ void PlayerGateSession_Game::Process()
 void PlayerGateSession_Game::Send资源()
 {
 	CHECK_WP_RET_VOID(m_wpSpace);
-	auto &ref = m_wpSpace.lock()->m_mapPlayer[NickName()];
-	Send<Msg资源>({ .晶体矿= ref.m_u32晶体矿,
+	auto& ref = m_wpSpace.lock()->m_mapPlayer[NickName()];
+	Send<Msg资源>({ .晶体矿 = ref.m_u32晶体矿,
 					.燃气矿 = ref.m_u32燃气矿,
 					.活动单位 = 活动单位包括制造队列中的(),
 					.活动单位上限 = 活动单位上限() });
@@ -609,7 +620,7 @@ uint16_t PlayerGateSession_Game::活动单位包括制造队列中的() const
 	uint16_t 制造队列中的单位 = 0;
 	for (const auto& [_, wp] : m_wpSpace.lock()->m_mapPlayer[NickName()].m_mapWpEntity)
 	{
-		assert(!wp.expired());
+		CHECK_WP_CONTINUE(wp);
 		const auto& refEntity = *wp.lock();
 		if (EntitySystem::Is视口(refEntity))
 		{
