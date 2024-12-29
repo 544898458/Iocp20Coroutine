@@ -26,7 +26,7 @@ public:
 	void Say语音提示(const std::string& str);
 	
 	const std::string& NickName()const { return m_strNickName; }
-	void EnterSpace(WpSpace wpSpace);
+	WpEntity EnterSpace(WpSpace wpSpace);
 	void Send资源();
 	uint16_t 活动单位上限() const;
 	uint16_t 活动单位包括制造队列中的() const;
@@ -71,7 +71,7 @@ private:
 
 	
 	void ForEachSelected(std::function<void(Entity& ref)> fun);
-	CoTaskBool Co进多人联机地图();
+	CoTaskBool Co进多人联机地图(WpEntity wp视口);
 	
 	//std::vector<CoTask<int>>	m_vecCoRpc;
 	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;

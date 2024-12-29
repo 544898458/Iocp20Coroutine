@@ -269,6 +269,10 @@ void Space::OnDestory()
 	EraseEntity(true);
 }
 
+Space::SpacePlayer::SpacePlayer()
+{
+}
+
 void Space::SpacePlayer::OnDestroy(const bool b单人副本, Space& refSpace, const std::string& refStrNickName)
 {
 	for (auto [_, wp] : m_mapWpEntity)

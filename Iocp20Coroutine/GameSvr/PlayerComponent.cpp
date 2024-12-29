@@ -12,10 +12,10 @@ void PlayerComponent::Say(Entity& refEntity, const std::string& str, const SayCh
 		refEntity.m_spPlayer->Say(str, channel);
 }
 
-void PlayerComponent::SayœµÕ≥(const std::shared_ptr<PlayerComponent>& spPlayerø…ƒ‹ø’, const std::string& str)
+void PlayerComponent::SayœµÕ≥(Entity& refEntity, const std::string& str)
 {
-	if (spPlayerø…ƒ‹ø’)
-		spPlayerø…ƒ‹ø’->m_refSession.SayœµÕ≥(str);
+	if (refEntity.m_spPlayer)
+		refEntity.m_spPlayer->m_refSession.SayœµÕ≥(str);
 }
 
 void PlayerComponent::≤•∑≈…˘“Ù(Entity& refEntity, const std::string& refStr…˘“Ù, const std::string& strŒƒ±æ)
@@ -24,7 +24,7 @@ void PlayerComponent::≤•∑≈…˘“Ù(Entity& refEntity, const std::string& refStr…˘“Ù,
 		refEntity.m_spPlayer->m_refSession.≤•∑≈…˘“Ù(refStr…˘“Ù, strŒƒ±æ);
 }
 
-void ≤•∑≈…˘“Ù(SpPlayerComponent& spPlayerø…ƒ‹ø’, const std::string& refStr…˘“Ù, const std::string& strŒƒ±æ)
+void PlayerComponent::≤•∑≈…˘“Ù(SpPlayerComponent& spPlayerø…ƒ‹ø’, const std::string& refStr…˘“Ù, const std::string& strŒƒ±æ)
 {
 	if (spPlayerø…ƒ‹ø’)
 		spPlayerø…ƒ‹ø’->m_refSession.≤•∑≈…˘“Ù(refStr…˘“Ù, strŒƒ±æ);
@@ -38,14 +38,23 @@ void PlayerComponent::Send◊ ‘¥(Entity& refEntity)
 
 void PlayerComponent::AddComponent(Entity& refEntity, std::weak_ptr<PlayerComponent> wpPlayer, const std::string& strNickName)
 {
-	if (!wpPlayer.expired())
-		refEntity.m_spPlayer = std::make_shared<PlayerComponent, PlayerGateSession_Game&>(wpPlayer.lock()->m_refSession);
-
-	CHECK_RET_VOID(!strNickName.empty());
-	if (!strNickName.empty())
-		refEntity.m_spPlayerNickName = std::make_shared<PlayerNickNameComponent, const std::string&>(strNickName);
+	if (wpPlayer.expired())
+	{
+		CHECK_RET_VOID(!strNickName.empty());
+		if (!strNickName.empty())
+			refEntity.m_spPlayerNickName = std::make_shared<PlayerNickNameComponent, const std::string&>(strNickName);
+	}
+	else 
+	{
+		AddComponent(refEntity ,wpPlayer.lock()->m_refSession);
+	}
 }
 
+void PlayerComponent::AddComponent(Entity& refEntity, PlayerGateSession_Game &refSession)
+{
+	refEntity.m_spPlayer = std::make_shared<PlayerComponent, PlayerGateSession_Game&>(refSession);
+	refEntity.m_spPlayerNickName = std::make_shared<PlayerNickNameComponent, const std::string&>(refSession.NickName());
+}
 void PlayerComponent::Say(const std::string& str, const SayChannel channel)
 {
 	m_refSession.Say(str, channel);
@@ -57,3 +66,4 @@ void PlayerComponent::Send(const std::shared_ptr<PlayerComponent>& spPlayerø…ƒ‹ø
 	if (spPlayerø…ƒ‹ø’)
 		spPlayerø…ƒ‹ø’->m_refSession.Send(ref);
 }
+template void PlayerComponent::Send(const std::shared_ptr<PlayerComponent>& spPlayerø…ƒ‹ø’, const Msgœ‘ æΩÁ√Ê& ref);

@@ -186,28 +186,29 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 	}
 }
 
-CoTaskBool PlayerGateSession_Game::Co进多人联机地图()
+CoTaskBool PlayerGateSession_Game::Co进多人联机地图(WpEntity wp视口)
 {
+	CHECK_WP_CO_RET_FALSE(m_wpSpace);
 	auto pos出生 = Position(std::rand() % 100 - 50.f, std::rand() % 50 - 25.f);
 	{
 		const 活动单位类型 类型(活动单位类型::兵);
 		单位::活动单位配置 配置;
 		单位::Find活动单位配置(类型, 配置);
-		造活动单位Component::造活动单位(*this, { pos出生.x, pos出生.z + 6 }, 配置, 类型);
+		m_wpSpace.lock()->造活动单位(wp视口.lock()->m_spPlayer, NickName(), { pos出生.x, pos出生.z + 6 }, 配置, 类型);
 	}
 	{
 		const 活动单位类型 类型(活动单位类型::三色坦克);
 		单位::活动单位配置 配置;
 		单位::Find活动单位配置(类型, 配置);
 
-		造活动单位Component::造活动单位(*this, { pos出生.x + 6, pos出生.z }, 配置, 类型);
+		m_wpSpace.lock()->造活动单位(wp视口.lock()->m_spPlayer, NickName(), { pos出生.x + 6, pos出生.z }, 配置, 类型);
 	}
 	{
 		const 活动单位类型 类型(活动单位类型::工程车);
 		单位::活动单位配置 配置;
 		单位::Find活动单位配置(类型, 配置);
 
-		SpEntity sp工程车 = 造活动单位Component::造活动单位(*this, pos出生, 配置, 类型);
+		SpEntity sp工程车 = m_wpSpace.lock()->造活动单位(wp视口.lock()->m_spPlayer, NickName(), pos出生, 配置, 类型);
 		Send设置视口(*sp工程车);
 	}
 	auto [stop, msgResponce] = co_await AiCo::ChangeMoney(*this, 0, true, m_funCancel进地图);
@@ -241,12 +242,14 @@ void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
 {
 	OnDestroy();
 	LOG(INFO) << "希望进Space:" << msg.idSapce;
-	EnterSpace(Space::GetSpace(msg.idSapce));
+	auto wp = Space::GetSpace(msg.idSapce);
+	CHECK_WP_RET_VOID(wp);
+	auto wp视口 = EnterSpace(wp);
 
 	if (m_funCancel进地图)
 		m_funCancel进地图();
 
-	Co进多人联机地图().RunNew();
+	Co进多人联机地图(wp视口).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg离开Space& msg)
@@ -284,9 +287,9 @@ void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
 	}
 
 	m_spSpace单人剧情副本 = std::make_shared<Space, const 副本配置&>(配置);
-	EnterSpace(m_spSpace单人剧情副本);
-
-	配置.funCo剧情(*m_spSpace单人剧情副本, m_funCancel进地图, *this).RunNew();
+	auto wp视口 = EnterSpace(m_spSpace单人剧情副本);
+	CHECK_WP_RET_VOID(wp视口);
+	配置.funCo剧情(*m_spSpace单人剧情副本, *wp视口.lock(), m_funCancel进地图, *this).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
@@ -374,7 +377,7 @@ void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fu
 			continue;
 		}
 		auto& spEntity = itFind->second;
-		auto &refMap = sp->m_mapPlayer[NickName()].m_mapWpEntity;
+		auto& refMap = sp->m_mapPlayer[NickName()].m_mapWpEntity;
 		if (refMap.end() == std::find_if(refMap.begin(), refMap.end(), [&spEntity](const auto& kv)
 			{
 				auto& wp = kv.second;
@@ -431,13 +434,13 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 		});
 }
 
-void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
+WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 {
 	assert(m_wpSpace.expired());
 	assert(!wpSpace.expired());
 	m_wpSpace = wpSpace;
 	auto spSpace = m_wpSpace.lock();
-	
+
 	Send<Msg进Space>({ .idSapce = 1 });
 	{
 		auto mapOld = spSpace->m_map已离线PlayerEntity[NickName()];
@@ -465,12 +468,13 @@ void PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	PlayerComponent::AddComponent(*spEntityViewPort, *this);
 	{
 		const auto [k, ok] = spSpace->m_map视口.insert({ spEntityViewPort->Id ,spEntityViewPort });
-		CHECK_RET_VOID(ok);
+		CHECK_RET_DEFAULT(ok);
 	}
 	spSpace->AddEntity(spEntityViewPort, 100);
 	spEntityViewPort->BroadcastEnter();
 
 	CoEvent<PlayerGateSession_Game*>::OnRecvEvent(false, this);
+	return spEntityViewPort;
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgSay& msg)
@@ -564,7 +568,12 @@ void PlayerGateSession_Game::Process()
 
 void PlayerGateSession_Game::Send资源()
 {
-	Send<Msg资源>({ .燃气矿 = m_u32燃气矿,.活动单位 = 活动单位包括制造队列中的(),.活动单位上限 = 活动单位上限() });
+	CHECK_WP_RET_VOID(m_wpSpace);
+	auto &ref = m_wpSpace.lock()->m_mapPlayer[NickName()];
+	Send<Msg资源>({ .晶体矿= ref.m_u32晶体矿,
+					.燃气矿 = ref.m_u32燃气矿,
+					.活动单位 = 活动单位包括制造队列中的(),
+					.活动单位上限 = 活动单位上限() });
 }
 
 uint16_t PlayerGateSession_Game::活动单位上限() const

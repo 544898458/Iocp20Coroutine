@@ -356,6 +356,7 @@ struct Msg出地堡
 struct Msg资源
 {
 	MsgHead msg{ .id = 资源 };
+	uint32_t 晶体矿;
 	uint32_t 燃气矿;
 	uint32_t 活动单位;
 	uint32_t 活动单位上限;

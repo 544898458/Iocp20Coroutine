@@ -119,6 +119,15 @@ class StrategyLog
 	}\
 }
 
+#define CHECK_WP_CO_RET_FALSE( wp ) \
+{\
+	LOG_IF(ERROR, wp.expired());\
+	if (wp.expired())\
+	{\
+		assert(false);\
+		co_return false; \
+	}\
+}
 #define CHECK_WP_CONTINUE( wp ) \
 {\
 	if (wp.expired()) \
@@ -128,6 +137,17 @@ class StrategyLog
 		continue;\
 	}\
 }
+
+#define CHECK_WP_RET_VOID( wp ) \
+{\
+	if (wp.expired()) \
+	{\
+		LOG(ERROR)<< #wp<< ",expired";\
+		assert(false);\
+		return;\
+	}\
+}
+
 #define CHECK_AOI_CONTINUE( ref ) \
 {\
 	if (!(ref).m_upAoi) \

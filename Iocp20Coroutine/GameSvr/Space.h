@@ -9,7 +9,7 @@
 class CrowdToolState;
 struct 副本配置
 {
-	typedef CoTask<int>(*funCo副本剧情)(Space& refSpace, FunCancel& funCancel, PlayerGateSession_Game& refGateSession);
+	typedef CoTask<int>(*funCo副本剧情)(Space& refSpace, Entity& ref视口, FunCancel& funCancel, PlayerGateSession_Game& refGateSession);
 
 	std::string str寻路文件名;
 	std::string strSceneName;
@@ -23,7 +23,7 @@ struct 副本配置
 class Space final
 {
 public:
-	Space(const 副本配置 &ref配置);// std::string& stf寻路文件);
+	Space(const 副本配置& ref配置);// std::string& stf寻路文件);
 	Space(const Space&) = delete;
 	~Space();
 	template<class T>
@@ -31,7 +31,7 @@ public:
 
 	std::map<int64_t, SpEntity> m_mapEntity;
 	WpEntity GetEntity(const int64_t id);
-	
+
 	//SpaceId：1无限刷怪
 	static WpSpace AddSpace(const uint8_t idSpace);
 	static WpSpace GetSpace(const uint8_t idSpace);
@@ -63,6 +63,8 @@ public:
 	std::unordered_map<uint64_t, WpEntity> m_map视口;
 	struct SpacePlayer
 	{
+		SpacePlayer();
+		SpacePlayer(const SpacePlayer&) = delete;
 		/// <summary>
 		/// 加入Space空间的实体（玩家角色）
 		/// </summary>
@@ -70,7 +72,7 @@ public:
 		uint32_t m_u32燃气矿 = 10;
 		uint32_t m_u32晶体矿 = 100;
 
-		void OnDestroy(const bool b单人副本,Space &refSpace,const std::string &refStrNickName);
+		void OnDestroy(const bool b单人副本, Space& refSpace, const std::string& refStrNickName);
 		void Erase(uint64_t u64Id);
 	};
 	//using SpSpacePlayer = std::shared_ptr<SpacePlayer> ;
