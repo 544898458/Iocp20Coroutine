@@ -76,6 +76,9 @@ void 地堡Component::全都出地堡()
 	{
 		//m_refEntity.m_refSpace.m_mapEntity.insert({ sp->Id, sp });
 		m_refEntity.m_refSpace.AddEntity(sp);
+		auto pos = sp->Pos();
+		m_refEntity.m_refSpace.CrowdToolFindNerestPos(pos);
+		sp->SetPos(pos);
 		sp->BroadcastEnter();
 		sp->m_wpOwner.reset();
 	}
