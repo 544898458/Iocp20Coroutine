@@ -163,6 +163,9 @@ CoTaskBool 走Component::Co走进地堡(WpEntity wpEntity地堡)
 	}
 	while (!wpEntity地堡.expired())
 	{
+		if (m_refEntity.IsDead())
+			co_return false;
+
 		auto spEntity地堡 = wpEntity地堡.lock();
 		if (!spEntity地堡->m_sp地堡)
 			co_return false;
