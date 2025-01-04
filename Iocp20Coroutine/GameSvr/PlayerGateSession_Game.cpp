@@ -598,7 +598,7 @@ uint16_t PlayerGateSession_Game::活动单位上限() const
 	uint16_t result = 0;
 	for (const auto& [_, wp] : m_wpSpace.lock()->m_mapPlayer[NickName()].m_mapWpEntity)
 	{
-		assert(!wp.expired());
+		CHECK_WP_CONTINUE(wp);
 		const auto& refEntity = wp.lock();
 		if (!refEntity->m_spBuilding)continue;
 		if (!refEntity->m_spBuilding->已造好())continue;
