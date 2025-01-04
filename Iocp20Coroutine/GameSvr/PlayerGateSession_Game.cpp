@@ -499,7 +499,10 @@ void PlayerGateSession_Game::OnRecv(const MsgSay& msg)
 
 void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
 {
-	CHECK_VOID(!m_wpSpace.expired());
+	if (m_wpSpace.expired()) {
+		LOG(ERROR) << "m_wpSpace";
+		return;
+	}
 	LOG(INFO) << "ÊÕµ½Ñ¡Ôñ:" << msg.ids.size();
 	std::vector<uint64_t> listSelectedEntity;
 	std::transform(msg.ids.begin(), msg.ids.end(), std::back_inserter(listSelectedEntity), [](const double& id) {return uint64_t(id); });
