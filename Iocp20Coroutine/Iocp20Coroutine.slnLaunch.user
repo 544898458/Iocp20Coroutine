@@ -1,0 +1,19 @@
+[
+  {
+    "Name": "新建配置文件",
+    "Projects": [
+      {
+        "Path": "WorldSvr\\WorldSvr.vcxproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "GameSvr\\GameSvr.vcxproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "GateSvr\\GateSvr.vcxproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
