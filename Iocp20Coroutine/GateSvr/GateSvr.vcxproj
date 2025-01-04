@@ -76,7 +76,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir)\msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;$(SolutionDir)\VisualLeakDetector\include;$(SolutionDir)/recastnavigation-main/DetourTileCache/Include;$(SolutionDir)\recastnavigation-main\Detour\Include;$(ProjectDir);$(SolutionDir)\recastnavigation-main\DetourCrowd\Include;$(SolutionDir)\recastnavigation-main\RecastDemo\Include;$(SolutionDir)\recastnavigation-main\Recast\Include;$(SolutionDir)\recastnavigation-main\DebugUtils\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\OpenSsl340</IncludePath>
-    <LibraryPath>$(SolutionDir)\glog\lib;$(VC_LibraryPath_x64);E:\Program Files\OpenSSL-Win64\lib\VC\x64\MD;$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\glog\lib;$(VC_LibraryPath_x64);$(SolutionDir)\OpenSsl340Lib;$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
