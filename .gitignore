@@ -38,3 +38,4 @@ enc_temp_folder
 *.enc
 *x64*
 *.bin
+*.pch
