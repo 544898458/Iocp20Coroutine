@@ -321,7 +321,9 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 		assert(m_refEntity.m_upAoi);
 		if (m_refEntity.m_upAoi)
 		{
-			for (auto [k, wp] : m_refEntity.m_upAoi->m_map我能看到的)
+			auto& refUpAoi = m_refEntity.m_wpOwner.expired() ? m_refEntity.m_upAoi : m_refEntity.m_wpOwner.lock()->m_upAoi;
+			CHECK_NOTNULL_CO_RET_FALSE(refUpAoi);
+			for (auto [k, wp] : refUpAoi->m_map我能看到的)
 			{
 				CHECK_WP_CONTINUE(wp);
 				auto& refDefencer = *wp.lock();

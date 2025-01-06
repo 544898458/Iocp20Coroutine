@@ -22,7 +22,15 @@ class StrategyLog
 		co_return 0;\
 	}\
 }
-
+#define CHECK_NOTNULL_CO_RET_FALSE( PTR ) \
+{\
+	if (nullptr == (PTR)) \
+	{\
+		LOG(ERROR)<< #PTR << ",is null";\
+		assert(false);\
+		co_return false;\
+	}\
+}
 #define CHECK_CO_RET_0( EXP ) \
 {\
 	if (!(EXP)) \
