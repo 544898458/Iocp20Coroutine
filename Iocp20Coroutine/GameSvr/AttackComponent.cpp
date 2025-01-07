@@ -267,7 +267,7 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 		refDefencer.m_spDefence->受伤(m_战斗配置.i32伤害);
 	} while (false);
 
-	if (co_await CoTimer::Wait(800ms, cancel))//后摇
+	if (co_await CoTimer::Wait(100ms, cancel))//后摇
 		co_return true;//协程取消
 
 	if (!m_refEntity.IsDead())
