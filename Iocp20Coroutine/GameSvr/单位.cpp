@@ -22,9 +22,9 @@ namespace 单位
 		{三色坦克,{{"三色坦克","活动单位/三色坦克",	"语音/ttapss00"},	 {20,10,60},{35,25,	30,	0.1f,	"idle",		5s,			 "attack_loop",		300ms,	 "音效/TTaFi200","音效/TTaDth00","die02"}}},
 	};
 	std::unordered_map<活动单位类型, 怪配置> g_map怪配置 = {
-		//									 警距 攻距 伤  移速 前摇动作 dura开始播放攻击动作 攻击动作 dura开始伤害 攻击音效	阵亡音效 阵亡动作 血量
-		{兵,	{{"怪"		, "altman-red"	},{20,8,	5, 0.2f,	"",			0s,			  "attack",	300ms,		"TMaFir00","TMaDth00","died"}, 50} },
-		{近战兵,{{"斧头怪"	, "axe-red"		},{15,3,	8, 0.2f,	"",			0s,			  "attack",	300ms,		"Tfrshoot","TMaDth00","died"}, 65} },
+		//								 警距 攻距 伤  移速 前摇动作 dura开始播放攻击动作 攻击动作 dura开始伤害 攻击音效	阵亡音效 阵亡动作 血量
+		{兵,	{{"怪"	, "altman-red"	}, {20,8,	5, 0.2f,	"",			0s,			  "attack",	300ms,		"TMaFir00","TMaDth00","died"}, 50} },
+		{近战兵,{{"跳虫", "活动单位/跳虫"},{15,3,	8, 0.4f,	"",			0s,			  "attack",	300ms,		"Tfrshoot","TMaDth00","died"}, 65} },
 	};
 
 	std::unordered_map<资源类型, 资源单位配置> g_map资源单位配置 =
