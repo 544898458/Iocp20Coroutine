@@ -13,12 +13,12 @@
 #include "◊ﬂComponent.h"
 #include "EntitySystem.h"
 
-void ‘ÏªÓ∂Øµ•ŒªComponent::AddComponent(Entity& refEntity, const Ω®÷˛µ•Œª¿‡–Õ ¿‡–Õ)
+void ‘ÏªÓ∂Øµ•ŒªComponent::AddComponent(Entity& refEntity, const µ•Œª¿‡–Õ ¿‡–Õ)
 {
-	refEntity.m_sp‘ÏªÓ∂Øµ•Œª = std::make_shared<‘ÏªÓ∂Øµ•ŒªComponent, Entity&, const Ω®÷˛µ•Œª¿‡–Õ >(refEntity, std::forward<const Ω®÷˛µ•Œª¿‡–Õ&&>(¿‡–Õ));
+	refEntity.m_sp‘ÏªÓ∂Øµ•Œª = std::make_shared<‘ÏªÓ∂Øµ•ŒªComponent, Entity&, const µ•Œª¿‡–Õ >(refEntity, std::forward<const µ•Œª¿‡–Õ&&>(¿‡–Õ));
 }
 
-‘ÏªÓ∂Øµ•ŒªComponent::‘ÏªÓ∂Øµ•ŒªComponent(Entity& refEntity, const Ω®÷˛µ•Œª¿‡–Õ ¿‡–Õ) :m_refEntity(refEntity)
+‘ÏªÓ∂Øµ•ŒªComponent::‘ÏªÓ∂Øµ•ŒªComponent(Entity& refEntity, const µ•Œª¿‡–Õ ¿‡–Õ) :m_refEntity(refEntity)
 {
 	switch (¿‡–Õ)
 	{
@@ -33,7 +33,7 @@ void ‘ÏªÓ∂Øµ•ŒªComponent::AddComponent(Entity& refEntity, const Ω®÷˛µ•Œª¿‡–Õ ¿‡–
 	}
 }
 
-void ‘ÏªÓ∂Øµ•ŒªComponent::‘Ï±¯(PlayerGateSession_Game& refGateSession, Entity& refEntity, const ªÓ∂Øµ•Œª¿‡–Õ ¿‡–Õ)
+void ‘ÏªÓ∂Øµ•ŒªComponent::‘Ï±¯(PlayerGateSession_Game& refGateSession, Entity& refEntity, const µ•Œª¿‡–Õ ¿‡–Õ)
 {
 	//CHECK_VOID(m_fun‘ÏªÓ∂Øµ•Œª);
 	if (refGateSession.ªÓ∂Øµ•Œª∞¸¿®÷∆‘Ï∂”¡–÷–µƒ() >= refGateSession.ªÓ∂Øµ•Œª…œœﬁ())

@@ -35,7 +35,7 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(2s, funCancel))
 			co_return 0;
 
-		const 活动单位类型 类型(活动单位类型::工程车);
+		const 单位类型 类型(单位类型::工程车);
 		单位::活动单位配置 配置;
 		单位::Find活动单位配置(类型, 配置);
 		SpEntity sp工程车 = refSpace.造活动单位(ref视口.m_spPlayer, EntitySystem::GetNickName(ref视口), {5,10}, 配置, 类型);
@@ -166,7 +166,7 @@ namespace 单人剧情
 		PlayerComponent::Send<Msg显示界面>(ref视口.m_spPlayer,{ .ui = Msg显示界面::选择地图 });
 		co_return 0;
 	}
-	Position 怪物闲逛(const Position& refOld)
+	Position 怪物走向矿附近(const Position& refOld)
 	{
 		return { -30,30 };
 	}
@@ -211,7 +211,7 @@ namespace 单人剧情
 		//}
 		{
 			{
-				const 活动单位类型 类型(活动单位类型::工程车);
+				const 单位类型 类型(单位类型::工程车);
 				单位::活动单位配置 配置;
 				单位::Find活动单位配置(类型, 配置);
 				refSpace.造活动单位(ref视口.m_spPlayer, EntitySystem::GetNickName(ref视口), {-30, 30}, 配置, 类型);
@@ -240,7 +240,7 @@ namespace 单人剧情
 				//if (spEntity->m_sp走)
 					//spEntity->m_sp走->WalkToPos({ -30, 30 });
 
-				spEntity->m_spAttack->m_fun空闲走向此处 = 怪物闲逛;
+				spEntity->m_spAttack->m_fun空闲走向此处 = 怪物走向矿附近;
 			}
 
 			if (co_await CoTimer::Wait(20s, funCancel))

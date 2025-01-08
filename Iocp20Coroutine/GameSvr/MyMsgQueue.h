@@ -99,15 +99,6 @@ enum MsgId
 };
 MSGPACK_ADD_ENUM(MsgId);
 
-enum 建筑单位类型
-{
-	基地,//指挥中心(Command Center),用来造工程车()
-	兵厂,//兵营(Barracks)，用来造兵
-	民房,//供给站(Supply Depot)
-	地堡,//掩体; 地堡(Bunker),可以进兵
-};
-MSGPACK_ADD_ENUM(建筑单位类型);
-
 enum 资源类型
 {
 	晶体矿,//Minerals
@@ -115,14 +106,20 @@ enum 资源类型
 };
 MSGPACK_ADD_ENUM(资源类型);
 
-enum 活动单位类型
+enum 单位类型
 {
 	工程车,//空间工程车Space Construction Vehicle。可以采矿，采气，也可以简单攻击
 	兵,//陆战队员Marine。只能攻击，不能采矿
 	近战兵,//火蝠，喷火兵Firebat
 	三色坦克,
+
+	基地,//指挥中心(Command Center),用来造工程车()
+	兵厂,//兵营(Barracks)，用来造兵
+	民房,//供给站(Supply Depot)
+	地堡,//掩体; 地堡(Bunker),可以进兵
+	光子炮,//Photon Cannon
 };
-MSGPACK_ADD_ENUM(活动单位类型);
+MSGPACK_ADD_ENUM(单位类型);
 
 struct MsgHead
 {
@@ -180,14 +177,14 @@ MSGPACK_ADD_ENUM(MsgLoginResponce::Error);
 struct MsgAddRole
 {
 	MsgHead msg;
-	活动单位类型 类型;
+	单位类型 类型;
 	MSGPACK_DEFINE(msg, 类型);
 };
 
 struct MsgAddBuilding
 {
 	MsgHead msg;
-	建筑单位类型 类型;
+	单位类型 类型;
 	Position pos;
 	MSGPACK_DEFINE(msg, 类型, pos);
 };

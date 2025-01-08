@@ -318,7 +318,7 @@ inline void Space::SpacePlayer::Erase(uint64_t u64Id)
 }
 
 
-SpEntity Space::造活动单位(std::shared_ptr<PlayerComponent> &refSpPlayer可能空, const std::string &strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 活动单位类型 类型)
+SpEntity Space::造活动单位(std::shared_ptr<PlayerComponent> &refSpPlayer可能空, const std::string &strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型)
 {
 	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位::单位配置&>(
 		pos, *this, 配置.配置);

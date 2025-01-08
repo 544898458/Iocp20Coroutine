@@ -195,20 +195,20 @@ CoTaskBool PlayerGateSession_Game::Co进多人联机地图(WpEntity wp视口)
 		auto& ref视口 = *wp视口.lock();
 		auto pos出生 = Position(std::rand() % 100 - 50.f, std::rand() % 50 - 25.f);
 		{
-			const 活动单位类型 类型(活动单位类型::兵);
+			const 单位类型 类型(单位类型::兵);
 			单位::活动单位配置 配置;
 			单位::Find活动单位配置(类型, 配置);
 			refSpace.造活动单位(ref视口.m_spPlayer, NickName(), { pos出生.x, pos出生.z + 6 }, 配置, 类型);
 		}
 		{
-			const 活动单位类型 类型(活动单位类型::三色坦克);
+			const 单位类型 类型(单位类型::三色坦克);
 			单位::活动单位配置 配置;
 			单位::Find活动单位配置(类型, 配置);
 
 			refSpace.造活动单位(ref视口.m_spPlayer, NickName(), { pos出生.x + 6, pos出生.z }, 配置, 类型);
 		}
 		{
-			const 活动单位类型 类型(活动单位类型::工程车);
+			const 单位类型 类型(单位类型::工程车);
 			单位::活动单位配置 配置;
 			单位::Find活动单位配置(类型, 配置);
 

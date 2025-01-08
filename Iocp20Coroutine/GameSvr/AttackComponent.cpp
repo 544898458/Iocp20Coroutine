@@ -19,11 +19,11 @@
 #include "临时阻挡Component.h"
 
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
-void AttackComponent::AddComponent(Entity& refEntity, const 活动单位类型 类型, const 单位::战斗配置& 配置)
+void AttackComponent::AddComponent(Entity& refEntity, const 单位类型 类型, const 单位::战斗配置& 配置)
 {
 	CHECK_VOID(!refEntity.m_spAttack);
-	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&, const 活动单位类型, const 单位::战斗配置&>(
-		refEntity, std::forward<const 活动单位类型&&>(类型), 配置);
+	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&, const 单位类型, const 单位::战斗配置&>(
+		refEntity, std::forward<const 单位类型&&>(类型), 配置);
 	//refEntity.m_spAttack->m_f攻击距离 = f攻击距离;
 	//refEntity.m_spAttack->m_f警戒距离 = f警戒距离;
 	//refEntity.m_spAttack->m_f伤害 = f伤害;
@@ -47,7 +47,7 @@ float AttackComponent::攻击距离(const float f目标建筑半边长) const
 	auto spOwner = m_refEntity.m_wpOwner.lock();
 	return m_战斗配置.f攻击距离 + f目标建筑半边长 + BuildingComponent::建筑半边长(*spOwner);
 }
-Position 怪物闲逛(const Position& refOld)
+Position AttackComponent::怪物闲逛(const Position& refOld)
 {
 	auto posTarget = refOld;
 	posTarget.x += std::rand() % 11 - 5;//随机走
@@ -55,7 +55,7 @@ Position 怪物闲逛(const Position& refOld)
 	return posTarget;
 }
 using namespace std;
-AttackComponent::AttackComponent(Entity& refEntity, const 活动单位类型 类型, const 单位::战斗配置& 配置) :
+AttackComponent::AttackComponent(Entity& refEntity, const 单位类型 类型, const 单位::战斗配置& 配置) :
 	m_refEntity(refEntity),
 	m_类型(类型),
 	m_fun空闲走向此处(怪物闲逛),
@@ -96,6 +96,12 @@ CoTaskBool AttackComponent::Co顶层()
 
 			auto posTarget = m_fun空闲走向此处(m_refEntity.Pos());
 			m_refEntity.m_refSpace.CrowdToolFindNerestPos(posTarget);
+			if (m_refEntity.Pos().DistanceLessEqual(posTarget, 3))
+			{
+				m_fun空闲走向此处 = 怪物闲逛;
+				continue;
+			}
+
 			走Component::WalkToPos(m_refEntity, posTarget);
 			continue;
 		}

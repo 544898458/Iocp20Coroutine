@@ -25,7 +25,7 @@ MonsterComponent::MonsterComponent(Entity& refThis)
 }
 
 
-std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const 活动单位类型 类型, const Position& refPos, const int count)
+std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const 单位类型 类型, const Position& refPos, const int count)
 {
 	std::vector<SpEntity> vecRet;
 	单位::怪配置 配置;

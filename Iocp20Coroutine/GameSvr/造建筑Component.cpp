@@ -13,9 +13,9 @@
 #include "地堡Component.h"
 #include "DefenceComponent.h"
 
-void 造建筑Component::AddComponent(Entity& refEntity, const 活动单位类型 类型)
+void 造建筑Component::AddComponent(Entity& refEntity, const 单位类型 类型)
 {
-	refEntity.m_sp造建筑 = std::make_shared<造建筑Component, Entity&, const 活动单位类型>(refEntity, std::forward<const 活动单位类型&&>(类型));
+	refEntity.m_sp造建筑 = std::make_shared<造建筑Component, Entity&, const 单位类型>(refEntity, std::forward<const 单位类型&&>(类型));
 }
 
 bool 造建筑Component::正在建造(Entity& refEntity)
@@ -26,7 +26,7 @@ bool 造建筑Component::正在建造(Entity& refEntity)
 	return refEntity.m_sp造建筑->m_cancel造建筑.operator bool();
 }
 
-造建筑Component::造建筑Component(Entity& refEntity, const 活动单位类型 类型) :m_refEntity(refEntity)
+造建筑Component::造建筑Component(Entity& refEntity, const 单位类型 类型) :m_refEntity(refEntity)
 {
 	switch (类型)
 	{
@@ -35,6 +35,7 @@ bool 造建筑Component::正在建造(Entity& refEntity)
 		m_set可造类型.insert(民房);
 		m_set可造类型.insert(兵厂);
 		m_set可造类型.insert(地堡);
+		m_set可造类型.insert(光子炮);
 		break;
 	default:
 		break;
@@ -46,7 +47,7 @@ bool 造建筑Component::正在建造(Entity& refEntity)
 	assert(!m_cancel造建筑.operator bool());
 }
 
-CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 建筑单位类型 类型)
+CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 单位类型 类型)
 {
 	if (m_set可造类型.end() == m_set可造类型.find(类型))
 	{
@@ -139,7 +140,7 @@ void 造建筑Component::TryCancel()
 }
 
 
-CoTask<SpEntity> 造建筑Component::CoAddBuilding(const 建筑单位类型 类型, const Position pos)
+CoTask<SpEntity> 造建筑Component::CoAddBuilding(const 单位类型 类型, const Position pos)
 {
 	单位::建筑单位配置 配置;
 	if (!单位::Find建筑单位配置(类型, 配置))
@@ -178,7 +179,7 @@ CoTask<SpEntity> 造建筑Component::CoAddBuilding(const 建筑单位类型 类型, const P
 
 		co_return{};
 	}
-	Space::GetSpacePlayer(m_refEntity).m_u32晶体矿-= 配置.建造.u16消耗晶体矿;
+	Space::GetSpacePlayer(m_refEntity).m_u32晶体矿 -= 配置.建造.u16消耗晶体矿;
 
 	PlayerComponent::Send资源(m_refEntity);
 
@@ -200,6 +201,13 @@ CoTask<SpEntity> 造建筑Component::CoAddBuilding(const 建筑单位类型 类型, const P
 		地堡Component::AddComponet(*spNewEntity);
 		break;
 	case 民房:break;
+	case 光子炮:
+	{
+		using namespace std;
+		单位::战斗配置 战斗 = { 20,20,3,0,"前摇动作",300ms,"攻击动作",300ms,"音效/PhoFir00","音效/explo1","" };
+		AttackComponent::AddComponent(*spNewEntity, 类型, 战斗);
+	}
+	break;
 	}
 	DefenceComponent::AddComponent(*spNewEntity, 配置.建造.u16初始Hp);
 	//spNewEntity->m_spBuilding->m_fun造活动单位 = 配置.fun造兵;
