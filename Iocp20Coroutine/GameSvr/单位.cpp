@@ -30,8 +30,8 @@ namespace 单位
 
 	std::unordered_map<资源类型, 资源单位配置> g_map资源单位配置 =
 	{
-		{晶体矿,{{"晶体矿"	, "tree_large"	}}},
-		{燃气矿,{{"燃气矿"	, "house_type03"}}},
+		{晶体矿,{{"晶体矿"	, "资源/晶体矿"	}}},
+		{燃气矿,{{"燃气矿"	, "资源/燃气矿"}}},
 	};
 
 	template<class K, class V>
