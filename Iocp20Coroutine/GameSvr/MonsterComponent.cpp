@@ -32,8 +32,8 @@ std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const 单位类
 	单位::Find怪配置(类型, 配置);
 	for (int i = 0; i < count; ++i)
 	{
-		SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const 单位::单位配置& >(
-			refPos, refSpace, 配置.配置);
+		SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
+			refPos, refSpace, std::forward<const 单位类型&&>(类型), 配置.配置);
 		AttackComponent::AddComponent(*spEntityMonster, 类型, 配置.战斗);
 		DefenceComponent::AddComponent(*spEntityMonster, 配置.u16初始Hp);
 		走Component::AddComponent(*spEntityMonster);

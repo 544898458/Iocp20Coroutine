@@ -342,7 +342,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 			b已播放声音 = true;
 			if (ref.m_spAttack)
 			{
-				switch (ref.m_spAttack->m_类型)
+				switch (ref.m_类型)
 				{
 				case 兵:播放声音(msg.b遇到敌人自动攻击 ? "语音/是男声正经版" : "语音/明白男声正经版"); break;//Standing by. 待命中
 				case 近战兵:播放声音("tfbYes03"); break;//Checked up and good to go. 检查完毕，准备动身
@@ -385,7 +385,8 @@ void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fu
 {
 	CHECK_VOID(!m_wpSpace.expired());
 	auto sp = m_wpSpace.lock();
-	for (const auto id : m_vecSelectedEntity)
+	auto temp = m_vecSelectedEntity;//防止循环中修改容器
+	for (const auto id : temp)
 	{
 		auto itFind = sp->m_mapEntity.find(id);
 		if (itFind == sp->m_mapEntity.end())
@@ -480,8 +481,8 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 		Send(MsgNotifyPos(*spEntity));
 	}
 
-	SpEntity spEntityViewPort = std::make_shared<Entity, const Position&, Space&, const 单位::单位配置&>(
-		{ 0.0 }, *spSpace, { "视口","smoke", "" });
+	SpEntity spEntityViewPort = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
+		{ 0.0 }, *spSpace, 视口, { "视口","smoke", "" });
 	spSpace->m_mapPlayer[NickName()].m_mapWpEntity[spEntityViewPort->Id] = (spEntityViewPort);
 	PlayerComponent::AddComponent(*spEntityViewPort, *this);
 	{

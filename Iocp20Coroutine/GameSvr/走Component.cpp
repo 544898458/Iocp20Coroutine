@@ -154,7 +154,7 @@ CoTaskBool 走Component::Co走进地堡(WpEntity wpEntity地堡)
 
 	if (m_refEntity.m_spAttack)
 	{
-		switch (m_refEntity.m_spAttack->m_类型) 
+		switch (m_refEntity.m_类型) 
 		{
 			case 工程车:PlayerComponent::播放声音(m_refEntity, "语音/明白女声可爱版", ""); break;
 			case 兵:PlayerComponent::播放声音(m_refEntity, "语音/明白男声正经版", ""); break;

@@ -28,7 +28,7 @@ namespace 单位
 		{近战兵,{{"跳虫", "活动单位/跳虫"},	{15, 3,	  5, 0.35f,	"",			0s,			  "attack",		400ms,	"音效/利爪攻击","音效/ZZeDth00",	"died"}, 60} },
 	};
 
-	std::unordered_map<资源类型, 资源单位配置> g_map资源单位配置 =
+	std::unordered_map<单位类型, 资源单位配置> g_map资源单位配置 =
 	{
 		{晶体矿,{{"晶体矿"	, "资源/晶体矿"	}}},
 		{燃气矿,{{"燃气矿"	, "资源/燃气矿"}}},
@@ -56,7 +56,7 @@ namespace 单位
 	{
 		return Find配置(g_map活动单位配置, 类型, refOut);
 	}
-	bool Find资源单位配置(const 资源类型 类型, 资源单位配置& refOut)
+	bool Find资源单位配置(const 单位类型 类型, 资源单位配置& refOut)
 	{
 		return Find配置(g_map资源单位配置, 类型, refOut);
 	}

@@ -7,7 +7,7 @@ class Entity;
 class AttackComponent final
 {
 public:
-	AttackComponent(Entity& refEntity, const 单位类型 类型, const 单位::战斗配置& 配置);
+	AttackComponent(Entity& refEntity, const 单位::战斗配置& 配置);
 	static Position 怪物闲逛(const Position& refOld);
 	void TryCancel(const bool bDestroy = false);
 	void Update();
@@ -25,7 +25,6 @@ public:
 	static const int INVALID_AGENT_IDX = -1;//0是合法值
 	int m_idxCrowdAgent = INVALID_AGENT_IDX;
 	Entity& m_refEntity;
-	const 单位类型 m_类型;
 	CoTaskCancel m_TaskCancel;
 	typedef Position(*Fun空闲走向目标)(const Position&);
 	Fun空闲走向目标 m_fun空闲走向此处;

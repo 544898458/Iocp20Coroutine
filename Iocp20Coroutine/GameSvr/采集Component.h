@@ -3,7 +3,7 @@
 #include "../CoRoutine/CoTask.h"
 
 class PlayerGateSession_Game;
-enum 资源类型;
+enum 单位类型;
 class 采集Component
 {
 public:
@@ -15,7 +15,7 @@ public:
 private:
 	static constexpr uint32_t Max携带矿() { return 5; }
 	uint32_t m_u32携带矿 = 0;
-	资源类型 m_携带矿类型;
+	单位类型 m_携带矿类型;
 	Entity& m_refEntity;
 };
 

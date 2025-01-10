@@ -22,8 +22,8 @@ extern std::unordered_map<int, uint64_t> m_mapEntityId;
 void AttackComponent::AddComponent(Entity& refEntity, const 单位类型 类型, const 单位::战斗配置& 配置)
 {
 	CHECK_VOID(!refEntity.m_spAttack);
-	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&, const 单位类型, const 单位::战斗配置&>(
-		refEntity, std::forward<const 单位类型&&>(类型), 配置);
+	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&, const 单位::战斗配置&>(
+		refEntity, 配置);
 	//refEntity.m_spAttack->m_f攻击距离 = f攻击距离;
 	//refEntity.m_spAttack->m_f警戒距离 = f警戒距离;
 	//refEntity.m_spAttack->m_f伤害 = f伤害;
@@ -55,9 +55,8 @@ Position AttackComponent::怪物闲逛(const Position& refOld)
 	return posTarget;
 }
 using namespace std;
-AttackComponent::AttackComponent(Entity& refEntity, const 单位类型 类型, const 单位::战斗配置& 配置) :
+AttackComponent::AttackComponent(Entity& refEntity, const 单位::战斗配置& 配置) :
 	m_refEntity(refEntity),
-	m_类型(类型),
 	m_fun空闲走向此处(怪物闲逛),
 	m_战斗配置(配置)
 {
@@ -155,7 +154,7 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
-			if (m_类型 == 三色坦克)
+			if (m_refEntity.m_类型 == 三色坦克)
 			{
 				if (co_await CoAttack位置(refTarget.Pos(), BuildingComponent::建筑半边长(refTarget), m_cancelAttack))
 					co_return true;
@@ -318,8 +317,8 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 
 		播放攻击音效();
 		{
-			SpEntity spEntity特效 = std::make_shared<Entity, const Position&, Space&, const 单位::单位配置&>(
-				posTarget, m_refEntity.m_refSpace, { "特效" ,"特效/黄光爆闪","" });
+			SpEntity spEntity特效 = std::make_shared<Entity, const Position&, Space&, 单位类型, const 单位::单位配置&>(
+				posTarget, m_refEntity.m_refSpace, 特效, { "特效" ,"特效/黄光爆闪","" });
 			m_refEntity.m_refSpace.AddEntity(spEntity特效, 0);
 			spEntity特效->BroadcastEnter();
 			spEntity特效->CoDelayDelete().RunNew();

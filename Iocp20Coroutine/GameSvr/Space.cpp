@@ -203,7 +203,7 @@ int Space::Get怪物单位数()
 		});
 }
 
-int Space::Get资源单位数(const 资源类型 类型)
+int Space::Get资源单位数(const 单位类型 类型)
 {
 	return Get单位数([类型](const Entity& refEntity)
 		{
@@ -320,8 +320,8 @@ inline void Space::SpacePlayer::Erase(uint64_t u64Id)
 
 SpEntity Space::造活动单位(std::shared_ptr<PlayerComponent> &refSpPlayer可能空, const std::string &strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型)
 {
-	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位::单位配置&>(
-		pos, *this, 配置.配置);
+	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
+		pos, *this, std::forward<const 单位类型&&>(类型), 配置.配置);
 	PlayerComponent::AddComponent(*spNewEntity, refSpPlayer可能空, strNickName);
 	AttackComponent::AddComponent(*spNewEntity, 类型, 配置.战斗);
 	DefenceComponent::AddComponent(*spNewEntity, 配置.制造.u16初始Hp);

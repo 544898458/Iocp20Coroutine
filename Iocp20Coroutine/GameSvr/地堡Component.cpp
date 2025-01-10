@@ -85,4 +85,6 @@ void 地堡Component::全都出地堡()
 		sp->m_wpOwner.reset();
 	}
 	list.clear();
+
+	EntitySystem::BroadcastEntity描述(m_refEntity, std::format("地堡是空的", m_listSpEntity.size()));
 }

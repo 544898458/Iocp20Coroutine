@@ -25,8 +25,9 @@
 #include "PlayerNickNameComponent.h"
 using namespace std;
 
-Entity::Entity(const Position& pos, Space& space, const 单位::单位配置& ref配置) :
-	Id((uint64_t)this), m_配置(ref配置), m_refSpace(space), m_Pos(pos)
+Entity::Entity(const Position& pos, Space& space, const 单位类型 类型, const 单位::单位配置& ref配置) :
+	Id((uint64_t)this), m_配置(ref配置), m_refSpace(space), m_Pos(pos),
+	m_类型(类型)
 {
 }
 

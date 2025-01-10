@@ -117,7 +117,7 @@ CoTaskBool 造建筑Component::Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel)
 
 	if (m_refEntity.m_spAttack)
 	{
-		switch (m_refEntity.m_spAttack->m_类型)
+		switch (m_refEntity.m_类型)
 		{
 		case 工程车:PlayerComponent::播放声音(m_refEntity, "语音/建造完成女声可爱版"); break;
 		default:break;
@@ -186,8 +186,8 @@ CoTask<SpEntity> 造建筑Component::CoAddBuilding(const 单位类型 类型, const Posit
 	//加建筑
 	//CHECK_CO_RET_0(!m_wpSpace.expired());
 	//auto spSpace = m_wpSpace.lock();
-	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位::单位配置& >(
-		pos, m_refEntity.m_refSpace, 配置.配置);
+	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置& >(
+		pos, m_refEntity.m_refSpace, std::forward<const 单位类型&&>(类型), 配置.配置);
 	//spNewEntity->AddComponentAttack();
 	PlayerComponent::AddComponent(*spNewEntity, m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity));
 	BuildingComponent::AddComponent(*spNewEntity, 类型, 配置.f半边长);

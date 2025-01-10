@@ -99,13 +99,6 @@ enum MsgId
 };
 MSGPACK_ADD_ENUM(MsgId);
 
-enum 资源类型
-{
-	晶体矿,//Minerals
-	燃气矿,//Vespene Gas
-};
-MSGPACK_ADD_ENUM(资源类型);
-
 enum 单位类型
 {
 	工程车,//空间工程车Space Construction Vehicle。可以采矿，采气，也可以简单攻击
@@ -118,6 +111,12 @@ enum 单位类型
 	民房,//供给站(Supply Depot)
 	地堡,//掩体; 地堡(Bunker),可以进兵
 	光子炮,//Photon Cannon
+
+	特效,
+	视口,
+
+	晶体矿,//Minerals
+	燃气矿,//Vespene Gas
 };
 MSGPACK_ADD_ENUM(单位类型);
 
