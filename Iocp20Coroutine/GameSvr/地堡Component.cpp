@@ -6,6 +6,7 @@
 #include "EntitySystem.h"
 #include "PlayerComponent.h"
 #include "AoiComponent.h"
+#include "PlayerGateSession_Game.h"
 
 void 地堡Component::AddComponet(Entity& refEntity)
 {
@@ -25,7 +26,7 @@ void 地堡Component::OnBeforeDelayDelete()
 	全都出地堡();
 }
 
-void 地堡Component::进(Space& refSpace, uint64_t idEntity)
+void 地堡Component::进(Space& refSpace, Entity& refEntity)
 {
 	if (m_refEntity.IsDead())
 	{
@@ -39,22 +40,23 @@ void 地堡Component::进(Space& refSpace, uint64_t idEntity)
 	}
 
 	//从地图上删除，记录在地堡内
-	auto wp = refSpace.GetEntity(idEntity);
-	CHECK_RET_VOID(!wp.expired());
-	auto sp = wp.lock();
-	if (sp->IsDead())
+	if (refEntity.IsDead())
 	{
 		LOG(INFO) << "阵亡单位不能进地堡";//assert(false);
 		return;
 	}
-	sp->SetPos(m_refEntity.Pos());
-	sp->BroadcastLeave();//OnDestroy();
-	if (sp->m_upAoi)
-		sp->m_upAoi->离开Space();
+	refEntity.SetPos(m_refEntity.Pos());
+	refEntity.BroadcastLeave();//OnDestroy();
+	if (refEntity.m_upAoi)
+		refEntity.m_upAoi->离开Space();
 
-	refSpace.m_mapEntity.erase(idEntity);
-	m_listSpEntity.push_back(sp);
-	sp->m_wpOwner = m_refEntity.weak_from_this();
+	m_listSpEntity.push_back(refEntity.shared_from_this());
+	refSpace.m_mapEntity.erase(refEntity.Id);
+	
+	refEntity.m_wpOwner = m_refEntity.weak_from_this();
+
+	if (refEntity.m_spPlayer)
+		refEntity.m_spPlayer->m_refSession.删除选中(refEntity.Id);
 
 	EntitySystem::BroadcastEntity描述(m_refEntity, std::format("地堡内有{0}人", m_listSpEntity.size()));
 }

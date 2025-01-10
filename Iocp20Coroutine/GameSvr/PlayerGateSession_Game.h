@@ -34,6 +34,7 @@ public:
 	void 播放声音(const std::string& refStr声音, const std::string& str文本 = "");
 
 	void Send设置视口(const Entity& refEntity);
+	void 删除选中(const uint64_t id);
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
 	/// <summary>
@@ -79,7 +80,7 @@ private:
 
 	GameSvrSession& m_refGameSvrSession;
 
-	std::list<uint64_t> m_listSelectedEntity;
+	std::vector<uint64_t> m_vecSelectedEntity;
 	std::string m_strNickName;
 	uint32_t m_snSend = 0;
 	FunCancel m_funCancel进地图;

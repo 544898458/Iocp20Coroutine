@@ -12,7 +12,7 @@ public:
 	static void AddComponet(Entity& refEntity);
 	void OnDestroy();
 	void OnBeforeDelayDelete();
-	void 进(Space& refSpace, uint64_t idEntity);
+	void 进(Space& refSpace, Entity& refEntity);
 	void Update();
 	void 全都出地堡();
 	Entity& m_refEntity;

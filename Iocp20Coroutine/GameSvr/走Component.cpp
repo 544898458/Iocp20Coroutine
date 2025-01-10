@@ -172,7 +172,7 @@ CoTaskBool 走Component::Co走进地堡(WpEntity wpEntity地堡)
 
 		if (m_refEntity.DistanceLessEqual(*spEntity地堡, m_refEntity.攻击距离() + BuildingComponent::建筑半边长(*spEntity地堡)))
 		{
-			spEntity地堡->m_sp地堡->进(m_refEntity.m_refSpace, m_refEntity.Id);
+			spEntity地堡->m_sp地堡->进(m_refEntity.m_refSpace, m_refEntity);
 
 			co_return false;
 		}

@@ -374,11 +374,18 @@ void PlayerGateSession_Game::Send设置视口(const Entity& refEntity)
 	Send<Msg设置视口>({ .pos视口 = refEntity.Pos() });
 }
 
+void PlayerGateSession_Game::删除选中(const uint64_t id)
+{
+	auto temp = m_vecSelectedEntity;
+	temp.erase(std::remove(temp.begin(), temp.end(), id), temp.end());
+	选中单位(temp);
+}
+
 void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fun)
 {
 	CHECK_VOID(!m_wpSpace.expired());
 	auto sp = m_wpSpace.lock();
-	for (const auto id : m_listSelectedEntity)
+	for (const auto id : m_vecSelectedEntity)
 	{
 		auto itFind = sp->m_mapEntity.find(id);
 		if (itFind == sp->m_mapEntity.end())
@@ -672,7 +679,7 @@ void PlayerGateSession_Game::OnRecv(const Msg框选& msg)
 
 void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
 {
-	m_listSelectedEntity.clear();
+	m_vecSelectedEntity.clear();
 	bool b已发送选中音效(false);
 	//for (const auto [k, wp] : m_mapWpEntity)
 	if (m_wpSpace.expired())
@@ -705,7 +712,7 @@ void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
 		if (&spEntity->m_spPlayer->m_refSession != this)//不是自己的单位
 			continue;
 
-		m_listSelectedEntity.push_back(spEntity->Id);
+		m_vecSelectedEntity.push_back(spEntity->Id);
 		if (!b已发送选中音效)
 		{
 			b已发送选中音效 = true;
@@ -755,7 +762,7 @@ void PlayerGateSession_Game::Send选中音效(const Entity& refEntity)
 void PlayerGateSession_Game::Send选中单位Responce()
 {
 	MsgSelectRoles msgResponse;
-	msgResponse.ids.insert(msgResponse.ids.end(), m_listSelectedEntity.begin(), m_listSelectedEntity.end());
+	msgResponse.ids.insert(msgResponse.ids.end(), m_vecSelectedEntity.begin(), m_vecSelectedEntity.end());
 	Send(msgResponse);
 }
 
