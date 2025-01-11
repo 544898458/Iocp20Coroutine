@@ -8,5 +8,6 @@ namespace CoTimer
 	CoAwaiterBool& Wait(const std::chrono::system_clock::duration&, FunCancel& cancel);
 	CoAwaiterBool& WaitNextUpdate(FunCancel& cancel);
 	void Update();
+	void OnAppExit();
 };
 

@@ -15,6 +15,7 @@ public:
 	void OnAdd(Session&);
 	void OnDel();
 	void Update();
+	void OnAppExit();
 
 	Sessions<GameSvrSession> m_Sessions;
 };

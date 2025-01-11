@@ -180,6 +180,12 @@ int main(void)
 		CoTask<int>::Process();
 	}
 
+	accept.m_Server.OnAppExit();
+	g_ConnectToWorldSvr->Session.OnAppExit();
+	Space::StaticOnAppExit();
+	CoTimer::OnAppExit();
+	CoTask<int>::OnAppExit();
+
 	if (funCancelSpawnMonster)
 		funCancelSpawnMonster();
 

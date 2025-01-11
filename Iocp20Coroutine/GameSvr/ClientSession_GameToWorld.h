@@ -42,6 +42,8 @@ public:
 	/// 工作线程中（单线程）调用
 	/// </summary>
 	void Process();
+	void OnAppExit();
+
 	template<class T> std::deque<T>& GetQueue();
 	uint32_t m_snRecv = 0;
 

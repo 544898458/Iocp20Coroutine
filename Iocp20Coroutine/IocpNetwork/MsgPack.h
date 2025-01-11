@@ -42,5 +42,24 @@ namespace MsgPack
 		memcpy(&vec[2], str.data(), usSize);
 		refFun(&vec[0], (int)vec.size());
 	}
+
+	template<class T_Msg, int BUF_LEN>
+	static bool RecvMsgpack(T_Msg& refOut, const char (&buf)[BUF_LEN], const uint16_t u16Size)
+	{
+		try
+		{
+			msgpack::object_handle oh = msgpack::unpack(buf, u16Size);
+			msgpack::object obj = oh.get();
+
+			refOut = obj.as<T_Msg>();
+			return true;
+		}
+		catch (const msgpack::type_error& error)
+		{
+			LOG(ERROR) << typeid(T_Msg).name() << ",·´ÐòÁÐ»¯Ê§°Ü," << error.what();
+			assert(false);
+			return false;
+		}
+	}
 };
 

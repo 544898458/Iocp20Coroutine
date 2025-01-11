@@ -13,6 +13,7 @@
 #include "走Component.h"
 #include "采集Component.h"
 #include "造建筑Component.h"
+#include <fstream>
 
 Space::Space(const 副本配置& ref) :m_配置(ref)
 {
@@ -22,6 +23,56 @@ Space::Space(const 副本配置& ref) :m_配置(ref)
 
 Space::~Space()
 {
+}
+
+std::string GetFileName(const uint16_t idSpace)
+{
+	std::ostringstream oss;
+	oss << idSpace << ".space";
+	return oss.str();
+}
+
+void Space::Save(const uint8_t idSpace)
+{
+	const auto strFileName = GetFileName(idSpace);
+	std::ofstream file(strFileName, std::ios::binary);
+	for (auto [id, spEntity] : m_mapEntity)
+	{
+		if (!spEntity->m_spPlayerNickName)
+			continue;//只存玩家单位
+
+		if (!spEntity->m_spBuilding)
+			continue;//只存建筑
+
+		spEntity->Save(file);
+	}
+	file.close();// 关闭文件
+	LOG(INFO) << "已写入" << strFileName;
+}
+
+void Space::Load(const uint8_t idSpace)
+{
+	const auto strFileName = GetFileName(idSpace);
+	std::ifstream file(strFileName, std::ios::binary);
+	// 获取文件大小
+	file.seekg(0, std::ios::end);
+	std::streamsize sizeFile = file.tellg();
+	file.seekg(0, std::ios::beg);
+	while (true)
+	{
+		std::streamsize size已读取 = file.tellg();
+		if (size已读取 >= sizeFile)
+			break;
+
+		uint16_t u16Size(0);
+		file.read((char*)&u16Size, sizeof(u16Size));
+		char buf[1024] = { 0 };
+		CHECK_GE_VOID(sizeof(buf), u16Size);
+		file.read(buf, u16Size);
+		Entity::Load(*this, buf, u16Size);
+	}
+	
+	file.close();// 关闭文件
 }
 
 WpEntity Space::GetEntity(const int64_t id)
@@ -109,6 +160,7 @@ WpSpace Space::AddSpace(const uint8_t idSpace)
 	}
 	auto [iterNew, bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space,const 副本配置&>(配置) });
 	assert(bOk);
+	iterNew->second->Load(idSpace);
 	return iterNew->second;
 }
 
@@ -119,6 +171,14 @@ WpSpace Space::GetSpace(const uint8_t idSpace)
 		return {};
 
 	return iterFind->second;
+}
+
+void Space::StaticOnAppExit()
+{
+	for (auto [id, sp] : g_mapSpace)
+	{
+		sp->Save(id);
+	}
 }
 
 void Space::StaticUpdate()
@@ -318,7 +378,7 @@ inline void Space::SpacePlayer::Erase(uint64_t u64Id)
 }
 
 
-SpEntity Space::造活动单位(std::shared_ptr<PlayerComponent> &refSpPlayer可能空, const std::string &strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型)
+SpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, const std::string& strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型)
 {
 	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
 		pos, *this, std::forward<const 单位类型&&>(类型), 配置.配置);

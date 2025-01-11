@@ -26,6 +26,8 @@ public:
 	Space(const 副本配置& ref配置);// std::string& stf寻路文件);
 	Space(const Space&) = delete;
 	~Space();
+	void Save(uint8_t idSpace);
+	void Load(uint8_t idSpace);
 	template<class T>
 	void Broadcast(const T& msg);
 
@@ -35,6 +37,7 @@ public:
 	//SpaceId：1无限刷怪
 	static WpSpace AddSpace(const uint8_t idSpace);
 	static WpSpace GetSpace(const uint8_t idSpace);
+	static void StaticOnAppExit();
 	static void StaticUpdate();
 	void Update();
 	bool CrowdTool可站立(const Position& refPos);

@@ -10,5 +10,6 @@ namespace EntitySystem
 	bool Is视口(const Entity& refEntity);
 	bool 距离友方单位太近(Entity& refEntity);
 	const std::string GetNickName(Entity& refEntity);
+	bool Is建筑(const 单位类型 类型);
 };
 

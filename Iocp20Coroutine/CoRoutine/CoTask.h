@@ -220,6 +220,10 @@ public:
 			LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
 		}
 	}
+	static void OnAppExit()
+	{
+
+	}
 	static std::list<CoTask> m_listCo;
 	std::mutex m_mutex;
 private:

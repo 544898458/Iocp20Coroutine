@@ -209,10 +209,9 @@ CoTask<SpEntity> 造建筑Component::CoAddBuilding(const 单位类型 类型, const Posit
 	}
 	break;
 	}
+
 	DefenceComponent::AddComponent(*spNewEntity, 配置.建造.u16初始Hp);
-	//spNewEntity->m_spBuilding->m_fun造活动单位 = 配置.fun造兵;
 	Space::GetSpacePlayer(m_refEntity).m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
-	//spSpace->m_mapEntity.insert({ (int64_t)spNewEntity.get() ,spNewEntity });//全地图单位
 	m_refEntity.m_refSpace.AddEntity(spNewEntity);
 
 	spNewEntity->BroadcastEnter();

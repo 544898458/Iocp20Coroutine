@@ -30,7 +30,7 @@ void 采集Component::采集(PlayerGateSession_Game& refGateSession, WpEntity wp目标
 	}
 	走Component::Cancel所有包含走路的协程(m_refEntity);
 	PlayerComponent::播放声音(m_refEntity, "语音/明白女声可爱版");
-	m_TaskCancel.TryRun(Co采集(refGateSession, wp目标资源));
+	m_TaskCancel.TryRun(Co采集(wp目标资源));
 }
 
 std::tuple<std::shared_ptr<Entity>, std::shared_ptr<资源Component>> Get目标资源(WpEntity& refWp目标资源)
@@ -43,7 +43,7 @@ std::tuple<std::shared_ptr<Entity>, std::shared_ptr<资源Component>> Get目标资源(
 	return { sp目标资源 ,sp资源 };
 }
 
-CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntity wp目标资源)
+CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 {
 	using namespace std;
 	while (true)
@@ -91,7 +91,8 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 		{
 			if (m_refEntity.DistanceLessEqual(*wpEntity基地.lock(), m_refEntity.攻击距离() + BuildingComponent::建筑半边长(*wpEntity基地.lock())))//在基地附近，满载矿，全部放进基地（直接加钱）
 			{
-				if (co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//把矿放进基地耗时
+				EntitySystem::BroadcastEntity描述(m_refEntity, "正在卸矿");
+				if (co_await CoTimer::Wait(2s, m_TaskCancel.cancel))//把矿放进基地耗时
 					co_return true;
 
 				const auto u32携带矿 = m_u32携带矿;
@@ -111,7 +112,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 				else
 				{
 					Space::GetSpacePlayer(m_refEntity).m_u32燃气矿 += u32携带矿;
-					refGateSession.Send资源();
+					PlayerComponent::Send资源(m_refEntity);
 				}
 				continue;
 			}
@@ -133,7 +134,7 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 
 				if (!m_refEntity.DistanceLessEqual(*spEntity资源, m_refEntity.攻击距离()))
 				{
-					//距离目标矿太远，走向晶体矿
+					EntitySystem::BroadcastEntity描述(m_refEntity, std::format("走向{0}", spEntity资源->m_类型 == 晶体矿 ? "晶体矿" : "燃气矿"));
 					//m_refEntity.m_spAttack->TryCancel();
 					if (co_await AiCo::WalkToTarget(m_refEntity, wp目标资源.lock(), m_TaskCancel.cancel, false))
 						co_return true;//中断
@@ -141,7 +142,6 @@ CoTaskBool 采集Component::Co采集(PlayerGateSession_Game& refGateSession, WpEntit
 			}
 
 			//在目标矿附近
-
 			CoEvent<MyEvent::开始采集晶体矿>::OnRecvEvent(false, {});
 			if (co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//采矿1个矿耗时
 				co_return true;//中断

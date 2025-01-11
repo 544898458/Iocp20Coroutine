@@ -32,6 +32,10 @@ void ClientSession_GameToWorld::Process()
 	}
 }
 
+void ClientSession_GameToWorld::OnAppExit()
+{
+}
+
 
 void ClientSession_GameToWorld::OnRecv(const MsgSay& msg)
 {

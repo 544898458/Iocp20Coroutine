@@ -106,11 +106,15 @@ enum 单位类型
 	近战兵,//火蝠，喷火兵Firebat
 	三色坦克,
 
+	建筑Min非法,
+
 	基地,//指挥中心(Command Center),用来造工程车()
 	兵厂,//兵营(Barracks)，用来造兵
 	民房,//供给站(Supply Depot)
 	地堡,//掩体; 地堡(Bunker),可以进兵
 	光子炮,//Photon Cannon
+
+	建筑Max非法,
 
 	特效,
 	视口,
@@ -119,6 +123,7 @@ enum 单位类型
 	燃气矿,//Vespene Gas
 };
 MSGPACK_ADD_ENUM(单位类型);
+
 
 struct MsgHead
 {

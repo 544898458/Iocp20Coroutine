@@ -26,12 +26,14 @@ class AoiComponent;
 class PlayerGateSession_Game;
 
 
-class Entity final:public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
+class Entity final :public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
 public:
 	Entity(const Position& pos, Space& refSpace, 单位类型 类型, const 单位::单位配置& ref配置);
 	Entity(const Entity&) = delete;
 	~Entity();
+	void Save(std::ofstream& refOf);
+	static bool Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size);
 	void Update();
 	bool IsDead()const;
 	bool NeedDelete()const { return m_bNeedDelete; }

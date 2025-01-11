@@ -48,6 +48,10 @@ void GameSvr::Update()
 	*/
 }
 
+void GameSvr::OnAppExit()
+{
+}
+
 
 template void Sessions<GameSvrSession>::Broadcast<MsgAddRoleRet >(const MsgAddRoleRet&);
 template void Sessions<GameSvrSession>::Broadcast<MsgNotifyPos>(const MsgNotifyPos&);

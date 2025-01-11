@@ -48,7 +48,7 @@ bool EntitySystem::距离友方单位太近(Entity& refEntity)
 
 			if (!ref.m_spAttack)
 				return false;
-			
+
 			return (bool)ref.m_spAttack->m_cancelAttack;
 		});
 	bool b距离友方单位太近 = false;
@@ -65,4 +65,9 @@ const std::string EntitySystem::GetNickName(Entity& refEntity)
 		return refEntity.m_spPlayerNickName->m_strNickName;
 
 	return {};
+}
+
+bool EntitySystem::Is建筑(const 单位类型 类型)
+{
+	return 建筑Min非法 < 类型 && 类型 < 建筑Max非法;
 }

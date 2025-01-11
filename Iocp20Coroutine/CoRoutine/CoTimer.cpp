@@ -109,4 +109,7 @@ namespace CoTimer
 			g_multiTimer.erase(kv.first);
 		}
 	}
+	void OnAppExit()
+	{
+	}
 }

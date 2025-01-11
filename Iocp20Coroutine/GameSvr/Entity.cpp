@@ -23,6 +23,9 @@
 #include "AoiComponent.h"
 #include "EntitySystem.h"
 #include "PlayerNickNameComponent.h"
+#include "../IocpNetwork/MsgPack.h"
+#include <fstream>
+
 using namespace std;
 
 Entity::Entity(const Position& pos, Space& space, const 单位类型 类型, const 单位::单位配置& ref配置) :
@@ -55,6 +58,57 @@ bool Entity::IsDead() const
 Entity::~Entity()
 {
 	LOG(INFO) << "~Entity()," << Id;
+}
+
+struct SaveEntity
+{
+	单位类型 m_类型;
+	单位::单位配置 m_配置;
+	Position m_Pos;
+	std::string m_strNickName;
+	MSGPACK_DEFINE(m_类型, m_配置, m_Pos, m_strNickName);
+};
+
+void Entity::Save(std::ofstream& refOf)
+{
+	SaveEntity save = { m_类型,m_配置, m_Pos, EntitySystem::GetNickName(*this) };
+	MsgPack::SendMsgpack(save, [&refOf](const void* buf, int len) { refOf.write((const char*)buf, len); }, true);
+}
+
+bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
+{
+	SaveEntity load;
+	CHECK_FALSE(MsgPack::RecvMsgpack(load, buf, u16Size));
+	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, 单位类型, const 单位::单位配置&>(
+		load.m_Pos, refSpace, std::forward<单位类型&&>(load.m_类型), load.m_配置);
+	if (EntitySystem::Is建筑(load.m_类型))
+	{
+		PlayerComponent::AddComponent(*spNewEntity, {}, load.m_strNickName);
+		单位::建筑单位配置 建筑配置;
+		单位::Find建筑单位配置(load.m_类型, 建筑配置);
+		BuildingComponent::AddComponent(*spNewEntity, load.m_类型, 建筑配置.f半边长);
+
+
+		switch (load.m_类型)
+		{
+		case 基地:
+		{
+			造活动单位Component::AddComponent(*spNewEntity, load.m_类型);
+		}
+		break;
+		case 民房:break;
+		default:
+			LOG(WARNING) << "不能反序列化单位:" << load.m_类型;
+			return false;
+		}
+		
+		DefenceComponent::AddComponent(*spNewEntity, 建筑配置.建造.u16初始Hp);
+		refSpace.m_mapPlayer[load.m_strNickName].m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
+		refSpace.AddEntity(spNewEntity);
+
+	}
+
+	return true;
 }
 
 //主线程单线程执行

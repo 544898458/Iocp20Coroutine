@@ -8,6 +8,7 @@ namespace 单位
 		std::string strName;
 		std::string strPrefabName;
 		std::string str选中音效;
+		MSGPACK_DEFINE(strName, strPrefabName, str选中音效);
 	};
 	struct 制造配置
 	{
