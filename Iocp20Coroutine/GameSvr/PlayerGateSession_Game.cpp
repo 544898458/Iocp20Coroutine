@@ -479,6 +479,8 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 		LOG(INFO) << spEntity->NickName() << ",发给单人," << spEntity->Id;
 		Send(MsgAddRoleRet(*spEntity));
 		Send(MsgNotifyPos(*spEntity));
+		if (spEntity->m_spBuilding && spEntity->m_spBuilding->m_n建造进度百分比 < MAX建造百分比)
+			Send<MsgEntity描述>({ .idEntity = spEntity->Id, .str描述 = StrConv::GbkToUtf8(std::format("建造进度{0}%",spEntity->m_spBuilding->m_n建造进度百分比)) });
 	}
 
 	SpEntity spEntityViewPort = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(

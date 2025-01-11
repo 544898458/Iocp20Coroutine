@@ -85,27 +85,11 @@ bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
 	{
 		PlayerComponent::AddComponent(*spNewEntity, {}, load.m_strNickName);
 		单位::建筑单位配置 建筑配置;
-		单位::Find建筑单位配置(load.m_类型, 建筑配置);
-		BuildingComponent::AddComponent(*spNewEntity, load.m_类型, 建筑配置.f半边长);
+		CHECK_FALSE(单位::Find建筑单位配置(load.m_类型, 建筑配置));
+		造建筑Component::根据建筑类型AddComponent(refSpace, load.m_类型, *spNewEntity, {}, load.m_strNickName, 建筑配置);
 
-
-		switch (load.m_类型)
-		{
-		case 基地:
-		{
-			造活动单位Component::AddComponent(*spNewEntity, load.m_类型);
-		}
-		break;
-		case 民房:break;
-		default:
-			LOG(WARNING) << "不能反序列化单位:" << load.m_类型;
-			return false;
-		}
-		
-		DefenceComponent::AddComponent(*spNewEntity, 建筑配置.建造.u16初始Hp);
-		refSpace.m_mapPlayer[load.m_strNickName].m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
-		refSpace.AddEntity(spNewEntity);
-
+		CHECK_NOTNULL_RET_FALSE(spNewEntity->m_spBuilding);
+		spNewEntity->m_spBuilding->m_n建造进度百分比 = MAX建造百分比;
 	}
 
 	return true;

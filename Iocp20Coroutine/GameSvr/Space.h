@@ -54,7 +54,7 @@ public:
 	/// </summary>
 	/// <param name="spNewEntity"></param>
 	/// <param name="i32视野范围">如果是0就用警戒范围当成视野范围</param>
-	void AddEntity(SpEntity& spNewEntity, const int32_t i32视野范围 = 0);
+	void AddEntity(SpEntity spNewEntity, const int32_t i32视野范围 = 0);
 	void 所有玩家全退出();
 	void OnDestory();
 	WpEntity Get最近的Entity支持地堡中的单位(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件);

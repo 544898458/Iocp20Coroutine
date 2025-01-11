@@ -304,7 +304,7 @@ int Space::Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位
 	return i32单位数;
 }
 
-void Space::AddEntity(SpEntity& spNewEntity, const int32_t i32视野范围)
+void Space::AddEntity(SpEntity spNewEntity, const int32_t i32视野范围)
 {
 	m_mapEntity.insert({ spNewEntity->Id ,spNewEntity });//全地图单位
 	AoiComponent::Add(*this, *spNewEntity, i32视野范围);

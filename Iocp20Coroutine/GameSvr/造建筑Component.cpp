@@ -189,32 +189,41 @@ CoTask<SpEntity> 造建筑Component::CoAddBuilding(const 单位类型 类型, const Posit
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置& >(
 		pos, m_refEntity.m_refSpace, std::forward<const 单位类型&&>(类型), 配置.配置);
 	//spNewEntity->AddComponentAttack();
-	PlayerComponent::AddComponent(*spNewEntity, m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity));
-	BuildingComponent::AddComponent(*spNewEntity, 类型, 配置.f半边长);
-	switch (类型)
-	{
-	case 基地:
-	case 兵厂:
-		造活动单位Component::AddComponent(*spNewEntity, 类型);
-		break;
-	case 地堡:
-		地堡Component::AddComponet(*spNewEntity);
-		break;
-	case 民房:break;
-	case 光子炮:
-	{
-		using namespace std;
-		单位::战斗配置 战斗 = { 20,20,3,0,"前摇动作",300ms,"攻击动作",300ms,"音效/PhoFir00","音效/explo1","" };
-		AttackComponent::AddComponent(*spNewEntity, 类型, 战斗);
-	}
-	break;
-	}
+	根据建筑类型AddComponent(m_refEntity.m_refSpace, 类型, *spNewEntity, m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity), 配置);
 
-	DefenceComponent::AddComponent(*spNewEntity, 配置.建造.u16初始Hp);
-	Space::GetSpacePlayer(m_refEntity).m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
-	m_refEntity.m_refSpace.AddEntity(spNewEntity);
 
 	spNewEntity->BroadcastEnter();
 	PlayerComponent::Send资源(m_refEntity);
 	co_return spNewEntity;
+}
+
+void 造建筑Component::根据建筑类型AddComponent(Space& refSpace, const 单位类型 类型, Entity& refNewEntity, std::shared_ptr<PlayerComponent> spPlayer,
+	const std::string& strNickName, const 单位::建筑单位配置& 配置)
+{
+	PlayerComponent::AddComponent(refNewEntity, spPlayer, strNickName);
+	BuildingComponent::AddComponent(refNewEntity, 类型, 配置.f半边长);
+
+	switch (类型)
+	{
+	case 基地:
+	case 兵厂:
+		造活动单位Component::AddComponent(refNewEntity, 类型);
+		break;
+	case 地堡:
+		地堡Component::AddComponet(refNewEntity);
+		break;
+	case 民房:
+		break;
+	case 光子炮:
+	{
+		using namespace std;
+		单位::战斗配置 战斗 = { 20,20,3,0,"前摇动作",300ms,"攻击动作",300ms,"音效/PhoFir00","音效/explo1","" };
+		AttackComponent::AddComponent(refNewEntity, 类型, 战斗);
+
+	}
+	break;
+	}
+	DefenceComponent::AddComponent(refNewEntity, 配置.建造.u16初始Hp);
+	refSpace.m_mapPlayer[strNickName].m_mapWpEntity[refNewEntity.Id] = refNewEntity.shared_from_this();//自己控制的单位
+	refSpace.AddEntity(refNewEntity.shared_from_this());
 }
