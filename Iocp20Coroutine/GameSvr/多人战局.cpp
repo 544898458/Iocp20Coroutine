@@ -35,17 +35,21 @@ CoTask<int> 多人战局::Co四方对战(Space& refSpace, Entity& ref视口, FunCancel& fu
 	arr方位玩家[0].strNickName = refGateSession.NickName();
 	auto wpSpace = refGateSession.m_wpSpace;
 	玩家带入单位进入四方对战(refSpace, ref视口, arr方位玩家[0].pos出生点);
+
 	for (int i = 1; i < _countof(arr方位玩家); ++i)
 	{
 		const auto& [stop, event玩家进入Space] = co_await CoEvent<MyEvent::玩家进入Space>::Wait(funCancel, [&refSpace]
-		(auto& refPlayer) { return &refPlayer.refSpace == &refSpace; });
+		(auto& refPlayer) { return &*refPlayer.wpSpace.lock() == &refSpace; });
 		if (stop)
 			co_return 0;
 
 		CHECK_WP_CO_RET_0(wpSpace);
-		event玩家进入Space.refPlayerGateSession.EnterSpace(wpSpace);
-		arr方位玩家[i].strNickName = event玩家进入Space.refPlayerGateSession.NickName();
-		玩家带入单位进入四方对战(refSpace, event玩家进入Space.ref视口, arr方位玩家[i].pos出生点);
+		CHECK_WP_CO_RET_0(event玩家进入Space.wpPlayerGateSession);
+		CHECK_WP_CO_RET_0(event玩家进入Space.wpSpace);
+		CHECK_WP_CO_RET_0(event玩家进入Space.wp视口);
+		event玩家进入Space.wpPlayerGateSession.lock()->EnterSpace(wpSpace);
+		arr方位玩家[i].strNickName = event玩家进入Space.wpPlayerGateSession.lock()->NickName();
+		玩家带入单位进入四方对战(refSpace, *event玩家进入Space.wp视口.lock(), arr方位玩家[i].pos出生点);
 	}
 	co_return 0;
 }

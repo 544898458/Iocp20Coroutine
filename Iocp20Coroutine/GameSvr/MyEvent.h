@@ -1,5 +1,6 @@
 #pragma once
 #include "SpEntity.h"
+
 class Space;
 class PlayerGateSession_Game;
 namespace MyEvent
@@ -24,9 +25,9 @@ namespace MyEvent
 	};
 	struct 玩家进入Space
 	{
-		PlayerGateSession_Game& refPlayerGateSession;
-		Entity& ref视口;
-		Space& refSpace;
+		std::weak_ptr<PlayerGateSession_Game> wpPlayerGateSession;
+		std::weak_ptr<Entity> wp视口;
+		std::weak_ptr<Space> wpSpace;
 	};
 	bool SameSpace(const WpEntity& refWpEntity, const Space& refSpace, const std::string& stdNickName);
 }
