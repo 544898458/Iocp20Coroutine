@@ -274,6 +274,7 @@ std::unordered_map<副本ID, 副本配置> g_map副本配置 =
 	{训练战,{"all_tiles_tilecache.bin",		"scene战斗",	单人剧情::Co训练战}},
 	{防守战,{"防守战.bin",					"scene防守战",	单人剧情::Co防守战}},
 	{多人联机地图,{"all_tiles_tilecache.bin","scene战斗",	{}}},
+	{四方对战,{"四方对战.bin",				"scene四方对战",{}}},
 };
 
 bool Get副本配置(const 副本ID id, 副本配置& refOut)
@@ -291,6 +292,7 @@ bool Get副本配置(const 副本ID id, 副本配置& refOut)
 
 void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
 {
+	CHECK_VOID(msg.id == 训练战 || msg.id == 防守战);
 	副本配置 配置;
 	{
 		const auto ok = Get副本配置(msg.id, 配置);
@@ -301,6 +303,21 @@ void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
 	auto wp视口 = EnterSpace(m_spSpace单人剧情副本);
 	CHECK_WP_RET_VOID(wp视口);
 	配置.funCo剧情(*m_spSpace单人剧情副本, *wp视口.lock(), m_funCancel进地图, *this).RunNew();
+}
+
+void PlayerGateSession_Game::OnRecv(const Msg创建多人战局& msg)
+{
+	CHECK_VOID(msg.id == 四方对战);
+	副本配置 配置;
+	{
+		const auto ok = Get副本配置(msg.id, 配置);
+		CHECK_RET_VOID(ok);
+	}
+
+	m_spSpace多人战局 = std::make_shared<Space, const 副本配置&>(配置);
+	auto wp视口 = EnterSpace(m_spSpace多人战局);
+	CHECK_WP_RET_VOID(wp视口);
+	//配置.funCo剧情(*m_spSpace单人剧情副本, *wp视口.lock(), m_funCancel进地图, *this).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
@@ -455,8 +472,8 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 
 WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 {
-	assert(m_wpSpace.expired());
-	assert(!wpSpace.expired());
+	CHECK_RET_DEFAULT(m_wpSpace.expired());
+	CHECK_RET_DEFAULT(!wpSpace.expired());
 	m_wpSpace = wpSpace;
 	auto spSpace = m_wpSpace.lock();
 

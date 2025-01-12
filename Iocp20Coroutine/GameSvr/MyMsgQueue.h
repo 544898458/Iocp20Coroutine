@@ -96,6 +96,7 @@ enum MsgId
 	框选,
 	玩家个人战局列表,
 	进其他玩家个人战局,
+	创建多人战局,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -376,6 +377,7 @@ enum 副本ID
 	训练战,
 	防守战,
 	多人联机地图,
+	四方对战,
 };
 MSGPACK_ADD_ENUM(副本ID);
 
@@ -462,4 +464,11 @@ struct Msg进其他玩家个人战局
 	MsgHead msg{ .id = 进其他玩家个人战局 };
 	std::string nickName其他玩家;
 	MSGPACK_DEFINE(msg, nickName其他玩家);
+};
+
+struct Msg创建多人战局
+{
+	MsgHead msg{ .id = 创建多人战局};
+	副本ID id;
+	MSGPACK_DEFINE(msg, id);
 };

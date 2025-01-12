@@ -42,7 +42,7 @@ public:
 	/// </summary>
 	WpSpace m_wpSpace;
 	SpSpace m_spSpace单人剧情副本;
-
+	SpSpace m_spSpace多人战局;
 private:
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);
 	/// <summary>
@@ -52,6 +52,7 @@ private:
 	void OnRecv(const Msg进Space& msg);
 	void OnRecv(const Msg离开Space& msg);
 	void OnRecv(const Msg进单人剧情副本& msg);
+	void OnRecv(const Msg创建多人战局& msg);
 	void OnRecv(const MsgMove& msg);
 	void OnRecv(const MsgSay& msg);
 	void OnRecv(const MsgSelectRoles& msg);
