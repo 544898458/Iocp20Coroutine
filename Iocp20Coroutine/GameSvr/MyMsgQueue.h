@@ -97,6 +97,8 @@ enum MsgId
 	玩家个人战局列表,
 	进其他玩家个人战局,
 	创建多人战局,
+	玩家多人战局列表,
+	进其他玩家多人战局,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -471,4 +473,24 @@ struct Msg创建多人战局
 	MsgHead msg{ .id = 创建多人战局};
 	副本ID id;
 	MSGPACK_DEFINE(msg, id);
+};
+
+struct Msg玩家多人战局列表
+{
+	MsgHead msg{ .id = 玩家多人战局列表 };
+	MSGPACK_DEFINE(msg);
+};
+
+struct Msg玩家多人战局列表Responce
+{
+	MsgHead msg{ .id = 玩家多人战局列表 };
+	std::vector<玩家场景> vec多人战局中的Host玩家;
+	MSGPACK_DEFINE(msg, vec多人战局中的Host玩家);
+};
+
+struct Msg进其他玩家多人战局
+{
+	MsgHead msg{ .id = 进其他玩家多人战局 };
+	std::string nickName其他玩家;
+	MSGPACK_DEFINE(msg, nickName其他玩家);
 };

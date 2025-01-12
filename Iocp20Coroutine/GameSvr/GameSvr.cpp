@@ -25,7 +25,7 @@ void GameSvr::Update()
 {
 	m_Sessions.Update([this]()
 		{
-			Space::StaticUpdate();
+			//Space::StaticUpdate();
 		});
 	
 	/*

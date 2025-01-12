@@ -10,7 +10,7 @@ class GameSvrSession;
 /// <summary>
 /// 这个GameSvr里的对象，对应一个GateSvr对游戏客户端的连接
 /// </summary>
-class PlayerGateSession_Game
+class PlayerGateSession_Game : public std::enable_shared_from_this<PlayerGateSession_Game>//必须公有继承，否则无效
 {
 public:
 	PlayerGateSession_Game(GameSvrSession& ref, uint64_t idPlayerGateSession, const std::string& strNickName);
@@ -63,7 +63,9 @@ private:
 	void OnRecv(const Msg出地堡& msg);
 	void OnRecv(const Msg框选& msg);
 	void OnRecv(const Msg玩家个人战局列表& msg);
+	void OnRecv(const Msg玩家多人战局列表& msg);
 	void OnRecv(const Msg进其他玩家个人战局& msg);
+	void OnRecv(const Msg进其他玩家多人战局& msg);
 
 	void 选中单位(const std::vector<uint64_t>& vecId);
 

@@ -27,6 +27,8 @@
 #include "../CoRoutine/CoTimer.h"
 #include "EntitySystem.h"
 #include "单位组件/PlayerNickNameComponent.h"
+#include "MyEvent.h"
+
 /// <summary>
 /// GameSvr通过GateSvr透传给游戏客户端
 /// </summary>
@@ -516,7 +518,7 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	spSpace->AddEntity(spEntityViewPort, 500);
 	spEntityViewPort->BroadcastEnter();
 
-	CoEvent<PlayerGateSession_Game*>::OnRecvEvent(false, this);
+	CoEvent<MyEvent::玩家进入Space>::OnRecvEvent(false, {this->weak_from_this(), spEntityViewPort, wpSpace});
 	return spEntityViewPort;
 }
 
@@ -582,6 +584,8 @@ void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& o
 	case MsgId::框选:RecvMsg<Msg框选>(obj); break;
 	case MsgId::玩家个人战局列表:RecvMsg<Msg玩家个人战局列表>(obj); break;
 	case MsgId::进其他玩家个人战局:RecvMsg<Msg进其他玩家个人战局>(obj); break;
+	case MsgId::玩家多人战局列表:RecvMsg<Msg玩家多人战局列表>(obj); break;
+	case MsgId::进其他玩家多人战局:RecvMsg<Msg进其他玩家多人战局>(obj); break;
 	case MsgId::Gate转发:
 		LOG(ERROR) << "不能再转发";
 		assert(false);
@@ -811,6 +815,22 @@ void PlayerGateSession_Game::OnRecv(const Msg玩家个人战局列表& msg)
 	}
 	Send(msgResponce);
 }
+void PlayerGateSession_Game::OnRecv(const Msg玩家多人战局列表& msg)
+{
+	Msg玩家多人战局列表Responce msgResponce;
+	for (const auto [id, sp] : m_refGameSvrSession.m_mapPlayerGateSession)
+	{
+		if (!sp->m_spSpace多人战局)
+			continue;
+
+		msgResponce.vec多人战局中的Host玩家.push_back(
+			{
+				StrConv::GbkToUtf8(sp->NickName()),
+				StrConv::GbkToUtf8(sp->m_spSpace多人战局->m_配置.strSceneName)
+			});
+	}
+	Send(msgResponce);
+}
 
 void PlayerGateSession_Game::OnRecv(const Msg进其他玩家个人战局& msg)
 {
@@ -822,6 +842,19 @@ void PlayerGateSession_Game::OnRecv(const Msg进其他玩家个人战局& msg)
 		});
 	CHECK_RET_VOID(iterFind != m_refGameSvrSession.m_mapPlayerGateSession.end());
 	auto& refSp = iterFind->second->m_spSpace单人剧情副本;
+	CHECK_RET_VOID(refSp);
+	EnterSpace(refSp);
+}
+void PlayerGateSession_Game::OnRecv(const Msg进其他玩家多人战局& msg)
+{
+	const auto strGbk = StrConv::Utf8ToGbk(msg.nickName其他玩家);
+	auto iterFind = std::find_if(m_refGameSvrSession.m_mapPlayerGateSession.begin(), m_refGameSvrSession.m_mapPlayerGateSession.end(),
+		[&strGbk](const auto& pair)->bool
+		{
+			return pair.second->NickName() == strGbk;
+		});
+	CHECK_RET_VOID(iterFind != m_refGameSvrSession.m_mapPlayerGateSession.end());
+	auto& refSp = iterFind->second->m_spSpace多人战局;
 	CHECK_RET_VOID(refSp);
 	EnterSpace(refSp);
 }

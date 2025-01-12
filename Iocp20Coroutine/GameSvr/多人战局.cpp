@@ -47,16 +47,30 @@ CoTask<int> 多人战局::Co四方对战(Space& refSpace, Entity& ref视口, FunCancel& fu
 
 	for (int i = 1; i < _countof(arr方位玩家); ++i)
 	{
-		const auto& [stop, event玩家进入Space] = co_await CoEvent<MyEvent::玩家进入Space>::Wait(funCancel, [&refSpace]
-		(auto& refPlayer) { return &*refPlayer.wpSpace.lock() == &refSpace; });
+		const auto& [stop, event玩家进入Space] = co_await CoEvent<MyEvent::玩家进入Space>::Wait(funCancel, 
+			[&refSpace](auto& refPlayer) { return &*refPlayer.wpSpace.lock() == &refSpace; });
 		if (stop)
+		{
+			LOG(INFO) << "Co四方对战,中断退出";
 			co_return 0;
+		}
 
 		CHECK_WP_CO_RET_0(wpSpace);
 		CHECK_WP_CO_RET_0(event玩家进入Space.wpPlayerGateSession);
 		CHECK_WP_CO_RET_0(event玩家进入Space.wpSpace);
 		CHECK_WP_CO_RET_0(event玩家进入Space.wp视口);
-		event玩家进入Space.wpPlayerGateSession.lock()->EnterSpace(wpSpace);
+
+		{
+			auto iterEnd = arr方位玩家 + _countof(arr方位玩家);
+			if (iterEnd != std::find_if(arr方位玩家, iterEnd, 
+				[&event玩家进入Space](const 方位玩家& ref方位玩家) 
+				{return ref方位玩家.strNickName == event玩家进入Space.wpPlayerGateSession.lock()->NickName(); }))
+			{
+				LOG(INFO) << "重复进入：" << event玩家进入Space.wpPlayerGateSession.lock()->NickName();
+				continue;
+			}
+		}
+		//event玩家进入Space.wpPlayerGateSession.lock()->EnterSpace(wpSpace);
 		arr方位玩家[i].strNickName = event玩家进入Space.wpPlayerGateSession.lock()->NickName();
 		玩家带入单位进入四方对战(refSpace, *event玩家进入Space.wp视口.lock(), arr方位玩家[i].pos出生点, *event玩家进入Space.wpPlayerGateSession.lock());
 	}
