@@ -4,9 +4,9 @@
 #include "MyMsgQueue.h"
 #include "../IocpNetwork/StrConv.h"
 #include "Space.h"
-#include "走Component.h"
-#include "AttackComponent.h"
-#include "PlayerNickNameComponent.h"
+#include "单位组件/走Component.h"
+#include "单位组件/AttackComponent.h"
+#include "单位组件/PlayerNickNameComponent.h"
 
 void EntitySystem::BroadcastEntity描述(Entity& refEntity, const std::string& refStrGbk)
 {

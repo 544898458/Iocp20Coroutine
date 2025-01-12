@@ -10,9 +10,9 @@
 #include "../IocpNetwork/StrConv.h"
 #include "AiCo.h"
 #include "Entity.h"
-#include "PlayerComponent.h"
+#include "单位组件/PlayerComponent.h"
 #include "../CoRoutine/CoRpc.h"
-#include "DefenceComponent.h"
+#include "单位组件/DefenceComponent.h"
 
 
 MsgNotifyPos::MsgNotifyPos(Entity& ref) : entityId(ref.Id), x(ref.Pos().x), z(ref.Pos().z), eulerAnglesY(ref.m_eulerAnglesY)

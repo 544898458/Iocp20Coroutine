@@ -52,6 +52,12 @@
     <Filter Include="MiniDump">
       <UniqueIdentifier>{8427d678-7bf9-4ffd-b30d-c9e095094e2f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="单位组件">
+      <UniqueIdentifier>{c5f2b902-104d-436b-bc7a-690e29354d53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Space组件">
+      <UniqueIdentifier>{aa4cb359-316a-4c56-9b33-9840cad2cb2b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Space.cpp">
@@ -129,22 +135,10 @@
     <ClCompile Include="PlayerSystem.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerComponent.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MonsterComponent.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\CoRoutine\CoRpc.cpp">
       <Filter>CoRoutine</Filter>
     </ClCompile>
     <ClCompile Include="MyMsgQueue.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="BuildingComponent.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="AttackComponent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GameSvrSession.cpp">
@@ -171,16 +165,7 @@
     <ClCompile Include="单位.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="采集Component.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="单人剧情.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="资源Component.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DefenceComponent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Sample_TempObstacles.cpp">
@@ -267,21 +252,6 @@
     <ClCompile Include="..\recastnavigation-main\RecastDemo\Contrib\fastlz\fastlz.c">
       <Filter>RecastNavigation\RecastDemo\Contrib</Filter>
     </ClCompile>
-    <ClCompile Include="临时阻挡Component.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="造活动单位Component.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="地堡Component.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="走Component.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="造建筑Component.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="EntitySystem.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -330,14 +300,50 @@
     <ClCompile Include="..\MiniDump\MiniDump.cpp">
       <Filter>MiniDump</Filter>
     </ClCompile>
-    <ClCompile Include="AoiComponent.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerNickNameComponent.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="多人战局.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\AoiComponent.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\AttackComponent.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\BuildingComponent.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\DefenceComponent.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\MonsterComponent.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\PlayerComponent.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\PlayerNickNameComponent.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\采集Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\地堡Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\临时阻挡Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\造活动单位Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\造建筑Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\资源Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\走Component.cpp">
+      <Filter>单位组件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -440,13 +446,7 @@
     <ClInclude Include="Entity.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerComponent.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="SpEntity.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MonsterComponent.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoRpc.h">
@@ -460,12 +460,6 @@
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\MsgQueueMsgPackTemplate.h">
       <Filter>IocpNetwork</Filter>
-    </ClInclude>
-    <ClInclude Include="BuildingComponent.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="AttackComponent.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="GameSvrSession.h">
       <Filter>头文件</Filter>
@@ -494,16 +488,7 @@
     <ClInclude Include="单位.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="采集Component.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="单人剧情.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="资源Component.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DefenceComponent.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Sample_TempObstacles.h">
@@ -512,22 +497,7 @@
     <ClInclude Include="RecastNavigationCrowd.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="临时阻挡Component.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="造活动单位Component.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="地堡Component.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="走Component.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="SpSpace.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="造建筑Component.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="EntitySystem.h">
@@ -536,14 +506,50 @@
     <ClInclude Include="..\MiniDump\MiniDump.h">
       <Filter>MiniDump</Filter>
     </ClInclude>
-    <ClInclude Include="AoiComponent.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerNickNameComponent.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="多人战局.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\AoiComponent.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\AttackComponent.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\BuildingComponent.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\DefenceComponent.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\MonsterComponent.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\PlayerComponent.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\PlayerNickNameComponent.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\采集Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\地堡Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\临时阻挡Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\造活动单位Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\造建筑Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\资源Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\走Component.h">
+      <Filter>单位组件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -22,6 +22,12 @@ namespace MyEvent
 	{
 		WpEntity wpEntity;
 	};
+	struct 玩家进入Space
+	{
+		PlayerGateSession_Game& refPlayerGateSession;
+		Entity& ref视口;
+		Space& refSpace;
+	};
 	bool SameSpace(const WpEntity& refWpEntity, const Space& refSpace, const std::string& stdNickName);
 }
 

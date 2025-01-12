@@ -11,7 +11,7 @@
 #include "Space.h"
 #include "Entity.h"
 #include "RecastNavigationCrowd.h"
-#include "AttackComponent.h"
+#include "单位组件/AttackComponent.h"
 #include "MyMsgQueue.h"
 
 std::shared_ptr<CrowdToolState> CreateCrowdToolState(const std::string &stf寻路文件)

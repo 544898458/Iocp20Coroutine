@@ -1,6 +1,6 @@
 #pragma once
 #include "MyMsgQueue.h"
-#include "BuildingComponent.h"
+//#include "BuildingComponent.h"
 namespace 单位
 {
 	struct 单位配置

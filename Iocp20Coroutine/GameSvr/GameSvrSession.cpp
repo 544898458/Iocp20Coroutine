@@ -22,7 +22,7 @@
 #include "../CoRoutine/CoEvent.h"
 #include "../IocpNetwork/StrConv.h"
 #include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
-#include "AttackComponent.h"
+#include "单位组件/AttackComponent.h"
 #include "../IocpNetwork/MsgPack.h"
 #include "PlayerGateSession_Game.h"
 //template<MySession>

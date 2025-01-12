@@ -12,6 +12,7 @@
 #include "PlayerComponent.h"
 #include "走Component.h"
 #include "EntitySystem.h"
+#include "BuildingComponent.h"
 
 void 造活动单位Component::AddComponent(Entity& refEntity, const 单位类型 类型)
 {

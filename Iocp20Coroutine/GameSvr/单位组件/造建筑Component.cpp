@@ -12,6 +12,7 @@
 #include "造活动单位Component.h"
 #include "地堡Component.h"
 #include "DefenceComponent.h"
+#include "BuildingComponent.h"
 
 void 造建筑Component::AddComponent(Entity& refEntity, const 单位类型 类型)
 {

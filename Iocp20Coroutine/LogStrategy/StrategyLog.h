@@ -136,6 +136,15 @@ class StrategyLog
 		co_return false; \
 	}\
 }
+#define CHECK_WP_CO_RET_0( wp ) \
+{\
+	LOG_IF(ERROR, wp.expired());\
+	if (wp.expired())\
+	{\
+		assert(false);\
+		co_return 0; \
+	}\
+}
 #define CHECK_WP_CONTINUE( wp ) \
 {\
 	if (wp.expired()) \
