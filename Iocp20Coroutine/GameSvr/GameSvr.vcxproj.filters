@@ -336,6 +336,9 @@
     <ClCompile Include="PlayerNickNameComponent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="多人战局.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -537,6 +540,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="PlayerNickNameComponent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="多人战局.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

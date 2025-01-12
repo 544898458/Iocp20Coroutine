@@ -317,7 +317,7 @@ void PlayerGateSession_Game::OnRecv(const Msg创建多人战局& msg)
 	m_spSpace多人战局 = std::make_shared<Space, const 副本配置&>(配置);
 	auto wp视口 = EnterSpace(m_spSpace多人战局);
 	CHECK_WP_RET_VOID(wp视口);
-	//配置.funCo剧情(*m_spSpace单人剧情副本, *wp视口.lock(), m_funCancel进地图, *this).RunNew();
+	配置.funCo剧情(*m_spSpace多人战局, *wp视口.lock(), m_funCancel进地图, *this).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
@@ -565,6 +565,7 @@ void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& o
 	case MsgId::进Space:RecvMsg<Msg进Space>(obj); break;
 	case MsgId::离开Space:RecvMsg<Msg离开Space>(obj); break;
 	case MsgId::进单人剧情副本:RecvMsg<Msg进单人剧情副本>(obj); break;
+	case MsgId::创建多人战局:RecvMsg<Msg创建多人战局>(obj); break;
 	case MsgId::Move:RecvMsg<MsgMove>(obj); break;
 	case MsgId::Say:RecvMsg<MsgSay >(obj); break;
 	case MsgId::SelectRoles:RecvMsg<MsgSelectRoles>(obj); break;
