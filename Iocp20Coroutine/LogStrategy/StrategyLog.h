@@ -90,8 +90,8 @@ class StrategyLog
 
 #define CHECK_VOID( exp ) \
 {\
-	LOG_IF(ERROR, !exp);\
-	if (!exp)\
+	LOG_IF(ERROR, !(exp));\
+	if (!(exp))\
 	{\
 		assert(false);\
 		return; \
@@ -100,8 +100,8 @@ class StrategyLog
 
 #define CHECK_CO_RET_FALSE( exp ) \
 {\
-	LOG_IF(ERROR, !exp);\
-	if (!exp)\
+	LOG_IF(ERROR, !(exp));\
+	if (!(exp))\
 	{\
 		assert(false);\
 		co_return false; \
@@ -110,8 +110,8 @@ class StrategyLog
 
 #define CHECK_DEFAULT( exp ) \
 {\
-	LOG_IF(ERROR, !exp);\
-	if (!exp)\
+	LOG_IF(ERROR, !(exp));\
+	if (!(exp))\
 	{\
 		return {}; \
 	}\
@@ -119,8 +119,8 @@ class StrategyLog
 
 #define CHECK_FALSE( exp ) \
 {\
-	LOG_IF(ERROR, !exp);\
-	if (!exp)\
+	LOG_IF(ERROR, !(exp));\
+	if (!(exp))\
 	{\
 		assert(false);\
 		return false; \

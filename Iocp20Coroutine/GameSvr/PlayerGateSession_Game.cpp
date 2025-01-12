@@ -16,6 +16,7 @@
 #include <unordered_map>
 #include "单位.h"
 #include "单人剧情.h"
+#include "多人战局.h"
 #include <sstream>
 #include "单位组件/造活动单位Component.h"
 #include "单位组件/造建筑Component.h"
@@ -84,7 +85,11 @@ void PlayerGateSession_Game::OnDestroy()
 		m_spSpace单人剧情副本->OnDestory();
 		m_spSpace单人剧情副本.reset();
 	}
-
+	if (m_spSpace多人战局)
+	{
+		m_spSpace多人战局->OnDestory();
+		m_spSpace多人战局.reset();
+	}
 	if (b离开)
 		Send<Msg离开Space>({});
 }
@@ -274,7 +279,7 @@ std::unordered_map<副本ID, 副本配置> g_map副本配置 =
 	{训练战,{"all_tiles_tilecache.bin",		"scene战斗",	单人剧情::Co训练战}},
 	{防守战,{"防守战.bin",					"scene防守战",	单人剧情::Co防守战}},
 	{多人联机地图,{"all_tiles_tilecache.bin","scene战斗",	{}}},
-	{四方对战,{"四方对战.bin",				"scene四方对战",{}}},
+	{四方对战,{"四方对战.bin",				"scene四方对战",多人战局::Co四方对战}},
 };
 
 bool Get副本配置(const 副本ID id, 副本配置& refOut)
@@ -508,7 +513,7 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 		const auto [k, ok] = spSpace->m_map视口.insert({ spEntityViewPort->Id ,spEntityViewPort });
 		CHECK_RET_DEFAULT(ok);
 	}
-	spSpace->AddEntity(spEntityViewPort, 100);
+	spSpace->AddEntity(spEntityViewPort, 500);
 	spEntityViewPort->BroadcastEnter();
 
 	CoEvent<PlayerGateSession_Game*>::OnRecvEvent(false, this);
@@ -605,6 +610,9 @@ void PlayerGateSession_Game::Process()
 
 	if (m_spSpace单人剧情副本)
 		m_spSpace单人剧情副本->Update();
+
+	if (m_spSpace多人战局)
+		m_spSpace多人战局->Update();
 }
 
 
