@@ -142,7 +142,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 	}
 
 
-	播放声音("BUZZ", "没有兵厂");
+	播放声音("BUZZ", msg.类型 == 工程车 ? "请先造一个基地" : "没有兵厂");
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
