@@ -34,7 +34,12 @@ void 造活动单位Component::AddComponent(Entity& refEntity, const 单位类型 类型)
 	}
 }
 
-void 造活动单位Component::造兵(PlayerGateSession_Game& refGateSession, Entity& refEntity, const 单位类型 类型)
+bool 造活动单位Component::可造(const 单位类型 类型)const
+{
+	return m_set可造类型.end() != m_set可造类型.find(类型);
+}
+
+void 造活动单位Component::造兵(PlayerGateSession_Game& refGateSession, const 单位类型 类型)
 {
 	//CHECK_VOID(m_fun造活动单位);
 	if (refGateSession.活动单位包括制造队列中的() >= refGateSession.活动单位上限())
@@ -43,7 +48,7 @@ void 造活动单位Component::造兵(PlayerGateSession_Game& refGateSession, Entity& r
 		refGateSession.播放声音("语音/民房不足女声正经版", "民房不足");
 		return;
 	}
-	if (m_set可造类型.end() == m_set可造类型.find(类型))
+	if (!可造(类型))
 	{
 		refGateSession.Say系统("造不了这种单位");
 		return;

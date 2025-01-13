@@ -26,6 +26,7 @@ public:
 		const std::string& strNickName, const 单位::建筑单位配置& 配置);
 	造建筑Component(Entity& refEntity, const 单位类型 类型);
 	~造建筑Component();
+	bool 可造(const 单位类型 类型) const;
 	CoTaskBool Co造建筑(const Position refPos, const 单位类型 类型);
 	void TryCancel();
 private:

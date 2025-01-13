@@ -48,9 +48,14 @@ bool 造建筑Component::正在建造(Entity& refEntity)
 	assert(!m_cancel造建筑.operator bool());
 }
 
+bool 造建筑Component::可造(const 单位类型 类型)const
+{
+	return m_set可造类型.end() != m_set可造类型.find(类型);
+}
+
 CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 单位类型 类型)
 {
-	if (m_set可造类型.end() == m_set可造类型.find(类型))
+	if (!可造(类型))
 	{
 		co_return false;
 	}

@@ -112,8 +112,8 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 				else
 				{
 					Space::GetSpacePlayer(m_refEntity).m_u32燃气矿 += u32携带矿;
-					PlayerComponent::Send资源(m_refEntity);
 				}
+				PlayerComponent::Send资源(m_refEntity);
 				continue;
 			}
 
@@ -177,9 +177,6 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 			++m_u32携带矿;
 			EntitySystem::BroadcastEntity描述(m_refEntity, std::format("已采集{0}", m_u32携带矿));
 			continue;
-
-
-
 		}
 	}
 }

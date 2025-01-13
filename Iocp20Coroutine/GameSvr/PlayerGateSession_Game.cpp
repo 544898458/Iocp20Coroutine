@@ -114,16 +114,35 @@ void PlayerGateSession_Game::Say语音提示(const std::string& str)
 
 void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 {
-	ForEachSelected([this, &msg](Entity& ref)
+	bool bOK(false);
+	ForEachSelected([this, &msg, &bOK](Entity& ref)
 		{
 			if (!ref.m_sp造活动单位)
-			{
-				PlayerComponent::播放声音(ref, "BUZZ", "造不了");
 				return;
-			}
 
-			ref.m_sp造活动单位->造兵(*this, ref, msg.类型);
+			ref.m_sp造活动单位->造兵(*this, msg.类型);
+			bOK = true;
 		});
+
+	if (bOK)
+		return;
+
+	//自动找兵厂去造
+	CHECK_WP_RET_VOID(m_wpSpace);
+	Space& refSpace = *m_wpSpace.lock();
+	for (auto [_, wp] : refSpace.m_mapPlayer[NickName()].m_mapWpEntity)
+	{
+		CHECK_WP_CONTINUE(wp);
+		Entity& refEntiy = *wp.lock();
+		if (!refEntiy.m_spBuilding)continue;
+		if (!refEntiy.m_sp造活动单位)continue;
+		if (!refEntiy.m_sp造活动单位->可造(msg.类型))continue;
+		refEntiy.m_sp造活动单位->造兵(*this, msg.类型);
+		return;
+	}
+
+
+	播放声音("BUZZ", "没有兵厂");
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
@@ -445,11 +464,11 @@ template<class T> void SendToWorldSvr(const T& msg, const uint64_t idGateSession
 void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 {
 	//CoAddBuilding(msg.类型, msg.pos).RunNew();
-	ForEachSelected([this, msg](Entity& ref)
+	bool b操作OK(false);
+	ForEachSelected([this, msg, &b操作OK](Entity& ref)
 		{
 			if (造建筑Component::正在建造(ref))
 			{
-				PlayerComponent::播放声音(ref, "BUZZ", "正在建造，不能建造");
 				return;
 			}
 
@@ -468,13 +487,40 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 			}
 			if (!ref.m_sp造建筑)
 			{
-				PlayerComponent::播放声音(ref, "BUZZ", "造不了这种建筑");
+				//PlayerComponent::播放声音(ref, "BUZZ", "造不了这种建筑");
 				return;
 			}
 
 			走Component::Cancel所有包含走路的协程(ref); //TryCancel();
 			ref.m_sp造建筑->Co造建筑(msg.pos, msg.类型).RunNew();
+			b操作OK = true;
 		});
+
+	if (b操作OK)
+		return;
+
+	//自动找一个合适的工程车去造
+	CHECK_WP_RET_VOID(m_wpSpace);
+	Space& refSpace = *m_wpSpace.lock();
+	for (auto [_, wp] : refSpace.m_mapPlayer[NickName()].m_mapWpEntity)
+	{
+		CHECK_WP_CONTINUE(wp);
+		Entity& refEntiy = *wp.lock();
+		if (refEntiy.m_类型 != 工程车)continue;
+		if (造建筑Component::正在建造(refEntiy))continue;
+
+		CHECK_CONTINUE(refEntiy.m_spAttack);
+		if (refEntiy.m_spAttack->m_cancelAttack)continue;
+		if (refEntiy.m_spAttack->m_TaskCancel.cancel)continue;
+
+		CHECK_CONTINUE(refEntiy.m_sp造建筑);
+		if (!refEntiy.m_sp造建筑->可造(msg.类型))continue;
+		走Component::Cancel所有包含走路的协程(refEntiy); //TryCancel();
+		refEntiy.m_sp造建筑->Co造建筑(msg.pos, msg.类型).RunNew();
+		return;
+	}
+
+	播放声音("BUZZ", "没找到空闲的工程车");
 }
 
 WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
@@ -518,7 +564,7 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	spSpace->AddEntity(spEntityViewPort, 500);
 	spEntityViewPort->BroadcastEnter();
 
-	CoEvent<MyEvent::玩家进入Space>::OnRecvEvent(false, {this->weak_from_this(), spEntityViewPort, wpSpace});
+	CoEvent<MyEvent::玩家进入Space>::OnRecvEvent(false, { this->weak_from_this(), spEntityViewPort, wpSpace });
 	return spEntityViewPort;
 }
 

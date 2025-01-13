@@ -19,7 +19,8 @@ class 造活动单位Component
 public:
 	static void AddComponent(Entity& refEntity, const 单位类型 类型);
 	造活动单位Component(Entity& refEntity, const 单位类型 类型);
-	void 造兵(PlayerGateSession_Game&, Entity& refEntity, const 单位类型 类型);
+	bool 可造(const 单位类型 类型) const;
+	void 造兵(PlayerGateSession_Game&, const 单位类型 类型);
 	void TryCancel(Entity& refEntity);
 	uint16_t 等待造Count()const;
 private:
