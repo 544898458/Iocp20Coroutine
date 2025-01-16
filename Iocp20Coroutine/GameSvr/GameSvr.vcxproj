@@ -283,20 +283,48 @@
     <ClCompile Include="Sample_TempObstacles.cpp" />
     <ClCompile Include="单人剧情.cpp" />
     <ClCompile Include="单位.cpp" />
-    <ClCompile Include="单位组件\AoiComponent.cpp" />
-    <ClCompile Include="单位组件\AttackComponent.cpp" />
-    <ClCompile Include="单位组件\BuildingComponent.cpp" />
-    <ClCompile Include="单位组件\DefenceComponent.cpp" />
-    <ClCompile Include="单位组件\MonsterComponent.cpp" />
-    <ClCompile Include="单位组件\PlayerComponent.cpp" />
-    <ClCompile Include="单位组件\PlayerNickNameComponent.cpp" />
-    <ClCompile Include="单位组件\临时阻挡Component.cpp" />
-    <ClCompile Include="单位组件\地堡Component.cpp" />
-    <ClCompile Include="单位组件\资源Component.cpp" />
-    <ClCompile Include="单位组件\走Component.cpp" />
-    <ClCompile Include="单位组件\造建筑Component.cpp" />
-    <ClCompile Include="单位组件\造活动单位Component.cpp" />
-    <ClCompile Include="单位组件\采集Component.cpp" />
+    <ClCompile Include="单位组件\AoiComponent.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="单位组件\AttackComponent.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="单位组件\BuildingComponent.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="单位组件\DefenceComponent.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="单位组件\MonsterComponent.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="单位组件\PlayerComponent.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="单位组件\PlayerNickNameComponent.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="单位组件\临时阻挡Component.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="单位组件\地堡Component.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="单位组件\资源Component.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="单位组件\走Component.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="单位组件\造建筑Component.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="单位组件\造活动单位Component.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="单位组件\采集Component.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="多人战局.cpp" />
     <ClInclude Include="..\CoRoutine\CoLock.h" />
     <ClInclude Include="..\IocpNetwork\MsgQueueMsgPackTemplate.h">

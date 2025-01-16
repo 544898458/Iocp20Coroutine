@@ -130,7 +130,7 @@ class StrategyLog
 #define CHECK_WP_CO_RET_FALSE( wp ) \
 {\
 	LOG_IF(ERROR, wp.expired());\
-	if (wp.expired())\
+	if ((wp).expired())\
 	{\
 		assert(false);\
 		co_return false; \
@@ -139,7 +139,7 @@ class StrategyLog
 #define CHECK_WP_CO_RET_0( wp ) \
 {\
 	LOG_IF(ERROR, wp.expired());\
-	if (wp.expired())\
+	if ((wp).expired())\
 	{\
 		assert(false);\
 		co_return 0; \
@@ -147,7 +147,7 @@ class StrategyLog
 }
 #define CHECK_WP_CONTINUE( wp ) \
 {\
-	if (wp.expired()) \
+	if ((wp).expired()) \
 	{\
 		LOG(ERROR)<< #wp<< ",expired";\
 		assert(false);\
@@ -167,11 +167,31 @@ class StrategyLog
 
 #define CHECK_WP_RET_VOID( wp ) \
 {\
-	if (wp.expired()) \
+	if ((wp).expired()) \
 	{\
 		LOG(ERROR)<< #wp<< ",expired";\
 		assert(false);\
 		return;\
+	}\
+}
+
+#define CHECK_WP_RET_DEFAULT( wp ) \
+{\
+	if ((wp).expired()) \
+	{\
+		LOG(ERROR)<< #wp<< ",expired";\
+		assert(false);\
+		return {};\
+	}\
+}
+
+#define CHECK_WP_RET_FALSE( wp ) \
+{\
+	if ((wp).expired()) \
+	{\
+		LOG(ERROR)<< #wp<< ",expired";\
+		assert(false);\
+		return false;\
 	}\
 }
 

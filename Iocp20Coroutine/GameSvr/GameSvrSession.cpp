@@ -109,7 +109,7 @@ bool GameSvrSession::ProcessMsg()
 		const MsgId msgId = this->m_MsgQueue.PopMsg();
 		switch (msgId)
 		{
-		case MsgId::Invalid_0:return true;//没有消息可处理
+		case MsgId::MsgId_Invalid_0:return true;//没有消息可处理
 		case MsgId::Gate转发:return this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &GameSvrSession::OnRecv); break;
 			//case MsgId::GateAddSession:return this->m_MsgQueue.OnRecv(this->m_queueGateAddSession, *this, &GameSvrSession::OnRecv); break;
 			//case MsgId::GateDeleteSession:return this->m_MsgQueue.OnRecv(this->m_queueGateDeleteSession, *this, &GameSvrSession::OnRecv); break;

@@ -18,7 +18,7 @@ public:
 	template<class T>
 	void Send(const T& ref)
 	{
-		assert(ref.msg.id != MsgId::Invalid_0);
+		assert(ref.msg.id != MsgId::MsgId_Invalid_0);
 
 		ref.msg.sn = (++m_snSend);
 		MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_refSession.Send(buf, len); });

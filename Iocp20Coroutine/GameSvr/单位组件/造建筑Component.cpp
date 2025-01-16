@@ -19,7 +19,7 @@ void 造建筑Component::AddComponent(Entity& refEntity, const 单位类型 类型)
 	refEntity.m_sp造建筑 = std::make_shared<造建筑Component, Entity&, const 单位类型>(refEntity, std::forward<const 单位类型&&>(类型));
 }
 
-bool 造建筑Component::正在建造(Entity& refEntity)
+bool 造建筑Component::正在建造(const Entity& refEntity)
 {
 	if (!refEntity.m_sp造建筑)
 		return false;

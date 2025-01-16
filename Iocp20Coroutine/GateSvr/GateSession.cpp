@@ -139,7 +139,7 @@ bool GateSession::Process()
 		const MsgId msgId = this->m_MsgQueue.PopMsg();
 		switch (msgId)
 		{
-		case MsgId::Invalid_0://没有消息可处理
+		case MsgId::MsgId_Invalid_0://没有消息可处理
 			return true;
 		case MsgId::Login:return this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &GateSession::OnRecv); break;
 		default:

@@ -14,7 +14,7 @@ void ClientSession_GateToWorld::Process()
 	while (true)
 	{
 		const MsgId msgId = this->m_MsgQueue.PopMsg();
-		if (MsgId::Invalid_0 == msgId)//没有消息可处理
+		if (MsgId::MsgId_Invalid_0 == msgId)//没有消息可处理
 			break;
 
 		switch (msgId)

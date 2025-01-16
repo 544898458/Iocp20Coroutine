@@ -19,12 +19,12 @@ public:
 	void RecvMsg(const MsgId idMsg, const msgpack::object& obj);
 	void Process();
 	void OnDestroy();
-	
+
 	template<class T> void Send(const T& ref);
 	void Say(const std::string& str, const SayChannel channel);
 	void Say系统(const std::string& str);
 	void Say语音提示(const std::string& str);
-	
+
 	const std::string& NickName()const { return m_strNickName; }
 	WpEntity EnterSpace(WpSpace wpSpace);
 	void Send资源();
@@ -66,17 +66,19 @@ private:
 	void OnRecv(const Msg玩家多人战局列表& msg);
 	void OnRecv(const Msg进其他玩家个人战局& msg);
 	void OnRecv(const Msg进其他玩家多人战局& msg);
+	void OnRecv(const Msg切换空闲工程车& msg);
 
 	void 选中单位(const std::vector<uint64_t>& vecId);
+	std::vector<WpEntity> Get空闲工程车(单位类型 造活动单位类型 = 单位类型_Invalid_0);
 
 	void Send选中音效(const Entity& refEntity);
 
 	void Send选中单位Responce();
 
-	
+
 	void ForEachSelected(std::function<void(Entity& ref)> fun);
 	CoTaskBool Co进多人联机地图(WpEntity wp视口);
-	
+
 	//std::vector<CoTask<int>>	m_vecCoRpc;
 	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;
 	bool m_bLoginOk = false;
@@ -87,5 +89,6 @@ private:
 	std::string m_strNickName;
 	uint32_t m_snSend = 0;
 	FunCancel m_funCancel进地图;
+	uint16_t m_idx切换工程车 = 0;
 };
 
