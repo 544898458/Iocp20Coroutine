@@ -45,7 +45,7 @@ CoTask<int> 多人战局::Co四方对战(Space& refSpace, Entity& ref视口, FunCancel& fu
 	auto wpSpace = refGateSession.m_wpSpace;
 	玩家带入单位进入四方对战(refSpace, ref视口, arr方位玩家[0].pos出生点, refGateSession);
 
-	for (int i = 1; i < _countof(arr方位玩家); ++i)
+	for (int i = 1; i < _countof(arr方位玩家); )
 	{
 		const auto& [stop, event玩家进入Space] = co_await CoEvent<MyEvent::玩家进入Space>::Wait(funCancel, 
 			[&refSpace](auto& refPlayer) { return &*refPlayer.wpSpace.lock() == &refSpace; });
@@ -73,6 +73,7 @@ CoTask<int> 多人战局::Co四方对战(Space& refSpace, Entity& ref视口, FunCancel& fu
 		//event玩家进入Space.wpPlayerGateSession.lock()->EnterSpace(wpSpace);
 		arr方位玩家[i].strNickName = event玩家进入Space.wpPlayerGateSession.lock()->NickName();
 		玩家带入单位进入四方对战(refSpace, *event玩家进入Space.wp视口.lock(), arr方位玩家[i].pos出生点, *event玩家进入Space.wpPlayerGateSession.lock());
+		++i;
 	}
 	co_return 0;
 }

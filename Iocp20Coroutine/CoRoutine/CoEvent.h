@@ -14,7 +14,7 @@ public:
 	using CoAwaiterRet = CoAwaiter<std::tuple<bool, T_Responce> >;
 	using FunWant = std::function<bool(const T_Responce&)>;
 
-	static void OnRecvEvent(bool stop, const T_Responce& responce)
+	static void OnRecvEvent(const T_Responce& responce)
 	{
 		//auto iterFindCancel = g_mapRpcCancel.find(req.rpcSnId);
 		std::vector<uint32_t> vec;
@@ -29,13 +29,14 @@ public:
 			if (iterFind == g_mapRpc.end())
 			{
 				assert(false);
+				LOG(ERROR) << "";
 				continue;
 			}
 
 			auto& [coAwaiter, fun] = iterFind->second;
-			if (stop || fun(responce))
+			if (fun(responce))
 			{
-				auto ret = std::make_tuple(stop, responce);
+				auto ret = std::make_tuple(false, responce);
 				coAwaiter.Run(ret);//此处可能加g_mapRpc
 				g_mapRpc.erase(iterFind);
 			}
@@ -50,7 +51,19 @@ public:
 
 		funCancel = [rpcSnId]()
 			{
-				OnRecvEvent(true, {});
+				//OnRecvEvent(true, {});
+				auto iterFind = g_mapRpc.find(rpcSnId);
+				if (iterFind == g_mapRpc.end())
+				{
+					assert(false);
+					LOG(ERROR) << "";
+					return;
+				}
+
+				auto& [coAwaiter, fun] = iterFind->second;
+				auto ret = std::make_tuple(true, T_Responce());
+				coAwaiter.Run(ret);
+				g_mapRpc.erase(iterFind);
 			};
 		auto& [coAwaiter, fun] = iter.first->second;
 		return coAwaiter;

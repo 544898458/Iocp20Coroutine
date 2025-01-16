@@ -225,7 +225,7 @@ void Entity::BroadcastEnter()
 	//LOG(INFO) << NickName() << "调用Entity::BroadcastEnter," << Id;
 	Broadcast(MsgAddRoleRet(*this));//自己广播给别人
 	BroadcastNotifyPos();
-	CoEvent<MyEvent::AddEntity>::OnRecvEvent(false, { weak_from_this() });
+	CoEvent<MyEvent::AddEntity>::OnRecvEvent({ weak_from_this() });
 }
 
 void Entity::BroadcastNotifyPos()

@@ -79,7 +79,7 @@ namespace AiCo
 		KeepCancel kc(funCancel);
 		const auto posLocalTarget = posTarget;
 		refThis.BroadcastChangeSkeleAnim("run");
-		CoEvent<MyEvent::MoveEntity>::OnRecvEvent(false, { refThis.weak_from_this() });
+		CoEvent<MyEvent::MoveEntity>::OnRecvEvent({ refThis.weak_from_this() });
 		while (true)
 		{
 			if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次

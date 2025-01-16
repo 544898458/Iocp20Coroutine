@@ -69,7 +69,7 @@ private:
 	void OnRecv(const Msg切换空闲工程车& msg);
 
 	void 选中单位(const std::vector<uint64_t>& vecId);
-	std::vector<WpEntity> Get空闲工程车(单位类型 造活动单位类型 = 单位类型_Invalid_0);
+	std::vector<WpEntity> Get空闲工程车(单位类型 造活动单位类型, bool b包括采集中的工程车);
 
 	void Send选中音效(const Entity& refEntity);
 

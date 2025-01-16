@@ -11,6 +11,7 @@ public:
 	void 采集(PlayerGateSession_Game&, WpEntity wp);
 	CoTaskBool Co采集(WpEntity wp);
 	static void AddComponent(Entity& spEntity);
+	static bool 正在采集(Entity& refEntity);
 	CoTaskCancel m_TaskCancel;
 private:
 	static constexpr uint32_t Max携带矿() { return 5; }

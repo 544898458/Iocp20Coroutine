@@ -107,7 +107,7 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 					//if (stop)
 					//	co_return true;
 					Space::GetSpacePlayer(m_refEntity).m_u32晶体矿 += u32携带矿;
-					CoEvent<MyEvent::晶体矿已运回基地>::OnRecvEvent(false, {});
+					CoEvent<MyEvent::晶体矿已运回基地>::OnRecvEvent({});
 				}
 				else
 				{
@@ -142,7 +142,7 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 			}
 
 			//在目标矿附近
-			CoEvent<MyEvent::开始采集晶体矿>::OnRecvEvent(false, {});
+			CoEvent<MyEvent::开始采集晶体矿>::OnRecvEvent({});
 			if (co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//采矿1个矿耗时
 				co_return true;//中断
 
@@ -184,5 +184,13 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 void 采集Component::AddComponent(Entity& refEntity)
 {
 	refEntity.m_sp采集 = std::make_shared<采集Component, Entity&>(refEntity);
+}
+
+bool 采集Component::正在采集(Entity& refEntity)
+{
+	if (!refEntity.m_sp采集)
+		return false;
+
+	return !refEntity.m_sp采集->m_TaskCancel.co.Finished();
 }
 

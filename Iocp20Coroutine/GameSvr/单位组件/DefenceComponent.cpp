@@ -70,7 +70,7 @@ void DefenceComponent::受伤(int hp)
 			}
 		}
 		m_refEntity.CoDelayDelete().RunNew();
-		CoEvent<MyEvent::单位阵亡>::OnRecvEvent(false, { .wpEntity = m_refEntity.weak_from_this() });
+		CoEvent<MyEvent::单位阵亡>::OnRecvEvent({ .wpEntity = m_refEntity.weak_from_this() });
 		PlayerComponent::Send资源(m_refEntity);
 	}
 }

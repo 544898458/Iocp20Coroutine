@@ -493,8 +493,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 		return;
 
 	//×Ô¶¯ÕÒÒ»¸öºÏÊÊµÄ¹¤³Ì³µÈ¥Ôì
-
-	auto vecWp = Get¿ÕÏĞ¹¤³Ì³µ(msg.ÀàĞÍ);
+	auto vecWp = Get¿ÕÏĞ¹¤³Ì³µ(msg.ÀàĞÍ, true);
 	if (vecWp.empty())
 	{
 		²¥·ÅÉùÒô("BUZZ", "Ã»ÕÒµ½¿ÕÏĞµÄ¹¤³Ì³µ");
@@ -506,6 +505,14 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 		CHECK_WP_RET_FALSE(wpÓÒ);
 		auto& ref×ó = *wp×ó.lock();
 		auto& refÓÒ = *wpÓÒ.lock();
+		const auto b×ó_ÔÚ²É¼¯ = ²É¼¯Component::ÕıÔÚ²É¼¯(ref×ó);
+		const auto bÓÒ_ÔÚ²É¼¯ = ²É¼¯Component::ÕıÔÚ²É¼¯(refÓÒ);
+		if (b×ó_ÔÚ²É¼¯ && !bÓÒ_ÔÚ²É¼¯)
+			return false;
+
+		if (!b×ó_ÔÚ²É¼¯ && bÓÒ_ÔÚ²É¼¯)
+			return true;
+
 		return msg.pos.DistancePow2(ref×ó.Pos()) < msg.pos.DistancePow2(refÓÒ.Pos());
 		});
 
@@ -517,7 +524,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 
 }
 
-std::vector<WpEntity> PlayerGateSession_Game::Get¿ÕÏĞ¹¤³Ì³µ(const µ¥Î»ÀàĞÍ Ôì»î¶¯µ¥Î»ÀàĞÍ)
+std::vector<WpEntity> PlayerGateSession_Game::Get¿ÕÏĞ¹¤³Ì³µ(const µ¥Î»ÀàĞÍ Ôì»î¶¯µ¥Î»ÀàĞÍ, bool b°üÀ¨²É¼¯ÖĞµÄ¹¤³Ì³µ)
 {
 	CHECK_WP_RET_DEFAULT(m_wpSpace);
 	Space& refSpace = *m_wpSpace.lock();
@@ -525,8 +532,11 @@ std::vector<WpEntity> PlayerGateSession_Game::Get¿ÕÏĞ¹¤³Ì³µ(const µ¥Î»ÀàĞÍ Ôì»î¶
 	for (auto [_, wp] : refSpace.m_mapPlayer[NickName()].m_mapWpEntity)
 	{
 		CHECK_WP_CONTINUE(wp);
-		Entity& refEntiy = *wp.lock();
-		if (!ÄÜÔì(refEntiy, Ôì»î¶¯µ¥Î»ÀàĞÍ))
+		Entity& refEntity = *wp.lock();
+		if (!ÄÜÔì(refEntity, Ôì»î¶¯µ¥Î»ÀàĞÍ))
+			continue;
+
+		if (!b°üÀ¨²É¼¯ÖĞµÄ¹¤³Ì³µ && ²É¼¯Component::ÕıÔÚ²É¼¯(refEntity))
 			continue;
 
 		vecWp.push_back(wp);
@@ -575,7 +585,7 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	spSpace->AddEntity(spEntityViewPort, 500);
 	spEntityViewPort->BroadcastEnter();
 
-	CoEvent<MyEvent::Íæ¼Ò½øÈëSpace>::OnRecvEvent(false, { this->weak_from_this(), spEntityViewPort, wpSpace });
+	CoEvent<MyEvent::Íæ¼Ò½øÈëSpace>::OnRecvEvent({ this->weak_from_this(), spEntityViewPort, wpSpace });
 	return spEntityViewPort;
 }
 
@@ -920,7 +930,7 @@ void PlayerGateSession_Game::OnRecv(const Msg½øÆäËûÍæ¼Ò¶àÈËÕ½¾Ö& msg)
 
 void PlayerGateSession_Game::OnRecv(const MsgÇĞ»»¿ÕÏĞ¹¤³Ì³µ& msg)
 {
-	auto vecWp = Get¿ÕÏĞ¹¤³Ì³µ();
+	auto vecWp = Get¿ÕÏĞ¹¤³Ì³µ(µ¥Î»ÀàĞÍ_Invalid_0, false);
 	if (vecWp.empty())
 	{
 		²¥·ÅÉùÒô("BUZZ", "Ã»ÓĞ¿ÕÏĞµÄ¹¤³Ì³µ");
