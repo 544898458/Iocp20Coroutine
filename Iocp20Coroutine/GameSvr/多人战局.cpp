@@ -17,9 +17,10 @@ void 玩家带入单位进入四方对战(Space& refSpace, Entity& ref视口, const Position &
 		refGateSession.Send设置视口(*sp工程车);
 	}
 
-	资源Component::Add(refSpace, 晶体矿, { refPos.x,refPos.z - 20 });
-	资源Component::Add(refSpace, 晶体矿, { refPos.x,refPos.z + 20 });
-	资源Component::Add(refSpace, 燃气矿, { refPos.x + 15,refPos.z });
+	资源Component::Add(refSpace, 晶体矿, { refPos.x,		refPos.z - 20 });
+	资源Component::Add(refSpace, 晶体矿, { refPos.x,		refPos.z + 20 });
+	资源Component::Add(refSpace, 晶体矿, { refPos.x - 20,	refPos.z	});
+	资源Component::Add(refSpace, 燃气矿, { refPos.x + 20,	refPos.z	});
 
 }
 

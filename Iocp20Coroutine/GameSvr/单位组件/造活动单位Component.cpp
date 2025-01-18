@@ -127,6 +127,7 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 			m_list等待造.clear();
 			co_return{};
 		}
+		Space::GetSpacePlayer(m_refEntity).m_u32晶体矿-= 配置.制造.u16消耗晶体矿;
 		//耗时
 		//if (co_await CoTimer::Wait(1s, m_TaskCancel造活动单位.cancel))
 		//{
