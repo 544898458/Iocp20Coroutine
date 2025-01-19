@@ -39,6 +39,7 @@ namespace 单位
 		std::string str攻击音效;
 		std::string str阵亡音效;
 		std::string str阵亡动作;
+		std::chrono::system_clock::duration dura后摇;
 	};
 	struct 活动单位配置
 	{
