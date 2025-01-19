@@ -17,6 +17,11 @@ void EntitySystem::BroadcastChangeSkeleAnimIdle(Entity& refEntity)
 {
 	refEntity.BroadcastChangeSkeleAnim("idle");
 }
+void EntitySystem::BroadcastChangeSkeleAnim采集(Entity& refEntity)
+{
+	if (refEntity.m_类型 == 工蜂)
+		refEntity.BroadcastChangeSkeleAnim("采集");
+}
 
 void EntitySystem::Broadcast播放声音(Entity& refEntity, const std::string& refStr声音, const std::string& str文本)
 {

@@ -240,6 +240,13 @@ CoTaskBool PlayerGateSession_Game::Co进多人联机地图(WpEntity wp视口)
 			SpEntity sp工程车 = refSpace.造活动单位(ref视口.m_spPlayer, NickName(), pos出生, 配置, 类型);
 			Send设置视口(*sp工程车);
 		}
+		{
+			const 单位类型 类型(单位类型::工蜂);
+			单位::活动单位配置 配置;
+			单位::Find活动单位配置(类型, 配置);
+
+			refSpace.造活动单位(ref视口.m_spPlayer, NickName(), { pos出生.x + 6, pos出生.z + 6}, 配置, 类型);
+		}
 		//auto [stop, msgResponce] = co_await AiCo::ChangeMoney(*this, 0, true, m_funCancel进地图);
 		//if (stop)
 		//	co_return true;

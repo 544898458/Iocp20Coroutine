@@ -138,6 +138,8 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 					//m_refEntity.m_spAttack->TryCancel();
 					if (co_await AiCo::WalkToTarget(m_refEntity, wp目标资源.lock(), m_TaskCancel.cancel, false))
 						co_return true;//中断
+
+					EntitySystem::BroadcastChangeSkeleAnimIdle(m_refEntity);
 				}
 			}
 

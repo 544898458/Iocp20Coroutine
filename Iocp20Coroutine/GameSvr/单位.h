@@ -45,6 +45,7 @@ namespace 单位
 		单位配置 配置;
 		制造配置 制造;
 		战斗配置 战斗;
+		std::string str入场语音;
 	};
 	struct 怪配置
 	{

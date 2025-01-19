@@ -389,16 +389,13 @@ SpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 	m_mapPlayer[strNickName].m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
 	AddEntity(spNewEntity);//全地图单位
 	spNewEntity->m_速度每帧移动距离 = 配置.战斗.f每帧移动距离;
+	PlayerComponent::播放声音(*spNewEntity, 配置.str入场语音); //refGateSession.Say语音提示("工程车可以开工了!");//SCV, good to go, sir. SCV可以开工了
 	switch (类型)
 	{
 	case 工程车:
 		采集Component::AddComponent(*spNewEntity);
 		造建筑Component::AddComponent(*spNewEntity, 类型);
-		PlayerComponent::播放声音(*spNewEntity, "语音/工程车准备就绪女声可爱版"); //refGateSession.Say语音提示("工程车可以开工了!");//SCV, good to go, sir. SCV可以开工了
 		break;
-	case 兵:PlayerComponent::播放声音(*spNewEntity, "语音/准备战斗男声正经版"); break;//refGateSession.Say语音提示("听说有人要买我的狗头？");//You want a piece of me, boy?想要我的一部分吗，小子？
-	case 近战兵:PlayerComponent::播放声音(*spNewEntity, "tfbRdy00"); break;//refGateSession.Say语音提示("听说有人要我的斧头？");//You want a piece of me, boy?想要我的一部分吗，小子？
-	case 三色坦克:PlayerComponent::播放声音(*spNewEntity, "语音/ttardy00"); break;
 	default:break;
 	}
 
