@@ -83,9 +83,10 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 		}
 		if (wpEntity基地.expired())
 		{
-			if (co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//自己连一个基地都没有，等一会儿再试
-				co_return true;
-			continue;
+			//if (co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//自己连一个基地都没有
+			//	co_return true;
+
+			co_return false;
 		}
 		if (Max携带矿() <= m_u32携带矿)//装满了，回基地放矿
 		{

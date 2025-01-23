@@ -95,7 +95,8 @@ namespace AiCo
 				co_return true;
 			}
 
-			if (已走到目标附近(refThis, posLocalTarget, f距离目标小于此距离停下))
+			auto wp最近 = refThis.m_refSpace.Get最近的Entity(refThis, Space::友方, [](const Entity&) {return true; });
+			if (已走到目标附近(refThis, posLocalTarget, f距离目标小于此距离停下) && (wp最近.expired()||!refThis.DistanceLessEqual(*wp最近.lock(), 0.3f)))
 			{
 				//EntitySystem::BroadcastEntity描述(refThis, "已走到目标附近");
 				co_return false;

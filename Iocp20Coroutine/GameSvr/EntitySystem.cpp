@@ -45,7 +45,7 @@ bool EntitySystem::Is视口(const Entity& refEntity)
 
 bool EntitySystem::距离友方单位太近(Entity& refEntity)
 {
-	const auto wp最近的正在攻击的友方单位 = refEntity.m_refSpace.Get最近的Entity(refEntity, false,
+	const auto wp最近的正在攻击的友方单位 = refEntity.m_refSpace.Get最近的Entity(refEntity, Space::友方,
 		[](const Entity& ref)->bool
 		{
 			if (nullptr == ref.m_spDefence)

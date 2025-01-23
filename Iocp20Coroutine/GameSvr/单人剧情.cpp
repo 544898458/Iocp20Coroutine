@@ -235,11 +235,10 @@ namespace 单人剧情
 
 			refGateSession.Say系统(std::format("第{0}波敌人正向您走来", i));
 			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 兵 : 近战兵, { 48,-48 }, i * 1);
+			auto vecEneity2 = MonsterComponent::AddMonster(refSpace, 工蜂, { 47,-47 }, i * 1);
+			vecEneity.insert(vecEneity.end(), vecEneity2.begin(), vecEneity2.end());
 			for (auto& spEntity : vecEneity)
 			{
-				//if (spEntity->m_sp走)
-					//spEntity->m_sp走->WalkToPos({ -30, 30 });
-
 				spEntity->m_spAttack->m_fun空闲走向此处 = 怪物走向矿附近;
 			}
 

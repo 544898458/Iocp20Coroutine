@@ -88,7 +88,7 @@ WpEntity Space::GetEntity(const int64_t id)
 	return itFind->second->weak_from_this();
 }
 
-WpEntity Space::Get最近的Entity支持地堡中的单位(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件)
+WpEntity Space::Get最近的Entity支持地堡中的单位(Entity& refEntity, const FindType bFindEnemy, std::function<bool(const Entity&)> fun符合条件)
 {
 	WpEntity wp = refEntity.m_wpOwner;
 	if (!GetEntity(refEntity.Id).expired())
@@ -101,7 +101,7 @@ WpEntity Space::Get最近的Entity支持地堡中的单位(Entity& refEntity, const bool bF
 	return Get最近的Entity(*wp.lock(), bFindEnemy, fun符合条件);
 }
 
-WpEntity Space::Get最近的Entity(Entity& refEntity, const bool bFindEnemy, std::function<bool(const Entity&)> fun符合条件)
+WpEntity Space::Get最近的Entity(Entity& refEntity, const FindType bFindEnemy, std::function<bool(const Entity&)> fun符合条件)
 {
 	if (!refEntity.m_upAoi)
 		return{};
@@ -114,7 +114,9 @@ WpEntity Space::Get最近的Entity(Entity& refEntity, const bool bFindEnemy, std::f
 			CHECK_FALSE(!wp.expired());
 			Entity& ref = *wp.lock();
 			const auto bEnemy = ref.IsEnemy(refEntity);
-			if (bEnemy != bFindEnemy)
+			if(bFindEnemy == 敌方 && !bEnemy )
+				return false;
+			if (bFindEnemy == 友方 && bEnemy)
 				return false;
 
 			if (fun符合条件 && !fun符合条件(ref))

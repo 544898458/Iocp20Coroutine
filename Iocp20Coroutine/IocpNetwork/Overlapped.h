@@ -131,13 +131,13 @@ namespace Iocp
 				auto changed = this->pOverlapped->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sending);//激活
 				if (changed)
 				{
-					LOG(INFO) << "激活沉睡的Send协程";
+					//LOG(INFO) << "激活沉睡的Send协程";
 					PostQueuedCompletionStatus(port, 0, (ULONG_PTR)pKey, &this->pOverlapped->overlapped);
 					return;
 				}
 				if (finalSendState == SendState_Sending)
 				{
-					LOG(INFO) << "Send协程正在等待发送结果";
+					//LOG(INFO) << "Send协程正在等待发送结果";
 					return;
 				}
 				assert(finalSendState == SendState_SendBeforeSleep);
@@ -150,7 +150,7 @@ namespace Iocp
 				assert(changed);
 				if (changed)
 				{
-					LOG(INFO) << "SendState_SendBeforeSleep,转,SendState_Sending";
+					//LOG(INFO) << "SendState_SendBeforeSleep,转,SendState_Sending";
 					return;
 				}
 

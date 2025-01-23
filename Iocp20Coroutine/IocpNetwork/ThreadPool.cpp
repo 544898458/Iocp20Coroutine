@@ -17,7 +17,7 @@ namespace Iocp
 		//LOG(INFO) << "等GetQueuedCompletionStatus返回,port=" << port << ",GetCurrentThreadId=" << GetCurrentThreadId();
 		BOOL bFlag = GetQueuedCompletionStatus(m_hIocp, &number_of_bytes, (PULONG_PTR)&pCompletionKey, &lpOverlapped, INFINITE);//没完成就会卡在这里，正常
 		int lastErr = GetLastError();//可能是Socket强制关闭
-		LOG(INFO) << "GetQueuedCompletionStatus返回lastErr=" << lastErr << ",pCompletionKey=" << pCompletionKey << ",number_of_bytes=" << number_of_bytes;
+		//LOG(INFO) << "GetQueuedCompletionStatus返回lastErr=" << lastErr << ",pCompletionKey=" << pCompletionKey << ",number_of_bytes=" << number_of_bytes;
 
 		if (lpOverlapped != nullptr)
 		{

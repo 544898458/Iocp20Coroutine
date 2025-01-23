@@ -145,22 +145,22 @@ namespace Iocp {
 				//delete pOverlapped;
 				break;
 			}
-			if (callSend)
-				LOG(INFO) << "准备异步等待WSASend结果";
-			else
-				LOG(INFO) << "等有数据再发WSASend";
+			//if (callSend)
+			//	LOG(INFO) << "准备异步等待WSASend结果";
+			//else
+			//	LOG(INFO) << "等有数据再发WSASend";
 
-			LOG(INFO) << "开始异步等WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
-				<< ",callSend=" << callSend << ",wsabuf.len=" << overlapped.wsabuf.len
-				<< ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn;
+			//LOG(INFO) << "开始异步等WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
+			//	<< ",callSend=" << callSend << ",wsabuf.len=" << overlapped.wsabuf.len
+			//	<< ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn;
 			co_yield callSend ? Overlapped::Sending : Overlapped::SendStop;
-			LOG(INFO) << "已异步等到WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
-				<< ",callSend=" << callSend << ",wsabuf.len=" << overlapped.wsabuf.len << ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn
-				<< ",Socket=" << Socket();
+			//LOG(INFO) << "已异步等到WSASend结果,pOverlapped.numberOfBytesTransferred=" << overlapped.numberOfBytesTransferred
+			//	<< ",callSend=" << callSend << ",wsabuf.len=" << overlapped.wsabuf.len << ",GetLastErrorReturn=" << overlapped.GetLastErrorReturn
+			//	<< ",Socket=" << Socket();
 
 			if (!callSend)
 			{
-				LOG(INFO) << "有数据了，准备发WSASend" << this << "," << Socket();
+				//LOG(INFO) << "有数据了，准备发WSASend" << this << "," << Socket();
 				continue;
 			}
 
@@ -173,7 +173,7 @@ namespace Iocp {
 			}
 			if (overlapped.GetLastErrorReturn == ERROR_IO_PENDING)
 			{
-				printf("ERROR_IO_PENDING还没发完，下次还要接着发\n");
+				//LOG(WARNING) << "ERROR_IO_PENDING还没发完，下次还要接着发";
 			}
 
 			this->sendBuf.Complete(overlapped.numberOfBytesTransferred);
