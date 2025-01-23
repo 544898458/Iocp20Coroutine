@@ -242,7 +242,7 @@ namespace 单人剧情
 				spEntity->m_spAttack->m_fun空闲走向此处 = 怪物走向矿附近;
 			}
 
-			if (co_await CoTimer::Wait(20s, funCancel))
+			if (co_await CoTimer::Wait(25s, funCancel))
 				co_return 0;
 		}
 
