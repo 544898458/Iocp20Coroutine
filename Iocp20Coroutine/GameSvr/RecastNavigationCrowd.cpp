@@ -18,7 +18,7 @@ std::shared_ptr<CrowdToolState> CreateCrowdToolState(const std::string &stfÑ°Â·Î
 {
 	auto sp = std::make_shared<CrowdToolState>();
 	auto pSample = new Sample_TempObstacles();
-	pSample->m_agentRadius = 1.0f;
+	pSample->m_agentRadius = 1.5f;
 	pSample->loadAll(stfÑ°Â·ÎÄ¼ş.c_str());
 	pSample->m_navQuery->init(pSample->m_navMesh, 1024*32);
 	sp->init(pSample);

@@ -95,10 +95,34 @@ namespace AiCo
 				co_return true;
 			}
 
-			auto wp最近 = refThis.m_refSpace.Get最近的Entity(refThis, Space::友方, [](const Entity&) {return true; });
-			if (已走到目标附近(refThis, posLocalTarget, f距离目标小于此距离停下) && (wp最近.expired()||!refThis.DistanceLessEqual(*wp最近.lock(), 0.3f)))
+			if (已走到目标附近(refThis, posLocalTarget, f距离目标小于此距离停下))
 			{
-				//EntitySystem::BroadcastEntity描述(refThis, "已走到目标附近");
+				if (refThis.m_spPlayer)
+				{
+					int a = 0;
+				}
+
+				for (int i = 0; i < 30; ++i)
+				{
+					auto wp最近 = refThis.m_refSpace.Get最近的Entity(refThis, Space::友方, [](const Entity&) {return true; });
+					if (wp最近.expired())
+						co_return false;
+
+					Entity& ref最近 = *wp最近.lock();
+
+					if (!refThis.DistanceLessEqual(ref最近, 2.0f))
+					{
+						LOG(INFO) << "附近没有友方单位，停止走向" << posLocalTarget;
+						co_return false;
+					}
+					if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
+					{
+						LOG(INFO) << "已走到目标附近，走向" << posLocalTarget << "的协程取消了";
+						co_return true;
+					}
+				}
+
+				LOG(INFO) << "已走到目标附近，附近都是友方单位," << posLocalTarget;
 				co_return false;
 			}
 
