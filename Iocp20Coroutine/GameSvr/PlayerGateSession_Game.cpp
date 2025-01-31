@@ -59,6 +59,7 @@ template void PlayerGateSession_Game::Send(const MsgDelRoleRet&);
 template void PlayerGateSession_Game::Send(const MsgNotifyMoney&);
 template void PlayerGateSession_Game::Send(const Msg显示界面&);
 template void PlayerGateSession_Game::Send(const MsgEntity描述&);
+template void PlayerGateSession_Game::Send(const Msg弹丸特效&);
 
 
 void PlayerGateSession_Game::OnDestroy()

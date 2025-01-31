@@ -255,6 +255,14 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 		CHECK_终止攻击目标流程;
 
 		播放攻击动作();
+		switch (m_refEntity.m_类型)
+		{
+		case 光子炮:
+			m_refEntity.Broadcast<Msg弹丸特效>({ .idEntity = m_refEntity.Id, .idEntityTarget = wpDefencer.lock()->Id,.特效name = StrConv::GbkToUtf8("特效/黄泡泡") });
+			break;
+		default:; break;
+		}
+
 		if (0s < m_战斗配置.dura开始伤害 && co_await CoTimer::Wait(m_战斗配置.dura开始伤害, cancel))
 			co_return true;//协程取消
 
@@ -272,7 +280,7 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 		refDefencer.m_spDefence->受伤(m_战斗配置.i32伤害);
 	} while (false);
 
-	if (co_await CoTimer::Wait(m_战斗配置.dura后摇 , cancel))//后摇
+	if (co_await CoTimer::Wait(m_战斗配置.dura后摇, cancel))//后摇
 		co_return true;//协程取消
 
 	if (!m_refEntity.IsDead())

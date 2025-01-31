@@ -100,6 +100,7 @@ enum MsgId
 	玩家多人战局列表,
 	进其他玩家多人战局,
 	切换空闲工程车,
+	弹丸特效,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -504,4 +505,14 @@ struct Msg切换空闲工程车
 {
 	MsgHead msg{ .id = 切换空闲工程车 };
 	MSGPACK_DEFINE(msg);
+};
+
+struct Msg弹丸特效
+{
+	//Msg弹丸特效(Entity& ref, const Position& refTarget) :entityId(ref.Id), pos起始(ref.Pos()) {}
+	MsgHead msg{ .id = 弹丸特效 };
+	uint64_t idEntity;
+	uint64_t idEntityTarget;
+	std::string 特效name;
+	MSGPACK_DEFINE(msg, idEntity, idEntityTarget, 特效name);
 };
