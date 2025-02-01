@@ -38,11 +38,11 @@ namespace 单人剧情
 		const 单位类型 类型(单位类型::工程车);
 		单位::活动单位配置 配置;
 		单位::Find活动单位配置(类型, 配置);
-		SpEntity sp工程车 = refSpace.造活动单位(ref视口.m_spPlayer, EntitySystem::GetNickName(ref视口), {5,10}, 配置, 类型);
+		SpEntity sp工程车 = refSpace.造活动单位(ref视口.m_spPlayer, EntitySystem::GetNickName(ref视口), { 5,10 }, 配置, 类型);
 
 		PlayerComponent::Say系统(ref视口, "请点击“工程车”选中，然后点击“造基地”按钮，再点击空白地面，10秒后就能造出一个基地");
 
-		const auto funSameSpace = [&refSpace,&ref视口](const MyEvent::AddEntity& refAddEntity)
+		const auto funSameSpace = [&refSpace, &ref视口](const MyEvent::AddEntity& refAddEntity)
 			{ return MyEvent::SameSpace(refAddEntity.wpEntity, refSpace, EntitySystem::GetNickName(ref视口)); };
 
 		Position pos基地;
@@ -163,7 +163,7 @@ namespace 单人剧情
 
 		PlayerComponent::播放声音(ref视口, "音效/YouWin", "您取得了胜利！您真是指挥天才！");
 
-		PlayerComponent::Send<Msg显示界面>(ref视口.m_spPlayer,{ .ui = Msg显示界面::选择地图 });
+		PlayerComponent::Send<Msg显示界面>(ref视口.m_spPlayer, { .ui = Msg显示界面::选择地图 });
 		co_return 0;
 	}
 	Position 怪物走向矿附近(const Position& refOld)
@@ -184,7 +184,7 @@ namespace 单人剧情
 		}
 		return false;
 	}
-	CoTask<int> Co防守战(Space& refSpace,Entity &ref视口, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
+	CoTask<int> Co防守战(Space& refSpace, Entity& ref视口, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
@@ -192,27 +192,29 @@ namespace 单人剧情
 			{ return ref.wpPlayerGateSession.lock().get() == &refGateSession; };
 
 #define 等玩家读完 {if (std::get<0>(co_await CoEvent<MyEvent::已阅读剧情对话>::Wait(funCancel, funSameSession)))co_return 0;}
-		PlayerComponent::剧情对话(ref视口, "情报显示：将有大量敌方单位进攻我方基地，请做好准备。");	等玩家读完;
-		PlayerComponent::剧情对话(ref视口, "可是我仅受过简单的指挥训练。");							等玩家读完;
-		PlayerComponent::剧情对话(ref视口, "我们会提供足够的初始资源，你不用再从零开始采集。");		等玩家读完;
-		PlayerComponent::剧情对话(ref视口, "我还是没有把握。");										等玩家读完;
-		PlayerComponent::剧情对话(ref视口, "我会传授你指挥实战速成口诀，三分钟即可成为实战高手。");	等玩家读完;
-		PlayerComponent::剧情对话(ref视口, "真有这种口诀的话就应该在训练站时告诉我啊！");			等玩家读完;
-		PlayerComponent::剧情对话(ref视口, "实战口诀只有在九死一生的实战中才有用！");				等玩家读完;
-		PlayerComponent::剧情对话(ref视口, "九死一生？形势严峻啊，我会全力以赴的!");				等玩家读完;
-		PlayerComponent::剧情对话(ref视口, "坦克可以超远距离造成超高伤害，而且是范围伤害，但是坦克锁定炮弹落点后有超长前摇时长，前摇结束后，敌方目标可能已经远离炮弹落点。炮弹落点附近的我方单位也会受到伤害。");等玩家读完;
-		PlayerComponent::剧情对话(ref视口, "有点鸡肋的感觉，不是红警中的高速坦克，与星际中的攻城坦克也有些不同。");等玩家读完;
-		PlayerComponent::剧情对话(ref视口, "…不知道你在说什么…有一种叫“光子炮”的建筑单位，攻击距离很远，仅次于坦克；前摇时长很短，可以快速攻击；缺陷是伤害较低；不过多造点集中防守某一块区域还是很实用的。");等玩家读完;
-		PlayerComponent::剧情对话(ref视口, "看来只要有坦克和光子炮就能守住对吗？");					等玩家读完;
-		PlayerComponent::剧情对话(ref视口, "是的，这是其他指挥官总结的经验。大概10个光子炮和5辆坦克沿墙边布置就能守住。当然还有其他多种可行的防守方法，要靠你自行摸索。");等玩家读完;
-		PlayerComponent::剧情对话(ref视口, "OK，也不是很复杂。我有信心完成任务！");					等玩家读完;
-		PlayerComponent::剧情对话(ref视口, "走你！");												等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "图片/总教官", "", "情报显示：将有大量敌方单位进攻我方基地，请做好准备。");	等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "", "图片/玩家", "可是我仅受过简单的指挥训练。");							等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "图片/总教官", "", "我们会提供足够的初始资源，你不用再从零开始采集。");		等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "", "图片/玩家", "我还是没有把握。");										等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "图片/总教官", "", "我会传授你指挥实战速成口诀，三分钟即可成为实战高手。");	等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "", "图片/玩家", "真有这种口诀的话就应该在训练站时告诉我啊！");			等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "图片/总教官", "", "实战口诀只有在九死一生的实战中才有用！");				等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "", "图片/玩家", "九死一生？形势严峻啊，我会全力以赴的!");				等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "图片/总教官", "", "坦克可以超远距离造成超高伤害，而且是范围伤害，但是坦克锁定炮弹落点后有超长前摇时长，前摇结束后，敌方目标可能已经远离炮弹落点。炮弹落点附近的我方单位也会受到伤害。");等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "", "图片/玩家", "有点鸡肋的感觉，不是红警中的高速坦克，与星际中的攻城坦克也有些不同。");等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "图片/总教官", "", "…不知道你在说什么…有一种叫“光子炮”的建筑单位，攻击距离很远，仅次于坦克；前摇时长很短，可以快速攻击；缺陷是伤害较低；不过多造点集中防守某一块区域还是很实用的。");等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "", "图片/玩家", "看来只要有坦克和光子炮就能守住对吗？");					等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "图片/总教官", "", "是的，这是其他指挥官总结的经验。大概10个光子炮和5辆坦克沿墙边布置就能守住。当然还有其他多种可行的防守方法，要靠你自行摸索。");等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "", "图片/玩家", "OK，也不是很复杂。我有信心完成任务！");					等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "图片/总教官", "", "走你！");												等玩家读完;
+		PlayerComponent::剧情对话已看完(ref视口);
+
 		PlayerComponent::Say系统(ref视口, "防守战：只要守住，就是胜利！");
 		if (co_await CoTimer::Wait(1s, funCancel))
 			co_return 0;
 
 		refSpace.GetSpacePlayer(ref视口).m_u32燃气矿 += 300;
-		refSpace.GetSpacePlayer(ref视口).m_u32晶体矿+= 1000;
+		refSpace.GetSpacePlayer(ref视口).m_u32晶体矿 += 1000;
 		{
 			//refSpace.m_mapPlayer[refGateSession.NickName()].m_u32燃气矿 += 200;
 			//auto [stop, msgResponce] = co_await AiCo::ChangeMoney(refGateSession, 1000, true, funCancel);
@@ -233,7 +235,7 @@ namespace 单人剧情
 				const 单位类型 类型(单位类型::工程车);
 				单位::活动单位配置 配置;
 				单位::Find活动单位配置(类型, 配置);
-				refSpace.造活动单位(ref视口.m_spPlayer, EntitySystem::GetNickName(ref视口), {-30, 30}, 配置, 类型);
+				refSpace.造活动单位(ref视口.m_spPlayer, EntitySystem::GetNickName(ref视口), { -30, 30 }, 配置, 类型);
 			}
 
 			资源Component::Add(refSpace, 晶体矿, { -20, 35 });
@@ -278,7 +280,7 @@ namespace 单人剧情
 		//}
 		while (!co_await CoTimer::Wait(5s, funCancel))
 		{
-			if (Is战斗结束(refSpace,refGateSession))
+			if (Is战斗结束(refSpace, refGateSession))
 				co_return 0;
 		}
 		co_return 0;

@@ -17,11 +17,19 @@ void PlayerComponent::Say系统(Entity& refEntity, const std::string& str)
 	if (refEntity.m_spPlayer)
 		refEntity.m_spPlayer->m_refSession.Say系统(str);
 }
-void PlayerComponent::剧情对话(Entity& refEntity, const std::string& str)
+
+void PlayerComponent::剧情对话(Entity& refEntity, const std::string& str头像左, const std::string& str头像右, const std::string& str)
 {
 	if (refEntity.m_spPlayer)
-		refEntity.m_spPlayer->m_refSession.剧情对话(str);
+		refEntity.m_spPlayer->m_refSession.剧情对话(str头像左, str头像右, str);
 }
+
+void PlayerComponent::剧情对话已看完(Entity& refEntity)
+{
+	if (refEntity.m_spPlayer)
+		refEntity.m_spPlayer->m_refSession.剧情对话已看完();
+}
+
 void PlayerComponent::播放声音(Entity& refEntity, const std::string& refStr声音, const std::string& str文本)
 {
 	if (refEntity.m_spPlayer)

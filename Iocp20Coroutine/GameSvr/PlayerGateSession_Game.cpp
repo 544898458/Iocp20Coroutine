@@ -955,12 +955,16 @@ void PlayerGateSession_Game::OnRecv(const Msg切换空闲工程车& msg)
 	++m_idx切换工程车;
 }
 
-void PlayerGateSession_Game::剧情对话(const std::string& str)
+void PlayerGateSession_Game::剧情对话(const std::string& str头像左, const std::string& str头像右, const std::string& str)
 {
-	Send<Msg剧情对话>({ .str对话内容 = StrConv::GbkToUtf8(str) });
+	Send<Msg剧情对话>({ .str头像左 = StrConv::GbkToUtf8(str头像左),.str头像右 = StrConv::GbkToUtf8(str头像右),.str对话内容 = StrConv::GbkToUtf8(str) });
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg剧情对话已看完& msg)
 {
 	CoEvent<MyEvent::已阅读剧情对话>::OnRecvEvent({ .wpPlayerGateSession = weak_from_this() });
+}
+void PlayerGateSession_Game::剧情对话已看完()
+{
+	Send<Msg剧情对话已看完>({});
 }
