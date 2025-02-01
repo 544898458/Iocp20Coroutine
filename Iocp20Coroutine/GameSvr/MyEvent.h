@@ -29,6 +29,10 @@ namespace MyEvent
 		std::weak_ptr<Entity> wp视口;
 		std::weak_ptr<Space> wpSpace;
 	};
+	struct 已阅读剧情对话
+	{
+		std::weak_ptr<PlayerGateSession_Game> wpPlayerGateSession;
+	};
 	bool SameSpace(const WpEntity& refWpEntity, const Space& refSpace, const std::string& stdNickName);
 }
 

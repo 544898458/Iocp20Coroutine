@@ -188,6 +188,25 @@ namespace 单人剧情
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
+		const auto funSameSession = [&refGateSession](const MyEvent::已阅读剧情对话& ref)
+			{ return ref.wpPlayerGateSession.lock().get() == &refGateSession; };
+
+#define 等玩家读完 {if (std::get<0>(co_await CoEvent<MyEvent::已阅读剧情对话>::Wait(funCancel, funSameSession)))co_return 0;}
+		PlayerComponent::剧情对话(ref视口, "情报显示：将有大量敌方单位进攻我方基地，请做好准备。");	等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "可是我仅受过简单的指挥训练。");							等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "我们会提供足够的初始资源，你不用再从零开始采集。");		等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "我还是没有把握。");										等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "我会传授你指挥实战速成口诀，三分钟即可成为实战高手。");	等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "真有这种口诀的话就应该在训练站时告诉我啊！");			等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "实战口诀只有在九死一生的实战中才有用！");				等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "九死一生？形势严峻啊，我会全力以赴的!");				等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "坦克可以超远距离造成超高伤害，而且是范围伤害，但是坦克锁定炮弹落点后有超长前摇时长，前摇结束后，敌方目标可能已经远离炮弹落点。炮弹落点附近的我方单位也会受到伤害。");等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "有点鸡肋的感觉，不是红警中的高速坦克，与星际中的攻城坦克也有些不同。");等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "…不知道你在说什么…有一种叫“光子炮”的建筑单位，攻击距离很远，仅次于坦克；前摇时长很短，可以快速攻击；缺陷是伤害较低；不过多造点集中防守某一块区域还是很实用的。");等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "看来只要有坦克和光子炮就能守住对吗？");					等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "是的，这是其他指挥官总结的经验。大概10个光子炮和5辆坦克沿墙边布置就能守住。当然还有其他多种可行的防守方法，要靠你自行摸索。");等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "OK，也不是很复杂。我有信心完成任务！");					等玩家读完;
+		PlayerComponent::剧情对话(ref视口, "走你！");												等玩家读完;
 		PlayerComponent::Say系统(ref视口, "防守战：只要守住，就是胜利！");
 		if (co_await CoTimer::Wait(1s, funCancel))
 			co_return 0;

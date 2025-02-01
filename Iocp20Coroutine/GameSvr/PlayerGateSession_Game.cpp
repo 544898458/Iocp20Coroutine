@@ -663,6 +663,7 @@ void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& o
 	case MsgId::玩家多人战局列表:RecvMsg<Msg玩家多人战局列表>(obj); break;
 	case MsgId::进其他玩家多人战局:RecvMsg<Msg进其他玩家多人战局>(obj); break;
 	case MsgId::切换空闲工程车:RecvMsg<Msg切换空闲工程车>(obj); break;
+	case MsgId::剧情对话已看完:RecvMsg<Msg剧情对话已看完>(obj); break;
 	case MsgId::Gate转发:
 		LOG(ERROR) << "不能再转发";
 		assert(false);
@@ -952,4 +953,14 @@ void PlayerGateSession_Game::OnRecv(const Msg切换空闲工程车& msg)
 	选中单位({ refEntity.Id });
 	Send设置视口(refEntity);
 	++m_idx切换工程车;
+}
+
+void PlayerGateSession_Game::剧情对话(const std::string& str)
+{
+	Send<Msg剧情对话>({ .str对话内容 = StrConv::GbkToUtf8(str) });
+}
+
+void PlayerGateSession_Game::OnRecv(const Msg剧情对话已看完& msg)
+{
+	CoEvent<MyEvent::已阅读剧情对话>::OnRecvEvent({ .wpPlayerGateSession = weak_from_this() });
 }

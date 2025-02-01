@@ -101,6 +101,8 @@ enum MsgId
 	进其他玩家多人战局,
 	切换空闲工程车,
 	弹丸特效,
+	剧情对话,
+	剧情对话已看完,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -515,4 +517,16 @@ struct Msg弹丸特效
 	uint64_t idEntityTarget;
 	std::string 特效name;
 	MSGPACK_DEFINE(msg, idEntity, idEntityTarget, 特效name);
+};
+
+struct Msg剧情对话
+{
+	MsgHead msg{ .id = 剧情对话 };
+	std::string str对话内容;
+	MSGPACK_DEFINE(msg, str对话内容);
+};
+struct Msg剧情对话已看完
+{
+	MsgHead msg{ .id = 剧情对话已看完 };
+	MSGPACK_DEFINE(msg);
 };

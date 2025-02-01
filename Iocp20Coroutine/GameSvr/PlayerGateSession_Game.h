@@ -35,6 +35,9 @@ public:
 
 	void Send设置视口(const Entity& refEntity);
 	void 删除选中(const uint64_t id);
+
+	void 剧情对话(const std::string& str);
+
 	uint32_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
 	/// <summary>
@@ -67,6 +70,7 @@ private:
 	void OnRecv(const Msg进其他玩家个人战局& msg);
 	void OnRecv(const Msg进其他玩家多人战局& msg);
 	void OnRecv(const Msg切换空闲工程车& msg);
+	void OnRecv(const Msg剧情对话已看完& msg);
 
 	void 选中单位(const std::vector<uint64_t>& vecId);
 	std::vector<WpEntity> Get空闲工程车(单位类型 造活动单位类型, bool b包括采集中的工程车);

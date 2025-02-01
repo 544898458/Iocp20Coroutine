@@ -17,7 +17,11 @@ void PlayerComponent::Say系统(Entity& refEntity, const std::string& str)
 	if (refEntity.m_spPlayer)
 		refEntity.m_spPlayer->m_refSession.Say系统(str);
 }
-
+void PlayerComponent::剧情对话(Entity& refEntity, const std::string& str)
+{
+	if (refEntity.m_spPlayer)
+		refEntity.m_spPlayer->m_refSession.剧情对话(str);
+}
 void PlayerComponent::播放声音(Entity& refEntity, const std::string& refStr声音, const std::string& str文本)
 {
 	if (refEntity.m_spPlayer)
