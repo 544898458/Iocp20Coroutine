@@ -198,17 +198,18 @@ namespace 单人剧情
 
 		if (0 == refSpace.Get怪物单位数())
 		{
+			refGateSession.播放声音("音效/YouWin", "您守住了！您真是指挥天才！");
+
 			fun总教官陈近南说(refGateSession.NickName() + "，我果然没有看错你，你是一个指挥天才！");_等玩家读完;
 			fun玩家说("承蒙教官谬赞。学生谨遵教诲，自不敢有一丝懈怠，定当不负所望，继续精进。");	_等玩家读完;
-			refGateSession.播放声音("音效/YouWin", "您守住了！您真是指挥天才！");
 			PlayerComponent::剧情对话(ref视口, "图片/总教官", "总教官：陈近南", "", "", "    走你!", true);
 			co_return true;
 		}
 		if (0 == refSpace.Get玩家单位数(refGateSession))
 		{
-			fun总教官陈近南说("胜败乃兵家常事，我仍然看好你的潜力！");_等玩家读完;
 			refGateSession.播放声音("音效/YouLose", "胜败乃兵家常事，请点击右上角“退出场景”离开，然后再次点击“防守战”，就可以重新来过。");
-			玩家说(ref视口, refGateSession, "学生此次功败垂成，定会吸取教训，总结经验，再次努力，定不辜负师傅的栽培与期望。", true);//	_等玩家读完;
+			fun总教官陈近南说("胜败乃兵家常事，我仍然看好你的潜力！");_等玩家读完;
+			玩家说(ref视口, refGateSession, "学生此次功败垂成，定会吸取教训，总结经验，再次努力，定不辜负教官的栽培与期望。", true);//	_等玩家读完;
 			co_return true;
 		}
 		co_return false;
