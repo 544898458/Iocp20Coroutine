@@ -13,7 +13,10 @@ public:
 	static void AddComponent(Entity& refEntity, PlayerGateSession_Game& refSession);
 	static void Say(Entity& refEntity, const std::string& str, const SayChannel channel);
 	static void Say系统(Entity& refEntity, const std::string& str);
-	static void 剧情对话(Entity& refEntity, const std::string& str头像左, const std::string& str头像右, const std::string& str);
+	static void 剧情对话(Entity& refEntity,
+		const std::string& str头像左, const std::string& str名字左,
+		const std::string& str头像右, const std::string& str名字右,
+		const std::string& str内容);
 	static void 剧情对话已看完(Entity& refEntity);
 	static void 播放声音(Entity& refEntity, const std::string& refStr声音, const std::string& str文本 = "");
 	static void 播放声音(SpPlayerComponent &refSp, const std::string& refStr声音, const std::string& str文本 = "");

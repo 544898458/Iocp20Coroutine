@@ -955,9 +955,17 @@ void PlayerGateSession_Game::OnRecv(const Msg切换空闲工程车& msg)
 	++m_idx切换工程车;
 }
 
-void PlayerGateSession_Game::剧情对话(const std::string& str头像左, const std::string& str头像右, const std::string& str)
+void PlayerGateSession_Game::剧情对话(
+	const std::string& str头像左, const std::string& str名字左,
+	const std::string& str头像右, const std::string& str名字右,
+	const std::string& str内容)
 {
-	Send<Msg剧情对话>({ .str头像左 = StrConv::GbkToUtf8(str头像左),.str头像右 = StrConv::GbkToUtf8(str头像右),.str对话内容 = StrConv::GbkToUtf8(str) });
+	Send<Msg剧情对话>({
+		.str头像左 = StrConv::GbkToUtf8(str头像左),
+		.str名字左 = StrConv::GbkToUtf8(str名字左),
+		.str头像右 = StrConv::GbkToUtf8(str头像右),
+		.str名字右 = StrConv::GbkToUtf8(str名字右),
+		.str对话内容 = StrConv::GbkToUtf8(str内容) });
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg剧情对话已看完& msg)

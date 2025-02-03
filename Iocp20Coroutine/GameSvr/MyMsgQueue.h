@@ -523,9 +523,11 @@ struct Msg剧情对话
 {
 	MsgHead msg{ .id = 剧情对话 };
 	std::string str头像左;
+	std::string str名字左;
 	std::string str头像右;
+	std::string str名字右;
 	std::string str对话内容;
-	MSGPACK_DEFINE(msg, str头像左, str头像右, str对话内容);
+	MSGPACK_DEFINE(msg, str头像左, str名字左, str头像右, str名字右, str对话内容);
 };
 struct Msg剧情对话已看完
 {

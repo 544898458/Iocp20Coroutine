@@ -36,7 +36,10 @@ public:
 	void Send设置视口(const Entity& refEntity);
 	void 删除选中(const uint64_t id);
 
-	void 剧情对话(const std::string& str头像左, const std::string& str头像右, const std::string& str);
+	void 剧情对话(
+		const std::string& str头像左, const std::string& str名字左,
+		const std::string& str头像右, const std::string& str名字右,
+		const std::string& str内容);
 	void 剧情对话已看完();
 
 	uint32_t m_snRecv = 0;
