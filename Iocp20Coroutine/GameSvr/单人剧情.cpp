@@ -1,57 +1,57 @@
-#include "pch.h"
-#include "µ¥ÈË¾çÇé.h"
+ï»¿#include "pch.h"
+#include "å•äººå‰§æƒ….h"
 #include "PlayerGateSession_Game.h"
 #include "../CoRoutine/CoTimer.h"
 #include "../CoRoutine/CoEvent.h"
 #include "MyEvent.h"
 #include "Entity.h"
 #include "EntitySystem.h"
-#include "µ¥Î»×é¼ş/×ÊÔ´Component.h"
-#include "µ¥Î»×é¼ş/MonsterComponent.h"
-#include "µ¥Î»×é¼ş/PlayerComponent.h"
-#include "µ¥Î»×é¼ş/AttackComponent.h"
-#include "µ¥Î»×é¼ş/Ôì»î¶¯µ¥Î»Component.h"
-#include "µ¥Î»×é¼ş/×ßComponent.h"
-#include "µ¥Î».h"
+#include "å•ä½ç»„ä»¶/èµ„æºComponent.h"
+#include "å•ä½ç»„ä»¶/MonsterComponent.h"
+#include "å•ä½ç»„ä»¶/PlayerComponent.h"
+#include "å•ä½ç»„ä»¶/AttackComponent.h"
+#include "å•ä½ç»„ä»¶/é€ æ´»åŠ¨å•ä½Component.h"
+#include "å•ä½ç»„ä»¶/èµ°Component.h"
+#include "å•ä½.h"
 #include "AiCo.h"
 
-namespace µ¥ÈË¾çÇé
+namespace å•äººå‰§æƒ…
 {
 
-	CoTask<int> CoÑµÁ·Õ½(Space& refSpace, Entity& refÊÓ¿Ú, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
+	CoTask<int> Coè®­ç»ƒæˆ˜(Space& refSpace, Entity& refè§†å£, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "»¶Ó­À´µ½RTS¼´Ê±Õ½ÂÔÓÎÏ·£¬ÏÖÔÚÄúÒª½ÓÊÜ»ù´¡µÄÑµÁ·");
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "æ¬¢è¿æ¥åˆ°RTSå³æ—¶æˆ˜ç•¥æ¸¸æˆï¼Œç°åœ¨æ‚¨è¦æ¥å—åŸºç¡€çš„è®­ç»ƒ");
 
 		//auto [stop, msgResponce] = co_await AiCo::ChangeMoney(refGateSession, 100, true, funCancel);
 		//if (stop)
 		//{
-		//	LOG(WARNING) << "ChangeMoney,Ğ­³ÌÈ¡Ïû";
+		//	LOG(WARNING) << "ChangeMoney,åç¨‹å–æ¶ˆ";
 		//	co_return 0;
 		//}
-		refSpace.GetSpacePlayer(refÊÓ¿Ú).m_u32¾§Ìå¿ó += 100;
+		refSpace.GetSpacePlayer(refè§†å£).m_u32æ™¶ä½“çŸ¿ += 100;
 
 		if (co_await CoTimer::Wait(2s, funCancel))
 			co_return 0;
 
-		const µ¥Î»ÀàĞÍ ÀàĞÍ(µ¥Î»ÀàĞÍ::¹¤³Ì³µ);
-		µ¥Î»::»î¶¯µ¥Î»ÅäÖÃ ÅäÖÃ;
-		µ¥Î»::Find»î¶¯µ¥Î»ÅäÖÃ(ÀàĞÍ, ÅäÖÃ);
-		SpEntity sp¹¤³Ì³µ = refSpace.Ôì»î¶¯µ¥Î»(refÊÓ¿Ú.m_spPlayer, EntitySystem::GetNickName(refÊÓ¿Ú), { 5,10 }, ÅäÖÃ, ÀàĞÍ);
+		const å•ä½ç±»å‹ ç±»å‹(å•ä½ç±»å‹::å·¥ç¨‹è½¦);
+		å•ä½::æ´»åŠ¨å•ä½é…ç½® é…ç½®;
+		å•ä½::Findæ´»åŠ¨å•ä½é…ç½®(ç±»å‹, é…ç½®);
+		SpEntity spå·¥ç¨‹è½¦ = refSpace.é€ æ´»åŠ¨å•ä½(refè§†å£.m_spPlayer, EntitySystem::GetNickName(refè§†å£), { 5,10 }, é…ç½®, ç±»å‹);
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "Çëµã»÷¡°¹¤³Ì³µ¡±Ñ¡ÖĞ£¬È»ºóµã»÷¡°Ôì»ùµØ¡±°´Å¥£¬ÔÙµã»÷¿Õ°×µØÃæ£¬10Ãëºó¾ÍÄÜÔì³öÒ»¸ö»ùµØ");
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "è¯·ç‚¹å‡»â€œå·¥ç¨‹è½¦â€é€‰ä¸­ï¼Œç„¶åç‚¹å‡»â€œé€ åŸºåœ°â€æŒ‰é’®ï¼Œå†ç‚¹å‡»ç©ºç™½åœ°é¢ï¼Œ10ç§’åå°±èƒ½é€ å‡ºä¸€ä¸ªåŸºåœ°");
 
-		const auto funSameSpace = [&refSpace, &refÊÓ¿Ú](const MyEvent::AddEntity& refAddEntity)
-			{ return MyEvent::SameSpace(refAddEntity.wpEntity, refSpace, EntitySystem::GetNickName(refÊÓ¿Ú)); };
+		const auto funSameSpace = [&refSpace, &refè§†å£](const MyEvent::AddEntity& refAddEntity)
+			{ return MyEvent::SameSpace(refAddEntity.wpEntity, refSpace, EntitySystem::GetNickName(refè§†å£)); };
 
-		Position pos»ùµØ;
+		Position posåŸºåœ°;
 		{
 			const auto& [stop, addEvent] = co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace);
 			if (stop)
 				co_return 0;
 
-			pos»ùµØ = addEvent.wpEntity.lock()->Pos();
+			posåŸºåœ° = addEvent.wpEntity.lock()->Pos();
 		}
 
 
@@ -59,14 +59,14 @@ namespace µ¥ÈË¾çÇé
 			co_return 0;
 
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "Çëµã»÷Ñ¡ÖĞ»ùµØ£¨Ô²»·ÌØĞ§±íÊ¾Ñ¡ÖĞ£©£¬È»ºóµã»÷¡°Ôì¹¤³Ì³µ¡±°´Å¥£¬5Ãëºó»áÔÚ»ùµØÅÔÔì³öÒ»¸ö¹¤³Ì³µ");
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "è¯·ç‚¹å‡»é€‰ä¸­åŸºåœ°ï¼ˆåœ†ç¯ç‰¹æ•ˆè¡¨ç¤ºé€‰ä¸­ï¼‰ï¼Œç„¶åç‚¹å‡»â€œé€ å·¥ç¨‹è½¦â€æŒ‰é’®ï¼Œ5ç§’åä¼šåœ¨åŸºåœ°æ—é€ å‡ºä¸€ä¸ªå·¥ç¨‹è½¦");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "ÏÖÔÚÄúÓĞ¹¤³Ì³µÁË£¬µã»÷Ñ¡ÖĞÄúµÄ¹¤³Ì³µ£¬ÔÙµã»÷¿Õ¿õµØÃæ£¬ÃüÁîËü×ßÏòÄ¿±êµã");
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "ç°åœ¨æ‚¨æœ‰å·¥ç¨‹è½¦äº†ï¼Œç‚¹å‡»é€‰ä¸­æ‚¨çš„å·¥ç¨‹è½¦ï¼Œå†ç‚¹å‡»ç©ºæ—·åœ°é¢ï¼Œå‘½ä»¤å®ƒèµ°å‘ç›®æ ‡ç‚¹");
 
-		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace, &refÊÓ¿Ú](const MyEvent::MoveEntity& ref)
+		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace, &refè§†å£](const MyEvent::MoveEntity& ref)
 			{
 				if (ref.wpEntity.expired())
 					return false;
@@ -75,7 +75,7 @@ namespace µ¥ÈË¾çÇé
 				if (&spEnity->m_refSpace != &refSpace)
 					return false;
 
-				if (EntitySystem::GetNickName(*spEnity) != EntitySystem::GetNickName(refÊÓ¿Ú))
+				if (EntitySystem::GetNickName(*spEnity) != EntitySystem::GetNickName(refè§†å£))
 					return false;
 
 				return true;
@@ -84,207 +84,223 @@ namespace µ¥ÈË¾çÇé
 			co_return 0;
 		}
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "ºÜºÃ£¡ÏÖÔÚ¸øÄúË¢ÁËÒ»¸ö¾§Ìå¿ó£¬Çëµã»÷¾§Ìå¿ó£¬ÈÃ¹¤³Ì³µÔÚ¾§Ìå¿óºÍ»ùµØÖ®¼ä°áÔË¾§Ìå¿ó");
-		×ÊÔ´Component::Add(refSpace, ¾§Ìå¿ó, { pos»ùµØ.x,pos»ùµØ.z - 20 });
-		×ÊÔ´Component::Add(refSpace, È¼Æø¿ó, { pos»ùµØ.x + 15,pos»ùµØ.z });
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "å¾ˆå¥½ï¼ç°åœ¨ç»™æ‚¨åˆ·äº†ä¸€ä¸ªæ™¶ä½“çŸ¿ï¼Œè¯·ç‚¹å‡»æ™¶ä½“çŸ¿ï¼Œè®©å·¥ç¨‹è½¦åœ¨æ™¶ä½“çŸ¿å’ŒåŸºåœ°ä¹‹é—´æ¬è¿æ™¶ä½“çŸ¿");
+		èµ„æºComponent::Add(refSpace, æ™¶ä½“çŸ¿, { posåŸºåœ°.x,posåŸºåœ°.z - 20 });
+		èµ„æºComponent::Add(refSpace, ç‡ƒæ°”çŸ¿, { posåŸºåœ°.x + 15,posåŸºåœ°.z });
 
-		if (std::get<0>(co_await CoEvent<MyEvent::¿ªÊ¼²É¼¯¾§Ìå¿ó>::Wait(funCancel)))
+		if (std::get<0>(co_await CoEvent<MyEvent::å¼€å§‹é‡‡é›†æ™¶ä½“çŸ¿>::Wait(funCancel)))
 			co_return 0;
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "ºÜºÃ£¡ÄúµÄ¹¤³Ì³µÕıÔÚ²É¼¯¾§Ìå¿ó£¬ÇëµÈËû°Ñ¾§Ìå¿óÔË»Ø»ùµØ¡£ÏÖÔÚ£¬ÇëÑ¡ÖĞÁíÒ»Á¾¹¤³Ì³µÈ¥²É¼¯È¼Æø¿ó");
-		if (std::get<0>(co_await CoEvent<MyEvent::¾§Ìå¿óÒÑÔË»Ø»ùµØ>::Wait(funCancel)))
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "å¾ˆå¥½ï¼æ‚¨çš„å·¥ç¨‹è½¦æ­£åœ¨é‡‡é›†æ™¶ä½“çŸ¿ï¼Œè¯·ç­‰ä»–æŠŠæ™¶ä½“çŸ¿è¿å›åŸºåœ°ã€‚ç°åœ¨ï¼Œè¯·é€‰ä¸­å¦ä¸€è¾†å·¥ç¨‹è½¦å»é‡‡é›†ç‡ƒæ°”çŸ¿");
+		if (std::get<0>(co_await CoEvent<MyEvent::æ™¶ä½“çŸ¿å·²è¿å›åŸºåœ°>::Wait(funCancel)))
 			co_return 0;
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "ÄúµÄ¹¤³Ì³µÒÑ°ÑµÚÒ»³µ¾§Ìå¿óÔËµ½»ùµØ£¬Çë²é¿´×óÉÏ½Ç¾§Ìå¿óÊıÁ¿±ä»¯");
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "æ‚¨çš„å·¥ç¨‹è½¦å·²æŠŠç¬¬ä¸€è½¦æ™¶ä½“çŸ¿è¿åˆ°åŸºåœ°ï¼Œè¯·æŸ¥çœ‹å·¦ä¸Šè§’æ™¶ä½“çŸ¿æ•°é‡å˜åŒ–");
 
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "µÈÄú´æ¹»20¾§Ìå¿óºó£¬ÇëÑ¡ÖĞÒ»Á¾¹¤³Ì³µ£¬È»ºóµã»÷¡°ÔìÃñ·¿¡±°´Å¥£¬ÔÙµã»÷Ò»´Î¿Õ¿õµØÃæ");
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "ç­‰æ‚¨å­˜å¤Ÿ20æ™¶ä½“çŸ¿åï¼Œè¯·é€‰ä¸­ä¸€è¾†å·¥ç¨‹è½¦ï¼Œç„¶åç‚¹å‡»â€œé€ æ°‘æˆ¿â€æŒ‰é’®ï¼Œå†ç‚¹å‡»ä¸€æ¬¡ç©ºæ—·åœ°é¢");
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "ºÜºÃ£¬Ãñ·¿¿ÉÒÔÌáÉıÄúµÄ»î¶¯µ¥Î»ÊıÁ¿ÉÏÏŞ");
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "å¾ˆå¥½ï¼Œæ°‘æˆ¿å¯ä»¥æå‡æ‚¨çš„æ´»åŠ¨å•ä½æ•°é‡ä¸Šé™");
 
 		if (co_await CoTimer::Wait(3s, funCancel))
 			co_return 0;
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "µÈÄú´æ¹»30¾§Ìå¿óºó£¬ÇëÑ¡ÖĞÒ»Á¾¹¤³Ì³µ£¬È»ºóµã»÷¡°Ôì±ø³§¡±°´Å¥£¬ÔÙµã»÷Ò»´Î¿Õ¿õµØÃæ£¬¾ÍÄÜÔì³öÒ»¸ö±ø³§");
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "ç­‰æ‚¨å­˜å¤Ÿ30æ™¶ä½“çŸ¿åï¼Œè¯·é€‰ä¸­ä¸€è¾†å·¥ç¨‹è½¦ï¼Œç„¶åç‚¹å‡»â€œé€ å…µå‚â€æŒ‰é’®ï¼Œå†ç‚¹å‡»ä¸€æ¬¡ç©ºæ—·åœ°é¢ï¼Œå°±èƒ½é€ å‡ºä¸€ä¸ªå…µå‚");
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
 
 		if (co_await CoTimer::Wait(10s, funCancel))
 			co_return 0;
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "Çëµã»÷Ñ¡ÖĞ±ø³§£¨Ô²»·ÌØĞ§±íÊ¾Ñ¡ÖĞ£©£¬È»ºóµã»÷¡°Ôì±ø¡±°´Å¥,10Ãëºó»áÔÚ±ø³§ÅÔÔì³öÒ»¸ö±ø");
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "è¯·ç‚¹å‡»é€‰ä¸­å…µå‚ï¼ˆåœ†ç¯ç‰¹æ•ˆè¡¨ç¤ºé€‰ä¸­ï¼‰ï¼Œç„¶åç‚¹å‡»â€œé€ å…µâ€æŒ‰é’®,10ç§’åä¼šåœ¨å…µå‚æ—é€ å‡ºä¸€ä¸ªå…µ");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "Êó±êµã»÷Ñ¡ÖĞÄúµÄ±ø£¬ÔÙµã»÷µØÃæ£¬¿ÉÒÔÖ¸»ÓËû×ßÏòÄ¿±ê´¦");
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "é¼ æ ‡ç‚¹å‡»é€‰ä¸­æ‚¨çš„å…µï¼Œå†ç‚¹å‡»åœ°é¢ï¼Œå¯ä»¥æŒ‡æŒ¥ä»–èµ°å‘ç›®æ ‡å¤„");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace](const MyEvent::MoveEntity& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
 			co_return 0;
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "ÏÖÔÚÒÑÔÚ×ó±ß¸øÄúË¢ÁËÒ»¸ö¹Ö£¬¿ØÖÆ±ø×ßµ½¹Ö¸½½ü£¬±ø»á×Ô¶¯´ò¹Ö¡£Äú¿ÉÒÔµãÓÒÏÂ½Ç¡°È¡ÏûÑ¡ÖĞ¡±È»ºóÍÏ¶¯µØÃæ¿´¿´¹ÖÔÚÄÄÀï");
-		MonsterComponent::AddMonster(refSpace, ±ø, { -30,20 });
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "ç°åœ¨å·²åœ¨å·¦è¾¹ç»™æ‚¨åˆ·äº†ä¸€ä¸ªæ€ªï¼Œæ§åˆ¶å…µèµ°åˆ°æ€ªé™„è¿‘ï¼Œå…µä¼šè‡ªåŠ¨æ‰“æ€ªã€‚æ‚¨å¯ä»¥ç‚¹å³ä¸‹è§’â€œå–æ¶ˆé€‰ä¸­â€ç„¶åæ‹–åŠ¨åœ°é¢çœ‹çœ‹æ€ªåœ¨å“ªé‡Œ");
+		MonsterComponent::AddMonster(refSpace, å…µ, { -30,20 });
 
-		if (std::get<0>(co_await CoEvent<MyEvent::µ¥Î»ÕóÍö>::Wait(funCancel, [&refSpace](const MyEvent::µ¥Î»ÕóÍö& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
+		if (std::get<0>(co_await CoEvent<MyEvent::å•ä½é˜µäº¡>::Wait(funCancel, [&refSpace](const MyEvent::å•ä½é˜µäº¡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
 			co_return 0;
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "ÄúµÄ±øÕóÍöÁË¡£¿ÉÒÔ¶àÔìµã±øÈ¥Î§¹¥µĞÈË");
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "æ‚¨çš„å…µé˜µäº¡äº†ã€‚å¯ä»¥å¤šé€ ç‚¹å…µå»å›´æ”»æ•Œäºº");
 
-		if (std::get<0>(co_await CoEvent<MyEvent::µ¥Î»ÕóÍö>::Wait(funCancel, [&refSpace](const MyEvent::µ¥Î»ÕóÍö& ref)
+		if (std::get<0>(co_await CoEvent<MyEvent::å•ä½é˜µäº¡>::Wait(funCancel, [&refSpace](const MyEvent::å•ä½é˜µäº¡& ref)
 			{
 				auto spEntity = ref.wpEntity.lock();
 				if (&spEntity->m_refSpace != &refSpace)
 					return false;
 
-				return !spEntity->m_spPlayer;//¹ÖÎïÕóÍö
+				return !spEntity->m_spPlayer;//æ€ªç‰©é˜µäº¡
 			})))
 		{
 			co_return 0;
 		}
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "¹§Ï²ÄúÏûÃğÁËµĞÈË£¡ÏÖÔÚ×ó±ß¸øÄúË¢ÁË10¸öµĞÈË¡£Äú¿ÉÒÔÔìµØ±¤,ÈÃ±ø½øÈëµØ±¤ÖĞ£¬Á¢×ã·ÀÊØ£¬ÔÙËÅ»ú½ø¹¥");
-		MonsterComponent::AddMonster(refSpace, ±ø, { -30.0 }, 10);
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "æ­å–œæ‚¨æ¶ˆç­äº†æ•Œäººï¼ç°åœ¨å·¦è¾¹ç»™æ‚¨åˆ·äº†10ä¸ªæ•Œäººã€‚æ‚¨å¯ä»¥é€ åœ°å ¡,è®©å…µè¿›å…¥åœ°å ¡ä¸­ï¼Œç«‹è¶³é˜²å®ˆï¼Œå†ä¼ºæœºè¿›æ”»");
+		MonsterComponent::AddMonster(refSpace, å…µ, { -30.0 }, 10);
 
-		if (std::get<0>(co_await CoEvent<MyEvent::µ¥Î»ÕóÍö>::Wait(funCancel, [&refSpace](const MyEvent::µ¥Î»ÕóÍö& ref)
+		if (std::get<0>(co_await CoEvent<MyEvent::å•ä½é˜µäº¡>::Wait(funCancel, [&refSpace](const MyEvent::å•ä½é˜µäº¡& ref)
 			{
 				auto spEntity = ref.wpEntity.lock();
 				if (&spEntity->m_refSpace != &refSpace)
 					return false;
 
-				return 0 == refSpace.Get¹ÖÎïµ¥Î»Êı();
+				return 0 == refSpace.Getæ€ªç‰©å•ä½æ•°();
 			})))
 		{
 			co_return 0;
 		}
 
-		PlayerComponent::²¥·ÅÉùÒô(refÊÓ¿Ú, "ÒôĞ§/YouWin", "ÄúÈ¡µÃÁËÊ¤Àû£¡ÄúÕæÊÇÖ¸»ÓÌì²Å£¡");
+		PlayerComponent::æ’­æ”¾å£°éŸ³(refè§†å£, "éŸ³æ•ˆ/YouWin", "æ‚¨å–å¾—äº†èƒœåˆ©ï¼æ‚¨çœŸæ˜¯æŒ‡æŒ¥å¤©æ‰ï¼");
 
-		PlayerComponent::Send<MsgÏÔÊ¾½çÃæ>(refÊÓ¿Ú.m_spPlayer, { .ui = MsgÏÔÊ¾½çÃæ::Ñ¡ÔñµØÍ¼ });
+		PlayerComponent::Send<Msgæ˜¾ç¤ºç•Œé¢>(refè§†å£.m_spPlayer, { .ui = Msgæ˜¾ç¤ºç•Œé¢::é€‰æ‹©åœ°å›¾ });
 		co_return 0;
 	}
-	Position ¹ÖÎï×ßÏò¿ó¸½½ü(const Position& refOld)
+	Position æ€ªç‰©èµ°å‘çŸ¿é™„è¿‘(const Position& refOld)
 	{
 		return { -30,30 };
 	}
-	bool IsÕ½¶·½áÊø(Space& refSpace, PlayerGateSession_Game& refGateSession)
+
+	static void æ€»æ•™å®˜é™ˆè¿‘å—è¯´(Entity& refè§†å£, const std::string& strå†…å®¹)
 	{
-		if (0 == refSpace.Get¹ÖÎïµ¥Î»Êı())
-		{
-			refGateSession.²¥·ÅÉùÒô("ÒôĞ§/YouWin", "ÄúÊØ×¡ÁË£¡ÄúÕæÊÇÖ¸»ÓÌì²Å£¡");
-			return true;
-		}
-		if (0 == refSpace.GetÍæ¼Òµ¥Î»Êı(refGateSession))
-		{
-			refGateSession.²¥·ÅÉùÒô("ÒôĞ§/YouLose", "Ê¤°ÜÄË±ø¼Ò³£ÊÂ£¬Çëµã»÷ÓÒÉÏ½Ç¡°ÍË³ö³¡¾°¡±Àë¿ª£¬È»ºóÔÙ´Îµã»÷¡°·ÀÊØÕ½¡±£¬¾Í¿ÉÒÔÖØĞÂÀ´¹ı¡£");
-			return true;
-		}
-		return false;
+		PlayerComponent::å‰§æƒ…å¯¹è¯(refè§†å£, "å›¾ç‰‡/æ€»æ•™å®˜", "æ€»æ•™å®˜ï¼šé™ˆè¿‘å—", "", "", "    " + strå†…å®¹);
+		PlayerComponent::æ’­æ”¾å£°éŸ³(refè§†å£, "éŸ³æ•ˆ/BUTTON");
 	}
-	CoTask<int> Co·ÀÊØÕ½(Space& refSpace, Entity& refÊÓ¿Ú, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
+	static void ç©å®¶è¯´(Entity& refè§†å£, PlayerGateSession_Game& refGateSession, const std::string& strå†…å®¹, const bool bæ˜¾ç¤ºé€€å‡ºåœºæ™¯æŒ‰é’® = false)
+	{
+		PlayerComponent::å‰§æƒ…å¯¹è¯(refè§†å£, "", "", "å›¾ç‰‡/ç©å®¶", "ç©å®¶ï¼š" + refGateSession.NickName(), "    " + strå†…å®¹, bæ˜¾ç¤ºé€€å‡ºåœºæ™¯æŒ‰é’®);
+		PlayerComponent::æ’­æ”¾å£°éŸ³(refè§†å£, "éŸ³æ•ˆ/BUTTON");
+	}
+
+	static CoTask<bool> ç­‰ç©å®¶è¯»å®Œ(PlayerGateSession_Game& refGateSession, FunCancel& funCancel)
+	{
+		const auto funSameSession = [&refGateSession](const MyEvent::å·²é˜…è¯»å‰§æƒ…å¯¹è¯& ref)
+			{ return ref.wpPlayerGateSession.lock().get() == &refGateSession; };
+		co_return std::get<0>(co_await CoEvent<MyEvent::å·²é˜…è¯»å‰§æƒ…å¯¹è¯>::Wait(funCancel, funSameSession));
+	}
+	static CoTask<bool> Isæˆ˜æ–—ç»“æŸ(Space& refSpace, Entity& refè§†å£, PlayerGateSession_Game& refGateSession, FunCancel& funCancel)
+	{
+#define _ç­‰ç©å®¶è¯»å®Œ	{if (co_await ç­‰ç©å®¶è¯»å®Œ(refGateSession, funCancel))co_return 0;}
+
+		const auto funæ€»æ•™å®˜é™ˆè¿‘å—è¯´ = [&refè§†å£](const std::string& strå†…å®¹) {æ€»æ•™å®˜é™ˆè¿‘å—è¯´(refè§†å£, strå†…å®¹);};
+		const auto funç©å®¶è¯´ = [&refè§†å£, &refGateSession](const std::string& strå†…å®¹) {ç©å®¶è¯´(refè§†å£, refGateSession, strå†…å®¹);};
+
+
+		if (0 == refSpace.Getæ€ªç‰©å•ä½æ•°())
+		{
+			funæ€»æ•™å®˜é™ˆè¿‘å—è¯´(refGateSession.NickName() + "ï¼Œæˆ‘æœç„¶æ²¡æœ‰çœ‹é”™ä½ ï¼Œä½ æ˜¯ä¸€ä¸ªæŒ‡æŒ¥å¤©æ‰ï¼");_ç­‰ç©å®¶è¯»å®Œ;
+			funç©å®¶è¯´("æ‰¿è’™æ•™å®˜è°¬èµã€‚å­¦ç”Ÿè°¨éµæ•™è¯²ï¼Œè‡ªä¸æ•¢æœ‰ä¸€ä¸æ‡ˆæ€ ï¼Œå®šå½“ä¸è´Ÿæ‰€æœ›ï¼Œç»§ç»­ç²¾è¿›ã€‚");	_ç­‰ç©å®¶è¯»å®Œ;
+			refGateSession.æ’­æ”¾å£°éŸ³("éŸ³æ•ˆ/YouWin", "æ‚¨å®ˆä½äº†ï¼æ‚¨çœŸæ˜¯æŒ‡æŒ¥å¤©æ‰ï¼");
+			PlayerComponent::å‰§æƒ…å¯¹è¯(refè§†å£, "å›¾ç‰‡/æ€»æ•™å®˜", "æ€»æ•™å®˜ï¼šé™ˆè¿‘å—", "", "", "    èµ°ä½ !", true);
+			co_return true;
+		}
+		if (0 == refSpace.Getç©å®¶å•ä½æ•°(refGateSession))
+		{
+			funæ€»æ•™å®˜é™ˆè¿‘å—è¯´("èƒœè´¥ä¹ƒå…µå®¶å¸¸äº‹ï¼Œæˆ‘ä»ç„¶çœ‹å¥½ä½ çš„æ½œåŠ›ï¼");_ç­‰ç©å®¶è¯»å®Œ;
+			refGateSession.æ’­æ”¾å£°éŸ³("éŸ³æ•ˆ/YouLose", "èƒœè´¥ä¹ƒå…µå®¶å¸¸äº‹ï¼Œè¯·ç‚¹å‡»å³ä¸Šè§’â€œé€€å‡ºåœºæ™¯â€ç¦»å¼€ï¼Œç„¶åå†æ¬¡ç‚¹å‡»â€œé˜²å®ˆæˆ˜â€ï¼Œå°±å¯ä»¥é‡æ–°æ¥è¿‡ã€‚");
+			ç©å®¶è¯´(refè§†å£, refGateSession, "å­¦ç”Ÿæ­¤æ¬¡åŠŸè´¥å‚æˆï¼Œå®šä¼šå¸å–æ•™è®­ï¼Œæ€»ç»“ç»éªŒï¼Œå†æ¬¡åŠªåŠ›ï¼Œå®šä¸è¾œè´Ÿå¸ˆå‚…çš„æ ½åŸ¹ä¸æœŸæœ›ã€‚", true);//	_ç­‰ç©å®¶è¯»å®Œ;
+			co_return true;
+		}
+		co_return false;
+	}
+	CoTask<int> Coé˜²å®ˆæˆ˜(Space& refSpace, Entity& refè§†å£, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
-		const auto funSameSession = [&refGateSession](const MyEvent::ÒÑÔÄ¶Á¾çÇé¶Ô»°& ref)
-			{ return ref.wpPlayerGateSession.lock().get() == &refGateSession; };
 
-#define µÈÍæ¼Ò¶ÁÍê {if (std::get<0>(co_await CoEvent<MyEvent::ÒÑÔÄ¶Á¾çÇé¶Ô»°>::Wait(funCancel, funSameSession)))co_return 0;}
-		const auto fun×Ü½Ì¹Ù³Â½üÄÏËµ = [&refÊÓ¿Ú](const std::string &strÄÚÈİ) {PlayerComponent::¾çÇé¶Ô»°(refÊÓ¿Ú, "Í¼Æ¬/×Ü½Ì¹Ù", "×Ü½Ì¹Ù£º³Â½üÄÏ", "", "", strÄÚÈİ);};
-		const auto funÍæ¼ÒËµ = [&refÊÓ¿Ú,&refGateSession](const std::string& strÄÚÈİ) {PlayerComponent::¾çÇé¶Ô»°(refÊÓ¿Ú, "", "", "Í¼Æ¬/Íæ¼Ò", "Íæ¼Ò£º" + refGateSession.NickName(), strÄÚÈİ);};
+#define _ç­‰ç©å®¶è¯»å®Œ	{if (co_await ç­‰ç©å®¶è¯»å®Œ(refGateSession, funCancel))co_return 0;}
 
-		fun×Ü½Ì¹Ù³Â½üÄÏËµ("Çé±¨ÏÔÊ¾£º½«ÓĞ´óÁ¿µĞ·½µ¥Î»½ø¹¥ÎÒ·½»ùµØ£¬Çë×öºÃ×¼±¸¡£");	µÈÍæ¼Ò¶ÁÍê;
-		funÍæ¼ÒËµ("¿ÉÊÇÎÒ½öÊÜ¹ı¼òµ¥µÄÖ¸»ÓÑµÁ·¡£");							µÈÍæ¼Ò¶ÁÍê;
-		fun×Ü½Ì¹Ù³Â½üÄÏËµ("ÎÒÃÇ»áÌá¹©×ã¹»µÄ³õÊ¼¾§Ìå¿óºÍÈ¼Æø¿ó£¬Äã²»ÓÃÔÙ´ÓÁã¿ªÊ¼²É¼¯¡£");		µÈÍæ¼Ò¶ÁÍê;
-		funÍæ¼ÒËµ("ÎÒ»¹ÊÇÃ»ÓĞ°ÑÎÕ¡£");										µÈÍæ¼Ò¶ÁÍê;
-		fun×Ü½Ì¹Ù³Â½üÄÏËµ("ÎÒ»á´«ÊÚÄãÖ¸»ÓÊµÕ½ËÙ³É¿Ú¾÷£¬Èı·ÖÖÓ¼´¿É³ÉÎªÊµÕ½¸ßÊÖ¡£");	µÈÍæ¼Ò¶ÁÍê;
-		funÍæ¼ÒËµ("ÕæÓĞÕâÖÖ¿Ú¾÷µÄ»°¾ÍÓ¦¸ÃÔÚÑµÁ·Õ½Ê±¸æËßÎÒ°¡£¡");			µÈÍæ¼Ò¶ÁÍê;
-		fun×Ü½Ì¹Ù³Â½üÄÏËµ("ÊµÕ½¿Ú¾÷Ö»ÓĞÔÚ¾ÅËÀÒ»ÉúµÄÊµÕ½ÖĞ²ÅÓĞÓÃ£¡");		µÈÍæ¼Ò¶ÁÍê;
-		funÍæ¼ÒËµ("¾ÅËÀÒ»Éú£¿ĞÎÊÆÑÏ¾ş°¡£¬ÎÒ»áÈ«Á¦ÒÔ¸°µÄ!");					µÈÍæ¼Ò¶ÁÍê;
-		fun×Ü½Ì¹Ù³Â½üÄÏËµ("Ì¹¿Ë¿ÉÒÔ³¬Ô¶¾àÀëÔì³É³¬¸ßÉËº¦£¬¶øÇÒÊÇ·¶Î§ÉËº¦£¬µ«ÊÇÌ¹¿ËËø¶¨ÅÚµ¯ÂäµãºóÓĞ³¬³¤Ç°Ò¡Ê±³¤£¬Ç°Ò¡½áÊøºó£¬µĞ·½Ä¿±ê¿ÉÄÜÒÑ¾­Ô¶ÀëÅÚµ¯Âäµã¡£ÅÚµ¯Âäµã¸½½üµÄÎÒ·½µ¥Î»Ò²»áÊÜµ½ÉËº¦¡£");µÈÍæ¼Ò¶ÁÍê;
-		funÍæ¼ÒËµ("ÓĞµã¼¦ÀßµÄ¸Ğ¾õ£¬²»ÊÇºì¾¯ÖĞµÄ¸ßËÙÌ¹¿Ë£¬ÓëĞÇ¼ÊÖĞµÄ¹¥³ÇÌ¹¿ËÒ²ÓĞĞ©²»Í¬¡£");µÈÍæ¼Ò¶ÁÍê;
-		fun×Ü½Ì¹Ù³Â½üÄÏËµ("¡­²»ÖªµÀÄãÔÚËµÊ²Ã´¡­ÓĞÒ»ÖÖ½Ğ¡°¹â×ÓÅÚ¡±µÄ½¨Öşµ¥Î»£¬¹¥»÷¾àÀëºÜÔ¶£¬½ö´ÎÓÚÌ¹¿Ë£»Ç°Ò¡Ê±³¤ºÜ¶Ì£¬¿ÉÒÔ¿ìËÙ¹¥»÷£»È±ÏİÊÇÉËº¦½ÏµÍ£»²»¹ı¶àÔìµã¼¯ÖĞ·ÀÊØÄ³Ò»¿éÇøÓò»¹ÊÇºÜÊµÓÃµÄ¡£");µÈÍæ¼Ò¶ÁÍê;
-		funÍæ¼ÒËµ("¿´À´Ö»ÒªÓĞÌ¹¿ËºÍ¹â×ÓÅÚ¾ÍÄÜÊØ×¡¶ÔÂğ£¿");					µÈÍæ¼Ò¶ÁÍê;
-		fun×Ü½Ì¹Ù³Â½üÄÏËµ("ÊÇµÄ£¬ÕâÊÇÆäËûÖ¸»Ó¹Ù×Ü½áµÄ¾­Ñé¡£´ó¸Å10¸ö¹â×ÓÅÚºÍ5Á¾Ì¹¿ËÑØÇ½±ß²¼ÖÃ¾ÍÄÜÊØ×¡¡£µ±È»»¹ÓĞÆäËû¶àÖÖ¿ÉĞĞµÄ·ÀÊØ·½·¨£¬Òª¿¿Äã×ÔĞĞÃşË÷¡£");µÈÍæ¼Ò¶ÁÍê;
-		funÍæ¼ÒËµ("OK£¬Ò²²»ÊÇºÜ¸´ÔÓ¡£ÎÒÓĞĞÅĞÄÍê³ÉÈÎÎñ£¡");					µÈÍæ¼Ò¶ÁÍê;
-		fun×Ü½Ì¹Ù³Â½üÄÏËµ("×ßÄã£¡");										µÈÍæ¼Ò¶ÁÍê;
+		const auto funæ€»æ•™å®˜é™ˆè¿‘å—è¯´ = [&refè§†å£](const std::string& strå†…å®¹) {æ€»æ•™å®˜é™ˆè¿‘å—è¯´(refè§†å£, strå†…å®¹);};
+		const auto funç©å®¶è¯´ = [&refè§†å£, &refGateSession](const std::string& strå†…å®¹) {ç©å®¶è¯´(refè§†å£, refGateSession, strå†…å®¹);};
+		funæ€»æ•™å®˜é™ˆè¿‘å—è¯´("æƒ…æŠ¥æ˜¾ç¤ºï¼šå°†æœ‰å¤§é‡æ•Œæ–¹å•ä½è¿›æ”»æˆ‘æ–¹åŸºåœ°ï¼Œè¯·åšå¥½å‡†å¤‡ã€‚");	_ç­‰ç©å®¶è¯»å®Œ;
+		funç©å®¶è¯´("å¯æ˜¯æˆ‘ä»…å—è¿‡ç®€å•çš„æŒ‡æŒ¥è®­ç»ƒã€‚");							_ç­‰ç©å®¶è¯»å®Œ;
+		funæ€»æ•™å®˜é™ˆè¿‘å—è¯´("æˆ‘ä»¬ä¼šæä¾›è¶³å¤Ÿçš„åˆå§‹æ™¶ä½“çŸ¿å’Œç‡ƒæ°”çŸ¿ï¼Œä½ ä¸ç”¨å†ä»é›¶å¼€å§‹é‡‡é›†ã€‚");	_ç­‰ç©å®¶è¯»å®Œ;
+		funç©å®¶è¯´("æˆ‘è¿˜æ˜¯æ²¡æœ‰æŠŠæ¡ã€‚");										_ç­‰ç©å®¶è¯»å®Œ;
+		funæ€»æ•™å®˜é™ˆè¿‘å—è¯´("æˆ‘ä¼šä¼ æˆä½ æŒ‡æŒ¥å®æˆ˜é€Ÿæˆå£è¯€ï¼Œä¸‰åˆ†é’Ÿå³å¯æˆä¸ºå®æˆ˜é«˜æ‰‹ã€‚");	_ç­‰ç©å®¶è¯»å®Œ;
+		funç©å®¶è¯´("çœŸæœ‰è¿™ç§å£è¯€çš„è¯å°±åº”è¯¥åœ¨è®­ç»ƒæˆ˜æ—¶å‘Šè¯‰æˆ‘å•Šï¼");			_ç­‰ç©å®¶è¯»å®Œ;
+		funæ€»æ•™å®˜é™ˆè¿‘å—è¯´("å®æˆ˜å£è¯€åªæœ‰åœ¨ä¹æ­»ä¸€ç”Ÿçš„å®æˆ˜ä¸­æ‰æœ‰ç”¨ï¼");		_ç­‰ç©å®¶è¯»å®Œ;
+		funç©å®¶è¯´("ä¹æ­»ä¸€ç”Ÿï¼Ÿå½¢åŠ¿ä¸¥å³»å•Šï¼Œæˆ‘ä¼šå…¨åŠ›ä»¥èµ´çš„!");					_ç­‰ç©å®¶è¯»å®Œ;
+		funæ€»æ•™å®˜é™ˆè¿‘å—è¯´("å¦å…‹å¯ä»¥è¶…è¿œè·ç¦»é€ æˆè¶…é«˜ä¼¤å®³ï¼Œè€Œä¸”æ˜¯èŒƒå›´ä¼¤å®³ï¼Œä½†æ˜¯å¦å…‹é”å®šç‚®å¼¹è½ç‚¹åæœ‰è¶…é•¿å‰æ‘‡æ—¶é•¿ï¼Œå‰æ‘‡ç»“æŸåï¼Œæ•Œæ–¹ç›®æ ‡å¯èƒ½å·²ç»è¿œç¦»ç‚®å¼¹è½ç‚¹ã€‚ç‚®å¼¹è½ç‚¹é™„è¿‘çš„æˆ‘æ–¹å•ä½ä¹Ÿä¼šå—åˆ°ä¼¤å®³ã€‚");_ç­‰ç©å®¶è¯»å®Œ;
+		funç©å®¶è¯´("æœ‰ç‚¹é¸¡è‚‹çš„æ„Ÿè§‰ï¼Œä¸æ˜¯çº¢è­¦ä¸­çš„é«˜é€Ÿå¦å…‹ï¼Œä¸æ˜Ÿé™…ä¸­çš„æ”»åŸå¦å…‹ä¹Ÿæœ‰äº›ä¸åŒã€‚");	_ç­‰ç©å®¶è¯»å®Œ;
+		funæ€»æ•™å®˜é™ˆè¿‘å—è¯´("â€¦ä¸çŸ¥é“ä½ åœ¨è¯´ä»€ä¹ˆâ€¦æœ‰ä¸€ç§å«â€œå…‰å­ç‚®â€çš„å»ºç­‘å•ä½ï¼Œæ”»å‡»è·ç¦»å¾ˆè¿œï¼Œä»…æ¬¡äºå¦å…‹ï¼›å‰æ‘‡æ—¶é•¿å¾ˆçŸ­ï¼Œå¯ä»¥å¿«é€Ÿæ”»å‡»ï¼›ç¼ºé™·æ˜¯ä¼¤å®³è¾ƒä½ï¼›ä¸è¿‡å¤šé€ ç‚¹é›†ä¸­é˜²å®ˆæŸä¸€å—åŒºåŸŸè¿˜æ˜¯å¾ˆå®ç”¨çš„ã€‚");_ç­‰ç©å®¶è¯»å®Œ;
+		funç©å®¶è¯´("çœ‹æ¥åªè¦æœ‰å¦å…‹å’Œå…‰å­ç‚®å°±èƒ½å®ˆä½å¯¹å—ï¼Ÿ");					_ç­‰ç©å®¶è¯»å®Œ;
+		funæ€»æ•™å®˜é™ˆè¿‘å—è¯´("æ˜¯çš„ï¼Œè¿™æ˜¯å…¶ä»–æŒ‡æŒ¥å®˜æ€»ç»“çš„ç»éªŒã€‚å¤§æ¦‚10ä¸ªå…‰å­ç‚®å’Œ5è¾†å¦å…‹æ²¿å¢™è¾¹å¸ƒç½®å°±èƒ½å®ˆä½ã€‚å½“ç„¶è¿˜æœ‰å…¶ä»–å¤šç§å¯è¡Œçš„é˜²å®ˆæ–¹æ³•ï¼Œè¦é ä½ è‡ªè¡Œæ‘¸ç´¢ã€‚");_ç­‰ç©å®¶è¯»å®Œ;
+		funç©å®¶è¯´("OKï¼Œä¹Ÿä¸æ˜¯å¾ˆå¤æ‚ã€‚æˆ‘æœ‰ä¿¡å¿ƒå®Œæˆä»»åŠ¡ï¼");					_ç­‰ç©å®¶è¯»å®Œ;
+		funæ€»æ•™å®˜é™ˆè¿‘å—è¯´("èµ°ä½ ï¼");										_ç­‰ç©å®¶è¯»å®Œ;
 
-		PlayerComponent::¾çÇé¶Ô»°ÒÑ¿´Íê(refÊÓ¿Ú);
+		PlayerComponent::å‰§æƒ…å¯¹è¯å·²çœ‹å®Œ(refè§†å£);
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "·ÀÊØÕ½£ºÖ»ÒªÊØ×¡£¬¾ÍÊÇÊ¤Àû£¡");
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "é˜²å®ˆæˆ˜ï¼šåªè¦å®ˆä½ï¼Œå°±æ˜¯èƒœåˆ©ï¼");
 		if (co_await CoTimer::Wait(1s, funCancel))
 			co_return 0;
 
-		refSpace.GetSpacePlayer(refÊÓ¿Ú).m_u32È¼Æø¿ó += 300;
-		refSpace.GetSpacePlayer(refÊÓ¿Ú).m_u32¾§Ìå¿ó += 1000;
+		refSpace.GetSpacePlayer(refè§†å£).m_u32ç‡ƒæ°”çŸ¿ += 300;
+		refSpace.GetSpacePlayer(refè§†å£).m_u32æ™¶ä½“çŸ¿ += 1000;
 		{
-			//refSpace.m_mapPlayer[refGateSession.NickName()].m_u32È¼Æø¿ó += 200;
+			//refSpace.m_mapPlayer[refGateSession.NickName()].m_u32ç‡ƒæ°”çŸ¿ += 200;
 			//auto [stop, msgResponce] = co_await AiCo::ChangeMoney(refGateSession, 1000, true, funCancel);
 			//if (stop)
 			//{
-			//	LOG(WARNING) << "ChangeMoney,Ğ­³ÌÈ¡Ïû";
+			//	LOG(WARNING) << "ChangeMoney,åç¨‹å–æ¶ˆ";
 			//	co_return 0;
 			//}
 		}
 		//auto [stop, msgResponce] = co_await AiCo::ChangeMoney(refGateSession, 100, true, funCancel);
 		//if (stop)
 		//{
-		//	LOG(WARNING) << "ChangeMoney,Ğ­³ÌÈ¡Ïû";
+		//	LOG(WARNING) << "ChangeMoney,åç¨‹å–æ¶ˆ";
 		//	co_return 0;
 		//}
 		{
 			{
-				const µ¥Î»ÀàĞÍ ÀàĞÍ(µ¥Î»ÀàĞÍ::¹¤³Ì³µ);
-				µ¥Î»::»î¶¯µ¥Î»ÅäÖÃ ÅäÖÃ;
-				µ¥Î»::Find»î¶¯µ¥Î»ÅäÖÃ(ÀàĞÍ, ÅäÖÃ);
-				refSpace.Ôì»î¶¯µ¥Î»(refÊÓ¿Ú.m_spPlayer, EntitySystem::GetNickName(refÊÓ¿Ú), { -30, 30 }, ÅäÖÃ, ÀàĞÍ);
+				const å•ä½ç±»å‹ ç±»å‹(å•ä½ç±»å‹::å·¥ç¨‹è½¦);
+				å•ä½::æ´»åŠ¨å•ä½é…ç½® é…ç½®;
+				å•ä½::Findæ´»åŠ¨å•ä½é…ç½®(ç±»å‹, é…ç½®);
+				refSpace.é€ æ´»åŠ¨å•ä½(refè§†å£.m_spPlayer, EntitySystem::GetNickName(refè§†å£), { -30, 30 }, é…ç½®, ç±»å‹);
 			}
 
-			×ÊÔ´Component::Add(refSpace, ¾§Ìå¿ó, { -20, 35 });
-			×ÊÔ´Component::Add(refSpace, ¾§Ìå¿ó, { -26, 20 });
-			×ÊÔ´Component::Add(refSpace, È¼Æø¿ó, { -29, 35 });
-			×ÊÔ´Component::Add(refSpace, È¼Æø¿ó, { -20, 20 });
+			èµ„æºComponent::Add(refSpace, æ™¶ä½“çŸ¿, { -20, 35 });
+			èµ„æºComponent::Add(refSpace, æ™¶ä½“çŸ¿, { -26, 20 });
+			èµ„æºComponent::Add(refSpace, ç‡ƒæ°”çŸ¿, { -29, 35 });
+			èµ„æºComponent::Add(refSpace, ç‡ƒæ°”çŸ¿, { -20, 20 });
 
 		}
 
-		PlayerComponent::SayÏµÍ³(refÊÓ¿Ú, "5Ãëºó½«³öÏÖµÚ1²¨¹Ö¡£Äú¿ÉÒÔÔì¼¸¸öµØ±¤£¬ÈÃ±ø½ø×¤µØ±¤");
+		PlayerComponent::Sayç³»ç»Ÿ(refè§†å£, "5ç§’åå°†å‡ºç°ç¬¬1æ³¢æ€ªã€‚æ‚¨å¯ä»¥é€ å‡ ä¸ªåœ°å ¡ï¼Œè®©å…µè¿›é©»åœ°å ¡");
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
 		for (int i = 1; i < 20; ++i)
 		{
-			if (1 < i && IsÕ½¶·½áÊø(refSpace, refGateSession))
+			if (1 < i && co_await Isæˆ˜æ–—ç»“æŸ(refSpace, refè§†å£, refGateSession, funCancel))
 				co_return 0;
 
-			refGateSession.SayÏµÍ³(std::format("µÚ{0}²¨µĞÈËÕıÏòÄú×ßÀ´", i));
-			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? ±ø : ½üÕ½±ø, { 48,-48 }, i * 1);
-			auto vecEneity2 = MonsterComponent::AddMonster(refSpace, ¹¤·ä, { 47,-47 }, i * 1);
+			refGateSession.Sayç³»ç»Ÿ(std::format("ç¬¬{0}æ³¢æ•Œäººæ­£å‘æ‚¨èµ°æ¥", i));
+			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? å…µ : è¿‘æˆ˜å…µ, { 48,-48 }, i * 1);
+			auto vecEneity2 = MonsterComponent::AddMonster(refSpace, å·¥èœ‚, { 47,-47 }, i * 1);
 			vecEneity.insert(vecEneity.end(), vecEneity2.begin(), vecEneity2.end());
 			for (auto& spEntity : vecEneity)
 			{
-				spEntity->m_spAttack->m_fun¿ÕÏĞ×ßÏò´Ë´¦ = ¹ÖÎï×ßÏò¿ó¸½½ü;
+				spEntity->m_spAttack->m_funç©ºé—²èµ°å‘æ­¤å¤„ = æ€ªç‰©èµ°å‘çŸ¿é™„è¿‘;
 			}
 
 			if (co_await CoTimer::Wait(25s, funCancel))
 				co_return 0;
 		}
 
-		//if (std::get<0>(co_await CoEvent<MyEvent::µ¥Î»ÕóÍö>::Wait(funCancel, [&refSpace](const MyEvent::µ¥Î»ÕóÍö& ref)
-		//	{
-		//		auto spEntity = ref.wpEntity.lock();
-		//		if (&spEntity->m_refSpace != &refSpace)
-		//			return false;
-
-		//		return 0 == refSpace.Get¹ÖÎïµ¥Î»Êı();
-		//	})))
-		//{
-		//	co_return 0;
-		//}
 		while (!co_await CoTimer::Wait(5s, funCancel))
 		{
-			if (IsÕ½¶·½áÊø(refSpace, refGateSession))
+			if (co_await Isæˆ˜æ–—ç»“æŸ(refSpace, refè§†å£, refGateSession, funCancel))
 				co_return 0;
 		}
 		co_return 0;

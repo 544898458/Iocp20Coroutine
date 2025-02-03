@@ -21,10 +21,10 @@ void PlayerComponent::Say系统(Entity& refEntity, const std::string& str)
 void PlayerComponent::剧情对话(Entity& refEntity,
 	const std::string& str头像左, const std::string& str名字左,
 	const std::string& str头像右, const std::string& str名字右,
-	const std::string& str内容)
+	const std::string& str内容, const bool b显示退出场景按钮)
 {
 	if (refEntity.m_spPlayer)
-		refEntity.m_spPlayer->m_refSession.剧情对话(str头像左, str名字左, str头像右, str名字右, str内容);
+		refEntity.m_spPlayer->m_refSession.剧情对话(str头像左, str名字左, str头像右, str名字右, str内容, b显示退出场景按钮);
 }
 
 void PlayerComponent::剧情对话已看完(Entity& refEntity)

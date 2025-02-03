@@ -39,7 +39,7 @@ public:
 	void 剧情对话(
 		const std::string& str头像左, const std::string& str名字左,
 		const std::string& str头像右, const std::string& str名字右,
-		const std::string& str内容);
+		const std::string& str内容, const bool b显示退出场景按钮);
 	void 剧情对话已看完();
 
 	uint32_t m_snRecv = 0;

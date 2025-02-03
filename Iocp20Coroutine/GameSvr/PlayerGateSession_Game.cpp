@@ -363,8 +363,10 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 		Say系统("还没进地图");
 		return;
 	}
+	std::vector<WpEntity> vecWp;
 	bool b已播放声音(false);
-	ForEachSelected([this, msg, &b已播放声音](Entity& ref)
+	Position pos中心点 = { 0 };
+	ForEachSelected([this, msg, &b已播放声音, &vecWp, &pos中心点](Entity& ref)
 		{
 			if (!ref.m_sp走)
 				return;
@@ -381,38 +383,44 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 			if (ref.m_spAttack)
 				ref.m_spAttack->TryCancel();
 
-			走Component::Cancel所有包含走路的协程(ref);
-			if (msg.b遇到敌人自动攻击)
-				ref.m_sp走->WalkToPos(msg.pos);
-			else
-				ref.m_sp走->WalkToPos手动控制(msg.pos);
-
-			if (b已播放声音)
-				return;
-
-			b已播放声音 = true;
-			if (ref.m_spAttack)
-			{
-				switch (ref.m_类型)
-				{
-				case 兵:播放声音(msg.b遇到敌人自动攻击 ? "语音/是男声正经版" : "语音/明白男声正经版"); break;//Standing by. 待命中
-				case 近战兵:播放声音("tfbYes03"); break;//Checked up and good to go. 检查完毕，准备动身
-				case 工程车:播放声音(msg.b遇到敌人自动攻击 ? "语音/是女声可爱版" : "语音/明白女声可爱版"); break;
-				case 三色坦克:播放声音("语音/ttayes01"); break;
-				default:break;
-				}
-			}
-			//else if (ref.m_spBuilding) 
-			//{
-			//	switch (ref.m_spBuilding->m_类型)
-			//	{
-			//	case 基地:播放声音("tcsWht00"); break;
-			//	case 兵厂:播放声音("tclWht00"); break;
-			//	default:
-			//		break;
-			//	}
-			//}
+			vecWp.push_back(ref.weak_from_this());
+			pos中心点 += ref.Pos();
 		});
+
+	if(vecWp.empty())
+	{
+		LOG(WARNING) << "vecWp";
+		return;
+	}
+	pos中心点.x /= vecWp.size();
+	pos中心点.z /= vecWp.size();
+	for (auto& wp : vecWp)
+	{
+		auto& ref = *wp.lock();
+		const auto pos偏离 = ref.Pos() - pos中心点;
+		const auto pos目标 = msg.pos + pos偏离;
+		走Component::Cancel所有包含走路的协程(ref);
+		if (msg.b遇到敌人自动攻击)
+			ref.m_sp走->WalkToPos(pos目标);
+		else
+			ref.m_sp走->WalkToPos手动控制(pos目标);
+
+		if (b已播放声音)
+			continue;
+
+		b已播放声音 = true;
+		if (ref.m_spAttack)
+		{
+			switch (ref.m_类型)
+			{
+			case 兵:播放声音(msg.b遇到敌人自动攻击 ? "语音/是男声正经版" : "语音/明白男声正经版"); break;//Standing by. 待命中
+			case 近战兵:播放声音("tfbYes03"); break;//Checked up and good to go. 检查完毕，准备动身
+			case 工程车:播放声音(msg.b遇到敌人自动攻击 ? "语音/是女声可爱版" : "语音/明白女声可爱版"); break;
+			case 三色坦克:播放声音("语音/ttayes01"); break;
+			default:break;
+			}
+		}
+	}
 }
 
 void PlayerGateSession_Game::播放声音(const std::string& refStr声音, const std::string& str文本)
@@ -811,8 +819,8 @@ void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
 		if (!spEntity->m_wpOwner.expired())
 			continue;//地堡内
 
-		//if (spEntity->m_spBuilding)
-		//	continue;//不可框选建筑单位
+		if (spEntity->m_spBuilding)
+			continue;//不可框选建筑单位
 
 		if (EntitySystem::Is视口(*spEntity))
 			continue;
@@ -958,14 +966,15 @@ void PlayerGateSession_Game::OnRecv(const Msg切换空闲工程车& msg)
 void PlayerGateSession_Game::剧情对话(
 	const std::string& str头像左, const std::string& str名字左,
 	const std::string& str头像右, const std::string& str名字右,
-	const std::string& str内容)
+	const std::string& str内容, const bool b显示退出场景按钮)
 {
 	Send<Msg剧情对话>({
 		.str头像左 = StrConv::GbkToUtf8(str头像左),
 		.str名字左 = StrConv::GbkToUtf8(str名字左),
 		.str头像右 = StrConv::GbkToUtf8(str头像右),
 		.str名字右 = StrConv::GbkToUtf8(str名字右),
-		.str对话内容 = StrConv::GbkToUtf8(str内容) });
+		.str对话内容 = StrConv::GbkToUtf8(str内容),
+		.b显示退出场景按钮 = b显示退出场景按钮 });
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg剧情对话已看完& msg)

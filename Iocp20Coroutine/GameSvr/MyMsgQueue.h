@@ -14,7 +14,25 @@ struct Position
 	{
 		return x == refRight.x && z == refRight.z;
 	}
-
+	void operator+=(const Position& refRight)
+	{
+		x += refRight.x;
+		z += refRight.z;
+	}
+	Position operator-(const Position& refRight)const
+	{
+		Position pos(*this);
+		pos.x -= refRight.x;
+		pos.z -= refRight.z;
+		return pos;
+	}
+	Position operator+(const Position& refRight)const
+	{
+		Position pos(*this);
+		pos.x += refRight.x;
+		pos.z += refRight.z;
+		return pos;
+	}
 	bool DistanceLessEqual(const Position& refPos, float fDistance)const
 	{
 		return this->DistancePow2(refPos) <= std::pow(fDistance, fExponent);
@@ -527,7 +545,8 @@ struct Msg剧情对话
 	std::string str头像右;
 	std::string str名字右;
 	std::string str对话内容;
-	MSGPACK_DEFINE(msg, str头像左, str名字左, str头像右, str名字右, str对话内容);
+	bool b显示退出场景按钮;
+	MSGPACK_DEFINE(msg, str头像左, str名字左, str头像右, str名字右, str对话内容, b显示退出场景按钮);
 };
 struct Msg剧情对话已看完
 {
