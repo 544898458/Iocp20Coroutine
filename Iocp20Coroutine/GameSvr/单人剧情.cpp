@@ -277,7 +277,7 @@ namespace 单人剧情
 
 		}
 
-		PlayerComponent::Say系统(ref视口, "5秒后将出现第1波怪。您可以造几个地堡，让兵进驻地堡");
+		PlayerComponent::Say系统(ref视口, "5秒后将出现第1波怪。您可以沿墙边造光子炮、布置坦克、造几地堡、让兵进驻地堡。");
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 

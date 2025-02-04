@@ -114,6 +114,9 @@ void AttackComponent::Update()
 
 bool AttackComponent::可以攻击()
 {
+	if (m_refEntity.m_spBuilding && !m_refEntity.m_spBuilding->已造好())
+		return false;
+
 	if (m_refEntity.m_sp走 && !m_refEntity.m_sp走->m_coWalk手动控制.Finished())
 		return false;//表示不允许打断
 

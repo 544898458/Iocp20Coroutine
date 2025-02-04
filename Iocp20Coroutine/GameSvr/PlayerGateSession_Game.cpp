@@ -130,6 +130,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 	//自动找兵厂去造
 	CHECK_WP_RET_VOID(m_wpSpace);
 	Space& refSpace = *m_wpSpace.lock();
+	std::vector<WpEntity> vecWp可造;
 	for (auto [_, wp] : refSpace.m_mapPlayer[NickName()].m_mapWpEntity)
 	{
 		CHECK_WP_CONTINUE(wp);
@@ -137,10 +138,25 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 		if (!refEntiy.m_spBuilding)continue;
 		if (!refEntiy.m_sp造活动单位)continue;
 		if (!refEntiy.m_sp造活动单位->可造(msg.类型))continue;
+		vecWp可造.push_back(wp);
+	}
+	
+	//待造队列最短的在前面
+	std::sort(vecWp可造.begin(), vecWp可造.end(), [](const WpEntity& wp左, const WpEntity& wp右)->bool 
+		{
+			CHECK_WP_RET_FALSE(wp左);
+			CHECK_WP_RET_FALSE(wp右);
+			CHECK_NOTNULL_RET_FALSE(wp左.lock()->m_sp造活动单位);
+			CHECK_NOTNULL_RET_FALSE(wp右.lock()->m_sp造活动单位);
+			return wp左.lock()->m_sp造活动单位->等待造Count() < wp右.lock()->m_sp造活动单位->等待造Count();
+		});
+	for (auto wp : vecWp可造) 
+	{
+		CHECK_WP_CONTINUE(wp);
+		Entity& refEntiy = *wp.lock();
 		refEntiy.m_sp造活动单位->造兵(*this, msg.类型);
 		return;
 	}
-
 
 	播放声音("BUZZ", msg.类型 == 工程车 ? "请先造一个基地" : "没有兵厂");
 }
@@ -387,7 +403,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 			pos中心点 += ref.Pos();
 		});
 
-	if(vecWp.empty())
+	if (vecWp.empty())
 	{
 		LOG(WARNING) << "vecWp";
 		return;
@@ -732,7 +748,7 @@ uint16_t PlayerGateSession_Game::活动单位上限() const
 		switch (refEntity->m_spBuilding->m_类型)
 		{
 		case 民房:result += 5; break;
-		case 基地:result += 2; break;
+		case 基地:result += 6; break;
 		default:break;
 		}
 	}
@@ -819,8 +835,8 @@ void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
 		if (!spEntity->m_wpOwner.expired())
 			continue;//地堡内
 
-		if (spEntity->m_spBuilding)
-			continue;//不可框选建筑单位
+		if (spEntity->m_spBuilding && vecId.size() > 1)
+			continue;//建筑单位目前只能单选
 
 		if (EntitySystem::Is视口(*spEntity))
 			continue;
