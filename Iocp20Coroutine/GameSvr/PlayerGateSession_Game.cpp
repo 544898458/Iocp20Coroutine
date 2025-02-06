@@ -140,9 +140,9 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 		if (!refEntiy.m_sp造活动单位->可造(msg.类型))continue;
 		vecWp可造.push_back(wp);
 	}
-	
+
 	//待造队列最短的在前面
-	std::sort(vecWp可造.begin(), vecWp可造.end(), [](const WpEntity& wp左, const WpEntity& wp右)->bool 
+	std::sort(vecWp可造.begin(), vecWp可造.end(), [](const WpEntity& wp左, const WpEntity& wp右)->bool
 		{
 			CHECK_WP_RET_FALSE(wp左);
 			CHECK_WP_RET_FALSE(wp右);
@@ -150,7 +150,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 			CHECK_NOTNULL_RET_FALSE(wp右.lock()->m_sp造活动单位);
 			return wp左.lock()->m_sp造活动单位->等待造Count() < wp右.lock()->m_sp造活动单位->等待造Count();
 		});
-	for (auto wp : vecWp可造) 
+	for (auto wp : vecWp可造)
 	{
 		CHECK_WP_CONTINUE(wp);
 		Entity& refEntiy = *wp.lock();
@@ -379,6 +379,8 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 		Say系统("还没进地图");
 		return;
 	}
+	auto& refSpace = *m_wpSpace.lock();
+
 	std::vector<WpEntity> vecWp;
 	bool b已播放声音(false);
 	Position pos中心点 = { 0 };
@@ -414,7 +416,18 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 	{
 		auto& ref = *wp.lock();
 		const auto pos偏离 = ref.Pos() - pos中心点;
-		const auto pos目标 = msg.pos + pos偏离;
+		auto pos目标 = msg.pos + pos偏离;
+		if (!refSpace.CrowdTool可站立(pos目标))
+		{
+			LOG(INFO) << pos目标 << "不可站立，找附近的可站立点";
+			if (!refSpace.CrowdToolFindNerestPos(pos目标))
+			{
+				LOG(WARNING) << pos目标 << "附近没有可站立的点";
+				continue;
+			}
+			LOG(INFO) << "找到附近的点:" << pos目标;
+		}
+
 		走Component::Cancel所有包含走路的协程(ref);
 		if (msg.b遇到敌人自动攻击)
 			ref.m_sp走->WalkToPos(pos目标);
@@ -747,7 +760,7 @@ uint16_t PlayerGateSession_Game::活动单位上限() const
 
 		switch (refEntity->m_spBuilding->m_类型)
 		{
-		case 民房:result += 5; break;
+		case 民房:result += 8; break;
 		case 基地:result += 6; break;
 		default:break;
 		}
@@ -816,7 +829,7 @@ void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
 {
 	m_vecSelectedEntity.clear();
 	bool b已发送选中音效(false);
-	//for (const auto [k, wp] : m_mapWpEntity)
+
 	if (m_wpSpace.expired())
 	{
 		LOG(ERROR) << "";
@@ -845,7 +858,15 @@ void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
 			continue;
 
 		if (&spEntity->m_spPlayer->m_refSession != this)//不是自己的单位
+		{
+			if (vecId.size() == 1)//单选一个敌方单位，就是走过去打
+			{
+				MsgMove msg = { .pos = spEntity->Pos(),.b遇到敌人自动攻击 = false };
+				OnRecv(msg);
+				return;
+			}
 			continue;
+		}
 
 		m_vecSelectedEntity.push_back(spEntity->Id);
 		if (!b已发送选中音效)

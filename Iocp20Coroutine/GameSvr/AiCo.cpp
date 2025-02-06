@@ -112,7 +112,7 @@ namespace AiCo
 
 					if (!refThis.DistanceLessEqual(ref最近, 2.0f))
 					{
-						LOG(INFO) << "附近没有友方单位，停止走向" << posLocalTarget;
+						//LOG(INFO) << "附近没有友方单位，停止走向" << posLocalTarget;
 						co_return false;
 					}
 					if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
