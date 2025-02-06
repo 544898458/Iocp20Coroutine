@@ -15,6 +15,11 @@
 #include "单位组件/DefenceComponent.h"
 
 
+/// <summary>
+/// 平方就是2次方
+/// </summary>
+const float fExponent = 2.0f;
+
 MsgNotifyPos::MsgNotifyPos(Entity& ref) : entityId(ref.Id), x(ref.Pos().x), z(ref.Pos().z), eulerAnglesY(ref.m_eulerAnglesY)
 {
 	if (ref.m_spDefence)
@@ -28,4 +33,19 @@ MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :
 	prefabName(StrConv::GbkToUtf8(ref.m_配置.strPrefabName)),
 	i32HpMax(ref.m_spDefence ? ref.m_spDefence->m_i32HpMax : 0)
 {
+}
+
+bool Position::DistanceLessEqual(const Position& refPos, float fDistance) const
+{
+	return this->DistancePow2(refPos) <= std::pow(fDistance, fExponent);
+}
+
+float Position::DistancePow2(const Position& refPos) const
+{
+	return std::pow(x - refPos.x, fExponent) + std::pow(z - refPos.z, fExponent);
+}
+
+float Position::Distance(const Position& refPos) const
+{
+	return std::sqrtf(DistancePow2(refPos));
 }
