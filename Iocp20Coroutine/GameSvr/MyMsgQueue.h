@@ -393,7 +393,7 @@ struct MsgMove
 enum SayChannel
 {
 	系统,
-	语音提示,
+	聊天,
 };
 MSGPACK_ADD_ENUM(SayChannel);
 

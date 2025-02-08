@@ -23,7 +23,7 @@ public:
 	template<class T> void Send(const T& ref);
 	void Say(const std::string& str, const SayChannel channel);
 	void Say系统(const std::string& str);
-	void Say语音提示(const std::string& str);
+	//void Say语音提示(const std::string& str);
 
 	const std::string& NickName()const { return m_strNickName; }
 	WpEntity EnterSpace(WpSpace wpSpace);

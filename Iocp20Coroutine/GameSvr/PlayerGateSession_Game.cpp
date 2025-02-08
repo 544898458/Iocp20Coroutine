@@ -108,10 +108,10 @@ void PlayerGateSession_Game::Say系统(const std::string& str)
 	Say(str, SayChannel::系统);
 }
 
-void PlayerGateSession_Game::Say语音提示(const std::string& str)
-{
-	Say(str, SayChannel::语音提示);
-}
+//void PlayerGateSession_Game::Say语音提示(const std::string& str)
+//{
+//	Say(str, SayChannel::聊天);
+//}
 
 void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 {
@@ -639,8 +639,9 @@ void PlayerGateSession_Game::OnRecv(const MsgSay& msg)
 {
 	MsgSay msg加名字 = msg;
 	auto strGbk = StrConv::Utf8ToGbk(msg加名字.content);
-	LOG(INFO) << "收到聊天:" << strGbk;
-	msg加名字.content = StrConv::GbkToUtf8(NickName() + " 说:" + strGbk);
+	LOG(INFO) << "收到聊天:" << strGbk << ",channel:" << msg.channel;
+	msg加名字.content = StrConv::GbkToUtf8(NickName() + " 说:\n" + strGbk);
+	msg加名字.channel = 聊天;
 	SendToWorldSvr<MsgSay>(msg加名字, m_idPlayerGateSession);
 }
 
@@ -882,13 +883,6 @@ void PlayerGateSession_Game::Send选中音效(const Entity& refEntity)
 {
 	if (refEntity.m_spAttack)
 	{
-		//switch (refEntity.m_spAttack->m_类型)
-		//{
-		//case 兵:播放声音("TMaPss00"); break;// Say语音提示("待命中!"); break;//Standing by. 待命中
-		//case 近战兵:播放声音("tfbPss00"); break;//Say语音提示("准备行动!"); break;//Checked up and good to go. 检查完毕，准备动身
-		//case 工程车:播放声音("TSCPss00"); break;//Commander.
-		//default:break;
-		//}
 		播放声音(refEntity.m_配置.str选中音效);
 	}
 	else if (refEntity.m_spBuilding)

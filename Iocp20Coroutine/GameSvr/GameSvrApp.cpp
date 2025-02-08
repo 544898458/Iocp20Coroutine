@@ -63,12 +63,6 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 //std::unique_ptr<Iocp::Server<WorldClient> > g_worldSvr;// (Iocp::ThreadPool::GetIocp());
 std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GameToWorld>> g_ConnectToWorldSvr;
 
-//void SendToWorldSvr(const MsgSay& msg){MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); });}
-//void SendToWorldSvr(const MsgChangeMoney& msg) 
-//{
-//	msg.msg.sn = (++g_ConnectToWorldSvr->m_snSend);
-//	MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); }); 
-//}
 template<class T>
 void SendToWorldSvr(const T& refMsg, const uint64_t idGateSession)
 {

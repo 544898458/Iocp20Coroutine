@@ -391,7 +391,7 @@ SpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 	m_mapPlayer[strNickName].m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
 	AddEntity(spNewEntity);//全地图单位
 	spNewEntity->m_速度每帧移动距离 = 配置.战斗.f每帧移动距离;
-	PlayerComponent::播放声音(*spNewEntity, 配置.str入场语音); //refGateSession.Say语音提示("工程车可以开工了!");//SCV, good to go, sir. SCV可以开工了
+	PlayerComponent::播放声音(*spNewEntity, 配置.str入场语音); //SCV, good to go, sir. SCV可以开工了
 	switch (类型)
 	{
 	case 工程车:

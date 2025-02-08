@@ -63,12 +63,3 @@ private:
 	std::deque<MsgChangeMoneyResponce> m_queueConsumeMoneyResponce;
 	MsgQueueMsgPack<ClientSession_GameToWorld> m_MsgQueue;
 };
-//class Client_GateToWorld
-//{
-//public:
-//	void OnAdd(Iocp::SessionSocketCompletionKey<ClientSession_GameToWorld>& session)
-//	{
-//
-//	}
-//	static std::function<void(MsgSay const&)> m_funBroadcast;
-//};

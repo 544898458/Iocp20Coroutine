@@ -15,12 +15,44 @@
 #include "单位.h"
 #include "AiCo.h"
 
+#define _等玩家读完	{if (co_await 等玩家读完(refGateSession, funCancel))co_return 0;}
+
 namespace 单人剧情
 {
 
+	static void 总教官陈近南说(Entity& ref视口, const std::string& str内容)
+	{
+		PlayerComponent::剧情对话(ref视口, "图片/总教官1", "总教官：陈近南", "", "", "    " + str内容);
+		PlayerComponent::播放声音(ref视口, "音效/BUTTON");
+	}
+	static void 玩家说(Entity& ref视口, PlayerGateSession_Game& refGateSession, const std::string& str内容, const bool b显示退出场景按钮 = false)
+	{
+		PlayerComponent::剧情对话(ref视口, "", "", "图片/玩家1", "玩家：" + refGateSession.NickName(), "    " + str内容, b显示退出场景按钮);
+		PlayerComponent::播放声音(ref视口, "音效/BUTTON");
+	}
+
+	static CoTask<bool> 等玩家读完(PlayerGateSession_Game& refGateSession, FunCancel& funCancel)
+	{
+		const auto funSameSession = [&refGateSession](const MyEvent::已阅读剧情对话& ref)
+			{ return ref.wpPlayerGateSession.lock().get() == &refGateSession; };
+		co_return std::get<0>(co_await CoEvent<MyEvent::已阅读剧情对话>::Wait(funCancel, funSameSession));
+	}
 	CoTask<int> Co训练战(Space& refSpace, Entity& ref视口, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
 	{
 		KeepCancel kc(funCancel);
+
+		const auto fun总教官陈近南说 = [&ref视口](const std::string& str内容) {总教官陈近南说(ref视口, str内容); };
+		const auto fun玩家说 = [&ref视口, &refGateSession](const std::string& str内容) {玩家说(ref视口, refGateSession, str内容); };
+
+		fun总教官陈近南说("即时战略游戏的操作并不复杂，老年间便有四句童谣：\n"
+			"\t\t\t工程车，造基地；\n"
+			"\t\t\t基地又产工程车。\n"
+			"\t\t\t工程车，造兵厂，\n"
+			"\t\t\t兵厂产兵欢乐多！"
+		);_等玩家读完;
+		fun玩家说("听说工程车还可以造地堡和光子炮，我也要试试。");_等玩家读完;
+		fun总教官陈近南说("造完基地应该先安排工程车去采集晶体矿和燃气矿，这是一切生产建造的基础。此外建造民房可以提升活动单位上限。\n加油！"); _等玩家读完;
+		PlayerComponent::剧情对话已看完(ref视口);
 		using namespace std;
 		PlayerComponent::Say系统(ref视口, "欢迎来到RTS即时战略游戏，现在您要接受基础的训练");
 
@@ -40,7 +72,7 @@ namespace 单人剧情
 		单位::Find活动单位配置(类型, 配置);
 		SpEntity sp工程车 = refSpace.造活动单位(ref视口.m_spPlayer, EntitySystem::GetNickName(ref视口), { 5,10 }, 配置, 类型);
 
-		PlayerComponent::Say系统(ref视口, "请点击“工程车”选中，然后点击“造基地”按钮，再点击空白地面，10秒后就能造出一个基地");
+		PlayerComponent::Say系统(ref视口, "请点击“工程车”选中，然后点击“基地”按钮，再点击空白地面，10秒后就能造出一个基地");
 
 		const auto funSameSpace = [&refSpace, &ref视口](const MyEvent::AddEntity& refAddEntity)
 			{ return MyEvent::SameSpace(refAddEntity.wpEntity, refSpace, EntitySystem::GetNickName(ref视口)); };
@@ -59,7 +91,7 @@ namespace 单人剧情
 			co_return 0;
 
 
-		PlayerComponent::Say系统(ref视口, "请点击选中基地（圆环特效表示选中），然后点击“造工程车”按钮，5秒后会在基地旁造出一个工程车");
+		PlayerComponent::Say系统(ref视口, "请点击选中基地（圆环特效表示选中），然后点击“工程车”按钮，5秒后会在基地旁造出一个工程车");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
@@ -100,7 +132,7 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
-		PlayerComponent::Say系统(ref视口, "等您存够20晶体矿后，请选中一辆工程车，然后点击“造民房”按钮，再点击一次空旷地面");
+		PlayerComponent::Say系统(ref视口, "等您存够20晶体矿后，请选中一辆工程车，然后点击“民房”按钮，再点击一次空旷地面");
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
 
@@ -109,14 +141,14 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(3s, funCancel))
 			co_return 0;
 
-		PlayerComponent::Say系统(ref视口, "等您存够30晶体矿后，请选中一辆工程车，然后点击“造兵厂”按钮，再点击一次空旷地面，就能造出一个兵厂");
+		PlayerComponent::Say系统(ref视口, "等您存够30晶体矿后，请选中一辆工程车，然后点击“兵厂”按钮，再点击一次空旷地面，就能造出一个兵厂");
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
 
 		if (co_await CoTimer::Wait(10s, funCancel))
 			co_return 0;
 
-		PlayerComponent::Say系统(ref视口, "请点击选中兵厂（圆环特效表示选中），然后点击“造兵”按钮,10秒后会在兵厂旁造出一个兵");
+		PlayerComponent::Say系统(ref视口, "请点击选中兵厂（圆环特效表示选中），然后点击“兵”按钮,10秒后会在兵厂旁造出一个兵");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
@@ -171,30 +203,10 @@ namespace 单人剧情
 		return { -30,30 };
 	}
 
-	static void 总教官陈近南说(Entity& ref视口, const std::string& str内容)
-	{
-		PlayerComponent::剧情对话(ref视口, "图片/总教官", "总教官：陈近南", "", "", "    " + str内容);
-		PlayerComponent::播放声音(ref视口, "音效/BUTTON");
-	}
-	static void 玩家说(Entity& ref视口, PlayerGateSession_Game& refGateSession, const std::string& str内容, const bool b显示退出场景按钮 = false)
-	{
-		PlayerComponent::剧情对话(ref视口, "", "", "图片/玩家", "玩家：" + refGateSession.NickName(), "    " + str内容, b显示退出场景按钮);
-		PlayerComponent::播放声音(ref视口, "音效/BUTTON");
-	}
-
-	static CoTask<bool> 等玩家读完(PlayerGateSession_Game& refGateSession, FunCancel& funCancel)
-	{
-		const auto funSameSession = [&refGateSession](const MyEvent::已阅读剧情对话& ref)
-			{ return ref.wpPlayerGateSession.lock().get() == &refGateSession; };
-		co_return std::get<0>(co_await CoEvent<MyEvent::已阅读剧情对话>::Wait(funCancel, funSameSession));
-	}
 	static CoTask<bool> Is战斗结束(Space& refSpace, Entity& ref视口, PlayerGateSession_Game& refGateSession, FunCancel& funCancel)
 	{
-#define _等玩家读完	{if (co_await 等玩家读完(refGateSession, funCancel))co_return 0;}
-
 		const auto fun总教官陈近南说 = [&ref视口](const std::string& str内容) {总教官陈近南说(ref视口, str内容);};
 		const auto fun玩家说 = [&ref视口, &refGateSession](const std::string& str内容) {玩家说(ref视口, refGateSession, str内容);};
-
 
 		if (0 == refSpace.Get怪物单位数())
 		{
@@ -219,10 +231,9 @@ namespace 单人剧情
 		KeepCancel kc(funCancel);
 		using namespace std;
 
-#define _等玩家读完	{if (co_await 等玩家读完(refGateSession, funCancel))co_return 0;}
-
 		const auto fun总教官陈近南说 = [&ref视口](const std::string& str内容) {总教官陈近南说(ref视口, str内容);};
 		const auto fun玩家说 = [&ref视口, &refGateSession](const std::string& str内容) {玩家说(ref视口, refGateSession, str内容);};
+
 		fun总教官陈近南说("情报显示：将有大量敌方单位进攻我方基地，请做好准备。");	_等玩家读完;
 		fun玩家说("可是我仅受过简单的指挥训练。");							_等玩家读完;
 		fun总教官陈近南说("我们会提供足够的初始晶体矿和燃气矿，你不用再从零开始采集。");	_等玩家读完;
