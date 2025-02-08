@@ -218,6 +218,9 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), funCancel, !b仇恨目标))
 				co_return true;
 
+			if(co_await CoTimer::WaitNextUpdate(funCancel))
+				co_return true;
+
 			continue;
 		}
 

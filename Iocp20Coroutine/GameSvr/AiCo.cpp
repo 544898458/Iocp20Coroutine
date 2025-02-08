@@ -134,6 +134,9 @@ namespace AiCo
 
 	CoTaskBool WalkToTarget(Entity& refThis, SpEntity spTarget, FunCancel& funCancel, const bool b检查警戒距离)
 	{
+		if(!refThis.m_sp走)
+			co_return false;
+
 		if (refThis.IsDead())
 		{
 			LOG(WARNING) << refThis.NickName() << ",已阵亡不用走";
