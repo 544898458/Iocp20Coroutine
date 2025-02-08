@@ -85,8 +85,7 @@ CoTaskBool AttackComponent::Co顶层()
 		if (m_refEntity.IsDead())
 			co_return false;
 
-
-		if (m_b搜索新的目标 && co_await Co走向警戒范围内的目标然后攻击(m_TaskCancel.cancel))
+		if ((m_b搜索新的目标) && co_await Co走向警戒范围内的目标然后攻击(m_TaskCancel.cancel))
 			continue;
 
 		if (!m_refEntity.m_spPlayerNickName && !走Component::正在走(m_refEntity))//怪随机走
@@ -143,7 +142,7 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 		if (!可以攻击())
 			co_return false;
 
-		const auto wpEntity = m_refEntity.m_refSpace.Get最近的Entity支持地堡中的单位(m_refEntity, Space::敌方, [](const Entity& ref)->bool {return nullptr != ref.m_spDefence; });
+		auto wpEntity = m_refEntity.m_refSpace.Get最近的Entity支持地堡中的单位(m_refEntity, Space::敌方, [](const Entity& ref)->bool {return nullptr != ref.m_spDefence; });
 		if (wpEntity.expired())
 		{
 			m_b搜索新的目标 = false;//警戒范围内没有目标
@@ -170,7 +169,42 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 
 			continue;
 		}
-		else if (m_refEntity.m_wpOwner.expired() && m_refEntity.DistanceLessEqual(refTarget, m_refEntity.警戒距离()) &&
+		
+		bool b仇恨目标 = false;
+
+		//仇恨列表
+		if (m_refEntity.m_spDefence)
+		{
+			auto& refMap = m_refEntity.m_spDefence->m_map对我伤害;
+			while (!refMap.empty())
+			{
+				auto iterBegin = refMap.begin();
+				WpEntity wp = m_refEntity.m_refSpace.GetEntity(iterBegin->first);
+				if (wp.expired())
+				{
+					refMap.erase(iterBegin);
+					continue;
+				}
+
+				auto& refEntity = *wp.lock();
+				if (!m_refEntity.IsEnemy(refEntity))
+				{
+					refMap.erase(iterBegin);
+					continue;
+				}
+				if (!m_refEntity.DistanceLessEqual(refEntity, 35))
+				{
+					refMap.erase(iterBegin);
+					continue;
+				}
+
+				//wpEntity = wp;
+				b仇恨目标 = true;
+				break;
+			}
+		}
+		
+		if (m_refEntity.m_wpOwner.expired() && (b仇恨目标 || m_refEntity.DistanceLessEqual(refTarget, m_refEntity.警戒距离())) &&
 			//!走Component::正在走(m_refEntity) && 
 			(!m_refEntity.m_sp采集 || m_refEntity.m_sp采集->m_TaskCancel.co.Finished()))
 		{
@@ -181,7 +215,7 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 				m_refEntity.m_sp采集->m_TaskCancel.TryCancel();
 			}
 
-			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), funCancel))
+			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), funCancel, !b仇恨目标))
 				co_return true;
 
 			continue;
@@ -280,7 +314,7 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 
 		播放攻击音效();
 
-		refDefencer.m_spDefence->受伤(m_战斗配置.i32伤害);
+		refDefencer.m_spDefence->受伤(m_战斗配置.i32伤害, m_refEntity.Id);
 	} while (false);
 
 	if (co_await CoTimer::Wait(m_战斗配置.dura后摇, cancel))//后摇
@@ -344,7 +378,7 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 				CHECK_WP_CONTINUE(wp);
 				auto& refDefencer = *wp.lock();
 				if (refDefencer.m_spDefence && refDefencer.Pos().DistanceLessEqual(posTarget, 5))
-					refDefencer.m_spDefence->受伤(m_战斗配置.i32伤害);
+					refDefencer.m_spDefence->受伤(m_战斗配置.i32伤害, m_refEntity.Id);
 			}
 		}
 

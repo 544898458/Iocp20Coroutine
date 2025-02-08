@@ -235,7 +235,7 @@ CoTaskBool PlayerGateSession_Game::Co进多人联机地图(WpEntity wp视口)
 		CHECK_WP_CO_RET_FALSE(wp视口);
 		auto& refSpace = *m_wpSpace.lock();
 		auto& ref视口 = *wp视口.lock();
-		auto pos出生 = Position(std::rand() % 100 - 50.f, std::rand() % 50 - 25.f);
+		auto pos出生 = Position(std::rand() % 100 - 50.f, std::rand() % 100 - 50.f);
 		{
 			const 单位类型 类型(单位类型::兵);
 			单位::活动单位配置 配置;
@@ -287,7 +287,7 @@ CoTaskBool PlayerGateSession_Game::Co进多人联机地图(WpEntity wp视口)
 	const auto seconds消息间隔 = 10s;
 	Say("这是每个玩家都可以自由共同进入的场景，分布有一些资源和少量的怪，资源的再生速度很慢", SayChannel::系统);
 	if (co_await CoTimer::Wait(seconds消息间隔, m_funCancel进地图)) co_return false;
-	Say("您开局只有一台工程车，工程车可以建造建筑，建筑中可以产出活动单位", SayChannel::系统);
+	Say("您开局只有一辆工程车，工程车可以建造建筑，建筑中可以产出活动单位", SayChannel::系统);
 	if (co_await CoTimer::Wait(seconds消息间隔, m_funCancel进地图)) co_return false;
 	Say("一旦您退出此场景或断线后，您在此场景中的所有单位可能会因为缺少指挥而遭到攻击", SayChannel::系统);
 	if (co_await CoTimer::Wait(seconds消息间隔, m_funCancel进地图)) co_return false;
@@ -429,6 +429,9 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 		}
 
 		走Component::Cancel所有包含走路的协程(ref);
+		if (ref.m_spDefence)
+			ref.m_spDefence->m_map对我伤害.clear();
+
 		if (msg.b遇到敌人自动攻击)
 			ref.m_sp走->WalkToPos(pos目标);
 		else

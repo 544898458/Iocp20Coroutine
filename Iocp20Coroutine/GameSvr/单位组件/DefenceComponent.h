@@ -1,15 +1,17 @@
 #pragma once
+#include <map>
 class Entity;
 class DefenceComponent
 {
 public:
 	DefenceComponent(Entity& refEntity, const int i32HpMax);
 	static void AddComponent(Entity& refEntity, uint16_t u16初始Hp);
-	void 受伤(int);
+	void 受伤(int hp, const uint64_t idAttacker);
 	bool IsDead() const;
 	void 播放基地正遭到攻击语音();
 	int m_hp = 20;
 	const int32_t m_i32HpMax;
+	std::map<uint64_t, int> m_map对我伤害;
 
 private:
 	Entity& m_refEntity;
