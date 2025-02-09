@@ -101,7 +101,7 @@ void PlayerGateSession_Game::OnDestroy()
 
 void PlayerGateSession_Game::Say(const std::string& str, const SayChannel channel)
 {
-	Send< MsgSay>({ .content = StrConv::GbkToUtf8(str),.channel = channel });
+	Send<MsgSay>({ .content = StrConv::GbkToUtf8(str),.channel = channel });
 }
 void PlayerGateSession_Game::Say系统(const std::string& str)
 {
@@ -635,6 +635,8 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	spEntityViewPort->BroadcastEnter();
 
 	CoEvent<MyEvent::玩家进入Space>::OnRecvEvent({ this->weak_from_this(), spEntityViewPort, wpSpace });
+	spEntityViewPort->Broadcast<MsgSay>({.content = StrConv::GbkToUtf8(NickName() + " 进来了")});
+
 	return spEntityViewPort;
 }
 

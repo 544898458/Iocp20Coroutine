@@ -289,3 +289,4 @@ template void Entity::Broadcast(const MsgDelRoleRet& msg);
 template void Entity::Broadcast(const MsgEntityÃèÊö& msg);
 template void Entity::Broadcast(const Msg²¥·ÅÉùÒô& msg);
 template void Entity::Broadcast(const Msgµ¯ÍèÌØĞ§& msg);
+template void Entity::Broadcast(const MsgSay& msg);

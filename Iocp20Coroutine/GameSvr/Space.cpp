@@ -252,9 +252,6 @@ int Space::Get怪物单位数()
 {
 	return Get单位数([](const Entity& refEntity)
 		{
-			if (refEntity.IsDead())
-				return false;
-
 			if (nullptr == refEntity.m_spMonster)
 				return false;
 
@@ -297,6 +294,9 @@ int Space::Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位
 	int i32单位数(0);
 	for (const auto [k, spEntity] : m_mapEntity)
 	{
+		if (spEntity->IsDead())
+			continue
+			;
 		if (fun是否统计此单位 && !fun是否统计此单位(*spEntity))
 			continue;
 

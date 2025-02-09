@@ -171,40 +171,69 @@ namespace 单人剧情
 		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
 			co_return 0;
 
-		PlayerComponent::Say系统(ref视口, "您的兵阵亡了。可以多造点兵去围攻敌人");
-
-		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref)
-			{
-				auto spEntity = ref.wpEntity.lock();
-				if (&spEntity->m_refSpace != &refSpace)
-					return false;
-
-				return !spEntity->m_spPlayer;//怪物阵亡
-			})))
+		if (0 < refSpace.Get怪物单位数())
 		{
-			co_return 0;
+			PlayerComponent::Say系统(ref视口, "您的兵阵亡了。可以多造点兵去围攻敌人");
+
+			if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref)
+				{
+					auto spEntity = ref.wpEntity.lock();
+					if (&spEntity->m_refSpace != &refSpace)
+						return false;
+
+					return !spEntity->m_spPlayer;//怪物阵亡
+				})))
+			{
+				co_return 0;
+			}
 		}
 
 		PlayerComponent::Say系统(ref视口, "恭喜您消灭了敌人！现在左边给您刷了10个敌人。您可以造地堡,让兵进入地堡中，立足防守，再伺机进攻");
 		MonsterComponent::AddMonster(refSpace, 兵, { -30.0 }, 10);
 
-		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref)
+		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace,&refGateSession](const MyEvent::单位阵亡& ref)
 			{
 				auto spEntity = ref.wpEntity.lock();
 				if (&spEntity->m_refSpace != &refSpace)
 					return false;
 
-				return 0 == refSpace.Get怪物单位数();
+				return 0 == refSpace.Get怪物单位数() || 0 == refSpace.Get玩家单位数(refGateSession);
 			})))
 		{
 			co_return 0;
 		}
+		if (0 == refSpace.Get怪物单位数())
+		{
+			PlayerComponent::播放声音(ref视口, "音效/YouWin", "您取得了胜利！您真是指挥天才！");
 
-		PlayerComponent::播放声音(ref视口, "音效/YouWin", "您取得了胜利！您真是指挥天才！");
+			fun总教官陈近南说(refGateSession.NickName() + "，你的悟性很高，10分钟就完成了其他学员一个月才能完成的训练，为师甚是欣慰！"); _等玩家读完;
+			fun玩家说("……我这都是些什么同学啊，这么简单的操作还要学一个月吗？"); _等玩家读完;
+			fun总教官陈近南说("唉，谁说不是呢！如今世风不古。遥想20年前，比你悟性更高的指挥天才多如牛毛，大家经常自发研究切磋指挥技艺，水平超越教官的学员比比皆是，实在令人怀念……"); _等玩家读完;
+			fun玩家说("这些前辈果真如此厉害吗？学生倒是想领教领教！"); _等玩家读完;
+			fun总教官陈近南说("在“多人联机地图”和“其他人的多人战局列表”可能会遇到他们，不要轻敌。要善用战斗单位的克制关系：\n"
+				"\t\t近战兵 克制 坦克\n"
+				"\t\t坦克 克制 地堡和光子炮\n"
+				"\t\t地堡和光子炮 克制 近战兵\n"
+			); _等玩家读完;
+			fun玩家说("这些克制关系是怎么产生的呢？"); _等玩家读完;
+			fun总教官陈近南说("坦克价格昂贵，攻击前摇最久，移动速度最慢；前摇开始后炸点无法改变，敌方单位很容易躲开炸点，此外坦克炸点溅射会伤害附近的己方单位。\n"
+				"\t\t近战兵移动速度快，攻击速度快，价格便宜，很容易躲开坦克炸点，也很容易在坦克攻击前摇结束之前将坦克打掉。"); _等玩家读完;
+			fun总教官陈近南说("坦克，攻击距离最远，可以在光子炮和地堡内单位的射程外攻击，是拆除建筑的利器。"); _等玩家读完;
+			fun总教官陈近南说("光子炮价格便宜，攻击速度快，攻击距离仅次于坦克，集中放置后可对快速移动的敌方小兵群体造成有效伤害。"); _等玩家读完;
+			fun玩家说("我会在实战中体会摸索。"); _等玩家读完;
+			fun总教官陈近南说("一个人的时候，可以试试“防守战”，有助于体会光子炮、坦克、地堡的威力。"); _等玩家读完;
+			玩家说(ref视口, refGateSession, "好的。", true);//	_等玩家读完;
+		}
+		else
+		{
+			PlayerComponent::播放声音(ref视口, "音效/YouLoss", "您取得了胜利！您真是指挥天才！");
 
-		PlayerComponent::Send<Msg显示界面>(ref视口.m_spPlayer, { .ui = Msg显示界面::选择地图 });
+			fun总教官陈近南说("这只是一次训练，不必过于在意。失败是成功之母，待情绪平复可以再试一次。"); _等玩家读完;
+			玩家说(ref视口, refGateSession, "好的。", true);//	_等玩家读完;
+		}
 		co_return 0;
 	}
+
 	Position 怪物走向矿附近(const Position& refOld)
 	{
 		return { -30,30 };

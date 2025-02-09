@@ -194,7 +194,7 @@ enum MsgId
 	/// <summary>
 	/// 没用
 	/// </summary>
-	显示界面,
+	显示界面_没用到,
 	/// <summary>
 	/// 玩家请求离开公共地图（多人联机地图）
 	/// </summary>
@@ -551,7 +551,7 @@ struct Msg进单人剧情副本
 
 struct Msg显示界面
 {
-	MsgHead msg{ .id = 显示界面 };
+	MsgHead msg{ .id = 显示界面_没用到 };
 	enum 界面类型
 	{
 		选择地图,
