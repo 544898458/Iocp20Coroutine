@@ -348,12 +348,12 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 		m_refEntity.m_eulerAnglesY = CalculateAngle(m_refEntity.Pos(), posTarget);
 		m_refEntity.BroadcastNotifyPos();
 		播放前摇动作();
-
+		EntitySystem::BroadcastEntity描述(m_refEntity, "准备开炮");
 		if (0s < m_战斗配置.dura开始播放攻击动作 && co_await CoTimer::Wait(m_战斗配置.dura开始播放攻击动作, cancel))
 			co_return true;//协程取消
 
 		CHECK_终止攻击位置流程;
-
+		EntitySystem::BroadcastEntity描述(m_refEntity, "");
 		播放攻击动作();
 		if (0s < m_战斗配置.dura开始伤害 && co_await CoTimer::Wait(m_战斗配置.dura开始伤害, cancel))
 			co_return true;//协程取消
