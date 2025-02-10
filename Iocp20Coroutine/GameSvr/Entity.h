@@ -42,11 +42,11 @@ public:
 	float Distance(const Entity& refEntity)const;
 	void OnDestroy();
 	void BroadcastLeave();
-	const std::string& NickName();
+	const std::string& NickName()const;
 	void BroadcastEnter();
 	void BroadcastNotifyPos();
 	void BroadcastChangeSkeleAnim(const std::string& refAniClipName, bool loop = true);
-	CoTaskBool CoDelayDelete();
+	CoTaskBool CoDelayDelete(const std::chrono::system_clock::duration& dura = std::chrono::seconds(3));
 	template<class T> void Broadcast(const T& msg);
 	bool IsEnemy(const Entity& refEntity);
 	const Position& Pos()const { return m_Pos; }

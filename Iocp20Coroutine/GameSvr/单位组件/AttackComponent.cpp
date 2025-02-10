@@ -169,7 +169,7 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 
 			continue;
 		}
-		
+
 		bool b仇恨目标 = false;
 
 		//仇恨列表
@@ -203,7 +203,7 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 				break;
 			}
 		}
-		
+
 		if (m_refEntity.m_wpOwner.expired() && (b仇恨目标 || m_refEntity.DistanceLessEqual(refTarget, m_refEntity.警戒距离())) &&
 			//!走Component::正在走(m_refEntity) && 
 			(!m_refEntity.m_sp采集 || m_refEntity.m_sp采集->m_TaskCancel.co.Finished()))
@@ -218,7 +218,7 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), funCancel, !b仇恨目标))
 				co_return true;
 
-			if(co_await CoTimer::WaitNextUpdate(funCancel))
+			if (co_await CoTimer::WaitNextUpdate(funCancel))
 				co_return true;
 
 			continue;
@@ -349,6 +349,13 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 		m_refEntity.BroadcastNotifyPos();
 		播放前摇动作();
 		EntitySystem::BroadcastEntity描述(m_refEntity, "准备开炮");
+		{
+			SpEntity spEntity特效 = std::make_shared<Entity, const Position&, Space&, 单位类型, const 单位::单位配置&>(
+				posTarget, m_refEntity.m_refSpace, 特效, { "炸点" ,"特效/炸点","" });
+			m_refEntity.m_refSpace.AddEntity(spEntity特效, 0);
+			spEntity特效->BroadcastEnter();
+			spEntity特效->CoDelayDelete(m_战斗配置.dura开始播放攻击动作 + m_战斗配置.dura开始伤害).RunNew();
+		}
 		if (0s < m_战斗配置.dura开始播放攻击动作 && co_await CoTimer::Wait(m_战斗配置.dura开始播放攻击动作, cancel))
 			co_return true;//协程取消
 
@@ -366,10 +373,10 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 		播放攻击音效();
 		{
 			SpEntity spEntity特效 = std::make_shared<Entity, const Position&, Space&, 单位类型, const 单位::单位配置&>(
-				posTarget, m_refEntity.m_refSpace, 特效, { "特效" ,"特效/黄光爆闪","" });
+				posTarget, m_refEntity.m_refSpace, 特效, { "爆炸溅射" ,"特效/黄光爆闪","" });
 			m_refEntity.m_refSpace.AddEntity(spEntity特效, 0);
 			spEntity特效->BroadcastEnter();
-			spEntity特效->CoDelayDelete().RunNew();
+			spEntity特效->CoDelayDelete(1s).RunNew();
 		}
 		assert(m_refEntity.m_upAoi);
 		if (m_refEntity.m_upAoi)

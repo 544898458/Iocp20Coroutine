@@ -202,7 +202,7 @@ void Entity::BroadcastLeave()
 	Broadcast(MsgDelRoleRet(Id));
 }
 
-const std::string& Entity::NickName()
+const std::string& Entity::NickName()const
 {
 	if (m_spPlayerNickName)
 		return m_spPlayerNickName->m_strNickName;
@@ -210,6 +210,12 @@ const std::string& Entity::NickName()
 	if (m_sp资源)
 	{
 		static const std::string str("资源");
+		return str;
+	}
+
+	if (特效 == m_类型)
+	{
+		static const std::string str("");
 		return str;
 	}
 
@@ -263,7 +269,7 @@ void Entity::Broadcast(const T& msg)
 	//m_refSpace.Broadcast(msg);
 }
 
-CoTaskBool Entity::CoDelayDelete()
+CoTaskBool Entity::CoDelayDelete(const std::chrono::system_clock::duration& dura)
 {
 	LOG(INFO) << "开始删除延时自己的协程";
 	//assert(!m_cancelDelete);//不可并行
@@ -274,7 +280,7 @@ CoTaskBool Entity::CoDelayDelete()
 		m_sp地堡->OnBeforeDelayDelete();
 
 	using namespace std;
-	if (co_await CoTimer::Wait(3s, m_cancelDelete))//服务器主工作线程大循环，每次循环触发一次
+	if (co_await CoTimer::Wait(dura, m_cancelDelete))//服务器主工作线程大循环，每次循环触发一次
 	{
 		LOG(INFO) << "WaitDelete协程取消了";
 		co_return true;
