@@ -221,6 +221,6 @@ public:
 	
 	SslTlsSvr m_SslTls;
 private:
-	const bool m_bSslTls = false;//wss或者ws
+	const bool m_bSslTls = true;//wss或者ws
 
 };
