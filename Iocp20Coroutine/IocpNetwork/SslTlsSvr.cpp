@@ -160,10 +160,10 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 	/* load key and certificate */
 	char certfile[1024];
 	char keyfile[1024];
-	char chainfile[1024];
+	//char chainfile[1024];
 	sprintf(certfile, "./%s-cert.crt", keyname);//本网站域名专用证书	-cert
 	sprintf(keyfile, "./%s-private.key", keyname);//私钥	-key 
-	sprintf(chainfile, "./%s-chain.crt", keyname);//证书链：颁发机构的证书， -CAfile
+	//sprintf(chainfile, "./%s-chain.crt", keyname);//证书链：颁发机构的证书， -CAfile
 
 	/* certificate file; contains also the public key */
 	//r = SSL_CTX_use_certificate_file(k->ctx, certfile, SSL_FILETYPE_PEM);
