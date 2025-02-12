@@ -209,6 +209,7 @@ public:
 	template<class T>
 	void Send(const T& ref)
 	{
+		ref.msg.sn = ++m_Session.m_snSendToClient;
 		MsgPack::SendMsgpack(ref, [this](const void* buf, int len)
 			{
 				this->Send((const char*)buf, len); 
