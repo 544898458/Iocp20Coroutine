@@ -492,6 +492,21 @@ struct MsgGateSvr转发GameSvr消息给游戏前端
 	std::vector<uint8_t> vecByte;
 	MSGPACK_DEFINE(msg, vecByte);
 };
+struct MsgGateSvr转发WorldSvr消息给游戏前端
+{
+	MsgGateSvr转发WorldSvr消息给游戏前端()
+	{
+
+	}
+	MsgGateSvr转发WorldSvr消息给游戏前端(const void* buf, int len) :vecByte(len)
+	{
+		uint8_t* pBegin = (uint8_t*)buf;
+		std::copy(pBegin, pBegin + len, vecByte.begin());
+	}
+	MsgHead msg{ .id = GateSvr转发WorldSvr消息给游戏前端 };
+	std::vector<uint8_t> vecByte;
+	MSGPACK_DEFINE(msg, vecByte);
+};
 
 
 struct MsgGateAddSession
@@ -705,4 +720,11 @@ struct Msg剧情对话已看完
 {
 	MsgHead msg{ .id = 剧情对话已看完 };
 	MSGPACK_DEFINE(msg);
+};
+
+struct Msg在线人数
+{
+	MsgHead msg{ .id = 在线人数 };
+	uint16_t u16人数;
+	MSGPACK_DEFINE(msg, u16人数);
 };

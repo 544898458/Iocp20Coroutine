@@ -57,6 +57,7 @@ private:
 	/// <param name="msg"></param>
 	void OnRecv(const MsgGateDeleteSession& msg);
 	void OnRecv(const MsgGate转发& msg);
+	void OnRecv(const Msg在线人数& msg);
 
 	void OnRecvPack(const void* buf, int len);
 
@@ -66,6 +67,7 @@ private:
 	/// </summary>
 	std::deque<MsgGateDeleteSession> m_queueGateDeleteSession;
 	std::deque<MsgGate转发> m_queueGate转发;
+	std::deque<Msg在线人数> m_queue在线人数;
 	MsgQueueMsgPack<ClientSession_GateToWorld> m_MsgQueue;
 	Session& m_refSession;
 	uint32_t m_snSend = 0;

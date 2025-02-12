@@ -70,19 +70,6 @@ std::unique_ptr<Iocp::Server<GateServer>> g_upGateSvr;
 template<class T>
 void SendToGateClient(const T &refMsg, uint64_t gateSessionId)
 {
-	//{
-	//	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
-	//	msgpack::object obj = oh.get();
-	//	const auto msg = MsgHead::GetMsgId(obj);
-	//	//LOG(INFO) << obj;
-	//	if (msg.id == MsgId::AddRoleRet)
-	//	{
-	//		static int n = 0;
-	//		++n;
-	//		LOG(INFO) << "AddRoleRet:" << n;
-	//	}
-	//}
-
 	auto pSession = g_upGateSvr->m_Server.m_Sessions.GetSession(gateSessionId);
 	//auto pSession = (GateSession*)gateSessionId;
 	if (nullptr == pSession)
@@ -101,6 +88,11 @@ void SendToGateClient(const T &refMsg, uint64_t gateSessionId)
 	}
 }
 template void SendToGateClient(const MsgGateSvr转发GameSvr消息给游戏前端& refMsg, uint64_t gateSessionId);
+
+void BroadToGateClient(const MsgGateSvr转发WorldSvr消息给游戏前端& refMsg)
+{
+	g_upGateSvr->m_Server.m_Sessions.Broadcast(refMsg);
+}
 
 int main()
 {

@@ -15,6 +15,9 @@ void PlayerGateSession_World::OnDestroy()
 
 std::map<std::string, uint64_t> g_mapPlayerNickNameGateSessionId;
 extern std::map<uint64_t, PlayerGateSession_World> g_mapPlayerGateSession;
+
+template<typename T> void BroadcastToGate(const T& refMsg);
+
 CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 {
 	auto utf8Name = msg.name;
@@ -62,6 +65,8 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 	m_nickName = gbkName;
 	//通知GateSvr继续登录流程
 	SendToGate转发(msgResponce);
+
+	BroadcastToGate<Msg在线人数>({.u16人数 = (uint16_t)g_mapPlayerNickNameGateSessionId.size()});
 	co_return 0;
 }
 

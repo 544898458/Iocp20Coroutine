@@ -39,6 +39,14 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 }
 
 CoDb<DbPlayer> g_CoDbPlayer;
+
+std::unique_ptr<Iocp::Server<WorldSvrAcceptGate>> g_upAcceptGate;
+template<typename T>
+void BroadcastToGate(const T& refMsg)
+{
+	g_upAcceptGate->m_Server.m_Sessions.Broadcast(refMsg);
+}
+template void BroadcastToGate(const Msg在线人数& refMsg);
 /*
 架构
 
@@ -55,7 +63,6 @@ GameSvr,GateSvr,WorldSvr都可以做，
 所以只能在Gate和World选一个
 因为Gate有多个，同号踢人还要依赖World，所以现在放到WorldSvr
 */
-
 int main()
 {
 	MiniDump::Install("WorldSvr");
@@ -75,16 +82,16 @@ int main()
 	g_CoDbPlayer.Init(threadPoolNetwork.GetIocp());
 	
 	Iocp::Server<WorldSvrAcceptGame> acceptGame(threadPoolNetwork.GetIocp());
-	Iocp::Server<WorldSvrAcceptGate> acceptGate(threadPoolNetwork.GetIocp());
+	g_upAcceptGate.reset(new Iocp::Server<WorldSvrAcceptGate>(threadPoolNetwork.GetIocp()));
 	Iocp::WsaStartup();
 	acceptGame.Init<WorldSessionFromGame>(PORT_WORLDSVR_ACCEPT_GAME);
-	acceptGate.Init<WorldSessionFromGate>(PORT_WORLDSVR_ACCEPT_GATE);
+	g_upAcceptGate->Init<WorldSessionFromGate>(PORT_WORLDSVR_ACCEPT_GATE);
 	
 	while (g_running)
 	{
 		Sleep(100);
 		acceptGame.m_Server.m_Sessions.Update([]() {});
-		acceptGate.m_Server.m_Sessions.Update([]() {});
+		g_upAcceptGate->m_Server.m_Sessions.Update([]() {});
 		CoTimer::Update();
 		g_CoDbPlayer.Process();
 	}

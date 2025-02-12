@@ -74,6 +74,8 @@ void WorldSessionFromGate::OnRecvPack(const void* buf, int len)
 	}
 }
 
+template<typename T> void BroadcastToGate(const T& refMsg);
+
 std::map<uint64_t, PlayerGateSession_World> g_mapPlayerGateSession;
 extern std::map<std::string, uint64_t> g_mapPlayerNickNameGateSessionId;
 void WorldSessionFromGate::OnRecv(const MsgGate转发& msg转发)
@@ -109,6 +111,7 @@ void WorldSessionFromGate::OnRecv(const MsgGate转发& msg转发)
 			{
 				LOG(INFO) << refPlayerGateSession.NickName() << ",删除名字对应的SessionId:" << msg转发.gateClientSessionId;
 				g_mapPlayerNickNameGateSessionId.erase(iterFind);
+				BroadcastToGate<Msg在线人数>({ .u16人数 = (uint16_t)g_mapPlayerNickNameGateSessionId.size() });
 			}
 		}
 		g_mapPlayerGateSession.erase(iter);

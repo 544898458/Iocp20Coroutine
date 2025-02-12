@@ -4,6 +4,7 @@
 #include "SessionSocketCompletionKey.h"
 #include <deque>
 #include "SslTlsSvr.h"
+#include "MsgPack.h"
 //void net_write_cb(char* buf, int64_t size, void* wd)
 //{
 //	static_cast<Iocp::
@@ -208,7 +209,10 @@ public:
 	template<class T>
 	void Send(const T& ref)
 	{
-		m_Session.Send(ref);
+		MsgPack::SendMsgpack(ref, [this](const void* buf, int len)
+			{
+				this->Send((const char*)buf, len); 
+			}, false);
 	}
 	bool Process() { return m_Session.Process(); }
 

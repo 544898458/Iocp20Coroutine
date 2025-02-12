@@ -20,6 +20,7 @@ void ClientSession_GateToWorld::Process()
 		switch (msgId)
 		{
 		case MsgId::Gate转发:this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &ClientSession_GateToWorld::OnRecv); break;
+		case MsgId::在线人数:this->m_MsgQueue.OnRecv(this->m_queue在线人数, *this, &ClientSession_GateToWorld::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
 			assert(false);
@@ -51,9 +52,20 @@ void ClientSession_GateToWorld::OnRecv(const MsgGate转发& msg转发)
 	case MsgId::GateDeleteSession:	pSession->Session.m_Session.OnRecvWorldSvr(obj.as<MsgGateDeleteSession>());	break;
 	}
 }
+void BroadToGateClient(const MsgGateSvr转发WorldSvr消息给游戏前端& refMsg);
+void ClientSession_GateToWorld::OnRecv(const Msg在线人数& msg在线人数)
+{
+	MsgPack::SendMsgpack(msg在线人数, [](const void* buf, int len) 
+	{
+		MsgGateSvr转发WorldSvr消息给游戏前端 msg给前端(buf, len);
+		BroadToGateClient(msg给前端);
+	}, false);
+	
+}
 
 template<> std::deque<MsgGateDeleteSession>& ClientSession_GateToWorld::GetQueue() { return m_queueGateDeleteSession; }
 template<> std::deque<MsgGate转发>& ClientSession_GateToWorld::GetQueue() { return m_queueGate转发; }
+template<> std::deque<Msg在线人数>& ClientSession_GateToWorld::GetQueue() { return m_queue在线人数; }
 
 /// <summary>
 /// 网络线程（多线程）调用
@@ -84,6 +96,7 @@ void ClientSession_GateToWorld::OnRecvPack(const void* buf, int len)
 	{
 	case MsgId::GateDeleteSession:	m_MsgQueue.PushMsg<MsgGateDeleteSession>(*this, obj); break;
 	case MsgId::Gate转发:	m_MsgQueue.PushMsg<MsgGate转发>(*this, obj); break;
+	case MsgId::在线人数:	m_MsgQueue.PushMsg<Msg在线人数>(*this, obj); break;
 	default:
 		LOG(WARNING) << "ERR:" << msg.id;
 		break;
