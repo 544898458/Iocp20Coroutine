@@ -2,6 +2,7 @@
 #include "ClientSession_GateToGame.h"
 #include "../IocpNetwork/SessionSocketCompletionKeyTemplate.h"
 #include "../GameSvr/MyMsgQueue.h"
+#include "../IocpNetwork/MsgPack.h"
 
 //template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WorldClientSession, WorldClient >(HANDLE hIocp, SOCKET socketListen, WorldClient&);
 template Iocp::SessionSocketCompletionKey<ClientSession_GateToGame>;
@@ -12,7 +13,8 @@ int ClientSession_GateToGame::OnRecv(Iocp::SessionSocketCompletionKey<ClientSess
 	return Iocp::OnRecv3(buf, len, *this, &ClientSession_GateToGame::OnRecvPack);
 }
 
-void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId);
+template<class T>
+void SendToGateClient(const T& refMsg, uint64_t gateSessionId);
 
 /// <summary>
 /// 此处是网络线程
@@ -44,7 +46,9 @@ void ClientSession_GateToGame::OnRecvPack(const void* buf, const int len)
 			assert(false);
 			return;
 		}
-		SendToGateClient(&msg.vecByte[0], (int)msg.vecByte.size(), msg.gateClientSessionId);
+		MsgGateSvr转发GameSvr消息给游戏前端 msg给前端(&msg.vecByte[0], (int)msg.vecByte.size());
+		SendToGateClient(msg给前端, msg.gateClientSessionId);
+		
 	}
 	break;
 	default:

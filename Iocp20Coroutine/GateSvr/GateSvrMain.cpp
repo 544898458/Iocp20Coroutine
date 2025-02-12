@@ -67,7 +67,8 @@ template void SendToWorldSvr转发(const MsgGateDeleteSessionResponce&, const ui
 
 
 std::unique_ptr<Iocp::Server<GateServer>> g_upGateSvr;
-void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
+template<class T>
+void SendToGateClient(const T &refMsg, uint64_t gateSessionId)
 {
 	//{
 	//	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
@@ -91,9 +92,15 @@ void SendToGateClient(const void* buf, const int len, uint64_t gateSessionId)
 	}
 	if (pSession->Session.m_Session.m_bLoginOk)
 	{
-		pSession->Session.m_Session.m_refSession.Send(buf, len);
+		refMsg.msg.sn = ++pSession->Session.m_Session.m_snSendToClient;
+		MsgPack::SendMsgpack(refMsg, [gateSessionId, pSession](const void* buf, int len)
+			{
+				pSession->Session.m_Session.m_refSession.Send(buf, len);
+			}, false);
+		
 	}
 }
+template void SendToGateClient(const MsgGateSvr转发GameSvr消息给游戏前端& refMsg, uint64_t gateSessionId);
 
 int main()
 {

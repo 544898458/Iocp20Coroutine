@@ -254,6 +254,9 @@ enum MsgId
 	/// C=>S
 	/// </summary>
 	剧情对话已看完,
+	在线人数,
+	GateSvr转发GameSvr消息给游戏前端,
+	GateSvr转发WorldSvr消息给游戏前端,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -473,6 +476,23 @@ struct MsgGate转发
 	std::vector<uint8_t> vecByte;
 	MSGPACK_DEFINE(msg, gateClientSessionId, vecByte);
 };
+
+struct MsgGateSvr转发GameSvr消息给游戏前端
+{
+	MsgGateSvr转发GameSvr消息给游戏前端()
+	{
+
+	}
+	MsgGateSvr转发GameSvr消息给游戏前端(const void* buf, int len) :vecByte(len)
+	{
+		uint8_t* pBegin = (uint8_t*)buf;
+		std::copy(pBegin, pBegin + len, vecByte.begin());
+	}
+	MsgHead msg{ .id = GateSvr转发GameSvr消息给游戏前端 };
+	std::vector<uint8_t> vecByte;
+	MSGPACK_DEFINE(msg, vecByte);
+};
+
 
 struct MsgGateAddSession
 {

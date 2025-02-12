@@ -41,6 +41,7 @@ public:
 	uint32_t m_snRecv = 0;
 	uint32_t m_snSendToGameSvr = 0;
 	uint32_t m_snSendToWorldSvr = 0;
+	uint32_t m_snSendToClient = 0;//发给游戏前端
 	bool m_bLoginOk = false;
 private:
 	void OnRecv(const MsgLogin& msg);
