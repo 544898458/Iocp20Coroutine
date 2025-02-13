@@ -28,8 +28,8 @@ public:
 			auto iterFind = g_mapRpc.find(k);
 			if (iterFind == g_mapRpc.end())
 			{
-				assert(false);
 				LOG(ERROR) << "";
+				assert(false);
 				continue;
 			}
 
@@ -55,8 +55,8 @@ public:
 				auto iterFind = g_mapRpc.find(rpcSnId);
 				if (iterFind == g_mapRpc.end())
 				{
-					assert(false);
 					LOG(ERROR) << "";
+					assert(false);
 					return;
 				}
 

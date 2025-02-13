@@ -67,6 +67,7 @@ namespace CoTimer
 				auto itFind = g_NextUpdate.find(sn);
 				if (itFind == g_NextUpdate.end())
 				{
+					LOG(ERROR) << "";
 					assert(false);
 					return;
 				}

@@ -121,11 +121,12 @@ public:
 		//std::lock_guard lock(m_mutex);
 		if (FinishedNoLock())
 		{
-			LOG(INFO) << m_desc << "协程已结束，不再执行\n";
+			LOG(INFO) << m_desc << "协程已结束，不再执行";
 			return true;
 		}
 		if (m_hCoroutine == nullptr)
 		{
+			LOG(INFO) << "m_hCoroutine == nullptr";
 			assert(false);
 			return true;
 		}
@@ -255,6 +256,7 @@ public:
 	/// <param name="other"></param>
 	void operator=(CoTask&& other)noexcept
 	{
+		LOG_IF(ERROR, !FinishedNoLock()) << "";
 		assert(FinishedNoLock());
 		if (m_hCoroutine)
 		{

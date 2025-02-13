@@ -7,6 +7,7 @@ void CoTaskCancel::TryCancel()
 	{
 		//LOG(INFO) << "µ÷ÓÃm_cancel";
 		cancel();
+		LOG_IF(ERROR, !co.Finished()) << "";
 		assert(co.Finished());
 	}
 	else
@@ -19,5 +20,6 @@ void CoTaskCancel::TryCancel()
 		}
 	}
 
+	LOG_IF(ERROR, !co.Finished()) << "";
 	assert(co.Finished());
 }
