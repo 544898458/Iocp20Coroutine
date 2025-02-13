@@ -36,9 +36,10 @@ bool EntitySystem::IsÊÓ¿Ú(const Entity& refEntity)
 	if (!refEntity.m_spPlayer)
 		return false;
 
-	assert(refEntity.m_upAoi);
-	if (!refEntity.m_upAoi)
-		return false;
+	CHECK_CO_RET_FALSE(refEntity.m_upAoi);
+	//assert(refEntity.m_upAoi);
+	//if (!refEntity.m_upAoi)
+		//return false;
 
 	return true;
 }

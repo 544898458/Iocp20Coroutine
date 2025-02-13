@@ -146,6 +146,7 @@ namespace AiCo
 		auto posTarget = spTarget->Pos();
 		{
 			const auto ok = refThis.m_refSpace.CrowdToolFindNerestPos(posTarget);
+			LOG_IF(ERROR, !ok) << "";
 			assert(ok);
 		}
 		活动单位走完路加阻挡 _(refThis);
@@ -243,6 +244,7 @@ namespace AiCo
 	{
 		if (changeMoney < 0)
 		{
+			LOG(ERROR) << "";
 			assert(false);
 			co_return std::make_tuple(false, MsgChangeMoneyResponce());
 		}

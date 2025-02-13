@@ -57,7 +57,12 @@ uint32_t CrowToolAdd·½¿é×èµ²(CrowdToolState& ref, float arrF[], float f°ë±ß³¤)
 	float arrMax[] = { arrF[0] + f°ë±ß³¤ , arrF[1] + f°ë±ß³¤ , arrF[2] + f°ë±ß³¤ };
 	uint32_t u32Ret(0);
 	const auto result = pSample_TempObstacles->m_tileCache->addBoxObstacle(arrMin, arrMax, &u32Ret);
-	assert(DT_SUCCESS == result);
+	
+	if (DT_SUCCESS != result)
+	{
+		LOG(ERROR) << "" << result;
+		assert(false);
+	}
 	return u32Ret;
 }
 

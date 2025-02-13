@@ -338,6 +338,7 @@ bool Get副本配置(const 副本ID id, 副本配置& refOut)
 	const auto itFind = g_map副本配置.find(id);
 	if (itFind == g_map副本配置.end())
 	{
+		LOG(ERROR) << "";
 		assert(false);
 		return false;
 	}
@@ -497,7 +498,8 @@ void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fu
 		if (refMap.end() == std::find_if(refMap.begin(), refMap.end(), [&spEntity](const auto& kv)
 			{
 				auto& wp = kv.second;
-				assert(!wp.expired());
+				CHECK_WP_CO_RET_FALSE(wp);
+				//assert(!wp.expired());
 				auto sp = wp.lock();
 				return sp == spEntity;
 			}))
