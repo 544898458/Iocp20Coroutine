@@ -9,7 +9,7 @@ class StrategyLog
 	if (nullptr == (PTR)) \
 	{\
 		LOG(ERROR)<< #PTR << ",is null";\
-		assert(false);\
+		_ASSERTfalse);\
 		return;\
 	}\
 }
@@ -18,7 +18,7 @@ class StrategyLog
 	if (nullptr == (PTR)) \
 	{\
 		LOG(ERROR)<< #PTR << ",is null";\
-		assert(false);\
+		_ASSERTfalse);\
 		co_return 0;\
 	}\
 }
@@ -27,7 +27,7 @@ class StrategyLog
 	if (nullptr == (PTR)) \
 	{\
 		LOG(ERROR)<< #PTR << ",is null";\
-		assert(false);\
+		_ASSERTfalse);\
 		co_return false;\
 	}\
 }
@@ -36,7 +36,7 @@ class StrategyLog
 	if (!(EXP)) \
 	{\
 		LOG(ERROR)<< #EXP<< "is false";\
-		assert(false);\
+		_ASSERTfalse);\
 		co_return 0;\
 	}\
 }
@@ -45,7 +45,7 @@ class StrategyLog
 	if (!(EXP)) \
 	{\
 		LOG(ERROR)<< #EXP ;\
-		assert(false);\
+		_ASSERTfalse);\
 		return false;\
 	}\
 }
@@ -55,7 +55,7 @@ class StrategyLog
 	if (!(EXP)) \
 	{\
 		LOG(ERROR)<< #EXP ;\
-		assert(false);\
+		_ASSERTfalse);\
 		return ;\
 	}\
 }
@@ -64,7 +64,7 @@ class StrategyLog
 	if (!(EXP)) \
 	{\
 		LOG(ERROR)<< #EXP ;\
-		assert(false);\
+		_ASSERTfalse);\
 		return {};\
 	}\
 }
@@ -73,7 +73,7 @@ class StrategyLog
 	if (nullptr == (PTR)) \
 	{\
 		LOG(ERROR)<< #PTR << ",is null";\
-		assert(false);\
+		_ASSERTfalse);\
 		return false;\
 	}\
 }
@@ -83,7 +83,7 @@ class StrategyLog
 	if (val1 < val2)\
 	{\
 		LOG(ERROR) << #val1 << ":" << val1 << ">=" << #val2 << ":" << val2 ;\
-		assert(false);\
+		_ASSERTfalse);\
 		return;\
 	}\
 }
@@ -93,7 +93,7 @@ class StrategyLog
 	LOG_IF(ERROR, !(exp));\
 	if (!(exp))\
 	{\
-		assert(false);\
+		_ASSERTfalse);\
 		return; \
 	}\
 }
@@ -103,7 +103,7 @@ class StrategyLog
 	LOG_IF(ERROR, !(exp));\
 	if (!(exp))\
 	{\
-		assert(false);\
+		_ASSERTfalse);\
 		co_return false; \
 	}\
 }
@@ -112,7 +112,7 @@ class StrategyLog
 	LOG_IF(ERROR, !(exp));\
 	if (!(exp))\
 	{\
-		assert(false);\
+		_ASSERTfalse);\
 		co_return; \
 	}\
 }
@@ -130,7 +130,7 @@ class StrategyLog
 	LOG_IF(ERROR, !(exp));\
 	if (!(exp))\
 	{\
-		assert(false);\
+		_ASSERTfalse);\
 		return false; \
 	}\
 }
@@ -140,7 +140,7 @@ class StrategyLog
 	LOG_IF(ERROR, wp.expired());\
 	if ((wp).expired())\
 	{\
-		assert(false);\
+		_ASSERTfalse);\
 		co_return false; \
 	}\
 }
@@ -149,7 +149,7 @@ class StrategyLog
 	LOG_IF(ERROR, wp.expired());\
 	if ((wp).expired())\
 	{\
-		assert(false);\
+		_ASSERTfalse);\
 		co_return 0; \
 	}\
 }
@@ -158,7 +158,7 @@ class StrategyLog
 	if ((wp).expired()) \
 	{\
 		LOG(ERROR)<< #wp<< ",expired";\
-		assert(false);\
+		_ASSERTfalse);\
 		continue;\
 	}\
 }
@@ -168,7 +168,7 @@ class StrategyLog
 	if (!(exp)) \
 	{\
 		LOG(ERROR)<< #exp << ",false";\
-		assert(false);\
+		_ASSERTfalse);\
 		continue;\
 	}\
 }
@@ -178,7 +178,7 @@ class StrategyLog
 	if ((wp).expired()) \
 	{\
 		LOG(ERROR)<< #wp<< ",expired";\
-		assert(false);\
+		_ASSERTfalse);\
 		return;\
 	}\
 }
@@ -188,7 +188,7 @@ class StrategyLog
 	if ((wp).expired()) \
 	{\
 		LOG(ERROR)<< #wp<< ",expired";\
-		assert(false);\
+		_ASSERTfalse);\
 		return {};\
 	}\
 }
@@ -198,7 +198,7 @@ class StrategyLog
 	if ((wp).expired()) \
 	{\
 		LOG(ERROR)<< #wp<< ",expired";\
-		assert(false);\
+		_ASSERTfalse);\
 		return false;\
 	}\
 }
@@ -208,7 +208,7 @@ class StrategyLog
 	if (!(ref).m_upAoi) \
 	{\
 		LOG(ERROR)<< #ref << ",m_upAoi";\
-		assert(false);\
+		_ASSERTfalse);\
 		continue;\
 	}\
 }

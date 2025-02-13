@@ -34,7 +34,7 @@ namespace Iocp
 		if (b同步完成)//同步返回
 		{
 			LOG(INFO) << "密集Accept导致同步完成" << pAcceptOverlapped->GetLastErrorReturn;
-			assert(0 == pAcceptOverlapped->GetLastErrorReturn);
+			_ASSERT0 == pAcceptOverlapped->GetLastErrorReturn);
 			return std::make_tuple(true, false);//AcceptEx(pAcceptOverlapped);
 		}
 
@@ -80,7 +80,7 @@ namespace Iocp
 	//	pAcceptOverlapped->numberOfBytesTransferred = dwRecvcount;
 	//	if (pAcceptOverlapped->GetQueuedCompletionStatusReturn)//同步返回
 	//	{
-	//		assert(0 == pAcceptOverlapped->GetLastErrorReturn);
+	//		_ASSERT0 == pAcceptOverlapped->GetLastErrorReturn);
 	//		return std::make_tuple(true, false);//AcceptEx(pAcceptOverlapped);
 	//	}
 

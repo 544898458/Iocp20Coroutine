@@ -57,7 +57,7 @@ namespace MsgPack
 		catch (const msgpack::type_error& error)
 		{
 			LOG(ERROR) << typeid(T_Msg).name() << ",·´ÐòÁÐ»¯Ê§°Ü," << error.what();
-			assert(false);
+			_ASSERTfalse);
 			return false;
 		}
 	}

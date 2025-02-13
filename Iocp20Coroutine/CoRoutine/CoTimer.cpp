@@ -68,7 +68,7 @@ namespace CoTimer
 				if (itFind == g_NextUpdate.end())
 				{
 					LOG(ERROR) << "";
-					assert(false);
+					_ASSERT(false);
 					return;
 				}
 				itFind->second.Run(true);
@@ -89,7 +89,7 @@ namespace CoTimer
 			auto itFind = g_NextUpdate.find(sn);
 			if (itFind == g_NextUpdate.end())
 			{
-				//assert(false);
+				//_ASSERT(false);
 				//LOG(WARING) << "N";	下面的Run里可能删除g_NextUpdate.erase(sn);
 				continue;
 			}
@@ -106,7 +106,7 @@ namespace CoTimer
 				return;
 
 			kv.second.Run(false);
-			//assert(kv.second.Finished());
+			//_ASSERT(kv.second.Finished());
 			g_multiTimer.erase(kv.first);
 		}
 	}

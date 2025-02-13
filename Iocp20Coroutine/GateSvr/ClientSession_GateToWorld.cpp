@@ -23,7 +23,7 @@ void ClientSession_GateToWorld::Process()
 		case MsgId::在线人数:this->m_MsgQueue.OnRecv(this->m_queue在线人数, *this, &ClientSession_GateToWorld::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
-			assert(false);
+			_ASSERTfalse);
 			break;
 		}
 	}
@@ -34,7 +34,7 @@ void ClientSession_GateToWorld::OnRecv(const MsgGate转发& msg转发)
 	if (msg转发.vecByte.empty())
 	{
 		LOG(ERROR) << "ERR";
-		assert(false);
+		_ASSERTfalse);
 		return;
 	}
 

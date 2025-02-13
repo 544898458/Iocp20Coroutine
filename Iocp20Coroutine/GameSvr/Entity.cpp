@@ -159,7 +159,7 @@ void Entity::OnDestroy()
 	{
 		const auto sizeCount = m_refSpace.m_map视口.erase(Id);
 		LOG_IF(ERROR, 1 != sizeCount) << "";
-		assert(1 == sizeCount);
+		_ASSERT1 == sizeCount);
 	}
 	//应该用proxy库同意调用下面的，免得忘了
 	if (m_spAttack)
@@ -273,7 +273,7 @@ void Entity::Broadcast(const T& msg)
 CoTaskBool Entity::CoDelayDelete(const std::chrono::system_clock::duration& dura)
 {
 	LOG(INFO) << "开始删除延时自己的协程";
-	//assert(!m_cancelDelete);//不可并行
+	//_ASSERT!m_cancelDelete);//不可并行
 	if (m_cancelDelete)
 		co_return false;
 

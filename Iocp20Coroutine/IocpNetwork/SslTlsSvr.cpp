@@ -137,7 +137,8 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 
 	/* set our supported ciphers */
 	//r = SSL_CTX_set_cipher_list(k->ctx, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
-	r = SSL_CTX_set_cipher_list(k->ctx, "ALL:!aNULL");
+	//r = SSL_CTX_set_cipher_list(k->ctx, "ALL:!aNULL");
+	r = SSL_CTX_set_cipher_list(k->ctx, "ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4:!DH:!DHE");//20250213
 	if (r != 1) {
 		printf("Error: cannot set the cipher list.\n");
 		ERR_print_errors_fp(stderr);

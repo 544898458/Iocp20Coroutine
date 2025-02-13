@@ -339,7 +339,7 @@ bool Get副本配置(const 副本ID id, 副本配置& refOut)
 	if (itFind == g_map副本配置.end())
 	{
 		LOG(ERROR) << "";
-		assert(false);
+		_ASSERT(false);
 		return false;
 	}
 
@@ -490,7 +490,7 @@ void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fu
 		if (itFind == sp->m_mapEntity.end())
 		{
 			LOG(INFO) << "选中的实体不存在:" << id;
-			//assert(false);
+			//_ASSERTfalse);
 			continue;
 		}
 		auto& spEntity = itFind->second;
@@ -498,8 +498,8 @@ void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fu
 		if (refMap.end() == std::find_if(refMap.begin(), refMap.end(), [&spEntity](const auto& kv)
 			{
 				auto& wp = kv.second;
-				CHECK_WP_CO_RET_FALSE(wp);
-				//assert(!wp.expired());
+				CHECK_WP_RET_FALSE(wp);
+				//_ASSERT(!wp.expired());
 				auto sp = wp.lock();
 				return sp == spEntity;
 			}))
@@ -681,7 +681,7 @@ void PlayerGateSession_Game::RecvMsg(const msgpack::object& obj)
 	catch (const msgpack::type_error& error)
 	{
 		LOG(ERROR) << typeid(T_Msg).name() << ",反序列化失败," << error.what();
-		assert(false);
+		_ASSERT(false);
 		return;
 	}
 }
@@ -717,11 +717,11 @@ void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& o
 	case MsgId::剧情对话已看完:RecvMsg<Msg剧情对话已看完>(obj); break;
 	case MsgId::Gate转发:
 		LOG(ERROR) << "不能再转发";
-		assert(false);
+		_ASSERT(false);
 		break;
 	default:
 		LOG(ERROR) << "没处理msgId:" << idMsg;
-		assert(false);
+		_ASSERT(false);
 		break;
 	}
 }

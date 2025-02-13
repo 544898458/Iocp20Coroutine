@@ -67,6 +67,6 @@ float BuildingComponent::建筑半边长(const Entity& refEntity)
 	if (单位::Find建筑单位配置(refEntity.m_spBuilding->m_类型, 配置))
 		return 配置.f半边长;
 
-	assert(false);
+	_ASSERTfalse);
 	return 0;
 }

@@ -8,7 +8,7 @@ void CoTaskCancel::TryCancel()
 		//LOG(INFO) << "调用m_cancel";
 		cancel();
 		LOG_IF(ERROR, !co.Finished()) << "";
-		assert(co.Finished());
+		_ASSERTco.Finished());
 	}
 	else
 	{
@@ -16,10 +16,10 @@ void CoTaskCancel::TryCancel()
 		if (!co.Finished())
 		{
 			LOG(ERROR) << "协程没结束，却提前清空了m_cancel";
-			assert(false);
+			_ASSERTfalse);
 		}
 	}
 
 	LOG_IF(ERROR, !co.Finished()) << "";
-	assert(co.Finished());
+	_ASSERTco.Finished());
 }

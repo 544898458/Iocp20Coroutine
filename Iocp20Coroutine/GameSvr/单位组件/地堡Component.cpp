@@ -42,7 +42,7 @@ void 地堡Component::进(Space& refSpace, Entity& refEntity)
 	//从地图上删除，记录在地堡内
 	if (refEntity.IsDead())
 	{
-		LOG(INFO) << "阵亡单位不能进地堡";//assert(false);
+		LOG(INFO) << "阵亡单位不能进地堡";//_ASSERTfalse);
 		return;
 	}
 	refEntity.SetPos(m_refEntity.Pos());

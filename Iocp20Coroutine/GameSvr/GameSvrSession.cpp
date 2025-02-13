@@ -55,7 +55,7 @@ void GameSvrSession::OnRecvPack(const void* buf, const int len)
 	LOG(INFO) << obj;
 	const auto msg = MsgHead::GetMsgId(obj);
 	//++m_snRecv;
-	//assert(m_snRecv == msg.sn);
+	//_ASSERTm_snRecv == msg.sn);
 	//auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompletionKey<WebSocketSession<MySession>>*>(this->nt_work_data_);
 	//auto pSessionSocketCompeletionKey = this->m_pWsSession;
 	switch (msg.id)
@@ -65,7 +65,7 @@ void GameSvrSession::OnRecvPack(const void* buf, const int len)
 		//case MsgId::GateDeleteSession:m_MsgQueue.PushMsg<MsgGateDeleteSession>(*this, obj); break;
 	default:
 		LOG(ERROR) << "没处理msgId:" << msg.id;
-		assert(false);
+		_ASSERTfalse);
 		break;
 	}
 }
@@ -115,11 +115,11 @@ bool GameSvrSession::ProcessMsg()
 			//case MsgId::GateDeleteSession:return this->m_MsgQueue.OnRecv(this->m_queueGateDeleteSession, *this, &GameSvrSession::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
-			assert(false);
+			_ASSERTfalse);
 			return false;
 			break;
 		}
-		assert(false);
+		_ASSERTfalse);
 	}
 }
 template<> std::deque<MsgGate转发>& GameSvrSession::GetQueue() { return m_queueGate转发; }
@@ -132,7 +132,7 @@ void GameSvrSession::OnRecv(const MsgGate转发& msg转发)
 	if (msg转发.vecByte.empty())
 	{
 		LOG(ERROR) << "ERR";
-		assert(false);
+		_ASSERTfalse);
 		return;
 	}
 
@@ -151,7 +151,7 @@ void GameSvrSession::OnRecv(const MsgGate转发& msg转发)
 		if (m_mapPlayerGateSession.end() == iter)
 		{
 			LOG(ERROR) << "player" << msg转发.gateClientSessionId << "还没进m_mapPlayerGateSession";
-			//assert(false);
+			//_ASSERTfalse);
 			return;
 		}
 
@@ -170,7 +170,7 @@ void GameSvrSession::OnRecv(const MsgGateAddSession& msg, const uint64_t idGateC
 	if (m_mapPlayerGateSession.end() != iterOld)
 	{
 		LOG(ERROR) << "err";
-		assert(false);
+		_ASSERTfalse);
 		m_mapPlayerGateSession.erase(iterOld);
 	}
 
@@ -179,7 +179,7 @@ void GameSvrSession::OnRecv(const MsgGateAddSession& msg, const uint64_t idGateC
 	if (!pair.second)
 	{
 		LOG(ERROR) << "ERR";
-		assert(false);
+		_ASSERTfalse);
 		return;
 	}
 
@@ -193,7 +193,7 @@ void GameSvrSession::OnRecv(const MsgGateDeleteSession& msg, const uint64_t idGa
 	if (m_mapPlayerGateSession.end() == iterOld)
 	{
 		LOG(ERROR) << "err";
-		//assert(false);
+		//_ASSERTfalse);
 		return;
 	}
 

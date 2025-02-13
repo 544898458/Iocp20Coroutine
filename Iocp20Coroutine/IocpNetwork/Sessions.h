@@ -32,7 +32,7 @@ public:
 		auto itFind = m_mapSession.find(idSession);
 		if (itFind == m_mapSession.end())
 		{
-			//assert(false);
+			//_ASSERTfalse);
 			LOG(WARNING) << "ERR";
 			return nullptr;
 		}

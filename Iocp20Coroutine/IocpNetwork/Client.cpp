@@ -19,7 +19,7 @@ namespace Iocp
 			(SOCKADDR*)&RemoteAddr,
 			NULL,
 			NULL);
-		assert(bSuccess);
+		_ASSERTbSuccess);
 		return socket; 
 	}
 }

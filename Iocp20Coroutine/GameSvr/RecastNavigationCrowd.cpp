@@ -61,7 +61,7 @@ uint32_t CrowToolAdd方块阻挡(CrowdToolState& ref, float arrF[], float f半边长)
 	if (DT_SUCCESS != result)
 	{
 		LOG(ERROR) << "" << result;
-		assert(false);
+		_ASSERTfalse);
 	}
 	return u32Ret;
 }
@@ -71,7 +71,7 @@ bool CrowToolRemove阻挡(CrowdToolState& ref, const uint32_t u32DtObstacleRef)
 	auto* pSample_TempObstacles = dynamic_cast<Sample_TempObstacles*>(ref.m_sample);
 	const auto result = pSample_TempObstacles->m_tileCache->removeObstacle(u32DtObstacleRef);
 	const auto ret = DT_SUCCESS == result;
-	assert(ret);
+	_ASSERTret);
 	return ret;
 }
 
@@ -114,7 +114,7 @@ void CrowToolUpdate(Space& ref)
 		if (spEntity.expired())
 		{
 			LOG(WARNING) << "要删才行";
-			//assert(false);
+			//_ASSERTfalse);
 			continue;
 		}
 		auto sp = spEntity.lock();
@@ -176,9 +176,9 @@ RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& 
 		return;
 	}
 	float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z };
-	assert(AttackComponent::INVALID_AGENT_IDX == refEntity.m_spAttack->m_idxCrowdAgent);
+	_ASSERTAttackComponent::INVALID_AGENT_IDX == refEntity.m_spAttack->m_idxCrowdAgent);
 	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(*refEntity.m_refSpace.m_spCrowdToolState, arrF, refEntity.m_速度每帧移动距离 * 10);
-	assert(AttackComponent::INVALID_AGENT_IDX != m_refEntity.m_spAttack->m_idxCrowdAgent);
+	_ASSERTAttackComponent::INVALID_AGENT_IDX != m_refEntity.m_spAttack->m_idxCrowdAgent);
 	refEntity.m_refSpace.m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
 
 	SetMoveTarget(posTarget);
@@ -198,7 +198,7 @@ RecastNavigationCrowd::~RecastNavigationCrowd()
 void RecastNavigationCrowd::SetMoveTarget(const Position& posTarget)
 {
 	float arrF[] = { posTarget.x,0,posTarget.z };
-	assert(AttackComponent::INVALID_AGENT_IDX != m_refEntity.m_spAttack->m_idxCrowdAgent);
+	_ASSERTAttackComponent::INVALID_AGENT_IDX != m_refEntity.m_spAttack->m_idxCrowdAgent);
 	if (AttackComponent::INVALID_AGENT_IDX == m_refEntity.m_spAttack->m_idxCrowdAgent)
 	{
 		LOG(ERROR) << "可能超过容量";

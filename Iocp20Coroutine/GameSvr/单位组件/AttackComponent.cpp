@@ -378,7 +378,7 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 			spEntity特效->BroadcastEnter();
 			spEntity特效->CoDelayDelete(1s).RunNew();
 		}
-		assert(m_refEntity.m_upAoi);
+		_ASSERTm_refEntity.m_upAoi);
 		if (m_refEntity.m_upAoi)
 		{
 			auto& refUpAoi = m_refEntity.m_wpOwner.expired() ? m_refEntity.m_upAoi : m_refEntity.m_wpOwner.lock()->m_upAoi;

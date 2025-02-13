@@ -47,7 +47,7 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 		if (g_mapPlayerGateSession.end() == itFindSession)
 		{
 			LOG(ERROR) << "idSessionId=" << idSessionId;
-			assert(false);
+			_ASSERTfalse);
 			co_return 0;
 		}
 
@@ -56,10 +56,10 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 		LOG(INFO) << gbkName << "," << m_idPlayerGateSession << "踢" << refGateSession.m_idPlayerGateSession;
 		static FunCancel funCancle;
 		co_await CoRpc<MsgGateDeleteSessionResponce>::Send<MsgGateDeleteSession>({}, [&refGateSession](const MsgGateDeleteSession& refMsg) {refGateSession.SendToGate转发(refMsg); }, funCancle);
-		assert(g_mapPlayerNickNameGateSessionId.find(gbkName) == g_mapPlayerNickNameGateSessionId.end());
+		_ASSERTg_mapPlayerNickNameGateSessionId.find(gbkName) == g_mapPlayerNickNameGateSessionId.end());
 	}
 	const auto pair = g_mapPlayerNickNameGateSessionId.insert({ gbkName, m_idPlayerGateSession });//g_mapPlayerNickNameGateSessionId[gbkName] = m_idPlayerGateSession;
-	assert(pair.second);
+	_ASSERTpair.second);
 	LOG(INFO) << gbkName << ",已添加此名字对应的SessionId=" << m_idPlayerGateSession;
 
 	m_nickName = gbkName;
@@ -72,7 +72,7 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 
 void PlayerGateSession_World::OnRecv(const MsgLogin& msg)
 {
-	assert(m_coLogin.Finished());
+	_ASSERTm_coLogin.Finished());
 	m_coLogin = CoLogin(msg);
 	m_coLogin.Run();
 }
@@ -97,7 +97,7 @@ void PlayerGateSession_World::RecvMsg(const MsgId idMsg, const msgpack::object& 
 	case MsgId::GateDeleteSessionResponce:RecvMsg<MsgGateDeleteSessionResponce>(obj); break;
 	default:
 		LOG(ERROR) << "没处理msgId:" << idMsg;
-		assert(false);
+		_ASSERTfalse);
 		break;
 	}
 }

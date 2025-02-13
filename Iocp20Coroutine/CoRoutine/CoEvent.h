@@ -29,7 +29,7 @@ public:
 			if (iterFind == g_mapRpc.end())
 			{
 				LOG(ERROR) << "";
-				assert(false);
+				_ASSERTfalse);
 				continue;
 			}
 
@@ -56,7 +56,7 @@ public:
 				if (iterFind == g_mapRpc.end())
 				{
 					LOG(ERROR) << "";
-					assert(false);
+					_ASSERTfalse);
 					return;
 				}
 

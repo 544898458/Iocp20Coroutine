@@ -289,7 +289,7 @@ void on_peer_read(uv_stream_t* client, ssize_t nread, const uv_buf_t* buf)
 	else
 	{
 		// nread > 0
-		assert(buf->len >= nread);
+		_ASSERTbuf->len >= nread);
 
 		peer_state_t* peerstate = (peer_state_t*)client->data;
 		//printf("main - on_peer_read: Watch ps-client:0x%x, client: 0x%x, ps-client-data:0x%x, client-data:0x%x\n",

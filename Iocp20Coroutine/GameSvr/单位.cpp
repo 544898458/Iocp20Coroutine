@@ -42,7 +42,7 @@ namespace 单位
 		const auto& iterFind = refMap.find(类型);
 		if (iterFind == refMap.end())
 		{
-			assert(false);
+			_ASSERTfalse);
 			return false;
 		}
 

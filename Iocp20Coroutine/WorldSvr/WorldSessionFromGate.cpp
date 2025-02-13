@@ -43,13 +43,13 @@ bool WorldSessionFromGate::Process()
 		case MsgId::Gate转发:	return this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &WorldSessionFromGate::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
-			assert(false);
+			_ASSERTfalse);
 			return false;
 			break;
 		}
 	}
 
-	assert(false);
+	_ASSERTfalse);
 	return false;
 }
 
@@ -83,7 +83,7 @@ void WorldSessionFromGate::OnRecv(const MsgGate转发& msg转发)
 	if (msg转发.vecByte.empty())
 	{
 		LOG(ERROR) << "ERR";
-		assert(false);
+		_ASSERTfalse);
 		return;
 	}
 
@@ -97,7 +97,7 @@ void WorldSessionFromGate::OnRecv(const MsgGate转发& msg转发)
 	{
 	case MsgId::GateDeleteSession:
 	{
-		//assert(g_mapPlayerGateSession.end() != iter);
+		//_ASSERTg_mapPlayerGateSession.end() != iter);
 		if (g_mapPlayerGateSession.end() == iter)
 		{
 			LOG(WARNING) << "不符合协议的黑客攻击";//可用telnet向端口发数据模拟
@@ -106,7 +106,7 @@ void WorldSessionFromGate::OnRecv(const MsgGate转发& msg转发)
 		auto& refPlayerGateSession = iter->second;
 		{
 			auto iterFind = g_mapPlayerNickNameGateSessionId.find(refPlayerGateSession.NickName());
-			assert(g_mapPlayerNickNameGateSessionId.end() != iterFind);
+			_ASSERTg_mapPlayerNickNameGateSessionId.end() != iterFind);
 			if (g_mapPlayerNickNameGateSessionId.end() != iterFind)
 			{
 				LOG(INFO) << refPlayerGateSession.NickName() << ",删除名字对应的SessionId:" << msg转发.gateClientSessionId;

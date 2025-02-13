@@ -98,6 +98,7 @@ int32_t WebSocketEndpoint<T_Callback, T_Data>::from_wire(const void* readbuf, in
 		}
 		else
 		{
+			LOG(ERROR) << "nrcv=" << nrcv;
 			return -1;
 		}
 	}
@@ -133,6 +134,7 @@ int64_t WebSocketEndpoint<T_Callback, T_Data>::parse_packet(ByteBuffer& input)
 		nstatus = wspacket.recv_handshake(input);
 		if (nstatus != 0)
 		{
+			LOG(ERROR) << "nstatus=" << nstatus;
 			return -1;
 		}
 
@@ -182,6 +184,7 @@ int64_t WebSocketEndpoint<T_Callback, T_Data>::parse_packet(ByteBuffer& input)
 		return ndf;
 	}
 
+	LOG(ERROR) << "ws_handshake_completed_=" << ws_handshake_completed_;
 	return -1;
 }
 template<class T_Callback, class T_Data>

@@ -9,7 +9,7 @@ template CoAwaiter<DbPlayer>& CoDb<DbPlayer>::CoSave(const DbPlayer&, const std:
 
 CoTask<DbPlayer*> DbPlayer::CoGet¾ø²»·µ»Ø¿Õ(const std::string& refStrNickName)
 {
-	assert(!refStrNickName.empty());
+	_ASSERT!refStrNickName.empty());
 	static FunCancel fun;
 	//LOG(INFO) << "GameSvrÇëÇó¿ÛÇ®" << msg.changeMoney;
 	if (g_mapDbPlayer.find(refStrNickName) == g_mapDbPlayer.end())

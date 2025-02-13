@@ -81,7 +81,7 @@ WpEntity Space::GetEntity(const int64_t id)
 	if (itFind == m_mapEntity.end())
 	{
 		LOG(INFO) << "选中的实体不存在:" << id;
-		//assert(false);
+		//_ASSERTfalse);
 		return {};
 	}
 	CHECK_DEFAULT(itFind->second);
@@ -161,7 +161,7 @@ WpSpace Space::AddSpace(const uint8_t idSpace)
 		CHECK_RET_DEFAULT(ok);
 	}
 	auto [iterNew, bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space,const 副本配置&>(配置) });
-	assert(bOk);
+	_ASSERTbOk);
 	iterNew->second->Load(idSpace);
 	return iterNew->second;
 }
@@ -219,7 +219,7 @@ Space::SpacePlayer& Space::GetSpacePlayer(const Entity& ref)
 		return ref.m_refSpace.m_mapPlayer[ref.m_spPlayerNickName->m_strNickName];
 
 	LOG(ERROR) << ref.Id << ",不是玩家";
-	assert(false);
+	_ASSERTfalse);
 	static Space::SpacePlayer s_err;
 	return s_err;
 }
@@ -339,7 +339,7 @@ void Space::SpacePlayer::OnDestroy(const bool b单人副本, Space& refSpace, const 
 {
 	for (auto [_, wp] : m_mapWpEntity)
 	{
-		//assert(!wp.expired());
+		//_ASSERT!wp.expired());
 		if (wp.expired())
 		{
 			LOG(ERROR) << "删了单位，但是这里没删";
@@ -356,7 +356,7 @@ void Space::SpacePlayer::OnDestroy(const bool b单人副本, Space& refSpace, const 
 			LOG(INFO) << "m_mapEntity.size=" << sp->m_refSpace.m_mapEntity.size();
 			sp->OnDestroy();
 			auto countErase = sp->m_refSpace.m_mapEntity.erase(sp->Id);
-			assert(1 == countErase);
+			_ASSERT1 == countErase);
 		}
 		else
 		{

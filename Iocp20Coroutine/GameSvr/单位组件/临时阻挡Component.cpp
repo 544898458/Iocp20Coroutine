@@ -31,7 +31,7 @@ bool 還奀郯結Component::AddComponent(Entity& refEntity, float f圉晚酗)
 {
 	if (refEntity.m_sp還奀郯結)
 	{
-		assert(false);
+		_ASSERTfalse);
 		return false;
 	}
 	refEntity.m_sp還奀郯結 = std::make_shared<還奀郯結Component, Entity&, const float&>(refEntity, f圉晚酗);

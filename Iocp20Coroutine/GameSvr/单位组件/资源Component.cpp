@@ -12,7 +12,7 @@ void 资源Component::Add(Space& refSpace, const 单位类型 类型, const Position& re
 	if (!单位::Find资源单位配置(类型, 配置))
 	{
 		LOG(ERROR) << "Add" << 类型;
-		assert(false);
+		_ASSERTfalse);
 		return;
 	}
 

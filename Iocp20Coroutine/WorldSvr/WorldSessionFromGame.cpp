@@ -46,12 +46,12 @@ bool WorldSessionFromGame::Process()
 		case MsgId::Gate转发:	return this->m_MsgQueue.OnRecv(this->m_queueGate转发, *this, &WorldSessionFromGame::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
-			assert(false);
+			_ASSERTfalse);
 			return false;
 			break;
 		}
 	}
-	assert(false);
+	_ASSERTfalse);
 	return false;
 }
 
@@ -74,7 +74,7 @@ void WorldSessionFromGame::OnRecvPack(const void* buf, int len)
 		*/case MsgId::Gate转发:m_MsgQueue.PushMsg<MsgGate转发>(*this, obj); break;
 		default:
 			LOG(WARNING) << "没处理GameSvr发来的消息:" << msg.id;
-			assert(false);
+			_ASSERTfalse);
 			break;
 	}
 }
@@ -93,7 +93,7 @@ void WorldSessionFromGame::OnRecv(const MsgGate转发& msg转发)
 	if (msg转发.vecByte.empty())
 	{
 		LOG(ERROR) << "ERR";
-		assert(false);
+		_ASSERTfalse);
 		return;
 	}
 
@@ -127,7 +127,7 @@ CoTask<int> WorldSessionFromGame::CoChangeMoney(const MsgChangeMoney msg, const 
 	auto& refDb = *co_await DbPlayer::CoGet绝不返回空(strNickName);
 	MsgChangeMoneyResponce msgResponce;//{ .msg = {.rpcSnId = msg.msg.rpcSnId} };
 	msgResponce.msg.rpcSnId = msg.msg.rpcSnId;
-	assert(0 <= refDb.money);
+	_ASSERT0 <= refDb.money);
 	LOG(INFO) << "msg.addMoney=" << msg.addMoney << ",refDb.money=" << refDb.money;
 
 	if (msg.addMoney)
@@ -174,7 +174,7 @@ void WorldSessionFromGame::OnRecv(const MsgChangeMoney& msg, const uint64_t idGa
 	//}
 	extern std::map<uint64_t, PlayerGateSession_World> g_mapPlayerGateSession;
 	const auto itFind = g_mapPlayerGateSession.find(idGateSessionId);
-	assert(itFind != g_mapPlayerGateSession.end());
+	_ASSERTitFind != g_mapPlayerGateSession.end());
 	if (itFind == g_mapPlayerGateSession.end())
 	{
 		return;

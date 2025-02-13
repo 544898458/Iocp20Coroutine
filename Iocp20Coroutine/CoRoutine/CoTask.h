@@ -53,7 +53,7 @@ public:
 			void await_resume() noexcept
 			{
 				LOG(ERROR) << "in final_awaiter.await_resume";
-				assert(false);
+				_ASSERTfalse);
 			}
 			std::coroutine_handle<>
 				await_suspend(std::coroutine_handle<promise_type> h) noexcept
@@ -90,7 +90,7 @@ public:
 		{
 			//return std::terminate(); 
 			LOG(WARNING) << "unhandled_exception";
-			assert(false);
+			_ASSERTfalse);
 		}
 		// co_return 时执行，return_void跟return_value二选一，协程的返回值
 		//void return_void() {}
@@ -127,7 +127,7 @@ public:
 		if (m_hCoroutine == nullptr)
 		{
 			LOG(INFO) << "m_hCoroutine == nullptr";
-			assert(false);
+			_ASSERTfalse);
 			return true;
 		}
 		//if (bMainThread)
@@ -257,7 +257,7 @@ public:
 	void operator=(CoTask&& other)noexcept
 	{
 		LOG_IF(ERROR, !FinishedNoLock()) << "";
-		assert(FinishedNoLock());
+		_ASSERTFinishedNoLock());
 		if (m_hCoroutine)
 		{
 			TryClear();//20241212

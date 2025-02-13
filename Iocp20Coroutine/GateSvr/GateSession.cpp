@@ -45,7 +45,7 @@ void GateSession::OnRecvWsPack(const void* buf, const int len)
 	catch (const msgpack::unpack_error& error)
 	{
 		LOG(WARNING) << "MsgPack解包失败:" << error.what();
-		//assert(false);
+		//_ASSERTfalse);
 	}
 
 }
@@ -68,7 +68,7 @@ void GateSession::OnRecv(const MsgLogin& msg)
 
 CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 {
-	assert(!m_bLoginOk);
+	_ASSERT!m_bLoginOk);
 	{
 		auto [stop, responce] = co_await CoRpc<MsgLoginResponce>::Send<MsgLogin>(msg, [this](const MsgLogin& msg) {SendToWorldSvr转发<MsgLogin>(msg, GetId()); }, funCancel);
 		LOG(INFO) << "WorldSvr返回登录结果stop=" << stop << ",error=" << responce.result;
@@ -144,11 +144,11 @@ bool GateSession::Process()
 		case MsgId::Login:return this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &GateSession::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
-			assert(false);
+			_ASSERTfalse);
 			return false;
 			break;
 		}
-		assert(false);
+		_ASSERTfalse);
 	}
 	return true;
 }
