@@ -12,12 +12,14 @@ namespace StrConv
 		std::wstring wStr;
 		wStr.resize(needWideCount);
 		const auto writtenWideCount = MultiByteToWideChar(CP_ACP, 0, src_str.c_str(), -1, (LPWSTR)wStr.c_str(), needWideCount);
+		LOG_IF(ERROR, writtenWideCount != needWideCount) << "ERR";
 		assert(writtenWideCount == needWideCount);
 
 		const auto needCharCount = WideCharToMultiByte(CP_UTF8, 0, (LPWSTR)wStr.c_str(), -1, NULL, 0, NULL, NULL);
 		std::string str;
 		str.resize(needCharCount);
 		const auto writtenCharCount = WideCharToMultiByte(CP_UTF8, 0, wStr.c_str(), wStr.size(), (LPSTR)str.c_str(), needCharCount, NULL, NULL);
+		LOG_IF(ERROR, writtenCharCount != needCharCount) << "ERR";
 		assert(writtenCharCount == needCharCount);
 		
 		if (!str.empty() && str.back() == 0)

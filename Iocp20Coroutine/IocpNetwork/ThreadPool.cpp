@@ -28,6 +28,7 @@ namespace Iocp
 				LOG(INFO) << "É¾³ý:	" << overlapped->coTask.m_desc << ",pOverlapped=" << overlapped->pOverlapped;
 				if (overlapped->pOverlapped)
 				{
+					LOG_IF(ERROR, overlapped->pOverlapped->pOverlapped != overlapped) << "ERR";
 					assert(overlapped->pOverlapped->pOverlapped == overlapped);
 					overlapped->pOverlapped->pOverlapped = nullptr;
 					overlapped->pOverlapped = nullptr;

@@ -31,6 +31,7 @@ int WebSocketSession<T_Session>::OnRecv(Iocp::SessionSocketCompletionKey<WebSock
 			if (0 < i32读出明文字节)
 			{
 				const auto write = m_webSocketEndpoint->from_wire(buf明文, i32读出明文字节);
+				LOG_IF(ERROR, write != i32读出明文字节) << "";
 				assert(write == i32读出明文字节);
 			}
 		}

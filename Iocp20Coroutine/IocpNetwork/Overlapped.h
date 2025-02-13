@@ -89,6 +89,7 @@ namespace Iocp
 
 				finalSendState = SendState_Sending;
 				changed = this->atomicSendState.compare_exchange_strong(finalSendState, SendState_SendBeforeSleep);//睡前再操作一次
+				LOG_IF(ERROR, !changed) << "";
 				assert(changed);
 				if (!changed)
 				{
@@ -140,6 +141,7 @@ namespace Iocp
 					//LOG(INFO) << "Send协程正在等待发送结果";
 					return;
 				}
+				LOG_IF(ERROR, finalSendState != SendState_SendBeforeSleep) << "";
 				assert(finalSendState == SendState_SendBeforeSleep);
 				if (finalSendState != SendState_SendBeforeSleep)
 				{
@@ -147,6 +149,7 @@ namespace Iocp
 					return;
 				}
 				changed = this->pOverlapped->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sending);//激活
+				LOG_IF(ERROR,!changed) << "";
 				assert(changed);
 				if (changed)
 				{
