@@ -14,7 +14,7 @@ namespace Iocp {
 	}
 	//virtual bool PostAccept(MyOverlapped* pAcceptOverlapped)override 
 	//{
-	//	_ASSERT!"SessionSocketCompletionKey不能PostAccept");
+	//	_ASSERT(!"SessionSocketCompletionKey不能PostAccept");
 	//	return false;
 	//}
 	template<class T_Session>
@@ -196,7 +196,7 @@ namespace Iocp {
 		//delete this;
 		//using namespace std;
 		//std::this_thread::sleep_for(1s);
-		//_ASSERTfalse);
+		//_ASSERT(false);
 		LOG(INFO) << "PostSend协程结束,this=" << this;
 		LOG(INFO) << "PostSend协程结束,Socket=" << Socket();
 		co_return Overlapped::OK;

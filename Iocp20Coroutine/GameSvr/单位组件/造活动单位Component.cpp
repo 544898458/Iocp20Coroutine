@@ -87,7 +87,7 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 		Position pos = { posBuilding.x + std::rand() % 10, posBuilding.z + +std::rand() % 10 };
 		{
 			const auto ok = refSpace.CrowdToolFindNerestPos(pos);
-			_ASSERTok);
+			_ASSERT(ok);
 		}
 		
 		if (!refSpace.CrowdTool可站立(pos))
@@ -151,7 +151,7 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 		//if (m_list等待造.empty())
 		//{
 		//	LOG(ERROR) << "err";
-		//	_ASSERTfalse);
+		//	_ASSERT(false);
 		//	co_return{};
 		//}
 	}

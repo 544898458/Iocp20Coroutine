@@ -45,7 +45,7 @@ bool 造建筑Component::正在建造(const Entity& refEntity)
 
 造建筑Component::~造建筑Component()
 {
-	_ASSERT!m_cancel造建筑.operator bool());
+	_ASSERT(!m_cancel造建筑.operator bool());
 }
 
 bool 造建筑Component::可造(const 单位类型 类型)const
@@ -66,12 +66,12 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 单位类型 类型)
 	单位::建筑单位配置 配置;
 	if (!单位::Find建筑单位配置(类型, 配置))
 	{
-		_ASSERTfalse);
+		_ASSERT(false);
 		co_return true;
 	}
 	if (!m_refEntity.m_spAttack)
 	{
-		_ASSERTfalse);
+		_ASSERT(false);
 		co_return true;
 	}
 	if (co_await AiCo::WalkToPos(m_refEntity, pos, m_cancel造建筑, 配置.f半边长 + m_refEntity.m_spAttack->m_战斗配置.f攻击距离))
@@ -116,7 +116,7 @@ CoTaskBool 造建筑Component::Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel)
 		else
 			oss << "正在建造:" << refBuilding.m_n建造进度百分比 << "%";
 
-		_ASSERT!wpEntity建筑.expired());
+		_ASSERT(!wpEntity建筑.expired());
 		EntitySystem::BroadcastEntity描述(*wpEntity建筑.lock(), oss.str());
 		PlayerComponent::Send资源(m_refEntity);
 	}

@@ -490,7 +490,7 @@ void PlayerGateSession_Game::ForEachSelected(std::function<void(Entity& ref)> fu
 		if (itFind == sp->m_mapEntity.end())
 		{
 			LOG(INFO) << "选中的实体不存在:" << id;
-			//_ASSERTfalse);
+			//_ASSERT(false);
 			continue;
 		}
 		auto& spEntity = itFind->second;

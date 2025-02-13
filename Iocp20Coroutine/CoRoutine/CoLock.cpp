@@ -9,11 +9,11 @@ std::map<std::string, std::deque<CoAwaiterBool>> g_mapLock;
 CoLock::~CoLock()
 {
 	CHECK_RET_VOID(!g_mapLock.empty());
-	_ASSERT!g_mapLock.empty());
+	_ASSERT(!g_mapLock.empty());
 	auto iter = g_mapLock.find(m_strLockKey);
 	auto& refDeque = iter->second;
 	CHECK_RET_VOID(!refDeque.empty());
-	_ASSERT!refDeque.empty());
+	_ASSERT(!refDeque.empty());
 	refDeque.pop_back();
 	if (!refDeque.empty())
 	{

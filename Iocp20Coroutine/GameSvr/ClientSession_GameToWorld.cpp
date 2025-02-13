@@ -26,7 +26,7 @@ void ClientSession_GameToWorld::Process()
 		case MsgId::ChangeMoneyResponce:this->m_MsgQueue.OnRecv(this->m_queueConsumeMoneyResponce, *this, &ClientSession_GameToWorld::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
-			_ASSERTfalse);
+			_ASSERT(false);
 			break;
 		}
 	}

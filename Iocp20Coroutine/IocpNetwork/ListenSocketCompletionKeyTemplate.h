@@ -65,7 +65,7 @@ namespace Iocp {
 					break;
 				default:
 					LOG(ERROR) << "AcceptEx失败,GetLastErrorReturn=" << pAcceptOverlapped->GetLastErrorReturn;
-					//_ASSERTfalse);
+					//_ASSERT(false);
 					break;
 				}
 				closesocket(pAcceptOverlapped->socket);
@@ -89,7 +89,7 @@ namespace Iocp {
 					break;
 				default:
 					LOG(ERROR) << "AcceptEx后的CreateIoCompletionPort失败,err=" << err;
-					//_ASSERTfalse);
+					//_ASSERT(false);
 					break;
 				}
 				LOG(ERROR) << "连上来的Socket关联到完成端口失败，Error=" << err << ",socket:"<< pAcceptOverlapped->socket;

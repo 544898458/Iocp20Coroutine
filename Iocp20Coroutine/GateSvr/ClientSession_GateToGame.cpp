@@ -43,7 +43,7 @@ void ClientSession_GateToGame::OnRecvPack(const void* buf, const int len)
 		if (msg.vecByte.empty())
 		{
 			LOG(ERROR) << "ERR";
-			_ASSERTfalse);
+			_ASSERT(false);
 			return;
 		}
 		MsgGateSvr转发GameSvr消息给游戏前端 msg给前端(&msg.vecByte[0], (int)msg.vecByte.size());
@@ -53,7 +53,7 @@ void ClientSession_GateToGame::OnRecvPack(const void* buf, const int len)
 	break;
 	default:
 		LOG(ERROR) << "没处理msgId:" << msg.id;
-		_ASSERTfalse);
+		_ASSERT(false);
 		break;
 	}
 }

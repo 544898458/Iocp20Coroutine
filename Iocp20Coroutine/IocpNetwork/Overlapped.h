@@ -66,7 +66,7 @@ namespace Iocp
 				auto finalSendState = SendState_Sending;
 				const auto old =this->atomicSendState.load();
 				auto changed = this->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sleep);
-				//_ASSERTchanged);
+				//_ASSERT(changed);
 				LOG_IF(WARNING, !changed) << "finalSendState:" << finalSendState << ",old=" << old;
 				
 				return;
@@ -90,7 +90,7 @@ namespace Iocp
 				finalSendState = SendState_Sending;
 				changed = this->atomicSendState.compare_exchange_strong(finalSendState, SendState_SendBeforeSleep);//睡前再操作一次
 				LOG_IF(ERROR, !changed) << "";
-				_ASSERTchanged);
+				_ASSERT(changed);
 				if (!changed)
 				{
 					LOG(ERROR) << "error,changed=" << changed << ",finalSendState=" << finalSendState;
@@ -103,7 +103,7 @@ namespace Iocp
 			break;
 			default:
 				LOG(ERROR) << "yiledValue=" << yiledValue;
-				_ASSERTfalse);
+				_ASSERT(false);
 				return;// break;
 			}
 		}
@@ -142,7 +142,7 @@ namespace Iocp
 					return;
 				}
 				LOG_IF(ERROR, finalSendState != SendState_SendBeforeSleep) << "";
-				_ASSERTfinalSendState == SendState_SendBeforeSleep);
+				_ASSERT(finalSendState == SendState_SendBeforeSleep);
 				if (finalSendState != SendState_SendBeforeSleep)
 				{
 					LOG(ERROR) << "ERROR";
@@ -150,7 +150,7 @@ namespace Iocp
 				}
 				changed = this->pOverlapped->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sending);//激活
 				LOG_IF(ERROR,!changed) << "";
-				_ASSERTchanged);
+				_ASSERT(changed);
 				if (changed)
 				{
 					//LOG(INFO) << "SendState_SendBeforeSleep,转,SendState_Sending";
@@ -162,7 +162,7 @@ namespace Iocp
 			break;
 			default:
 				LOG(ERROR) << "yiledValue=" << yiledValue;
-				_ASSERTfalse);
+				_ASSERT(false);
 				break;
 			}
 

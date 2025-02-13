@@ -23,12 +23,12 @@ void AoiComponent::ÄÜ¿´µ½ÕâÒ»¸ñµÄÈË¶¼¿´µ½ÎÒ(const int id)
 {
 	{
 		const auto [iter, ok] = m_refEntity.m_refSpace.m_mapÔÚÕâÒ»¸ñÀï[id].insert({ m_refEntity.Id,m_refEntity.weak_from_this() });
-		_ASSERTok);
+		_ASSERT(ok);
 	}
 	auto& refMapWpÄÜ¿´µ½ÕâÒ»¸ñ = m_refEntity.m_refSpace.m_mapÄÜ¿´µ½ÕâÒ»¸ñ[id];
 	//{
 	//	const auto [iter, ok] = refMapWpÄÜ¿´µ½ÕâÒ»¸ñ.insert({ m_refEntity.Id,m_refEntity.weak_from_this() });
-	//	_ASSERTok);
+	//	_ASSERT(ok);
 	//}
 	for (auto [k, wp] : refMapWpÄÜ¿´µ½ÕâÒ»¸ñ)
 	{
@@ -52,11 +52,11 @@ void AoiComponent::ÄÜ¿´µ½ÕâÒ»¸ñµÄÈË¶¼¿´²»µ½ÎÒ()
 
 	{
 		const auto sizeErase = m_refEntity.m_refSpace.m_mapÔÚÕâÒ»¸ñÀï[id].erase(m_refEntity.Id);// , m_refEntity.weak_from_this() });
-		_ASSERT1 == sizeErase);
+		_ASSERT(1 == sizeErase);
 	}
 	//{
 	//	const auto [iter, ok] = refMapWpÄÜ¿´µ½ÕâÒ»¸ñ.insert({ m_refEntity.Id,m_refEntity.weak_from_this() });
-	//	_ASSERTok);
+	//	_ASSERT(ok);
 	//}
 }
 void AoiComponent::½øÈëSpace()
@@ -78,17 +78,17 @@ void AoiComponent::Àë¿ªSpace()
 }
 void AoiComponent::¿´µ½(Entity& refEntity±»¿´)
 {
-	_ASSERTrefEntity±»¿´.m_upAoi);
+	_ASSERT(refEntity±»¿´.m_upAoi);
 	if (!refEntity±»¿´.m_upAoi)//µÆËşÄ£ĞÍ£¬Ïà»¥¼Ç×¡
 		return;
 
 	{
 		const auto [iter, ok] = refEntity±»¿´.m_upAoi->m_mapÄÜ¿´µ½ÎÒµÄ.insert({ m_refEntity.Id, m_refEntity.weak_from_this() });
-		_ASSERTok);
+		_ASSERT(ok);
 	}
 	{
 		const auto [iter, ok] = m_refEntity.m_upAoi->m_mapÎÒÄÜ¿´µ½µÄ.insert({ refEntity±»¿´.Id, refEntity±»¿´.weak_from_this() });
-		_ASSERTok);
+		_ASSERT(ok);
 
 		if (m_refEntity.m_spAttack)
 		{
@@ -108,17 +108,17 @@ void AoiComponent::¿´µ½(Entity& refEntity±»¿´)
 
 void AoiComponent::¿´²»µ½(Entity& refEntity±»¿´)
 {
-	_ASSERTrefEntity±»¿´.m_upAoi);
+	_ASSERT(refEntity±»¿´.m_upAoi);
 	if (!refEntity±»¿´.m_upAoi)//µÆËşÄ£ĞÍ£¬Ïà»¥¼Ç×¡
 		return;
 
 	{
 		const auto sizeErase = refEntity±»¿´.m_upAoi->m_mapÄÜ¿´µ½ÎÒµÄ.erase(m_refEntity.Id);// ] = m_refEntity.weak_from_this();
-		_ASSERTsizeErase);
+		_ASSERT(sizeErase);
 	}
 	{
 		const auto sizeErase = m_refEntity.m_upAoi->m_mapÎÒÄÜ¿´µ½µÄ.erase(refEntity±»¿´.Id);// ] = refEntity±»¿´.weak_from_this();
-		_ASSERTsizeErase);
+		_ASSERT(sizeErase);
 	}
 }
 
@@ -137,7 +137,7 @@ void AoiComponent::¿´µ½ÕâĞ©¸ñ×Ó(const std::vector<int32_t>& vecĞÂÔö¿´µ½µÄ¸ñ×ÓId)
 		}
 
 		auto [iter, ok] = m_refSpace.m_mapÄÜ¿´µ½ÕâÒ»¸ñ[id].insert({ m_refEntity.Id, m_refEntity.weak_from_this() });
-		_ASSERTok);
+		_ASSERT(ok);
 	}
 }
 
@@ -156,7 +156,7 @@ void AoiComponent::¿´²»µ½ÕâĞ©¸ñ×Ó(const std::vector<int32_t>& vecÉ¾³ı²»ÔÙ¿´µ½µÄÀ
 		}
 
 		const auto sizeÉ¾³ıÊı = m_refSpace.m_mapÄÜ¿´µ½ÕâÒ»¸ñ[id].erase(m_refEntity.Id);// = m_refEntity.weak_from_this();
-		_ASSERT1 == sizeÉ¾³ıÊı);
+		_ASSERT(1 == sizeÉ¾³ıÊı);
 	}
 }
 
@@ -190,12 +190,12 @@ void AoiComponent::OnDestory()
 	Àë¿ªSpace();
 	//for (auto [k, wp] : m_mapÎÒÄÜ¿´µ½µÄ)
 	//{
-	//	_ASSERT!wp.expired());
+	//	_ASSERT(!wp.expired());
 	//	if (wp.expired())
 	//		continue;
 
 	//	auto sp = wp.lock();
-	//	_ASSERTsp->m_upAoi);
+	//	_ASSERT(sp->m_upAoi);
 	//	if (!sp->m_upAoi)
 	//		continue;
 
@@ -205,12 +205,12 @@ void AoiComponent::OnDestory()
 
 	//for (auto [k, wp] : m_mapÄÜ¿´µ½ÎÒµÄ)
 	//{
-	//	_ASSERT!wp.expired());
+	//	_ASSERT(!wp.expired());
 	//	if (wp.expired())
 	//		continue;
 
 	//	auto sp = wp.lock();
-	//	_ASSERTsp->m_upAoi);
+	//	_ASSERT(sp->m_upAoi);
 	//	if (!sp->m_upAoi)
 	//		continue;
 
@@ -257,7 +257,7 @@ std::unordered_map<int, std::unordered_map<uint64_t, WpEntity>> AoiComponent::ÄÜ
 		for (auto [k, wp] : mapWp)
 		{
 			auto [iter, ok] = map[id].insert({ k,wp });
-			_ASSERTok);
+			_ASSERT(ok);
 		}
 	}
 	return map;
@@ -293,7 +293,7 @@ std::set<int32_t> AoiComponent::ÄÜ¿´µ½µÄ¸ñ×Ó(const Position& pos) const
 		{
 			const auto id = ¸ñ×ÓId(x, z);
 			const auto [iter, ok] = set.insert(id);
-			_ASSERTok); //boolÖµÔò±íÊ¾ÊÇ·ñ²åÈëÁË¸ÃÔªËØ
+			_ASSERT(ok); //boolÖµÔò±íÊ¾ÊÇ·ñ²åÈëÁË¸ÃÔªËØ
 		}
 	}
 

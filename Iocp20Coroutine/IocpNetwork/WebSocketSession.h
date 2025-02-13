@@ -184,7 +184,7 @@ public:
 				if (i32已处理明文 != len)
 				{
 					LOG(ERROR) << "严重错误";
-					_ASSERTfalse);
+					_ASSERT(false);
 				}
 			}
 			获取准备发往前端的密文并发给前端();

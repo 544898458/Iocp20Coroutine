@@ -147,7 +147,7 @@ namespace AiCo
 		{
 			const auto ok = refThis.m_refSpace.CrowdToolFindNerestPos(posTarget);
 			LOG_IF(ERROR, !ok) << "";
-			_ASSERTok);
+			_ASSERT(ok);
 		}
 		活动单位走完路加阻挡 _(refThis);
 		RecastNavigationCrowd rnc(refThis, posTarget);
@@ -245,7 +245,7 @@ namespace AiCo
 		if (changeMoney < 0)
 		{
 			LOG(ERROR) << "";
-			_ASSERTfalse);
+			_ASSERT(false);
 			co_return std::make_tuple(false, MsgChangeMoneyResponce());
 		}
 		KeepCancel kc(funCancel);
