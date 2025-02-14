@@ -673,6 +673,7 @@ SslTlsSvr::SslTlsSvr() :m_pServer(new krx)
 
 SslTlsSvr::~SslTlsSvr()
 {
+	krx_ssl_shutdown(m_pServer);
 	delete m_pServer;
 	m_pServer = nullptr;
 }
