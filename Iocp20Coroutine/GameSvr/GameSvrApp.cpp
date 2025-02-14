@@ -95,7 +95,7 @@ int main(void)
 	//屏蔽控制台最小按钮和关闭按钮
 	HWND hwnd = GetConsoleWindow();
 	HMENU hmenu = GetSystemMenu(hwnd, false);
-	RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
+	//RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF);
 
 	auto* pMemoryLeak = malloc(123);//测试内存泄漏
