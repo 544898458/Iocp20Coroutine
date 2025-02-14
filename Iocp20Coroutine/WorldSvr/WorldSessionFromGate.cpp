@@ -109,20 +109,19 @@ void WorldSessionFromGate::OnRecv(const MsgGate转发& msg转发)
 			return;
 		}
 		auto& refPlayerGateSession = iter->second;
+
 		{
 			auto iterFind = g_mapPlayerNickNameGateSessionId.find(refPlayerGateSession.NickName());
-			_ASSERT(g_mapPlayerNickNameGateSessionId.end() != iterFind);
-			if (g_mapPlayerNickNameGateSessionId.end() != iterFind)
-			{
-				LOG(INFO) << refPlayerGateSession.NickName() << ",删除名字对应的SessionId:" << msg转发.gateClientSessionId;
-				g_mapPlayerNickNameGateSessionId.erase(iterFind);
-				void BroadcastToGate在线人数();
-				BroadcastToGate在线人数();
-			}
+			CHECK_RET_VOID(g_mapPlayerNickNameGateSessionId.end() != iterFind);
+			LOG(INFO) << refPlayerGateSession.NickName() << ",删除名字对应的SessionId:" << msg转发.gateClientSessionId;
+			g_mapPlayerNickNameGateSessionId.erase(iterFind);
+			void BroadcastToGate在线人数();
+			BroadcastToGate在线人数();
 		}
+
 		g_mapPlayerGateSession.erase(iter);
 		LOG(INFO) << "删除PlayerGateSession_World对象,Id=" << msg转发.gateClientSessionId;
-		
+
 	}
 	break;
 	default:

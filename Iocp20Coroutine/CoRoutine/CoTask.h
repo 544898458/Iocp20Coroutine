@@ -118,7 +118,18 @@ public:
 	/// </summary>
 	bool Run()
 	{
-		//std::lock_guard lock(m_mutex);
+		if(m_bNeedLock)
+		{
+			std::lock_guard lock(m_mutex);
+			return RunNoLock();
+		}
+		else
+		{
+			return RunNoLock();
+		}
+	}
+	bool RunNoLock()
+	{
 		if (FinishedNoLock())
 		{
 			LOG(INFO) << m_desc << "协程已结束，不再执行";
@@ -130,28 +141,11 @@ public:
 			_ASSERT(false);
 			return true;
 		}
-		//if (bMainThread)
-		//{
-		//	g_funRunCurrentCo = [this]() {this->Run(); };
-		//}
+
 		m_hCoroutine.resume();
 		return TryClear();
 	}
-	/// <summary>
-	/// Send专用
-	/// </summary>
-	/// <param name="send"></param>
-	//void Run2(const bool& send)
-	//{
-	//	std::lock_guard lock(m_mutex);
-	//	if (send)
-	//		return;
-	//	if (!m_hCoroutine)
-	//		return;
 
-	//	m_hCoroutine.resume();
-	//	TryClear();
-	//}
 	bool TryClear()
 	{
 		if (!m_hCoroutine.done())
@@ -166,8 +160,14 @@ public:
 	}
 	bool Finished()
 	{
-		//std::lock_guard lock(m_mutex);
-		return FinishedNoLock();
+		if (m_bNeedLock)
+		{
+			std::lock_guard lock(m_mutex);
+			return FinishedNoLock();
+		}
+		else {
+			return FinishedNoLock();
+		}
 	}
 	bool FinishedNoLock()
 	{
@@ -227,6 +227,7 @@ public:
 	}
 	static std::list<CoTask> m_listCo;
 	std::mutex m_mutex;
+	bool m_bNeedLock = false;
 private:
 
 	/// <summary>
@@ -419,11 +420,7 @@ struct CoAwaiter
 		m_Kc.Revert();
 		m_hAwaiter.resume();
 	}
-	void Run2(const T_Result& result, std::mutex& mutex)
-	{
-		std::lock_guard lock(mutex);
-		Run(result);
-	}
+	
 	bool m_bAwaitReady = false;
 private:
 	long m_sn;
