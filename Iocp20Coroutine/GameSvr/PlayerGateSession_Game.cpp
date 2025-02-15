@@ -447,7 +447,6 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 		if (b已播放声音)
 			continue;
 
-		b已播放声音 = true;
 		if (ref.m_spAttack)
 		{
 			switch (ref.m_类型)
@@ -456,8 +455,12 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 			case 近战兵:播放声音("tfbYes03"); break;//Checked up and good to go. 检查完毕，准备动身
 			case 工程车:播放声音(msg.b遇到敌人自动攻击 ? "语音/是女声可爱版" : "语音/明白女声可爱版"); break;
 			case 三色坦克:播放声音("语音/ttayes01"); break;
-			default:break;
+			default:
+				continue;
+				break;
 			}
+
+			b已播放声音 = true;
 		}
 	}
 }
