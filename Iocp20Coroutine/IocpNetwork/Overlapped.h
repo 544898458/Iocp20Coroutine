@@ -66,8 +66,19 @@ namespace Iocp
 				auto finalSendState = SendState_Sending;
 				const auto old =this->atomicSendState.load();
 				auto changed = this->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sleep);
-				//_ASSERT(changed);
-				LOG_IF(WARNING, !changed) << "finalSendState:" << finalSendState << ",old=" << old;
+				if (changed)
+				{
+					LOG(INFO) << "Send协程结束，SendState_Sending时断线,finalSendState:" << finalSendState << ",old=" << old;
+				}
+				else if( SendState_SendBeforeSleep == old)
+				{
+					LOG(WARNING) << "Send协程结束，SendState_SendBeforeSleep时断线,finalSendState:" << finalSendState << ",old=" << old;
+					changed = this->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sleep);
+					if (!changed)
+					{
+						LOG(ERROR) << "Send协程结束,状态有问题,finalSendState:" << finalSendState << ",old=" << old;
+					}
+				}
 				
 				return;
 			}

@@ -24,10 +24,7 @@ namespace Iocp
 	class SessionSocketCompletionKey :public SocketCompeletionKey
 	{
 	public:
-		SessionSocketCompletionKey(SOCKET s) :SocketCompeletionKey(s), Session(*this)
-		{
-
-		}
+		SessionSocketCompletionKey(SOCKET s);
 		virtual ~SessionSocketCompletionKey();
 		void StartCoRoutine(HANDLE hIocp);
 		void Send(const void* buf, int len);

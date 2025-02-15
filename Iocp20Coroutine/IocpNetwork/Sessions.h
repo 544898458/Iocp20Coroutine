@@ -72,9 +72,9 @@ void Sessions<T_Session>::Update(T_Function const& functionLockUpdate)
 		}
 
 		p->Session.OnDestroy();
-		delete p;
 		iter = m_mapSession.erase(iter);
-		LOG(INFO) << "É¾³ýSession£¬Ê£Óà" << m_mapSession.size();
+		LOG(INFO) << "É¾³ýSession"<< p <<"£¬Ê£Óà" << m_mapSession.size();
+		delete p;
 	}
 
 	functionLockUpdate();

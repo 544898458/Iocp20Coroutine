@@ -9,8 +9,14 @@
 
 namespace Iocp {
 	template<class T_Session>
+	inline SessionSocketCompletionKey<T_Session>::SessionSocketCompletionKey(SOCKET s) :SocketCompeletionKey(s), Session(*this)
+	{
+		LOG(INFO) << this << ",¹¹ÔìSessionSocketCompletionKey,socket=" << s;
+	}
+	template<class T_Session>
 	SessionSocketCompletionKey<T_Session>::~SessionSocketCompletionKey()
 	{
+		LOG(INFO) << this << ",Îö¹¹SessionSocketCompletionKey,socket=" << Socket();
 	}
 	//virtual bool PostAccept(MyOverlapped* pAcceptOverlapped)override 
 	//{
@@ -28,12 +34,14 @@ namespace Iocp {
 			sendOverlapped.OnComplete = &Overlapped::OnCompleteSend;
 			sendOverlapped.coTask = PostSend(sendOverlapped);
 			sendOverlapped.coTask.m_desc = "PostSend";
+			//sendOverlapped.coTask.m_bNeedLock = true;
 			sendOverlapped.coTask.Run();
 
 			notifySendOverlapped.pOverlapped = &sendOverlapped;
 			sendOverlapped.pOverlapped = &notifySendOverlapped;
 			notifySendOverlapped.OnComplete = &Overlapped::OnCompleteNotifySend;
 			notifySendOverlapped.coTask.m_desc = "NotifySend";
+			notifySendOverlapped.coTask.m_bNeedLock = true;
 			//PostQueuedCompletionStatus(m_hIocp, 0, (ULONG_PTR)this, &notifySendOverlapped.overlapped);
 
 		}

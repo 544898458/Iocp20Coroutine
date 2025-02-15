@@ -16,6 +16,7 @@ namespace Iocp {
 		pAcceptOverlapped->needDeleteMe = true;
 		pAcceptOverlapped->coTask = PostAccept<T_Session>(pAcceptOverlapped, hIocp, socketListen, refServer);
 		pAcceptOverlapped->coTask.m_desc = "PostAccept";
+		pAcceptOverlapped->coTask.m_bNeedLock = true;
 		pAcceptOverlapped->coTask.Run();
 	}
 	
