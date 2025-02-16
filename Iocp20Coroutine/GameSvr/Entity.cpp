@@ -79,10 +79,11 @@ bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
 {
 	SaveEntity load;
 	CHECK_FALSE(MsgPack::RecvMsgpack(load, buf, u16Size));
-	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, 单位类型, const 单位::单位配置&>(
-		load.m_Pos, refSpace, std::forward<单位类型&&>(load.m_类型), load.m_配置);
+	
 	if (EntitySystem::Is建筑(load.m_类型))
 	{
+		SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, 单位类型, const 单位::单位配置&>(
+			load.m_Pos, refSpace, std::forward<单位类型&&>(load.m_类型), load.m_配置);
 		PlayerComponent::AddComponent(*spNewEntity, {}, load.m_strNickName);
 		单位::建筑单位配置 建筑配置;
 		CHECK_FALSE(单位::Find建筑单位配置(load.m_类型, 建筑配置));
@@ -90,6 +91,13 @@ bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
 
 		CHECK_NOTNULL_RET_FALSE(spNewEntity->m_spBuilding);
 		spNewEntity->m_spBuilding->m_n建造进度百分比 = MAX建造百分比;
+	}
+	else if(EntitySystem::Is活动单位(load.m_类型)) {
+		std::shared_ptr<PlayerComponent> spNull;
+		单位::活动单位配置 活动单位配置;
+		CHECK_FALSE(单位::Find活动单位配置(load.m_类型, 活动单位配置));
+
+		refSpace.造活动单位(spNull, load.m_strNickName, load.m_Pos, 活动单位配置, load.m_类型);
 	}
 
 	return true;

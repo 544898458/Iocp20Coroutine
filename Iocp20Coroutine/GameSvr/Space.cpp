@@ -41,10 +41,8 @@ void Space::Save(const uint8_t idSpace)
 		if (!spEntity->m_spPlayerNickName)
 			continue;//只存玩家单位
 
-		if (!spEntity->m_spBuilding)
-			continue;//只存建筑
-
-		spEntity->Save(file);
+		if (spEntity->m_spBuilding && !spEntity->m_sp资源)
+			spEntity->Save(file);
 	}
 	file.close();// 关闭文件
 	LOG(INFO) << "已写入" << strFileName;
@@ -71,7 +69,7 @@ void Space::Load(const uint8_t idSpace)
 		file.read(buf, u16Size);
 		Entity::Load(*this, buf, u16Size);
 	}
-	
+
 	file.close();// 关闭文件
 }
 
@@ -114,7 +112,7 @@ WpEntity Space::Get最近的Entity(Entity& refEntity, const FindType bFindEnemy, st
 			CHECK_FALSE(!wp.expired());
 			Entity& ref = *wp.lock();
 			const auto bEnemy = ref.IsEnemy(refEntity);
-			if(bFindEnemy == 敌方 && !bEnemy )
+			if (bFindEnemy == 敌方 && !bEnemy)
 				return false;
 			if (bFindEnemy == 友方 && bEnemy)
 				return false;

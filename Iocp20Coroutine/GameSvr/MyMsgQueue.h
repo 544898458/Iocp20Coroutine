@@ -270,7 +270,7 @@ enum 单位类型
 	资源Min非法 = 100,
 	晶体矿,//Minerals
 	燃气矿,//Vespene Gas
-
+	资源Max非法,
 
 	活动单位Min非法 = 200,
 	工程车,//空间工程车Space Construction Vehicle。可以采矿，采气，也可以简单攻击
@@ -278,6 +278,7 @@ enum 单位类型
 	近战兵,//火蝠，喷火兵Firebat
 	三色坦克,//！不是！攻城坦克（Siege Tank）
 	工蜂,//Drone
+	活动单位Max非法,
 
 	建筑Min非法 = 300,
 	基地,//指挥中心(Command Center),可造工程车

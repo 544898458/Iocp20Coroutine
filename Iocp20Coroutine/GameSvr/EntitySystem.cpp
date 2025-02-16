@@ -77,3 +77,13 @@ bool EntitySystem::Is建筑(const 单位类型 类型)
 {
 	return 建筑Min非法 < 类型 && 类型 < 建筑Max非法;
 }
+
+bool EntitySystem::Is资源(const 单位类型 类型)
+{
+	return 资源Min非法 < 类型 && 类型 < 资源Max非法;
+}
+
+bool EntitySystem::Is活动单位(const 单位类型 类型)
+{
+	return 活动单位Min非法 < 类型 && 类型 < 活动单位Max非法;
+}
