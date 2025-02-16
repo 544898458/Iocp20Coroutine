@@ -18,6 +18,7 @@ void SendToGateClient(const T& refMsg, uint64_t gateSessionId);
 
 /// <summary>
 /// 此处是网络线程
+/// GateSvr收到来自GameSvr的消息
 /// </summary>
 /// <param name="buf"></param>
 /// <param name="len"></param>
