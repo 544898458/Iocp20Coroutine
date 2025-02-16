@@ -712,6 +712,11 @@ int SslTlsSvr::处理前端发来的密文(const void* buf, const int len)
 	return i32已处理密文字节;
 }
 
+bool SslTlsSvr::握手OK()const 
+{
+	return SSL_is_init_finished(m_pServer->ssl);
+}
+
 int SslTlsSvr::把要发给前端的明文交给Ssl处理(const void* buf, const int len)
 {
 	return SSL_write(m_pServer->ssl, buf, len);

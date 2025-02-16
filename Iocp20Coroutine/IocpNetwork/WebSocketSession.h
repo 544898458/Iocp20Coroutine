@@ -183,8 +183,9 @@ public:
 				const auto i32已处理明文 = m_SslTls.把要发给前端的明文交给Ssl处理(buf, len);
 				if (i32已处理明文 != len)
 				{
-					LOG(ERROR) << "严重错误";
+					LOG(ERROR) << "i32已处理明文=" << i32已处理明文 << ",len=" << len << ",m_SslTls.握手OK=" << m_SslTls.握手OK();
 					_ASSERT(false);
+					m_refSession.CloseSocket();
 				}
 			}
 			获取准备发往前端的密文并发给前端();

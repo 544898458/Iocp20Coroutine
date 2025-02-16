@@ -33,7 +33,7 @@ public:
 		if (itFind == m_mapSession.end())
 		{
 			//_ASSERTfalse);
-			LOG(WARNING) << "ERR";
+			LOG(WARNING) << "SessionsÕÒ²»µ½idSession=" << idSession;
 			return nullptr;
 		}
 		return itFind->second;

@@ -9,6 +9,7 @@ public:
 	static void InitAll();
 	void Init(const bool bServer);
 	int 处理前端发来的密文(const void* buf, const int len);
+	bool 握手OK() const;
 	template<int len>
 	int 读出已解密的明文(char(&bufOut)[len]);
 	template<int len>
