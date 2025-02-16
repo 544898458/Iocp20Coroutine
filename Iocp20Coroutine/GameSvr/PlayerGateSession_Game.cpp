@@ -424,27 +424,27 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 	{
 		auto& ref = *wp.lock();
 		auto pos偏离 = ref.Pos() - pos中心点;
-		
+
 		if (ref.m_spAttack)
 		{
-			const auto f警戒距离 = ref.m_spAttack->m_战斗配置.f警戒距离;
-			if (std::abs(pos偏离.x) > f警戒距离)
-				pos偏离.x = pos偏离.x / pos偏离.x * f警戒距离;
-			
-			if (std::abs(pos偏离.z) > f警戒距离)
-				pos偏离.z = pos偏离.z / pos偏离.z * f警戒距离;
+			const auto f距离中心点Max = ref.m_spAttack->m_战斗配置.f警戒距离;
+			if (std::abs(pos偏离.x) > f距离中心点Max)
+				pos偏离.x = pos偏离.x / std::abs(pos偏离.x) * f距离中心点Max;
+
+			if (std::abs(pos偏离.z) > f距离中心点Max)
+				pos偏离.z = pos偏离.z / std::abs(pos偏离.z) * f距离中心点Max;
 		}
 
 		auto pos目标 = msg.pos + pos偏离;
-		
+
 		if (!refSpace.CrowdTool可站立(pos目标))
 		{
 			LOG(INFO) << pos目标 << "不可站立，找附近的可站立点";
-				if (!refSpace.CrowdToolFindNerestPos(pos目标))
-				{
-					LOG(WARNING) << pos目标 << "附近没有可站立的点";
-						continue;
-				}
+			if (!refSpace.CrowdToolFindNerestPos(pos目标))
+			{
+				LOG(WARNING) << pos目标 << "附近没有可站立的点";
+				continue;
+			}
 			LOG(INFO) << "找到附近的点:" << pos目标;
 		}
 
