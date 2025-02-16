@@ -79,7 +79,7 @@ namespace 单人剧情
 		单位::Find活动单位配置(类型, 配置);
 		SpEntity sp工程车 = refSpace.造活动单位(ref视口.m_spPlayer, EntitySystem::GetNickName(ref视口), { 5,10 }, 配置, 类型);
 
-		PlayerComponent::Say系统(ref视口, "请点击“工程车”选中，然后点击“基地”按钮，再点击空白地面，10秒后就能造出一个基地");
+		PlayerComponent::Say系统(ref视口, "请点击“工程车”选中，然后点击“建筑单位=>基地”按钮，再点击空白地面，10秒后就能造出一个基地");
 
 		const auto funSameSpace = [&refSpace, &ref视口](const MyEvent::AddEntity& refAddEntity)
 			{ return MyEvent::SameSpace(refAddEntity.wpEntity, refSpace, EntitySystem::GetNickName(ref视口)); };
@@ -98,7 +98,7 @@ namespace 单人剧情
 			co_return 0;
 
 
-		PlayerComponent::Say系统(ref视口, "请点击选中基地（圆环特效表示选中），然后点击“工程车”按钮，5秒后会在基地旁造出一个工程车");
+		PlayerComponent::Say系统(ref视口, "请点击选中基地（圆环特效表示选中），然后点击“活动单位/工程车”按钮，5秒后会在基地旁造出一个工程车");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
@@ -139,7 +139,7 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
-		PlayerComponent::Say系统(ref视口, "等您存够20晶体矿后，请选中一辆工程车，然后点击“民房”按钮，再点击一次空旷地面");
+		PlayerComponent::Say系统(ref视口, "等您存够20晶体矿后，请选中一辆工程车，然后点击“建筑单位/民房”按钮，再点击一次空旷地面");
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
 
@@ -148,19 +148,19 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(3s, funCancel))
 			co_return 0;
 
-		PlayerComponent::Say系统(ref视口, "等您存够30晶体矿后，请选中一辆工程车，然后点击“兵厂”按钮，再点击一次空旷地面，就能造出一个兵厂");
+		PlayerComponent::Say系统(ref视口, "等您存够30晶体矿后，请选中一辆工程车，然后点击“建筑单位/兵厂”按钮，再点击一次空旷地面，就能造出一个兵厂");
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
 
 		if (co_await CoTimer::Wait(10s, funCancel))
 			co_return 0;
 
-		PlayerComponent::Say系统(ref视口, "请点击选中兵厂（圆环特效表示选中），然后点击“兵”按钮,10秒后会在兵厂旁造出一个兵");
+		PlayerComponent::Say系统(ref视口, "请点击选中兵厂（圆环特效表示选中），然后点击“活动单位/兵”按钮，10秒后会在兵厂旁造出一个兵");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, funSameSpace)))
 			co_return 0;
 
-		PlayerComponent::Say系统(ref视口, "鼠标点击选中您的兵，再点击地面，可以指挥他走向目标处");
+		PlayerComponent::Say系统(ref视口, "点击选中您的兵，再点击地面，可以指挥他走向目标处");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace](const MyEvent::MoveEntity& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
 			co_return 0;
@@ -188,7 +188,7 @@ namespace 单人剧情
 			}
 		}
 
-		PlayerComponent::Say系统(ref视口, "恭喜您消灭了敌人！现在左边给您刷了10个敌人。您可以造地堡,让兵进入地堡中，立足防守，再伺机进攻");
+		PlayerComponent::Say系统(ref视口, "恭喜您消灭了敌人！现在左边给您刷了10个怪。您可以造“活动单位/地堡”,让兵进入地堡中，立足防守，再伺机进攻");
 		MonsterComponent::AddMonster(refSpace, 兵, { -30.0 }, 10);
 
 		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace,&refGateSession](const MyEvent::单位阵亡& ref)

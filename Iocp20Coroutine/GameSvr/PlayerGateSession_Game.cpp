@@ -409,6 +409,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 				ref.m_spAttack->TryCancel();
 
 			vecWp.push_back(ref.weak_from_this());
+
 			pos中心点 += ref.Pos();
 		});
 
@@ -422,16 +423,28 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 	for (auto& wp : vecWp)
 	{
 		auto& ref = *wp.lock();
-		const auto pos偏离 = ref.Pos() - pos中心点;
+		auto pos偏离 = ref.Pos() - pos中心点;
+		
+		if (ref.m_spAttack)
+		{
+			const auto f警戒距离 = ref.m_spAttack->m_战斗配置.f警戒距离;
+			if (std::abs(pos偏离.x) > f警戒距离)
+				pos偏离.x = pos偏离.x / pos偏离.x * f警戒距离;
+			
+			if (std::abs(pos偏离.z) > f警戒距离)
+				pos偏离.x = pos偏离.z / pos偏离.z * f警戒距离;
+		}
+
 		auto pos目标 = msg.pos + pos偏离;
+		
 		if (!refSpace.CrowdTool可站立(pos目标))
 		{
 			LOG(INFO) << pos目标 << "不可站立，找附近的可站立点";
-			if (!refSpace.CrowdToolFindNerestPos(pos目标))
-			{
-				LOG(WARNING) << pos目标 << "附近没有可站立的点";
-				continue;
-			}
+				if (!refSpace.CrowdToolFindNerestPos(pos目标))
+				{
+					LOG(WARNING) << pos目标 << "附近没有可站立的点";
+						continue;
+				}
 			LOG(INFO) << "找到附近的点:" << pos目标;
 		}
 
@@ -646,7 +659,7 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	spEntityViewPort->BroadcastEnter();
 
 	CoEvent<MyEvent::玩家进入Space>::OnRecvEvent({ this->weak_from_this(), spEntityViewPort, wpSpace });
-	spEntityViewPort->Broadcast<MsgSay>({.content = StrConv::GbkToUtf8(NickName() + " 进来了")});
+	spEntityViewPort->Broadcast<MsgSay>({ .content = StrConv::GbkToUtf8(NickName() + " 进来了") });
 
 	return spEntityViewPort;
 }

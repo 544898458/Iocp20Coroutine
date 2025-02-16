@@ -87,7 +87,8 @@ namespace Iocp {
 	bool SessionSocketCompletionKey<T_Session>::Finished()
 	{
 		std::lock_guard lock(lockFinish);
-		return recvFinish && sendFinish && this->sendOverlapped.atomicSendState.load() == Overlapped::SendState_Sleep;
+		return recvFinish && sendFinish && this->sendOverlapped.atomicSendState.load() == Overlapped::SendState_Sleep
+			&& this->sendOverlapped.coTask.m_mutex.;
 	}
 	template<class T_Session>
 	CoTask<Overlapped::YieldReturn> SessionSocketCompletionKey<T_Session>::PostRecv(Overlapped& pOverlapped)
