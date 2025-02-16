@@ -432,7 +432,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 				posЖ«Ал.x = posЖ«Ал.x / posЖ«Ал.x * fѕЇЅдѕаАл;
 			
 			if (std::abs(posЖ«Ал.z) > fѕЇЅдѕаАл)
-				posЖ«Ал.x = posЖ«Ал.z / posЖ«Ал.z * fѕЇЅдѕаАл;
+				posЖ«Ал.z = posЖ«Ал.z / posЖ«Ал.z * fѕЇЅдѕаАл;
 		}
 
 		auto posДї±к = msg.pos + posЖ«Ал;
