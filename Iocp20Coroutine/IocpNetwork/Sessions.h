@@ -27,16 +27,20 @@ public:
 			v->Session.Send(msg);
 		}
 	}
-	Session* GetSession(const uint64_t idSession)
+	bool GetSession(const uint64_t idSession, const std::function<void(Session &refSession)> fun)
 	{
+		std::lock_guard lock(m_setSessionMutex);
+
 		auto itFind = m_mapSession.find(idSession);
 		if (itFind == m_mapSession.end())
 		{
 			//_ASSERTfalse);
 			LOG(WARNING) << "SessionsÕÒ²»µ½idSession=" << idSession;
-			return nullptr;
+			return false;
 		}
-		return itFind->second;
+		Session *pSession = itFind->second;
+		fun(*pSession);
+		return true;
 	}
 	template<typename T_Function> void Update(T_Function const& functionLockUpdate);
 	template<typename T_Function> void AddSession(Session* pSession, T_Function const& functionLock, const uint64_t idSession);

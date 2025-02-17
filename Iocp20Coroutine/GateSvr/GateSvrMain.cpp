@@ -68,23 +68,20 @@ template void SendToWorldSvr转发(const MsgGateDeleteSessionResponce&, const ui
 
 std::unique_ptr<Iocp::Server<GateServer>> g_upGateSvr;
 template<class T>
-void SendToGateClient(const T &refMsg, uint64_t gateSessionId)
+void SendToGateClient(const T& refMsg, uint64_t gateSessionId)
 {
-	auto pSession = g_upGateSvr->m_Server.m_Sessions.GetSession(gateSessionId);
-	//auto pSession = (GateSession*)gateSessionId;
-	if (nullptr == pSession)
+	if(!g_upGateSvr->m_Server.m_Sessions.GetSession(gateSessionId, [&refMsg, gateSessionId](auto& refGateSession) {
+		if (refGateSession.Session.m_Session.m_bLoginOk)
+		{
+			refMsg.msg.sn = ++refGateSession.Session.m_Session.m_snSendToClient;
+			MsgPack::SendMsgpack(refMsg, [gateSessionId, &refGateSession](const void* buf, int len)
+				{
+					refGateSession.Session.m_Session.m_refSession.Send(buf, len);
+				}, false);
+		}
+		}))
 	{
 		LOG(WARNING) << "无法发给游戏客户端，找不到GateSession，可能早已断线,gateSessionId=" << gateSessionId << ",id=" << refMsg.msg.id << ",sn=" << refMsg.msg.sn << ",rpcSnId=" << refMsg.msg.rpcSnId;
-		return;
-	}
-	if (pSession->Session.m_Session.m_bLoginOk)
-	{
-		refMsg.msg.sn = ++pSession->Session.m_Session.m_snSendToClient;
-		MsgPack::SendMsgpack(refMsg, [gateSessionId, pSession](const void* buf, int len)
-			{
-				pSession->Session.m_Session.m_refSession.Send(buf, len);
-			}, false);
-		
 	}
 }
 template void SendToGateClient(const MsgGateSvr转发GameSvr消息给游戏前端& refMsg, uint64_t gateSessionId);

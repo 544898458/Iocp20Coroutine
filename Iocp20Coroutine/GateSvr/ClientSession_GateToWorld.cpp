@@ -43,13 +43,15 @@ void ClientSession_GateToWorld::OnRecv(const MsgGate转发& msg转发)
 	const auto msg = MsgHead::GetMsgId(obj);
 	LOG(INFO) << obj;
 	extern std::unique_ptr<Iocp::Server<GateServer>> g_upGateSvr;
-	auto pSession = g_upGateSvr->m_Server.m_Sessions.GetSession(msg转发.gateClientSessionId);
-	//auto pSession = (GateSession*)gateSessionId;
-	CHECK_NOTNULL_VOID(pSession);
-	switch (msg.id)
+	if (!g_upGateSvr->m_Server.m_Sessions.GetSession(msg转发.gateClientSessionId, [&msg,&obj](auto& refGateSession) {
+			switch (msg.id)
+			{
+			case MsgId::Login:	refGateSession.Session.m_Session.OnRecvWorldSvr(obj.as<MsgLoginResponce>());	break;
+			case MsgId::GateDeleteSession:	refGateSession.Session.m_Session.OnRecvWorldSvr(obj.as<MsgGateDeleteSession>());	break;
+			}
+		}))
 	{
-	case MsgId::Login:	pSession->Session.m_Session.OnRecvWorldSvr(obj.as<MsgLoginResponce>());	break;
-	case MsgId::GateDeleteSession:	pSession->Session.m_Session.OnRecvWorldSvr(obj.as<MsgGateDeleteSession>());	break;
+		LOG(ERROR) << "msg转发.gateClientSessionId=" << msg转发.gateClientSessionId;
 	}
 }
 void BroadToGateClient(const MsgGateSvr转发WorldSvr消息给游戏前端& refMsg);
