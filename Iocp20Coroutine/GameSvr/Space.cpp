@@ -41,8 +41,8 @@ void Space::Save(const uint8_t idSpace)
 		if (!spEntity->m_spPlayerNickName)
 			continue;//只存玩家单位
 
-		if (spEntity->m_spBuilding && !spEntity->m_sp资源)
-			spEntity->Save(file);
+		//if (spEntity->m_spBuilding && !spEntity->m_sp资源)
+		spEntity->Save(file);
 	}
 	file.close();// 关闭文件
 	LOG(INFO) << "已写入" << strFileName;

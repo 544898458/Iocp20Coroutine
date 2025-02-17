@@ -47,7 +47,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 		//	CloseHandle(pThread[i]);
 		//}
 		//free(pThread);
-		Sleep(3000);
+		Sleep(300000*1000);
 		_CrtDumpMemoryLeaks();	 //显示内存泄漏报告
 		//Sleep(1000);
 		//false;

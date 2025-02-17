@@ -136,6 +136,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 		CHECK_WP_CONTINUE(wp);
 		Entity& refEntiy = *wp.lock();
 		if (!refEntiy.m_spBuilding)continue;
+		if (!refEntiy.m_spBuilding->已造好())continue;
 		if (!refEntiy.m_sp造活动单位)continue;
 		if (!refEntiy.m_sp造活动单位->可造(msg.类型))continue;
 		vecWp可造.push_back(wp);
