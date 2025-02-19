@@ -536,7 +536,7 @@ static void openssl_info_callback(const SSL* s, int where, int ret)
 	}
 	else if (where & SSL_CB_ALERT) {
 		str = (where & SSL_CB_READ) ? "read" : "write";
-		LOG(WARNING) << "SSL_LOG_ALERT," << "SSL3 alert,str:" << str << ",Type:" << SSL_alert_type_string_long(ret) << "," << SSL_alert_desc_string_long(ret);
+		LOG(WARNING) << "SSL_LOG_ALERT," << "SSL3 alert,str:" << str << ",Type:" << SSL_alert_type_string_long(ret) << ",ret=" << ret << "," << SSL_alert_desc_string_long(ret);
 	}
 	else if (where & SSL_CB_EXIT) {
 		if (ret == 0) {
