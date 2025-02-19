@@ -250,7 +250,7 @@ void Entity::BroadcastNotifyPos()
 
 void Entity::BroadcastChangeSkeleAnim(const std::string& refAniClipName, bool loop)
 {
-	Broadcast(MsgChangeSkeleAnim(*this, refAniClipName, loop));//播放死亡动作
+	Broadcast(MsgChangeSkeleAnim(*this, StrConv::GbkToUtf8(refAniClipName), loop));//播放死亡动作
 }
 
 template<class T>

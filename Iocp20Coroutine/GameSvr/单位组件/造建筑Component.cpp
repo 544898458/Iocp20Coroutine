@@ -223,7 +223,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	case ¹â×ÓÅÚ:
 	{
 		using namespace std;
-		µ¥Î»::Õ½¶·ÅäÖÃ Õ½¶· = { 20,20,3,0,"Ç°Ò¡¶¯×÷",300ms,"¹¥»÷¶¯×÷",300ms,"ÒôĞ§/PhoFir00","ÒôĞ§/explo1","" };
+		µ¥Î»::Õ½¶·ÅäÖÃ Õ½¶· = { 20,20,3,0,"",300ms,"Æ½³£×´Ì¬",300ms,"ÒôĞ§/PhoFir00","ÒôĞ§/explo1","Take 001" };
 		AttackComponent::AddComponent(refNewEntity, ÀàĞÍ, Õ½¶·);
 
 	}

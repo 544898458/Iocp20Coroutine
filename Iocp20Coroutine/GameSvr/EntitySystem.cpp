@@ -15,7 +15,8 @@ void EntitySystem::BroadcastEntity描述(Entity& refEntity, const std::string& ref
 
 void EntitySystem::BroadcastChangeSkeleAnimIdle(Entity& refEntity)
 {
-	refEntity.BroadcastChangeSkeleAnim("idle");
+
+	refEntity.BroadcastChangeSkeleAnim(光子炮 == refEntity.m_类型 ? "平常状态" : "idle");
 }
 void EntitySystem::BroadcastChangeSkeleAnim采集(Entity& refEntity)
 {
