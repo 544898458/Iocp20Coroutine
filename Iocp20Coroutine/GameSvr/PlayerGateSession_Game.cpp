@@ -537,7 +537,7 @@ template<class T> void SendToWorldSvr(const T& msg, const uint64_t idGateSession
 
 bool 能造(const Entity& refEntiy, const 单位类型 造活动单位类型)
 {
-	if (refEntiy.m_类型 != 工程车) return false;
+	if (refEntiy.m_类型 != 工程车 && refEntiy.m_类型 != 工蜂) return false;
 	if (造建筑Component::正在建造(refEntiy))return false;
 
 	CHECK_FALSE(refEntiy.m_spAttack);

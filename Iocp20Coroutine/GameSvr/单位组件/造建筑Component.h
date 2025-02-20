@@ -20,11 +20,11 @@ namespace 单位
 class 造建筑Component final
 {
 public:
-	static void AddComponent(Entity& refEntity, const 单位类型 类型);
+	static void AddComponent(Entity& refEntity);
 	static bool 正在建造(const Entity& refEntity);
 	static void 根据建筑类型AddComponent(Space& refSpace, const 单位类型 类型, Entity& refNewEntity, std::shared_ptr<PlayerComponent> spPlayer,
 		const std::string& strNickName, const 单位::建筑单位配置& 配置);
-	造建筑Component(Entity& refEntity, const 单位类型 类型);
+	造建筑Component(Entity& refEntity);
 	~造建筑Component();
 	bool 可造(const 单位类型 类型) const;
 	CoTaskBool Co造建筑(const Position refPos, const 单位类型 类型);

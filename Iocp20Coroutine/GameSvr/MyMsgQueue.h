@@ -286,6 +286,7 @@ enum 单位类型
 	民房,//供给站(Supply Depot)
 	地堡,//掩体; 地堡(Bunker),可以进兵
 	光子炮,//Photon Cannon
+	孵化场,//hatchery
 	建筑Max非法,
 };
 MSGPACK_ADD_ENUM(单位类型);

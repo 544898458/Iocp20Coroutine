@@ -14,9 +14,9 @@
 #include "DefenceComponent.h"
 #include "BuildingComponent.h"
 
-void 造建筑Component::AddComponent(Entity& refEntity, const 单位类型 类型)
+void 造建筑Component::AddComponent(Entity& refEntity)
 {
-	refEntity.m_sp造建筑 = std::make_shared<造建筑Component, Entity&, const 单位类型>(refEntity, std::forward<const 单位类型&&>(类型));
+	refEntity.m_sp造建筑 = std::make_shared<造建筑Component, Entity&>(refEntity);
 }
 
 bool 造建筑Component::正在建造(const Entity& refEntity)
@@ -27,9 +27,9 @@ bool 造建筑Component::正在建造(const Entity& refEntity)
 	return refEntity.m_sp造建筑->m_cancel造建筑.operator bool();
 }
 
-造建筑Component::造建筑Component(Entity& refEntity, const 单位类型 类型) :m_refEntity(refEntity)
+造建筑Component::造建筑Component(Entity& refEntity):m_refEntity(refEntity)
 {
-	switch (类型)
+	switch (refEntity.m_类型)
 	{
 	case 工程车:
 		m_set可造类型.insert(基地);
@@ -37,6 +37,9 @@ bool 造建筑Component::正在建造(const Entity& refEntity)
 		m_set可造类型.insert(兵厂);
 		m_set可造类型.insert(地堡);
 		m_set可造类型.insert(光子炮);
+		break;
+	case 工蜂:
+		m_set可造类型.insert(孵化场);
 		break;
 	default:
 		break;

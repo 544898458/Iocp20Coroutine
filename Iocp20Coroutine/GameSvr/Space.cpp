@@ -394,7 +394,11 @@ SpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 	{
 	case 工程车:
 		采集Component::AddComponent(*spNewEntity);
-		造建筑Component::AddComponent(*spNewEntity, 类型);
+		造建筑Component::AddComponent(*spNewEntity);
+		break;
+	case 工蜂:
+		采集Component::AddComponent(*spNewEntity);
+		造建筑Component::AddComponent(*spNewEntity);
 		break;
 	default:break;
 	}
