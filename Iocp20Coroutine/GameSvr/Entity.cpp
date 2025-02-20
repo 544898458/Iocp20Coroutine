@@ -207,11 +207,11 @@ void Entity::OnDestroy()
 
 void Entity::BroadcastLeave()
 {
-	LOG(INFO) << NickName() << "调用Entity::BroadcastLeave," << Id;
+	LOG(INFO) << 头顶Name() << "调用Entity::BroadcastLeave," << Id;
 	Broadcast(MsgDelRoleRet(Id));
 }
 
-const std::string& Entity::NickName()const
+const std::string& Entity::头顶Name()const
 {
 	if (m_spPlayerNickName)
 		return m_spPlayerNickName->m_strNickName;

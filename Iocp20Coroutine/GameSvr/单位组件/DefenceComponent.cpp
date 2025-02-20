@@ -50,6 +50,10 @@ void DefenceComponent::ÊÜÉË(int hp, const uint64_t idAttacker)
 				EntitySystem::Broadcast²¥·ÅÉùÒô(m_refEntity, "explo4");
 				m_refEntity.BroadcastChangeSkeleAnim("Take 001", false);
 				break;
+			case ±ø³§:
+				EntitySystem::Broadcast²¥·ÅÉùÒô(m_refEntity, "explo4");
+				m_refEntity.BroadcastChangeSkeleAnim("±ø³§Ëğ»Ù", false);
+				break;
 			default:
 				EntitySystem::Broadcast²¥·ÅÉùÒô(m_refEntity, "EXPLOMED"); break;
 				break;

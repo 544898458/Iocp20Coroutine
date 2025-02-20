@@ -42,7 +42,7 @@ public:
 	float Distance(const Entity& refEntity)const;
 	void OnDestroy();
 	void BroadcastLeave();
-	const std::string& NickName()const;
+	const std::string& Í·¶¥Name()const;
 	void BroadcastEnter();
 	void BroadcastNotifyPos();
 	void BroadcastChangeSkeleAnim(const std::string& refAniClipName, bool loop = true);

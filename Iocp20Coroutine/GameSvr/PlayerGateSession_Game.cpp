@@ -641,7 +641,7 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	}
 	for (const auto& [id, spEntity] : spSpace->m_mapEntity)//所有地图上的实体发给自己
 	{
-		LOG(INFO) << spEntity->NickName() << ",发给单人," << spEntity->Id;
+		LOG(INFO) << spEntity->头顶Name() << ",发给单人," << spEntity->Id;
 		Send(MsgAddRoleRet(*spEntity));
 		Send(MsgNotifyPos(*spEntity));
 		if (spEntity->m_spBuilding && spEntity->m_spBuilding->m_n建造进度百分比 < MAX建造百分比)

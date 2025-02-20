@@ -240,7 +240,7 @@ void Space::EraseEntity(const bool bForceEraseAll)
 			m_mapPlayer[spEntity->m_spPlayerNickName->m_strNickName].Erase(spEntity->Id);
 		}
 
-		LOG(INFO) << "删除过期对象," << spEntity->NickName() << ",Id=" << spEntity->Id << ",删除前剩余" << m_mapEntity.size();
+		LOG(INFO) << "删除过期对象," << spEntity->头顶Name() << ",Id=" << spEntity->Id << ",删除前剩余" << m_mapEntity.size();
 		spEntity->OnDestroy();
 		iter = m_mapEntity.erase(iter);
 	}
@@ -348,7 +348,7 @@ void Space::SpacePlayer::OnDestroy(const bool b单人副本, Space& refSpace, const 
 		{
 			if (sp->m_refSpace.GetEntity(sp->Id).expired())
 			{
-				LOG(INFO) << "可能是地堡里的兵" << sp->NickName();
+				LOG(INFO) << "可能是地堡里的兵" << sp->头顶Name();
 				continue;
 			}
 			LOG(INFO) << "m_mapEntity.size=" << sp->m_refSpace.m_mapEntity.size();

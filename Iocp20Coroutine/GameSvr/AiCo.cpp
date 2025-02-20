@@ -139,7 +139,7 @@ namespace AiCo
 
 		if (refThis.IsDead())
 		{
-			LOG(WARNING) << refThis.NickName() << ",已阵亡不用走";
+			LOG(WARNING) << refThis.头顶Name() << ",已阵亡不用走";
 			co_return false;
 		}
 
@@ -166,7 +166,7 @@ namespace AiCo
 			}
 			if (refThis.IsDead())
 			{
-				LOG(INFO) << "自己阵亡，走向[" << spTarget->NickName() << "]的协程取消了";
+				LOG(INFO) << "自己阵亡，走向[" << spTarget->头顶Name() << "]的协程取消了";
 				//PlayerComponent::Say(refThis, "自己阵亡", SayChannel::系统);
 
 				co_return false;

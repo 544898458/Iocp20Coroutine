@@ -28,7 +28,7 @@ MsgNotifyPos::MsgNotifyPos(Entity& ref) : entityId(ref.Id), x(ref.Pos().x), z(re
 
 MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :
 	entityId(ref.Id),
-	nickName(StrConv::GbkToUtf8(ref.NickName())),
+	nickName(StrConv::GbkToUtf8(ref.Í·¶¥Name())),
 	entityName(StrConv::GbkToUtf8(ref.m_ÅäÖÃ.strName)),
 	prefabName(StrConv::GbkToUtf8(ref.m_ÅäÖÃ.strPrefabName)),
 	i32HpMax(ref.m_spDefence ? ref.m_spDefence->m_i32HpMax : 0)

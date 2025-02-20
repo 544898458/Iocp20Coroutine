@@ -78,7 +78,7 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 单位类型 类型)
 		co_return true;
 
 	//然后开始扣钱建造
-	CHECK_CO_RET_FALSE(m_refEntity.m_spPlayer);
+	//CHECK_CO_RET_FALSE(m_refEntity.m_spPlayer);
 	auto spEntity建筑 = co_await CoAddBuilding(类型, pos);
 	if (!spEntity建筑)
 		co_return false;
