@@ -14,6 +14,17 @@ void BuildingComponent::AddComponent(Entity& refThis, float f半边长)
 	临时阻挡Component::AddComponent(refThis, f半边长);
 }
 
+void BuildingComponent::StartCo建造过程()
+{
+	Co建造过程(m_cancel建造).RunNew();
+}
+
+void BuildingComponent::TryCancel()
+{
+	if (m_cancel建造)
+		m_cancel建造();
+}
+
 BuildingComponent::BuildingComponent(Entity& refEntity) :m_refEntity(refEntity)
 {
 	//if (!m_coAddMoney.Finished())

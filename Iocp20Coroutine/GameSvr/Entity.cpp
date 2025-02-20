@@ -191,6 +191,10 @@ void Entity::OnDestroy()
 	if (m_sp造建筑)
 		m_sp造建筑->TryCancel();
 
+	if (m_spBuilding)
+		m_spBuilding->TryCancel();
+
+
 	if (m_cancelDelete)
 	{
 		LOG(INFO) << "取消删除协程";

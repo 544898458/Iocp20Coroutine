@@ -27,7 +27,7 @@ bool 造建筑Component::正在建造(const Entity& refEntity)
 	return refEntity.m_sp造建筑->m_cancel造建筑.operator bool();
 }
 
-造建筑Component::造建筑Component(Entity& refEntity):m_refEntity(refEntity)
+造建筑Component::造建筑Component(Entity& refEntity) :m_refEntity(refEntity)
 {
 	switch (refEntity.m_类型)
 	{
@@ -82,12 +82,23 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 单位类型 类型)
 
 	//然后开始扣钱建造
 	//CHECK_CO_RET_FALSE(m_refEntity.m_spPlayer);
-	auto spEntity建筑 = co_await CoAddBuilding(类型, pos);
+	auto spEntity建筑 = AddBuilding(类型, pos);
 	if (!spEntity建筑)
 		co_return false;
 
-	if (co_await Co建造过程(spEntity建筑, m_cancel造建筑))
-		co_return true;
+	CHECK_CO_RET_FALSE(spEntity建筑->m_spBuilding);
+
+	if (工程车 == m_refEntity.m_类型)
+	{
+		if (co_await Co建造过程(spEntity建筑, m_cancel造建筑))
+			co_return true;
+	}
+	else
+	{
+		using namespace std;
+		m_refEntity.CoDelayDelete(1ms).RunNew();
+		spEntity建筑->m_spBuilding->StartCo建造过程();
+	}
 
 	co_return false;
 }
@@ -149,26 +160,26 @@ void 造建筑Component::TryCancel()
 }
 
 
-CoTask<SpEntity> 造建筑Component::CoAddBuilding(const 单位类型 类型, const Position pos)
+SpEntity 造建筑Component::AddBuilding(const 单位类型 类型, const Position pos)
 {
 	单位::建筑单位配置 配置;
 	if (!单位::Find建筑单位配置(类型, 配置))
 	{
-		co_return{};
+		return{};
 	}
 	//Position pos = { 35,float(std::rand() % 60) - 30 };
 	if (!m_refEntity.m_refSpace.可放置建筑(pos, 配置.f半边长))
 	{
 		//播放声音("TSCErr00", "有阻挡，无法建造");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
 		PlayerComponent::播放声音(m_refEntity, "语音/无法在这里建造可爱版", "有阻挡，无法建造");
-		co_return{};
+		return{};
 	}
 	if (配置.建造.u16消耗燃气矿 > Space::GetSpacePlayer(m_refEntity).m_u32燃气矿)
 	{
 		//std::ostringstream oss;
 		PlayerComponent::播放声音(m_refEntity, "语音/燃气矿不足可爱版", "燃气矿不足，无法建造");// << 配置.建造.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
 		//Say系统(oss.str());
-		co_return{};
+		return{};
 	}
 	Space::GetSpacePlayer(m_refEntity).m_u32燃气矿 -= 配置.建造.u16消耗燃气矿;
 	//auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());//不能存对象，扩容可能导致引用和指针失效
@@ -186,7 +197,7 @@ CoTask<SpEntity> 造建筑Component::CoAddBuilding(const 单位类型 类型, const Posit
 		//m_u32燃气矿 += 配置.建造.u16消耗燃气矿;//返还燃气矿
 		PlayerComponent::播放声音(m_refEntity, "语音/晶体矿不足可爱版", "晶体矿不足无法建造");//Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
 
-		co_return{};
+		return{};
 	}
 	Space::GetSpacePlayer(m_refEntity).m_u32晶体矿 -= 配置.建造.u16消耗晶体矿;
 
@@ -203,7 +214,7 @@ CoTask<SpEntity> 造建筑Component::CoAddBuilding(const 单位类型 类型, const Posit
 
 	spNewEntity->BroadcastEnter();
 	PlayerComponent::Send资源(m_refEntity);
-	co_return spNewEntity;
+	return spNewEntity;
 }
 
 void 造建筑Component::根据建筑类型AddComponent(Space& refSpace, const 单位类型 类型, Entity& refNewEntity, std::shared_ptr<PlayerComponent> spPlayer,

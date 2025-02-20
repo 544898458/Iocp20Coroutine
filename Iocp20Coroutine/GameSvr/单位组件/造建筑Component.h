@@ -31,7 +31,7 @@ public:
 	void TryCancel();
 private:
 	CoTaskBool Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel);
-	CoTask<SpEntity> CoAddBuilding(const 单位类型 类型, const Position pos);
+	SpEntity AddBuilding(const 单位类型 类型, const Position pos);
 	
 	std::unordered_set<单位类型> m_set可造类型;
 	FunCancel m_cancel造建筑;
