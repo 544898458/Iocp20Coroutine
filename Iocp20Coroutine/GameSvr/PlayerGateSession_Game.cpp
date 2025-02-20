@@ -785,11 +785,11 @@ uint16_t PlayerGateSession_Game::活动单位上限() const
 	for (const auto& [_, wp] : m_wpSpace.lock()->m_mapPlayer[NickName()].m_mapWpEntity)
 	{
 		CHECK_WP_CONTINUE(wp);
-		const auto& refEntity = wp.lock();
-		if (!refEntity->m_spBuilding)continue;
-		if (!refEntity->m_spBuilding->已造好())continue;
+		const auto& refEntity = *wp.lock();
+		if (!refEntity.m_spBuilding)continue;
+		if (!refEntity.m_spBuilding->已造好())continue;
 
-		switch (refEntity->m_spBuilding->m_类型)
+		switch (refEntity.m_类型)
 		{
 		case 民房:result += 8; break;
 		case 基地:result += 6; break;

@@ -207,7 +207,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	const std::string& strNickName, const µ¥Î»::½¨Öşµ¥Î»ÅäÖÃ& ÅäÖÃ)
 {
 	PlayerComponent::AddComponent(refNewEntity, spPlayer, strNickName);
-	BuildingComponent::AddComponent(refNewEntity, ÀàĞÍ, ÅäÖÃ.f°ë±ß³¤);
+	BuildingComponent::AddComponent(refNewEntity, ÅäÖÃ.f°ë±ß³¤);
 
 	switch (ÀàĞÍ)
 	{

@@ -10,11 +10,8 @@ const int MAX建造百分比 = 100;
 class BuildingComponent
 {
 public:
-	BuildingComponent(const 单位类型& 类型, Entity& refEntity);
-	//typedef CoTaskBool(*Fun造兵)(BuildingComponent& refThis, PlayerGateSession_Game& refGateSession, Entity& refEntity, const 单位类型 类型);
-	//Fun造兵 m_fun造活动单位;
-	const 单位类型 m_类型;
-	static void AddComponent(Entity& refThis, const 单位类型 类型, float f半边长);
+	BuildingComponent(Entity& refEntity);
+	static void AddComponent(Entity& refThis, float f半边长);
 	CoTaskBool Co建造过程(FunCancel& cancel);
 	int m_n建造进度百分比 = 0;
 	bool 已造好()const;

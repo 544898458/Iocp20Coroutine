@@ -8,13 +8,13 @@
 #include "../IocpNetwork/StrConv.h"
 #include "单位.h"
 
-void BuildingComponent::AddComponent(Entity& refThis, const 单位类型 类型, float f半边长)
+void BuildingComponent::AddComponent(Entity& refThis, float f半边长)
 {
-	refThis.m_spBuilding = std::make_shared<BuildingComponent, const 单位类型&, Entity&>(类型, refThis);
+	refThis.m_spBuilding = std::make_shared<BuildingComponent, Entity&>(refThis);
 	临时阻挡Component::AddComponent(refThis, f半边长);
 }
 
-BuildingComponent::BuildingComponent(const 单位类型& 类型, Entity& refEntity) :m_类型(类型), m_refEntity(refEntity)
+BuildingComponent::BuildingComponent(Entity& refEntity) :m_refEntity(refEntity)
 {
 	//if (!m_coAddMoney.Finished())
 	//{
@@ -64,7 +64,7 @@ float BuildingComponent::建筑半边长(const Entity& refEntity)
 	if (!refEntity.m_spBuilding)
 		return 0;
 
-	if (单位::Find建筑单位配置(refEntity.m_spBuilding->m_类型, 配置))
+	if (单位::Find建筑单位配置(refEntity.m_类型, 配置))
 		return 配置.f半边长;
 
 	_ASSERT(false);

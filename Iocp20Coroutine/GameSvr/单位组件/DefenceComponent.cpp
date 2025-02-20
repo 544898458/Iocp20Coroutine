@@ -29,7 +29,7 @@ void DefenceComponent::受伤(int hp, const uint64_t idAttacker)
 	this->m_hp -= hp;
 	m_map对我伤害[idAttacker] += hp;
 
-	播放基地正遭到攻击语音();
+	播放正遭到攻击语音();
 	m_refEntity.BroadcastNotifyPos();
 	if (IsDead())
 	{
@@ -40,7 +40,7 @@ void DefenceComponent::受伤(int hp, const uint64_t idAttacker)
 		}
 		else if (m_refEntity.m_spBuilding)
 		{
-			switch (m_refEntity.m_spBuilding->m_类型)
+			switch (m_refEntity.m_类型)
 			{
 			case 基地:
 				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
@@ -71,26 +71,23 @@ bool DefenceComponent::IsDead() const
 	return m_hp <= 0;
 }
 
-void DefenceComponent::播放基地正遭到攻击语音()
+void DefenceComponent::播放正遭到攻击语音()
 {
-	if (m_refEntity.m_spBuilding)
-	{
-		switch (m_refEntity.m_spBuilding->m_类型)
-		{
-		case 基地:
-		{
-			const auto now = std::chrono::system_clock::now();
-			using namespace std;
-			if (now - m_time上次提醒基地正遭到进攻 > 60s)
-			{
-				m_time上次提醒基地正遭到进攻 = now;
-				PlayerComponent::播放声音(m_refEntity, "语音/基地正遭到进攻女声正经版");
-			}
-			break;
-		}
-		default:
+	using namespace std;
+	const auto now = std::chrono::system_clock::now();
+	if (now - m_time上次提醒正遭到攻击 < 60s)
+		return;
 
-			break;
-		}
+	m_time上次提醒正遭到攻击 = now;
+
+	LPCSTR sz语音 = "";
+	switch (m_refEntity.m_类型)
+	{
+	case 基地:sz语音 = "语音/基地正遭到进攻女声正经版";break;
+	case 工程车:sz语音 = "语音/工程车遭到攻击女声可爱版"; break;
+	default:
+		return;
+		break;
 	}
+	PlayerComponent::播放声音(m_refEntity, sz语音);
 }
