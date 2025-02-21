@@ -146,6 +146,32 @@ void Space::Update()
 }
 
 std::unordered_map<uint8_t, SpSpace> g_mapSpace;
+std::unordered_map<std::string, SpSpace> g_mapSpace单人;
+const std::unordered_map<std::string, SpSpace>& Space::个人战局()
+{
+	return g_mapSpace单人;
+}
+
+WpSpace Space::GetSpace单人(const std::string& refStrPlayerNickName)
+{
+	auto itFind = g_mapSpace单人.find(refStrPlayerNickName);
+	if (g_mapSpace单人.end() != itFind)
+		return itFind->second;
+
+	return {};
+}
+
+std::tuple<bool,WpSpace> Space::GetSpace单人(const std::string& refStrPlayerNickName, const 副本配置& 配置)
+{
+	auto itFind = g_mapSpace单人.find(refStrPlayerNickName);
+	if (g_mapSpace单人.end() != itFind)
+		return { false,itFind->second };
+
+	auto pair = g_mapSpace单人.insert({refStrPlayerNickName, std::make_shared<Space, const 副本配置&>(配置)});
+	_ASSERT(pair.second);
+	return { true,pair.first->second };
+}
+
 WpSpace Space::AddSpace(const uint8_t idSpace)
 {
 	auto wpOld = GetSpace(idSpace);
@@ -183,7 +209,11 @@ void Space::StaticOnAppExit()
 
 void Space::StaticUpdate()
 {
-	for (auto [id, sp] : g_mapSpace)
+	for (auto [_, sp] : g_mapSpace)
+	{
+		sp->Update();
+	}
+	for (auto [_, sp] : g_mapSpace单人)
 	{
 		sp->Update();
 	}
@@ -210,11 +240,14 @@ bool Space::CrowdToolFindNerestPos(Position& refPos)
 	bool CrowdToolFindNerestPos(CrowdToolState & refCrowTool, Position & refPos);
 	return CrowdToolFindNerestPos(*m_spCrowdToolState, refPos);
 }
-
+Space::SpacePlayer& Space::GetSpacePlayer( const std::string strPlayerNickName)
+{
+	return ref.m_refSpace.m_mapPlayer[strPlayerNickName];
+}
 Space::SpacePlayer& Space::GetSpacePlayer(const Entity& ref)
 {
 	if (ref.m_spPlayerNickName)
-		return ref.m_refSpace.m_mapPlayer[ref.m_spPlayerNickName->m_strNickName];
+		return GetSpacePlayer(ref.m_spPlayerNickName->m_strNickName);
 
 	LOG(ERROR) << ref.Id << ",不是玩家";
 	_ASSERT(false);
@@ -271,14 +304,14 @@ int Space::Get资源单位数(const 单位类型 类型)
 		});
 }
 
-int Space::Get玩家单位数(const PlayerGateSession_Game& ref)
+int Space::Get玩家单位数(const std::string& strPlayerNickName)
 {
-	return Get单位数([&ref](const Entity& refEntity)
+	return Get单位数([&strPlayerNickName](const Entity& refEntity)
 		{
 			if (nullptr == refEntity.m_spPlayerNickName)
 				return false;
 
-			if (ref.NickName() != refEntity.m_spPlayerNickName->m_strNickName)
+			if (strPlayerNickName != refEntity.m_spPlayerNickName->m_strNickName)
 				return false;
 
 			if (!refEntity.m_spDefence)

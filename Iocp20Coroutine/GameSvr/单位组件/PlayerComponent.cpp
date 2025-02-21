@@ -6,6 +6,8 @@
 #include "../IocpNetwork/StrConv.h"
 #include "PlayerNickNameComponent.h"
 
+std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStrNickName);
+
 void PlayerComponent::Say(Entity& refEntity, const std::string& str, const SayChannel channel)
 {
 	if (refEntity.m_spPlayer)
@@ -18,13 +20,14 @@ void PlayerComponent::Say系统(Entity& refEntity, const std::string& str)
 		refEntity.m_spPlayer->m_refSession.Say系统(str);
 }
 
-void PlayerComponent::剧情对话(Entity& refEntity,
+void PlayerComponent::剧情对话(const std::string& refStrNickName,
 	const std::string& str头像左, const std::string& str名字左,
 	const std::string& str头像右, const std::string& str名字右,
 	const std::string& str内容, const bool b显示退出场景按钮)
 {
-	if (refEntity.m_spPlayer)
-		refEntity.m_spPlayer->m_refSession.剧情对话(str头像左, str名字左, str头像右, str名字右, str内容, b显示退出场景按钮);
+	auto wpPlayerSession = GetPlayerGateSession(refStrNickName);
+	if (!wpPlayerSession.expired())
+		wpPlayerSession.lock()->剧情对话(str头像左, str名字左, str头像右, str名字右, str内容, b显示退出场景按钮);
 }
 
 void PlayerComponent::剧情对话已看完(Entity& refEntity)
@@ -37,6 +40,12 @@ void PlayerComponent::播放声音(Entity& refEntity, const std::string& refStr声音,
 {
 	if (refEntity.m_spPlayer)
 		refEntity.m_spPlayer->m_refSession.播放声音(refStr声音, str文本);
+}
+void PlayerComponent::播放声音(const std::string& refStrNickName, std::string& refStr声音, const std::string& str文本)
+{
+	auto wpPlayerSession = GetPlayerGateSession(refStrNickName);
+	if (!wpPlayerSession.expired())
+		wpPlayerSession.lock()->播放声音(refStr声音, str文本);
 }
 
 void PlayerComponent::播放声音(SpPlayerComponent& spPlayer可能空, const std::string& refStr声音, const std::string& str文本)

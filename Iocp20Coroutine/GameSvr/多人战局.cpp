@@ -7,13 +7,16 @@
 #include "EntitySystem.h"
 #include "单位组件/资源Component.h"
 
-void 玩家带入单位进入四方对战(Space& refSpace, Entity& ref视口, const Position &refPos, PlayerGateSession_Game& refGateSession)
+std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStrNickName);
+
+void 玩家带入单位进入四方对战(Space& refSpace, const Position &refPos, PlayerGateSession_Game& refGateSession)
 {
 	{
 		const 单位类型 类型(单位类型::工程车);
 		单位::活动单位配置 配置;
 		单位::Find活动单位配置(类型, 配置);
-		SpEntity sp工程车 = refSpace.造活动单位(ref视口.m_spPlayer, EntitySystem::GetNickName(ref视口), refPos, 配置, 类型);
+		CHECK_WP_RET_VOID(refGateSession.m_wp视口);
+		SpEntity sp工程车 = refSpace.造活动单位(refGateSession.m_wp视口.lock()->m_spPlayer, refGateSession.NickName(), refPos, 配置, 类型);
 		refGateSession.Send设置视口(*sp工程车);
 	}
 
@@ -24,7 +27,7 @@ void 玩家带入单位进入四方对战(Space& refSpace, Entity& ref视口, const Position &
 
 }
 
-CoTask<int> 多人战局::Co四方对战(Space& refSpace, Entity& ref视口, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
+CoTask<int> 多人战局::Co四方对战(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName)
 {
 	struct 方位玩家
 	{
@@ -42,9 +45,10 @@ CoTask<int> 多人战局::Co四方对战(Space& refSpace, Entity& ref视口, FunCancel& fu
 	};
 
 	//房主进第一个点
-	arr方位玩家[0].strNickName = refGateSession.NickName();
-	auto wpSpace = refGateSession.m_wpSpace;
-	玩家带入单位进入四方对战(refSpace, ref视口, arr方位玩家[0].pos出生点, refGateSession);
+	arr方位玩家[0].strNickName = strPlayerNickName;
+	auto spOwnerPlayerSession = GetPlayerGateSession(strPlayerNickName);
+	CHECK_WP_CO_RET_0(spOwnerPlayerSession);
+	玩家带入单位进入四方对战(refSpace, arr方位玩家[0].pos出生点, *spOwnerPlayerSession.lock());
 
 	for (int i = 1; i < _countof(arr方位玩家); )
 	{
@@ -56,7 +60,6 @@ CoTask<int> 多人战局::Co四方对战(Space& refSpace, Entity& ref视口, FunCancel& fu
 			co_return 0;
 		}
 
-		CHECK_WP_CO_RET_0(wpSpace);
 		CHECK_WP_CO_RET_0(event玩家进入Space.wpPlayerGateSession);
 		CHECK_WP_CO_RET_0(event玩家进入Space.wpSpace);
 		CHECK_WP_CO_RET_0(event玩家进入Space.wp视口);
@@ -73,7 +76,7 @@ CoTask<int> 多人战局::Co四方对战(Space& refSpace, Entity& ref视口, FunCancel& fu
 		}
 		//event玩家进入Space.wpPlayerGateSession.lock()->EnterSpace(wpSpace);
 		arr方位玩家[i].strNickName = event玩家进入Space.wpPlayerGateSession.lock()->NickName();
-		玩家带入单位进入四方对战(refSpace, *event玩家进入Space.wp视口.lock(), arr方位玩家[i].pos出生点, *event玩家进入Space.wpPlayerGateSession.lock());
+		玩家带入单位进入四方对战(refSpace, arr方位玩家[i].pos出生点, *event玩家进入Space.wpPlayerGateSession.lock());
 		++i;
 	}
 	co_return 0;

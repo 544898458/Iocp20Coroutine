@@ -15,34 +15,34 @@
 #include "单位.h"
 #include "AiCo.h"
 
-#define _等玩家读完returnTrue	{if (co_await 等玩家读完(refGateSession, funCancel))co_return true;}
-
+#define _等玩家读完returnTrue	{if (co_await 等玩家读完(strPlayerNickName, funCancel))co_return true;}
+std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStrNickName);
 namespace 单人剧情
 {
 
-	static void 总教官陈近南说(Entity& ref视口, const std::string& str内容)
+	static void 总教官陈近南说(const std::string& refStrNickName, const std::string& str内容)
 	{
-		PlayerComponent::剧情对话(ref视口, "图片/总教官1", "总教官：陈近南", "", "", "    " + str内容);
-		PlayerComponent::播放声音(ref视口, "音效/BUTTON");
+		PlayerComponent::剧情对话(refStrNickName, "图片/总教官1", "总教官：陈近南", "", "", "    " + str内容);
+		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
 	}
-	static void 玩家说(Entity& ref视口, PlayerGateSession_Game& refGateSession, const std::string& str内容, const bool b显示退出场景按钮 = false)
+	static void 玩家说(const std::string& refStrNickName, const std::string& strPlayerNickName, const std::string& str内容, const bool b显示退出场景按钮 = false)
 	{
-		PlayerComponent::剧情对话(ref视口, "", "", "图片/玩家1", "玩家：" + refGateSession.NickName(), "    " + str内容, b显示退出场景按钮);
-		PlayerComponent::播放声音(ref视口, "音效/BUTTON");
+		PlayerComponent::剧情对话(refStrNickName, "", "", "图片/玩家1", "玩家：" + strPlayerNickName, "    " + str内容, b显示退出场景按钮);
+		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
 	}
 
-	static CoTask<bool> 等玩家读完(PlayerGateSession_Game& refGateSession, FunCancel& funCancel)
+	static CoTask<bool> 等玩家读完(const std::string strPlayerNickName, FunCancel& funCancel)
 	{
-		const auto funSameSession = [&refGateSession](const MyEvent::已阅读剧情对话& ref)
-			{ return ref.wpPlayerGateSession.lock().get() == &refGateSession; };
+		const auto funSameSession = [&strPlayerNickName](const MyEvent::已阅读剧情对话& ref)
+			{ return ref.wpPlayerGateSession.lock() == GetPlayerGateSession(strPlayerNickName).lock(); };
 		co_return std::get<0>(co_await CoEvent<MyEvent::已阅读剧情对话>::Wait(funCancel, funSameSession));
 	}
-	CoTask<int> Co训练战(Space& refSpace, Entity& ref视口, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
+	CoTask<int> Co训练战(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName)
 	{
 		KeepCancel kc(funCancel);
 
-		const auto fun总教官陈近南说 = [&ref视口](const std::string& str内容) {总教官陈近南说(ref视口, str内容); };
-		const auto fun玩家说 = [&ref视口, &refGateSession](const std::string& str内容) {玩家说(ref视口, refGateSession, str内容); };
+		const auto fun总教官陈近南说 = [&strPlayerNickName](const std::string& str内容) {总教官陈近南说(strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName, &strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, strPlayerNickName, str内容); };
 
 		fun总教官陈近南说("即时战略游戏的操作并不复杂，老年间便有四句童谣：\n"
 			"\t\t\t工程车，造基地；\n"
@@ -59,9 +59,9 @@ namespace 单人剧情
 			); _等玩家读完returnTrue;
 		fun玩家说("只用一只手就能玩的RTS即时战略游戏，那岂不是跟刷短视频一样轻松？我一定要体验一下！"); _等玩家读完returnTrue;
 		fun总教官陈近南说("走你!"); _等玩家读完returnTrue;
-		PlayerComponent::剧情对话已看完(ref视口);
+		PlayerComponent::剧情对话已看完(strPlayerNickName);
 		using namespace std;
-		PlayerComponent::Say系统(ref视口, "欢迎来到RTS即时战略游戏，现在您要接受基础的训练");
+		PlayerComponent::Say系统(strPlayerNickName, "欢迎来到RTS即时战略游戏，现在您要接受基础的训练");
 
 		//auto [stop, msgResponce] = co_await AiCo::ChangeMoney(refGateSession, 100, true, funCancel);
 		//if (stop)
@@ -69,7 +69,7 @@ namespace 单人剧情
 		//	LOG(WARNING) << "ChangeMoney,协程取消";
 		//	co_return 0;
 		//}
-		refSpace.GetSpacePlayer(ref视口).m_u32晶体矿 += 100;
+		refSpace.GetSpacePlayer(strPlayerNickName).m_u32晶体矿 += 100;
 
 		if (co_await CoTimer::Wait(2s, funCancel))
 			co_return 0;
@@ -191,13 +191,13 @@ namespace 单人剧情
 		PlayerComponent::Say系统(ref视口, "恭喜您消灭了敌人！现在左边给您刷了10个怪。您可以造“活动单位/地堡”,让兵进入地堡中，立足防守，再伺机进攻");
 		MonsterComponent::AddMonster(refSpace, 兵, { -30.0 }, 10);
 
-		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace,&refGateSession](const MyEvent::单位阵亡& ref)
+		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace,&strPlayerNickName](const MyEvent::单位阵亡& ref)
 			{
 				auto spEntity = ref.wpEntity.lock();
 				if (&spEntity->m_refSpace != &refSpace)
 					return false;
 
-				return 0 == refSpace.Get怪物单位数() || 0 == refSpace.Get玩家单位数(refGateSession);
+				return 0 == refSpace.Get怪物单位数() || 0 == refSpace.Get玩家单位数(strPlayerNickName);
 			})))
 		{
 			co_return 0;
@@ -206,7 +206,7 @@ namespace 单人剧情
 		{
 			PlayerComponent::播放声音(ref视口, "音效/YouWin", "您取得了胜利！您真是指挥天才！");
 
-			fun总教官陈近南说(refGateSession.NickName() + "，你的悟性很高，10分钟就完成了其他学员一个月才能完成的训练，为师甚是欣慰！"); _等玩家读完returnTrue;
+			fun总教官陈近南说(strPlayerNickName + "，你的悟性很高，10分钟就完成了其他学员一个月才能完成的训练，为师甚是欣慰！"); _等玩家读完returnTrue;
 			fun玩家说("……我这都是些什么同学啊，这么简单的操作还要学一个月吗？"); _等玩家读完returnTrue;
 			fun总教官陈近南说("唉，谁说不是呢！如今世风不古。遥想20年前，比你悟性更高的指挥天才多如牛毛，大家经常自发研究切磋指挥技艺，水平超越教官的学员比比皆是，实在令人怀念……"); _等玩家读完returnTrue;
 			fun玩家说("这些前辈果真如此厉害吗？学生倒是想领教领教！"); _等玩家读完returnTrue;
@@ -222,14 +222,14 @@ namespace 单人剧情
 			fun总教官陈近南说("光子炮价格便宜，攻击速度快，攻击距离仅次于坦克，集中放置后可对快速移动的敌方小兵群体造成有效伤害。"); _等玩家读完returnTrue;
 			fun玩家说("我会在实战中体会摸索。"); _等玩家读完returnTrue;
 			fun总教官陈近南说("一个人的时候，可以试试“防守战”，有助于体会光子炮、坦克、地堡的威力。"); _等玩家读完returnTrue;
-			玩家说(ref视口, refGateSession, "好的。", true);//	_等玩家读完;
+			玩家说(ref视口, strPlayerNickName, "好的。", true);//	_等玩家读完;
 		}
 		else
 		{
 			PlayerComponent::播放声音(ref视口, "音效/YouLoss", "您取得了胜利！您真是指挥天才！");
 
 			fun总教官陈近南说("这只是一次训练，不必过于在意。失败是成功之母，待情绪平复可以再试一次。"); _等玩家读完returnTrue;
-			玩家说(ref视口, refGateSession, "好的。", true);//	_等玩家读完;
+			玩家说(ref视口, strPlayerNickName, "好的。", true);//	_等玩家读完;
 		}
 		co_return 0;
 	}
@@ -239,36 +239,36 @@ namespace 单人剧情
 		return { -30,30 };
 	}
 
-	static CoTask<bool> Is战斗结束(Space& refSpace, Entity& ref视口, PlayerGateSession_Game& refGateSession, FunCancel& funCancel)
+	static CoTask<bool> Is战斗结束(Space& refSpace, Entity& ref视口, const std::string strPlayerNickName, FunCancel& funCancel)
 	{
 		const auto fun总教官陈近南说 = [&ref视口](const std::string& str内容) {总教官陈近南说(ref视口, str内容);};
-		const auto fun玩家说 = [&ref视口, &refGateSession](const std::string& str内容) {玩家说(ref视口, refGateSession, str内容);};
+		const auto fun玩家说 = [&ref视口, &strPlayerNickName](const std::string& str内容) {玩家说(ref视口, strPlayerNickName, str内容);};
 
 		if (0 == refSpace.Get怪物单位数())
 		{
-			refGateSession.播放声音("音效/YouWin", "您守住了！您真是指挥天才！");
+			PlayerGateSession_Game::播放声音(strPlayerNickName, "音效/YouWin", "您守住了！您真是指挥天才！");
 
-			fun总教官陈近南说(refGateSession.NickName() + "，我果然没有看错你，你是一个指挥天才！");_等玩家读完returnTrue;
+			fun总教官陈近南说(strPlayerNickName + "，我果然没有看错你，你是一个指挥天才！");_等玩家读完returnTrue;
 			fun玩家说("承蒙教官谬赞。学生谨遵教诲，自不敢有一丝懈怠，定当不负所望，继续精进。");	_等玩家读完returnTrue;
 			PlayerComponent::剧情对话(ref视口, "图片/总教官1", "总教官：陈近南", "", "", "    走你!", true);
 			co_return true;
 		}
-		if (0 == refSpace.Get玩家单位数(refGateSession))
+		if (0 == refSpace.Get玩家单位数(strPlayerNickName))
 		{
-			refGateSession.播放声音("音效/YouLose", "胜败乃兵家常事，请点击右上角“退出场景”离开，然后再次点击“防守战”，就可以重新来过。");
+			PlayerGateSession_Game::播放声音(strPlayerNickName, "音效/YouLose", "胜败乃兵家常事，请点击右上角“退出场景”离开，然后再次点击“防守战”，就可以重新来过。");
 			fun总教官陈近南说("胜败乃兵家常事，我仍然看好你的潜力！");_等玩家读完returnTrue;
-			玩家说(ref视口, refGateSession, "学生此次功败垂成，定会吸取教训，总结经验，再次努力，定不辜负教官的栽培与期望。", true);//	_等玩家读完;
+			玩家说(ref视口, strPlayerNickName, "学生此次功败垂成，定会吸取教训，总结经验，再次努力，定不辜负教官的栽培与期望。", true);//	_等玩家读完;
 			co_return true;
 		}
 		co_return false;
 	}
-	CoTask<int> Co防守战(Space& refSpace, Entity& ref视口, FunCancel& funCancel, PlayerGateSession_Game& refGateSession)
+	CoTask<int> Co防守战(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName)
 	{
 		KeepCancel kc(funCancel);
 		using namespace std;
 
 		const auto fun总教官陈近南说 = [&ref视口](const std::string& str内容) {总教官陈近南说(ref视口, str内容);};
-		const auto fun玩家说 = [&ref视口, &refGateSession](const std::string& str内容) {玩家说(ref视口, refGateSession, str内容);};
+		const auto fun玩家说 = [&ref视口, &strPlayerNickName](const std::string& str内容) {玩家说(ref视口, strPlayerNickName, str内容);};
 
 		fun总教官陈近南说("情报显示：将有大量敌方单位进攻我方基地，请做好准备。");	_等玩家读完returnTrue;
 		fun玩家说("可是我仅受过简单的指挥训练。");							_等玩家读完returnTrue;
@@ -330,10 +330,10 @@ namespace 单人剧情
 
 		for (int i = 1; i < 20; ++i)
 		{
-			if (1 < i && co_await Is战斗结束(refSpace, ref视口, refGateSession, funCancel))
+			if (1 < i && co_await Is战斗结束(refSpace, ref视口, strPlayerNickName, funCancel))
 				co_return 0;
 
-			refGateSession.Say系统(std::format("第{0}波敌人正向您走来", i));
+			PlayerGateSession_Game::Say系统(strPlayerNickName, std::format("第{0}波敌人正向您走来", i));
 			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 兵 : 近战兵, { 48,-48 }, i * 1);
 			auto vecEneity2 = MonsterComponent::AddMonster(refSpace, 工蜂, { 47,-47 }, i * 1);
 			vecEneity.insert(vecEneity.end(), vecEneity2.begin(), vecEneity2.end());
@@ -348,7 +348,7 @@ namespace 单人剧情
 
 		while (!co_await CoTimer::Wait(5s, funCancel))
 		{
-			if (co_await Is战斗结束(refSpace, ref视口, refGateSession, funCancel))
+			if (co_await Is战斗结束(refSpace, ref视口, strPlayerNickName, funCancel))
 				co_return 0;
 		}
 		co_return 0;

@@ -19,10 +19,12 @@ public:
 	void RecvMsg(const MsgId idMsg, const msgpack::object& obj);
 	void Process();
 	void OnDestroy();
+	void 离开Space(const bool b主动退);
 
 	template<class T> void Send(const T& ref);
 	void Say(const std::string& str, const SayChannel channel);
 	void Say系统(const std::string& str);
+	static void Say系统(const std::string& refStrNickName, const std::string& str);
 	//void Say语音提示(const std::string& str);
 
 	const std::string& NickName()const { return m_strNickName; }
@@ -31,7 +33,8 @@ public:
 	uint16_t 活动单位上限() const;
 	uint16_t 活动单位包括制造队列中的() const;
 
-	void 播放声音(const std::string& refStr声音, const std::string& str文本 = "");
+	void 播放声音(const std::string& refStr声音, const std::string& str文本);
+	static void 播放声音(const std::string& refStrNickName, const std::string& refStr声音, const std::string& str文本);
 
 	void Send设置视口(const Entity& refEntity);
 	void 删除选中(const uint64_t id);
@@ -48,8 +51,9 @@ public:
 	/// 当前这个玩家在哪个Space里
 	/// </summary>
 	WpSpace m_wpSpace;
-	SpSpace m_spSpace单人剧情副本;
+	//WpSpace m_wpSpace单人剧情副本;
 	SpSpace m_spSpace多人战局;
+	WpEntity m_wp视口;
 private:
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);
 	/// <summary>

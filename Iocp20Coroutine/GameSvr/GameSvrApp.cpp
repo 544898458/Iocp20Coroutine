@@ -61,8 +61,8 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 }
 
 //std::unique_ptr<Iocp::Server<WorldClient> > g_worldSvr;// (Iocp::ThreadPool::GetIocp());
-std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GameToWorld>> g_ConnectToWorldSvr;
-
+std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GameToWorld> > g_ConnectToWorldSvr;
+std::unique_ptr<Iocp::Server<GameSvr> > g_upAccept;
 template<class T>
 void SendToWorldSvr(const T& refMsg, const uint64_t idGateSession)
 {
@@ -88,6 +88,26 @@ template void SendToWorldSvr(const MsgSay& msg, const uint64_t idGateSession);
 template void SendToWorldSvr(const MsgChangeMoney& msg, const uint64_t idGateSession);
 
 LONG WINAPI UnhandledExceptionFilter_SpawDmp(struct _EXCEPTION_POINTERS* ExceptionInfo);
+
+std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string &refStrNickName)
+{
+	std::weak_ptr<PlayerGateSession_Game> spRet;
+	g_upAccept->m_Server.m_Sessions.ForEach([&spRet, &refStrNickName](GameSvrSession& refSession) {
+		//CHECK_NOTNULL_VOID(pSession);
+		auto &refMap = refSession.m_mapPlayerGateSession;
+		auto iterFind = std::find_if(refMap.begin(), refMap.end(),
+		[&refStrNickName](const auto& pair)->bool
+		{
+			return pair.second->NickName() == refStrNickName;
+		});
+		if (refMap.end() == iterFind)
+			return;
+
+		spRet = iterFind->second;
+	});
+
+	return spRet;
+}
 int main(void)
 {
 	MiniDump::Install("GameSvr");
@@ -117,18 +137,18 @@ int main(void)
 	Iocp::ThreadPool threadPoolNetwork;
 	threadPoolNetwork.Init();
 
-	Iocp::Server<GameSvr> accept(threadPoolNetwork.GetIocp());
+	g_upAccept.reset(new Iocp::Server<GameSvr>(threadPoolNetwork.GetIocp()));
 	//g_worldSvr.reset( new Iocp::Server<WorldServer>(Iocp::ThreadPool::GetIocp()) );
 
 	Iocp::WsaStartup();
-	accept.Init<GameSvrSession>(PORT_GAMESVR);
+	g_upAccept->Init<GameSvrSession>(PORT_GAMESVR);
 	//Iocp::ThreadPool::Add(accept.GetIocp());
 
 	//g_worldSvr->Init<WorldSession>(12346);
 	//g_worldSvr.reset(new Iocp::Server<WorldClient>(Iocp::ThreadPool::GetIocp()));
 	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<ClientSession_GameToWorld>(L"127.0.0.1", PORT_WORLDSVR_ACCEPT_GAME, threadPoolNetwork.GetIocp()));
 	extern std::function<void(MsgSay const&)> m_funBroadcast;
-	m_funBroadcast = [&accept](const MsgSay& msg) {accept.m_Server.m_Sessions.Broadcast(msg); };
+	m_funBroadcast = [](const MsgSay& msg) {g_upAccept->m_Server.m_Sessions.Broadcast(msg); };
 
 	auto wpSpace无限刷怪 = Space::AddSpace(1);
 
@@ -167,14 +187,14 @@ int main(void)
 		if (msSleep > 0ms)
 			std::this_thread::sleep_for(msSleep);
 
-		accept.m_Server.Update();
+		g_upAccept->m_Server.Update();
 		g_ConnectToWorldSvr->Session.Process();
 		Space::StaticUpdate();
 		CoTimer::Update();
 		CoTask<int>::Process();
 	}
 
-	accept.m_Server.OnAppExit();
+	g_upAccept->m_Server.OnAppExit();
 	g_ConnectToWorldSvr->Session.OnAppExit();
 	Space::StaticOnAppExit();
 	CoTimer::OnAppExit();
@@ -183,7 +203,7 @@ int main(void)
 	if (funCancelSpawnMonster)
 		funCancelSpawnMonster();
 
-	accept.Stop();
+	g_upAccept->Stop();
 	LOG(INFO) << "正常退出,GetCurrentThreadId=" << GetCurrentThreadId();
 	Sleep(3000);
 	//system(0);

@@ -9,7 +9,7 @@
 class CrowdToolState;
 struct 副本配置
 {
-	typedef CoTask<int>(*funCo副本剧情)(Space& refSpace, Entity& ref视口, FunCancel& funCancel, PlayerGateSession_Game& refGateSession);
+	typedef CoTask<int>(*funCo副本剧情)(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName);
 
 	std::string str寻路文件名;
 	std::string strSceneName;
@@ -39,6 +39,9 @@ public:
 	static WpSpace GetSpace(const uint8_t idSpace);
 	static void StaticOnAppExit();
 	static void StaticUpdate();
+	static std::tuple<bool, WpSpace> GetSpace单人(const std::string& refStrPlayerNickName, const 副本配置& 配置);
+	static WpSpace GetSpace单人(const std::string& refStrPlayerNickName);
+	static const std::unordered_map<std::string, SpSpace>& 个人战局();
 	void Update();
 	bool CrowdTool可站立(const Position& refPos);
 	bool CrowdToolFindNerestPos(Position& refPos);
@@ -47,7 +50,7 @@ public:
 	std::unordered_map<int, uint64_t> m_mapEntityId;
 	int Get怪物单位数();
 	int Get资源单位数(const 单位类型 类型);
-	int Get玩家单位数(const PlayerGateSession_Game& ref);
+	int Get玩家单位数(const std::string& strPlayerNickName);
 	int Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位);
 	/// <summary>
 	/// 
@@ -62,7 +65,7 @@ public:
 		所有,
 		敌方,
 		友方,
-	};	
+	};
 	WpEntity Get最近的Entity支持地堡中的单位(Entity& refEntity, FindType bFindEnemy, std::function<bool(const Entity&)> fun符合条件);
 
 	WpEntity Get最近的Entity(Entity& refEntity, FindType bFindEnemy, std::function<bool(const Entity&)> fun符合条件);
@@ -88,6 +91,7 @@ public:
 	//using SpSpacePlayer = std::shared_ptr<SpacePlayer> ;
 	std::unordered_map<std::string, SpacePlayer> m_mapPlayer;
 	static SpacePlayer& GetSpacePlayer(const Entity& ref);
+	static Space::SpacePlayer& GetSpacePlayer(const std::string strPlayerNickName);
 	SpEntity 造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer, const std::string& strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型);
 
 	bool 可放置建筑(const Position& pos, float f半边长);

@@ -29,6 +29,9 @@
 #include "单位组件/PlayerNickNameComponent.h"
 #include "MyEvent.h"
 
+std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStrNickName);
+
+
 /// <summary>
 /// GameSvr通过GateSvr透传给游戏客户端
 /// </summary>
@@ -64,8 +67,13 @@ template void PlayerGateSession_Game::Send(const Msg弹丸特效&);
 
 void PlayerGateSession_Game::OnDestroy()
 {
+	离开Space(false);
+}
+
+void PlayerGateSession_Game::离开Space(const bool b主动退)
+{
 	if (!m_wpSpace.expired())
-		m_wpSpace.lock()->m_mapPlayer[NickName()].OnDestroy((bool)m_spSpace单人剧情副本, *m_wpSpace.lock(), NickName());
+		m_wpSpace.lock()->m_mapPlayer[NickName()].OnDestroy(b主动退, *m_wpSpace.lock(), NickName());
 
 	for (auto& sp : m_vecFunCancel)
 	{
@@ -83,11 +91,11 @@ void PlayerGateSession_Game::OnDestroy()
 
 	const bool b离开 = !m_wpSpace.expired();
 	m_wpSpace.reset();
-	if (m_spSpace单人剧情副本)
-	{
-		m_spSpace单人剧情副本->OnDestory();
-		m_spSpace单人剧情副本.reset();
-	}
+	//if (m_spSpace单人剧情副本)
+	//{
+	//	m_spSpace单人剧情副本->OnDestory();
+	//	m_spSpace单人剧情副本.reset();
+	//}
 	if (m_spSpace多人战局)
 	{
 		m_spSpace多人战局->OnDestory();
@@ -102,6 +110,14 @@ void PlayerGateSession_Game::OnDestroy()
 void PlayerGateSession_Game::Say(const std::string& str, const SayChannel channel)
 {
 	Send<MsgSay>({ .content = StrConv::GbkToUtf8(str),.channel = channel });
+}
+
+void PlayerGateSession_Game::Say系统(const std::string& refStrNickName, const std::string& str)
+{
+	auto wp = GetPlayerGateSession(refStrNickName);
+	if (!wp.expired())
+		wp.lock()->Say系统(str);
+
 }
 void PlayerGateSession_Game::Say系统(const std::string& str)
 {
@@ -308,22 +324,22 @@ CoTaskBool PlayerGateSession_Game::Co进多人联机地图(WpEntity wp视口)
 }
 void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
 {
-	OnDestroy();
+	离开Space(true);
 	LOG(INFO) << "希望进Space:" << msg.idSapce;
 	auto wp = Space::GetSpace(msg.idSapce);
 	CHECK_WP_RET_VOID(wp);
-	auto wp视口 = EnterSpace(wp);
+	m_wp视口 = EnterSpace(wp);
 
 	if (m_funCancel进地图)
 		m_funCancel进地图();
 
-	Co进多人联机地图(wp视口).RunNew();
+	Co进多人联机地图(m_wp视口).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg离开Space& msg)
 {
 	LOG(INFO) << "希望离开Space:";// << msg.idSapce;
-	OnDestroy();
+	离开Space(true);
 }
 
 std::unordered_map<副本ID, 副本配置> g_map副本配置 =
@@ -357,10 +373,14 @@ void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
 		CHECK_RET_VOID(ok);
 	}
 
-	m_spSpace单人剧情副本 = std::make_shared<Space, const 副本配置&>(配置);
-	auto wp视口 = EnterSpace(m_spSpace单人剧情副本);
-	CHECK_WP_RET_VOID(wp视口);
-	配置.funCo剧情(*m_spSpace单人剧情副本, *wp视口.lock(), m_funCancel进地图, *this).RunNew();
+	//m_spSpace单人剧情副本 = std::make_shared<Space, const 副本配置&>(配置);
+	auto [b新, wpSpace] = Space::GetSpace单人(NickName(), 配置);
+	//m_wpSpace单人剧情副本 = wpSpace;
+	CHECK_WP_RET_VOID(wpSpace);
+	m_wp视口 = EnterSpace(wpSpace);
+	CHECK_WP_RET_VOID(m_wp视口);
+	if (b新)
+		配置.funCo剧情(*wpSpace.lock(), m_funCancel进地图, NickName()).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg创建多人战局& msg)
@@ -373,9 +393,9 @@ void PlayerGateSession_Game::OnRecv(const Msg创建多人战局& msg)
 	}
 
 	m_spSpace多人战局 = std::make_shared<Space, const 副本配置&>(配置);
-	auto wp视口 = EnterSpace(m_spSpace多人战局);
-	CHECK_WP_RET_VOID(wp视口);
-	配置.funCo剧情(*m_spSpace多人战局, *wp视口.lock(), m_funCancel进地图, *this).RunNew();
+	m_wp视口 = EnterSpace(m_spSpace多人战局);
+	CHECK_WP_RET_VOID(m_wp视口);
+	配置.funCo剧情(*m_spSpace多人战局, m_funCancel进地图, NickName()).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
@@ -465,10 +485,10 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 		{
 			switch (ref.m_类型)
 			{
-			case 兵:播放声音(msg.b遇到敌人自动攻击 ? "语音/是男声正经版" : "语音/明白男声正经版"); break;//Standing by. 待命中
-			case 近战兵:播放声音("tfbYes03"); break;//Checked up and good to go. 检查完毕，准备动身
-			case 工程车:播放声音(msg.b遇到敌人自动攻击 ? "语音/是女声可爱版" : "语音/明白女声可爱版"); break;
-			case 三色坦克:播放声音("语音/ttayes01"); break;
+			case 兵:播放声音(msg.b遇到敌人自动攻击 ? "语音/是男声正经版" : "语音/明白男声正经版", ""); break;//Standing by. 待命中
+			case 近战兵:播放声音("tfbYes03", ""); break;//Checked up and good to go. 检查完毕，准备动身
+			case 工程车:播放声音(msg.b遇到敌人自动攻击 ? "语音/是女声可爱版" : "语音/明白女声可爱版", ""); break;
+			case 三色坦克:播放声音("语音/ttayes01", ""); break;
 			default:
 				continue;
 				break;
@@ -477,6 +497,13 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 			b已播放声音 = true;
 		}
 	}
+}
+
+void PlayerGateSession_Game::播放声音(const std::string& refStrNickName, const std::string& refStr声音, const std::string& str文本)
+{
+	auto wp = GetPlayerGateSession(refStrNickName);
+	if (!wp.expired())
+		wp.lock()->播放声音(refStr声音, str文本);
 }
 
 void PlayerGateSession_Game::播放声音(const std::string& refStr声音, const std::string& str文本)
@@ -758,8 +785,8 @@ void PlayerGateSession_Game::Process()
 		}
 	}
 
-	if (m_spSpace单人剧情副本)
-		m_spSpace单人剧情副本->Update();
+	//if (m_spSpace单人剧情副本)
+		//m_spSpace单人剧情副本->Update();
 
 	if (m_spSpace多人战局)
 		m_spSpace多人战局->Update();
@@ -913,7 +940,7 @@ void PlayerGateSession_Game::Send选中音效(const Entity& refEntity)
 {
 	if (refEntity.m_spAttack)
 	{
-		播放声音(refEntity.m_配置.str选中音效);
+		播放声音(refEntity.m_配置.str选中音效, "");
 	}
 	else if (refEntity.m_spBuilding)
 	{
@@ -925,7 +952,7 @@ void PlayerGateSession_Game::Send选中音效(const Entity& refEntity)
 		//default:
 		//	break;
 		//}
-		播放声音(refEntity.m_配置.str选中音效);
+		播放声音(refEntity.m_配置.str选中音效, "");
 	}
 	else if (refEntity.m_sp资源) {
 		switch (refEntity.m_sp资源->m_类型)
@@ -933,7 +960,7 @@ void PlayerGateSession_Game::Send选中音效(const Entity& refEntity)
 		case 晶体矿:
 		case 燃气矿:
 		default:
-			播放声音("音效/BUTTON");
+			播放声音("音效/BUTTON", "");
 			break;
 		}
 	}
@@ -949,15 +976,16 @@ void PlayerGateSession_Game::Send选中单位Responce()
 void PlayerGateSession_Game::OnRecv(const Msg玩家个人战局列表& msg)
 {
 	Msg玩家个人战局列表Responce msgResponce;
-	for (const auto [id, sp] : m_refGameSvrSession.m_mapPlayerGateSession)
+	//for (const auto [id, sp] : m_refGameSvrSession.m_mapPlayerGateSession)
+	for (auto [strNickName, sp] : Space::个人战局())
 	{
-		if (!sp->m_spSpace单人剧情副本)
-			continue;
+		//if (!sp->m_spSpace单人剧情副本)
+		//	continue;
 
 		msgResponce.vec个人战局中的玩家.push_back(
 			{
-				StrConv::GbkToUtf8(sp->NickName()),
-				StrConv::GbkToUtf8(sp->m_spSpace单人剧情副本->m_配置.strSceneName)
+				StrConv::GbkToUtf8(strNickName),
+				StrConv::GbkToUtf8(sp->m_配置.strSceneName)
 			});
 	}
 	Send(msgResponce);
@@ -982,15 +1010,14 @@ void PlayerGateSession_Game::OnRecv(const Msg玩家多人战局列表& msg)
 void PlayerGateSession_Game::OnRecv(const Msg进其他玩家个人战局& msg)
 {
 	const auto strGbk = StrConv::Utf8ToGbk(msg.nickName其他玩家);
-	auto iterFind = std::find_if(m_refGameSvrSession.m_mapPlayerGateSession.begin(), m_refGameSvrSession.m_mapPlayerGateSession.end(),
-		[&strGbk](const auto& pair)->bool
-		{
-			return pair.second->NickName() == strGbk;
-		});
-	CHECK_RET_VOID(iterFind != m_refGameSvrSession.m_mapPlayerGateSession.end());
-	auto& refSp = iterFind->second->m_spSpace单人剧情副本;
-	CHECK_RET_VOID(refSp);
-	EnterSpace(refSp);
+	//auto iterFind = std::find_if(m_refGameSvrSession.m_mapPlayerGateSession.begin(), m_refGameSvrSession.m_mapPlayerGateSession.end(),
+	//	[&strGbk](const auto& pair)->bool
+	//	{
+	//		return pair.second->NickName() == strGbk;
+	//	});
+	auto wpSpace = Space::GetSpace单人(NickName());
+	CHECK_WP_RET_VOID(wpSpace);
+	EnterSpace(wpSpace);
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg进其他玩家多人战局& msg)

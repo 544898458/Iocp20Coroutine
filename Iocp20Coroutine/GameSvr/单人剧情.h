@@ -7,7 +7,7 @@ class Entity;
 
 namespace 单人剧情
 {
-	CoTask<int> Co训练战(Space& refSpace, Entity& ref视口, FunCancel& funCancel, PlayerGateSession_Game& refGateSession);
-	CoTask<int> Co防守战(Space& refSpace, Entity& ref视口, FunCancel& funCancel, PlayerGateSession_Game& refGateSession);
+	CoTask<int> Co训练战(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName);
+	CoTask<int> Co防守战(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName);
 };
 
