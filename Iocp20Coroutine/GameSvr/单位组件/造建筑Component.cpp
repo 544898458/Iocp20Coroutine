@@ -237,7 +237,8 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	case ¹â×ÓÅÚ:
 	{
 		using namespace std;
-		µ¥Î»::Õ½¶·ÅäÖÃ Õ½¶· = { 20,20,3,0,"",300ms,"pao002",300ms,"ÒôĞ§/PhoFir00","ÒôĞ§/explo1","Take 001" };
+		//						¾¯¾à ¹¥¾à ÉËº¦ ÒÆËÙ
+		µ¥Î»::Õ½¶·ÅäÖÃ Õ½¶· = { 20,	20,		5,	0,	"", 0ms,"pao002",400ms,"ÒôĞ§/PhoFir00","ÒôĞ§/explo1","Take 001", 400ms };
 		AttackComponent::AddComponent(refNewEntity, ÀàĞÍ, Õ½¶·);
 
 	}

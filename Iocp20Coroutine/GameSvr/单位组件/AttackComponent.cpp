@@ -295,6 +295,10 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 		CHECK_终止攻击目标流程;
 
 		播放攻击动作();
+		
+		if (0s < m_战斗配置.dura开始伤害 && co_await CoTimer::Wait(m_战斗配置.dura开始伤害, cancel))
+			co_return true;//协程取消
+
 		switch (m_refEntity.m_类型)
 		{
 		case 光子炮:
@@ -302,9 +306,6 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 			break;
 		default:; break;
 		}
-
-		if (0s < m_战斗配置.dura开始伤害 && co_await CoTimer::Wait(m_战斗配置.dura开始伤害, cancel))
-			co_return true;//协程取消
 
 		CHECK_终止攻击目标流程;
 
