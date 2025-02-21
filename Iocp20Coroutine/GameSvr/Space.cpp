@@ -171,7 +171,17 @@ std::tuple<bool,WpSpace> Space::GetSpace单人(const std::string& refStrPlayerNick
 	_ASSERT(pair.second);
 	return { true,pair.first->second };
 }
+bool Space::DeleteSpace单人(const std::string& refStrPlayerNickName)
+{
+	auto wp = GetSpace单人(refStrPlayerNickName);
+	if (wp.expired())
+		return false;
 
+	wp.lock()->OnDestory();
+	auto sizeErase = g_mapSpace单人.erase(refStrPlayerNickName);
+	_ASSERT(1 == sizeErase);
+	return true;
+}
 WpSpace Space::AddSpace(const uint8_t idSpace)
 {
 	auto wpOld = GetSpace(idSpace);
@@ -240,14 +250,14 @@ bool Space::CrowdToolFindNerestPos(Position& refPos)
 	bool CrowdToolFindNerestPos(CrowdToolState & refCrowTool, Position & refPos);
 	return CrowdToolFindNerestPos(*m_spCrowdToolState, refPos);
 }
-Space::SpacePlayer& Space::GetSpacePlayer( const std::string strPlayerNickName)
+Space::SpacePlayer& Space::GetSpacePlayer(const std::string strPlayerNickName)
 {
-	return ref.m_refSpace.m_mapPlayer[strPlayerNickName];
+	return m_mapPlayer[strPlayerNickName];
 }
 Space::SpacePlayer& Space::GetSpacePlayer(const Entity& ref)
 {
 	if (ref.m_spPlayerNickName)
-		return GetSpacePlayer(ref.m_spPlayerNickName->m_strNickName);
+		return ref.m_refSpace.GetSpacePlayer(ref.m_spPlayerNickName->m_strNickName);
 
 	LOG(ERROR) << ref.Id << ",不是玩家";
 	_ASSERT(false);
@@ -358,6 +368,12 @@ void Space::所有玩家全退出()
 
 void Space::OnDestory()
 {
+	if (m_funCancel剧情)
+	{
+		m_funCancel剧情();
+		m_funCancel剧情 = nullptr;
+	}
+
 	所有玩家全退出();
 	EraseEntity(true);
 }
@@ -366,9 +382,10 @@ Space::SpacePlayer::SpacePlayer()
 {
 }
 
-void Space::SpacePlayer::OnDestroy(const bool b单人副本, Space& refSpace, const std::string& refStrNickName)
+void Space::SpacePlayer::OnDestroy(const bool b主动退, Space& refSpace, const std::string& refStrNickName)
 {
-	for (auto [_, wp] : m_mapWpEntity)
+	auto mapLocal = m_mapWpEntity;//不能在ForEach内删除容器
+	for (auto [_, wp] : mapLocal)
 	{
 		//_ASSERT(!wp.expired());
 		if (wp.expired())
@@ -377,7 +394,7 @@ void Space::SpacePlayer::OnDestroy(const bool b单人副本, Space& refSpace, const 
 			continue;
 		}
 		auto sp = wp.lock();
-		if (b单人副本 || EntitySystem::Is视口(*sp))
+		if (b主动退 || EntitySystem::Is视口(*sp))
 		{
 			if (sp->m_refSpace.GetEntity(sp->Id).expired())
 			{
@@ -386,17 +403,21 @@ void Space::SpacePlayer::OnDestroy(const bool b单人副本, Space& refSpace, const 
 			}
 			LOG(INFO) << "m_mapEntity.size=" << sp->m_refSpace.m_mapEntity.size();
 			sp->OnDestroy();
-			auto countErase = sp->m_refSpace.m_mapEntity.erase(sp->Id);
+
+			auto countErase = m_mapWpEntity.erase(sp->Id);
+			_ASSERT(1 == countErase);
+
+			countErase = sp->m_refSpace.m_mapEntity.erase(sp->Id);
 			_ASSERT(1 == countErase);
 		}
 		else
 		{
 			sp->m_spPlayer.reset();
-			refSpace.m_map已离线PlayerEntity[refStrNickName].insert({ sp->Id,sp });
+			//refSpace.m_map已离线PlayerEntity[refStrNickName].insert({ sp->Id,sp });
 		}
 	}
 
-	m_mapWpEntity.clear();
+	//m_mapWpEntity.clear();
 }
 
 inline void Space::SpacePlayer::Erase(uint64_t u64Id)
@@ -419,6 +440,7 @@ SpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 	AttackComponent::AddComponent(*spNewEntity, 类型, 配置.战斗);
 	DefenceComponent::AddComponent(*spNewEntity, 配置.制造.u16初始Hp);
 	走Component::AddComponent(*spNewEntity);
+
 	m_mapPlayer[strNickName].m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
 	AddEntity(spNewEntity);//全地图单位
 	spNewEntity->m_速度每帧移动距离 = 配置.战斗.f每帧移动距离;

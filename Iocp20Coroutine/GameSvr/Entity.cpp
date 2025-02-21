@@ -284,7 +284,7 @@ void Entity::Broadcast(const T& msg)
 
 CoTaskBool Entity::CoDelayDelete(const std::chrono::system_clock::duration& dura)
 {
-	LOG(INFO) << "开始删除延时自己的协程";
+	LOG(INFO) << "开始延时删除自己的协程";
 	//_ASSERT(!m_cancelDelete);//不可并行
 	if (m_cancelDelete)
 		co_return false;

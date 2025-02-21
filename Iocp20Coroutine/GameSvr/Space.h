@@ -41,6 +41,7 @@ public:
 	static void StaticUpdate();
 	static std::tuple<bool, WpSpace> GetSpace单人(const std::string& refStrPlayerNickName, const 副本配置& 配置);
 	static WpSpace GetSpace单人(const std::string& refStrPlayerNickName);
+	static bool DeleteSpace单人(const std::string& refStrPlayerNickName);
 	static const std::unordered_map<std::string, SpSpace>& 个人战局();
 	void Update();
 	bool CrowdTool可站立(const Position& refPos);
@@ -72,7 +73,7 @@ public:
 	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map能看到这一格;
 	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map在这一格里;
 
-	std::unordered_map<std::string, std::map<uint64_t, WpEntity>> m_map已离线PlayerEntity;
+	//std::unordered_map<std::string, std::map<uint64_t, WpEntity>> m_map已离线PlayerEntity;
 	std::unordered_map<uint64_t, WpEntity> m_map视口;
 	struct SpacePlayer
 	{
@@ -91,11 +92,12 @@ public:
 	//using SpSpacePlayer = std::shared_ptr<SpacePlayer> ;
 	std::unordered_map<std::string, SpacePlayer> m_mapPlayer;
 	static SpacePlayer& GetSpacePlayer(const Entity& ref);
-	static Space::SpacePlayer& GetSpacePlayer(const std::string strPlayerNickName);
+	Space::SpacePlayer& GetSpacePlayer(const std::string strPlayerNickName);
 	SpEntity 造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer, const std::string& strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型);
 
 	bool 可放置建筑(const Position& pos, float f半边长);
 	const 副本配置 m_配置;
+	FunCancel m_funCancel剧情;
 private:
 	void EraseEntity(const bool bForceEraseAll);
 

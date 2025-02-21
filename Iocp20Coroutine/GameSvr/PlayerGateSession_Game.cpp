@@ -96,6 +96,10 @@ void PlayerGateSession_Game::离开Space(const bool b主动退)
 	//	m_spSpace单人剧情副本->OnDestory();
 	//	m_spSpace单人剧情副本.reset();
 	//}
+	if (b主动退)
+	{
+		Space::DeleteSpace单人(NickName());
+	}
 	if (m_spSpace多人战局)
 	{
 		m_spSpace多人战局->OnDestory();
@@ -104,8 +108,6 @@ void PlayerGateSession_Game::离开Space(const bool b主动退)
 	if (b离开)
 		Send<Msg离开Space>({});
 }
-
-
 
 void PlayerGateSession_Game::Say(const std::string& str, const SayChannel channel)
 {
@@ -374,13 +376,18 @@ void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
 	}
 
 	//m_spSpace单人剧情副本 = std::make_shared<Space, const 副本配置&>(配置);
+	auto wpOld = Space::GetSpace单人(NickName());
+	if (!wpOld.expired()&& wpOld.lock()->m_配置.strSceneName != 配置.strSceneName)
+	{
+		Space::DeleteSpace单人(NickName());
+	}
 	auto [b新, wpSpace] = Space::GetSpace单人(NickName(), 配置);
 	//m_wpSpace单人剧情副本 = wpSpace;
 	CHECK_WP_RET_VOID(wpSpace);
 	m_wp视口 = EnterSpace(wpSpace);
 	CHECK_WP_RET_VOID(m_wp视口);
 	if (b新)
-		配置.funCo剧情(*wpSpace.lock(), m_funCancel进地图, NickName()).RunNew();
+		配置.funCo剧情(*wpSpace.lock(), wpSpace.lock()->m_funCancel剧情, NickName()).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg创建多人战局& msg)
@@ -654,17 +661,17 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 
 	Send<Msg进Space>({ .idSapce = 1 });
 	{
-		auto mapOld = spSpace->m_map已离线PlayerEntity[NickName()];
-		for (auto [id, wp] : mapOld)
+		auto &sencePlayer = spSpace->m_mapPlayer[NickName()];
+		for (auto [id, wp] : sencePlayer.m_mapWpEntity)
 		{
 			if (wp.expired())
 				continue;
 
 			auto sp = wp.lock();
 			PlayerComponent::AddComponent(*sp, *this);
-			spSpace->m_mapPlayer[NickName()].m_mapWpEntity.insert({ sp->Id ,sp });
+			//spSpace->m_mapPlayer[NickName()].m_mapWpEntity.insert({ sp->Id ,sp });
 		}
-		mapOld.clear();
+		//mapOld.clear();
 	}
 	for (const auto& [id, spEntity] : spSpace->m_mapEntity)//所有地图上的实体发给自己
 	{
@@ -1015,7 +1022,7 @@ void PlayerGateSession_Game::OnRecv(const Msg进其他玩家个人战局& msg)
 	//	{
 	//		return pair.second->NickName() == strGbk;
 	//	});
-	auto wpSpace = Space::GetSpace单人(NickName());
+	auto wpSpace = Space::GetSpace单人(strGbk);
 	CHECK_WP_RET_VOID(wpSpace);
 	EnterSpace(wpSpace);
 }
