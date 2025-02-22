@@ -38,12 +38,27 @@ namespace 单人剧情
 
 	static void 总教官陈近南说(const std::string& refStrNickName, const std::string& str内容)
 	{
-		PlayerComponent::剧情对话(refStrNickName, "图片/总教官1", "总教官：陈近南", "", "", "    " + str内容);
+		PlayerComponent::剧情对话(refStrNickName, "图片/陈近南", "总教官：陈近南", "", "", "    " + str内容);
+		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
+	}
+	static void 科学家玛丽亚说(const std::string& refStrNickName, const std::string& str内容)
+	{
+		PlayerComponent::剧情对话(refStrNickName, "图片/红发年轻女人", "科学家：玛丽亚", "", "", "    " + str内容);
+		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
+	}
+	static void 坦克手齐诺维说(const std::string& refStrNickName, const std::string& str内容)
+	{
+		PlayerComponent::剧情对话(refStrNickName, "图片/青壮年欧洲男人脸朝右", "坦克手：齐诺维", "", "", "    " + str内容);
+		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
+	}
+	static void 装甲指挥官海因茨说(const std::string& refStrNickName, const std::string& str内容)
+	{
+		PlayerComponent::剧情对话(refStrNickName, "图片/大白胡子抽烟", "装甲指挥官：海因茨", "", "", "    " + str内容);
 		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
 	}
 	static void 玩家说(const std::string& strPlayerNickName, const std::string& str内容, const bool b显示退出场景按钮 = false)
 	{
-		PlayerComponent::剧情对话(strPlayerNickName, "", "", "图片/玩家1", "玩家：" + strPlayerNickName, "    " + str内容, b显示退出场景按钮);
+		PlayerComponent::剧情对话(strPlayerNickName, "", "", "图片/韦小宝", "玩家：" + strPlayerNickName, "    " + str内容, b显示退出场景按钮);
 		PlayerComponent::播放声音(strPlayerNickName, "音效/BUTTON", "");
 	}
 
@@ -379,50 +394,160 @@ namespace 单人剧情
 		co_return 0;
 	}
 
-	static void 创建敌方建筑(Space& refSpace, const Position& pos, const 单位类型 类型)
+	static WpEntity 创建敌方建筑(Space& refSpace, const Position& pos, const 单位类型 类型)
 	{
 		auto wp = 造建筑Component::创建建筑(refSpace, pos, 类型, {}, "");
-		CHECK_WP_RET_VOID(wp);
+		CHECK_WP_RET_DEFAULT(wp);
 		auto& refEntity = *wp.lock();
 		refEntity.m_spBuilding->StartCo建造过程();
+		return wp;
+	}
+
+	static CoTask<bool> 攻坚战胜利(Space& refSpace, const std::string strPlayerNickName, FunCancel& funCancel)
+	{
+		const auto fun坦克手齐诺维说 = [&strPlayerNickName](const std::string& str内容) {坦克手齐诺维说(strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, str内容); };
+		fun坦克手齐诺维说("总算报仇了！");	_等玩家读完returnTrue;
+		fun玩家说("以后坦克不能再单独行动了，一定要带上步兵。");	_等玩家读完returnTrue;
+		fun坦克手齐诺维说("是，指挥官！");	_等玩家读完returnTrue;
+		玩家说(strPlayerNickName, "走！", true);
+		co_return false;
+	}
+
+	static CoTask<bool> 攻坚战失败(Space& refSpace, const std::string strPlayerNickName, FunCancel& funCancel, const bool b已营救坦克连)
+	{
+		const auto fun装甲指挥官海因茨说 = [&strPlayerNickName](const std::string& str内容) {装甲指挥官海因茨说(strPlayerNickName, str内容); };
+		const auto fun坦克手齐诺维说 = [&strPlayerNickName](const std::string& str内容) {坦克手齐诺维说(strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, str内容); };
+
+		if (b已营救坦克连)
+		{
+			fun坦克手齐诺维说("早知如此就该听你的直接回去！"); _等玩家读完returnTrue;
+			玩家说(strPlayerNickName, "现在说什么都晚了（惨叫）。", true);
+		}
+		else
+		{
+			fun装甲指挥官海因茨说("可以试试操作慢一点，先进攻右下角的孵化场。"); _等玩家读完returnTrue;
+			玩家说(strPlayerNickName, "只能下次再试试了。", true);
+		}
+		co_return false;
 	}
 
 	CoTask<int> Co攻坚战(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName)
 	{
 		KeepCancel kc(funCancel);
 
-		const auto fun总教官陈近南说 = [&strPlayerNickName](const std::string& str内容) {总教官陈近南说(strPlayerNickName, str内容); };
+		const auto fun装甲指挥官海因茨说 = [&strPlayerNickName](const std::string& str内容) {装甲指挥官海因茨说(strPlayerNickName, str内容); };
+		const auto fun科学家玛丽亚说 = [&strPlayerNickName](const std::string& str内容) {科学家玛丽亚说(strPlayerNickName, str内容); };
+		const auto fun坦克手齐诺维说 = [&strPlayerNickName](const std::string& str内容) {坦克手齐诺维说(strPlayerNickName, str内容); };
 		const auto fun玩家说 = [&strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, str内容); };
 
-		fun总教官陈近南说("攻坚战还在开发中，请点右上角“X”退出"); _等玩家读完returnTrue;
-		玩家说(strPlayerNickName, "好的。", true);//	_等玩家读完;
+		fun装甲指挥官海因茨说(strPlayerNickName + "，我的一个坦克连在调查无人区孵化场时失联，请前往营救。"); _等玩家读完returnTrue;
+		fun玩家说( "坦克没有步兵保护吗？");	_等玩家读完returnTrue;
+		fun装甲指挥官海因茨说("是的，步兵刚刚到位，两个班的兵力，现在全部交给你指挥。"); _等玩家读完returnTrue;
+		fun玩家说("孵化场是什么？无人区为什么会有孵化场呢？");	_等玩家读完returnTrue;
+		fun科学家玛丽亚说("孵化场是什么尚不清楚，好像是凭空出现的。无人侦机拍摄的视频表明孵化场周围会形成无人区，人的去向不明。");	_等玩家读完returnTrue;
+		fun玩家说("我想起一个古老的传说……");	_等玩家读完returnTrue;
+		fun装甲指挥官海因茨说("现在不是讲故事的时候，坦克连的伴随无人机也失联了。我们再次派侦察机到目标上空已找不到坦克连的踪迹。"); _等玩家读完returnTrue;
+		fun玩家说("一个坦克连应该有10辆坦克吧？这么多钢铁疙瘩能凭空消失吗？");	_等玩家读完returnTrue;
+		fun科学家玛丽亚说("无人区本来是一个生活区，居住着很多人，但是出现孵化场后，居民都消失了。坦克连正是去调查居民失踪的事。");	_等玩家读完returnTrue;
+		fun玩家说("居民失踪就派坦克连去调查，坦克连消失就派我的部队去营救。要是我和我的部队也消失了，还会有人去救我们吗？");	_等玩家读完returnTrue;
+		fun装甲指挥官海因茨说("现在人手紧缺，我不能做任何行动上的承诺。但我个人会竭尽全力，不放弃任何一个人，就像我不会放弃坦克连一样。"); _等玩家读完returnTrue;
+		fun玩家说("我也会尽力而为的。");	_等玩家读完returnTrue;
+		fun装甲指挥官海因茨说("要多用脑子，要多想。记住兵种克制关系：\n小兵 克制 坦克\n坦克 克制 光子炮\n光子炮 克制 小兵"); _等玩家读完returnTrue;
+		fun玩家说("这我早就记住了，否则我也不会疑惑为什么坦克没有步兵保护。");	_等玩家读完returnTrue;
+		fun装甲指挥官海因茨说("我们相信你的能力，你一定能平安归来!"); _等玩家读完returnTrue;
+		PlayerComponent::剧情对话已看完(strPlayerNickName);
+
 		{
-			auto wpSession = GetPlayerGateSession(strPlayerNickName);
-			CHECK_WP_CO_RET_0(wpSession);
-			auto wp视口 = wpSession.lock()->m_wp视口;
-			CHECK_WP_CO_RET_0(wp视口);
-			auto& ref视口 = *wp视口.lock();
-
-			造活动单位(refSpace, ref视口, strPlayerNickName, 单位类型::近战兵, { -40, -1 }, true);
-			for (int i = 0; i < 8; ++i)
 			{
-				const float z = (float)i * 5;
-				造活动单位(refSpace, ref视口, strPlayerNickName, 单位类型::兵, { -40, z });
-				造活动单位(refSpace, ref视口, strPlayerNickName, 单位类型::近战兵, { -35, z });
-			}
+				auto wpSession = GetPlayerGateSession(strPlayerNickName);
+				CHECK_WP_CO_RET_0(wpSession);
+				auto wp视口 = wpSession.lock()->m_wp视口;
+				CHECK_WP_CO_RET_0(wp视口);
+				auto& ref视口 = *wp视口.lock();
 
+				造活动单位(refSpace, ref视口, strPlayerNickName, 单位类型::近战兵, { -40, 10 }, true);
+				for (int i = 0; i < 8; ++i)
+				{
+					const float z = 10.f + i * 5;
+					造活动单位(refSpace, ref视口, strPlayerNickName, 单位类型::兵, { -40, z });
+					造活动单位(refSpace, ref视口, strPlayerNickName, 单位类型::近战兵, { -45, z });
+				}
+			}
 			for (int i = 0; i < 6; ++i)
 			{
-				MonsterComponent::AddMonster(refSpace, 三色坦克, { 48,-49.f + i * 5 }, 1);
+				MonsterComponent::AddMonster(refSpace, 三色坦克, { 40,-49.f + i * 5 }, 1);
+				MonsterComponent::AddMonster(refSpace, 三色坦克, { -40,-49.f + i * 5 }, 1);
 			}
 			for (int i = 0; i < 6; ++i)
 			{
 				创建敌方建筑(refSpace, { 25,-49.f + i * 5 }, 光子炮);
 				创建敌方建筑(refSpace, { 30,-49.f + i * 5 }, 光子炮);
 				创建敌方建筑(refSpace, { 35,-49.f + i * 5 }, 光子炮);
+
+				创建敌方建筑(refSpace, { -25,-49.f + i * 5 }, 光子炮);
+				创建敌方建筑(refSpace, { -30,-49.f + i * 5 }, 光子炮);
+				创建敌方建筑(refSpace, { -35,-49.f + i * 5 }, 光子炮);
 			}
 
-			创建敌方建筑(refSpace, { 5, 35.f }, 孵化场);
+			{
+				//守卫右下角孵化场的怪
+				MonsterComponent::AddMonster(refSpace, 兵 , { 10,35.f}, 2);
+				MonsterComponent::AddMonster(refSpace, 近战兵,{ 10,49.f }, 2);
+			}
+
+			auto wp孵化场右下 = 创建敌方建筑(refSpace, { 10, 40.f }, 孵化场);
+			创建敌方建筑(refSpace, { -45, -45.f }, 孵化场);
+			创建敌方建筑(refSpace, { 45, -45.f }, 孵化场);
+
+			bool b已营救坦克连 = false;
+			while (true)
+			{
+				auto [stop, responce] = co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace, wp孵化场右下](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; });
+				if (stop)
+					co_return 0;
+
+				if (0 == refSpace.Get怪物单位数(孵化场))
+				{
+					co_await 攻坚战胜利(refSpace, strPlayerNickName, funCancel);
+					co_return 0;
+				}
+
+				if (0 == refSpace.Get玩家单位数(strPlayerNickName))
+				{
+					co_await 攻坚战失败(refSpace, strPlayerNickName, funCancel, b已营救坦克连);
+					co_return 0;
+				}
+				CHECK_WP_CO_RET_0(responce.wpEntity);
+				if (!wp孵化场右下.expired() && wp孵化场右下.lock() == responce.wpEntity.lock())//救出坦克连
+				{
+					b已营救坦克连 = true;
+					auto wpSession = GetPlayerGateSession(strPlayerNickName);
+					CHECK_WP_CO_RET_0(wpSession);
+					auto wp视口 = wpSession.lock()->m_wp视口;
+					CHECK_WP_CO_RET_0(wp视口);
+					auto& ref视口 = *wp视口.lock();
+
+					for (int i = 0; i < 5; ++i)
+					{
+						造活动单位(refSpace, ref视口, strPlayerNickName, 三色坦克, { 05.f + i * 5 ,35.f });
+						造活动单位(refSpace, ref视口, strPlayerNickName, 三色坦克, { 10.f + i * 5 ,40.f });
+					}
+
+					fun坦克手齐诺维说("谢谢你救了我们。");	_等玩家读完returnTrue;
+					fun玩家说("你们怎么会在孵化场里？");	_等玩家读完returnTrue;
+					fun坦克手齐诺维说("我也不知道，仿佛做了一场梦，什么都不记得了。");	_等玩家读完returnTrue;
+					fun玩家说("现在我的部队会护送你们回基地。到时候再仔细回忆一下。");	_等玩家读完returnTrue;
+					fun坦克手齐诺维说("上面还有两个孵化场，我要炸掉它们再回去。");	_等玩家读完returnTrue;
+					fun玩家说("上面的孵化场有敌方的光子炮把守，我们过不去。");	_等玩家读完returnTrue;
+					fun坦克手齐诺维说("我的坦克专门克制光子炮。一辆坦克就能全灭它们，何况我现在有十辆。");	_等玩家读完returnTrue;
+					fun玩家说("好的，但是坦克要接受我的指挥，我的步兵会保护坦克。");	_等玩家读完returnTrue;
+					fun坦克手齐诺维说("是！明白！指挥官！");	_等玩家读完returnTrue;
+					PlayerComponent::剧情对话已看完(strPlayerNickName);
+				}
+
+			}
 		}
 
 		co_return 0;

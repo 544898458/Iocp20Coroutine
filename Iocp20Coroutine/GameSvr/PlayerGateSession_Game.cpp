@@ -421,6 +421,8 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 {
 	LOG(INFO) << "收到点击坐标:" << msg.pos;
 	const auto pos = msg.pos;
+	const auto b保持队形 = !pos.DistanceLessEqual(m_pos上次点击走路目标, 5);
+	m_pos上次点击走路目标 = pos;
 	if (m_wpSpace.expired())
 	{
 		Say系统("还没进地图");
@@ -467,7 +469,8 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 
 		if (ref.m_spAttack)
 		{
-			const auto f距离中心点Max = ref.m_spAttack->m_战斗配置.f警戒距离;
+			const auto f距离中心点Max = b保持队形 ? ref.m_spAttack->m_战斗配置.f警戒距离 : ref.m_spAttack->m_战斗配置.f攻击距离/5;
+
 			if (std::abs(pos偏离.x) > f距离中心点Max)
 				pos偏离.x = pos偏离.x / std::abs(pos偏离.x) * f距离中心点Max;
 

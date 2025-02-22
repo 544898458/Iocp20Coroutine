@@ -289,14 +289,14 @@ void Space::EraseEntity(const bool bForceEraseAll)
 	}
 }
 
-int Space::Get怪物单位数()
+int Space::Get怪物单位数(const 单位类型 类型)const
 {
-	return Get单位数([](const Entity& refEntity)
+	return Get单位数([类型](const Entity& refEntity)
 		{
-			if (nullptr == refEntity.m_spMonster)
+			if (refEntity.m_spPlayerNickName)//属于玩家制的单位
 				return false;
 
-			if (refEntity.m_spPlayerNickName)//属于玩家制的单位
+			if (类型 > 单位类型_Invalid_0 && 类型 != refEntity.m_类型)
 				return false;
 
 			return true;
@@ -330,7 +330,7 @@ int Space::Get玩家单位数(const std::string& strPlayerNickName)
 			return true;
 		});
 }
-int Space::Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位)
+int Space::Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位)const
 {
 	int i32单位数(0);
 	for (const auto [k, spEntity] : m_mapEntity)
