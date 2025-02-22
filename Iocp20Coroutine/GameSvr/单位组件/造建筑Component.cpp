@@ -83,7 +83,9 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position pos, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 	//È»ºó¿ªÊ¼¿ÛÇ®½¨Ôì
 	//CHECK_CO_RET_FALSE(m_refEntity.m_spPlayer);
 	auto wpEntity½¨Öş = AddBuilding(ÀàĞÍ, pos);
-	CHECK_WP_CO_RET_FALSE(wpEntity½¨Öş);
+	if (wpEntity½¨Öş.expired())
+		co_return false;
+
 	auto &ref½¨Öş = *wpEntity½¨Öş.lock();
 	CHECK_CO_RET_FALSE(ref½¨Öş.m_spBuilding);
 
@@ -249,7 +251,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	{
 		using namespace std;
 		//						¾¯¾à ¹¥¾à ÉËº¦ ÒÆËÙ
-		µ¥Î»::Õ½¶·ÅäÖÃ Õ½¶· = { 20,	20,		5,	0,	"", 0ms,"pao002",400ms,"ÒôĞ§/PhoFir00","ÒôĞ§/explo1","Take 001", 400ms };
+		µ¥Î»::Õ½¶·ÅäÖÃ Õ½¶· = { 20,	20,		4,	0,	"", 0ms,"pao002",400ms,"ÒôĞ§/PhoFir00","ÒôĞ§/explo1","Take 001", 400ms };
 		AttackComponent::AddComponent(refNewEntity, ÀàĞÍ, Õ½¶·);
 
 	}

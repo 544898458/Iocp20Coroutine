@@ -295,7 +295,8 @@ int Space::Get怪物单位数(const 单位类型 类型)const
 		{
 			if (refEntity.m_spPlayerNickName)//属于玩家制的单位
 				return false;
-
+			if(EntitySystem::Is资源(refEntity.m_类型))
+				return false;
 			if (类型 > 单位类型_Invalid_0 && 类型 != refEntity.m_类型)
 				return false;
 
