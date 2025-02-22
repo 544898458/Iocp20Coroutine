@@ -52,7 +52,7 @@ public:
 	/// </summary>
 	WpSpace m_wpSpace;
 	//WpSpace m_wpSpace单人剧情副本;
-	SpSpace m_spSpace多人战局;
+	//SpSpace m_spSpace多人战局;
 	WpEntity m_wp视口;
 private:
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);

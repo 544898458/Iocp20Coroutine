@@ -103,11 +103,11 @@ void PlayerGateSession_Game::离开Space(const bool b主动退)
 	{
 		Space::DeleteSpace单人(NickName());
 	}
-	if (m_spSpace多人战局)
-	{
-		m_spSpace多人战局->OnDestory();
-		m_spSpace多人战局.reset();
-	}
+	//if (m_spSpace多人战局)
+	//{
+	//	m_spSpace多人战局->OnDestory();
+	//	m_spSpace多人战局.reset();
+	//}
 	if (b离开)
 		Send<Msg离开Space>({});
 }
@@ -351,6 +351,7 @@ std::unordered_map<副本ID, 副本配置> g_map副本配置 =
 {
 	{训练战,{"all_tiles_tilecache.bin",		"scene战斗",	单人剧情::Co训练战}},
 	{防守战,{"防守战.bin",					"scene防守战",	单人剧情::Co防守战}},
+	{攻坚战,{"攻坚战.bin",					"scene攻坚战",	单人剧情::Co攻坚战}},
 	{多人联机地图,{"all_tiles_tilecache.bin","scene战斗",	{}}},
 	{四方对战,{"四方对战.bin",				"scene四方对战",多人战局::Co四方对战}},
 };
@@ -371,7 +372,7 @@ bool Get副本配置(const 副本ID id, 副本配置& refOut)
 
 void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
 {
-	CHECK_VOID(msg.id == 训练战 || msg.id == 防守战);
+	CHECK_VOID(msg.id == 训练战 || msg.id == 防守战 || msg.id == 攻坚战);
 	副本配置 配置;
 	{
 		const auto ok = Get副本配置(msg.id, 配置);
@@ -402,10 +403,18 @@ void PlayerGateSession_Game::OnRecv(const Msg创建多人战局& msg)
 		CHECK_RET_VOID(ok);
 	}
 
-	m_spSpace多人战局 = std::make_shared<Space, const 副本配置&>(配置);
-	m_wp视口 = EnterSpace(m_spSpace多人战局);
+	//m_spSpace多人战局 = std::make_shared<Space, const 副本配置&>(配置);
+	auto wpOld = Space::GetSpace单人(NickName());
+	if (!wpOld.expired() && wpOld.lock()->m_配置.strSceneName != 配置.strSceneName)
+	{
+		Space::DeleteSpace单人(NickName());
+	}
+	auto [b新, wpSpace] = Space::GetSpace单人(NickName(), 配置);
+	//m_wpSpace单人剧情副本 = wpSpace;
+	CHECK_WP_RET_VOID(wpSpace);
+	m_wp视口 = EnterSpace(wpSpace);
 	CHECK_WP_RET_VOID(m_wp视口);
-	配置.funCo剧情(*m_spSpace多人战局, m_funCancel进地图, NickName()).RunNew();
+	配置.funCo剧情(*wpSpace.lock(), wpSpace.lock()->m_funCancel剧情, NickName()).RunNew();
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
@@ -798,8 +807,8 @@ void PlayerGateSession_Game::Process()
 	//if (m_spSpace单人剧情副本)
 		//m_spSpace单人剧情副本->Update();
 
-	if (m_spSpace多人战局)
-		m_spSpace多人战局->Update();
+	//if (m_spSpace多人战局)
+		//m_spSpace多人战局->Update();
 }
 
 
@@ -992,6 +1001,9 @@ void PlayerGateSession_Game::OnRecv(const Msg玩家个人战局列表& msg)
 		//if (!sp->m_spSpace单人剧情副本)
 		//	continue;
 
+		if (sp->m_配置.strSceneName == "scene四方对战")
+			continue;
+
 		msgResponce.vec个人战局中的玩家.push_back(
 			{
 				StrConv::GbkToUtf8(strNickName),
@@ -1003,15 +1015,18 @@ void PlayerGateSession_Game::OnRecv(const Msg玩家个人战局列表& msg)
 void PlayerGateSession_Game::OnRecv(const Msg玩家多人战局列表& msg)
 {
 	Msg玩家多人战局列表Responce msgResponce;
-	for (const auto [id, sp] : m_refGameSvrSession.m_mapPlayerGateSession)
+	//for (const auto [id, sp] : m_refGameSvrSession.m_mapPlayerGateSession)
+	for (auto [strNickName, sp] : Space::个人战局())
 	{
-		if (!sp->m_spSpace多人战局)
+		//if (!sp->m_spSpace多人战局)
+			//continue;
+		if (sp->m_配置.strSceneName != "scene四方对战")
 			continue;
 
 		msgResponce.vec多人战局中的Host玩家.push_back(
 			{
-				StrConv::GbkToUtf8(sp->NickName()),
-				StrConv::GbkToUtf8(sp->m_spSpace多人战局->m_配置.strSceneName)
+				StrConv::GbkToUtf8(strNickName),
+				StrConv::GbkToUtf8(sp->m_配置.strSceneName)//sp->m_spSpace多人战局->m_配置.strSceneName)
 			});
 	}
 	Send(msgResponce);
@@ -1033,15 +1048,16 @@ void PlayerGateSession_Game::OnRecv(const Msg进其他玩家个人战局& msg)
 void PlayerGateSession_Game::OnRecv(const Msg进其他玩家多人战局& msg)
 {
 	const auto strGbk = StrConv::Utf8ToGbk(msg.nickName其他玩家);
-	auto iterFind = std::find_if(m_refGameSvrSession.m_mapPlayerGateSession.begin(), m_refGameSvrSession.m_mapPlayerGateSession.end(),
-		[&strGbk](const auto& pair)->bool
-		{
-			return pair.second->NickName() == strGbk;
-		});
-	CHECK_RET_VOID(iterFind != m_refGameSvrSession.m_mapPlayerGateSession.end());
-	auto& refSp = iterFind->second->m_spSpace多人战局;
-	CHECK_RET_VOID(refSp);
-	EnterSpace(refSp);
+	//auto iterFind = std::find_if(m_refGameSvrSession.m_mapPlayerGateSession.begin(), m_refGameSvrSession.m_mapPlayerGateSession.end(),
+	//	[&strGbk](const auto& pair)->bool
+	//	{
+	//		return pair.second->NickName() == strGbk;
+	//	});
+	//CHECK_RET_VOID(iterFind != m_refGameSvrSession.m_mapPlayerGateSession.end());
+	//auto& refSp = iterFind->second->m_spSpace多人战局;
+	auto wpSpace = Space::GetSpace单人(strGbk);
+	CHECK_WP_RET_VOID(wpSpace);
+	EnterSpace(wpSpace);
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg切换空闲工程车& msg)

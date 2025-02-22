@@ -572,10 +572,17 @@ struct Msg进Space
 
 enum 副本ID
 {
+	单人ID_非法_MIN,
 	训练战,
 	防守战,
-	多人联机地图,
+	攻坚战,
+	单人ID_非法_MAX,
+
+	多人ID_非法_MIN = 100,
 	四方对战,
+	多人ID_非法_MAX,
+
+	多人联机地图,
 };
 MSGPACK_ADD_ENUM(副本ID);
 

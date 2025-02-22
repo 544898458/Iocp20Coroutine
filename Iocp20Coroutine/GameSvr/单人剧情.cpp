@@ -362,4 +362,9 @@ namespace 单人剧情
 		}
 		co_return 0;
 	}
+
+	CoTask<int> Co攻坚战(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName)
+	{
+		co_return 0;
+	}
 }
