@@ -285,7 +285,7 @@ namespace 单人剧情
 
 			fun总教官陈近南说(strPlayerNickName + "，我果然没有看错你，你是一个指挥天才！"); _等玩家读完returnTrue;
 			fun玩家说("承蒙教官谬赞。学生谨遵教诲，自不敢有一丝懈怠，定当不负所望，继续精进。");	_等玩家读完returnTrue;
-			PlayerComponent::剧情对话(strPlayerNickName, "图片/总教官1", "总教官：陈近南", "", "", "    走你!", true);
+			PlayerComponent::剧情对话(strPlayerNickName, "图片/陈近南", "总教官：陈近南", "", "", "    走你!", true);
 			co_return true;
 		}
 		if (0 == refSpace.Get玩家单位数(strPlayerNickName))
@@ -364,7 +364,7 @@ namespace 单人剧情
 
 		}
 
-		PlayerGateSession_Game::Say系统(strPlayerNickName, "5秒后将出现第1波怪。您可以沿墙边造光子炮、布置坦克、造几地堡、让兵进驻地堡。");
+		PlayerGateSession_Game::Say系统(strPlayerNickName, "5秒后将出现第1波怪。您可以沿右边墙边造光子炮、布置坦克、造地堡、让兵进驻地堡。");
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
