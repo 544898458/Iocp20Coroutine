@@ -89,8 +89,11 @@ void PlayerGateSession_Game::离开Space(const bool b主动退)
 		{
 		});*/
 
-	if (m_funCancel进地图)
+	if (m_funCancel进地图) 
+	{
 		m_funCancel进地图();
+		m_funCancel进地图 = nullptr;
+	}
 
 	const bool b离开 = !m_wpSpace.expired();
 	m_wpSpace.reset();
@@ -335,8 +338,11 @@ void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
 	CHECK_WP_RET_VOID(wp);
 	m_wp视口 = EnterSpace(wp);
 
-	if (m_funCancel进地图)
+	if (m_funCancel进地图) 
+	{
 		m_funCancel进地图();
+		m_funCancel进地图 = nullptr;
+	}
 
 	Co进多人联机地图(m_wp视口).RunNew();
 }
