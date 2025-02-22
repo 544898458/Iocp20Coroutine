@@ -382,7 +382,7 @@ Space::SpacePlayer::SpacePlayer()
 {
 }
 
-void Space::SpacePlayer::OnDestroy(const bool b主动退, Space& refSpace, const std::string& refStrNickName)
+void Space::SpacePlayer::OnDestroy(const bool b删除玩家所有单位, Space& refSpace, const std::string& refStrNickName)
 {
 	auto mapLocal = m_mapWpEntity;//不能在ForEach内删除容器
 	for (auto [_, wp] : mapLocal)
@@ -394,7 +394,7 @@ void Space::SpacePlayer::OnDestroy(const bool b主动退, Space& refSpace, const st
 			continue;
 		}
 		auto sp = wp.lock();
-		if (b主动退 || EntitySystem::Is视口(*sp))
+		if (b删除玩家所有单位 || EntitySystem::Is视口(*sp))//删除单位
 		{
 			if (sp->m_refSpace.GetEntity(sp->Id).expired())
 			{
@@ -410,7 +410,7 @@ void Space::SpacePlayer::OnDestroy(const bool b主动退, Space& refSpace, const st
 			countErase = sp->m_refSpace.m_mapEntity.erase(sp->Id);
 			_ASSERT(1 == countErase);
 		}
-		else
+		else//不删，只删除Session引用
 		{
 			sp->m_spPlayer.reset();
 			//refSpace.m_map已离线PlayerEntity[refStrNickName].insert({ sp->Id,sp });

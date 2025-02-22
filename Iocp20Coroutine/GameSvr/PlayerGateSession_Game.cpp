@@ -73,7 +73,10 @@ void PlayerGateSession_Game::OnDestroy()
 void PlayerGateSession_Game::离开Space(const bool b主动退)
 {
 	if (!m_wpSpace.expired())
-		m_wpSpace.lock()->m_mapPlayer[NickName()].OnDestroy(b主动退, *m_wpSpace.lock(), NickName());
+	{
+		auto wp我的单人 = Space::GetSpace单人(NickName());
+		m_wpSpace.lock()->m_mapPlayer[NickName()].OnDestroy(b主动退 && !wp我的单人.expired(), *m_wpSpace.lock(), NickName());
+	}
 
 	for (auto& sp : m_vecFunCancel)
 	{
@@ -377,7 +380,7 @@ void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
 
 	//m_spSpace单人剧情副本 = std::make_shared<Space, const 副本配置&>(配置);
 	auto wpOld = Space::GetSpace单人(NickName());
-	if (!wpOld.expired()&& wpOld.lock()->m_配置.strSceneName != 配置.strSceneName)
+	if (!wpOld.expired() && wpOld.lock()->m_配置.strSceneName != 配置.strSceneName)
 	{
 		Space::DeleteSpace单人(NickName());
 	}
@@ -661,7 +664,7 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 
 	Send<Msg进Space>({ .idSapce = 1 });
 	{
-		auto &sencePlayer = spSpace->m_mapPlayer[NickName()];
+		auto& sencePlayer = spSpace->m_mapPlayer[NickName()];
 		for (auto [id, wp] : sencePlayer.m_mapWpEntity)
 		{
 			if (wp.expired())

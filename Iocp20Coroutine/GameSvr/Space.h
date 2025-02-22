@@ -86,7 +86,7 @@ public:
 		uint32_t m_u32燃气矿 = 10;
 		uint32_t m_u32晶体矿 = 100;
 
-		void OnDestroy(const bool b单人副本, Space& refSpace, const std::string& refStrNickName);
+		void OnDestroy(const bool b删除玩家所有单位, Space& refSpace, const std::string& refStrNickName);
 		void Erase(uint64_t u64Id);
 	};
 	//using SpSpacePlayer = std::shared_ptr<SpacePlayer> ;
