@@ -12,13 +12,29 @@
 #include "单位组件/AttackComponent.h"
 #include "单位组件/造活动单位Component.h"
 #include "单位组件/走Component.h"
+#include "单位组件/造建筑Component.h"
+#include "单位组件/BuildingComponent.h"
 #include "单位.h"
 #include "AiCo.h"
+
 
 #define _等玩家读完returnTrue	{if (co_await 等玩家读完(strPlayerNickName, funCancel))co_return true;}
 std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStrNickName);
 namespace 单人剧情
 {
+	static void 造活动单位(Space& refSpace, Entity& ref视口, const std::string& refStrNickName, const 单位类型 类型, const Position& refPos, bool b设置视口 = false)
+	{
+		单位::活动单位配置 配置;
+		单位::Find活动单位配置(类型, 配置);
+		auto sp = refSpace.造活动单位(ref视口.m_spPlayer, refStrNickName, refPos, 配置, 类型);
+		if (b设置视口)
+		{
+			auto wpSession = GetPlayerGateSession(refStrNickName);
+			CHECK_WP_RET_VOID(wpSession);
+
+			wpSession.lock()->Send设置视口(*sp);
+		}
+	}
 
 	static void 总教官陈近南说(const std::string& refStrNickName, const std::string& str内容)
 	{
@@ -49,14 +65,14 @@ namespace 单人剧情
 			"\t\t\t基地又产工程车。\n"
 			"\t\t\t工程车，造兵厂，\n"
 			"\t\t\t兵厂产兵欢乐多！"
-		);_等玩家读完returnTrue;
-		fun玩家说("听说工程车还可以造地堡和光子炮，我也要试试。");_等玩家读完returnTrue;
+		); _等玩家读完returnTrue;
+		fun玩家说("听说工程车还可以造地堡和光子炮，我也要试试。"); _等玩家读完returnTrue;
 		fun总教官陈近南说("造完基地应该先安排工程车去采集晶体矿和燃气矿，这是一切生产建造的基础。此外建造民房可以提升活动单位上限。\n加油！"); _等玩家读完returnTrue;
 		fun玩家说("我只想单手操作，拖动视口 和 选中多个单位 如何操作呢？"); _等玩家读完returnTrue;
 		fun总教官陈近南说("\t\t拖动地面就可以移动视口，此外右侧还有视口镜头投影切换、放大、缩小按钮。\n"
 			"\t\t先点击右边“框选”按钮，然后在屏幕中间上下拖动，即可框选多个单位。\n"
 			"\t\t全程只要单手握持手机单指操作即可。\n"
-			); _等玩家读完returnTrue;
+		); _等玩家读完returnTrue;
 		fun玩家说("只用一只手就能玩的RTS即时战略游戏，那岂不是跟刷短视频一样轻松？我一定要体验一下！"); _等玩家读完returnTrue;
 		fun总教官陈近南说("走你!"); _等玩家读完returnTrue;
 		PlayerComponent::剧情对话已看完(strPlayerNickName);
@@ -81,7 +97,7 @@ namespace 单人剧情
 		CHECK_WP_CO_RET_0(wpSession);
 		auto wp视口 = wpSession.lock()->m_wp视口;
 		CHECK_WP_CO_RET_0(wp视口);
-		SpEntity sp工程车 = refSpace.造活动单位(wp视口.lock()->m_spPlayer, strPlayerNickName, {5,10}, 配置, 类型);
+		SpEntity sp工程车 = refSpace.造活动单位(wp视口.lock()->m_spPlayer, strPlayerNickName, { 5,10 }, 配置, 类型);
 
 		PlayerGateSession_Game::Say系统(strPlayerNickName, "请点击“工程车”选中，然后点击“建筑单位=>基地”按钮，再点击空白地面，10秒后就能造出一个基地");
 
@@ -195,7 +211,7 @@ namespace 单人剧情
 		PlayerGateSession_Game::Say系统(strPlayerNickName, "恭喜您消灭了敌人！现在左边给您刷了10个怪。您可以造“活动单位/地堡”,让兵进入地堡中，立足防守，再伺机进攻");
 		MonsterComponent::AddMonster(refSpace, 兵, { -30.0 }, 10);
 
-		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace,&strPlayerNickName](const MyEvent::单位阵亡& ref)
+		if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::单位阵亡& ref)
 			{
 				auto spEntity = ref.wpEntity.lock();
 				if (&spEntity->m_refSpace != &refSpace)
@@ -245,14 +261,14 @@ namespace 单人剧情
 
 	static CoTask<bool> Is战斗结束(Space& refSpace, const std::string strPlayerNickName, FunCancel& funCancel)
 	{
-		const auto fun总教官陈近南说 = [&strPlayerNickName](const std::string& str内容) {总教官陈近南说(strPlayerNickName, str内容);};
-		const auto fun玩家说 = [&strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, str内容);};
+		const auto fun总教官陈近南说 = [&strPlayerNickName](const std::string& str内容) {总教官陈近南说(strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, str内容); };
 
 		if (0 == refSpace.Get怪物单位数())
 		{
 			PlayerGateSession_Game::播放声音(strPlayerNickName, "音效/YouWin", "您守住了！您真是指挥天才！");
 
-			fun总教官陈近南说(strPlayerNickName + "，我果然没有看错你，你是一个指挥天才！");_等玩家读完returnTrue;
+			fun总教官陈近南说(strPlayerNickName + "，我果然没有看错你，你是一个指挥天才！"); _等玩家读完returnTrue;
 			fun玩家说("承蒙教官谬赞。学生谨遵教诲，自不敢有一丝懈怠，定当不负所望，继续精进。");	_等玩家读完returnTrue;
 			PlayerComponent::剧情对话(strPlayerNickName, "图片/总教官1", "总教官：陈近南", "", "", "    走你!", true);
 			co_return true;
@@ -260,7 +276,7 @@ namespace 单人剧情
 		if (0 == refSpace.Get玩家单位数(strPlayerNickName))
 		{
 			PlayerGateSession_Game::播放声音(strPlayerNickName, "音效/YouLose", "胜败乃兵家常事，请点击右上角“退出场景”离开，然后再次点击“防守战”，就可以重新来过。");
-			fun总教官陈近南说("胜败乃兵家常事，我仍然看好你的潜力！");_等玩家读完returnTrue;
+			fun总教官陈近南说("胜败乃兵家常事，我仍然看好你的潜力！"); _等玩家读完returnTrue;
 			玩家说(strPlayerNickName, "学生此次功败垂成，定会吸取教训，总结经验，再次努力，定不辜负教官的栽培与期望。", true);//	_等玩家读完;
 			co_return true;
 		}
@@ -271,8 +287,8 @@ namespace 单人剧情
 		KeepCancel kc(funCancel);
 		using namespace std;
 
-		const auto fun总教官陈近南说 = [&strPlayerNickName](const std::string& str内容) {总教官陈近南说(strPlayerNickName, str内容);};
-		const auto fun玩家说 = [&strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, str内容);};
+		const auto fun总教官陈近南说 = [&strPlayerNickName](const std::string& str内容) {总教官陈近南说(strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, str内容); };
 
 		fun总教官陈近南说("情报显示：将有大量敌方单位进攻我方基地，请做好准备。");	_等玩家读完returnTrue;
 		fun玩家说("可是我仅受过简单的指挥训练。");							_等玩家读完returnTrue;
@@ -282,11 +298,11 @@ namespace 单人剧情
 		fun玩家说("真有这种口诀的话就应该在训练战时告诉我啊！");			_等玩家读完returnTrue;
 		fun总教官陈近南说("实战口诀只有在九死一生的实战中才有用！");		_等玩家读完returnTrue;
 		fun玩家说("九死一生？形势严峻啊，我会全力以赴的!");					_等玩家读完returnTrue;
-		fun总教官陈近南说("坦克可以超远距离造成超高伤害，而且是范围伤害，但是坦克锁定炮弹落点后有超长前摇时长，前摇结束后，敌方目标可能已经远离炮弹落点。炮弹落点附近的我方单位也会受到伤害。");_等玩家读完returnTrue;
+		fun总教官陈近南说("坦克可以超远距离造成超高伤害，而且是范围伤害，但是坦克锁定炮弹落点后有超长前摇时长，前摇结束后，敌方目标可能已经远离炮弹落点。炮弹落点附近的我方单位也会受到伤害。"); _等玩家读完returnTrue;
 		fun玩家说("有点鸡肋的感觉，不是红警中的高速坦克，与星际中的攻城坦克也有些不同。");	_等玩家读完returnTrue;
-		fun总教官陈近南说("…不知道你在说什么…有一种叫“光子炮”的建筑单位，攻击距离很远，仅次于坦克；前摇时长很短，可以快速攻击；缺陷是伤害较低；不过多造点集中防守某一块区域还是很实用的。");_等玩家读完returnTrue;
+		fun总教官陈近南说("…不知道你在说什么…有一种叫“光子炮”的建筑单位，攻击距离很远，仅次于坦克；前摇时长很短，可以快速攻击；缺陷是伤害较低；不过多造点集中防守某一块区域还是很实用的。"); _等玩家读完returnTrue;
 		fun玩家说("看来只要有坦克和光子炮就能守住对吗？");					_等玩家读完returnTrue;
-		fun总教官陈近南说("是的，这是其他指挥官总结的经验。大概10个光子炮和5辆坦克沿墙边布置就能守住。当然还有其他多种可行的防守方法，要靠你自行摸索。");_等玩家读完returnTrue;
+		fun总教官陈近南说("是的，这是其他指挥官总结的经验。大概10个光子炮和5辆坦克沿墙边布置就能守住。当然还有其他多种可行的防守方法，要靠你自行摸索。"); _等玩家读完returnTrue;
 		fun玩家说("OK，也不是很复杂。我有信心完成任务！");					_等玩家读完returnTrue;
 		fun总教官陈近南说("走你！");										_等玩家读完returnTrue;
 
@@ -323,7 +339,7 @@ namespace 单人剧情
 				const 单位类型 类型(单位类型::工程车);
 				单位::活动单位配置 配置;
 				单位::Find活动单位配置(类型, 配置);
-				refSpace.造活动单位(wp视口.lock()->m_spPlayer, strPlayerNickName, {-30, 30}, 配置, 类型);
+				refSpace.造活动单位(wp视口.lock()->m_spPlayer, strPlayerNickName, { -30, 30 }, 配置, 类型);
 			}
 
 			资源Component::Add(refSpace, 晶体矿, { -20, 35 });
@@ -363,8 +379,52 @@ namespace 单人剧情
 		co_return 0;
 	}
 
+	static void 创建敌方建筑(Space& refSpace, const Position& pos, const 单位类型 类型)
+	{
+		auto wp = 造建筑Component::创建建筑(refSpace, pos, 类型, {}, "");
+		CHECK_WP_RET_VOID(wp);
+		auto& refEntity = *wp.lock();
+		refEntity.m_spBuilding->StartCo建造过程();
+	}
+
 	CoTask<int> Co攻坚战(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName)
 	{
+		KeepCancel kc(funCancel);
+
+		const auto fun总教官陈近南说 = [&strPlayerNickName](const std::string& str内容) {总教官陈近南说(strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, str内容); };
+
+		fun总教官陈近南说("攻坚战还在开发中，请点右上角“X”退出"); _等玩家读完returnTrue;
+		玩家说(strPlayerNickName, "好的。", true);//	_等玩家读完;
+		{
+			auto wpSession = GetPlayerGateSession(strPlayerNickName);
+			CHECK_WP_CO_RET_0(wpSession);
+			auto wp视口 = wpSession.lock()->m_wp视口;
+			CHECK_WP_CO_RET_0(wp视口);
+			auto& ref视口 = *wp视口.lock();
+
+			造活动单位(refSpace, ref视口, strPlayerNickName, 单位类型::近战兵, { -40, -1 }, true);
+			for (int i = 0; i < 8; ++i)
+			{
+				const float z = (float)i * 5;
+				造活动单位(refSpace, ref视口, strPlayerNickName, 单位类型::兵, { -40, z });
+				造活动单位(refSpace, ref视口, strPlayerNickName, 单位类型::近战兵, { -35, z });
+			}
+
+			for (int i = 0; i < 6; ++i)
+			{
+				MonsterComponent::AddMonster(refSpace, 三色坦克, { 48,-49.f + i * 5 }, 1);
+			}
+			for (int i = 0; i < 6; ++i)
+			{
+				创建敌方建筑(refSpace, { 25,-49.f + i * 5 }, 光子炮);
+				创建敌方建筑(refSpace, { 30,-49.f + i * 5 }, 光子炮);
+				创建敌方建筑(refSpace, { 35,-49.f + i * 5 }, 光子炮);
+			}
+
+			创建敌方建筑(refSpace, { 5, 35.f }, 孵化场);
+		}
+
 		co_return 0;
 	}
 }

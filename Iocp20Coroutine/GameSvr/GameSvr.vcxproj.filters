@@ -551,6 +551,9 @@
     <ClInclude Include="单位组件\走Component.h">
       <Filter>单位组件</Filter>
     </ClInclude>
+    <ClInclude Include="SpPlayerComponent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\websocketfiles-master\src\string_helper.inl">

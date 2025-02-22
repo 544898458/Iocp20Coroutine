@@ -82,22 +82,21 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position pos, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 
 	//È»ºó¿ªÊ¼¿ÛÇ®½¨Ôì
 	//CHECK_CO_RET_FALSE(m_refEntity.m_spPlayer);
-	auto spEntity½¨Öş = AddBuilding(ÀàĞÍ, pos);
-	if (!spEntity½¨Öş)
-		co_return false;
-
-	CHECK_CO_RET_FALSE(spEntity½¨Öş->m_spBuilding);
+	auto wpEntity½¨Öş = AddBuilding(ÀàĞÍ, pos);
+	CHECK_WP_CO_RET_FALSE(wpEntity½¨Öş);
+	auto &ref½¨Öş = *wpEntity½¨Öş.lock();
+	CHECK_CO_RET_FALSE(ref½¨Öş.m_spBuilding);
 
 	if (¹¤³Ì³µ == m_refEntity.m_ÀàĞÍ)
 	{
-		if (co_await Co½¨Ôì¹ı³Ì(spEntity½¨Öş, m_cancelÔì½¨Öş))
+		if (co_await Co½¨Ôì¹ı³Ì(wpEntity½¨Öş, m_cancelÔì½¨Öş))
 			co_return true;
 	}
 	else
 	{
 		using namespace std;
 		m_refEntity.CoDelayDelete(1ms).RunNew();
-		spEntity½¨Öş->m_spBuilding->StartCo½¨Ôì¹ı³Ì();
+		ref½¨Öş.m_spBuilding->StartCo½¨Ôì¹ı³Ì();
 	}
 
 	co_return false;
@@ -160,7 +159,7 @@ void Ôì½¨ÖşComponent::TryCancel()
 }
 
 
-SpEntity Ôì½¨ÖşComponent::AddBuilding(const µ¥Î»ÀàĞÍ ÀàĞÍ, const Position pos)
+WpEntity Ôì½¨ÖşComponent::AddBuilding(const µ¥Î»ÀàĞÍ ÀàĞÍ, const Position pos)
 {
 	µ¥Î»::½¨Öşµ¥Î»ÅäÖÃ ÅäÖÃ;
 	if (!µ¥Î»::Find½¨Öşµ¥Î»ÅäÖÃ(ÀàĞÍ, ÅäÖÃ))
@@ -206,21 +205,33 @@ SpEntity Ôì½¨ÖşComponent::AddBuilding(const µ¥Î»ÀàĞÍ ÀàĞÍ, const Position pos)
 	//¼Ó½¨Öş
 	//CHECK_CO_RET_0(!m_wpSpace.expired());
 	//auto spSpace = m_wpSpace.lock();
+	auto wpNew = ´´½¨½¨Öş(m_refEntity.m_refSpace, pos, ÀàĞÍ, m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity));
+	PlayerComponent::Send×ÊÔ´(m_refEntity);
+	return wpNew;
+}
+
+WpEntity Ôì½¨ÖşComponent::´´½¨½¨Öş(Space& refSpace, const Position& pos, const µ¥Î»ÀàĞÍ ÀàĞÍ, SpPlayerComponent spPlayer, const std::string& strPlayerNickName)
+{
+	µ¥Î»::½¨Öşµ¥Î»ÅäÖÃ ÅäÖÃ;
+	if (!µ¥Î»::Find½¨Öşµ¥Î»ÅäÖÃ(ÀàĞÍ, ÅäÖÃ))
+	{
+		return{};
+	}
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const µ¥Î»ÀàĞÍ, const µ¥Î»::µ¥Î»ÅäÖÃ& >(
-		pos, m_refEntity.m_refSpace, std::forward<const µ¥Î»ÀàĞÍ&&>(ÀàĞÍ), ÅäÖÃ.ÅäÖÃ);
+		pos, refSpace, std::forward<const µ¥Î»ÀàĞÍ&&>(ÀàĞÍ), ÅäÖÃ.ÅäÖÃ);
 	//spNewEntity->AddComponentAttack();
-	¸ù¾İ½¨ÖşÀàĞÍAddComponent(m_refEntity.m_refSpace, ÀàĞÍ, *spNewEntity, m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity), ÅäÖÃ);
+	¸ù¾İ½¨ÖşÀàĞÍAddComponent(refSpace, ÀàĞÍ, *spNewEntity, spPlayer, strPlayerNickName, ÅäÖÃ);
 
 
 	spNewEntity->BroadcastEnter();
-	PlayerComponent::Send×ÊÔ´(m_refEntity);
 	return spNewEntity;
 }
 
-void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ ÀàĞÍ, Entity& refNewEntity, std::shared_ptr<PlayerComponent> spPlayer,
-	const std::string& strNickName, const µ¥Î»::½¨Öşµ¥Î»ÅäÖÃ& ÅäÖÃ)
+void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ ÀàĞÍ, Entity& refNewEntity, SpPlayerComponent spPlayer, const std::string& strPlayerNickName, const µ¥Î»::½¨Öşµ¥Î»ÅäÖÃ& ÅäÖÃ)
 {
-	PlayerComponent::AddComponent(refNewEntity, spPlayer, strNickName);
+	if (spPlayer)
+		PlayerComponent::AddComponent(refNewEntity, spPlayer, spPlayer->m_refSession.NickName());
+
 	BuildingComponent::AddComponent(refNewEntity, ÅäÖÃ.f°ë±ß³¤);
 
 	switch (ÀàĞÍ)
@@ -245,6 +256,6 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	break;
 	}
 	DefenceComponent::AddComponent(refNewEntity, ÅäÖÃ.½¨Ôì.u16³õÊ¼Hp);
-	refSpace.m_mapPlayer[strNickName].m_mapWpEntity[refNewEntity.Id] = refNewEntity.shared_from_this();//×Ô¼º¿ØÖÆµÄµ¥Î»
+	refSpace.m_mapPlayer[strPlayerNickName].m_mapWpEntity[refNewEntity.Id] = refNewEntity.shared_from_this();//×Ô¼º¿ØÖÆµÄµ¥Î»
 	refSpace.AddEntity(refNewEntity.shared_from_this());
 }
