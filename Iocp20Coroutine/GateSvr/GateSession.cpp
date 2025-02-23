@@ -70,6 +70,11 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 {
 	_ASSERT(!m_bLoginOk);
 	{
+		if (msg.u32版本号 < 0)
+		{
+			LOG(WARNING) << "版本过低:" << msg.u32版本号;
+			co_return 0;
+		}
 		auto [stop, responce] = co_await CoRpc<MsgLoginResponce>::Send<MsgLogin>(msg, [this](const MsgLogin& msg) {SendToWorldSvr转发<MsgLogin>(msg, GetId()); }, funCancel);
 		LOG(INFO) << "WorldSvr返回登录结果stop=" << stop << ",error=" << responce.result;
 		if (stop)

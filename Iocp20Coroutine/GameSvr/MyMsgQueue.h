@@ -326,7 +326,8 @@ struct MsgLogin
 	MsgHead msg;
 	std::string name;
 	std::string pwd;
-	MSGPACK_DEFINE(msg, name, pwd);
+	uint32_t u32°æ±¾ºÅ;
+	MSGPACK_DEFINE(msg, name, pwd, u32°æ±¾ºÅ);
 };
 
 struct MsgLoginResponce
