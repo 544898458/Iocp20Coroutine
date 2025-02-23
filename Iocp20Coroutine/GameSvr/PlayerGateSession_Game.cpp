@@ -221,24 +221,27 @@ void PlayerGateSession_Game::OnRecv(const Msg出地堡& msg)
 
 void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 {
-	std::list<std::function<void()>> listFun;
-	ForEachSelected([this, &msg, &listFun](Entity& ref)
-		{
-			CHECK_VOID(!m_wpSpace.expired());
-			auto wpTarget = m_wpSpace.lock()->GetEntity((int64_t)msg.id目标地堡);
-			CHECK_RET_VOID(!wpTarget.expired());
-			auto& refTarget地堡 = *wpTarget.lock();
-			if (!refTarget地堡.m_sp地堡)
-			{
-				播放声音("BUZZ", "目标不是地堡");
-				return;
-			}
-			if (EntitySystem::GetNickName(refTarget地堡) != NickName())
-			{
-				播放声音("BUZZ", "不能进别人的地堡");
-				return;
-			}
+	CHECK_VOID(!m_wpSpace.expired());
+	auto wpTarget = m_wpSpace.lock()->GetEntity((int64_t)msg.id目标地堡);
+	CHECK_RET_VOID(!wpTarget.expired());
+	auto& refTarget地堡 = *wpTarget.lock();
+	if (!refTarget地堡.m_sp地堡)
+	{
+		播放声音("BUZZ", "目标不是地堡");
+		return;
+	}
+	if (EntitySystem::GetNickName(refTarget地堡) != NickName())
+	{
+		//播放声音("BUZZ", "不能进别人的地堡");
+		MsgMove msg = { .pos = refTarget地堡.Pos(),.b遇到敌人自动攻击 = true };
+		OnRecv(msg);
 
+		return;
+	}
+
+	std::list<std::function<void()>> listFun;
+	ForEachSelected([this, &msg, &listFun, &wpTarget](Entity& ref)
+		{
 			if (!ref.m_spAttack || EntitySystem::Is建筑(ref.m_类型))
 			{
 				//Say系统("此单位不可进入地堡");
@@ -953,7 +956,7 @@ void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
 		{
 			if (vecId.size() == 1)//单选一个敌方单位，就是走过去打
 			{
-				MsgMove msg = { .pos = spEntity->Pos(),.b遇到敌人自动攻击 = false };
+				MsgMove msg = { .pos = spEntity->Pos(),.b遇到敌人自动攻击 = true };
 				OnRecv(msg);
 				return;
 			}
