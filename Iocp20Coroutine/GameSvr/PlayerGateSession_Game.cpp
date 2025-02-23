@@ -227,16 +227,22 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 			CHECK_VOID(!m_wpSpace.expired());
 			auto wpTarget = m_wpSpace.lock()->GetEntity((int64_t)msg.id目标地堡);
 			CHECK_RET_VOID(!wpTarget.expired());
-			auto spTarget = wpTarget.lock();
-			if (!spTarget->m_sp地堡)
+			auto& refTarget地堡 = *wpTarget.lock();
+			if (!refTarget地堡.m_sp地堡)
 			{
-				Say系统("目标不是地堡");
+				播放声音("BUZZ", "目标不是地堡");
+				return;
+			}
+			if (EntitySystem::GetNickName(refTarget地堡) != NickName())
+			{
+				播放声音("BUZZ", "不能进别人的地堡");
 				return;
 			}
 
-			if (!ref.m_spAttack)
+			if (!ref.m_spAttack || EntitySystem::Is建筑(ref.m_类型))
 			{
-				Say系统("此单位不可进入地堡");
+				//Say系统("此单位不可进入地堡");
+				播放声音("BUZZ", "此单位不可进入地堡");
 				return;
 			}
 
