@@ -81,7 +81,12 @@ extern std::map<std::string, uint64_t> g_mapPlayerNickNameGateSessionId;
 
 void BroadcastToGate在线人数()
 {
-	BroadcastToGate<Msg在线人数>({ .u16人数 = (uint16_t)g_mapPlayerNickNameGateSessionId.size() });
+	Msg在线人数 msg = { .u16人数 = (uint16_t)g_mapPlayerNickNameGateSessionId.size() };
+	for (auto [strNickName, v] : g_mapPlayerNickNameGateSessionId)
+	{
+		msg.vec玩家NickName.push_back(StrConv::GbkToUtf8(strNickName));
+	}
+	BroadcastToGate(msg);
 }
 void WorldSessionFromGate::OnRecv(const MsgGate转发& msg转发)
 {

@@ -400,6 +400,7 @@ enum SayChannel
 {
 	系统,
 	聊天,
+	任务提示,
 };
 MSGPACK_ADD_ENUM(SayChannel);
 
@@ -736,5 +737,6 @@ struct Msg在线人数
 {
 	MsgHead msg{ .id = 在线人数 };
 	uint16_t u16人数;
-	MSGPACK_DEFINE(msg, u16人数);
+	std::vector<std::string> vec玩家NickName;
+	MSGPACK_DEFINE(msg, u16人数, vec玩家NickName);
 };

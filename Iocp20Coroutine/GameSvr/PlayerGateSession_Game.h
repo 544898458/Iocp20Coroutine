@@ -25,6 +25,7 @@ public:
 	void Say(const std::string& str, const SayChannel channel);
 	void Say系统(const std::string& str);
 	static void Say系统(const std::string& refStrNickName, const std::string& str);
+	static void Say任务提示(const std::string& refStrNickName, const std::string& str);
 	//void Say语音提示(const std::string& str);
 
 	const std::string& NickName()const { return m_strNickName; }

@@ -127,6 +127,15 @@ void PlayerGateSession_Game::Say系统(const std::string& refStrNickName, const st
 		wp.lock()->Say系统(str);
 
 }
+
+void PlayerGateSession_Game::Say任务提示(const std::string& refStrNickName, const std::string& str)
+{
+	auto wp = GetPlayerGateSession(refStrNickName);
+	if (!wp.expired())
+		wp.lock()->Say(str, 任务提示);
+
+}
+
 void PlayerGateSession_Game::Say系统(const std::string& str)
 {
 	Say(str, SayChannel::系统);
