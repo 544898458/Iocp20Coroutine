@@ -345,7 +345,7 @@ void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
 	LOG(INFO) << "希望进Space:" << msg.idSapce;
 	auto wp = Space::GetSpace(msg.idSapce);
 	CHECK_WP_RET_VOID(wp);
-	m_wp视口 = EnterSpace(wp);
+	EnterSpace(wp);
 
 	if (m_funCancel进地图) 
 	{
@@ -403,7 +403,7 @@ void PlayerGateSession_Game::OnRecv(const Msg进单人剧情副本& msg)
 	auto [b新, wpSpace] = Space::GetSpace单人(NickName(), 配置);
 	//m_wpSpace单人剧情副本 = wpSpace;
 	CHECK_WP_RET_VOID(wpSpace);
-	m_wp视口 = EnterSpace(wpSpace);
+	EnterSpace(wpSpace);
 	CHECK_WP_RET_VOID(m_wp视口);
 	if (b新)
 		配置.funCo剧情(*wpSpace.lock(), wpSpace.lock()->m_funCancel剧情, NickName()).RunNew();
@@ -722,7 +722,7 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	}
 	spSpace->AddEntity(spEntityViewPort, 500);
 	spEntityViewPort->BroadcastEnter();
-
+	m_wp视口 = spEntityViewPort;
 	CoEvent<MyEvent::玩家进入Space>::OnRecvEvent({ this->weak_from_this(), spEntityViewPort, wpSpace });
 	spEntityViewPort->Broadcast<MsgSay>({ .content = StrConv::GbkToUtf8(NickName() + " 进来了") });
 
