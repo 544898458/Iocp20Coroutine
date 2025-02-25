@@ -87,3 +87,11 @@ bool EntitySystem::Is活动单位(const 单位类型 类型)
 {
 	return 活动单位Min非法 < 类型 && 类型 < 活动单位Max非法;
 }
+
+bool EntitySystem::Is单位类型(const WpEntity &wp, const 单位类型 类型)
+{
+	if (wp.expired())
+		return false;
+
+	return wp.lock()->m_类型 == 类型;
+}

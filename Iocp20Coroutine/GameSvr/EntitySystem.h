@@ -14,5 +14,6 @@ namespace EntitySystem
 	bool Is建筑(const 单位类型 类型);
 	bool Is资源(const 单位类型 类型);
 	bool Is活动单位(const 单位类型 类型);
+	bool Is单位类型(const WpEntity& wp, const 单位类型 类型);
 };
 
