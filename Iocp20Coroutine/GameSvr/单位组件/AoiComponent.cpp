@@ -224,16 +224,15 @@ AoiComponent::AoiComponent(Space& refSpace, Entity& refEntity) :m_refSpace(refSp
 }
 
 const uint8_t u8格子正方形边长 = 10;
+const uint16_t u16X坐标放大倍数 = 10000;//坐标不能超过9999
 
 int AoiComponent::格子Id(const int32_t i32格子X, const int32_t i32格子Z)
 {
-	const uint16_t u16X坐标放大倍数 = 10000;//z坐标不能超过9999
 	const int32_t i32格子ID = (u16X坐标放大倍数 + i32格子X) * u16X坐标放大倍数 + (u16X坐标放大倍数 + i32格子Z);
 	return i32格子ID;
 }
 std::tuple<int, int, int> AoiComponent::格子(const Position& refPos)
 {
-	const uint16_t u16X坐标放大倍数 = 10000;//z坐标不能超过9999
 	const int32_t i32格子X = ((int)refPos.x) / u8格子正方形边长;
 	const int32_t i32格子Z = ((int)refPos.z) / u8格子正方形边长;
 	const int32_t i32格子ID = 格子Id(i32格子X, i32格子Z);

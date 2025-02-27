@@ -13,6 +13,7 @@
 #include "走Component.h"
 #include "EntitySystem.h"
 #include "BuildingComponent.h"
+#include "AoiComponent.h"
 
 void 造活动单位Component::AddComponent(Entity& refEntity, const 单位类型 类型)
 {
@@ -32,6 +33,7 @@ void 造活动单位Component::AddComponent(Entity& refEntity, const 单位类型 类型)
 	default:
 		break;
 	}
+	m_pos集结点 = refEntity.Pos();
 }
 
 bool 造活动单位Component::可造(const 单位类型 类型)const
@@ -81,15 +83,15 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 		{
 			co_return{};
 		}
-		auto &refSpace = m_refEntity.m_refSpace;
+		auto& refSpace = m_refEntity.m_refSpace;
 		using namespace std;
 		const auto posBuilding = m_refEntity.Pos();
-		Position pos = { posBuilding.x + std::rand() % 10, posBuilding.z + +std::rand() % 10 };
+		Position pos = { posBuilding.x - 5 + std::rand() % 10, posBuilding.z - 5 +std::rand() % 10 };
 		{
 			const auto ok = refSpace.CrowdToolFindNerestPos(pos);
 			_ASSERT(ok);
 		}
-		
+
 		if (!refSpace.CrowdTool可站立(pos))
 		{
 			PlayerComponent::播放声音(m_refEntity, "此处不可放置");
@@ -127,7 +129,7 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 			m_list等待造.clear();
 			co_return{};
 		}
-		Space::GetSpacePlayer(m_refEntity).m_u32晶体矿-= 配置.制造.u16消耗晶体矿;
+		Space::GetSpacePlayer(m_refEntity).m_u32晶体矿 -= 配置.制造.u16消耗晶体矿;
 		//耗时
 		//if (co_await CoTimer::Wait(1s, m_TaskCancel造活动单位.cancel))
 		//{
@@ -147,16 +149,52 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 		//LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 		//CHECK_CO_RET_0(!refGateSession.m_wpSpace.expired());
 		SpEntity spNewEntity = m_refEntity.m_refSpace.造活动单位(m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity), pos, 配置, 类型);
-
+		CHECK_CO_RET_FALSE(spNewEntity);
 		//if (m_list等待造.empty())
 		//{
 		//	LOG(ERROR) << "err";
 		//	_ASSERT(false);
 		//	co_return{};
 		//}
+		if (m_pos集结点 != m_refEntity.Pos())
+		{
+			if (!采集集结点附近的资源(*spNewEntity))
+			{
+
+				CHECK_CO_RET_FALSE(spNewEntity->m_sp走);
+				auto pos = m_pos集结点;
+				m_refEntity.m_refSpace.CrowdToolFindNerestPos(pos);
+				spNewEntity->m_sp走->WalkToPos手动控制(pos);
+			}
+		}
 	}
 
 	EntitySystem::BroadcastEntity描述(m_refEntity, "造完了");
+}
+
+bool 造活动单位Component::采集集结点附近的资源(Entity& refEntiy)const
+{
+	if (!refEntiy.m_sp采集)
+		return false;//不是 工程车 或 工蜂
+
+	const auto [i32格子Id, i32格子X, i32格子Z] = AoiComponent::格子(m_pos集结点);
+	const auto& mapEntity = m_refEntity.m_refSpace.m_map在这一格里[i32格子Id];
+	const auto iterFind = std::find_if(mapEntity.begin(), mapEntity.end(), [](const auto& pair)
+		{
+			CHECK_WP_RET_FALSE(pair.second);
+			const auto& refEntity = *pair.second.lock();
+			return EntitySystem::Is资源(refEntity.m_类型);
+		});
+	if (mapEntity.end() == iterFind)
+		return false;
+
+	CHECK_WP_RET_FALSE(iterFind->second);
+	const auto& wp资源 = iterFind->second;
+	if (!wp资源.lock()->Pos().DistanceLessEqual(m_pos集结点, 1))
+		return false;
+
+	refEntiy.m_sp采集->采集(wp资源);
+	return true;
 }
 
 uint16_t 造活动单位Component::等待造Count()const

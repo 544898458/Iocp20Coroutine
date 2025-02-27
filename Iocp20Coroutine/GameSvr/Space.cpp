@@ -99,6 +99,11 @@ WpEntity Space::Get最近的Entity支持地堡中的单位(Entity& refEntity, const FindTyp
 	return Get最近的Entity(*wp.lock(), bFindEnemy, fun符合条件);
 }
 
+WpEntity Space::Get最近的Entity(Entity& refEntity, const FindType bFindEnemy, const 单位类型 目标类型)
+{
+	return Get最近的Entity(refEntity, Space::所有, [目标类型](const Entity& ref) {return ref.m_类型 == 目标类型; });
+}
+
 WpEntity Space::Get最近的Entity(Entity& refEntity, const FindType bFindEnemy, std::function<bool(const Entity&)> fun符合条件)
 {
 	if (!refEntity.m_upAoi)

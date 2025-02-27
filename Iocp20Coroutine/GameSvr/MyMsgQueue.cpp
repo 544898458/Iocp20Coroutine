@@ -31,7 +31,8 @@ MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :
 	nickName(StrConv::GbkToUtf8(ref.头顶Name())),
 	entityName(StrConv::GbkToUtf8(ref.m_配置.strName)),
 	prefabName(StrConv::GbkToUtf8(ref.m_配置.strPrefabName)),
-	i32HpMax(ref.m_spDefence ? ref.m_spDefence->m_i32HpMax : 0)
+	i32HpMax(ref.m_spDefence ? ref.m_spDefence->m_i32HpMax : 0),
+	类型(ref.m_类型)
 {
 }
 

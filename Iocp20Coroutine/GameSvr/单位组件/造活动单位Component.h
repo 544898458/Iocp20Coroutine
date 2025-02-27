@@ -2,6 +2,7 @@
 #include "../CoRoutine/CoTask.h"
 #include <unordered_set>
 #include "SpEntity.h"
+#include "../MyMsgQueue.h"
 
 enum 单位类型;
 enum 单位类型;
@@ -23,8 +24,10 @@ public:
 	void 造兵(PlayerGateSession_Game&, const 单位类型 类型);
 	void TryCancel(Entity& refEntity);
 	uint16_t 等待造Count()const;
+	Position m_pos集结点;
 private:
 	CoTaskBool Co造活动单位();
+	bool 采集集结点附近的资源(Entity& refEntiy)const;
 	
 private:
 	CoTaskCancel m_TaskCancel造活动单位;

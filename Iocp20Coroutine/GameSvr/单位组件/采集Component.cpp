@@ -21,7 +21,7 @@
 {
 }
 
-void 采集Component::采集(PlayerGateSession_Game& refGateSession, WpEntity wp目标资源)
+void 采集Component::采集(WpEntity wp目标资源)
 {
 	if (造建筑Component::正在建造(m_refEntity))
 	{

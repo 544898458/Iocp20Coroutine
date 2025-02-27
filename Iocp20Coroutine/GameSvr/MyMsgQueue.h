@@ -257,6 +257,7 @@ enum MsgId
 	在线人数,
 	GateSvr转发GameSvr消息给游戏前端,
 	GateSvr转发WorldSvr消息给游戏前端,
+	建筑产出活动单位的集结点,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -431,7 +432,8 @@ struct MsgAddRoleRet
 	std::string entityName;
 	std::string prefabName;
 	int32_t	i32HpMax;
-	MSGPACK_DEFINE(msg, entityId, nickName, entityName, prefabName, i32HpMax);
+	单位类型 类型;
+	MSGPACK_DEFINE(msg, entityId, nickName, entityName, prefabName, i32HpMax, 类型);
 };
 
 struct MsgDelRoleRet
@@ -739,4 +741,11 @@ struct Msg在线人数
 	uint16_t u16人数;
 	std::vector<std::string> vec玩家NickName;
 	MSGPACK_DEFINE(msg, u16人数, vec玩家NickName);
+};
+
+struct Msg建筑产出活动单位的集结点
+{
+	MsgHead msg{ .id = 建筑产出活动单位的集结点 };
+	Position pos;
+	MSGPACK_DEFINE(msg, pos);
 };

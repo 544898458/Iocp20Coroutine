@@ -89,7 +89,7 @@ void PlayerGateSession_Game::离开Space(const bool b主动退)
 		{
 		});*/
 
-	if (m_funCancel进地图) 
+	if (m_funCancel进地图)
 	{
 		m_funCancel进地图();
 		m_funCancel进地图 = nullptr;
@@ -201,7 +201,15 @@ void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
 		{
 			CHECK_VOID(!m_wpSpace.expired());
 			auto wpEntity = m_wpSpace.lock()->GetEntity((int64_t)msg.id目标资源);
-			CHECK_RET_VOID(!wpEntity.expired());
+			CHECK_WP_RET_VOID(wpEntity);
+			auto& ref资源 = *wpEntity.lock();
+			if (基地 == ref.m_类型 || 孵化场 == ref.m_类型)
+			{
+				CHECK_RET_VOID(ref.m_sp造活动单位);
+				ref.m_sp造活动单位->m_pos集结点 = ref资源.Pos();
+				Say系统("已设定采集资源");
+				return;
+			}
 
 			if (!ref.m_sp采集)
 			{
@@ -209,7 +217,7 @@ void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
 				return;
 			}
 
-			ref.m_sp采集->采集(*this, wpEntity);
+			ref.m_sp采集->采集(wpEntity);
 		});
 }
 
@@ -356,7 +364,7 @@ void PlayerGateSession_Game::OnRecv(const Msg进Space& msg)
 	CHECK_WP_RET_VOID(wp);
 	EnterSpace(wp);
 
-	if (m_funCancel进地图) 
+	if (m_funCancel进地图)
 	{
 		m_funCancel进地图();
 		m_funCancel进地图 = nullptr;
@@ -493,7 +501,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 
 		if (ref.m_spAttack)
 		{
-			const auto f距离中心点Max = b保持队形 ? ref.m_spAttack->m_战斗配置.f警戒距离 : ref.m_spAttack->m_战斗配置.f攻击距离/5;
+			const auto f距离中心点Max = b保持队形 ? ref.m_spAttack->m_战斗配置.f警戒距离 : ref.m_spAttack->m_战斗配置.f攻击距离 / 5;
 
 			if (std::abs(pos偏离.x) > f距离中心点Max)
 				pos偏离.x = pos偏离.x / std::abs(pos偏离.x) * f距离中心点Max;
@@ -643,7 +651,11 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 	auto vecWp = Get空闲工程车(msg.类型, true);
 	if (vecWp.empty())
 	{
-		播放声音("BUZZ", "没找到空闲的工程车");
+		if (工蜂 == msg.类型)
+			播放声音("BUZZ", "没找到空闲的工程车");
+		else
+			播放声音("BUZZ", "没找到空闲的工蜂");
+
 		return;
 	}
 
@@ -805,6 +817,7 @@ void PlayerGateSession_Game::RecvMsg(const MsgId idMsg, const msgpack::object& o
 	case MsgId::进其他玩家多人战局:RecvMsg<Msg进其他玩家多人战局>(obj); break;
 	case MsgId::切换空闲工程车:RecvMsg<Msg切换空闲工程车>(obj); break;
 	case MsgId::剧情对话已看完:RecvMsg<Msg剧情对话已看完>(obj); break;
+	case MsgId::建筑产出活动单位的集结点:RecvMsg<Msg建筑产出活动单位的集结点>(obj); break;
 	case MsgId::Gate转发:
 		LOG(ERROR) << "不能再转发";
 		_ASSERT(false);
@@ -1125,4 +1138,25 @@ void PlayerGateSession_Game::OnRecv(const Msg剧情对话已看完& msg)
 void PlayerGateSession_Game::剧情对话已看完()
 {
 	Send<Msg剧情对话已看完>({});
+}
+
+void PlayerGateSession_Game::OnRecv(const Msg建筑产出活动单位的集结点& msg)
+{
+	CHECK_WP_RET_VOID(m_wpSpace);
+	auto& refSpace = *m_wpSpace.lock();
+	auto& refSpacePlayer = refSpace.GetSpacePlayer(NickName());
+
+	CHECK_RET_VOID(!m_vecSelectedEntity.empty());
+	auto iterFind = refSpacePlayer.m_mapWpEntity.find(*m_vecSelectedEntity.begin());
+	CHECK_RET_VOID(refSpacePlayer.m_mapWpEntity.end() != iterFind);
+
+	auto& wp我方建筑 = iterFind->second;
+	CHECK_WP_RET_VOID(wp我方建筑);
+
+	auto& refEntity我方建筑 = *wp我方建筑.lock();
+	CHECK_RET_VOID(EntitySystem::Is建筑(refEntity我方建筑.m_类型));
+	CHECK_RET_VOID(refEntity我方建筑.m_sp造活动单位);
+
+	refEntity我方建筑.m_sp造活动单位->m_pos集结点 = msg.pos;
+	Say系统("修改已生效。此建筑新产出的活动单位将会自动走向此集结点。");
 }
