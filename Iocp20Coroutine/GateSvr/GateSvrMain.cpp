@@ -6,7 +6,7 @@
 #include "../IocpNetwork/Server.h"
 #include "../IocpNetwork/Client.h"
 #include "../IocpNetwork/ThreadPool.h"
-//#include "../CoRoutine/CoTimer.h"
+#include "../CoRoutine/CoTimer.h"
 //#include <glog/logging.h>
 //#include "../IocpNetwork/StrConv.h"
 #include "GateServer.h"
@@ -71,7 +71,7 @@ template<class T>
 void SendToGateClient(const T& refMsg, uint64_t gateSessionId)
 {
 	if(!g_upGateSvr->m_Server.m_Sessions.GetSession(gateSessionId, [&refMsg, gateSessionId](auto& refGateSession) {
-		if (refGateSession.Session.m_Session.m_bLoginOk)
+		if (refGateSession.Session.m_Session.m_bLoginOk || refMsg.msg.id == Login)
 		{
 			refMsg.msg.sn = ++refGateSession.Session.m_Session.m_snSendToClient;
 			MsgPack::SendMsgpack(refMsg, [gateSessionId, &refGateSession](const void* buf, int len)
@@ -84,7 +84,9 @@ void SendToGateClient(const T& refMsg, uint64_t gateSessionId)
 		LOG(WARNING) << "无法发给游戏客户端，找不到GateSession，可能早已断线,gateSessionId=" << gateSessionId << ",id=" << refMsg.msg.id << ",sn=" << refMsg.msg.sn << ",rpcSnId=" << refMsg.msg.rpcSnId;
 	}
 }
+
 template void SendToGateClient(const MsgGateSvr转发GameSvr消息给游戏前端& refMsg, uint64_t gateSessionId);
+template void SendToGateClient(const MsgLoginResponce& refMsg, uint64_t gateSessionId);
 
 void BroadToGateClient(const MsgGateSvr转发WorldSvr消息给游戏前端& refMsg)
 {
@@ -115,7 +117,7 @@ int main()
 		Sleep(100);
 		g_upGateSvr->m_Server.m_Sessions.Update([]() {});
 		g_ConnectToWorldSvr->Session.Process();
-		//CoTimer::Update();
+		CoTimer::Update();
 	}
 	g_upGateSvr->Stop();
 	LOG(INFO) << "GateSvr正常退出,GetCurrentThreadId=" << GetCurrentThreadId();

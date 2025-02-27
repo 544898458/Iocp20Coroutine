@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "CoTimer.h"
 #include <map>
 /// <summary>

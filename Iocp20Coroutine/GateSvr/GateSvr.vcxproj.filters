@@ -108,6 +108,9 @@
     <ClCompile Include="..\IocpNetwork\SslTlsSvr.cpp">
       <Filter>IocpNetwork</Filter>
     </ClCompile>
+    <ClCompile Include="..\CoRoutine\CoTimer.cpp">
+      <Filter>CoRoutine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GateSession.h">
@@ -220,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="..\IocpNetwork\SslTlsSvr.h">
       <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CoRoutine\CoTimer.h">
+      <Filter>CoRoutine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

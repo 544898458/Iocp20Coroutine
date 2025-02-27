@@ -8,6 +8,8 @@
 #include "GateServer.h"
 #include "../IocpNetwork/SessionsTemplate.h"
 #include "../CoRoutine/CoRpc.h"
+#include "../CoRoutine/CoTask.h"
+#include "../CoRoutine/CoTimer.h"
 #include "../IocpNetwork/StrConv.h"
 
 template class Iocp::SessionSocketCompletionKey<GateSession::CompeletionKeySession>;
@@ -65,14 +67,23 @@ void GateSession::OnRecv(const MsgLogin& msg)
 	m_coLogin = CoLogin(msg, m_funCancelLogin);
 	m_coLogin.Run();
 }
-
+template<class T>
+void SendToGateClient(const T& refMsg, uint64_t gateSessionId);
 CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 {
+	KeepCancel kc(funCancel);
+
 	_ASSERT(!m_bLoginOk);
 	{
-		if (msg.u32版本号 < 0)
+		if (msg.u32版本号 < 1)
 		{
 			LOG(WARNING) << "版本过低:" << msg.u32版本号;
+			SendToGateClient<MsgLoginResponce>({ .result = MsgLoginResponce::版本不一致 }, (uint64_t)this);
+			using namespace std;
+			if(co_await CoTimer::Wait(1s,funCancel))
+				co_return 0;
+
+			m_refSession.m_refSession.CloseSocket();
 			co_return 0;
 		}
 		auto [stop, responce] = co_await CoRpc<MsgLoginResponce>::Send<MsgLogin>(msg, [this](const MsgLogin& msg) {SendToWorldSvr转发<MsgLogin>(msg, GetId()); }, funCancel);

@@ -651,10 +651,10 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 	auto vecWp = Get空闲工程车(msg.类型, true);
 	if (vecWp.empty())
 	{
-		if (工蜂 == msg.类型)
-			播放声音("BUZZ", "没找到空闲的工程车");
-		else
+		if (孵化场 == msg.类型)
 			播放声音("BUZZ", "没找到空闲的工蜂");
+		else
+			播放声音("BUZZ", "没找到空闲的工程车");
 
 		return;
 	}
