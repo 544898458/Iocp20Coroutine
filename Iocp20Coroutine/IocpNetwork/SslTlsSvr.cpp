@@ -686,7 +686,8 @@ void SslTlsSvr::Init()
 {
 	/* init server. */
 	char szCert[1024] = { 0 };
-	DWORD ret = GetPrivateProfileStringA("SslTls", "Cert", "rtsgame.online", szCert, sizeof(buffer), "Config.ini");
+	DWORD ret = GetPrivateProfileStringA("SslTls", "Cert", "rtsgame_online", szCert, sizeof(szCert), "SslTlsSvr.ini");
+	LOG(INFO) << "Ö¤Êé" << szCert;
 	const bool bServer = true;
 	if (krx_ssl_ctx_init(m_pServer, szCert) < 0) {
 		exit(EXIT_FAILURE);

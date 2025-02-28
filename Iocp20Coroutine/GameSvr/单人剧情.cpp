@@ -407,7 +407,7 @@ namespace 单人剧情
 		auto wp = 造建筑Component::创建建筑(refSpace, pos, 类型, {}, "");
 		CHECK_WP_RET_DEFAULT(wp);
 		auto& refEntity = *wp.lock();
-		refEntity.m_spBuilding->StartCo建造过程();
+		refEntity.m_spBuilding->直接造好();
 		return wp;
 	}
 

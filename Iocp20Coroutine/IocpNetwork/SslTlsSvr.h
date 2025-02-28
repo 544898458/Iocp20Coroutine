@@ -7,7 +7,7 @@ public:
 	SslTlsSvr();
 	~SslTlsSvr();
 	static void InitAll();
-	void Init(const bool bServer);
+	void Init();
 	int 处理前端发来的密文(const void* buf, const int len);
 	bool 握手OK() const;
 	template<int len>

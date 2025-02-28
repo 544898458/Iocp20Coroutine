@@ -13,7 +13,7 @@ void WebSocketSession<T_Session>::OnInit(T_Server& server)
 	m_webSocketEndpoint.reset(new MyWebSocketEndpoint<T_Session, WebSocketSession<T_Session> >(&this->m_Session, this));
 
 	this->m_Session.OnInit(server);
-	m_SslTls.Init(true);
+	m_SslTls.Init();
 }
 template<class T_Session>
 int WebSocketSession<T_Session>::OnRecv(Iocp::SessionSocketCompletionKey<WebSocketSession<T_Session>>& refSession, const void* buf, int len)
