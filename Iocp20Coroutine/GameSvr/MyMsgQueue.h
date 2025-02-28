@@ -341,8 +341,8 @@ struct MsgLoginResponce
 		Busy,
 		PwdErr,
 		NameErr,
-		版本太高,
-		版本太低,
+		客户端版本太低,
+		客户端版本太高,
 	};
 	Error  result = OK;
 

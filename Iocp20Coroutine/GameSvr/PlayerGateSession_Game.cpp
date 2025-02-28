@@ -472,7 +472,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 
 			if (造建筑Component::正在建造(ref))
 			{
-				PlayerComponent::播放声音(ref, "BUZZ", "正在建造，不能移动");
+				PlayerComponent::播放声音Buzz(ref, "正在建造，不能移动");
 				return;
 			}
 
@@ -562,7 +562,7 @@ void PlayerGateSession_Game::播放声音(const std::string& refStrNickName, const s
 
 void PlayerGateSession_Game::播放声音Buzz(const std::string& str文本)
 {
-	播放声音Buzz(str文本);
+	播放声音("BUZZ", str文本);
 }
 void PlayerGateSession_Game::播放声音(const std::string& refStr声音, const std::string& str文本)
 {
@@ -733,7 +733,7 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 		LOG(INFO) << spEntity->头顶Name() << ",发给单人," << spEntity->Id;
 		Send(MsgAddRoleRet(*spEntity));
 		Send(MsgNotifyPos(*spEntity));
-		if (spEntity->m_spBuilding && spEntity->m_spBuilding->m_n建造进度百分比 < MAX建造百分比)
+		if (spEntity->m_spBuilding && !spEntity->m_spBuilding->已造好())
 			Send<MsgEntity描述>({ .idEntity = spEntity->Id, .str描述 = StrConv::GbkToUtf8(std::format("建造进度{0}%",spEntity->m_spBuilding->m_n建造进度百分比)) });
 	}
 

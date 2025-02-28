@@ -90,7 +90,7 @@ bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
 		造建筑Component::根据建筑类型AddComponent(refSpace, load.m_类型, *spNewEntity, {}, load.m_strNickName, 建筑配置);
 
 		CHECK_NOTNULL_RET_FALSE(spNewEntity->m_spBuilding);
-		spNewEntity->m_spBuilding->m_n建造进度百分比 = MAX建造百分比;
+		spNewEntity->m_spBuilding->直接造好();
 	}
 	else if(EntitySystem::Is活动单位(load.m_类型)) {
 		std::shared_ptr<PlayerComponent> spNull;

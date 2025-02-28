@@ -78,7 +78,7 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 		if (msg.u32版本号 < 1)
 		{
 			LOG(WARNING) << "版本过低:" << msg.u32版本号;
-			SendToGateClient<MsgLoginResponce>({ .result = MsgLoginResponce::版本不一致 }, (uint64_t)this);
+			SendToGateClient<MsgLoginResponce>({ .result = MsgLoginResponce::客户端版本太低 }, (uint64_t)this);
 			using namespace std;
 			if(co_await CoTimer::Wait(1s,funCancel))
 				co_return 0;

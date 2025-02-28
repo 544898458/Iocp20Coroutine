@@ -19,6 +19,11 @@ void BuildingComponent::StartCo建造过程()
 	Co建造过程(m_cancel建造).RunNew();
 }
 
+void BuildingComponent::直接造好()
+{
+	m_n建造进度百分比 = MAX建造百分比;
+}
+
 void BuildingComponent::TryCancel()
 {
 	if (m_cancel建造)

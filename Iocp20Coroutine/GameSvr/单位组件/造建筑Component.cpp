@@ -111,7 +111,7 @@ CoTaskBool 造建筑Component::Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel)
 	KeepCancel kc(cancel);
 	std::weak_ptr<BuildingComponent> wpBuilding(wpEntity建筑.lock()->m_spBuilding);
 
-	while (!wpBuilding.expired() && MAX建造百分比 > wpBuilding.lock()->m_n建造进度百分比)
+	while (!wpBuilding.expired() && BuildingComponent::MAX建造百分比 > wpBuilding.lock()->m_n建造进度百分比)
 	{
 		if (co_await CoTimer::WaitNextUpdate(cancel))
 			co_return true;
@@ -126,7 +126,7 @@ CoTaskBool 造建筑Component::Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel)
 		++refBuilding.m_n建造进度百分比;
 
 		std::ostringstream oss;
-		if (MAX建造百分比 <= refBuilding.m_n建造进度百分比)
+		if (BuildingComponent::MAX建造百分比 <= refBuilding.m_n建造进度百分比)
 			oss << "建造完成";
 		else
 			oss << "正在建造:" << refBuilding.m_n建造进度百分比 << "%";

@@ -682,10 +682,13 @@ void SslTlsSvr::InitAll()
 {
 	krx_begin();
 }
-void SslTlsSvr::Init(const bool bServer)
+void SslTlsSvr::Init()
 {
 	/* init server. */
-	if (krx_ssl_ctx_init(m_pServer, bServer ? "server" : "client") < 0) {
+	char szCert[1024] = { 0 };
+	DWORD ret = GetPrivateProfileStringA("SslTls", "Cert", "rtsgame.online", szCert, sizeof(buffer), "Config.ini");
+	const bool bServer = true;
+	if (krx_ssl_ctx_init(m_pServer, szCert) < 0) {
 		exit(EXIT_FAILURE);
 	}
 	if (krx_ssl_init(m_pServer, bServer, bServer ? krx_ssl_server_info_callback : krx_ssl_client_info_callback) < 0) {
