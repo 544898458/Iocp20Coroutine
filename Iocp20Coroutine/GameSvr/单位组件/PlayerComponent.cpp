@@ -37,6 +37,11 @@ void PlayerComponent::剧情对话已看完(const std::string& refStrNickName)
 		wpPlayerSession.lock()->剧情对话已看完();
 }
 
+void PlayerComponent::播放声音Buzz(Entity& refEntity, const std::string& str文本) 
+{
+	if (refEntity.m_spPlayer)
+		refEntity.m_spPlayer->m_refSession.播放声音Buzz( str文本);
+}
 void PlayerComponent::播放声音(Entity& refEntity, const std::string& refStr声音, const std::string& str文本)
 {
 	if (refEntity.m_spPlayer)

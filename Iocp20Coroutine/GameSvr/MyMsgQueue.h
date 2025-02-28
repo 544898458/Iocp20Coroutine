@@ -279,6 +279,7 @@ enum 单位类型
 	近战兵,//火蝠，喷火兵Firebat
 	三色坦克,//！不是！攻城坦克（Siege Tank）
 	工蜂,//Drone
+
 	活动单位Max非法,
 
 	建筑Min非法 = 300,
@@ -340,7 +341,8 @@ struct MsgLoginResponce
 		Busy,
 		PwdErr,
 		NameErr,
-		版本不一致,
+		版本太高,
+		版本太低,
 	};
 	Error  result = OK;
 

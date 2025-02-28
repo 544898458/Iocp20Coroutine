@@ -34,6 +34,7 @@ public:
 	uint16_t 活动单位上限() const;
 	uint16_t 活动单位包括制造队列中的() const;
 
+	void 播放声音Buzz(const std::string& str文本);
 	void 播放声音(const std::string& refStr声音, const std::string& str文本);
 	static void 播放声音(const std::string& refStrNickName, const std::string& refStr声音, const std::string& str文本);
 

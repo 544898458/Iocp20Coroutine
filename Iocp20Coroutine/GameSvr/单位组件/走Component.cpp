@@ -128,13 +128,13 @@ void 走Component::走进地堡(WpEntity wpEntity地堡)
 
 	if (!wpEntity地堡.lock()->m_spBuilding->已造好())
 	{
-		PlayerComponent::播放声音(m_refEntity, "BUZZ", "地堡还没造好，不能进地堡");
+		PlayerComponent::播放声音Buzz(m_refEntity, "地堡还没造好，不能进地堡");
 		return;
 	}
 
 	if (造建筑Component::正在建造(m_refEntity))
 	{
-		PlayerComponent::播放声音(m_refEntity, "BUZZ", "正在建造，不能进地堡");
+		PlayerComponent::播放声音Buzz(m_refEntity, "正在建造，不能进地堡");
 		return;
 	}
 

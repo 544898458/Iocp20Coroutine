@@ -192,7 +192,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 		return;
 	}
 
-	播放声音("BUZZ", msg.类型 == 工程车 ? "请先造一个基地" : "没有兵厂");
+	播放声音Buzz(msg.类型 == 工程车 ? "请先造一个基地" : "没有兵厂");
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
@@ -213,7 +213,7 @@ void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
 
 			if (!ref.m_sp采集)
 			{
-				Say系统("此单位无法采集资源");
+				播放声音Buzz("此单位无法采集资源");
 				return;
 			}
 
@@ -244,12 +244,12 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 	auto& refTarget地堡 = *wpTarget.lock();
 	if (!refTarget地堡.m_sp地堡)
 	{
-		播放声音("BUZZ", "目标不是地堡");
+		播放声音Buzz("目标不是地堡");
 		return;
 	}
 	if (EntitySystem::GetNickName(refTarget地堡) != NickName())
 	{
-		//播放声音("BUZZ", "不能进别人的地堡");
+		//播放声音Buzz("不能进别人的地堡");
 		MsgMove msg = { .pos = refTarget地堡.Pos(),.b遇到敌人自动攻击 = true };
 		OnRecv(msg);
 
@@ -262,7 +262,7 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 			if (!ref.m_spAttack || EntitySystem::Is建筑(ref.m_类型))
 			{
 				//Say系统("此单位不可进入地堡");
-				播放声音("BUZZ", "此单位不可进入地堡");
+				播放声音Buzz("此单位不可进入地堡");
 				return;
 			}
 
@@ -560,6 +560,10 @@ void PlayerGateSession_Game::播放声音(const std::string& refStrNickName, const s
 		wp.lock()->播放声音(refStr声音, str文本);
 }
 
+void PlayerGateSession_Game::播放声音Buzz(const std::string& str文本)
+{
+	播放声音Buzz(str文本);
+}
 void PlayerGateSession_Game::播放声音(const std::string& refStr声音, const std::string& str文本)
 {
 	Send<Msg播放声音>({ .str声音 = StrConv::GbkToUtf8(refStr声音), .str文本 = StrConv::GbkToUtf8(str文本) });
@@ -652,9 +656,9 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 	if (vecWp.empty())
 	{
 		if (孵化场 == msg.类型)
-			播放声音("BUZZ", "没找到空闲的工蜂");
+			播放声音Buzz("没找到空闲的工蜂");
 		else
-			播放声音("BUZZ", "没找到空闲的工程车");
+			播放声音Buzz("没找到空闲的工程车");
 
 		return;
 	}
@@ -1105,7 +1109,7 @@ void PlayerGateSession_Game::OnRecv(const Msg切换空闲工程车& msg)
 	auto vecWp = Get空闲工程车(单位类型_Invalid_0, false);
 	if (vecWp.empty())
 	{
-		播放声音("BUZZ", "没有空闲的工程车");
+		播放声音Buzz("没有空闲的工程车");
 		return;
 	}
 	m_idx切换工程车 = m_idx切换工程车 % vecWp.size();

@@ -25,7 +25,7 @@ void 采集Component::采集(WpEntity wp目标资源)
 {
 	if (造建筑Component::正在建造(m_refEntity))
 	{
-		PlayerComponent::播放声音(m_refEntity, "BUZZ", "正在建造，不能采集");
+		PlayerComponent::播放声音Buzz(m_refEntity, "正在建造，不能采集");
 		return;
 	}
 	走Component::Cancel所有包含走路的协程(m_refEntity);
