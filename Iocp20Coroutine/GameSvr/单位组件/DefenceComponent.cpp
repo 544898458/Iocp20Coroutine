@@ -58,6 +58,10 @@ void DefenceComponent::受伤(int hp, const uint64_t idAttacker)
 				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
 				m_refEntity.BroadcastChangeSkeleAnim("孵化场死亡", false);
 				break;
+			case 地堡:
+				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
+				m_refEntity.BroadcastChangeSkeleAnim("died", false);
+				break;
 			default:
 				EntitySystem::Broadcast播放声音(m_refEntity, "EXPLOMED"); break;
 				break;
