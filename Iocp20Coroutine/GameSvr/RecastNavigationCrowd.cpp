@@ -14,13 +14,13 @@
 #include "单位组件/AttackComponent.h"
 #include "MyMsgQueue.h"
 
-std::shared_ptr<CrowdToolState> CreateCrowdToolState(const std::string &stf寻路文件)
+std::shared_ptr<CrowdToolState> CreateCrowdToolState(const std::string& stf寻路文件)
 {
 	auto sp = std::make_shared<CrowdToolState>();
 	auto pSample = new Sample_TempObstacles();
 	pSample->m_agentRadius = 1.5f;
 	pSample->loadAll(stf寻路文件.c_str());
-	pSample->m_navQuery->init(pSample->m_navMesh, 1024*32);
+	pSample->m_navQuery->init(pSample->m_navMesh, 1024 * 32);
 	sp->init(pSample);
 	return sp;
 }
@@ -57,7 +57,7 @@ uint32_t CrowToolAdd方块阻挡(CrowdToolState& ref, float arrF[], float f半边长)
 	float arrMax[] = { arrF[0] + f半边长 , arrF[1] + f半边长 , arrF[2] + f半边长 };
 	uint32_t u32Ret(0);
 	const auto result = pSample_TempObstacles->m_tileCache->addBoxObstacle(arrMin, arrMax, &u32Ret);
-	
+
 	if (DT_SUCCESS != result)
 	{
 		LOG(ERROR) << "" << result;
@@ -118,7 +118,7 @@ void CrowToolUpdate(Space& ref)
 			continue;
 		}
 		auto sp = spEntity.lock();
-		sp->SetPos({pos[0] ,pos[2]});
+		sp->SetPos({ pos[0] ,pos[2] });
 		sp->m_eulerAnglesY = CalculateAngle(vel[0], vel[2]);
 		//sp->Broadcast(MsgNotifyPos(*sp));
 	}
@@ -130,6 +130,7 @@ void CrowdToolSetMoveTarget(CrowdToolState& ref, const float* p, const int idx)
 	ref.setMoveTarget(p, false);
 }
 
+const float halfExtents[] = { 10, 5, 10 };//refCrowTool.m_sample->m_crowd->getQueryExtents();
 
 bool CrowdToolFindNerestPos(CrowdToolState& refCrowTool, Position& refPos)
 {
@@ -137,7 +138,7 @@ bool CrowdToolFindNerestPos(CrowdToolState& refCrowTool, Position& refPos)
 	CHECK_NOTNULL_RET_FALSE(navquery);
 
 	dtQueryFilter filter;
-	const float halfExtents[] = { 10, 5, 10 };//refCrowTool.m_sample->m_crowd->getQueryExtents();
+
 	float tgt[3] = { 0 };
 	dtPolyRef ref;
 	float p[] = { refPos.x,0,refPos.z };
@@ -156,6 +157,58 @@ bool CrowdTool可站立(CrowdToolState& refCrowTool, const Position& refPos)
 		return false;
 
 	return refPos.DistanceLessEqual(pos, 0.1f);
+}
+
+bool CrowdTool可走直线(CrowdToolState& refCrowTool, const Position& pos起始, const Position& pos目标)
+{
+	dtNavMeshQuery* navquery = refCrowTool.m_sample->getNavMeshQuery();
+	CHECK_NOTNULL_RET_FALSE(navquery);
+
+	float arr起始点[] = { pos起始.x, 0, pos起始.z }, arr目标点[] = { pos目标.x, 0, pos目标.z };
+	float arr起始点可站立[3] = { 0 }, arr目标点可站立[3] = { 0 };
+	dtQueryFilter filter;
+	filter.setIncludeFlags(0xffff);
+	filter.setExcludeFlags(0);
+	dtPolyRef polyRef起始, polyRef目标;
+	bool bOverlay起始点 = false, bOverlay目标 = false;
+	navquery->findNearestPoly(arr起始点, halfExtents, &filter, &polyRef起始, arr起始点可站立, &bOverlay起始点);
+	navquery->findNearestPoly(arr目标点, halfExtents, &filter, &polyRef目标, arr目标点可站立, &bOverlay目标);
+
+	const int MAX_POLYS = 100;
+	dtPolyRef polys[MAX_POLYS];
+	int npolys;
+	unsigned char straightPathFlags[MAX_POLYS];
+	dtPolyRef straightPathPolys[MAX_POLYS];
+	float straightPath[3 * MAX_POLYS];
+	int nstraightPath = 0;
+
+	navquery->findPath(polyRef起始, polyRef目标, arr起始点可站立, arr目标点可站立, &filter, polys, &npolys, MAX_POLYS);
+
+	if (!npolys)
+		return false;
+
+	float epos1[3];
+	dtVcopy(epos1, arr目标点可站立);
+
+	if (polys[npolys - 1] != polyRef目标)
+	{
+		navquery->closestPointOnPoly(polys[npolys - 1], arr目标点可站立, epos1, 0);
+	}
+
+	if (DT_SUCCESS != navquery->findStraightPath(arr起始点可站立, arr目标点可站立, polys, npolys, straightPath, straightPathFlags, straightPathPolys, &nstraightPath, MAX_POLYS, DT_STRAIGHTPATH_ALL_CROSSINGS))
+		return false;
+
+	float f总路径长 = 0.f;
+	for (int i = 0; i < nstraightPath - 1; ++i)
+	{
+		const Position pos = { straightPath[i * 3 + 0], straightPath[i * 3 + 2] };
+		const int i下一个 = i + 1;
+		const Position pos下一个 = { straightPath[i下一个 * 3 + 0], straightPath[i下一个 * 3 + 2] };
+		f总路径长 += pos.Distance(pos下一个);
+	}
+
+	const float f直线距离 = pos起始.Distance(pos目标);
+	return f直线距离 + 0.0001f > f总路径长;// refPos.DistanceLessEqual(pos, 0.1f);
 }
 
 bool CrowdTool判断单位重叠(const Position& refPosOld, const Position& refPosNew, const float fNew半边长)

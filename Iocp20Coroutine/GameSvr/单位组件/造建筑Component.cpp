@@ -63,8 +63,6 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 单位类型 类型)
 		co_return false;
 	}
 
-	PlayerComponent::播放声音(m_refEntity, "语音/明白女声可爱版");
-
 	//先走到目标点
 	单位::建筑单位配置 配置;
 	if (!单位::Find建筑单位配置(类型, 配置))
@@ -72,11 +70,20 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 单位类型 类型)
 		_ASSERT(false);
 		co_return true;
 	}
+	if (!m_refEntity.m_refSpace.可放置建筑(pos, 配置.f半边长))
+	{
+		//播放声音("TSCErr00", "有阻挡，无法建造");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
+		PlayerComponent::播放声音(m_refEntity, "语音/无法在这里建造可爱版", "有阻挡，无法建造");
+		co_return true;
+	}
 	if (!m_refEntity.m_spAttack)
 	{
 		_ASSERT(false);
 		co_return true;
 	}
+
+	PlayerComponent::播放声音(m_refEntity, "语音/明白女声可爱版");
+
 	if (co_await AiCo::WalkToPos(m_refEntity, pos, m_cancel造建筑, 配置.f半边长 + m_refEntity.m_spAttack->m_战斗配置.f攻击距离))
 		co_return true;
 

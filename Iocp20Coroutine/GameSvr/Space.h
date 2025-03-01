@@ -94,7 +94,8 @@ public:
 	std::unordered_map<std::string, SpacePlayer> m_mapPlayer;
 	static SpacePlayer& GetSpacePlayer(const Entity& ref);
 	Space::SpacePlayer& GetSpacePlayer(const std::string strPlayerNickName);
-	SpEntity 造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer, const std::string& strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型);
+	WpEntity 造活动单位(Entity& ref视口, const std::string& refStrNickName, const 单位类型 类型, const Position& refPos, bool b设置视口 = false);
+	WpEntity 造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer, const std::string& strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型);
 
 	bool 可放置建筑(const Position& pos, float f半边长);
 	const 副本配置 m_配置;

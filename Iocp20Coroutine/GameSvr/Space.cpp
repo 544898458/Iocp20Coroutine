@@ -437,8 +437,25 @@ inline void Space::SpacePlayer::Erase(uint64_t u64Id)
 	m_mapWpEntity.erase(u64Id);
 }
 
+std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStrNickName);
 
-SpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, const std::string& strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型)
+WpEntity Space::造活动单位(Entity& ref视口, const std::string& refStrNickName, const 单位类型 类型, const Position& refPos, bool b设置视口)
+{
+	单位::活动单位配置 配置;
+	单位::Find活动单位配置(类型, 配置);
+	auto wp = 造活动单位(ref视口.m_spPlayer, refStrNickName, refPos, 配置, 类型);
+	CHECK_WP_RET_DEFAULT(wp);
+	if (b设置视口)
+	{
+		auto wpSession = GetPlayerGateSession(refStrNickName);
+		CHECK_WP_RET_DEFAULT(wpSession);
+
+		wpSession.lock()->Send设置视口(*wp.lock());
+	}
+	return wp;
+}
+
+WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, const std::string& strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型)
 {
 	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
 		pos, *this, std::forward<const 单位类型&&>(类型), 配置.配置);
@@ -473,10 +490,14 @@ SpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 
 bool Space::可放置建筑(const Position& refPos, float f半边长)
 {
-	if (!CrowdTool可站立({ refPos.x - f半边长 ,refPos.z + f半边长 }))return false;
-	if (!CrowdTool可站立({ refPos.x - f半边长 ,refPos.z - f半边长 }))return false;
-	if (!CrowdTool可站立({ refPos.x + f半边长 ,refPos.z + f半边长 }))return false;
-	if (!CrowdTool可站立({ refPos.x + f半边长 ,refPos.z - f半边长 }))return false;
+	const Position pos左下 = { refPos.x - f半边长, refPos.z - f半边长 };
+	const Position pos右上 = { refPos.x + f半边长, refPos.z + f半边长 };
+	const Position pos左上 = { refPos.x - f半边长, refPos.z + f半边长 };
+	const Position pos右下 = { refPos.x + f半边长, refPos.z - f半边长 };
+	if (!CrowdTool可站立(pos左上))return false;
+	if (!CrowdTool可站立(pos左下))return false;
+	if (!CrowdTool可站立(pos右上))return false;
+	if (!CrowdTool可站立(pos右下))return false;
 
 	//遍历全地图所有建筑判断重叠
 	for (const auto& kv : m_mapEntity)
@@ -488,5 +509,12 @@ bool Space::可放置建筑(const Position& refPos, float f半边长)
 			return false;
 	}
 
-	return true;
+	bool CrowdTool可走直线(CrowdToolState & refCrowTool, const Position & pos起始, const Position & pos目标);
+	return	CrowdTool可走直线(*m_spCrowdToolState, pos左下, pos右上) 
+		&& CrowdTool可走直线(*m_spCrowdToolState, pos左上, pos右下)
+		&& CrowdTool可走直线(*m_spCrowdToolState, pos左上, pos左下)
+		&& CrowdTool可走直线(*m_spCrowdToolState, pos右上, pos右下)
+		&& CrowdTool可走直线(*m_spCrowdToolState, pos右上, pos右下)
+		&& CrowdTool可走直线(*m_spCrowdToolState, pos左上, pos左下)
+		;
 }

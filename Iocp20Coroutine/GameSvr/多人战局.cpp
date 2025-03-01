@@ -11,20 +11,13 @@ std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& re
 
 void 玩家带入单位进入四方对战(Space& refSpace, const Position &refPos, PlayerGateSession_Game& refGateSession)
 {
-	{
-		const 单位类型 类型(单位类型::工程车);
-		单位::活动单位配置 配置;
-		单位::Find活动单位配置(类型, 配置);
-		CHECK_WP_RET_VOID(refGateSession.m_wp视口);
-		SpEntity sp工程车 = refSpace.造活动单位(refGateSession.m_wp视口.lock()->m_spPlayer, refGateSession.NickName(), refPos, 配置, 类型);
-		refGateSession.Send设置视口(*sp工程车);
-	}
-
+	CHECK_WP_RET_VOID(refGateSession.m_wp视口);
+	refSpace.造活动单位(*refGateSession.m_wp视口.lock(), refGateSession.NickName(), 单位类型::工程车, refPos, true);
+	
 	资源Component::Add(refSpace, 晶体矿, { refPos.x,		refPos.z - 20 });
 	资源Component::Add(refSpace, 晶体矿, { refPos.x,		refPos.z + 20 });
 	资源Component::Add(refSpace, 晶体矿, { refPos.x - 20,	refPos.z	});
 	资源Component::Add(refSpace, 燃气矿, { refPos.x + 20,	refPos.z	});
-
 }
 
 CoTask<int> 多人战局::Co四方对战(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName)

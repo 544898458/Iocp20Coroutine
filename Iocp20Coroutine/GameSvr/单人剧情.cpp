@@ -22,20 +22,6 @@
 std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStrNickName);
 namespace 单人剧情
 {
-	static void 造活动单位(Space& refSpace, Entity& ref视口, const std::string& refStrNickName, const 单位类型 类型, const Position& refPos, bool b设置视口 = false)
-	{
-		单位::活动单位配置 配置;
-		单位::Find活动单位配置(类型, 配置);
-		auto sp = refSpace.造活动单位(ref视口.m_spPlayer, refStrNickName, refPos, 配置, 类型);
-		if (b设置视口)
-		{
-			auto wpSession = GetPlayerGateSession(refStrNickName);
-			CHECK_WP_RET_VOID(wpSession);
-
-			wpSession.lock()->Send设置视口(*sp);
-		}
-	}
-
 	static void 总教官陈近南说(const std::string& refStrNickName, const std::string& str内容)
 	{
 		PlayerComponent::剧情对话(refStrNickName, "图片/陈近南", "总教官：陈近南", "", "", "    " + str内容);
@@ -105,15 +91,19 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(2s, funCancel))
 			co_return 0;
 
-		const 单位类型 类型(单位类型::工程车);
-		单位::活动单位配置 配置;
-		单位::Find活动单位配置(类型, 配置);
-		auto wpSession = GetPlayerGateSession(strPlayerNickName);
-		CHECK_WP_CO_RET_0(wpSession);
-		auto wp视口 = wpSession.lock()->m_wp视口;
-		CHECK_WP_CO_RET_0(wp视口);
-		SpEntity sp工程车 = refSpace.造活动单位(wp视口.lock()->m_spPlayer, strPlayerNickName, { 5,10 }, 配置, 类型);
-
+		//const 单位类型 类型(单位类型::工程车);
+		//单位::活动单位配置 配置;
+		//单位::Find活动单位配置(类型, 配置);
+		{
+			auto wpSession = GetPlayerGateSession(strPlayerNickName);
+			CHECK_WP_CO_RET_0(wpSession);
+			auto wp视口 = wpSession.lock()->m_wp视口;
+			CHECK_WP_CO_RET_0(wp视口);
+			auto& ref视口 = *wp视口.lock();
+			//SpEntity sp工程车 = refSpace.造活动单位(wp视口.lock()->m_spPlayer, strPlayerNickName, { 5,10 }, 配置, 类型);
+			refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::工程车, { 5, 10 }, true);
+			资源Component::Add(refSpace, 晶体矿, {20, 10});
+		}
 		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击“工程车”选中，然后点击“建筑单位=>基地”按钮，再点击空白地面，10秒后就能造出一个基地");
 
 		const auto funSameSpace = [&refSpace, &strPlayerNickName](const MyEvent::AddEntity& refAddEntity, 单位类型 类型)
@@ -229,8 +219,9 @@ namespace 单人剧情
 				}
 			}
 
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "恭喜您消灭了敌人！现在左边给您刷了10个怪。您可以造“活动单位/地堡”,让兵进入地堡中，立足防守，再伺机进攻");
-			MonsterComponent::AddMonster(refSpace, 兵, { -30.0 }, 10);
+
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "恭喜您消灭了敌人！现在左边给您刷了更多的怪。您可以造“活动单位/地堡”,让兵进入地堡中，立足防守，再伺机进攻");
+			MonsterComponent::AddMonster(refSpace, 近战兵, { -30.0 }, 5);
 
 			if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::单位阵亡& ref)
 				{
@@ -356,12 +347,8 @@ namespace 单人剧情
 		CHECK_WP_CO_RET_0(wp视口);
 
 		{
-			{
-				const 单位类型 类型(单位类型::工程车);
-				单位::活动单位配置 配置;
-				单位::Find活动单位配置(类型, 配置);
-				refSpace.造活动单位(wp视口.lock()->m_spPlayer, strPlayerNickName, { -10, 10 }, 配置, 类型);
-			}
+			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工程车, {-10, 10});
+			
 
 			资源Component::Add(refSpace, 晶体矿, { -20, 35 });
 			资源Component::Add(refSpace, 晶体矿, { -26, 20 });
@@ -475,12 +462,12 @@ namespace 单人剧情
 				CHECK_WP_CO_RET_0(wp视口);
 				auto& ref视口 = *wp视口.lock();
 
-				造活动单位(refSpace, ref视口, strPlayerNickName, 单位类型::近战兵, { -40, 10 }, true);
+				refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::近战兵, { -40, 10 }, true);
 				for (int i = 0; i < 8; ++i)
 				{
 					const float z = 10.f + i * 5;
-					造活动单位(refSpace, ref视口, strPlayerNickName, 单位类型::兵, { -40, z });
-					造活动单位(refSpace, ref视口, strPlayerNickName, 单位类型::近战兵, { -45, z });
+					refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::兵, { -40, z });
+					refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::近战兵, { -45, z });
 				}
 			}
 			for (int i = 0; i < 6; ++i)
@@ -540,8 +527,8 @@ namespace 单人剧情
 
 					for (int i = 0; i < 5; ++i)
 					{
-						造活动单位(refSpace, ref视口, strPlayerNickName, 三色坦克, { 05.f + i * 5 ,35.f });
-						造活动单位(refSpace, ref视口, strPlayerNickName, 三色坦克, { 10.f + i * 5 ,40.f });
+						refSpace.造活动单位(ref视口, strPlayerNickName, 三色坦克, { 05.f + i * 5 ,35.f });
+						refSpace.造活动单位(ref视口, strPlayerNickName, 三色坦克, { 10.f + i * 5 ,40.f });
 					}
 
 					fun坦克手齐诺维说("谢谢你救了我们。");	_等玩家读完returnTrue;
