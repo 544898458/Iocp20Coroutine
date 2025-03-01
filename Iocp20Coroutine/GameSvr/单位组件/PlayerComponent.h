@@ -2,6 +2,7 @@
 class GameSvrSession;
 class PlayerGateSession_Game;
 class Entity;
+class Space;
 enum SayChannel;
 
 class PlayerComponent;
@@ -13,7 +14,7 @@ public:
 	static void AddComponent(Entity& refEntity, PlayerGateSession_Game& refSession);
 	static void Say(Entity& refEntity, const std::string& str, const SayChannel channel);
 	static void Say系统(Entity& refEntity, const std::string& str);
-	static void 剧情对话(const std::string& refStrNickName,
+	static void 剧情对话(Space& refSpace, const std::string& refStrNickName,
 		const std::string& str头像左, const std::string& str名字左,
 		const std::string& str头像右, const std::string& str名字右,
 		const std::string& str内容, const bool b显示退出场景按钮 = false);

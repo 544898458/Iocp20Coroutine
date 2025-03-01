@@ -1100,25 +1100,6 @@ void PlayerGateSession_Game::OnRecv(const Msg切换空闲工程车& msg)
 	++m_idx切换工程车;
 }
 
-void PlayerGateSession_Game::剧情对话(
-	const std::string& str头像左, const std::string& str名字左,
-	const std::string& str头像右, const std::string& str名字右,
-	const std::string& str内容, const bool b显示退出场景按钮)
-{
-
-	CHECK_WP_RET_VOID(m_wpSpace);
-	auto& refSapce = *m_wpSpace.lock();
-	Msg剧情对话 msg = { .str头像左 = StrConv::GbkToUtf8(str头像左),
-		.str名字左 = StrConv::GbkToUtf8(str名字左),
-		.str头像右 = StrConv::GbkToUtf8(str头像右),
-		.str名字右 = StrConv::GbkToUtf8(str名字右),
-		.str对话内容 = StrConv::GbkToUtf8(str内容),
-		.b显示退出场景按钮 = b显示退出场景按钮 };
-	Send(msg);
-
-	refSapce.GetSpacePlayer(NickName()).m_msg上次发给前端的剧情对话 = msg;
-}
-
 void PlayerGateSession_Game::OnRecv(const Msg剧情对话已看完& msg)
 {
 	CoEvent<MyEvent::已阅读剧情对话>::OnRecvEvent({ .wpPlayerGateSession = weak_from_this() });

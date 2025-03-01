@@ -20,14 +20,23 @@ void PlayerComponent::Say系统(Entity& refEntity, const std::string& str)
 		refEntity.m_spPlayer->m_refSession.Say系统(str);
 }
 
-void PlayerComponent::剧情对话(const std::string& refStrNickName,
+void PlayerComponent::剧情对话(Space& refSpace, const std::string& refStrNickName,
 	const std::string& str头像左, const std::string& str名字左,
 	const std::string& str头像右, const std::string& str名字右,
 	const std::string& str内容, const bool b显示退出场景按钮)
 {
 	auto wpPlayerSession = GetPlayerGateSession(refStrNickName);
+	Msg剧情对话 msg = { .str头像左 = StrConv::GbkToUtf8(str头像左),
+	.str名字左 = StrConv::GbkToUtf8(str名字左),
+	.str头像右 = StrConv::GbkToUtf8(str头像右),
+	.str名字右 = StrConv::GbkToUtf8(str名字右),
+	.str对话内容 = StrConv::GbkToUtf8(str内容),
+	.b显示退出场景按钮 = b显示退出场景按钮 };
+	
 	if (!wpPlayerSession.expired())
-		wpPlayerSession.lock()->剧情对话(str头像左, str名字左, str头像右, str名字右, str内容, b显示退出场景按钮);
+		wpPlayerSession.lock()->Send(msg);
+
+	refSpace.GetSpacePlayer(refStrNickName).m_msg上次发给前端的剧情对话 = msg;
 }
 
 void PlayerComponent::剧情对话已看完(const std::string& refStrNickName)

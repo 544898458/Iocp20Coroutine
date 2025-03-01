@@ -22,29 +22,29 @@
 std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStrNickName);
 namespace 单人剧情
 {
-	static void 总教官陈近南说(const std::string& refStrNickName, const std::string& str内容)
+	static void 总教官陈近南说(Space& refSpace, const std::string& refStrNickName, const std::string& str内容)
 	{
-		PlayerComponent::剧情对话(refStrNickName, "图片/陈近南", "总教官：陈近南", "", "", "    " + str内容);
+		PlayerComponent::剧情对话(refSpace, refStrNickName, "图片/陈近南", "总教官：陈近南", "", "", "    " + str内容);
 		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
 	}
-	static void 科学家玛丽亚说(const std::string& refStrNickName, const std::string& str内容)
+	static void 科学家玛丽亚说(Space& refSpace, const std::string& refStrNickName, const std::string& str内容)
 	{
-		PlayerComponent::剧情对话(refStrNickName, "图片/红发年轻女人", "科学家：玛丽亚", "", "", "    " + str内容);
+		PlayerComponent::剧情对话(refSpace, refStrNickName, "图片/红发年轻女人", "科学家：玛丽亚", "", "", "    " + str内容);
 		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
 	}
-	static void 坦克手齐诺维说(const std::string& refStrNickName, const std::string& str内容)
+	static void 坦克手齐诺维说(Space& refSpace, const std::string& refStrNickName, const std::string& str内容)
 	{
-		PlayerComponent::剧情对话(refStrNickName, "图片/青壮年欧洲男人脸朝右", "坦克手：齐诺维", "", "", "    " + str内容);
+		PlayerComponent::剧情对话(refSpace, refStrNickName, "图片/青壮年欧洲男人脸朝右", "坦克手：齐诺维", "", "", "    " + str内容);
 		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
 	}
-	static void 装甲指挥官海因茨说(const std::string& refStrNickName, const std::string& str内容)
+	static void 装甲指挥官海因茨说(Space& refSpace, const std::string& refStrNickName, const std::string& str内容)
 	{
-		PlayerComponent::剧情对话(refStrNickName, "图片/大白胡子抽烟", "装甲指挥官：海因茨", "", "", "    " + str内容);
+		PlayerComponent::剧情对话(refSpace, refStrNickName, "图片/大白胡子抽烟", "装甲指挥官：海因茨", "", "", "    " + str内容);
 		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
 	}
-	static void 玩家说(const std::string& strPlayerNickName, const std::string& str内容, const bool b显示退出场景按钮 = false)
+	static void 玩家说(Space& refSpace, const std::string& strPlayerNickName, const std::string& str内容, const bool b显示退出场景按钮 = false)
 	{
-		PlayerComponent::剧情对话(strPlayerNickName, "", "", "图片/韦小宝", "玩家：" + strPlayerNickName, "    " + str内容, b显示退出场景按钮);
+		PlayerComponent::剧情对话(refSpace, strPlayerNickName, "", "", "图片/韦小宝", "玩家：" + strPlayerNickName, "    " + str内容, b显示退出场景按钮);
 		PlayerComponent::播放声音(strPlayerNickName, "音效/BUTTON", "");
 	}
 
@@ -67,8 +67,8 @@ namespace 单人剧情
 	{
 		KeepCancel kc(funCancel);
 
-		const auto fun总教官陈近南说 = [&strPlayerNickName](const std::string& str内容) {总教官陈近南说(strPlayerNickName, str内容); };
-		const auto fun玩家说 = [&strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, str内容); };
+		const auto fun总教官陈近南说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官陈近南说(refSpace, strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 
 		fun总教官陈近南说("即时战略游戏的操作并不复杂，老年间便有四句童谣：\n"
 			"\t\t\t工程车，造基地；\n"
@@ -263,14 +263,14 @@ namespace 单人剧情
 				fun总教官陈近南说("光子炮价格便宜，攻击速度快，攻击距离仅次于坦克，集中放置后可对快速移动的敌方小兵群体造成有效伤害。"); _等玩家读完returnTrue;
 				fun玩家说("我会在实战中体会摸索。"); _等玩家读完returnTrue;
 				fun总教官陈近南说("一个人的时候，可以试试“防守战”，有助于体会光子炮、坦克、地堡的威力。"); _等玩家读完returnTrue;
-				玩家说(strPlayerNickName, "好的。", true);//	_等玩家读完;
+				玩家说(refSpace, strPlayerNickName, "好的。", true);//	_等玩家读完;
 			}
 			else
 			{
 				PlayerComponent::播放声音(strPlayerNickName, "音效/YouLoss", "训练失败。");
 
 				fun总教官陈近南说("这只是一次训练，不必过于在意。失败是成功之母，待情绪平复可以再试一次。"); _等玩家读完returnTrue;
-				玩家说(strPlayerNickName, "好的。", true);//	_等玩家读完;
+				玩家说(refSpace, strPlayerNickName, "好的。", true);//	_等玩家读完;
 			}
 			co_return 0;
 	}
@@ -282,8 +282,8 @@ namespace 单人剧情
 
 	static CoTask<bool> Is战斗结束(Space& refSpace, const std::string strPlayerNickName, FunCancel& funCancel)
 	{
-		const auto fun总教官陈近南说 = [&strPlayerNickName](const std::string& str内容) {总教官陈近南说(strPlayerNickName, str内容); };
-		const auto fun玩家说 = [&strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, str内容); };
+		const auto fun总教官陈近南说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官陈近南说(refSpace, strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 
 		if (0 == refSpace.Get怪物单位数())
 		{
@@ -291,14 +291,14 @@ namespace 单人剧情
 
 			fun总教官陈近南说(strPlayerNickName + "，我果然没有看错你，你是一个指挥天才！"); _等玩家读完returnTrue;
 			fun玩家说("承蒙教官谬赞。学生谨遵教诲，自不敢有一丝懈怠，定当不负所望，继续精进。");	_等玩家读完returnTrue;
-			PlayerComponent::剧情对话(strPlayerNickName, "图片/陈近南", "总教官：陈近南", "", "", "    走你!", true);
+			PlayerComponent::剧情对话(refSpace, strPlayerNickName, "图片/陈近南", "总教官：陈近南", "", "", "    走你!", true);
 			co_return true;
 		}
 		if (0 == refSpace.Get玩家单位数(strPlayerNickName))
 		{
 			PlayerGateSession_Game::播放声音(strPlayerNickName, "音效/YouLose", "胜败乃兵家常事，请点击右上角“退出场景”离开，然后再次点击“防守战”，就可以重新来过。");
 			fun总教官陈近南说("胜败乃兵家常事，我仍然看好你的潜力！"); _等玩家读完returnTrue;
-			玩家说(strPlayerNickName, "学生此次功败垂成，定会吸取教训，总结经验，再次努力，定不辜负教官的栽培与期望。", true);//	_等玩家读完;
+			玩家说(refSpace, strPlayerNickName, "学生此次功败垂成，定会吸取教训，总结经验，再次努力，定不辜负教官的栽培与期望。", true);//	_等玩家读完;
 			co_return true;
 		}
 		co_return false;
@@ -308,8 +308,8 @@ namespace 单人剧情
 		KeepCancel kc(funCancel);
 		using namespace std;
 
-		const auto fun总教官陈近南说 = [&strPlayerNickName](const std::string& str内容) {总教官陈近南说(strPlayerNickName, str内容); };
-		const auto fun玩家说 = [&strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, str内容); };
+		const auto fun总教官陈近南说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官陈近南说(refSpace, strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 
 		fun总教官陈近南说("情报显示：将有大量敌方单位进攻我方基地，请做好准备。");	_等玩家读完returnTrue;
 		fun玩家说("可是我仅受过简单的指挥训练。");							_等玩家读完returnTrue;
@@ -409,30 +409,30 @@ namespace 单人剧情
 
 	static CoTask<bool> 攻坚战胜利(Space& refSpace, const std::string strPlayerNickName, FunCancel& funCancel)
 	{
-		const auto fun坦克手齐诺维说 = [&strPlayerNickName](const std::string& str内容) {坦克手齐诺维说(strPlayerNickName, str内容); };
-		const auto fun玩家说 = [&strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, str内容); };
+		const auto fun坦克手齐诺维说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {坦克手齐诺维说(refSpace, strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 		fun坦克手齐诺维说("总算报仇了！");	_等玩家读完returnTrue;
 		fun玩家说("以后坦克不能再单独行动了，一定要带上步兵。");	_等玩家读完returnTrue;
 		fun坦克手齐诺维说("是，指挥官！");	_等玩家读完returnTrue;
-		玩家说(strPlayerNickName, "走！", true);
+		玩家说(refSpace, strPlayerNickName, "走！", true);
 		co_return false;
 	}
 
 	static CoTask<bool> 攻坚战失败(Space& refSpace, const std::string strPlayerNickName, FunCancel& funCancel, const bool b已营救坦克连)
 	{
-		const auto fun装甲指挥官海因茨说 = [&strPlayerNickName](const std::string& str内容) {装甲指挥官海因茨说(strPlayerNickName, str内容); };
-		const auto fun坦克手齐诺维说 = [&strPlayerNickName](const std::string& str内容) {坦克手齐诺维说(strPlayerNickName, str内容); };
-		const auto fun玩家说 = [&strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, str内容); };
+		const auto fun装甲指挥官海因茨说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {装甲指挥官海因茨说(refSpace, strPlayerNickName, str内容); };
+		const auto fun坦克手齐诺维说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {坦克手齐诺维说(refSpace, strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 
 		if (b已营救坦克连)
 		{
 			fun坦克手齐诺维说("早知如此就该听你的直接回去！"); _等玩家读完returnTrue;
-			玩家说(strPlayerNickName, "现在说什么都晚了（惨叫）。", true);
+			玩家说(refSpace, strPlayerNickName, "现在说什么都晚了（惨叫）。", true);
 		}
 		else
 		{
 			fun装甲指挥官海因茨说("可以试试操作慢一点，先进攻右下角的孵化场。"); _等玩家读完returnTrue;
-			玩家说(strPlayerNickName, "只能下次再试试了。", true);
+			玩家说(refSpace, strPlayerNickName, "只能下次再试试了。", true);
 		}
 		co_return false;
 	}
@@ -441,10 +441,10 @@ namespace 单人剧情
 	{
 		KeepCancel kc(funCancel);
 
-		const auto fun装甲指挥官海因茨说 = [&strPlayerNickName](const std::string& str内容) {装甲指挥官海因茨说(strPlayerNickName, str内容); };
-		const auto fun科学家玛丽亚说 = [&strPlayerNickName](const std::string& str内容) {科学家玛丽亚说(strPlayerNickName, str内容); };
-		const auto fun坦克手齐诺维说 = [&strPlayerNickName](const std::string& str内容) {坦克手齐诺维说(strPlayerNickName, str内容); };
-		const auto fun玩家说 = [&strPlayerNickName](const std::string& str内容) {玩家说(strPlayerNickName, str内容); };
+		const auto fun装甲指挥官海因茨说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {装甲指挥官海因茨说(refSpace, strPlayerNickName, str内容); };
+		const auto fun科学家玛丽亚说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {科学家玛丽亚说(refSpace, strPlayerNickName, str内容); };
+		const auto fun坦克手齐诺维说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {坦克手齐诺维说(refSpace, strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 
 		fun装甲指挥官海因茨说(strPlayerNickName + "，我的一个坦克连在调查无人区孵化场时失联，请前往营救。"); _等玩家读完returnTrue;
 		fun玩家说("坦克没有步兵保护吗？");	_等玩家读完returnTrue;
@@ -528,8 +528,18 @@ namespace 单人剧情
 				if (!wp孵化场右下.expired() && wp孵化场右下.lock() == responce.wpEntity.lock())//救出坦克连
 				{
 					b已营救坦克连 = true;
-					auto wpSession = GetPlayerGateSession(strPlayerNickName);
-					CHECK_WP_CO_RET_0(wpSession);
+					std::weak_ptr<PlayerGateSession_Game> wpSession;
+					while (true)
+					{
+						wpSession = GetPlayerGateSession(strPlayerNickName);
+						if (!wpSession.expired() && !wpSession.lock()->m_wpSpace.expired() && wpSession.lock()->m_wpSpace.lock().get() == &refSpace)
+							break;
+
+						using namespace std;
+						if (co_await CoTimer::Wait(5s, funCancel))//等玩家上线
+							co_return true;
+					}
+
 					auto wp视口 = wpSession.lock()->m_wp视口;
 					CHECK_WP_CO_RET_0(wp视口);
 					auto& ref视口 = *wp视口.lock();
