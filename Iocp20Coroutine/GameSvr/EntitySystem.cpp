@@ -105,6 +105,7 @@ bool EntitySystem::Is空地能打(const 单位类型 攻, const 单位类型 防)
 	{
 	case 兵:
 	case 光子炮:
+	case 飞机:
 		return true;
 	default:
 		return false;
