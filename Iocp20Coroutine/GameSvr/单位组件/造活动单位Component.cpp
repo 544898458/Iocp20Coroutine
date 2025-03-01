@@ -29,6 +29,7 @@ void 造活动单位Component::AddComponent(Entity& refEntity, const 单位类型 类型)
 		m_set可造类型.insert(兵);
 		m_set可造类型.insert(近战兵);
 		m_set可造类型.insert(三色坦克);
+		m_set可造类型.insert(飞机);
 		break;
 	default:
 		break;

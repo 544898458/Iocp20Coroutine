@@ -142,7 +142,13 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 		if (!可以攻击())
 			co_return false;
 
-		auto wpEntity = m_refEntity.m_refSpace.Get最近的Entity支持地堡中的单位(m_refEntity, Space::敌方, [](const Entity& ref)->bool {return nullptr != ref.m_spDefence; });
+		auto wpEntity = m_refEntity.m_refSpace.Get最近的Entity支持地堡中的单位(m_refEntity, Space::敌方, [this](const Entity& ref)->bool
+			{
+				if (!EntitySystem::Is空地能打(m_refEntity.m_类型, ref.m_类型))
+					return false;
+
+				return nullptr != ref.m_spDefence; 
+			});
 		if (wpEntity.expired())
 		{
 			m_b搜索新的目标 = false;//警戒范围内没有目标

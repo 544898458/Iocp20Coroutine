@@ -47,8 +47,6 @@ public:
 	bool CrowdTool可站立(const Position& refPos);
 	bool CrowdToolFindNerestPos(Position& refPos);
 
-	std::shared_ptr<CrowdToolState> m_spCrowdToolState;
-	std::unordered_map<int, uint64_t> m_mapEntityId;
 	int Get怪物单位数(const 单位类型 类型= 单位类型_Invalid_0)const;
 	int Get资源单位数(const 单位类型 类型);
 	int Get玩家单位数(const std::string& strPlayerNickName);
@@ -101,10 +99,11 @@ public:
 	bool 可放置建筑(const Position& pos, float f半边长);
 	const 副本配置 m_配置;
 	FunCancel m_funCancel剧情;
+	CrowdToolState& GetCrowdToolState(单位类型 类型);
 private:
 	void EraseEntity(const bool bForceEraseAll);
-
-
+	std::shared_ptr<CrowdToolState> m_spCrowdToolState;
+	std::shared_ptr<CrowdToolState> m_spCrowdToolState空中;
 };
 
 

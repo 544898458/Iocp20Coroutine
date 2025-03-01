@@ -75,17 +75,12 @@ bool CrowToolRemove阻挡(CrowdToolState& ref, const uint32_t u32DtObstacleRef)
 	return ret;
 }
 
-void CrowToolUpdate(Space& ref)
+void CrowToolUpdate(Space& ref, CrowdToolState& refCrowdToolState)
 {
-	if (!ref.m_spCrowdToolState)
-	{
-		LOG(ERROR) << "没有寻路组件";
-		return;
-	}
 	const float SIM_RATE = 10;
 	const float DELTA_TIME = 1.0f / SIM_RATE;
-	ref.m_spCrowdToolState->handleUpdate(DELTA_TIME);
-	auto m_sample = ref.m_spCrowdToolState->m_sample;
+	refCrowdToolState.handleUpdate(DELTA_TIME);
+	auto* m_sample = refCrowdToolState.m_sample;
 	m_sample->handleUpdate(DELTA_TIME);
 	duDebugDraw& dd = m_sample->getDebugDraw();
 	const float rad = m_sample->getAgentRadius();
@@ -109,7 +104,7 @@ void CrowToolUpdate(Space& ref)
 		//	col = duRGBA(255,0,0,128);
 
 		//duDebugDrawCircle(&dd, pos[0], pos[1], pos[2], radius, col, 2.0f);
-		const auto idEntity = ref.m_mapEntityId[i];
+		const auto idEntity = refCrowdToolState.m_mapEntityId[i];
 		auto spEntity = ref.GetEntity(idEntity);
 		if (spEntity.expired())
 		{
@@ -223,28 +218,19 @@ bool CrowdTool判断单位重叠(const Position& refPosOld, const Position& refPosNew,
 
 RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& posTarget) :m_refEntity(refEntity)
 {
-	if (!refEntity.m_refSpace.m_spCrowdToolState)
-	{
-		LOG(ERROR) << "m_spCrowdToolState";
-		return;
-	}
 	float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z };
 	_ASSERT(AttackComponent::INVALID_AGENT_IDX == refEntity.m_spAttack->m_idxCrowdAgent);
-	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(*refEntity.m_refSpace.m_spCrowdToolState, arrF, refEntity.m_速度每帧移动距离 * 10);
+	auto& refCrowdToolState = refEntity.m_refSpace.GetCrowdToolState(refEntity.m_类型);
+	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(refCrowdToolState, arrF, refEntity.m_速度每帧移动距离 * 10);
 	_ASSERT(AttackComponent::INVALID_AGENT_IDX != m_refEntity.m_spAttack->m_idxCrowdAgent);
-	refEntity.m_refSpace.m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
+	refCrowdToolState.m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
 
 	SetMoveTarget(posTarget);
 }
 
 RecastNavigationCrowd::~RecastNavigationCrowd()
 {
-	if (!m_refEntity.m_refSpace.m_spCrowdToolState)
-	{
-		LOG(ERROR) << "m_spCrowdToolState";
-		return;
-	}
-	CrowToolRemoveAgent(*m_refEntity.m_refSpace.m_spCrowdToolState, m_refEntity.m_spAttack->m_idxCrowdAgent);
+	CrowToolRemoveAgent(m_refEntity.m_refSpace.GetCrowdToolState(m_refEntity.m_类型), m_refEntity.m_spAttack->m_idxCrowdAgent);
 	m_refEntity.m_spAttack->m_idxCrowdAgent = AttackComponent::INVALID_AGENT_IDX;
 }
 
@@ -256,6 +242,6 @@ void RecastNavigationCrowd::SetMoveTarget(const Position& posTarget)
 	{
 		LOG(ERROR) << "可能超过容量";
 	}
-	CrowdToolSetMoveTarget(*m_refEntity.m_refSpace.m_spCrowdToolState, arrF, m_refEntity.m_spAttack->m_idxCrowdAgent);
+	CrowdToolSetMoveTarget(m_refEntity.m_refSpace.GetCrowdToolState(m_refEntity.m_类型), arrF, m_refEntity.m_spAttack->m_idxCrowdAgent);
 }
 

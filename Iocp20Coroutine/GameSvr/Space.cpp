@@ -19,6 +19,7 @@ Space::Space(const 副本配置& ref) :m_配置(ref)
 {
 	std::shared_ptr<CrowdToolState> CreateCrowdToolState(const std::string & stf寻路文件);
 	m_spCrowdToolState = CreateCrowdToolState(ref.str寻路文件名);
+	m_spCrowdToolState空中 = CreateCrowdToolState("空中无障碍.bin");
 }
 
 Space::~Space()
@@ -146,8 +147,9 @@ void Space::Update()
 {
 	EraseEntity(false);
 
-	void CrowToolUpdate(Space & ref);
-	CrowToolUpdate(*this);
+	void CrowToolUpdate(Space & ref, CrowdToolState & refCrowdToolState);
+	CrowToolUpdate(*this, *m_spCrowdToolState);
+	CrowToolUpdate(*this, *m_spCrowdToolState空中);
 }
 
 std::unordered_map<uint8_t, SpSpace> g_mapSpace;
@@ -166,13 +168,13 @@ WpSpace Space::GetSpace单人(const std::string& refStrPlayerNickName)
 	return {};
 }
 
-std::tuple<bool,WpSpace> Space::GetSpace单人(const std::string& refStrPlayerNickName, const 副本配置& 配置)
+std::tuple<bool, WpSpace> Space::GetSpace单人(const std::string& refStrPlayerNickName, const 副本配置& 配置)
 {
 	auto itFind = g_mapSpace单人.find(refStrPlayerNickName);
 	if (g_mapSpace单人.end() != itFind)
 		return { false,itFind->second };
 
-	auto pair = g_mapSpace单人.insert({refStrPlayerNickName, std::make_shared<Space, const 副本配置&>(配置)});
+	auto pair = g_mapSpace单人.insert({ refStrPlayerNickName, std::make_shared<Space, const 副本配置&>(配置) });
 	_ASSERT(pair.second);
 	return { true,pair.first->second };
 }
@@ -294,13 +296,18 @@ void Space::EraseEntity(const bool bForceEraseAll)
 	}
 }
 
+CrowdToolState& Space::GetCrowdToolState(const 单位类型 类型)
+{
+	return 飞机 == 类型 ? *m_spCrowdToolState空中 : *m_spCrowdToolState;
+}
+
 int Space::Get怪物单位数(const 单位类型 类型)const
 {
 	return Get单位数([类型](const Entity& refEntity)
 		{
 			if (refEntity.m_spPlayerNickName)//属于玩家制的单位
 				return false;
-			if(EntitySystem::Is资源(refEntity.m_类型))
+			if (EntitySystem::Is资源(refEntity.m_类型))
 				return false;
 			if (类型 > 单位类型_Invalid_0 && 类型 != refEntity.m_类型)
 				return false;
@@ -510,7 +517,7 @@ bool Space::可放置建筑(const Position& refPos, float f半边长)
 	}
 
 	bool CrowdTool可走直线(CrowdToolState & refCrowTool, const Position & pos起始, const Position & pos目标);
-	return	CrowdTool可走直线(*m_spCrowdToolState, pos左下, pos右上) 
+	return	CrowdTool可走直线(*m_spCrowdToolState, pos左下, pos右上)
 		&& CrowdTool可走直线(*m_spCrowdToolState, pos左上, pos右下)
 		&& CrowdTool可走直线(*m_spCrowdToolState, pos左上, pos左下)
 		&& CrowdTool可走直线(*m_spCrowdToolState, pos右上, pos右下)

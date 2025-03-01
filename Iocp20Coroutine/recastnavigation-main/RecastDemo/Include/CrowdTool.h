@@ -24,6 +24,7 @@
 #include "DetourObstacleAvoidance.h"
 #include "ValueHistory.h"
 #include "DetourCrowd.h"
+#include <unordered_map>
 
 // Tool to create crowds.
 
@@ -82,6 +83,7 @@ public:
 	CrowdToolParams m_toolParams;
 
 	bool m_run;
+	std::unordered_map<int, uint64_t> m_mapEntityId;//AgentIdx到EntityId的映射关系
 
 public:
 	CrowdToolState();

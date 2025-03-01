@@ -287,11 +287,12 @@ CoTaskBool PlayerGateSession_Game::Co进多人联机地图(WpEntity wp视口)
 		auto& refSpace = *m_wpSpace.lock();
 		auto& ref视口 = *wp视口.lock();
 		auto pos出生 = Position(std::rand() % 100 - 50.f, std::rand() % 100 - 50.f);
-		refSpace.造活动单位(ref视口, NickName(), 单位类型::兵, { pos出生.x, pos出生.z + 6 });
-		refSpace.造活动单位(ref视口, NickName(), 单位类型::三色坦克, { pos出生.x + 6, pos出生.z });
 		refSpace.造活动单位(ref视口, NickName(), 单位类型::工程车, pos出生, true);
-		refSpace.造活动单位(ref视口, NickName(), 单位类型::工蜂, { pos出生.x + 6, pos出生.z + 6 });
-		refSpace.造活动单位(ref视口, NickName(), 单位类型::近战兵, { pos出生.x - 6, pos出生.z - 6 });
+		refSpace.造活动单位(ref视口, NickName(), 单位类型::兵,		{ pos出生.x, pos出生.z + 6 });
+		refSpace.造活动单位(ref视口, NickName(), 单位类型::三色坦克,{ pos出生.x + 6, pos出生.z });
+		refSpace.造活动单位(ref视口, NickName(), 单位类型::工蜂,	{ pos出生.x + 6, pos出生.z + 6 });
+		refSpace.造活动单位(ref视口, NickName(), 单位类型::近战兵,	{ pos出生.x - 6, pos出生.z });
+		refSpace.造活动单位(ref视口, NickName(), 单位类型::飞机,	{ pos出生.x - 6, pos出生.z - 6 });
 
 		//auto [stop, msgResponce] = co_await AiCo::ChangeMoney(*this, 0, true, m_funCancel进地图);
 		//if (stop)

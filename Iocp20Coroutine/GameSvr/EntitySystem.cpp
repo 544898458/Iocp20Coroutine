@@ -95,3 +95,18 @@ bool EntitySystem::Is单位类型(const WpEntity &wp, const 单位类型 类型)
 
 	return wp.lock()->m_类型 == 类型;
 }
+
+bool EntitySystem::Is空地能打(const 单位类型 攻, const 单位类型 防)
+{
+	if (防 != 飞机)
+		return true;
+
+	switch (攻)
+	{
+	case 兵:
+	case 光子炮:
+		return true;
+	default:
+		return false;
+	}
+}

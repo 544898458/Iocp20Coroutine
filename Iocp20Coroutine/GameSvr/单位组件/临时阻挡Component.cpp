@@ -3,28 +3,23 @@
 #include "Entity.h"
 #include "Space.h"
 
-還奀郯結Component::還奀郯結Component(Entity& refEntity, float f圉晚酗):m_refSpace(refEntity.m_refSpace)
+還奀郯結Component::還奀郯結Component(Entity& refEntity, float f圉晚酗):m_refSpace(refEntity.m_refSpace), m_refEntity(refEntity)
 {
 	float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z };
 	uint32_t CrowToolAdd源輸郯結(CrowdToolState & ref, float arrF[], float f圉晚酗);
-	if (!refEntity.m_refSpace.m_spCrowdToolState)
-	{
-		LOG(ERROR) << "m_spCrowdToolState";
-		return;
-	}
-	m_u32DtObstacleRef = CrowToolAdd源輸郯結(*refEntity.m_refSpace.m_spCrowdToolState, arrF, f圉晚酗);
+	m_u32DtObstacleRef = CrowToolAdd源輸郯結(refEntity.m_refSpace.GetCrowdToolState(refEntity.m_濬倰), arrF, f圉晚酗);
 }
 
 還奀郯結Component::~還奀郯結Component()
 {
-	if (!m_refSpace.m_spCrowdToolState)
-	{
-		LOG(ERROR) << "m_spCrowdToolState";
-		return;
-	}
+	//if (!m_refSpace.m_spCrowdToolState)
+	//{
+	//	LOG(ERROR) << "m_spCrowdToolState";
+	//	return;
+	//}
 
 	bool CrowToolRemove郯結(CrowdToolState & ref, const uint32_t u32DtObstacleRef);
-	CrowToolRemove郯結(*m_refSpace.m_spCrowdToolState, m_u32DtObstacleRef);
+	CrowToolRemove郯結(m_refSpace.GetCrowdToolState(m_refEntity.m_濬倰), m_u32DtObstacleRef);
 }
 
 bool 還奀郯結Component::AddComponent(Entity& refEntity, float f圉晚酗)

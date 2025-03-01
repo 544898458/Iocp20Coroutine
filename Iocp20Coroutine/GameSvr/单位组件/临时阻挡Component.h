@@ -9,6 +9,7 @@ public:
 	static bool AddComponent(Entity& refEntity, float f半边长);
 	uint32_t m_u32DtObstacleRef = 0;
 	Space& m_refSpace;
+	Entity& m_refEntity;
 };
 
 class 活动单位走完路加阻挡 final
