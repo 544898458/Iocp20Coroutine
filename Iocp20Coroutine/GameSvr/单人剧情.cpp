@@ -52,7 +52,16 @@ namespace 单人剧情
 	{
 		const auto funSameSession = [&strPlayerNickName](const MyEvent::已阅读剧情对话& ref)
 			{ return ref.wpPlayerGateSession.lock() == GetPlayerGateSession(strPlayerNickName).lock(); };
-		co_return std::get<0>(co_await CoEvent<MyEvent::已阅读剧情对话>::Wait(funCancel, funSameSession));
+
+		auto [stop, event已阅读] = co_await CoEvent<MyEvent::已阅读剧情对话>::Wait(funCancel, funSameSession);
+		if (!event已阅读.wpPlayerGateSession.expired())
+		{
+			auto& refSession = *event已阅读.wpPlayerGateSession.lock();
+			if (!refSession.m_wpSpace.expired())
+				refSession.m_wpSpace.lock()->GetSpacePlayer(strPlayerNickName).m_msg上次发给前端的剧情对话.str对话内容.clear();
+		}
+
+		co_return stop;
 	}
 	CoTask<int> Co训练战(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName)
 	{
@@ -102,7 +111,7 @@ namespace 单人剧情
 			auto& ref视口 = *wp视口.lock();
 			//SpEntity sp工程车 = refSpace.造活动单位(wp视口.lock()->m_spPlayer, strPlayerNickName, { 5,10 }, 配置, 类型);
 			refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::工程车, { 5, 10 }, true);
-			资源Component::Add(refSpace, 晶体矿, {20, 10});
+			资源Component::Add(refSpace, 晶体矿, { 20, 10 });
 		}
 		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击“工程车”选中，然后点击“建筑单位=>基地”按钮，再点击空白地面，10秒后就能造出一个基地");
 
@@ -347,8 +356,8 @@ namespace 单人剧情
 		CHECK_WP_CO_RET_0(wp视口);
 
 		{
-			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工程车, {-10, 10});
-			
+			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工程车, { -10, 10 });
+
 
 			资源Component::Add(refSpace, 晶体矿, { -20, 35 });
 			资源Component::Add(refSpace, 晶体矿, { -26, 20 });

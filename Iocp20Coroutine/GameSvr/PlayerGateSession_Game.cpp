@@ -290,9 +290,9 @@ CoTaskBool PlayerGateSession_Game::Co½ø¶àÈËÁª»úµØÍ¼(WpEntity wpÊÓ¿Ú)
 		refSpace.Ôì»î¶¯µ¥Î»(refÊÓ¿Ú, NickName(), µ¥Î»ÀàĞÍ::±ø, { pos³öÉú.x, pos³öÉú.z + 6 });
 		refSpace.Ôì»î¶¯µ¥Î»(refÊÓ¿Ú, NickName(), µ¥Î»ÀàĞÍ::ÈıÉ«Ì¹¿Ë, { pos³öÉú.x + 6, pos³öÉú.z });
 		refSpace.Ôì»î¶¯µ¥Î»(refÊÓ¿Ú, NickName(), µ¥Î»ÀàĞÍ::¹¤³Ì³µ, pos³öÉú, true);
-		refSpace.Ôì»î¶¯µ¥Î»(refÊÓ¿Ú, NickName(), µ¥Î»ÀàĞÍ::¹¤·ä,{ pos³öÉú.x + 6, pos³öÉú.z + 6 });
+		refSpace.Ôì»î¶¯µ¥Î»(refÊÓ¿Ú, NickName(), µ¥Î»ÀàĞÍ::¹¤·ä, { pos³öÉú.x + 6, pos³öÉú.z + 6 });
 		refSpace.Ôì»î¶¯µ¥Î»(refÊÓ¿Ú, NickName(), µ¥Î»ÀàĞÍ::½üÕ½±ø, { pos³öÉú.x - 6, pos³öÉú.z - 6 });
-		
+
 		//auto [stop, msgResponce] = co_await AiCo::ChangeMoney(*this, 0, true, m_funCancel½øµØÍ¼);
 		//if (stop)
 		//	co_return true;
@@ -681,13 +681,13 @@ std::vector<WpEntity> PlayerGateSession_Game::Get¿ÕÏĞ¹¤³Ì³µ(const µ¥Î»ÀàĞÍ Ôì»î¶
 WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 {
 	CHECK_RET_DEFAULT(m_wpSpace.expired());
-	CHECK_RET_DEFAULT(!wpSpace.expired());
+	CHECK_WP_RET_DEFAULT(wpSpace);
 	m_wpSpace = wpSpace;
-	auto spSpace = m_wpSpace.lock();
+	auto& refSpace = *m_wpSpace.lock();
 
 	Send<Msg½øSpace>({ .idSapce = 1 });
 	{
-		auto& sencePlayer = spSpace->m_mapPlayer[NickName()];
+		auto& sencePlayer = refSpace.m_mapPlayer[NickName()];
 		for (auto [id, wp] : sencePlayer.m_mapWpEntity)
 		{
 			if (wp.expired())
@@ -695,11 +695,13 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 
 			auto sp = wp.lock();
 			PlayerComponent::AddComponent(*sp, *this);
-			//spSpace->m_mapPlayer[NickName()].m_mapWpEntity.insert({ sp->Id ,sp });
+			//refSpace.m_mapPlayer[NickName()].m_mapWpEntity.insert({ sp->Id ,sp });
 		}
 		//mapOld.clear();
+
+
 	}
-	for (const auto& [id, spEntity] : spSpace->m_mapEntity)//ËùÓĞµØÍ¼ÉÏµÄÊµÌå·¢¸ø×Ô¼º
+	for (const auto& [id, spEntity] : refSpace.m_mapEntity)//ËùÓĞµØÍ¼ÉÏµÄÊµÌå·¢¸ø×Ô¼º
 	{
 		LOG(INFO) << spEntity->Í·¶¥Name() << ",·¢¸øµ¥ÈË," << spEntity->Id;
 		Send(MsgAddRoleRet(*spEntity));
@@ -709,19 +711,25 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 	}
 
 	SpEntity spEntityViewPort = std::make_shared<Entity, const Position&, Space&, const µ¥Î»ÀàĞÍ, const µ¥Î»::µ¥Î»ÅäÖÃ&>(
-		{ 0.0 }, *spSpace, ÊÓ¿Ú, { "ÊÓ¿Ú","smoke", "" });
-	spSpace->m_mapPlayer[NickName()].m_mapWpEntity[spEntityViewPort->Id] = (spEntityViewPort);
+		{ 0.0 }, refSpace, ÊÓ¿Ú, { "ÊÓ¿Ú","smoke", "" });
+	refSpace.m_mapPlayer[NickName()].m_mapWpEntity[spEntityViewPort->Id] = (spEntityViewPort);
 	PlayerComponent::AddComponent(*spEntityViewPort, *this);
 	{
-		const auto [k, ok] = spSpace->m_mapÊÓ¿Ú.insert({ spEntityViewPort->Id ,spEntityViewPort });
+		const auto [k, ok] = refSpace.m_mapÊÓ¿Ú.insert({ spEntityViewPort->Id ,spEntityViewPort });
 		CHECK_RET_DEFAULT(ok);
 	}
-	spSpace->AddEntity(spEntityViewPort, 500);
+	refSpace.AddEntity(spEntityViewPort, 500);
 	spEntityViewPort->BroadcastEnter();
 	m_wpÊÓ¿Ú = spEntityViewPort;
 	CoEvent<MyEvent::Íæ¼Ò½øÈëSpace>::OnRecvEvent({ this->weak_from_this(), spEntityViewPort, wpSpace });
 	spEntityViewPort->Broadcast<MsgSay>({ .content = StrConv::GbkToUtf8(NickName() + " ½øÀ´ÁË") });
 
+	auto& playerSpace = refSpace.GetSpacePlayer(NickName());
+	if (!playerSpace.m_msgÉÏ´Î·¢¸øÇ°¶ËµÄ¾çÇé¶Ô»°.str¶Ô»°ÄÚÈİ.empty())
+	{
+		Send(playerSpace.m_msgÉÏ´Î·¢¸øÇ°¶ËµÄ¾çÇé¶Ô»°);
+		playerSpace.m_msgÉÏ´Î·¢¸øÇ°¶ËµÄ¾çÇé¶Ô»°.str¶Ô»°ÄÚÈİ.clear();
+	}
 	return spEntityViewPort;
 }
 
@@ -1097,13 +1105,18 @@ void PlayerGateSession_Game::¾çÇé¶Ô»°(
 	const std::string& strÍ·ÏñÓÒ, const std::string& strÃû×ÖÓÒ,
 	const std::string& strÄÚÈİ, const bool bÏÔÊ¾ÍË³ö³¡¾°°´Å¥)
 {
-	Send<Msg¾çÇé¶Ô»°>({
-		.strÍ·Ïñ×ó = StrConv::GbkToUtf8(strÍ·Ïñ×ó),
+
+	CHECK_WP_RET_VOID(m_wpSpace);
+	auto& refSapce = *m_wpSpace.lock();
+	Msg¾çÇé¶Ô»° msg = { .strÍ·Ïñ×ó = StrConv::GbkToUtf8(strÍ·Ïñ×ó),
 		.strÃû×Ö×ó = StrConv::GbkToUtf8(strÃû×Ö×ó),
 		.strÍ·ÏñÓÒ = StrConv::GbkToUtf8(strÍ·ÏñÓÒ),
 		.strÃû×ÖÓÒ = StrConv::GbkToUtf8(strÃû×ÖÓÒ),
 		.str¶Ô»°ÄÚÈİ = StrConv::GbkToUtf8(strÄÚÈİ),
-		.bÏÔÊ¾ÍË³ö³¡¾°°´Å¥ = bÏÔÊ¾ÍË³ö³¡¾°°´Å¥ });
+		.bÏÔÊ¾ÍË³ö³¡¾°°´Å¥ = bÏÔÊ¾ÍË³ö³¡¾°°´Å¥ };
+	Send(msg);
+
+	refSapce.GetSpacePlayer(NickName()).m_msgÉÏ´Î·¢¸øÇ°¶ËµÄ¾çÇé¶Ô»° = msg;
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg¾çÇé¶Ô»°ÒÑ¿´Íê& msg)
