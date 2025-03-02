@@ -394,6 +394,9 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 			{
 				CHECK_WP_CONTINUE(wp);
 				auto& refDefencer = *wp.lock();
+				if (!EntitySystem::Is空地能打(m_refEntity.m_类型, refDefencer.m_类型))
+					continue;
+
 				if (refDefencer.m_spDefence && refDefencer.Pos().DistanceLessEqual(posTarget, 5))
 					refDefencer.m_spDefence->受伤(m_战斗配置.i32伤害, m_refEntity.Id);
 			}

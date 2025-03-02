@@ -192,7 +192,18 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 		return;
 	}
 
-	播放声音Buzz(msg.类型 == 工程车 ? "请先造一个基地" : "没有兵厂");
+	{
+		std::string str提示("请先造一个");
+		const auto _ = msg.类型;
+		switch (_)
+		{
+		case 工程车:str提示 += "基地"; break;
+		case 飞机:str提示 += "机场"; break;
+		case 三色坦克:str提示 += "重工厂"; break;
+		default:str提示 += "兵厂"; break;
+		}
+		播放声音Buzz(str提示);
+	}
 }
 
 void PlayerGateSession_Game::OnRecv(const Msg采集& msg)

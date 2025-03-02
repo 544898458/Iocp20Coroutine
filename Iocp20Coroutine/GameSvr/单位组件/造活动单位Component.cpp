@@ -25,11 +25,17 @@ void 造活动单位Component::AddComponent(Entity& refEntity, const 单位类型 类型)
 	switch (类型)
 	{
 	case 基地:m_set可造类型.insert(工程车); break;
+	case 机场:m_set可造类型.insert(飞机); break;
 	case 兵厂:
 		m_set可造类型.insert(兵);
 		m_set可造类型.insert(近战兵);
+		break;
+	case 重工厂:
 		m_set可造类型.insert(三色坦克);
-		m_set可造类型.insert(飞机);
+		break;
+	case 孵化场:
+		m_set可造类型.insert(跳虫);
+		m_set可造类型.insert(刺蛇);
 		break;
 	default:
 		break;
