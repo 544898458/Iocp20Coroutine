@@ -258,6 +258,7 @@ enum MsgId
 	GateSvr转发GameSvr消息给游戏前端,
 	GateSvr转发WorldSvr消息给游戏前端,
 	建筑产出活动单位的集结点,
+	播放音乐,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -638,6 +639,12 @@ struct Msg播放声音
 	std::string str声音;
 	std::string str文本;
 	MSGPACK_DEFINE(msg, str声音, str文本);
+};
+struct Msg播放网络音乐
+{
+	MsgHead msg{ .id = 播放音乐};
+	std::string strHttpsMp3;
+	MSGPACK_DEFINE(msg, strHttpsMp3);
 };
 
 struct Msg设置视口

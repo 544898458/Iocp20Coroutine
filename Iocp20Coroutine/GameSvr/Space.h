@@ -14,6 +14,7 @@ struct 副本配置
 	std::string str寻路文件名;
 	std::string strSceneName;
 	funCo副本剧情 funCo剧情;
+	std::string strHttps音乐;
 };
 
 //class GameSvr;

@@ -364,11 +364,11 @@ void PlayerGateSession_Game::OnRecv(const Msg离开Space& msg)
 
 std::unordered_map<副本ID, 副本配置> g_map副本配置 =
 {
-	{训练战,{"all_tiles_tilecache.bin",		"scene战斗",	单人剧情::Co训练战}},
-	{防守战,{"防守战.bin",					"scene防守战",	单人剧情::Co防守战}},
-	{攻坚战,{"攻坚战.bin",					"scene攻坚战",	单人剧情::Co攻坚战}},
-	{多人联机地图,{"all_tiles_tilecache.bin","scene战斗",	{}}},
-	{四方对战,{"四方对战.bin",				"scene四方对战",多人战局::Co四方对战}},
+	{训练战,{"all_tiles_tilecache.bin",		"scene战斗",	单人剧情::Co训练战,	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
+	{防守战,{"防守战.bin",					"scene防守战",	单人剧情::Co防守战,	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3"}},
+	{攻坚战,{"攻坚战.bin",					"scene攻坚战",	单人剧情::Co攻坚战,	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
+	{多人联机地图,{"all_tiles_tilecache.bin","scene战斗",	{},	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
+	{四方对战,{"四方对战.bin",				"scene四方对战",多人战局::Co四方对战,	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3"}},
 };
 
 bool Get副本配置(const 副本ID id, 副本配置& refOut)
@@ -743,6 +743,8 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 		Send(playerSpace.m_msg上次发给前端的剧情对话);
 		playerSpace.m_msg上次发给前端的剧情对话.str对话内容.clear();
 	}
+
+	Send<Msg播放网络音乐>({ .strHttpsMp3 = refSpace.m_配置.strHttps音乐 });
 	return spEntityViewPort;
 }
 
