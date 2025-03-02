@@ -75,7 +75,7 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 
 	_ASSERT(!m_bLoginOk);
 	{
-		if (msg.u32版本号 < 2)
+		if (msg.u32版本号 < 3)
 		{
 			LOG(WARNING) << "版本过低:" << msg.u32版本号;
 			SendToGateClient<MsgLoginResponce>({ .result = MsgLoginResponce::客户端版本太低 }, (uint64_t)this);
