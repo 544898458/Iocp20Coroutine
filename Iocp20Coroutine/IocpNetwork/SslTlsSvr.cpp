@@ -16,6 +16,7 @@
 #include <openssl/ssl.h>
 #include <openssl/conf.h>
 #include <openssl/engine.h>
+#include <unordered_map>
 
 #pragma comment(lib, "libssl.lib")
 #pragma comment(lib, "libcrypto.lib")
@@ -682,14 +683,46 @@ void SslTlsSvr::InitAll()
 {
 	krx_begin();
 }
+
+bool Try读Ini本地机器专用(std::string& refInOut, const std::string& strAppName, const std::string& strKey)
+{
+	using namespace std;
+	static unordered_map <string, unordered_map<string, string> > s_map;
+	auto itFindApp = s_map.find(strAppName);
+	if (s_map.end() != itFindApp)
+	{
+		auto &refMapApp = itFindApp->second;
+		auto iterFindKey = refMapApp.find(strKey);
+		if (refMapApp.end() != iterFindKey)
+		{
+			refInOut = iterFindKey->second;
+			return true;
+		}
+	}
+
+	char szRead[1024] = { 0 };
+	DWORD ret = GetPrivateProfileStringA(strAppName.c_str(), strKey.c_str(), refInOut.c_str(), szRead, sizeof(szRead), "本地机器专用.ini");
+	if (ret == 0)
+	{
+		return false;
+	}
+
+	LOG(INFO) << "GetPrivateProfileStringA:strAppName:" << strAppName << "strKey:" << strKey << ",szRead:" << szRead;
+	s_map[strAppName][strKey] = szRead;
+	refInOut = szRead;
+	return true;
+}
+
 void SslTlsSvr::Init()
 {
 	/* init server. */
-	char szCert[1024] = { 0 };
-	DWORD ret = GetPrivateProfileStringA("SslTls", "Cert", "rtsgame_online", szCert, sizeof(szCert), "SslTlsSvr.ini");
-	LOG(INFO) << "证书" << szCert;
+	//char szCert[1024] = { 0 };
+	//const DWORD ret = GetPrivateProfileStringA("SslTls", "Cert", "rtsgame_online", szCert, sizeof(szCert), "SslTlsSvr.ini");
+	std::string str证书前缀;
+	Try读Ini本地机器专用(str证书前缀, "SslTlsSvr", "证书文件名前缀");
+	LOG(INFO) << "证书" << str证书前缀;
 	const bool bServer = true;
-	if (krx_ssl_ctx_init(m_pServer, szCert) < 0) {
+	if (krx_ssl_ctx_init(m_pServer, str证书前缀.c_str()) < 0) {
 		exit(EXIT_FAILURE);
 	}
 	if (krx_ssl_init(m_pServer, bServer, bServer ? krx_ssl_server_info_callback : krx_ssl_client_info_callback) < 0) {
@@ -716,7 +749,7 @@ int SslTlsSvr::处理前端发来的密文(const void* buf, const int len)
 	return i32已处理密文字节;
 }
 
-bool SslTlsSvr::握手OK()const 
+bool SslTlsSvr::握手OK()const
 {
 	return SSL_is_init_finished(m_pServer->ssl);
 }
