@@ -28,7 +28,7 @@
 #include "EntitySystem.h"
 #include "单位组件/PlayerNickNameComponent.h"
 #include "MyEvent.h"
-
+#include "../读配置文件/Try读Ini本地机器专用.h"
 std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStrNickName);
 
 
@@ -270,7 +270,7 @@ void PlayerGateSession_Game::OnRecv(const Msg进地堡& msg)
 	std::list<std::function<void()>> listFun;
 	ForEachSelected([this, &msg, &listFun, &wpTarget](Entity& ref)
 		{
-			if (!ref.m_spAttack || EntitySystem::Is建筑(ref.m_类型))
+			if (!ref.m_spAttack || !EntitySystem::Is可进地堡(ref.m_类型))
 			{
 				//Say系统("此单位不可进入地堡");
 				播放声音Buzz("此单位不可进入地堡");
@@ -743,8 +743,11 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 		Send(playerSpace.m_msg上次发给前端的剧情对话);
 		playerSpace.m_msg上次发给前端的剧情对话.str对话内容.clear();
 	}
-
-	Send<Msg播放网络音乐>({ .strHttpsMp3 = refSpace.m_配置.strHttps音乐 });
+	{
+		auto strHttps = refSpace.m_配置.strHttps音乐;
+		Try读Ini本地机器专用(strHttps, "PlayerGateSession_Game", refSpace.m_配置.strSceneName + "_音乐");
+		Send<Msg播放网络音乐>({ .strHttpsMp3 = strHttps });
+	}
 	return spEntityViewPort;
 }
 

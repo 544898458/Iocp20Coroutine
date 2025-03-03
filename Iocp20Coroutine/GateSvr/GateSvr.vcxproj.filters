@@ -28,6 +28,9 @@
     <Filter Include="OpenSSL">
       <UniqueIdentifier>{eac1c833-ac63-4f9e-b48c-0c9f7fe7e738}</UniqueIdentifier>
     </Filter>
+    <Filter Include="读配置文件">
+      <UniqueIdentifier>{ea2f8341-1d38-4b4b-b7e7-c987e8238a41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GateSvrMain.cpp">
@@ -110,6 +113,9 @@
     </ClCompile>
     <ClCompile Include="..\CoRoutine\CoTimer.cpp">
       <Filter>CoRoutine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\读配置文件\Try读Ini本地机器专用.cpp">
+      <Filter>读配置文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="..\CoRoutine\CoTimer.h">
       <Filter>CoRoutine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\读配置文件\Try读Ini本地机器专用.h">
+      <Filter>读配置文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

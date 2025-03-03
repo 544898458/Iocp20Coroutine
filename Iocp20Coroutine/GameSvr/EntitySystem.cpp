@@ -78,6 +78,21 @@ bool EntitySystem::Is建筑(const 单位类型 类型)
 	return 建筑Min非法 < 类型 && 类型 < 建筑Max非法;
 }
 
+bool EntitySystem::Is可进地堡(const 单位类型 类型)
+{
+	if (Is建筑(类型))
+		return false;
+
+	switch (类型)
+	{
+	case 三色坦克:
+	case 飞机:
+		return false;
+	default:
+		return true;
+	}
+}
+
 bool EntitySystem::Is资源(const 单位类型 类型)
 {
 	return 资源Min非法 < 类型 && 类型 < 资源Max非法;
@@ -88,7 +103,7 @@ bool EntitySystem::Is活动单位(const 单位类型 类型)
 	return 活动单位Min非法 < 类型 && 类型 < 活动单位Max非法;
 }
 
-bool EntitySystem::Is单位类型(const WpEntity &wp, const 单位类型 类型)
+bool EntitySystem::Is单位类型(const WpEntity& wp, const 单位类型 类型)
 {
 	if (wp.expired())
 		return false;

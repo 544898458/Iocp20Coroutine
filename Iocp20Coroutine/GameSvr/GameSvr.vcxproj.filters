@@ -58,6 +58,9 @@
     <Filter Include="Space组件">
       <UniqueIdentifier>{aa4cb359-316a-4c56-9b33-9840cad2cb2b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="读配置文件">
+      <UniqueIdentifier>{b2ab4215-4e2a-452d-b717-6c058823c9c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Space.cpp">
@@ -345,6 +348,9 @@
     <ClCompile Include="单位组件\走Component.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
+    <ClCompile Include="..\读配置文件\Try读Ini本地机器专用.cpp">
+      <Filter>读配置文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -553,6 +559,9 @@
     </ClInclude>
     <ClInclude Include="SpPlayerComponent.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\读配置文件\Try读Ini本地机器专用.h">
+      <Filter>读配置文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -12,6 +12,7 @@ namespace EntitySystem
 	bool 距离友方单位太近(Entity& refEntity);
 	const std::string GetNickName(Entity& refEntity);
 	bool Is建筑(const 单位类型 类型);
+	bool Is可进地堡(const 单位类型 类型);
 	bool Is资源(const 单位类型 类型);
 	bool Is活动单位(const 单位类型 类型);
 	bool Is单位类型(const WpEntity& wp, const 单位类型 类型);
