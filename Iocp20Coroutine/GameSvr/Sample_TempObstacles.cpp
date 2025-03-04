@@ -868,6 +868,10 @@ Sample_TempObstacles::~Sample_TempObstacles()
 	dtFreeNavMesh(m_navMesh);
 	m_navMesh = 0;
 	dtFreeTileCache(m_tileCache);
+
+	delete m_talloc;// = new LinearAllocator(32000);		20250305
+	delete m_tcomp;// = new FastLZCompressor;
+	delete m_tmproc;// = new MeshProcess;
 }
 
 void Sample_TempObstacles::handleSettings()

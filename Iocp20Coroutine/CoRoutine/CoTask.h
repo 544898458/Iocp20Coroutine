@@ -118,7 +118,7 @@ public:
 	/// </summary>
 	bool Run()
 	{
-		if(m_bNeedLock)
+		if (m_bNeedLock)
 		{
 			std::lock_guard lock(m_mutex);
 			return RunNoLock();
@@ -249,7 +249,12 @@ public:
 	/// 带有移动语言的复制构造函数
 	/// </summary>
 	/// <param name="other"></param>
-	CoTask(CoTask&& other)noexcept :m_hCoroutine(other.m_hCoroutine) { other.m_hCoroutine = nullptr; }
+	CoTask(CoTask&& other)noexcept
+	{
+		//m_hCoroutine = other.m_hCoroutine;
+		//other.m_hCoroutine = nullptr; 
+		operator = (std::forward<CoTask&&>(other));//20250304
+	}
 
 	/// <summary>
 	/// 移动语义，这是必须的，协程反回的临时对象是右值引用，传统复制构造函数传入的const&无法修改传进来的对象
@@ -420,7 +425,7 @@ struct CoAwaiter
 		m_Kc.Revert();
 		m_hAwaiter.resume();
 	}
-	
+
 	bool m_bAwaitReady = false;
 private:
 	long m_sn;
