@@ -25,16 +25,19 @@ int WebSocketSession<T_Session>::OnRecv(Iocp::SessionSocketCompletionKey<WebSock
 
 		获取准备发往前端的密文并发给前端();
 
+		for (int i = 0; true; ++i)
 		{
 			char buf明文[4096] = { 0 };
 			const auto i32读出明文字节 = m_SslTls.读出已解密的明文(buf明文);
-			if (0 < i32读出明文字节)
+			if (0 >= i32读出明文字节) 
 			{
-				const auto write = m_webSocketEndpoint->from_wire(buf明文, i32读出明文字节);
-				LOG_IF(WARNING, write != i32读出明文字节) << "i32读出明文字节" << i32读出明文字节 << ",明文传给WS,write=" << write << ",buf明文=" << buf明文;
-				//if(write == i32读出明文字节)
-					//return i32已处理;
+				LOG_IF(WARNING, 1<i) << "Tls粘包,i=" << i;
+				break;
 			}
+			const auto write = m_webSocketEndpoint->from_wire(buf明文, i32读出明文字节);
+			LOG_IF(WARNING, write != i32读出明文字节) << "i32读出明文字节" << i32读出明文字节 << ",明文传给WS,write=" << write << ",buf明文=" << buf明文;
+			//if(write == i32读出明文字节)
+				//return i32已处理;
 		}
 		return i32已处理;
 	}
