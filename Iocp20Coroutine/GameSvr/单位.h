@@ -1,68 +1,68 @@
-#pragma once
+ï»¿#pragma once
 #include "MyMsgQueue.h"
 //#include "BuildingComponent.h"
-namespace µ¥Î»
+namespace å•ä½
 {
-	struct µ¥Î»ÅäÖÃ
+	struct å•ä½é…ç½®
 	{
 		std::string strName;
 		std::string strPrefabName;
-		std::string strÑ¡ÖĞÒôĞ§;
-		MSGPACK_DEFINE(strName, strPrefabName, strÑ¡ÖĞÒôĞ§);
+		std::string stré€‰ä¸­éŸ³æ•ˆ;
+		MSGPACK_DEFINE(strName, strPrefabName, stré€‰ä¸­éŸ³æ•ˆ);
 	};
-	struct ÖÆÔìÅäÖÃ
+	struct åˆ¶é€ é…ç½®
 	{
-		uint16_t u16ÏûºÄ¾§Ìå¿ó;
-		uint16_t u16ÏûºÄÈ¼Æø¿ó;
-		uint16_t u16³õÊ¼Hp;
+		uint16_t u16æ¶ˆè€—æ™¶ä½“çŸ¿;
+		uint16_t u16æ¶ˆè€—ç‡ƒæ°”çŸ¿;
+		uint16_t u16åˆå§‹Hp;
 	};
-	struct ½¨Öşµ¥Î»ÅäÖÃ
+	struct å»ºç­‘å•ä½é…ç½®
 	{
-		µ¥Î»ÅäÖÃ ÅäÖÃ;
-		ÖÆÔìÅäÖÃ ½¨Ôì;
-		//BuildingComponent::FunÔì±ø funÔì±ø;
+		å•ä½é…ç½® é…ç½®;
+		åˆ¶é€ é…ç½® å»ºé€ ;
+		//BuildingComponent::Funé€ å…µ funé€ å…µ;
 		/// <summary>
-		/// ¾²Ì¬×èµ²£¨Ô°µÄ°ë¾¶»òÕı·½ĞÎµÄ°ë±ß³¤£©
+		/// é™æ€é˜»æŒ¡ï¼ˆå›­çš„åŠå¾„æˆ–æ­£æ–¹å½¢çš„åŠè¾¹é•¿ï¼‰
 		/// </summary>
-		float f°ë±ß³¤ = 0;
+		float fåŠè¾¹é•¿ = 0;
 	};
-	struct Õ½¶·ÅäÖÃ
+	struct æˆ˜æ–—é…ç½®
 	{
-		float f¾¯½ä¾àÀë;
-		float f¹¥»÷¾àÀë;
-		int32_t i32ÉËº¦;
-		float fÃ¿Ö¡ÒÆ¶¯¾àÀë;
-		std::string strÇ°Ò¡¶¯×÷;
-		std::chrono::system_clock::duration dura¿ªÊ¼²¥·Å¹¥»÷¶¯×÷;
-		std::string str¹¥»÷¶¯×÷;
-		std::chrono::system_clock::duration dura¿ªÊ¼ÉËº¦;
-		std::string str¹¥»÷ÒôĞ§;
-		std::string strÕóÍöÒôĞ§;
-		std::string strÕóÍö¶¯×÷;
-		std::chrono::system_clock::duration duraºóÒ¡;
+		float fè­¦æˆ’è·ç¦»;
+		float fæ”»å‡»è·ç¦»;
+		int32_t i32ä¼¤å®³;
+		float fæ¯å¸§ç§»åŠ¨è·ç¦»;
+		std::string strå‰æ‘‡åŠ¨ä½œ;
+		std::chrono::system_clock::duration duraå¼€å§‹æ’­æ”¾æ”»å‡»åŠ¨ä½œ;
+		std::string stræ”»å‡»åŠ¨ä½œ;
+		std::chrono::system_clock::duration duraå¼€å§‹ä¼¤å®³;
+		std::string stræ”»å‡»éŸ³æ•ˆ;
+		std::string stré˜µäº¡éŸ³æ•ˆ;
+		std::string stré˜µäº¡åŠ¨ä½œ;
+		std::chrono::system_clock::duration duraåæ‘‡;
 	};
-	struct »î¶¯µ¥Î»ÅäÖÃ
+	struct æ´»åŠ¨å•ä½é…ç½®
 	{
-		µ¥Î»ÅäÖÃ ÅäÖÃ;
-		ÖÆÔìÅäÖÃ ÖÆÔì;
-		Õ½¶·ÅäÖÃ Õ½¶·;
-		std::string strÈë³¡ÓïÒô;
+		å•ä½é…ç½® é…ç½®;
+		åˆ¶é€ é…ç½® åˆ¶é€ ;
+		æˆ˜æ–—é…ç½® æˆ˜æ–—;
+		std::string strå…¥åœºè¯­éŸ³;
 	};
-	struct ¹ÖÅäÖÃ
+	struct æ€ªé…ç½®
 	{
-		µ¥Î»ÅäÖÃ ÅäÖÃ;
-		Õ½¶·ÅäÖÃ Õ½¶·;
-		uint16_t u16³õÊ¼Hp;
+		å•ä½é…ç½® é…ç½®;
+		æˆ˜æ–—é…ç½® æˆ˜æ–—;
+		uint16_t u16åˆå§‹Hp;
 	};
 	
-	struct ×ÊÔ´µ¥Î»ÅäÖÃ
+	struct èµ„æºå•ä½é…ç½®
 	{
-		µ¥Î»ÅäÖÃ ÅäÖÃ;
+		å•ä½é…ç½® é…ç½®;
 	};
 
-	bool Find½¨Öşµ¥Î»ÅäÖÃ(const µ¥Î»ÀàĞÍ ÀàĞÍ, ½¨Öşµ¥Î»ÅäÖÃ& refOut);
-	bool Find»î¶¯µ¥Î»ÅäÖÃ(const µ¥Î»ÀàĞÍ ÀàĞÍ, »î¶¯µ¥Î»ÅäÖÃ& refOut);
-	bool Find×ÊÔ´µ¥Î»ÅäÖÃ(const µ¥Î»ÀàĞÍ ÀàĞÍ, ×ÊÔ´µ¥Î»ÅäÖÃ& refOut);
-	bool Find¹ÖÅäÖÃ(const µ¥Î»ÀàĞÍ ÀàĞÍ, ¹ÖÅäÖÃ& refOut);
+	bool Findå»ºç­‘å•ä½é…ç½®(const å•ä½ç±»å‹ ç±»å‹, å»ºç­‘å•ä½é…ç½®& refOut);
+	bool Findæ´»åŠ¨å•ä½é…ç½®(const å•ä½ç±»å‹ ç±»å‹, æ´»åŠ¨å•ä½é…ç½®& refOut);
+	bool Findèµ„æºå•ä½é…ç½®(const å•ä½ç±»å‹ ç±»å‹, èµ„æºå•ä½é…ç½®& refOut);
+	bool Findæ€ªé…ç½®(const å•ä½ç±»å‹ ç±»å‹, æ€ªé…ç½®& refOut);
 };
 
