@@ -520,13 +520,14 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 
 		if (ref.m_spAttack)
 		{
+			const std::string str显示文字 = msg.b遇到敌人自动攻击 ? "" : "强行走向目标位置";
 			switch (ref.m_类型)
 			{
-			case 兵:播放声音(msg.b遇到敌人自动攻击 ? "语音/是男声正经版" : "语音/明白男声正经版", ""); break;//Standing by. 待命中
-			case 近战兵:播放声音("tfbYes03", ""); break;//Checked up and good to go. 检查完毕，准备动身
-			case 工程车:播放声音(msg.b遇到敌人自动攻击 ? "语音/是女声可爱版" : "语音/明白女声可爱版", ""); break;
-			case 三色坦克:播放声音("语音/ttayes01", ""); break;
-			case 飞机:播放声音(msg.b遇到敌人自动攻击 ? "音效/飞机声" : "语音/飞机明白", ""); break;
+			case 兵:播放声音(msg.b遇到敌人自动攻击 ? "语音/是男声正经版" : "语音/明白男声正经版", str显示文字); break;//Standing by. 待命中
+			case 近战兵:播放声音("tfbYes03", str显示文字); break;//Checked up and good to go. 检查完毕，准备动身
+			case 工程车:播放声音(msg.b遇到敌人自动攻击 ? "语音/是女声可爱版" : "语音/明白女声可爱版", str显示文字); break;
+			case 三色坦克:播放声音(msg.b遇到敌人自动攻击 ? "音效/坦克行进声" : "语音/坦克明白", str显示文字); break;
+			case 飞机:播放声音(msg.b遇到敌人自动攻击 ? "音效/飞机声" : "语音/飞机明白", str显示文字); break;
 			default:
 				continue;
 				break;
