@@ -97,8 +97,8 @@ namespace 单人剧情
 		//}
 		refSpace.GetSpacePlayer(strPlayerNickName).m_u32晶体矿 += 100;
 
-		if (co_await CoTimer::Wait(2s, funCancel))
-			co_return 0;
+		//if (co_await CoTimer::Wait(2s, funCancel))
+		//	co_return 0;
 
 		//const 单位类型 类型(单位类型::工程车);
 		//单位::活动单位配置 配置;
@@ -330,8 +330,8 @@ namespace 单人剧情
 		PlayerComponent::剧情对话已看完(strPlayerNickName);
 
 		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "防守战：只要守住，就是胜利！");
-		if (co_await CoTimer::Wait(1s, funCancel))
-			co_return 0;
+		//if (co_await CoTimer::Wait(1s, funCancel))
+		//	co_return 0;
 
 		refSpace.GetSpacePlayer(strPlayerNickName).m_u32燃气矿 += 300;
 		refSpace.GetSpacePlayer(strPlayerNickName).m_u32晶体矿 += 1000;
