@@ -75,7 +75,7 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 
 	_ASSERT(!m_bLoginOk);
 	{
-		const uint32_t °æ±¾ºÅ = 6;
+		const uint32_t °æ±¾ºÅ = 7;
 		if (msg.u32°æ±¾ºÅ != °æ±¾ºÅ)
 		{
 			LOG(WARNING) << °æ±¾ºÅ << ",°æ±¾:" << msg.u32°æ±¾ºÅ;

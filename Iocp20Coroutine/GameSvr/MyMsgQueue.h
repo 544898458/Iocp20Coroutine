@@ -281,8 +281,8 @@ enum 单位类型
 	三色坦克,//！不是！攻城坦克（Siege Tank）
 	工蜂,//Drone
 	飞机,
-	跳虫,
-	刺蛇,
+	跳虫,//Zergling
+	刺蛇,//Hydralisk
 	幼虫,//Larva
 
 	活动单位Max非法,

@@ -21,6 +21,7 @@
 #include "单位组件/走Component.h"
 #include "单位组件/造建筑Component.h"
 #include "单位组件/AoiComponent.h"
+#include "单位组件/孵化场Component.h"
 #include "EntitySystem.h"
 #include "单位组件/PlayerNickNameComponent.h"
 #include "../IocpNetwork/MsgPack.h"
@@ -80,6 +81,7 @@ bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
 	SaveEntity load;
 	CHECK_FALSE(MsgPack::RecvMsgpack(load, buf, u16Size));
 	
+	WpEntity wpNew;
 	if (EntitySystem::Is建筑(load.m_类型))
 	{
 		SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, 单位类型, const 单位::单位配置&>(
@@ -90,16 +92,23 @@ bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
 		造建筑Component::根据建筑类型AddComponent(refSpace, load.m_类型, *spNewEntity, {}, load.m_strNickName, 建筑配置);
 
 		CHECK_NOTNULL_RET_FALSE(spNewEntity->m_spBuilding);
-		spNewEntity->m_spBuilding->直接造好();
+		wpNew = spNewEntity;
 	}
 	else if(EntitySystem::Is活动单位(load.m_类型)) {
 		std::shared_ptr<PlayerComponent> spNull;
 		单位::活动单位配置 活动单位配置;
 		CHECK_FALSE(单位::Find活动单位配置(load.m_类型, 活动单位配置));
 
-		refSpace.造活动单位(spNull, load.m_strNickName, load.m_Pos, 活动单位配置, load.m_类型);
+		wpNew = refSpace.造活动单位(spNull, load.m_strNickName, load.m_Pos, load.m_类型);
 	}
-
+	else 
+	{
+		_ASSERT(false);
+		return false;
+	}
+	
+	CHECK_WP_RET_FALSE(wpNew);
+	wpNew.lock()->OnLoad();
 	return true;
 }
 
@@ -159,6 +168,15 @@ float Entity::警戒距离() const
 	return 0;
 }
 
+void Entity::OnLoad() 
+{
+	if(m_spBuilding)
+		m_spBuilding->直接造好();
+
+	if (m_sp孵化场)
+		m_sp孵化场->OnLoad();
+}
+
 void Entity::OnDestroy()
 {
 	BroadcastLeave();
@@ -194,6 +212,8 @@ void Entity::OnDestroy()
 	if (m_spBuilding)
 		m_spBuilding->TryCancel();
 
+	if (m_sp孵化场)
+		m_sp孵化场->TryCancel();
 
 	if (m_cancelDelete)
 	{

@@ -13,6 +13,7 @@
 #include "µÿ±§Component.h"
 #include "DefenceComponent.h"
 #include "BuildingComponent.h"
+#include "∑ıªØ≥°Component.h"
 
 void ‘ÏΩ®÷˛Component::AddComponent(Entity& refEntity)
 {
@@ -264,8 +265,10 @@ void ‘ÏΩ®÷˛Component::∏˘æ›Ω®÷˛¿‡–ÕAddComponent(Space& refSpace, const µ•Œª¿‡–Õ ¿
 		//						æØæ‡ π•æ‡ …À∫¶ “∆ÀŸ
 		µ•Œª::’Ω∂∑≈‰÷√ ’Ω∂∑ = { 20,	20,		4,	0,	"", 0ms,"pao002",400ms,"“Ù–ß/PhoFir00","“Ù–ß/explo1","Take 001", 400ms };
 		AttackComponent::AddComponent(refNewEntity, ¿‡–Õ, ’Ω∂∑);
-
 	}
+	break;
+	case ∑ıªØ≥°:
+		∑ıªØ≥°Component::AddComponet(refNewEntity);
 	break;
 	}
 	DefenceComponent::AddComponent(refNewEntity, ≈‰÷√.Ω®‘Ï.u16≥ı ºHp);

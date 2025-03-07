@@ -155,7 +155,7 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 
 		//LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 		//CHECK_CO_RET_0(!refGateSession.m_wpSpace.expired());
-		auto wpNewEntity = m_refEntity.m_refSpace.造活动单位(m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity), pos, 配置, 类型);
+		auto wpNewEntity = m_refEntity.m_refSpace.造活动单位(m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity), pos, 类型);
 		CHECK_WP_CO_RET_FALSE(wpNewEntity);
 		auto& ref资源 = *wpNewEntity.lock();
 		//if (m_list等待造.empty())

@@ -42,6 +42,8 @@ void Space::Save(const uint8_t idSpace)
 		if (!spEntity->m_spPlayerNickName)
 			continue;//只存玩家单位
 
+		if (EntitySystem::Is视口(*spEntity))
+			continue;
 		//if (spEntity->m_spBuilding && !spEntity->m_sp资源)
 		spEntity->Save(file);
 	}
@@ -462,6 +464,15 @@ WpEntity Space::造活动单位(Entity& ref视口, const std::string& refStrNickName, c
 	return wp;
 }
 
+WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, const std::string& refStrNickName, const Position& refPos, const 单位类型 类型)
+{
+	单位::活动单位配置 配置;
+	单位::Find活动单位配置(类型, 配置);
+	auto wp = 造活动单位(refSpPlayer可能空, refStrNickName, refPos, 配置, 类型);
+	CHECK_WP_RET_DEFAULT(wp);
+	return wp;
+}
+
 WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, const std::string& strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型)
 {
 	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
@@ -478,9 +489,6 @@ WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 	switch (类型)
 	{
 	case 工程车:
-		采集Component::AddComponent(*spNewEntity);
-		造建筑Component::AddComponent(*spNewEntity);
-		break;
 	case 工蜂:
 		采集Component::AddComponent(*spNewEntity);
 		造建筑Component::AddComponent(*spNewEntity);

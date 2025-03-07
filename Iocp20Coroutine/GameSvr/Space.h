@@ -95,13 +95,14 @@ public:
 	static SpacePlayer& GetSpacePlayer(const Entity& ref);
 	Space::SpacePlayer& GetSpacePlayer(const std::string strPlayerNickName);
 	WpEntity 造活动单位(Entity& ref视口, const std::string& refStrNickName, const 单位类型 类型, const Position& refPos, bool b设置视口 = false);
-	WpEntity 造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer, const std::string& strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型);
+	WpEntity 造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, const std::string& refStrNickName, const Position& refPos, const 单位类型 类型);
 
 	bool 可放置建筑(const Position& pos, float f半边长);
 	const 副本配置 m_配置;
 	FunCancel m_funCancel剧情;
 	CrowdToolState& GetCrowdToolState(单位类型 类型);
 private:
+	WpEntity 造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer, const std::string& strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型);
 	void EraseEntity(const bool bForceEraseAll);
 	std::shared_ptr<CrowdToolState> m_spCrowdToolState;
 	std::shared_ptr<CrowdToolState> m_spCrowdToolState空中;
