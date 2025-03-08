@@ -31,6 +31,7 @@ CoTaskBool DbPlayer::AliyunGreenCheck(const std::string strGbk)
 	const bool ok = co_await g_CoAliyunGreenCheck.DoDb([this, strGbk](auto& sp) 
 		{
 			const auto ok线程 = AliyunGreen::Check(strGbk);
+			g_mapAliyunGreenCheck[strGbk] = ok线程
 		}, fun);
-	co_return ok;
+	co_return g_mapAliyunGreenCheck[strGbk];
 }
