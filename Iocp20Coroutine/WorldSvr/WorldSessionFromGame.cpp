@@ -82,8 +82,19 @@ void WorldSessionFromGame::OnRecvPack(const void* buf, int len)
 void WorldSessionFromGame::OnRecv(const MsgSay& msg)
 {
 	LOG(INFO) << "GameSvr发来聊天" << StrConv::Utf8ToGbk(msg.content);
-	this->m_pServer->m_Sessions.Broadcast(msg);
+	//this->m_pServer->m_Sessions.Broadcast(msg);
+	Co收到聊天(msg).RunNew();
 
+}
+
+CoTaskBool WorldSessionFromGame::Co收到聊天(const MsgSay msg)
+{
+	const auto strGbk = StrConv::Utf8ToGbk(msg.content);
+	LOG(INFO) << "GameSvr发来聊天" << strGbk;
+
+	const bool ok = co_await g_CoDbPlayer.AliyunGreenCheckk(strGbk);
+	this->m_pServer->m_Sessions.Broadcast(msg);
+	co_return false;
 }
 
 void WorldSessionFromGame::OnRecv(const MsgGate转发& msg转发)

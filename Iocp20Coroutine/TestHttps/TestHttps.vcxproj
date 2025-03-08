@@ -134,6 +134,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\AliyunGreen\AliyunGreen.cpp" />
+    <ClCompile Include="..\IocpNetwork\StrConv.cpp" />
     <ClCompile Include="..\读配置文件\Try读Ini本地机器专用.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -141,6 +143,8 @@
     <ClCompile Include="TestHttps.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\AliyunGreen\AliyunGreen.h" />
+    <ClInclude Include="..\IocpNetwork\StrConv.h" />
     <ClInclude Include="..\读配置文件\Try读Ini本地机器专用.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>

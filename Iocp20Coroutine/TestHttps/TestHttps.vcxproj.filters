@@ -16,6 +16,12 @@
     <Filter Include="读配置文件">
       <UniqueIdentifier>{6aa2f694-490f-4fa4-9192-4bd775c0e6ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="IocpNetwork">
+      <UniqueIdentifier>{88260371-8530-4f51-8e72-a45a63fe70d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AliyunGreen">
+      <UniqueIdentifier>{7737e7f0-e1e0-4008-a28d-fb583bdb6fb7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestHttps.cpp">
@@ -27,6 +33,12 @@
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\IocpNetwork\StrConv.cpp">
+      <Filter>IocpNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AliyunGreen\AliyunGreen.cpp">
+      <Filter>AliyunGreen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\读配置文件\Try读Ini本地机器专用.h">
@@ -34,6 +46,12 @@
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\IocpNetwork\StrConv.h">
+      <Filter>IocpNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AliyunGreen\AliyunGreen.h">
+      <Filter>AliyunGreen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

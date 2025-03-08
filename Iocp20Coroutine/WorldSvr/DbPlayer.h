@@ -10,6 +10,7 @@ struct DbPlayer
 	MSGPACK_DEFINE(pwd, money);
 
 	static CoTask<DbPlayer*> CoGet¾ø²»·µ»Ø¿Õ(const std::string& refStrNickName);
+	CoTaskBool AliyunGreenCheck(const std::string strGbk);
 };
 
 extern std::map<std::string, DbPlayer> g_mapDbPlayer;

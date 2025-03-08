@@ -129,6 +129,13 @@ CoAwaiter<T>& CoDb<T>::Load(const std::string nickName, FunCancel& cancel)
 {
 	return DoDb([this, nickName](SpCoAwaiterT& sp) {this->LoadFromDbThread(nickName, sp); }, cancel);
 }
+
+template<class T>
+CoAwaiter<T>& CoDb<T>::Load(const std::string nickName, FunCancel& cancel)
+{
+	return DoDb([this, nickName](SpCoAwaiterT& sp) {this->LoadFromDbThread(nickName, sp); }, cancel);
+}
+
 template<class T>
 CoTask<Iocp::Overlapped::YieldReturn> CoDb<T>::CoDbDbThreadProcess(Iocp::Overlapped&)
 {
