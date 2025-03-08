@@ -1,13 +1,22 @@
-﻿#include <windows.h>
+﻿#include "pch.h"
+#include <windows.h>
 #include <winhttp.h>
 #include <wchar.h>
 #include <wincrypt.h>
 #include <comdef.h>
 #include <string>
 #include <iostream>
-
+#include <format>
+#include "../jsoncpp-master/include/json/json.h"
+#include "../读配置文件/Try读Ini本地机器专用.h"
 #pragma comment(lib, "Winhttp.lib")
 #pragma comment(lib, "Crypt32.lib")
+
+#pragma comment(lib, "../glog/lib/glog.lib")
+#ifdef _DEBUG
+#pragma comment(lib, "../jsoncpp-master/lib/Debug/jsoncpp.lib")
+#else
+#endif
 using namespace std;
 wstring string2wstring(const string& str)
 {
@@ -17,9 +26,8 @@ wstring string2wstring(const string& str)
 	return ret;
 }
 
-void winhttp_client_post(const std::wstring &strUrl) {
+std::string winhttp_client_post(const std::wstring& strHost, const std::wstring& strVerb, const bool bPost, const std::string& strData) {
 
-	LPCSTR pszData = "access_token=ACCESS_TOKEN";
 	DWORD dwBytesWritten = 0;
 	BOOL  bResults = FALSE;
 	HINTERNET hSession = NULL,
@@ -36,13 +44,13 @@ void winhttp_client_post(const std::wstring &strUrl) {
 
 	// Specify an HTTP server.
 	if (hSession)
-		hConnect = WinHttpConnect(hSession, strUrl.c_str(),//L"www.wingtiptoys.com",
+		hConnect = WinHttpConnect(hSession, strHost.c_str(),//L"www.wingtiptoys.com",
 			INTERNET_DEFAULT_HTTPS_PORT, 0);
 
 	// Create an HTTP Request handle.
 	if (hConnect)
-		hRequest = WinHttpOpenRequest(hConnect, L"POST",
-			L"/wxa/msg_sec_check",
+		hRequest = WinHttpOpenRequest(hConnect, bPost ? L"POST" : L"GET",
+			strVerb.c_str(),
 			NULL, WINHTTP_NO_REFERER,
 			WINHTTP_DEFAULT_ACCEPT_TYPES,
 			WINHTTP_FLAG_SECURE);
@@ -74,14 +82,14 @@ void winhttp_client_post(const std::wstring &strUrl) {
 		bResults = WinHttpSendRequest(hRequest,
 			WINHTTP_NO_ADDITIONAL_HEADERS,
 			0, WINHTTP_NO_REQUEST_DATA, 0,
-			(DWORD)strlen(pszData), 0);
+			(DWORD)strData.size(), 0);
 
 	// Write data to the server. don't need this step
-	if (bResults)
-		bResults = WinHttpWriteData( hRequest, pszData,
-									 (DWORD)strlen(pszData),
-									 &dwBytesWritten);
-	
+	if (bResults && !strData.empty())
+		bResults = WinHttpWriteData(hRequest, strData.c_str(),
+			(DWORD)strData.size(),
+			&dwBytesWritten);
+
 	// End the request.
 	if (bResults)
 		bResults = WinHttpReceiveResponse(hRequest, NULL);
@@ -102,11 +110,12 @@ void winhttp_client_post(const std::wstring &strUrl) {
 			printf("Error %d has occurred.\n", err);
 			break;
 		}
-		return;
+		return "";
 	}
 
 	//接收服务器返回数据
 	//if (bRet)
+	std::string strRet;
 	{
 		char* pszOutBuf;
 		DWORD dwSize = 0;
@@ -129,6 +138,7 @@ void winhttp_client_post(const std::wstring &strUrl) {
 
 			strJson += pszOutBuf;
 		} while (dwSize > 0);
+		strRet = strJson;
 	}
 
 
@@ -137,10 +147,25 @@ void winhttp_client_post(const std::wstring &strUrl) {
 	if (hConnect) WinHttpCloseHandle(hConnect);
 	if (hSession) WinHttpCloseHandle(hSession);
 
+	return strRet;
 }
+
 
 int main()
 {
-	std::cout << "Hello World!\n";
-	winhttp_client_post(L"api.weixin.qq.com");// / wxa / msg_sec_check");
+	std::string strAppId, strAppSecret;
+	Try读Ini本地机器专用(strAppId, "WeChat", "AppId");
+	Try读Ini本地机器专用(strAppSecret, "WeChat", "AppSecret");
+	const auto strVerb = std::format("/cgi-bin/token?grant_type=client_credential&appid={0}&secret={1}", strAppId, strAppSecret);
+	std::wstring wstrVerb(strVerb.begin(), strVerb.end());
+	const auto strToken = winhttp_client_post(L"api.weixin.qq.com", wstrVerb, false, "");// / wxa / msg_sec_check");
+
+	Json::Reader reader;
+	Json::Value value;
+	if (reader.parse(strToken, value))
+	{
+		const auto access_token = value["access_token"].asString();
+		const auto check = winhttp_client_post(L"api.weixin.qq.com", L"/wxa/msg_sec_check", true, std::format("access_token={0}", access_token));// / wxa / msg_sec_check");
+	}
+
 }
