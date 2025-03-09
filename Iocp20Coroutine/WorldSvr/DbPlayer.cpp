@@ -26,12 +26,12 @@ CoTask<DbPlayer*> DbPlayer::CoGet绝不返回空(const std::string& refStrNickName)
 CoTaskBool DbPlayer::AliyunGreenCheck(const std::string strGbk)
 {
 	_ASSERT(!strGbk.empty());
-	static FunCancel fun;
-	//LOG(INFO) << "GameSvr请求扣钱" << msg.changeMoney;
-	const bool ok = co_await g_CoAliyunGreenCheck.DoDb([this, strGbk](auto& sp) 
-		{
-			const auto ok线程 = AliyunGreen::Check(strGbk);
-			g_mapAliyunGreenCheck[strGbk] = ok线程
-		}, fun);
-	co_return g_mapAliyunGreenCheck[strGbk];
+	//static FunCancel fun;
+	////LOG(INFO) << "GameSvr请求扣钱" << msg.changeMoney;
+	//const bool ok = co_await g_CoAliyunGreenCheck.DoDb([this, strGbk](auto& sp) 
+	//	{
+	//		const auto ok线程 = AliyunGreen::Check(strGbk);
+	//		g_mapAliyunGreenCheck[strGbk] = ok线程
+	//	}, fun);
+	co_return false;// g_mapAliyunGreenCheck[strGbk];
 }

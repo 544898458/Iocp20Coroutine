@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "CoDb.h"
 #include <deque>
 #include <sstream>
@@ -9,7 +8,7 @@
 
 
 template<class T>
-void CoDb<T>::Init(const HANDLE hIocp)
+void 慢操作<T>::Init(const HANDLE hIocp)
 {
 	m_hIocp = hIocp;
 	m_OverlappedNotify.OnComplete = &Iocp::Overlapped::OnCompleteNotifySend;
@@ -23,7 +22,7 @@ void CoDb<T>::Init(const HANDLE hIocp)
 }
 
 template<class T>
-void CoDb<T>::LoadFromDbThread(const std::string nickName, SpCoAwaiterT& spCoAwait)
+T CoDb<T>::LoadFromDbThread(const std::string nickName)
 {
 	std::ostringstream oss;
 	oss << typeid(T).name() << "_" << nickName << ".bin";
@@ -60,17 +59,11 @@ void CoDb<T>::LoadFromDbThread(const std::string nickName, SpCoAwaiterT& spCoAwa
 		//dequeLocal.pop_front();
 	}
 
-	//模拟读硬盘很卡
-	std::this_thread::sleep_for(std::chrono::milliseconds(300));
-	{
-		spCoAwait->SetResult(objT);
-
-		m_dequeResult.push_back(spCoAwait);
-	}
+	return objT;
 }
 
 template<class T>
-void CoDb<T>::SaveInDbThread(const T& ref, const std::string & strNickName, SpCoAwaiterT& spCoAwait)
+T CoDb<T>::SaveInDbThread(const T& ref, const std::string & strNickName)
 {
 	std::ostringstream oss;
 	oss << typeid(T).name() << "_" << strNickName << ".bin";
@@ -84,7 +77,7 @@ void CoDb<T>::SaveInDbThread(const T& ref, const std::string & strNickName, SpCo
 	{
 		LOG(ERROR) << "无法打开文件" << strFileName;
 		//dequeLocal.pop_front();
-		return;
+		return ref;
 	}
 
 	MsgPack::SendMsgpack(ref, [&out](const void* buf, int len) { out.write((const char*)buf, len); }, false);
@@ -94,21 +87,17 @@ void CoDb<T>::SaveInDbThread(const T& ref, const std::string & strNickName, SpCo
 	LOG(INFO) << "已写入" << strFileName;
 	//模拟写硬盘很卡
 	std::this_thread::sleep_for(std::chrono::milliseconds(200));
-	{
-		spCoAwait->SetResult(ref);
-		std::lock_guard lock(m_mutexDequeResult);
-		m_dequeResult.push_back(spCoAwait);
-	}
+	return ref;
 };
 
 template<class T>
 CoAwaiter<T>& CoDb<T>::CoSave(const T& ref, const std::string& strNickName, FunCancel& cancel)
 {
-	return DoDb([this, &ref, &strNickName](SpCoAwaiterT& sp) {this->SaveInDbThread(ref, strNickName, sp); }, cancel);
+	return m_慢操作.DoDb([this, &ref, strNickName]() {return this->SaveInDbThread(ref, strNickName); }, cancel);
 }
 
 template<class T>
-CoAwaiter<T>& CoDb<T>::DoDb(DbFun funDb, FunCancel& cancel)
+CoAwaiter<T>& 慢操作<T>::DoDb(DbFun funDb, FunCancel& cancel)
 {
 	std::lock_guard lock(m_mutexDequeSave);
 
@@ -127,11 +116,11 @@ CoAwaiter<T>& CoDb<T>::DoDb(DbFun funDb, FunCancel& cancel)
 template<class T>
 CoAwaiter<T>& CoDb<T>::Load(const std::string nickName, FunCancel& cancel)
 {
-	return DoDb([this, nickName](SpCoAwaiterT& sp) {this->LoadFromDbThread(nickName, sp); }, cancel);
+	return m_慢操作.DoDb([this, nickName]() { return this->LoadFromDbThread(nickName); }, cancel);
 }
 
 template<class T>
-CoTask<Iocp::Overlapped::YieldReturn> CoDb<T>::CoDbDbThreadProcess(Iocp::Overlapped&)
+CoTask<Iocp::Overlapped::YieldReturn> 慢操作<T>::CoDbDbThreadProcess(Iocp::Overlapped&)
 {
 	{
 		while (true)
@@ -144,7 +133,7 @@ CoTask<Iocp::Overlapped::YieldReturn> CoDb<T>::CoDbDbThreadProcess(Iocp::Overlap
 	}
 }
 template<class T>
-void CoDb<T>::DbThreadProcess()
+void 慢操作<T>::DbThreadProcess()
 {
 	std::deque<std::tuple<DbFun, SpCoAwaiterT>> dequeLocal;
 
@@ -162,13 +151,15 @@ void CoDb<T>::DbThreadProcess()
 	{
 		auto& [fun, spCoAwait] = dequeLocal.front();
 		//SaveInDbThread(ref, std::forward<CoAwaiterBool&&>(coAwait));
-		fun(spCoAwait);
+		//模拟读硬盘很卡
+		spCoAwait->SetResult(fun());
+		m_dequeResult.push_back(spCoAwait);
 		dequeLocal.pop_front();
 	}
 }
 
 template<class T>
-inline void CoDb<T>::Process()
+inline void 慢操作<T>::Process()
 {
 	{
 		std::lock_guard lock(m_mutexDequeResult);

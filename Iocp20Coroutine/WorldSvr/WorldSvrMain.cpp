@@ -19,6 +19,7 @@
 #include "../IocpNetwork/WsaStartUp.h"
 #include "../GameSvr/AllPort.h"
 #include "../MiniDump/MiniDump.h"
+#include "../慢操作AliyunGreen/慢操作AliyunGreen.h"
 
 BOOL g_running = TRUE;
 BOOL WINAPI fun(DWORD dwCtrlType)
@@ -39,6 +40,7 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 }
 
 CoDb<DbPlayer> g_CoDbPlayer;
+慢操作AliyunGreen g_慢操作AliyunGreen;
 
 std::unique_ptr<Iocp::Server<WorldSvrAcceptGate>> g_upAcceptGate;
 template<typename T>
@@ -79,8 +81,9 @@ int main()
 	Iocp::ThreadPool threadPoolDb;
 	threadPoolDb.Init();
 
-	g_CoDbPlayer.Init(threadPoolNetwork.GetIocp());
-	
+	g_CoDbPlayer.m_慢操作.Init(threadPoolNetwork.GetIocp());
+	g_慢操作AliyunGreen.m_慢操作.Init(threadPoolNetwork.GetIocp());
+
 	Iocp::Server<WorldSvrAcceptGame> acceptGame(threadPoolNetwork.GetIocp());
 	g_upAcceptGate.reset(new Iocp::Server<WorldSvrAcceptGate>(threadPoolNetwork.GetIocp()));
 	Iocp::WsaStartup();
@@ -93,7 +96,8 @@ int main()
 		acceptGame.m_Server.m_Sessions.Update([]() {});
 		g_upAcceptGate->m_Server.m_Sessions.Update([]() {});
 		CoTimer::Update();
-		g_CoDbPlayer.Process();
+		g_CoDbPlayer.m_慢操作.Process();
+		g_慢操作AliyunGreen.m_慢操作.Process();
 	}
 	acceptGame.Stop();
 	LOG(INFO) << "WorldSvr正常退出,GetCurrentThreadId=" << GetCurrentThreadId();

@@ -22,6 +22,12 @@
     <Filter Include="MiniDump">
       <UniqueIdentifier>{44e9de85-807b-43ef-9065-5ea1120100d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="慢操作AliyunGreen">
+      <UniqueIdentifier>{821566f4-dbc2-4e17-89c5-39e0a0fbcff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AliyunGreen">
+      <UniqueIdentifier>{757a233d-0d1c-464f-a1f4-de8a14a25f27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WorldSvrMain.cpp">
@@ -89,6 +95,12 @@
     </ClCompile>
     <ClCompile Include="..\MiniDump\MiniDump.cpp">
       <Filter>MiniDump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\慢操作AliyunGreen\慢操作AliyunGreen.cpp">
+      <Filter>慢操作AliyunGreen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AliyunGreen\AliyunGreen.cpp">
+      <Filter>AliyunGreen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +190,12 @@
     </ClInclude>
     <ClInclude Include="..\MiniDump\MiniDump.h">
       <Filter>MiniDump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\慢操作AliyunGreen\慢操作AliyunGreen.h">
+      <Filter>慢操作AliyunGreen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AliyunGreen\AliyunGreen.h">
+      <Filter>AliyunGreen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

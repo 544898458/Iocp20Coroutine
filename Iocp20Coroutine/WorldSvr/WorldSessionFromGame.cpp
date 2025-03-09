@@ -12,6 +12,7 @@
 #include "PlayerGateSession_World.h"
 #include "DbPlayer.h"
 #include "../CoRoutine/CoLock.h"
+#include "../慢操作AliyunGreen/慢操作AliyunGreen.h"
 
 template class Iocp::SessionSocketCompletionKey<WorldSessionFromGame>;
 template class MsgQueueMsgPack<WorldSessionFromGame>;
@@ -86,13 +87,17 @@ void WorldSessionFromGame::OnRecv(const MsgSay& msg)
 	Co收到聊天(msg).RunNew();
 
 }
-
-CoTaskBool WorldSessionFromGame::Co收到聊天(const MsgSay msg)
+extern 慢操作AliyunGreen g_慢操作AliyunGreen;
+CoTaskBool WorldSessionFromGame::Co收到聊天(MsgSay msg)
 {
 	const auto strGbk = StrConv::Utf8ToGbk(msg.content);
 	LOG(INFO) << "GameSvr发来聊天" << strGbk;
 
-	const bool ok = co_await g_CoDbPlayer.AliyunGreenCheckk(strGbk);
+	static FunCancel s_funCancel;
+	const bool ok = co_await g_慢操作AliyunGreen.CoAliyunGreen(strGbk, s_funCancel);
+	if(!ok)
+		msg.content = "*";
+
 	this->m_pServer->m_Sessions.Broadcast(msg);
 	co_return false;
 }

@@ -34,7 +34,7 @@ private:
 	void OnRecvPack(const void* buf, int len);
 	void OnRecv(const MsgLogin& msg);
 	void OnRecv(const MsgSay& msg);
-	CoTaskBool Co收到聊天(const MsgSay msg);
+	CoTaskBool Co收到聊天(MsgSay msg);
 	void OnRecv(const MsgChangeMoney& msg, const uint64_t idGateSessionId);
 	void OnRecv(const MsgGate转发& msg);
 	
