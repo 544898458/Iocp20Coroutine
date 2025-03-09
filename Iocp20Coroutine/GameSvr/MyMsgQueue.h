@@ -351,8 +351,8 @@ struct MsgLoginResponce
 		客户端版本太高,
 	};
 	Error  result = OK;
-
-	MSGPACK_DEFINE(msg, result);
+	std::string str提示;
+	MSGPACK_DEFINE(msg, result, str提示);
 };
 MSGPACK_ADD_ENUM(MsgLoginResponce::Error);
 

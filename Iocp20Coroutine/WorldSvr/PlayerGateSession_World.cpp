@@ -5,7 +5,7 @@
 #include "../CoRoutine/CoRpc.h"
 #include "WorldSessionFromGate.h"
 #include "DbPlayer.h"
-
+#include "../慢操作AliyunGreen/慢操作AliyunGreen.h"
 
 
 void PlayerGateSession_World::OnDestroy()
@@ -30,6 +30,17 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 		SendToGate转发(msgResponce);
 		co_return 0;
 	}
+	extern 慢操作AliyunGreen g_慢操作AliyunGreen;
+	static FunCancel funCancle;
+
+	if (!co_await g_慢操作AliyunGreen.CoAliyunGreen(gbkName, funCancle))
+	{
+		msgResponce.result = MsgLoginResponce::NameErr;
+		msgResponce.str提示 = "请换一个名字";
+		SendToGate转发(msgResponce);
+		co_return 0;
+	}
+
 	auto& refDb = *co_await DbPlayer::CoGet绝不返回空(gbkName);
 	if (refDb.pwd != msg.pwd)
 	{
@@ -54,7 +65,6 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 		auto& refGateSession = itFindSession->second;
 		//通知GameSvr此Session是断线状态（不再接收消息）
 		LOG(INFO) << gbkName << "," << m_idPlayerGateSession << "踢" << refGateSession.m_idPlayerGateSession;
-		static FunCancel funCancle;
 		co_await CoRpc<MsgGateDeleteSessionResponce>::Send<MsgGateDeleteSession>({}, [&refGateSession](const MsgGateDeleteSession& refMsg) {refGateSession.SendToGate转发(refMsg); }, funCancle);
 		_ASSERT(g_mapPlayerNickNameGateSessionId.find(gbkName) == g_mapPlayerNickNameGateSessionId.end());
 	}
