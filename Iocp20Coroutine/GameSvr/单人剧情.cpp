@@ -73,8 +73,8 @@ namespace 单人剧情
 		fun总教官陈近南说("即时战略游戏的操作并不复杂，老年间便有四句童谣：\n"
 			"\t\t\t工程车，造基地；\n"
 			"\t\t\t基地又产工程车。\n"
-			"\t\t\t工程车，造兵厂，\n"
-			"\t\t\t兵厂产兵欢乐多！"
+			"\t\t\t工程车，造兵营，\n"
+			"\t\t\t兵营产兵欢乐多！"
 		); _等玩家读完returnTrue;
 		fun玩家说("听说工程车还可以造地堡和炮台，我也要试试。"); _等玩家读完returnTrue;
 		fun总教官陈近南说("造完基地应该先安排工程车去采集晶体矿和燃气矿，这是一切生产建造的基础。此外建造民房可以提升活动单位上限。\n加油！"); _等玩家读完returnTrue;
@@ -185,14 +185,14 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(3s, funCancel))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请选中一辆工程车，然后点击“建筑单位/兵厂”按钮，再点击一次空旷地面，就能造出一个兵厂");
-		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 兵厂))))
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请选中一辆工程车，然后点击“建筑单位/兵营”按钮，再点击一次空旷地面，就能造出一个兵营");
+		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 兵营))))
 			co_return 0;
 
 		if (co_await CoTimer::Wait(10s, funCancel))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击选中兵厂（圆环特效表示选中），然后点击“活动单位/兵”按钮，10秒后会在兵厂旁造出一个兵");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击选中兵营（圆环特效表示选中），然后点击“活动单位/枪兵”按钮，10秒后会在兵营旁造出一个 枪兵");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 兵))))
 			co_return 0;

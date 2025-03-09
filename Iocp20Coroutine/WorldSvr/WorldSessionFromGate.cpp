@@ -117,7 +117,11 @@ void WorldSessionFromGate::OnRecv(const MsgGate转发& msg转发)
 
 		{
 			auto iterFind = g_mapPlayerNickNameGateSessionId.find(refPlayerGateSession.NickName());
-			CHECK_RET_VOID(g_mapPlayerNickNameGateSessionId.end() != iterFind);
+			if (g_mapPlayerNickNameGateSessionId.end() == iterFind)
+			{
+				LOG(WARNING) << "还没登录，不用删除:" << refPlayerGateSession.NickName();
+				return;
+			}
 			LOG(INFO) << refPlayerGateSession.NickName() << ",删除名字对应的SessionId:" << msg转发.gateClientSessionId;
 			g_mapPlayerNickNameGateSessionId.erase(iterFind);
 			void BroadcastToGate在线人数();

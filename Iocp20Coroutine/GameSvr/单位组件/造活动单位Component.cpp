@@ -26,7 +26,7 @@ void 造活动单位Component::AddComponent(Entity& refEntity, const 单位类型 类型)
 	{
 	case 基地:m_set可造类型.insert(工程车); break;
 	case 机场:m_set可造类型.insert(飞机); break;
-	case 兵厂:
+	case 兵营:
 		m_set可造类型.insert(兵);
 		m_set可造类型.insert(近战兵);
 		break;

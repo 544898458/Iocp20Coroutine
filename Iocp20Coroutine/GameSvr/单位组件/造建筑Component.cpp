@@ -35,7 +35,7 @@ bool Ôì½¨ÖşComponent::ÕıÔÚ½¨Ôì(const Entity& refEntity)
 	case ¹¤³Ì³µ:
 		m_set¿ÉÔìÀàĞÍ.insert(»ùµØ);
 		m_set¿ÉÔìÀàĞÍ.insert(Ãñ·¿);
-		m_set¿ÉÔìÀàĞÍ.insert(±ø³§);
+		m_set¿ÉÔìÀàĞÍ.insert(±øÓª);
 		m_set¿ÉÔìÀàĞÍ.insert(µØ±¤);
 		m_set¿ÉÔìÀàĞÍ.insert(ÅÚÌ¨);
 		m_set¿ÉÔìÀàĞÍ.insert(»ú³¡);
@@ -249,7 +249,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	switch (ÀàĞÍ)
 	{
 	case »ùµØ:
-	case ±ø³§:
+	case ±øÓª:
 	case »ú³¡:
 	case ÖØ¹¤³§:
 		Ôì»î¶¯µ¥Î»Component::AddComponent(refNewEntity, ÀàĞÍ);

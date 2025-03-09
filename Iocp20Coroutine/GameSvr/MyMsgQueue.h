@@ -289,7 +289,7 @@ enum 单位类型
 
 	建筑Min非法 = 300,
 	基地,//指挥中心(Command Center),可造工程车
-	兵厂,//兵营(Barracks)，造兵、近战兵、坦克（不需要重工厂）
+	兵营,//兵营(Barracks)，造兵、近战兵、坦克（不需要重工厂）
 	民房,//供给站(Supply Depot)
 	地堡,//掩体; 地堡(Bunker),可以进兵
 	炮台,//Photon Cannon

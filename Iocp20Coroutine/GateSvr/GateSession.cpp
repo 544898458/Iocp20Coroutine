@@ -75,12 +75,13 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 
 	_ASSERT(!m_bLoginOk);
 	{
+		using namespace std;
+
 		const uint32_t 版本号 = 7;
 		if (msg.u32版本号 != 版本号)
 		{
 			LOG(WARNING) << 版本号 << ",版本:" << msg.u32版本号;
-			SendToGateClient<MsgLoginResponce>({ .result = msg.u32版本号 < 版本号 ? MsgLoginResponce::客户端版本太低 : MsgLoginResponce::客户端版本太高 }, (uint64_t)this);
-			using namespace std;
+			SendToGateClient<MsgLoginResponce>({ .result = msg.u32版本号 < 版本号 ? MsgLoginResponce::客户端版本太低 : MsgLoginResponce::客户端版本太高, .str提示="版本不匹配"}, (uint64_t)this);
 			if (co_await CoTimer::Wait(1s, funCancel))
 				co_return 0;
 
@@ -98,6 +99,11 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 		if (responce.result != MsgLoginResponce::OK)
 		{
 			LOG(WARNING) << "登录失败";
+			SendToGateClient(responce, (uint64_t)this);
+			if (co_await CoTimer::Wait(1s, funCancel))
+				co_return 0;
+
+			m_refSession.m_refSession.CloseSocket();
 			co_return 0;
 		}
 		m_bLoginOk = true;

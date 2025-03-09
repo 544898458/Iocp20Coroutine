@@ -36,7 +36,7 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 	if (!co_await g_慢操作AliyunGreen.CoAliyunGreen(gbkName, funCancle))
 	{
 		msgResponce.result = MsgLoginResponce::NameErr;
-		msgResponce.str提示 = "请换一个名字";
+		msgResponce.str提示 = StrConv::GbkToUtf8("请换一个名字");
 		SendToGate转发(msgResponce);
 		co_return 0;
 	}
@@ -45,6 +45,7 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 	if (refDb.pwd != msg.pwd)
 	{
 		msgResponce.result = MsgLoginResponce::PwdErr;
+		msgResponce.str提示 = "密码错误";
 		SendToGate转发(msgResponce);
 		co_return 0;
 	}

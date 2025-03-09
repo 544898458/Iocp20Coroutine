@@ -162,7 +162,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 	if (bOK)
 		return;
 
-	//自动找兵厂去造
+	//自动找兵营去造
 	CHECK_WP_RET_VOID(m_wpSpace);
 	Space& refSpace = *m_wpSpace.lock();
 	std::vector<WpEntity> vecWp可造;
@@ -202,7 +202,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddRole& msg)
 		case 工程车:str提示 += "基地"; break;
 		case 飞机:str提示 += "机场"; break;
 		case 三色坦克:str提示 += "重工厂"; break;
-		default:str提示 += "兵厂"; break;
+		default:str提示 += "兵营"; break;
 		}
 		播放声音Buzz(str提示);
 	}

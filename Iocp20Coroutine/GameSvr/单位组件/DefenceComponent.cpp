@@ -50,7 +50,7 @@ void DefenceComponent::受伤(int hp, const uint64_t idAttacker)
 				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
 				m_refEntity.BroadcastChangeSkeleAnim("Take 001", false);
 				break;
-			case 兵厂:
+			case 兵营:
 				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
 				m_refEntity.BroadcastChangeSkeleAnim("兵厂损毁", false);
 				break;

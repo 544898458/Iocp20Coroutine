@@ -67,6 +67,7 @@ GameSvr,GateSvr,WorldSvr都可以做，
 */
 int main()
 {
+	//std::locale("zh_CN.UTF-8");
 	MiniDump::Install("WorldSvr");
 	//memset((void*)12341324, 23423, 234234);
 
