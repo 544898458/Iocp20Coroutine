@@ -77,11 +77,11 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 	{
 		using namespace std;
 
-		const uint32_t 版本号 = 7;
+		const uint32_t 版本号 = 8;
 		if (msg.u32版本号 != 版本号)
 		{
 			LOG(WARNING) << 版本号 << ",版本:" << msg.u32版本号;
-			SendToGateClient<MsgLoginResponce>({ .result = msg.u32版本号 < 版本号 ? MsgLoginResponce::客户端版本太低 : MsgLoginResponce::客户端版本太高, .str提示="版本不匹配"}, (uint64_t)this);
+			SendToGateClient<MsgLoginResponce>({ .result = msg.u32版本号 < 版本号 ? MsgLoginResponce::客户端版本太低 : MsgLoginResponce::客户端版本太高, .str提示= StrConv::GbkToUtf8("版本不匹配")}, (uint64_t)this);
 			if (co_await CoTimer::Wait(1s, funCancel))
 				co_return 0;
 
