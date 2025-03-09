@@ -7,10 +7,10 @@ class Entity;
 //class PlayerGateSession_Game;
 //class Space;
 
-class 痿趙部Component
+class 單陴Component
 {
 public:
-	痿趙部Component(Entity &ref);
+	單陴Component(Entity &ref);
 	static void AddComponet(Entity& refEntity);
 	void TryCancel();
 	void OnLoad();

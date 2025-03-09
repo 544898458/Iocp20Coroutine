@@ -241,7 +241,7 @@ enum MsgId
 	/// </summary>
 	切换空闲工程车,
 	/// <summary>
-	/// 通知前端播放光子炮攻击特效（从光子炮飞向目标）
+	/// 通知前端播放炮台攻击特效（从炮台飞向目标）
 	/// </summary>
 	弹丸特效,
 	/// <summary>
@@ -292,8 +292,8 @@ enum 单位类型
 	兵厂,//兵营(Barracks)，造兵、近战兵、坦克（不需要重工厂）
 	民房,//供给站(Supply Depot)
 	地堡,//掩体; 地堡(Bunker),可以进兵
-	光子炮,//Photon Cannon
-	孵化场,//hatchery
+	炮台,//Photon Cannon
+	虫巢,//hatchery
 	机场,
 	重工厂,
 	建筑Max非法,

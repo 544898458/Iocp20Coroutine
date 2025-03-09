@@ -24,7 +24,7 @@ namespace 单人剧情
 {
 	static void 总教官陈近南说(Space& refSpace, const std::string& refStrNickName, const std::string& str内容)
 	{
-		PlayerComponent::剧情对话(refSpace, refStrNickName, "图片/陈近南", "总教官：陈近南", "", "", "    " + str内容);
+		PlayerComponent::剧情对话(refSpace, refStrNickName, "图片/女教官白色海军服", "总教官：凌云", "", "", "    " + str内容);
 		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
 	}
 	static void 科学家玛丽亚说(Space& refSpace, const std::string& refStrNickName, const std::string& str内容)
@@ -44,9 +44,9 @@ namespace 单人剧情
 	}
 	static void 玩家说(Space& refSpace, const std::string& strPlayerNickName, const std::string& str内容, const bool b显示退出场景按钮 = false)
 	{
-		PlayerComponent::剧情对话(refSpace, strPlayerNickName, "", "", "图片/韦小宝", "玩家：" + strPlayerNickName, "    " + str内容, b显示退出场景按钮);
+		PlayerComponent::剧情对话(refSpace, strPlayerNickName, "", "", "图片/指挥学员学员青灰色军服", "玩家：" + strPlayerNickName, "    " + str内容, b显示退出场景按钮);
 		PlayerComponent::播放声音(strPlayerNickName, "音效/BUTTON", "");
-	}
+	}gu
 
 	static CoTask<bool> 等玩家读完(const std::string strPlayerNickName, FunCancel& funCancel)
 	{
@@ -76,7 +76,7 @@ namespace 单人剧情
 			"\t\t\t工程车，造兵厂，\n"
 			"\t\t\t兵厂产兵欢乐多！"
 		); _等玩家读完returnTrue;
-		fun玩家说("听说工程车还可以造地堡和光子炮，我也要试试。"); _等玩家读完returnTrue;
+		fun玩家说("听说工程车还可以造地堡和炮台，我也要试试。"); _等玩家读完returnTrue;
 		fun总教官陈近南说("造完基地应该先安排工程车去采集晶体矿和燃气矿，这是一切生产建造的基础。此外建造民房可以提升活动单位上限。\n加油！"); _等玩家读完returnTrue;
 		fun玩家说("我只想单手操作，拖动视口 和 选中多个单位 如何操作呢？"); _等玩家读完returnTrue;
 		fun总教官陈近南说("\t\t拖动地面就可以移动视口，此外设置（齿轮图标）界面还有视口镜头投影切换、放大、缩小按钮。当然也支持双指缩放视口。\n"
@@ -253,16 +253,16 @@ namespace 单人剧情
 				fun玩家说("这些前辈果真如此厉害吗？学生倒是想领教领教！"); _等玩家读完returnTrue;
 				fun总教官陈近南说("在“多人联机地图”和“其他人的多人战局列表”可能会遇到他们，不要轻敌。要善用战斗单位的克制关系：\n"
 					"\t\t近战兵 克制 坦克\n"
-					"\t\t坦克 克制 地堡和光子炮\n"
-					"\t\t地堡和光子炮 克制 近战兵\n"
+					"\t\t坦克 克制 地堡和炮台\n"
+					"\t\t地堡和炮台 克制 近战兵\n"
 				); _等玩家读完returnTrue;
 				fun玩家说("这些克制关系是怎么产生的呢？"); _等玩家读完returnTrue;
 				fun总教官陈近南说("坦克价格昂贵，攻击前摇最久，移动速度最慢；前摇开始后炸点无法改变，敌方单位很容易躲开炸点，此外坦克炸点溅射会伤害附近的己方单位。\n"
 					"\t\t近战兵移动速度快，攻击速度快，价格便宜，很容易躲开坦克炸点，也很容易在坦克攻击前摇结束之前将坦克打掉。"); _等玩家读完returnTrue;
-				fun总教官陈近南说("坦克，攻击距离最远，可以在光子炮和地堡内单位的射程外攻击，是拆除建筑的利器。"); _等玩家读完returnTrue;
-				fun总教官陈近南说("光子炮价格便宜，攻击速度快，攻击距离仅次于坦克，集中放置后可对快速移动的敌方小兵群体造成有效伤害。"); _等玩家读完returnTrue;
+				fun总教官陈近南说("坦克，攻击距离最远，可以在炮台和地堡内单位的射程外攻击，是拆除建筑的利器。"); _等玩家读完returnTrue;
+				fun总教官陈近南说("炮台价格便宜，攻击速度快，攻击距离仅次于坦克，集中放置后可对快速移动的敌方小兵群体造成有效伤害。"); _等玩家读完returnTrue;
 				fun玩家说("我会在实战中体会摸索。"); _等玩家读完returnTrue;
-				fun总教官陈近南说("一个人的时候，可以试试“防守战”，有助于体会光子炮、坦克、地堡的威力。"); _等玩家读完returnTrue;
+				fun总教官陈近南说("一个人的时候，可以试试“防守战”，有助于体会炮台、坦克、地堡的威力。"); _等玩家读完returnTrue;
 				玩家说(refSpace, strPlayerNickName, "好的。", true);//	_等玩家读完;
 			}
 			else
@@ -321,9 +321,9 @@ namespace 单人剧情
 		fun玩家说("九死一生？形势严峻啊，我会全力以赴的!");					_等玩家读完returnTrue;
 		fun总教官陈近南说("坦克可以超远距离造成超高伤害，而且是范围伤害，但是坦克锁定炮弹落点后有超长前摇时长，前摇结束后，敌方目标可能已经远离炮弹落点。炮弹落点附近的我方单位也会受到伤害。"); _等玩家读完returnTrue;
 		fun玩家说("有点鸡肋的感觉，不是红警中的高速坦克，与星际中的攻城坦克也有些不同。");	_等玩家读完returnTrue;
-		fun总教官陈近南说("…不知道你在说什么…有一种叫“光子炮”的建筑单位，攻击距离很远，仅次于坦克；前摇时长很短，可以快速攻击；缺陷是伤害较低；不过多造点集中防守某一块区域还是很实用的。"); _等玩家读完returnTrue;
-		fun玩家说("看来只要有坦克和光子炮就能守住对吗？");					_等玩家读完returnTrue;
-		fun总教官陈近南说("是的，这是其他指挥官总结的经验。大概10个光子炮和5辆坦克沿墙边布置就能守住。当然还有其他多种可行的防守方法，要靠你自行摸索。"); _等玩家读完returnTrue;
+		fun总教官陈近南说("…不知道你在说什么…有一种叫“炮台”的建筑单位，攻击距离很远，仅次于坦克；前摇时长很短，可以快速攻击；缺陷是伤害较低；不过多造点集中防守某一块区域还是很实用的。"); _等玩家读完returnTrue;
+		fun玩家说("看来只要有坦克和炮台就能守住对吗？");					_等玩家读完returnTrue;
+		fun总教官陈近南说("是的，这是其他指挥官总结的经验。大概10个炮台和5辆坦克沿墙边布置就能守住。当然还有其他多种可行的防守方法，要靠你自行摸索。"); _等玩家读完returnTrue;
 		fun玩家说("OK，也不是很复杂。我有信心完成任务！");					_等玩家读完returnTrue;
 		fun总教官陈近南说("走你！");										_等玩家读完returnTrue;
 
@@ -366,11 +366,11 @@ namespace 单人剧情
 
 		}
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "5秒后将出现第1波怪。您可以沿右边墙边造光子炮、布置坦克、造地堡、让兵进驻地堡。");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "5秒后将出现第1波怪。您可以沿右边墙边造炮台、布置坦克、造地堡、让兵进驻地堡。");
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "不用采矿。沿右边迷宫出口墙边布置一排光子炮，再放置坦克加强防御。");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "不用采矿。沿右边迷宫出口墙边布置一排炮台，再放置坦克加强防御。");
 
 		for (int i = 1; i < 20; ++i)
 		{
@@ -431,7 +431,7 @@ namespace 单人剧情
 		}
 		else
 		{
-			fun装甲指挥官海因茨说("可以试试操作慢一点，先进攻右下角的孵化场。"); _等玩家读完returnTrue;
+			fun装甲指挥官海因茨说("可以试试操作慢一点，先进攻右下角的虫巢。"); _等玩家读完returnTrue;
 			玩家说(refSpace, strPlayerNickName, "只能下次再试试了。", true);
 		}
 		co_return false;
@@ -446,19 +446,19 @@ namespace 单人剧情
 		const auto fun坦克手齐诺维说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {坦克手齐诺维说(refSpace, strPlayerNickName, str内容); };
 		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 
-		fun装甲指挥官海因茨说(strPlayerNickName + "，我的一个坦克连在调查无人区孵化场时失联，请前往营救。"); _等玩家读完returnTrue;
+		fun装甲指挥官海因茨说(strPlayerNickName + "，我的一个坦克连在调查无人区虫巢时失联，请前往营救。"); _等玩家读完returnTrue;
 		fun玩家说("坦克没有步兵保护吗？");	_等玩家读完returnTrue;
 		fun装甲指挥官海因茨说("是的，步兵刚刚到位，两个班的兵力，现在全部交给你指挥。"); _等玩家读完returnTrue;
-		fun玩家说("孵化场是什么？无人区为什么会有孵化场呢？");	_等玩家读完returnTrue;
-		fun科学家玛丽亚说("孵化场是什么尚不清楚，好像是凭空出现的。无人侦察机拍摄的视频表明孵化场周围会形成无人区，人的去向不明。");	_等玩家读完returnTrue;
+		fun玩家说("虫巢是什么？无人区为什么会有虫巢呢？");	_等玩家读完returnTrue;
+		fun科学家玛丽亚说("虫巢是什么尚不清楚，好像是凭空出现的。无人侦察机拍摄的视频表明虫巢周围会形成无人区，人的去向不明。");	_等玩家读完returnTrue;
 		fun玩家说("我想起一个古老的传说……");	_等玩家读完returnTrue;
 		fun装甲指挥官海因茨说("现在不是讲故事的时候，坦克连的伴随无人机也失联了。我们再次派侦察机到目标上空已找不到坦克连的踪迹。"); _等玩家读完returnTrue;
 		fun玩家说("一个坦克连应该有10辆坦克吧？这么多钢铁疙瘩能凭空消失吗？");	_等玩家读完returnTrue;
-		fun科学家玛丽亚说("无人区本来是一个生活区，居住着很多人，但是出现孵化场后，居民都消失了。坦克连正是去调查居民失踪的事。");	_等玩家读完returnTrue;
+		fun科学家玛丽亚说("无人区本来是一个生活区，居住着很多人，但是出现虫巢后，居民都消失了。坦克连正是去调查居民失踪的事。");	_等玩家读完returnTrue;
 		fun玩家说("居民失踪就派坦克连去调查，坦克连消失就派我的部队去营救。要是我和我的部队也消失了，还会有人去救我们吗？");	_等玩家读完returnTrue;
 		fun装甲指挥官海因茨说("现在人手紧缺，我不能做任何行动上的承诺。但我个人会竭尽全力，不放弃任何一个人，就像我不会放弃坦克连一样。"); _等玩家读完returnTrue;
 		fun玩家说("我也会尽力而为的。");	_等玩家读完returnTrue;
-		fun装甲指挥官海因茨说("要多用脑子，要多想。记住兵种克制关系：\n小兵 克制 坦克\n坦克 克制 光子炮\n光子炮 克制 小兵"); _等玩家读完returnTrue;
+		fun装甲指挥官海因茨说("要多用脑子，要多想。记住兵种克制关系：\n小兵 克制 坦克\n坦克 克制 炮台\n炮台 克制 小兵"); _等玩家读完returnTrue;
 		fun玩家说("这我早就记住了，否则我也不会疑惑为什么坦克没有步兵保护。");	_等玩家读完returnTrue;
 		fun装甲指挥官海因茨说("我们相信你的能力，你一定能平安归来!"); _等玩家读完returnTrue;
 		PlayerComponent::剧情对话已看完(strPlayerNickName);
@@ -486,34 +486,34 @@ namespace 单人剧情
 			}
 			for (int i = 0; i < 6; ++i)
 			{
-				创建敌方建筑(refSpace, { 25,-49.f + i * 5 }, 光子炮);
-				创建敌方建筑(refSpace, { 30,-49.f + i * 5 }, 光子炮);
-				创建敌方建筑(refSpace, { 35,-49.f + i * 5 }, 光子炮);
+				创建敌方建筑(refSpace, { 25,-49.f + i * 5 }, 炮台);
+				创建敌方建筑(refSpace, { 30,-49.f + i * 5 }, 炮台);
+				创建敌方建筑(refSpace, { 35,-49.f + i * 5 }, 炮台);
 
-				创建敌方建筑(refSpace, { -25,-49.f + i * 5 }, 光子炮);
-				创建敌方建筑(refSpace, { -30,-49.f + i * 5 }, 光子炮);
-				创建敌方建筑(refSpace, { -35,-49.f + i * 5 }, 光子炮);
+				创建敌方建筑(refSpace, { -25,-49.f + i * 5 }, 炮台);
+				创建敌方建筑(refSpace, { -30,-49.f + i * 5 }, 炮台);
+				创建敌方建筑(refSpace, { -35,-49.f + i * 5 }, 炮台);
 			}
 
 			{
-				//守卫右下角孵化场的怪
+				//守卫右下角虫巢的怪
 				MonsterComponent::AddMonster(refSpace, 兵, { 10,35.f }, 2);
 				MonsterComponent::AddMonster(refSpace, 近战兵, { 10,49.f }, 2);
 			}
 
-			auto wp孵化场右下 = 创建敌方建筑(refSpace, { 10, 40.f }, 孵化场);
-			创建敌方建筑(refSpace, { -45, -45.f }, 孵化场);
-			创建敌方建筑(refSpace, { 45, -45.f }, 孵化场);
+			auto wp虫巢右下 = 创建敌方建筑(refSpace, { 10, 40.f }, 虫巢);
+			创建敌方建筑(refSpace, { -45, -45.f }, 虫巢);
+			创建敌方建筑(refSpace, { 45, -45.f }, 虫巢);
 
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "此局没有工程车。右下方的敌方孵化场防守薄弱。");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "此局没有工程车。右下方的敌方虫巢防守薄弱。");
 			bool b已营救坦克连 = false;
 			while (true)
 			{
-				auto [stop, responce] = co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace, wp孵化场右下](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; });
+				auto [stop, responce] = co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace, wp虫巢右下](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; });
 				if (stop)
 					co_return 0;
 
-				if (0 == refSpace.Get怪物单位数(孵化场))
+				if (0 == refSpace.Get怪物单位数(虫巢))
 				{
 					co_await 攻坚战胜利(refSpace, strPlayerNickName, funCancel);
 					co_return 0;
@@ -525,7 +525,7 @@ namespace 单人剧情
 					co_return 0;
 				}
 				CHECK_WP_CO_RET_0(responce.wpEntity);
-				if (!wp孵化场右下.expired() && wp孵化场右下.lock() == responce.wpEntity.lock())//救出坦克连
+				if (!wp虫巢右下.expired() && wp虫巢右下.lock() == responce.wpEntity.lock())//救出坦克连
 				{
 					b已营救坦克连 = true;
 					std::weak_ptr<PlayerGateSession_Game> wpSession;
@@ -551,16 +551,16 @@ namespace 单人剧情
 					}
 
 					fun坦克手齐诺维说("谢谢你救了我们。");	_等玩家读完returnTrue;
-					fun玩家说("你们怎么会在孵化场里？");	_等玩家读完returnTrue;
+					fun玩家说("你们怎么会在虫巢里？");	_等玩家读完returnTrue;
 					fun坦克手齐诺维说("我也不知道，仿佛做了一场梦，什么都不记得了。");	_等玩家读完returnTrue;
 					fun玩家说("现在我的部队会护送你们回基地。到时候再仔细回忆一下。");	_等玩家读完returnTrue;
-					fun坦克手齐诺维说("上面还有两个孵化场，我要炸掉它们再回去。");	_等玩家读完returnTrue;
-					fun玩家说("上面的孵化场有敌方的光子炮把守，我们过不去。");	_等玩家读完returnTrue;
-					fun坦克手齐诺维说("我的坦克专门克制光子炮。一辆坦克就能全灭它们，何况我现在有十辆。");	_等玩家读完returnTrue;
+					fun坦克手齐诺维说("上面还有两个虫巢，我要炸掉它们再回去。");	_等玩家读完returnTrue;
+					fun玩家说("上面的虫巢有敌方的炮台把守，我们过不去。");	_等玩家读完returnTrue;
+					fun坦克手齐诺维说("我的坦克专门克制炮台。一辆坦克就能全灭它们，何况我现在有十辆。");	_等玩家读完returnTrue;
 					fun玩家说("好的，但是坦克要接受我的指挥，我的步兵会保护坦克。");	_等玩家读完returnTrue;
 					fun坦克手齐诺维说("是！明白！指挥官！");	_等玩家读完returnTrue;
 					PlayerComponent::剧情对话已看完(strPlayerNickName);
-					PlayerGateSession_Game::Say任务提示(strPlayerNickName, "消灭上方两个敌方孵化场，控制好步兵保护您的坦克");
+					PlayerGateSession_Game::Say任务提示(strPlayerNickName, "消灭上方两个敌方虫巢，控制好步兵保护您的坦克");
 				}
 
 			}

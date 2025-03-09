@@ -21,7 +21,7 @@
 #include "单位组件/走Component.h"
 #include "单位组件/造建筑Component.h"
 #include "单位组件/AoiComponent.h"
-#include "单位组件/孵化场Component.h"
+#include "单位组件/虫巢Component.h"
 #include "EntitySystem.h"
 #include "单位组件/PlayerNickNameComponent.h"
 #include "../IocpNetwork/MsgPack.h"
@@ -173,8 +173,8 @@ void Entity::OnLoad()
 	if(m_spBuilding)
 		m_spBuilding->直接造好();
 
-	if (m_sp孵化场)
-		m_sp孵化场->OnLoad();
+	if (m_sp虫巢)
+		m_sp虫巢->OnLoad();
 }
 
 void Entity::OnDestroy()
@@ -212,8 +212,8 @@ void Entity::OnDestroy()
 	if (m_spBuilding)
 		m_spBuilding->TryCancel();
 
-	if (m_sp孵化场)
-		m_sp孵化场->TryCancel();
+	if (m_sp虫巢)
+		m_sp虫巢->TryCancel();
 
 	if (m_cancelDelete)
 	{

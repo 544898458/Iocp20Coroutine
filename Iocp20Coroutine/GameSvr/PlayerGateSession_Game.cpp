@@ -216,7 +216,7 @@ void PlayerGateSession_Game::OnRecv(const Msg采集& msg)
 			auto wpEntity = m_wpSpace.lock()->GetEntity((int64_t)msg.id目标资源);
 			CHECK_WP_RET_VOID(wpEntity);
 			auto& ref资源 = *wpEntity.lock();
-			if (基地 == ref.m_类型 || 孵化场 == ref.m_类型)
+			if (基地 == ref.m_类型 || 虫巢 == ref.m_类型)
 			{
 				CHECK_RET_VOID(ref.m_sp造活动单位);
 				ref.m_sp造活动单位->m_pos集结点 = ref资源.Pos();
@@ -644,7 +644,7 @@ void PlayerGateSession_Game::OnRecv(const MsgAddBuilding& msg)
 	auto vecWp = Get空闲工程车(msg.类型, true);
 	if (vecWp.empty())
 	{
-		if (孵化场 == msg.类型)
+		if (虫巢 == msg.类型)
 			播放声音Buzz("没找到空闲的工蜂");
 		else
 			播放声音Buzz("没找到空闲的工程车");

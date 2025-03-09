@@ -24,7 +24,7 @@ class 造活动单位Component;
 class 造建筑Component;
 class AoiComponent;
 class PlayerGateSession_Game;
-class 孵化场Component;
+class 虫巢Component;
 
 class Entity final : public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
@@ -79,7 +79,7 @@ public:
 	std::shared_ptr<临时阻挡Component> m_sp临时阻挡;
 	std::shared_ptr<造活动单位Component> m_sp造活动单位;
 	std::shared_ptr<造建筑Component> m_sp造建筑;
-	std::shared_ptr<孵化场Component> m_sp孵化场;
+	std::shared_ptr<虫巢Component> m_sp虫巢;
 	std::unique_ptr<AoiComponent> m_upAoi;
 	/// <summary>
 	/// 地堡或运输机

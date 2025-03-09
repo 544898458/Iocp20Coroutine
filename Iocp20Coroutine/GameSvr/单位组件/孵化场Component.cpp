@@ -1,28 +1,28 @@
 #pragma once
 #include "pch.h"
-#include "痿趙部Component.h"
+#include "單陴Component.h"
 #include "../Entity.h"
 #include "../../CoRoutine/CoTimer.h"
 #include "../Space.h"
 #include "../EntitySystem.h"
 
-inline 痿趙部Component::痿趙部Component(Entity& ref) :m_refEntity(ref)
+inline 單陴Component::單陴Component(Entity& ref) :m_refEntity(ref)
 {
 	Co婖衿單().RunNew();
 }
 
-void 痿趙部Component::AddComponet(Entity& refEntity)
+void 單陴Component::AddComponet(Entity& refEntity)
 {
-	refEntity.m_sp痿趙部 = std::make_shared<痿趙部Component, Entity&>(refEntity);
+	refEntity.m_sp單陴 = std::make_shared<單陴Component, Entity&>(refEntity);
 }
 
-void 痿趙部Component::TryCancel()
+void 單陴Component::TryCancel()
 {
 	if (m_Cancel婖衿單)
 		m_Cancel婖衿單();
 }
 
-void 痿趙部Component::OnLoad()
+void 單陴Component::OnLoad()
 {
 }
 
@@ -36,7 +36,7 @@ int Rand(int min, int maxValid)
 	}
 	return min + 1 + std::rand() % (maxValid - min);
 }
-CoTaskBool 痿趙部Component::Co婖衿單()
+CoTaskBool 單陴Component::Co婖衿單()
 {
 	KeepCancel kc(m_Cancel婖衿單);
 	using namespace std;

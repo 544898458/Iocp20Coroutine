@@ -307,7 +307,7 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 
 		switch (m_refEntity.m_类型)
 		{
-		case 光子炮:
+		case 炮台:
 			m_refEntity.Broadcast<Msg弹丸特效>({ .idEntity = m_refEntity.Id, .idEntityTarget = wpDefencer.lock()->Id,.特效name = StrConv::GbkToUtf8("特效/黄泡泡") });
 			break;
 		default:; break;

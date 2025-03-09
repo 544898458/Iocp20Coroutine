@@ -13,7 +13,7 @@
 #include "µØ±¤Component.h"
 #include "DefenceComponent.h"
 #include "BuildingComponent.h"
-#include "·õ»¯³¡Component.h"
+#include "³æ³²Component.h"
 
 void Ôì½¨ÖşComponent::AddComponent(Entity& refEntity)
 {
@@ -37,12 +37,12 @@ bool Ôì½¨ÖşComponent::ÕıÔÚ½¨Ôì(const Entity& refEntity)
 		m_set¿ÉÔìÀàĞÍ.insert(Ãñ·¿);
 		m_set¿ÉÔìÀàĞÍ.insert(±ø³§);
 		m_set¿ÉÔìÀàĞÍ.insert(µØ±¤);
-		m_set¿ÉÔìÀàĞÍ.insert(¹â×ÓÅÚ);
+		m_set¿ÉÔìÀàĞÍ.insert(ÅÚÌ¨);
 		m_set¿ÉÔìÀàĞÍ.insert(»ú³¡);
 		m_set¿ÉÔìÀàĞÍ.insert(ÖØ¹¤³§);
 		break;
 	case ¹¤·ä:
-		m_set¿ÉÔìÀàĞÍ.insert(·õ»¯³¡);
+		m_set¿ÉÔìÀàĞÍ.insert(³æ³²);
 		break;
 	default:
 		break;
@@ -259,7 +259,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 		break;
 	case Ãñ·¿:
 		break;
-	case ¹â×ÓÅÚ:
+	case ÅÚÌ¨:
 	{
 		using namespace std;
 		//						¾¯¾à ¹¥¾à ÉËº¦ ÒÆËÙ
@@ -267,8 +267,8 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 		AttackComponent::AddComponent(refNewEntity, ÀàĞÍ, Õ½¶·);
 	}
 	break;
-	case ·õ»¯³¡:
-		·õ»¯³¡Component::AddComponet(refNewEntity);
+	case ³æ³²:
+		³æ³²Component::AddComponet(refNewEntity);
 	break;
 	}
 	DefenceComponent::AddComponent(refNewEntity, ÅäÖÃ.½¨Ôì.u16³õÊ¼Hp);

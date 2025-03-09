@@ -46,7 +46,7 @@ void DefenceComponent::受伤(int hp, const uint64_t idAttacker)
 				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
 				m_refEntity.BroadcastChangeSkeleAnim("die", false);//播放死亡动作
 				break;
-			case 光子炮:
+			case 炮台:
 				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
 				m_refEntity.BroadcastChangeSkeleAnim("Take 001", false);
 				break;
@@ -54,9 +54,9 @@ void DefenceComponent::受伤(int hp, const uint64_t idAttacker)
 				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
 				m_refEntity.BroadcastChangeSkeleAnim("兵厂损毁", false);
 				break;
-			case 孵化场:
+			case 虫巢:
 				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
-				m_refEntity.BroadcastChangeSkeleAnim("孵化场死亡", false);
+				m_refEntity.BroadcastChangeSkeleAnim("虫巢死亡", false);
 				break;
 			case 地堡:
 				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");

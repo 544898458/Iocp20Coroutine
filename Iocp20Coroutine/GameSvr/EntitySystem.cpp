@@ -15,7 +15,7 @@ void EntitySystem::BroadcastEntity描述(Entity& refEntity, const std::string& ref
 
 void EntitySystem::BroadcastChangeSkeleAnimIdle(Entity& refEntity)
 {
-	refEntity.BroadcastChangeSkeleAnim(光子炮 == refEntity.m_类型 ? "平常状态" : "idle");
+	refEntity.BroadcastChangeSkeleAnim(炮台 == refEntity.m_类型 ? "平常状态" : "idle");
 }
 void EntitySystem::BroadcastChangeSkeleAnim采集(Entity& refEntity)
 {
@@ -119,7 +119,7 @@ bool EntitySystem::Is空地能打(const 单位类型 攻, const 单位类型 防)
 	switch (攻)
 	{
 	case 兵:
-	case 光子炮:
+	case 炮台:
 	case 飞机:
 		return true;
 	default:
