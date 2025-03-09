@@ -22,7 +22,7 @@
 std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStrNickName);
 namespace 单人剧情
 {
-	static void 总教官陈近南说(Space& refSpace, const std::string& refStrNickName, const std::string& str内容)
+	static void 总教官凌云说(Space& refSpace, const std::string& refStrNickName, const std::string& str内容)
 	{
 		PlayerComponent::剧情对话(refSpace, refStrNickName, "图片/女教官白色海军服", "总教官：凌云", "", "", "    " + str内容);
 		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
@@ -46,7 +46,7 @@ namespace 单人剧情
 	{
 		PlayerComponent::剧情对话(refSpace, strPlayerNickName, "", "", "图片/指挥学员学员青灰色军服", "玩家：" + strPlayerNickName, "    " + str内容, b显示退出场景按钮);
 		PlayerComponent::播放声音(strPlayerNickName, "音效/BUTTON", "");
-	}gu
+	}
 
 	static CoTask<bool> 等玩家读完(const std::string strPlayerNickName, FunCancel& funCancel)
 	{
@@ -67,7 +67,7 @@ namespace 单人剧情
 	{
 		KeepCancel kc(funCancel);
 
-		const auto fun总教官陈近南说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官陈近南说(refSpace, strPlayerNickName, str内容); };
+		const auto fun总教官陈近南说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官凌云说(refSpace, strPlayerNickName, str内容); };
 		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 
 		fun总教官陈近南说("即时战略游戏的操作并不复杂，老年间便有四句童谣：\n"
@@ -282,7 +282,7 @@ namespace 单人剧情
 
 	static CoTask<bool> Is战斗结束(Space& refSpace, const std::string strPlayerNickName, FunCancel& funCancel)
 	{
-		const auto fun总教官陈近南说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官陈近南说(refSpace, strPlayerNickName, str内容); };
+		const auto fun总教官陈近南说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官凌云说(refSpace, strPlayerNickName, str内容); };
 		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 
 		if (0 == refSpace.Get怪物单位数())
@@ -308,7 +308,7 @@ namespace 单人剧情
 		KeepCancel kc(funCancel);
 		using namespace std;
 
-		const auto fun总教官陈近南说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官陈近南说(refSpace, strPlayerNickName, str内容); };
+		const auto fun总教官陈近南说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官凌云说(refSpace, strPlayerNickName, str内容); };
 		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 
 		fun总教官陈近南说("情报显示：将有大量敌方单位进攻我方基地，请做好准备。");	_等玩家读完returnTrue;

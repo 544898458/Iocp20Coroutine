@@ -968,7 +968,11 @@ void PlayerGateSession_Game::选中单位(std::vector<uint64_t> vecId)
 		{
 			auto& refMap我的所有单位 = refSpace.GetSpacePlayer(NickName()).m_mapWpEntity;
 			auto itefFind = refMap我的所有单位.find(id这次单选选中);
-			CHECK_RET_VOID(refMap我的所有单位.end() != itefFind);
+			if (refMap我的所有单位.end() == itefFind)
+			{
+				LOG(WARNING) << "选中的单位不属于我," << id这次单选选中;
+				return;
+			}
 			CHECK_WP_RET_VOID(itefFind->second);
 			auto& refEntity重复选中的1个单位 = *itefFind->second.lock();
 			CHECK_RET_VOID(refEntity重复选中的1个单位.m_upAoi);

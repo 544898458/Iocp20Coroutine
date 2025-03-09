@@ -354,9 +354,7 @@
     <ClCompile Include="单位组件\地堡Component.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="单位组件\孵化场Component.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="单位组件\虫巢Component.cpp" />
     <ClCompile Include="单位组件\资源Component.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -495,7 +493,7 @@
     <ClInclude Include="单位组件\PlayerNickNameComponent.h" />
     <ClInclude Include="单位组件\临时阻挡Component.h" />
     <ClInclude Include="单位组件\地堡Component.h" />
-    <ClInclude Include="单位组件\孵化场Component.h" />
+    <ClInclude Include="单位组件\虫巢Component.h" />
     <ClInclude Include="单位组件\资源Component.h" />
     <ClInclude Include="单位组件\走Component.h" />
     <ClInclude Include="单位组件\造建筑Component.h" />

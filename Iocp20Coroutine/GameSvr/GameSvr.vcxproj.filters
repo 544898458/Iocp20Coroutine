@@ -351,7 +351,7 @@
     <ClCompile Include="..\读配置文件\Try读Ini本地机器专用.cpp">
       <Filter>读配置文件</Filter>
     </ClCompile>
-    <ClCompile Include="单位组件\孵化场Component.cpp">
+    <ClCompile Include="单位组件\虫巢Component.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -566,7 +566,7 @@
     <ClInclude Include="..\读配置文件\Try读Ini本地机器专用.h">
       <Filter>读配置文件</Filter>
     </ClInclude>
-    <ClInclude Include="单位组件\孵化场Component.h">
+    <ClInclude Include="单位组件\虫巢Component.h">
       <Filter>单位组件</Filter>
     </ClInclude>
   </ItemGroup>
