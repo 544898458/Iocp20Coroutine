@@ -67,24 +67,24 @@ namespace 单人剧情
 	{
 		KeepCancel kc(funCancel);
 
-		const auto fun总教官陈近南说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官凌云说(refSpace, strPlayerNickName, str内容); };
+		const auto fun总教官凌云说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官凌云说(refSpace, strPlayerNickName, str内容); };
 		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 
-		fun总教官陈近南说("即时战略游戏的操作并不复杂，老年间便有四句童谣：\n"
+		fun总教官凌云说("即时战略游戏的操作并不复杂，老年间便有四句童谣：\n"
 			"\t\t\t工程车，造基地；\n"
 			"\t\t\t基地又产工程车。\n"
 			"\t\t\t工程车，造兵营，\n"
 			"\t\t\t兵营产兵欢乐多！"
 		); _等玩家读完returnTrue;
 		fun玩家说("听说工程车还可以造地堡和炮台，我也要试试。"); _等玩家读完returnTrue;
-		fun总教官陈近南说("造完基地应该先安排工程车去采集晶体矿和燃气矿，这是一切生产建造的基础。此外建造民房可以提升活动单位上限。\n加油！"); _等玩家读完returnTrue;
+		fun总教官凌云说("造完基地应该先安排工程车去采集晶体矿和燃气矿，这是一切生产建造的基础。此外建造民房可以提升活动单位上限。\n加油！"); _等玩家读完returnTrue;
 		fun玩家说("我只想单手操作，拖动视口 和 选中多个单位 如何操作呢？"); _等玩家读完returnTrue;
-		fun总教官陈近南说("\t\t拖动地面就可以移动视口，此外设置（齿轮图标）界面还有视口镜头投影切换、放大、缩小按钮。当然也支持双指缩放视口。\n"
+		fun总教官凌云说("\t\t拖动地面就可以移动视口，此外设置（齿轮图标）界面还有视口镜头投影切换、放大、缩小按钮。当然也支持双指缩放视口。\n"
 			"\t\t先点击右边“框选”按钮，然后在屏幕中拖动，即可框选多个单位。在设置（齿轮图标）界面中可以切换菱形框选或方形框选。\n"
 			"\t\t全程只要单手握持手机单指操作即可。\n"
 		); _等玩家读完returnTrue;
 		fun玩家说("只用一只手就能玩的RTS即时战略游戏，那岂不是跟刷短视频一样轻松？我一定要体验一下！"); _等玩家读完returnTrue;
-		fun总教官陈近南说("走你!"); _等玩家读完returnTrue;
+		fun总教官凌云说("走你!"); _等玩家读完returnTrue;
 		PlayerComponent::剧情对话已看完(strPlayerNickName);
 		using namespace std;
 		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "欢迎来到RTS即时战略游戏，现在您要接受基础的训练");
@@ -247,29 +247,29 @@ namespace 单人剧情
 			{
 				PlayerComponent::播放声音(strPlayerNickName, "音效/YouWin", "您取得了胜利！您真是指挥天才！");
 
-				fun总教官陈近南说(strPlayerNickName + "，你的悟性很高，10分钟就完成了其他学员一个月才能完成的训练，为师甚是欣慰！"); _等玩家读完returnTrue;
+				fun总教官凌云说(strPlayerNickName + "，你的悟性很高，10分钟就完成了其他学员一个月才能完成的训练，为师甚是欣慰！"); _等玩家读完returnTrue;
 				fun玩家说("……我这都是些什么同学啊，这么简单的操作还要学一个月吗？"); _等玩家读完returnTrue;
-				fun总教官陈近南说("唉，谁说不是呢！如今世风不古。遥想20年前，比你悟性更高的指挥天才比比皆是，大家经常自发研究切磋指挥技艺，更有无数学员的水平远超教官。实在令人怀念……"); _等玩家读完returnTrue;
+				fun总教官凌云说("唉，谁说不是呢！如今世风不古。遥想20年前，比你悟性更高的指挥天才比比皆是，大家经常自发研究切磋指挥技艺，更有无数学员的水平远超教官。实在令人怀念……"); _等玩家读完returnTrue;
 				fun玩家说("这些前辈果真如此厉害吗？学生倒是想领教领教！"); _等玩家读完returnTrue;
-				fun总教官陈近南说("在“多人联机地图”和“其他人的多人战局列表”可能会遇到他们，不要轻敌。要善用战斗单位的克制关系：\n"
+				fun总教官凌云说("在“多人联机地图”和“其他人的多人战局列表”可能会遇到他们，不要轻敌。要善用战斗单位的克制关系：\n"
 					"\t\t近战兵 克制 坦克\n"
 					"\t\t坦克 克制 地堡和炮台\n"
 					"\t\t地堡和炮台 克制 近战兵\n"
 				); _等玩家读完returnTrue;
 				fun玩家说("这些克制关系是怎么产生的呢？"); _等玩家读完returnTrue;
-				fun总教官陈近南说("坦克价格昂贵，攻击前摇最久，移动速度最慢；前摇开始后炸点无法改变，敌方单位很容易躲开炸点，此外坦克炸点溅射会伤害附近的己方单位。\n"
+				fun总教官凌云说("坦克价格昂贵，攻击前摇最久，移动速度最慢；前摇开始后炸点无法改变，敌方单位很容易躲开炸点，此外坦克炸点溅射会伤害附近的己方单位。\n"
 					"\t\t近战兵移动速度快，攻击速度快，价格便宜，很容易躲开坦克炸点，也很容易在坦克攻击前摇结束之前将坦克打掉。"); _等玩家读完returnTrue;
-				fun总教官陈近南说("坦克，攻击距离最远，可以在炮台和地堡内单位的射程外攻击，是拆除建筑的利器。"); _等玩家读完returnTrue;
-				fun总教官陈近南说("炮台价格便宜，攻击速度快，攻击距离仅次于坦克，集中放置后可对快速移动的敌方小兵群体造成有效伤害。"); _等玩家读完returnTrue;
+				fun总教官凌云说("坦克，攻击距离最远，可以在炮台和地堡内单位的射程外攻击，是拆除建筑的利器。"); _等玩家读完returnTrue;
+				fun总教官凌云说("炮台价格便宜，攻击速度快，攻击距离仅次于坦克，集中放置后可对快速移动的敌方小兵群体造成有效伤害。"); _等玩家读完returnTrue;
 				fun玩家说("我会在实战中体会摸索。"); _等玩家读完returnTrue;
-				fun总教官陈近南说("一个人的时候，可以试试“防守战”，有助于体会炮台、坦克、地堡的威力。"); _等玩家读完returnTrue;
+				fun总教官凌云说("一个人的时候，可以试试“防守战”，有助于体会炮台、坦克、地堡的威力。"); _等玩家读完returnTrue;
 				玩家说(refSpace, strPlayerNickName, "好的。", true);//	_等玩家读完;
 			}
 			else
 			{
 				PlayerComponent::播放声音(strPlayerNickName, "音效/YouLoss", "训练失败。");
 
-				fun总教官陈近南说("这只是一次训练，不必过于在意。失败是成功之母，待情绪平复可以再试一次。"); _等玩家读完returnTrue;
+				fun总教官凌云说("这只是一次训练，不必过于在意。失败是成功之母，待情绪平复可以再试一次。"); _等玩家读完returnTrue;
 				玩家说(refSpace, strPlayerNickName, "好的。", true);//	_等玩家读完;
 			}
 			co_return 0;
@@ -282,22 +282,22 @@ namespace 单人剧情
 
 	static CoTask<bool> Is战斗结束(Space& refSpace, const std::string strPlayerNickName, FunCancel& funCancel)
 	{
-		const auto fun总教官陈近南说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官凌云说(refSpace, strPlayerNickName, str内容); };
+		const auto fun总教官凌云说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官凌云说(refSpace, strPlayerNickName, str内容); };
 		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 
 		if (0 == refSpace.Get怪物单位数())
 		{
 			PlayerGateSession_Game::播放声音(strPlayerNickName, "音效/YouWin", "您守住了！您真是指挥天才！");
 
-			fun总教官陈近南说(strPlayerNickName + "，我果然没有看错你，你是一个指挥天才！"); _等玩家读完returnTrue;
+			fun总教官凌云说(strPlayerNickName + "，我果然没有看错你，你是一个指挥天才！"); _等玩家读完returnTrue;
 			fun玩家说("承蒙教官谬赞。学生谨遵教诲，自不敢有一丝懈怠，定当不负所望，继续精进。");	_等玩家读完returnTrue;
-			PlayerComponent::剧情对话(refSpace, strPlayerNickName, "图片/陈近南", "总教官：陈近南", "", "", "    走你!", true);
+			PlayerComponent::剧情对话(refSpace, strPlayerNickName, "图片/女教官白色海军服", "总教官：凌云", "", "", "    走你!", true);
 			co_return true;
 		}
 		if (0 == refSpace.Get玩家单位数(strPlayerNickName))
 		{
 			PlayerGateSession_Game::播放声音(strPlayerNickName, "音效/YouLose", "胜败乃兵家常事，请点击右上角“退出场景”离开，然后再次点击“防守战”，就可以重新来过。");
-			fun总教官陈近南说("胜败乃兵家常事，我仍然看好你的潜力！"); _等玩家读完returnTrue;
+			fun总教官凌云说("胜败乃兵家常事，我仍然看好你的潜力！"); _等玩家读完returnTrue;
 			玩家说(refSpace, strPlayerNickName, "学生此次功败垂成，定会吸取教训，总结经验，再次努力，定不辜负教官的栽培与期望。", true);//	_等玩家读完;
 			co_return true;
 		}
@@ -308,24 +308,24 @@ namespace 单人剧情
 		KeepCancel kc(funCancel);
 		using namespace std;
 
-		const auto fun总教官陈近南说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官凌云说(refSpace, strPlayerNickName, str内容); };
+		const auto fun总教官凌云说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {总教官凌云说(refSpace, strPlayerNickName, str内容); };
 		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 
-		fun总教官陈近南说("情报显示：将有大量敌方单位进攻我方基地，请做好准备。");	_等玩家读完returnTrue;
+		fun总教官凌云说("情报显示：将有大量敌方单位进攻我方基地，请做好准备。");	_等玩家读完returnTrue;
 		fun玩家说("可是我仅受过简单的指挥训练。");							_等玩家读完returnTrue;
-		fun总教官陈近南说("我们会提供足够的初始晶体矿和燃气矿，你不用再从零开始采集。");	_等玩家读完returnTrue;
+		fun总教官凌云说("我们会提供足够的初始晶体矿和燃气矿，你不用再从零开始采集。");	_等玩家读完returnTrue;
 		fun玩家说("我还是没有把握。");										_等玩家读完returnTrue;
-		fun总教官陈近南说("我会传授你指挥实战速成口诀，三分钟即可成为实战高手。");	_等玩家读完returnTrue;
+		fun总教官凌云说("我会传授你指挥实战速成口诀，三分钟即可成为实战高手。");	_等玩家读完returnTrue;
 		fun玩家说("真有这种口诀的话就应该在训练战时告诉我啊！");			_等玩家读完returnTrue;
-		fun总教官陈近南说("实战口诀只有在九死一生的实战中才有用！");		_等玩家读完returnTrue;
+		fun总教官凌云说("实战口诀只有在九死一生的实战中才有用！");		_等玩家读完returnTrue;
 		fun玩家说("九死一生？形势严峻啊，我会全力以赴的!");					_等玩家读完returnTrue;
-		fun总教官陈近南说("坦克可以超远距离造成超高伤害，而且是范围伤害，但是坦克锁定炮弹落点后有超长前摇时长，前摇结束后，敌方目标可能已经远离炮弹落点。炮弹落点附近的我方单位也会受到伤害。"); _等玩家读完returnTrue;
+		fun总教官凌云说("坦克可以超远距离造成超高伤害，而且是范围伤害，但是坦克锁定炮弹落点后有超长前摇时长，前摇结束后，敌方目标可能已经远离炮弹落点。炮弹落点附近的我方单位也会受到伤害。"); _等玩家读完returnTrue;
 		fun玩家说("有点鸡肋的感觉，不是红警中的高速坦克，与星际中的攻城坦克也有些不同。");	_等玩家读完returnTrue;
-		fun总教官陈近南说("…不知道你在说什么…有一种叫“炮台”的建筑单位，攻击距离很远，仅次于坦克；前摇时长很短，可以快速攻击；缺陷是伤害较低；不过多造点集中防守某一块区域还是很实用的。"); _等玩家读完returnTrue;
+		fun总教官凌云说("…不知道你在说什么…有一种叫“炮台”的建筑单位，攻击距离很远，仅次于坦克；前摇时长很短，可以快速攻击；缺陷是伤害较低；不过多造点集中防守某一块区域还是很实用的。"); _等玩家读完returnTrue;
 		fun玩家说("看来只要有坦克和炮台就能守住对吗？");					_等玩家读完returnTrue;
-		fun总教官陈近南说("是的，这是其他指挥官总结的经验。大概10个炮台和5辆坦克沿墙边布置就能守住。当然还有其他多种可行的防守方法，要靠你自行摸索。"); _等玩家读完returnTrue;
+		fun总教官凌云说("是的，这是其他指挥官总结的经验。大概10个炮台和5辆坦克沿墙边布置就能守住。当然还有其他多种可行的防守方法，要靠你自行摸索。"); _等玩家读完returnTrue;
 		fun玩家说("OK，也不是很复杂。我有信心完成任务！");					_等玩家读完returnTrue;
-		fun总教官陈近南说("走你！");										_等玩家读完returnTrue;
+		fun总教官凌云说("走你！");										_等玩家读完returnTrue;
 
 		PlayerComponent::剧情对话已看完(strPlayerNickName);
 
