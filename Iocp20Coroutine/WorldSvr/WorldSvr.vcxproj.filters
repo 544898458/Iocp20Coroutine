@@ -28,6 +28,9 @@
     <Filter Include="AliyunGreen">
       <UniqueIdentifier>{757a233d-0d1c-464f-a1f4-de8a14a25f27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="读配置文件">
+      <UniqueIdentifier>{75594a77-054f-4bfe-98c2-9c3f49d7a5d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WorldSvrMain.cpp">
@@ -101,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="..\AliyunGreen\AliyunGreen.cpp">
       <Filter>AliyunGreen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\读配置文件\Try读Ini本地机器专用.cpp">
+      <Filter>读配置文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="..\AliyunGreen\AliyunGreen.h">
       <Filter>AliyunGreen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\读配置文件\Try读Ini本地机器专用.h">
+      <Filter>读配置文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

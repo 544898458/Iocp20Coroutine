@@ -153,10 +153,17 @@ std::string winhttp_client_post(const std::wstring& strHost, const std::wstring&
 
 #include "../IocpNetwork/StrConv.h"
 #include "AliyunGreen.h"
+std::wstring StrToW(const std::string& str)
+{
+	return std::wstring(str.begin(), str.end());
+}
 bool AliyunGreen::Check(const std::string& refContentGbk)
 {
-
-	const auto strToken = winhttp_client_post(L"https.iotlabor.cn", L"public/index.php/index/admin/green", true, std::format("content={0}", StrConv::GbkToUtf8(refContentGbk)));// / wxa / msg_sec_check");
+	std::string strHttpsHost;
+	std::string strHttpsVerb;
+	Try读Ini本地机器专用(strHttpsHost, "Aliyun", "HttpsHost");
+	Try读Ini本地机器专用(strHttpsVerb, "Aliyun", "HttpsVerb");
+	const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("content={0}", StrConv::GbkToUtf8(refContentGbk)));// / wxa / msg_sec_check");
 	const auto strGbk = StrConv::Utf8ToGbk(strToken);
 	//std::cout << strGbk;
 	return strGbk == "none";

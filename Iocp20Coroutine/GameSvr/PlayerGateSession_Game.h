@@ -83,7 +83,7 @@ private:
 	void OnRecv(const Msg剧情对话已看完& msg);
 	void OnRecv(const Msg建筑产出活动单位的集结点& msg);
 
-	void 选中单位(const std::vector<uint64_t>& vecId);
+	void 选中单位(std::vector<uint64_t> vecId);
 	std::vector<WpEntity> Get空闲工程车(单位类型 造活动单位类型, bool b包括采集中的工程车);
 
 	void Send选中音效(const Entity& refEntity);
@@ -101,6 +101,7 @@ private:
 	GameSvrSession& m_refGameSvrSession;
 
 	std::vector<uint64_t> m_vecSelectedEntity;
+	uint64_t m_id上次单选选中 = 0;
 	std::string m_strNickName;
 	uint32_t m_snSend = 0;
 	FunCancel m_funCancel进地图;

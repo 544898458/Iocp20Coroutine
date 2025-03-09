@@ -24,11 +24,13 @@
 #include "单位组件/走Component.h"
 #include "单位组件/PlayerComponent.h"
 #include "单位组件/资源Component.h"
+#include "单位组件/AoiComponent.h"
 #include "../CoRoutine/CoTimer.h"
 #include "EntitySystem.h"
 #include "单位组件/PlayerNickNameComponent.h"
 #include "MyEvent.h"
 #include "../读配置文件/Try读Ini本地机器专用.h"
+
 std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStrNickName);
 
 
@@ -300,12 +302,12 @@ CoTaskBool PlayerGateSession_Game::Co进多人联机地图(WpEntity wp视口)
 		auto pos出生 = Position(std::rand() % 100 - 50.f, std::rand() % 100 - 50.f);
 		refSpace.造活动单位(ref视口, NickName(), 单位类型::工程车, pos出生, true);
 		const uint16_t 间距 = 5;
-		refSpace.造活动单位(ref视口, NickName(), 单位类型::兵,		{pos出生.x,		pos出生.z + 间距  });
-		refSpace.造活动单位(ref视口, NickName(), 单位类型::三色坦克,{pos出生.x + 间距 , pos出生.z });
-		refSpace.造活动单位(ref视口, NickName(), 单位类型::工蜂,	{pos出生.x + 间距 , pos出生.z + 间距  });
-		refSpace.造活动单位(ref视口, NickName(), 单位类型::近战兵,	{pos出生.x - 间距 , pos出生.z });
-		refSpace.造活动单位(ref视口, NickName(), 单位类型::飞机,	{pos出生.x - 间距 , pos出生.z - 间距  });
-		refSpace.造活动单位(ref视口, NickName(), 单位类型::幼虫,	{pos出生.x + 间距 , pos出生.z - 间距  });
+		refSpace.造活动单位(ref视口, NickName(), 单位类型::兵, { pos出生.x,		pos出生.z + 间距 });
+		refSpace.造活动单位(ref视口, NickName(), 单位类型::三色坦克, { pos出生.x + 间距 , pos出生.z });
+		refSpace.造活动单位(ref视口, NickName(), 单位类型::工蜂, { pos出生.x + 间距 , pos出生.z + 间距 });
+		refSpace.造活动单位(ref视口, NickName(), 单位类型::近战兵, { pos出生.x - 间距 , pos出生.z });
+		refSpace.造活动单位(ref视口, NickName(), 单位类型::飞机, { pos出生.x - 间距 , pos出生.z - 间距 });
+		refSpace.造活动单位(ref视口, NickName(), 单位类型::幼虫, { pos出生.x + 间距 , pos出生.z - 间距 });
 
 		//auto [stop, msgResponce] = co_await AiCo::ChangeMoney(*this, 0, true, m_funCancel进地图);
 		//if (stop)
@@ -946,18 +948,59 @@ void PlayerGateSession_Game::OnRecv(const Msg框选& msg)
 	选中单位(vec);
 }
 
-void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
+void PlayerGateSession_Game::选中单位(std::vector<uint64_t> vecId)
 {
-	m_vecSelectedEntity.clear();
-	bool b已发送选中音效(false);
-
 	if (m_wpSpace.expired())
 	{
-		LOG(ERROR) << "";
+		LOG(ERROR) << "没进场景，不能选中单位";
 		return;
 	}
 	auto& refSpace = *m_wpSpace.lock();
-	for (const auto id : vecId)
+	if (vecId.empty())
+		m_id上次单选选中 = 0;
+
+	//如果重复选择同一单位，就是把附近同类型的单位全部选中
+	if (1 == vecId.size())
+	{
+		const auto id这次单选选中 = vecId[0];
+
+		if (id这次单选选中 == m_id上次单选选中)
+		{
+			auto& refMap我的所有单位 = refSpace.GetSpacePlayer(NickName()).m_mapWpEntity;
+			auto itefFind = refMap我的所有单位.find(id这次单选选中);
+			CHECK_RET_VOID(refMap我的所有单位.end() != itefFind);
+			CHECK_WP_RET_VOID(itefFind->second);
+			auto& refEntity重复选中的1个单位 = *itefFind->second.lock();
+			CHECK_RET_VOID(refEntity重复选中的1个单位.m_upAoi);
+			for (const auto [id, wp] : refEntity重复选中的1个单位.m_upAoi->m_map我能看到的)
+			{
+				if (id这次单选选中 == id)
+					continue;
+
+				CHECK_WP_CONTINUE(wp);
+				auto& refEntity附近 = *wp.lock();
+				if (EntitySystem::Is建筑(refEntity附近.m_类型))
+					continue;
+
+				if (refEntity附近.m_类型 == refEntity重复选中的1个单位.m_类型)
+					vecId.emplace_back(id);
+			}
+		}
+
+		m_id上次单选选中 = id这次单选选中;
+	}
+
+	std::vector<uint64_t> vecId并集;//每次都是添加选择
+	if (!vecId.empty())
+	{
+		std::sort(m_vecSelectedEntity.begin(), m_vecSelectedEntity.end());
+		std::sort(vecId.begin(), vecId.end());
+		std::set_union(m_vecSelectedEntity.begin(), m_vecSelectedEntity.end(), vecId.begin(), vecId.end(), std::back_inserter(vecId并集));
+	}
+	m_vecSelectedEntity.clear();
+	bool b已发送选中音效(false);
+
+	for (const auto id : vecId并集)
 	{
 		auto wpEntity = refSpace.GetEntity(id);
 		if (wpEntity.expired())
@@ -969,7 +1012,7 @@ void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
 		if (!spEntity->m_wpOwner.expired())
 			continue;//地堡内
 
-		if (spEntity->m_spBuilding && vecId.size() > 1)
+		if (spEntity->m_spBuilding && vecId并集.size() > 1)
 			continue;//建筑单位目前只能单选
 
 		if (EntitySystem::Is视口(*spEntity))
@@ -980,7 +1023,7 @@ void PlayerGateSession_Game::选中单位(const std::vector<uint64_t>& vecId)
 
 		if (&spEntity->m_spPlayer->m_refSession != this)//不是自己的单位
 		{
-			if (vecId.size() == 1)//单选一个敌方单位，就是走过去打
+			if (vecId并集.size() == 1)//单选一个敌方单位，就是走过去打
 			{
 				MsgMove msg = { .pos = spEntity->Pos(),.b遇到敌人自动攻击 = true };
 				OnRecv(msg);

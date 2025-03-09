@@ -79,8 +79,8 @@ void PlayerComponent::AddComponent(Entity& refEntity, std::weak_ptr<PlayerCompon
 {
 	if (wpPlayer.expired())
 	{
-		CHECK_RET_VOID(!strNickName.empty());
-		if (!strNickName.empty())
+		//CHECK_RET_VOID(!strNickName.empty());
+		if (!strNickName.empty())//没有玩家昵称说明就是怪（敌人）
 			refEntity.m_spPlayerNickName = std::make_shared<PlayerNickNameComponent, const std::string&>(strNickName);
 	}
 	else 
