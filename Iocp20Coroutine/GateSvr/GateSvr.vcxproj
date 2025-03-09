@@ -143,7 +143,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\CoRoutine\CoLock.cpp" />
-    <ClCompile Include="..\CoRoutine\CoRpc.cpp" />
+    <ClCompile Include="..\CoRoutine\CoRpc.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\CoRoutine\CoTimer.cpp" />
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp" />
     <ClCompile Include="..\IocpNetwork\Client.cpp" />
@@ -170,7 +172,9 @@
     <ClCompile Include="..\websocketfiles-master\src\ws_endpoint.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp" />
     <ClCompile Include="..\读配置文件\Try读Ini本地机器专用.cpp" />
-    <ClCompile Include="ClientSession_GateToGame.cpp" />
+    <ClCompile Include="ClientSession_GateToGame.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="GateServer.cpp" />
     <ClCompile Include="GateSession.cpp" />
     <ClCompile Include="GateSvrMain.cpp" />
