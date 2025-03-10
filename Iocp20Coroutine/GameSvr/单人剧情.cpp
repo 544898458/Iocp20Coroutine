@@ -167,7 +167,7 @@ namespace 单人剧情
 		if (std::get<0>(co_await CoEvent<MyEvent::开始采集晶体矿>::Wait(funCancel)))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！您的工程车正在采集晶体矿，请等他把晶体矿运回基地。现在，请选中另一辆工程车去采集燃气矿");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！您的工程车正在采集晶体矿，请等他把晶体矿运回基地。现在，请先点“取消选中”，再选中另一辆工程车去采集燃气矿");
 		if (std::get<0>(co_await CoEvent<MyEvent::晶体矿已运回基地>::Wait(funCancel)))
 			co_return 0;
 

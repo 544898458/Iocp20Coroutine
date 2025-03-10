@@ -348,8 +348,7 @@ struct MsgLoginResponce
 		Busy,
 		PwdErr,
 		NameErr,
-		客户端版本太低,
-		客户端版本太高,
+		客户端版本不匹配,
 	};
 	Error  result = OK;
 	std::string str提示;

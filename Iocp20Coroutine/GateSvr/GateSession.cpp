@@ -11,6 +11,7 @@
 #include "../CoRoutine/CoTask.h"
 #include "../CoRoutine/CoTimer.h"
 #include "../IocpNetwork/StrConv.h"
+#include "../读配置文件/Try读Ini本地机器专用.h"
 
 template class Iocp::SessionSocketCompletionKey<GateSession::CompeletionKeySession>;
 template class MsgQueueMsgPack<GateSession::CompeletionKeySession>;
@@ -77,11 +78,14 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 	{
 		using namespace std;
 
-		const uint32_t 版本号 = 8;
-		if (msg.u32版本号 != 版本号)
+		uint32_t 版本号可进最高 = 0;
+		uint32_t 版本号可进最低 = 0;
+		Try读Ini本地机器专用(版本号可进最高, "GateSvr", "VerMax");
+		Try读Ini本地机器专用(版本号可进最低, "GateSvr", "VerMin");
+		if (版本号可进最高 < msg.u32版本号 || 版本号可进最低>msg.u32版本号)
 		{
-			LOG(WARNING) << 版本号 << ",版本:" << msg.u32版本号;
-			SendToGateClient<MsgLoginResponce>({ .result = msg.u32版本号 < 版本号 ? MsgLoginResponce::客户端版本太低 : MsgLoginResponce::客户端版本太高, .str提示= StrConv::GbkToUtf8("版本不匹配")}, (uint64_t)this);
+			LOG(WARNING) << "[" << 版本号可进最高 << "," << 版本号可进最低 << "],版本:" << msg.u32版本号;
+			SendToGateClient<MsgLoginResponce>({ .result = MsgLoginResponce::客户端版本不匹配, .str提示 = StrConv::GbkToUtf8("版本不匹配") }, (uint64_t)this);
 			if (co_await CoTimer::Wait(1s, funCancel))
 				co_return 0;
 

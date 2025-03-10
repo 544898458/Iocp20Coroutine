@@ -31,3 +31,13 @@ bool Try读Ini本地机器专用(std::string& refInOut, const std::string& strAppName, 
 	refInOut = szRead;
 	return true;
 }
+
+bool Try读Ini本地机器专用(uint32_t& refInOut, const std::string& strAppName, const std::string& strKey)
+{
+	std::string str(std::format("{0}", refInOut));
+	if (!Try读Ini本地机器专用(str, strAppName, strKey))
+		return false;
+
+	refInOut = atoi(str.c_str());
+	return true;
+}
