@@ -964,17 +964,23 @@ void PlayerGateSession_Game::选中单位(std::vector<uint64_t> vecId)
 	{
 		const auto id这次单选选中 = vecId[0];
 
-		if (id这次单选选中 == m_id上次单选选中)
+		auto& refMap我的所有单位 = refSpace.GetSpacePlayer(NickName()).m_mapWpEntity;
+		auto itefFind = refMap我的所有单位.find(id这次单选选中);
+		if (refMap我的所有单位.end() == itefFind)
 		{
-			auto& refMap我的所有单位 = refSpace.GetSpacePlayer(NickName()).m_mapWpEntity;
-			auto itefFind = refMap我的所有单位.find(id这次单选选中);
-			if (refMap我的所有单位.end() == itefFind)
-			{
-				LOG(WARNING) << "选中的单位不属于我," << id这次单选选中;
-				return;
-			}
-			CHECK_WP_RET_VOID(itefFind->second);
-			auto& refEntity重复选中的1个单位 = *itefFind->second.lock();
+			LOG(WARNING) << "选中的单位不属于我," << id这次单选选中;
+			return;
+		}
+
+		CHECK_WP_RET_VOID(itefFind->second);
+		auto& refEntity重复选中的1个单位 = *itefFind->second.lock();
+
+		if (EntitySystem::Is建筑(refEntity重复选中的1个单位.m_类型)) 
+		{
+			m_vecSelectedEntity.clear();//单选建筑
+		}
+		else if (id这次单选选中 == m_id上次单选选中)
+		{
 			CHECK_RET_VOID(refEntity重复选中的1个单位.m_upAoi);
 			for (const auto [id, wp] : refEntity重复选中的1个单位.m_upAoi->m_map我能看到的)
 			{
@@ -983,8 +989,9 @@ void PlayerGateSession_Game::选中单位(std::vector<uint64_t> vecId)
 
 				CHECK_WP_CONTINUE(wp);
 				auto& refEntity附近 = *wp.lock();
-				if (EntitySystem::Is建筑(refEntity附近.m_类型))
+				if (EntitySystem::Is建筑(refEntity附近.m_类型)) {
 					continue;
+				}
 
 				if (refEntity附近.m_类型 == refEntity重复选中的1个单位.m_类型)
 					vecId.emplace_back(id);
