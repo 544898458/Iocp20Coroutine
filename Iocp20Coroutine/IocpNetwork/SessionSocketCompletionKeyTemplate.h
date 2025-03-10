@@ -49,6 +49,7 @@ namespace Iocp {
 			//pRecvOverlapped = new Overlapped();
 			recvOverlapped.coTask = PostRecv(recvOverlapped);
 			recvOverlapped.coTask.m_desc = "PostRecv";
+			recvOverlapped.coTask.m_bNeedLock = true;
 			recvOverlapped.coTask.Run();
 		}
 		return;
