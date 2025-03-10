@@ -748,12 +748,22 @@ WpEntity PlayerGateSession_Game::EnterSpace(WpSpace wpSpace)
 		Send(playerSpace.m_msg上次发给前端的剧情对话);
 		playerSpace.m_msg上次发给前端的剧情对话.str对话内容.clear();
 	}
-	{
-		auto strHttps = refSpace.m_配置.strHttps音乐;
-		Try读Ini本地机器专用(strHttps, "PlayerGateSession_Game", refSpace.m_配置.strSceneName + "_音乐");
-		Send<Msg播放网络音乐>({ .strHttpsMp3 = strHttps });
-	}
+	播放音乐(refSpace.m_配置.strHttps音乐, refSpace.m_配置.strSceneName + "_音乐");
 	return spEntityViewPort;
+}
+
+void PlayerGateSession_Game::播放音乐(const std::string& strHttps默认, const std::string& strKey)
+{
+	auto strHttps = strHttps默认;
+	Try读Ini本地机器专用(strHttps, "PlayerGateSession_Game", strKey);
+	if (strHttps.empty())
+		return;
+
+	Send<Msg播放网络音乐>({ .strHttpsMp3 = StrConv::GbkToUtf8(strHttps) });
+}
+void PlayerGateSession_Game::OnLoginOk()
+{
+	播放音乐("", "登录场景_音乐");
 }
 
 void PlayerGateSession_Game::OnRecv(const MsgSay& msg)

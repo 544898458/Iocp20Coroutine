@@ -139,7 +139,7 @@ void GameSvrSession::OnRecv(const MsgGate转发& msg转发)
 	msgpack::object_handle oh = msgpack::unpack((const char*)&msg转发.vecByte[0], msg转发.vecByte.size());//没判断越界，要加try
 	msgpack::object obj = oh.get();
 	const auto msg = MsgHead::GetMsgId(obj);
-	LOG(INFO) << "OnRecv:"  << obj;
+	LOG(INFO) << "OnRecv:" << obj;
 
 	switch (msg.id)
 	{
@@ -183,7 +183,9 @@ void GameSvrSession::OnRecv(const MsgGateAddSession& msg, const uint64_t idGateC
 		return;
 	}
 
-	//pair.first->second.EnterSpace(m_pServer->m_Space无限刷怪);
+	CHECK_RET_VOID(m_mapPlayerGateSession.end() != pair.first);
+	CHECK_RET_VOID(pair.first->second);
+	pair.first->second->OnLoginOk();
 	//pair.first->second->EnterSpace(Space::GetSpace(1), msg.nickName);
 }
 

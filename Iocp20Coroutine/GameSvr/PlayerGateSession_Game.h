@@ -30,6 +30,8 @@ public:
 
 	const std::string& NickName()const { return m_strNickName; }
 	WpEntity EnterSpace(WpSpace wpSpace);
+	void 播放音乐(const std::string& strHttps默认, const std::string& strKey);
+	void OnLoginOk();
 	void Send资源();
 	uint16_t 活动单位上限() const;
 	uint16_t 活动单位包括制造队列中的() const;
