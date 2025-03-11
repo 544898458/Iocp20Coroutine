@@ -116,7 +116,7 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 单位类型 类型)
 
 CoTaskBool 造建筑Component::Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel)
 {
-	PlayerComponent::播放声音(m_refEntity, "TSCTra00");
+	PlayerComponent::播放声音(m_refEntity, "音效/打桩机破碎镐");
 
 	KeepCancel kc(cancel);
 	std::weak_ptr<BuildingComponent> wpBuilding(wpEntity建筑.lock()->m_spBuilding);
