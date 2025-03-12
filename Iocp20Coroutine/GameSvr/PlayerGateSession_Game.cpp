@@ -775,7 +775,7 @@ void PlayerGateSession_Game::OnRecv(const MsgSelectRoles& msg)
 	LOG(INFO) << "收到选择:" << msg.ids.size();
 	std::vector<uint64_t> listSelectedEntity;
 	std::transform(msg.ids.begin(), msg.ids.end(), std::back_inserter(listSelectedEntity), [](const double& id) {return uint64_t(id); });
-	选中单位(listSelectedEntity);
+	选中单位(listSelectedEntity, msg.b追加);
 }
 
 template<class T_Msg>
@@ -948,7 +948,7 @@ void PlayerGateSession_Game::OnRecv(const Msg框选& msg)
 	选中单位(vec);
 }
 
-void PlayerGateSession_Game::选中单位(std::vector<uint64_t> vecId)
+void PlayerGateSession_Game::选中单位(std::vector<uint64_t> vecId, const bool b追加)
 {
 	if (m_wpSpace.expired())
 	{
@@ -975,7 +975,7 @@ void PlayerGateSession_Game::选中单位(std::vector<uint64_t> vecId)
 		CHECK_WP_RET_VOID(itefFind->second);
 		auto& refEntity重复选中的1个单位 = *itefFind->second.lock();
 
-		if (EntitySystem::Is建筑(refEntity重复选中的1个单位.m_类型)) 
+		if (EntitySystem::Is建筑(refEntity重复选中的1个单位.m_类型) || !b追加)
 		{
 			m_vecSelectedEntity.clear();//单选建筑
 		}

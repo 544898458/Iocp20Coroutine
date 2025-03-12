@@ -429,7 +429,8 @@ struct MsgSelectRoles
 	MsgSelectRoles() {}
 	MsgHead msg{ .id = MsgId::SelectRoles };
 	std::vector<double> ids;//TypeScript只有FLOAT64,没有POSITIVE_INTEGER和NEGATIVE_INTEGER
-	MSGPACK_DEFINE(msg, ids);
+	bool b追加 = false;
+	MSGPACK_DEFINE(msg, ids, b追加);
 };
 
 struct MsgAddRoleRet
