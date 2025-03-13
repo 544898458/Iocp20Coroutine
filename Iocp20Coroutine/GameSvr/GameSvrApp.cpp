@@ -18,6 +18,7 @@
 #include "../IocpNetwork/WsaStartUp.h"
 #include "AllPort.h"
 #include "../MiniDump/MiniDump.h"
+#include "单位.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")
@@ -122,6 +123,10 @@ int main(void)
 	const char sz[] = "Memory Leak Test.Nei Cun Xie Lou Jian Ce.This is not a real Defect.Zhe Bu Shi Yi Ge Zhen De Que Xian.";
 	memcpy(pMemoryLeak, sz, sizeof(sz));
 	pMemoryLeak = nullptr;
+
+	单位::读配置文件();
+
+
 
 	FLAGS_alsologtostderr = true;//是否将日志输出到文件和stderr
 	FLAGS_colorlogtostdout = true;

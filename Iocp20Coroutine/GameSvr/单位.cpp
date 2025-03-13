@@ -1,6 +1,33 @@
 ﻿#include "pch.h"
 #include "单位.h"
 #include <unordered_map>
+
+#define YAML_CPP_STATIC_DEFINE
+#include <yaml-cpp/yaml.h>
+
+#ifdef _DEBUG
+#pragma comment(lib, "../yaml-cpp-0.8.0/lib/yaml-cppd.lib")
+#else
+#pragma comment(lib, "../yaml-cpp-0.8.0/lib/yaml-cpp.lib")
+#endif
+
+namespace YAML {
+	template<>
+	struct convert<单位类型> {
+		static Node encode(const 单位类型& rhs) {
+			
+			return Node((int)rhs);
+		}
+		static bool decode(const Node& node, 单位类型& rhs) {
+			if (node.IsMap() || node.IsSequence()) {
+				return false;
+			}
+			rhs = (单位类型)node.as<int>();
+			return true;
+		}
+	};
+}
+
 namespace 单位
 {
 
@@ -54,6 +81,27 @@ namespace 单位
 
 		refOut = iterFind->second;
 		return true;
+	}
+
+	bool 读配置文件()
+	{
+		try {
+			YAML::Node config = YAML::LoadFile("配置/建筑单位.yaml");
+			for (auto it = config.begin(); it != config.end(); it++)
+			{
+				auto line = *it;
+				auto& ref配置 = g_map建筑单位配置[line["类型"].as<单位类型>()];
+				ref配置.配置 = { line["名字"].as<std::string>(), line["PrefabPathName"].as<std::string>(), line["选中音效"].as<std::string>() };
+				ref配置.建造 = { line["消耗晶体矿"].as<uint16_t>(), line["消耗燃气矿"].as<uint16_t>(), line["初始HP"].as<uint16_t>() };
+				ref配置.f半边长 = line["f半边长"].as<float>();
+					
+			}
+			return true;
+		}
+		catch (YAML::BadFile& e) {
+			LOG(ERROR) << "read error!" << e.msg;
+			return false;
+		}
 	}
 	bool Find建筑单位配置(const 单位类型 类型, 建筑单位配置& refOut)
 	{

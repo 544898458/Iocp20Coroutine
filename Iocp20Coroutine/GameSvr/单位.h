@@ -20,7 +20,6 @@ namespace 单位
 	{
 		单位配置 配置;
 		制造配置 建造;
-		//BuildingComponent::Fun造兵 fun造兵;
 		/// <summary>
 		/// 静态阻挡（园的半径或正方形的半边长）
 		/// </summary>
@@ -60,6 +59,7 @@ namespace 单位
 		单位配置 配置;
 	};
 
+	bool 读配置文件();
 	bool Find建筑单位配置(const 单位类型 类型, 建筑单位配置& refOut);
 	bool Find活动单位配置(const 单位类型 类型, 活动单位配置& refOut);
 	bool Find资源单位配置(const 单位类型 类型, 资源单位配置& refOut);
