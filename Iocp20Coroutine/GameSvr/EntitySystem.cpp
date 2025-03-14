@@ -102,6 +102,10 @@ bool EntitySystem::Is活动单位(const 单位类型 类型)
 {
 	return 活动单位Min非法 < 类型 && 类型 < 活动单位Max非法;
 }
+bool EntitySystem::Is怪(const 单位类型 类型)
+{
+	return 怪Min非法 < 类型 && 类型 < 怪Max非法;
+}
 
 bool EntitySystem::Is单位类型(const WpEntity& wp, const 单位类型 类型)
 {
@@ -110,6 +114,7 @@ bool EntitySystem::Is单位类型(const WpEntity& wp, const 单位类型 类型)
 
 	return wp.lock()->m_类型 == 类型;
 }
+
 
 bool EntitySystem::Is空地能打(const 单位类型 攻, const 单位类型 防)
 {

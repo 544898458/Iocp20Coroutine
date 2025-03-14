@@ -7,7 +7,7 @@ class Entity;
 class AttackComponent final
 {
 public:
-	AttackComponent(Entity& refEntity, const 单位::战斗配置& 配置);
+	AttackComponent(Entity& refEntity);
 	static Position 怪物闲逛(const Position& refOld);
 	void TryCancel(const bool bDestroy = false);
 	void Update();
@@ -17,7 +17,7 @@ public:
 	void 播放攻击音效();
 	CoTaskBool CoAttack目标(WpEntity wpDefencer, FunCancel& cancel);
 	CoTaskBool CoAttack位置(const Position pos, const float f目标建筑半边长, FunCancel& cancel);
-	static void AddComponent(Entity& refEntity, const 单位类型 类型, const 单位::战斗配置& 配置);
+	static void AddComponent(Entity& refEntity);
 	float 攻击距离(const Entity& refTarget)const;
 	float 攻击距离(const float f目标建筑半边长) const;
 	//CoTask<int> m_coAttack;

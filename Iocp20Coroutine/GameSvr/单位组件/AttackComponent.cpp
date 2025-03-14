@@ -19,11 +19,10 @@
 #include "临时阻挡Component.h"
 
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
-void AttackComponent::AddComponent(Entity& refEntity, const 单位类型 类型, const 单位::战斗配置& 配置)
+void AttackComponent::AddComponent(Entity& refEntity)
 {
 	CHECK_VOID(!refEntity.m_spAttack);
-	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&, const 单位::战斗配置&>(
-		refEntity, 配置);
+	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&>(refEntity);
 	//refEntity.m_spAttack->m_f攻击距离 = f攻击距离;
 	//refEntity.m_spAttack->m_f警戒距离 = f警戒距离;
 	//refEntity.m_spAttack->m_f伤害 = f伤害;
@@ -55,11 +54,12 @@ Position AttackComponent::怪物闲逛(const Position& refOld)
 	return posTarget;
 }
 using namespace std;
-AttackComponent::AttackComponent(Entity& refEntity, const 单位::战斗配置& 配置) :
+AttackComponent::AttackComponent(Entity& refEntity) :
 	m_refEntity(refEntity),
-	m_fun空闲走向此处(怪物闲逛),
-	m_战斗配置(配置)
+	m_fun空闲走向此处(怪物闲逛)
+	
 {
+	CHECK_RET_VOID(单位::Find战斗配置(refEntity.m_类型, m_战斗配置));
 }
 
 void AttackComponent::TryCancel(const bool bDestroy)

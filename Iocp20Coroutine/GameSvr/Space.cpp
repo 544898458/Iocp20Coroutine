@@ -450,9 +450,7 @@ std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& re
 
 WpEntity Space::造活动单位(Entity& ref视口, const std::string& refStrNickName, const 单位类型 类型, const Position& refPos, bool b设置视口)
 {
-	单位::活动单位配置 配置;
-	单位::Find活动单位配置(类型, 配置);
-	auto wp = 造活动单位(ref视口.m_spPlayer, refStrNickName, refPos, 配置, 类型);
+	auto wp = 造活动单位(ref视口.m_spPlayer, refStrNickName, refPos, 类型);
 	CHECK_WP_RET_DEFAULT(wp);
 	if (b设置视口)
 	{
@@ -464,28 +462,27 @@ WpEntity Space::造活动单位(Entity& ref视口, const std::string& refStrNickName, c
 	return wp;
 }
 
-WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, const std::string& refStrNickName, const Position& refPos, const 单位类型 类型)
+WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, const std::string& strNickName, const Position& pos, const 单位类型 类型)
 {
-	单位::活动单位配置 配置;
-	单位::Find活动单位配置(类型, 配置);
-	auto wp = 造活动单位(refSpPlayer可能空, refStrNickName, refPos, 配置, 类型);
-	CHECK_WP_RET_DEFAULT(wp);
-	return wp;
-}
-
-WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, const std::string& strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型)
-{
+	单位::活动单位配置 活动;
+	单位::单位配置 单位;
+	单位::制造配置 制造;
+	单位::战斗配置 战斗;
+	CHECK_RET_DEFAULT(单位::Find活动单位配置(类型, 活动));
+	CHECK_RET_DEFAULT(单位::Find单位配置(类型, 单位));
+	CHECK_RET_DEFAULT(单位::Find制造配置(类型, 制造));
+	CHECK_RET_DEFAULT(单位::Find战斗配置(类型, 战斗));
 	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
-		pos, *this, std::forward<const 单位类型&&>(类型), 配置.配置);
+		pos, *this, std::forward<const 单位类型&&>(类型), 单位);
 	PlayerComponent::AddComponent(*spNewEntity, refSpPlayer可能空, strNickName);
-	AttackComponent::AddComponent(*spNewEntity, 类型, 配置.战斗);
-	DefenceComponent::AddComponent(*spNewEntity, 配置.制造.u16初始Hp);
+	AttackComponent::AddComponent(*spNewEntity);
+	DefenceComponent::AddComponent(*spNewEntity, 制造.u16初始Hp);
 	走Component::AddComponent(*spNewEntity);
 
 	m_mapPlayer[strNickName].m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
 	AddEntity(spNewEntity);//全地图单位
-	spNewEntity->m_速度每帧移动距离 = 配置.战斗.f每帧移动距离;
-	PlayerComponent::播放声音(*spNewEntity, 配置.str入场语音); //SCV, good to go, sir. SCV可以开工了
+	spNewEntity->m_速度每帧移动距离 = 战斗.f每帧移动距离;
+	PlayerComponent::播放声音(*spNewEntity, 活动.str入场语音); //SCV, good to go, sir. SCV可以开工了
 	switch (类型)
 	{
 	case 工程车:

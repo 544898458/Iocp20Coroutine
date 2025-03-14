@@ -124,10 +124,6 @@ int main(void)
 	memcpy(pMemoryLeak, sz, sizeof(sz));
 	pMemoryLeak = nullptr;
 
-	单位::读配置文件();
-
-
-
 	FLAGS_alsologtostderr = true;//是否将日志输出到文件和stderr
 	FLAGS_colorlogtostdout = true;
 	FLAGS_colorlogtostderr = true;//20240216
@@ -137,6 +133,7 @@ int main(void)
 	LOG(WARNING) << "Test GLOG_WARNING";
 	LOG(ERROR) << "Test GLOG_ERROR";
 	LOG(INFO) << "GameSvr已启动";
+	单位::读配置文件();
 
 	SetConsoleCtrlHandler(fun, TRUE);
 	Iocp::ThreadPool threadPoolNetwork;

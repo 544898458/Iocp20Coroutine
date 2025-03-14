@@ -222,18 +222,15 @@ namespace AiCo
 				const Rect rect = { {-100, -100},{100, 100} };
 				{
 					const Position pos = { rect.pos左上.x + std::rand() % rect.宽Int32(), rect.pos左上.z + std::rand() % rect.高Int32() };
-					MonsterComponent::AddMonster(refSpace, 兵, pos);
+					MonsterComponent::AddMonster(refSpace, 枪怪, pos);
 				}
 				{
-					const Position pos = { rect.pos左上.x + std::rand() % rect.宽Int32(), rect.pos左上.z + std::rand() % rect.高Int32() }; MonsterComponent::AddMonster(refSpace, 近战兵, pos);
-					MonsterComponent::AddMonster(refSpace, 近战兵, pos);
+					const Position pos = { rect.pos左上.x + std::rand() % rect.宽Int32(), rect.pos左上.z + std::rand() % rect.高Int32() };
+					MonsterComponent::AddMonster(refSpace, 近战怪, pos);
 				}
 
 			}
-			//for (int i = 0; i < 100 && !co_await CoTimer::Wait(20s, funCancel); ++i)
-			//{
-			//	MonsterComponent::AddMonster(refSpace, 兵, { -30.0 });
-			//}
+
 		} while (!co_await CoTimer::Wait(2s, funCancel));
 
 		LOG(INFO) << "停止";

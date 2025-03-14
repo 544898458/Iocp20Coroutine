@@ -206,7 +206,7 @@ namespace 单人剧情
 			co_return 0;
 
 			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "现在已在左边给您刷了一个怪，控制兵走到怪附近，兵会自动打怪。您可以点右下角“取消选中”然后拖动地面看看怪在哪里");
-			MonsterComponent::AddMonster(refSpace, 兵, { -30,20 });
+			MonsterComponent::AddMonster(refSpace, 枪怪, { -30,20 });
 
 			if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
 				co_return 0;
@@ -230,7 +230,7 @@ namespace 单人剧情
 
 
 			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "恭喜您消灭了敌人！现在左边给您刷了更多的怪。您可以造“活动单位/地堡”,让兵进入地堡中，立足防守，再伺机进攻");
-			MonsterComponent::AddMonster(refSpace, 近战兵, { -30.0 }, 5);
+			MonsterComponent::AddMonster(refSpace, 近战怪, { -30.0 }, 5);
 
 			if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::单位阵亡& ref)
 				{
@@ -378,8 +378,8 @@ namespace 单人剧情
 				co_return 0;
 
 			PlayerGateSession_Game::Say系统(strPlayerNickName, std::format("第{0}波敌人正向您走来", i));
-			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 兵 : 近战兵, { 48,-48 }, i * 1);
-			auto vecEneity2 = MonsterComponent::AddMonster(refSpace, 工蜂, { 47,-47 }, i * 1);
+			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 枪怪 : 近战怪, { 48,-48 }, i * 1);
+			auto vecEneity2 = MonsterComponent::AddMonster(refSpace, 工怪, { 47,-47 }, i * 1);
 			vecEneity.insert(vecEneity.end(), vecEneity2.begin(), vecEneity2.end());
 			for (auto& spEntity : vecEneity)
 			{
@@ -497,8 +497,8 @@ namespace 单人剧情
 
 			{
 				//守卫右下角虫巢的怪
-				MonsterComponent::AddMonster(refSpace, 兵, { 10,35.f }, 2);
-				MonsterComponent::AddMonster(refSpace, 近战兵, { 10,49.f }, 2);
+				MonsterComponent::AddMonster(refSpace, 枪怪, { 10,35.f }, 2);
+				MonsterComponent::AddMonster(refSpace, 近战怪, { 10,49.f }, 2);
 			}
 
 			auto wp虫巢右下 = 创建敌方建筑(refSpace, { 10, 40.f }, 虫巢);

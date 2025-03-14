@@ -102,7 +102,6 @@ public:
 	FunCancel m_funCancel剧情;
 	CrowdToolState& GetCrowdToolState(单位类型 类型);
 private:
-	WpEntity 造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer, const std::string& strNickName, const Position& pos, const 单位::活动单位配置& 配置, const 单位类型 类型);
 	void EraseEntity(const bool bForceEraseAll);
 	std::shared_ptr<CrowdToolState> m_spCrowdToolState;
 	std::shared_ptr<CrowdToolState> m_spCrowdToolState空中;

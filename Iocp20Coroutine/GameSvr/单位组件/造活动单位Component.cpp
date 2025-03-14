@@ -85,11 +85,12 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 	{
 		const auto 类型(m_list等待造.front());
 		m_list等待造.pop_front();//--refThis.m_i等待造兵数;
-		单位::活动单位配置 配置;
-		if (!单位::Find活动单位配置(类型, 配置))
-		{
-			co_return{};
-		}
+		单位::活动单位配置 活动;
+		单位::单位配置 单位;
+		单位::制造配置 制造;
+		CHECK_CO_RET_FALSE(单位::Find活动单位配置(类型, 活动));
+		CHECK_CO_RET_FALSE(单位::Find单位配置(类型, 单位));
+		CHECK_CO_RET_FALSE(单位::Find制造配置(类型, 制造));
 		auto& refSpace = m_refEntity.m_refSpace;
 		using namespace std;
 		const auto posBuilding = m_refEntity.Pos();
@@ -110,7 +111,7 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 			continue;
 		}
 
-		if (配置.制造.u16消耗燃气矿 > Space::GetSpacePlayer(m_refEntity).m_u32燃气矿)
+		if (制造.u16消耗燃气矿 > Space::GetSpacePlayer(m_refEntity).m_u32燃气矿)
 		{
 			//std::ostringstream oss;
 			PlayerComponent::播放声音(m_refEntity, "语音/燃气矿不足正经版", "燃气矿不足");//(low error beep) Insufficient Vespene Gas.气矿不足 
@@ -118,7 +119,7 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 			m_list等待造.clear();
 			co_return{};
 		}
-		refSpace.GetSpacePlayer(m_refEntity).m_u32燃气矿 -= 配置.制造.u16消耗燃气矿;
+		refSpace.GetSpacePlayer(m_refEntity).m_u32燃气矿 -= 制造.u16消耗燃气矿;
 
 		//先扣钱
 		//const auto& [stop, responce] = co_await AiCo::ChangeMoney(refGateSession, 配置.制造.u16消耗晶体矿, false, m_TaskCancel造活动单位.cancel);
@@ -129,14 +130,14 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 		//	co_return{};
 		//}
 		//if (0 != responce.error)
-		if (配置.制造.u16消耗晶体矿 > Space::GetSpacePlayer(m_refEntity).m_u32晶体矿)
+		if (制造.u16消耗晶体矿 > Space::GetSpacePlayer(m_refEntity).m_u32晶体矿)
 		{
 			//refGateSession.m_u32燃气矿 += 配置.制造.u16消耗燃气矿;
 			PlayerComponent::播放声音(m_refEntity, "语音/晶体矿不足正经版", "晶体矿矿不足");//Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
 			m_list等待造.clear();
 			co_return{};
 		}
-		Space::GetSpacePlayer(m_refEntity).m_u32晶体矿 -= 配置.制造.u16消耗晶体矿;
+		Space::GetSpacePlayer(m_refEntity).m_u32晶体矿 -= 制造.u16消耗晶体矿;
 		//耗时
 		//if (co_await CoTimer::Wait(1s, m_TaskCancel造活动单位.cancel))
 		//{

@@ -18,8 +18,6 @@ namespace 单位
 	};
 	struct 建筑单位配置
 	{
-		单位配置 配置;
-		制造配置 建造;
 		/// <summary>
 		/// 静态阻挡（园的半径或正方形的半边长）
 		/// </summary>
@@ -42,27 +40,24 @@ namespace 单位
 	};
 	struct 活动单位配置
 	{
-		单位配置 配置;
-		制造配置 制造;
-		战斗配置 战斗;
 		std::string str入场语音;
 	};
 	struct 怪配置
 	{
-		单位配置 配置;
-		战斗配置 战斗;
 		uint16_t u16初始Hp;
 	};
 	
-	struct 资源单位配置
-	{
-		单位配置 配置;
-	};
+	//struct 资源单位配置
+	//{
+	//	单位配置 配置;
+	//};
 
 	bool 读配置文件();
 	bool Find建筑单位配置(const 单位类型 类型, 建筑单位配置& refOut);
 	bool Find活动单位配置(const 单位类型 类型, 活动单位配置& refOut);
-	bool Find资源单位配置(const 单位类型 类型, 资源单位配置& refOut);
+	bool Find单位配置(const 单位类型 类型, 单位配置& refOut);
+	bool Find战斗配置(const 单位类型 类型, 战斗配置& refOut);
 	bool Find怪配置(const 单位类型 类型, 怪配置& refOut);
+	bool Find制造配置(const 单位类型 类型, 制造配置& refOut);
 };
 
