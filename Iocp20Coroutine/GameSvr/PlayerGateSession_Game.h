@@ -109,5 +109,6 @@ private:
 	FunCancel m_funCancel进地图;
 	uint16_t m_idx切换工程车 = 0;
 	Position m_pos上次点击走路目标;
+	std::map<std::string, std::chrono::steady_clock::time_point> g_map上次播放音效;
 };
 

@@ -555,6 +555,15 @@ void PlayerGateSession_Game::²¥·ÅÉùÒôBuzz(const std::string& strÎÄ±¾)
 }
 void PlayerGateSession_Game::²¥·ÅÉùÒô(const std::string& refStrÉùÒô, const std::string& strÎÄ±¾)
 {
+	auto& refTime = g_mapÉÏ´Î²¥·ÅÒôĞ§[refStrÉùÒô];
+	using namespace std;
+	const auto now = chrono::steady_clock::now();
+	if (now < refTime )
+	{
+		LOG(INFO) << "²¥·ÅÍ¬Ò»¸öÒôĞ§Ì«Æµ·±,Ìø¹ı," << refStrÉùÒô;
+		return;
+	}
+	refTime = now + 1s;
 	Send<Msg²¥·ÅÉùÒô>({ .strÉùÒô = StrConv::GbkToUtf8(refStrÉùÒô), .strÎÄ±¾ = StrConv::GbkToUtf8(strÎÄ±¾) });
 }
 
@@ -989,7 +998,7 @@ void PlayerGateSession_Game::Ñ¡ÖĞµ¥Î»(std::vector<uint64_t> vecId, const bool b×
 		{
 			m_vecSelectedEntity.clear();//µ¥Ñ¡½¨Öş
 		}
-		
+
 		if (idÕâ´Îµ¥Ñ¡Ñ¡ÖĞ == m_idÉÏ´Îµ¥Ñ¡Ñ¡ÖĞ)
 		{
 			CHECK_RET_VOID(refEntityÖØ¸´Ñ¡ÖĞµÄ1¸öµ¥Î».m_upAoi);
