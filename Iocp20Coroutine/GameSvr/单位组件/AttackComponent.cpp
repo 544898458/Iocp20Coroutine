@@ -57,7 +57,7 @@ using namespace std;
 AttackComponent::AttackComponent(Entity& refEntity) :
 	m_refEntity(refEntity),
 	m_fun空闲走向此处(怪物闲逛)
-	
+
 {
 	CHECK_RET_VOID(单位::Find战斗配置(refEntity.m_类型, m_战斗配置));
 }
@@ -85,10 +85,13 @@ CoTaskBool AttackComponent::Co顶层()
 		if (m_refEntity.IsDead())
 			co_return false;
 
+		if (!可以攻击())
+			continue;
+
 		if ((m_b搜索新的目标) && co_await Co走向警戒范围内的目标然后攻击(m_TaskCancel.cancel))
 			continue;
 
-		if (m_refEntity.m_sp走 && !m_refEntity.m_spPlayerNickName && !走Component::正在走(m_refEntity))//怪随机走
+		if (!m_b原地坚守 && m_refEntity.m_sp走 && m_fun空闲走向此处 && !走Component::正在走(m_refEntity))//打完走向下一个目标
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
@@ -96,7 +99,7 @@ CoTaskBool AttackComponent::Co顶层()
 			m_refEntity.m_refSpace.CrowdToolFindNerestPos(posTarget);
 			if (m_refEntity.Pos().DistanceLessEqual(posTarget, 3))
 			{
-				m_fun空闲走向此处 = 怪物闲逛;
+				m_fun空闲走向此处 = m_refEntity.m_spPlayerNickName ? nullptr : 怪物闲逛;
 				continue;
 			}
 
@@ -115,9 +118,6 @@ bool AttackComponent::可以攻击()
 {
 	if (m_refEntity.m_spBuilding && !m_refEntity.m_spBuilding->已造好())
 		return false;
-
-	if (m_refEntity.m_sp走 && !m_refEntity.m_sp走->m_coWalk手动控制.Finished())
-		return false;//表示不允许打断
 
 	if (m_refEntity.IsDead())
 		return false;
@@ -139,6 +139,9 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 	KeepCancel kc(funCancel);
 	while (true)
 	{
+		if (co_await CoTimer::WaitNextUpdate(funCancel))
+			co_return true; 
+		
 		if (!可以攻击())
 			co_return false;
 
@@ -147,7 +150,7 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 				if (!EntitySystem::Is空地能打(m_refEntity.m_类型, ref.m_类型))
 					return false;
 
-				return nullptr != ref.m_spDefence; 
+				return nullptr != ref.m_spDefence;
 			});
 		if (wpEntity.expired())
 		{
@@ -175,6 +178,9 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 
 			continue;
 		}
+
+		if (m_b原地坚守)
+			continue;
 
 		bool b仇恨目标 = false;
 
@@ -222,9 +228,6 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 			}
 
 			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), funCancel, !b仇恨目标))
-				co_return true;
-
-			if (co_await CoTimer::WaitNextUpdate(funCancel))
 				co_return true;
 
 			continue;

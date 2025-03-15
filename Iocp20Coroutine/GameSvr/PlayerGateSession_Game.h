@@ -84,6 +84,7 @@ private:
 	void OnRecv(const Msg切换空闲工程车& msg);
 	void OnRecv(const Msg剧情对话已看完& msg);
 	void OnRecv(const Msg建筑产出活动单位的集结点& msg);
+	void OnRecv(const Msg原地坚守& msg);
 
 	void 选中单位(std::vector<uint64_t> vecId, const bool b追加 = false);
 	std::vector<WpEntity> Get空闲工程车(单位类型 造活动单位类型, bool b包括采集中的工程车);

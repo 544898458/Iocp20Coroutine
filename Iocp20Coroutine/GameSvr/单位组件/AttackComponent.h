@@ -26,11 +26,12 @@ public:
 	int m_idxCrowdAgent = INVALID_AGENT_IDX;
 	Entity& m_refEntity;
 	CoTaskCancel m_TaskCancel;
-	typedef Position(*Fun空闲走向目标)(const Position&);
+	using Fun空闲走向目标 = std::function<Position(const Position&)>;
 	Fun空闲走向目标 m_fun空闲走向此处;
 	单位::战斗配置 m_战斗配置;
 	FunCancel m_funCancel顶层;
 	bool m_b搜索新的目标 = true;
+	bool m_b原地坚守 = false;//Hold Position
 private:
 	bool 可以攻击();
 	CoTaskBool Co顶层();
