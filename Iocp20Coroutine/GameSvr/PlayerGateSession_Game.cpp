@@ -989,7 +989,8 @@ void PlayerGateSession_Game::Ñ¡ÖĞµ¥Î»(std::vector<uint64_t> vecId, const bool b×
 		{
 			m_vecSelectedEntity.clear();//µ¥Ñ¡½¨Öş
 		}
-		else if (idÕâ´Îµ¥Ñ¡Ñ¡ÖĞ == m_idÉÏ´Îµ¥Ñ¡Ñ¡ÖĞ)
+		
+		if (idÕâ´Îµ¥Ñ¡Ñ¡ÖĞ == m_idÉÏ´Îµ¥Ñ¡Ñ¡ÖĞ)
 		{
 			CHECK_RET_VOID(refEntityÖØ¸´Ñ¡ÖĞµÄ1¸öµ¥Î».m_upAoi);
 			for (const auto [id, wp] : refEntityÖØ¸´Ñ¡ÖĞµÄ1¸öµ¥Î».m_upAoi->m_mapÎÒÄÜ¿´µ½µÄ)
