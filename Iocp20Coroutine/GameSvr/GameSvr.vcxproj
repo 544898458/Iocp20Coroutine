@@ -76,7 +76,7 @@
     <LibraryPath>$(SolutionDir)\glog\lib;$(SolutionDir)\VisualLeakDetector\lib\Win64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)\msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;$(SolutionDir)\VisualLeakDetector\include;$(SolutionDir)/recastnavigation-main/DetourTileCache/Include;$(SolutionDir)\recastnavigation-main\Detour\Include;$(ProjectDir);$(SolutionDir)\recastnavigation-main\DetourCrowd\Include;$(SolutionDir)\recastnavigation-main\RecastDemo\Include;$(SolutionDir)\recastnavigation-main\Recast\Include;$(SolutionDir)\recastnavigation-main\DebugUtils\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)\msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;$(SolutionDir)\VisualLeakDetector\include;$(SolutionDir)/recastnavigation-main/DetourTileCache/Include;$(SolutionDir)\recastnavigation-main\Detour\Include;$(ProjectDir);$(SolutionDir)\recastnavigation-main\DetourCrowd\Include;$(SolutionDir)\recastnavigation-main\RecastDemo\Include;$(SolutionDir)\recastnavigation-main\Recast\Include;$(SolutionDir)\recastnavigation-main\DebugUtils\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\yaml-cpp-0.8.0\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\glog\lib;$(SolutionDir)\VisualLeakDetector\lib\Win64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

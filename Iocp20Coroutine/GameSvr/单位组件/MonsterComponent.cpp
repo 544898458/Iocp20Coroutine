@@ -35,6 +35,7 @@ std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const 单位类
 	单位::战斗配置 战斗配置;
 	CHECK_RET_DEFAULT(单位::Find怪配置(类型, 怪配置));
 	CHECK_RET_DEFAULT(单位::Find单位配置(类型, 单位配置));
+	CHECK_RET_DEFAULT(单位::Find战斗配置(类型, 战斗配置));
 	for (int i = 0; i < count; ++i)
 	{
 		SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
