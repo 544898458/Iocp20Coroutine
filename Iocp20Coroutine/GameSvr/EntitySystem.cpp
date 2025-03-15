@@ -123,9 +123,10 @@ bool EntitySystem::Is空地能打(const 单位类型 攻, const 单位类型 防)
 
 	switch (攻)
 	{
-	case 兵:
+	case 枪兵:
 	case 炮台:
 	case 飞机:
+	case 枪怪:
 		return true;
 	default:
 		return false;

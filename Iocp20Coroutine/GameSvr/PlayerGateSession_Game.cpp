@@ -302,7 +302,7 @@ CoTaskBool PlayerGateSession_Game::Co进多人联机地图(WpEntity wp视口)
 		auto pos出生 = Position(std::rand() % 100 - 50.f, std::rand() % 100 - 50.f);
 		refSpace.造活动单位(ref视口, NickName(), 单位类型::工程车, pos出生, true);
 		const uint16_t 间距 = 5;
-		refSpace.造活动单位(ref视口, NickName(), 单位类型::兵, { pos出生.x,		pos出生.z + 间距 });
+		refSpace.造活动单位(ref视口, NickName(), 单位类型::枪兵, { pos出生.x,		pos出生.z + 间距 });
 		refSpace.造活动单位(ref视口, NickName(), 单位类型::三色坦克, { pos出生.x + 间距 , pos出生.z });
 		refSpace.造活动单位(ref视口, NickName(), 单位类型::工蜂, { pos出生.x + 间距 , pos出生.z + 间距 });
 		refSpace.造活动单位(ref视口, NickName(), 单位类型::近战兵, { pos出生.x - 间距 , pos出生.z });
@@ -527,7 +527,7 @@ void PlayerGateSession_Game::OnRecv(const MsgMove& msg)
 			const std::string str显示文字 = msg.b遇到敌人自动攻击 ? "" : "强行走向目标位置";
 			switch (ref.m_类型)
 			{
-			case 兵:播放声音(msg.b遇到敌人自动攻击 ? "语音/是男声正经版" : "语音/明白男声正经版", str显示文字); break;//Standing by. 待命中
+			case 枪兵:播放声音(msg.b遇到敌人自动攻击 ? "语音/是男声正经版" : "语音/明白男声正经版", str显示文字); break;//Standing by. 待命中
 			case 近战兵:播放声音("tfbYes03", str显示文字); break;//Checked up and good to go. 检查完毕，准备动身
 			case 工程车:播放声音(msg.b遇到敌人自动攻击 ? "语音/是女声可爱版" : "语音/明白女声可爱版", str显示文字); break;
 			case 三色坦克:播放声音(msg.b遇到敌人自动攻击 ? "音效/坦克行进声" : "语音/坦克明白", str显示文字); break;

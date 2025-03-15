@@ -194,14 +194,14 @@ namespace 单人剧情
 
 		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击选中兵营（圆环特效表示选中），然后点击“活动单位/枪兵”按钮，10秒后会在兵营旁造出一个 枪兵");
 
-		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 兵))))
+		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 枪兵))))
 			co_return 0;
 
 		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "点击选中您的兵，再点击地面，可以指挥他走向目标处");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::MoveEntity& ref) {
 			return //&ref.wpEntity.lock()->m_refSpace == &refSpace; 
-				MyEvent::SameSpace(ref.wpEntity, refSpace, strPlayerNickName) && EntitySystem::Is单位类型(ref.wpEntity, 兵);
+				MyEvent::SameSpace(ref.wpEntity, refSpace, strPlayerNickName) && EntitySystem::Is单位类型(ref.wpEntity, 枪兵);
 			})))
 			co_return 0;
 
@@ -475,7 +475,7 @@ namespace 单人剧情
 				for (int i = 0; i < 8; ++i)
 				{
 					const float z = 10.f + i * 5;
-					refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::兵, { -40, z });
+					refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::枪兵, { -40, z });
 					refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::近战兵, { -45, z });
 				}
 			}
