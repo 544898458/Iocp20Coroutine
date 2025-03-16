@@ -21,7 +21,12 @@
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
 AttackComponent& AttackComponent::AddComponent(Entity& refEntity)
 {
-	CHECK_VOID(!refEntity.m_spAttack);
+	if (refEntity.m_spAttack) 
+	{
+		LOG(ERROR) << "不能重复加AttackComponent";
+		_ASSERT(!"不能重复加AttackComponent");
+		return *refEntity.m_spAttack;
+	}
 	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&>(refEntity);
 	//refEntity.m_spAttack->m_f攻击距离 = f攻击距离;
 	//refEntity.m_spAttack->m_f警戒距离 = f警戒距离;
@@ -139,8 +144,8 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 	while (true)
 	{
 		if (co_await CoTimer::WaitNextUpdate(funCancel))
-			co_return true; 
-		
+			co_return true;
+
 		if (!可以攻击())
 			co_return false;
 

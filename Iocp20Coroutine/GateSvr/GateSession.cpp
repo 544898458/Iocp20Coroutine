@@ -148,15 +148,20 @@ void GateSession::OnRecvWorldSvr(const MsgLoginResponce& msg)
 	CoRpc<MsgLoginResponce>::OnRecvResponce(false, msg);
 }
 
+void SendResponceToWorldSvr(const uint32_t rpcSnId, const uint64_t gateSessionId)
+{
+	MsgGateDeleteSessionResponce msgResponce;
+	msgResponce.msg.rpcSnId = rpcSnId;
+	SendToWorldSvr转发(msgResponce, gateSessionId);
+}
+
 void GateSession::OnRecvWorldSvr(const MsgGateDeleteSession& msg)
 {
 	LOG(INFO) << "主动断开游戏客户端Socket,Id=" << GetId(),
 		m_refSession.m_refSession.CloseSocket();
 
 	OnDestroy();
-	MsgGateDeleteSessionResponce msgResponce;
-	msgResponce.msg.rpcSnId = msg.msg.rpcSnId;
-	SendToWorldSvr转发(msgResponce, GetId());
+	SendResponceToWorldSvr(msg.msg.rpcSnId, GetId());
 }
 
 bool GateSession::Process()
