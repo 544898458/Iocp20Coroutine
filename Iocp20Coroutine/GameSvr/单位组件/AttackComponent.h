@@ -17,7 +17,7 @@ public:
 	void 播放攻击音效();
 	CoTaskBool CoAttack目标(WpEntity wpDefencer, FunCancel& cancel);
 	CoTaskBool CoAttack位置(const Position pos, const float f目标建筑半边长, FunCancel& cancel);
-	static void AddComponent(Entity& refEntity);
+	static AttackComponent& AddComponent(Entity& refEntity);
 	float 攻击距离(const Entity& refTarget)const;
 	float 攻击距离(const float f目标建筑半边长) const;
 	//CoTask<int> m_coAttack;

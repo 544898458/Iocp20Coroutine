@@ -19,7 +19,7 @@
 #include "临时阻挡Component.h"
 
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
-void AttackComponent::AddComponent(Entity& refEntity)
+AttackComponent& AttackComponent::AddComponent(Entity& refEntity)
 {
 	CHECK_VOID(!refEntity.m_spAttack);
 	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&>(refEntity);
@@ -31,6 +31,7 @@ void AttackComponent::AddComponent(Entity& refEntity)
 	//refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);
 	//m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
 	refEntity.m_spAttack->Co顶层().RunNew();
+	return *refEntity.m_spAttack;
 }
 
 float AttackComponent::攻击距离(const Entity& refTarget) const
@@ -55,9 +56,7 @@ Position AttackComponent::怪物闲逛(const Position& refOld)
 }
 using namespace std;
 AttackComponent::AttackComponent(Entity& refEntity) :
-	m_refEntity(refEntity),
-	m_fun空闲走向此处(怪物闲逛)
-
+	m_refEntity(refEntity)
 {
 	CHECK_RET_VOID(单位::Find战斗配置(refEntity.m_类型, m_战斗配置));
 }

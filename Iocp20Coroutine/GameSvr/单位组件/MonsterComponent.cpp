@@ -40,7 +40,8 @@ std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const 单位类
 	{
 		SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
 			refPos, refSpace, std::forward<const 单位类型&&>(类型), 单位配置);
-		AttackComponent::AddComponent(*spEntityMonster);
+		AttackComponent::AddComponent(*spEntityMonster).m_fun空闲走向此处 = AttackComponent::怪物闲逛;
+
 		DefenceComponent::AddComponent(*spEntityMonster, 怪配置.u16初始Hp);
 		走Component::AddComponent(*spEntityMonster);
 		AddComponent(*spEntityMonster);
