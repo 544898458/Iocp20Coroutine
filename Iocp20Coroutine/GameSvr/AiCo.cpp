@@ -52,7 +52,7 @@ namespace AiCo
 		if (std::abs(localTarget.x - x) < step && std::abs(localTarget.z - z) < step)
 		{
 			//LOG(INFO) << "已走到" << localTarget.x << "," << localTarget.z << "附近，协程正常退出";
-			EntitySystem::BroadcastChangeSkeleAnimIdle(refThis);
+			//EntitySystem::BroadcastChangeSkeleAnimIdle(refThis);
 			return true;
 		}
 
@@ -78,7 +78,8 @@ namespace AiCo
 		RecastNavigationCrowd rnc(refThis, posTarget);
 		KeepCancel kc(funCancel);
 		const auto posLocalTarget = posTarget;
-		refThis.BroadcastChangeSkeleAnim("run");
+		//refThis.BroadcastChangeSkeleAnim("run");
+		EntitySystem::恢复休闲动作 __(refThis, "run");
 		CoEvent<MyEvent::MoveEntity>::OnRecvEvent({ refThis.weak_from_this() });
 		while (true)
 		{
@@ -134,7 +135,7 @@ namespace AiCo
 
 	CoTaskBool WalkToTarget(Entity& refThis, SpEntity spTarget, FunCancel& funCancel, const bool b检查警戒距离)
 	{
-		if(!refThis.m_sp走)
+		if (!refThis.m_sp走)
 			co_return false;
 
 		if (refThis.IsDead())
@@ -155,7 +156,8 @@ namespace AiCo
 		const float f建筑半边长 = BuildingComponent::建筑半边长(*spTarget);
 
 
-		refThis.BroadcastChangeSkeleAnim("run");
+		//refThis.BroadcastChangeSkeleAnim("run");
+		EntitySystem::恢复休闲动作 __(refThis, "run");
 		Position posOld;
 		while (true)
 		{
@@ -180,7 +182,7 @@ namespace AiCo
 			if (!b距离友方单位太近 && refThis.DistanceLessEqual(*spTarget, refThis.攻击距离() + f建筑半边长))
 			{
 				//LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
-				EntitySystem::BroadcastChangeSkeleAnimIdle(refThis);
+				//EntitySystem::BroadcastChangeSkeleAnimIdle(refThis);
 				//EntitySystem::BroadcastEntity描述(refThis, "已走到目标附近");
 				co_return false;
 			}

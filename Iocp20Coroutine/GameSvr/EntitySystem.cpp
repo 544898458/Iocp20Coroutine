@@ -132,3 +132,14 @@ bool EntitySystem::Is空地能打(const 单位类型 攻, const 单位类型 防)
 		return false;
 	}
 }
+
+EntitySystem::恢复休闲动作::恢复休闲动作(Entity& refEntity, const std::string& str动作) :m_refEntity(refEntity) 
+{
+	if(!str动作.empty())
+		m_refEntity.BroadcastChangeSkeleAnim(str动作);
+}
+
+EntitySystem::恢复休闲动作::~恢复休闲动作()
+{
+	BroadcastChangeSkeleAnimIdle(m_refEntity);
+}

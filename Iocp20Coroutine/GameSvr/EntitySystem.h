@@ -4,6 +4,14 @@ class Entity;
 
 namespace EntitySystem
 {
+	class 恢复休闲动作 final
+	{
+	public:
+		恢复休闲动作(Entity& refEntity, const std::string& str动作);
+		~恢复休闲动作();
+	private:
+		Entity& m_refEntity;
+	};
 	void BroadcastEntity描述(Entity& refEntity, const std::string& refStrGbk);
 	void BroadcastChangeSkeleAnimIdle(Entity& refEntity);
 	void BroadcastChangeSkeleAnim采集(Entity& refEntity);
