@@ -15,7 +15,7 @@ void EntitySystem::BroadcastEntity描述(Entity& refEntity, const std::string& ref
 
 void EntitySystem::BroadcastChangeSkeleAnimIdle(Entity& refEntity)
 {
-	refEntity.BroadcastChangeSkeleAnim(炮台 == refEntity.m_类型 ? "平常状态" : "idle");
+	refEntity.BroadcastChangeSkeleAnim(refEntity.m_配置.str空闲动作);
 }
 void EntitySystem::BroadcastChangeSkeleAnim采集(Entity& refEntity)
 {
@@ -107,6 +107,11 @@ bool EntitySystem::Is怪(const 单位类型 类型)
 	return 怪Min非法 < 类型 && 类型 < 怪Max非法;
 }
 
+bool EntitySystem::Is视口(const 单位类型 类型)
+{
+	return 视口 == 类型;
+}
+
 bool EntitySystem::Is单位类型(const WpEntity& wp, const 单位类型 类型)
 {
 	if (wp.expired())
@@ -133,13 +138,14 @@ bool EntitySystem::Is空地能打(const 单位类型 攻, const 单位类型 防)
 	}
 }
 
-EntitySystem::恢复休闲动作::恢复休闲动作(Entity& refEntity, const std::string& str动作) :m_refEntity(refEntity) 
+EntitySystem::恢复休闲动作::恢复休闲动作(Entity& refEntity, const std::string& str动作) :m_refEntity(refEntity)
 {
-	if(!str动作.empty())
+	if (!str动作.empty())
 		m_refEntity.BroadcastChangeSkeleAnim(str动作);
 }
 
 EntitySystem::恢复休闲动作::~恢复休闲动作()
 {
-	BroadcastChangeSkeleAnimIdle(m_refEntity);
+	if(!m_refEntity.IsDead())
+		BroadcastChangeSkeleAnimIdle(m_refEntity);
 }

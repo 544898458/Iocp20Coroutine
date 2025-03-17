@@ -385,7 +385,7 @@ int Space::Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位
 
 void Space::AddEntity(SpEntity spNewEntity, const int32_t i32视野范围)
 {
-	if (EntitySystem::Is视口(*spNewEntity))
+	if (EntitySystem::Is视口(spNewEntity->m_类型))
 	{
 		LOG(INFO) << m_配置.strSceneName << ",醒了";
 		m_b休眠 = false;

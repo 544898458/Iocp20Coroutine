@@ -71,7 +71,7 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::单位配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["名字"].as<std::string>(), refNode["PrefabPathName"].as<std::string>(), refNode["选中音效"].as<std::string>() };
+			rhs = { refNode["名字"].as<std::string>(), refNode["PrefabPathName"].as<std::string>(), refNode["选中音效"].as<std::string>() , refNode["空闲动作"].as<std::string>() };
 			return true;
 		}
 	};
@@ -111,7 +111,7 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::活动单位配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["入场语音"].as<std::string>() };
+			rhs = { refNode["入场语音"].as<std::string>(), refNode["走路动作"].as<std::string>() };
 			return true;
 		}
 	};

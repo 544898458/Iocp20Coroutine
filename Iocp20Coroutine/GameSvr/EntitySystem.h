@@ -26,5 +26,6 @@ namespace EntitySystem
 	bool Is单位类型(const WpEntity& wp, const 单位类型 类型);
 	bool Is空地能打(const 单位类型 攻, const 单位类型 防);
 	bool Is怪(const 单位类型 类型);
+	bool Is视口(const 单位类型 类型);
 };
 

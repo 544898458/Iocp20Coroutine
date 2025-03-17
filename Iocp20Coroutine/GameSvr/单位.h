@@ -8,7 +8,8 @@ namespace 单位
 		std::string strName;
 		std::string strPrefabName;
 		std::string str选中音效;
-		MSGPACK_DEFINE(strName, strPrefabName, str选中音效);
+		std::string str空闲动作;
+		MSGPACK_DEFINE(strName, strPrefabName, str选中音效, str空闲动作);
 	};
 	struct 制造配置
 	{
@@ -41,6 +42,7 @@ namespace 单位
 	struct 活动单位配置
 	{
 		std::string str入场语音;
+		std::string str走路动作;
 	};
 	struct 怪配置
 	{

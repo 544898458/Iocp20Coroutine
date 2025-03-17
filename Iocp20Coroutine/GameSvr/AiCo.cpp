@@ -79,7 +79,9 @@ namespace AiCo
 		KeepCancel kc(funCancel);
 		const auto posLocalTarget = posTarget;
 		//refThis.BroadcastChangeSkeleAnim("run");
-		EntitySystem::恢复休闲动作 __(refThis, "run");
+		单位::活动单位配置 配置;
+		单位::Find活动单位配置(refThis.m_类型, 配置);
+		EntitySystem::恢复休闲动作 __(refThis, 配置.str走路动作);
 		CoEvent<MyEvent::MoveEntity>::OnRecvEvent({ refThis.weak_from_this() });
 		while (true)
 		{
@@ -157,7 +159,9 @@ namespace AiCo
 
 
 		//refThis.BroadcastChangeSkeleAnim("run");
-		EntitySystem::恢复休闲动作 __(refThis, "run");
+		单位::活动单位配置 配置;
+		单位::Find活动单位配置(refThis.m_类型, 配置);
+		EntitySystem::恢复休闲动作 __(refThis, 配置.str走路动作);
 		Position posOld;
 		while (true)
 		{
