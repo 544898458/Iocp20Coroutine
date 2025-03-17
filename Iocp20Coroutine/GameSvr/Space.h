@@ -73,7 +73,6 @@ public:
 	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map能看到这一格;
 	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map在这一格里;
 
-	//std::unordered_map<std::string, std::map<uint64_t, WpEntity>> m_map已离线PlayerEntity;
 	std::unordered_map<uint64_t, WpEntity> m_map视口;
 	struct SpacePlayer
 	{
@@ -101,6 +100,8 @@ public:
 	const 副本配置 m_配置;
 	FunCancel m_funCancel剧情;
 	CrowdToolState& GetCrowdToolState(单位类型 类型);
+	void On玩家离线(const std::string& refStrNickName离线);
+	bool m_b休眠 = false;
 private:
 	void EraseEntity(const bool bForceEraseAll);
 	std::shared_ptr<CrowdToolState> m_spCrowdToolState;

@@ -144,9 +144,30 @@ WpEntity Space::Get最近的Entity(Entity& refEntity, const FindType bFindEnemy, st
 		});
 	return iterMin->second.lock()->weak_from_this();
 }
+std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStrNickName);
+void Space::On玩家离线(const std::string& refStrNickName离线)
+{
+	m_b休眠 = true;
+	for (const auto& [refStrNickName, _] : m_mapPlayer)
+	{
+		if (refStrNickName离线 == refStrNickName)
+			continue;
+
+		if (GetPlayerGateSession(refStrNickName).expired())
+			continue;
+
+		m_b休眠 = false;
+		return;
+	}
+
+	LOG(INFO) << m_配置.strSceneName << ",休眠";
+}
 
 void Space::Update()
 {
+	if (m_b休眠)
+		return;
+
 	EraseEntity(false);
 
 	void CrowToolUpdate(Space & ref, CrowdToolState & refCrowdToolState);
@@ -364,6 +385,11 @@ int Space::Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位
 
 void Space::AddEntity(SpEntity spNewEntity, const int32_t i32视野范围)
 {
+	if (EntitySystem::Is视口(*spNewEntity))
+	{
+		LOG(INFO) << m_配置.strSceneName << ",醒了";
+		m_b休眠 = false;
+	}
 	m_mapEntity.insert({ spNewEntity->Id ,spNewEntity });//全地图单位
 	AoiComponent::Add(*this, *spNewEntity, i32视野范围);
 }
