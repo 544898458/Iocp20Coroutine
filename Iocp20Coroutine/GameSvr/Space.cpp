@@ -13,6 +13,7 @@
 #include "单位组件/走Component.h"
 #include "单位组件/采集Component.h"
 #include "单位组件/造建筑Component.h"
+#include "单位组件/造活动单位Component.h"
 #include <fstream>
 
 Space::Space(const 副本配置& ref) :m_配置(ref)
@@ -512,9 +513,12 @@ WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 	switch (类型)
 	{
 	case 工程车:
-	case 工蜂:
+	case 工虫:
 		采集Component::AddComponent(*spNewEntity);
 		造建筑Component::AddComponent(*spNewEntity);
+		break;
+	case 幼虫:
+		造活动单位Component::AddComponent(*spNewEntity);
 		break;
 	default:break;
 	}

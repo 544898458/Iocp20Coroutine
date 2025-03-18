@@ -15,14 +15,14 @@
 #include "BuildingComponent.h"
 #include "AoiComponent.h"
 
-void Ôì»î¶¯µ¥Î»Component::AddComponent(Entity& refEntity, const µ¥Î»ÀàĞÍ ÀàĞÍ)
+void Ôì»î¶¯µ¥Î»Component::AddComponent(Entity& refEntity)
 {
-	refEntity.m_spÔì»î¶¯µ¥Î» = std::make_shared<Ôì»î¶¯µ¥Î»Component, Entity&, const µ¥Î»ÀàĞÍ >(refEntity, std::forward<const µ¥Î»ÀàĞÍ&&>(ÀàĞÍ));
+	refEntity.m_spÔì»î¶¯µ¥Î» = std::make_shared<Ôì»î¶¯µ¥Î»Component, Entity& >(refEntity);
 }
 
-Ôì»î¶¯µ¥Î»Component::Ôì»î¶¯µ¥Î»Component(Entity& refEntity, const µ¥Î»ÀàĞÍ ÀàĞÍ) :m_refEntity(refEntity)
+Ôì»î¶¯µ¥Î»Component::Ôì»î¶¯µ¥Î»Component(Entity& refEntity) :m_refEntity(refEntity)
 {
-	switch (ÀàĞÍ)
+	switch (refEntity.m_ÀàĞÍ)
 	{
 	case »ùµØ:m_set¿ÉÔìÀàĞÍ.insert(¹¤³Ì³µ); break;
 	case »ú³¡:m_set¿ÉÔìÀàĞÍ.insert(·É»ú); break;
@@ -33,9 +33,10 @@ void Ôì»î¶¯µ¥Î»Component::AddComponent(Entity& refEntity, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 	case ÖØ¹¤³§:
 		m_set¿ÉÔìÀàĞÍ.insert(ÈıÉ«Ì¹¿Ë);
 		break;
-	case ³æ³²:
-		m_set¿ÉÔìÀàĞÍ.insert(Ìø³æ);
-		m_set¿ÉÔìÀàĞÍ.insert(´ÌÉß);
+	case Ó×³æ:
+		m_set¿ÉÔìÀàĞÍ.insert(¹¤³æ);
+		m_set¿ÉÔìÀàĞÍ.insert(½üÕ½³æ);
+		m_set¿ÉÔìÀàĞÍ.insert(Ç¹³æ);
 		break;
 	default:
 		break;
@@ -43,9 +44,9 @@ void Ôì»î¶¯µ¥Î»Component::AddComponent(Entity& refEntity, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 	m_pos¼¯½áµã = refEntity.Pos();
 }
 
-bool Ôì»î¶¯µ¥Î»Component::¿ÉÔì(const µ¥Î»ÀàĞÍ ÀàĞÍ)const
+bool Ôì»î¶¯µ¥Î»Component::¿ÉÔì(const µ¥Î»ÀàĞÍ ÀàĞÍ)
 {
-	return m_set¿ÉÔìÀàĞÍ.end() != m_set¿ÉÔìÀàĞÍ.find(ÀàĞÍ);
+	return m_set¿ÉÔìÀàĞÍ.end() != m_set¿ÉÔìÀàĞÍ.find(ÀàĞÍ) && !IsÓ×³æÕıÔÚÍÉ±ä();
 }
 
 void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î»ÀàĞÍ ÀàĞÍ)
@@ -63,9 +64,15 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 		return;
 	}
 
-	if (!m_refEntity.m_spBuilding->ÒÑÔìºÃ())
+	if (m_refEntity.m_spBuilding && !m_refEntity.m_spBuilding->ÒÑÔìºÃ())
 	{
 		refGateSession.SayÏµÍ³("½¨Öş»¹Ã»ÔìºÃ");
+		return;
+	}
+
+	if (IsÓ×³æÕıÔÚÍÉ±ä())
+	{
+		refGateSession.²¥·ÅÉùÒôBuzz("Ó×³æÕıÔÚÍÉ±ä");
 		return;
 	}
 
@@ -73,6 +80,15 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 	m_TaskCancelÔì»î¶¯µ¥Î».TryRun(CoÔì»î¶¯µ¥Î»());
 }
 
+bool Ôì»î¶¯µ¥Î»Component::IsÓ×³æ()const
+{
+	return Ó×³æ == m_refEntity.m_ÀàĞÍ;
+}
+
+bool Ôì»î¶¯µ¥Î»Component::IsÓ×³æÕıÔÚÍÉ±ä()
+{
+	return !m_TaskCancelÔì»î¶¯µ¥Î».co.Finished() && IsÓ×³æ();
+}
 
 void Ôì»î¶¯µ¥Î»Component::TryCancel(Entity& refEntity)
 {
@@ -94,7 +110,7 @@ CoTaskBool Ôì»î¶¯µ¥Î»Component::CoÔì»î¶¯µ¥Î»()
 		auto& refSpace = m_refEntity.m_refSpace;
 		using namespace std;
 		const auto posBuilding = m_refEntity.Pos();
-		Position pos = { posBuilding.x - 5 + std::rand() % 10, posBuilding.z - 5 +std::rand() % 10 };
+		Position pos = { posBuilding.x - 5 + std::rand() % 10, posBuilding.z - 5 + std::rand() % 10 };
 		{
 			const auto ok = refSpace.CrowdToolFindNerestPos(pos);
 			_ASSERT(ok);
@@ -151,7 +167,10 @@ CoTaskBool Ôì»î¶¯µ¥Î»Component::CoÔì»î¶¯µ¥Î»()
 				m_listµÈ´ıÔì.clear();
 				co_return{};
 			}
-			EntitySystem::BroadcastEntityÃèÊö(m_refEntity, std::format("´ıÔì¶ÓÁĞ{0},µ±Ç°µ¥Î»½ø¶È{1}/{2}", m_listµÈ´ıÔì.size(), i, MAX½ø¶È));
+			if (IsÓ×³æ())
+				EntitySystem::BroadcastEntityÃèÊö(m_refEntity, std::format("ÍÉ±ä½ø¶È{0}/{1}", i, MAX½ø¶È));
+			else
+				EntitySystem::BroadcastEntityÃèÊö(m_refEntity, std::format("´ıÔì¶ÓÁĞ{0},µ±Ç°µ¥Î»½ø¶È{1}/{2}", m_listµÈ´ıÔì.size(), i, MAX½ø¶È));
 		}
 
 		//LOG(INFO) << "Ğ­³ÌRPC·µ»Ø,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
@@ -177,7 +196,11 @@ CoTaskBool Ôì»î¶¯µ¥Î»Component::CoÔì»î¶¯µ¥Î»()
 		}
 	}
 
-	EntitySystem::BroadcastEntityÃèÊö(m_refEntity, "ÔìÍêÁË");
+	using namespace std;
+	if (Ó×³æ == m_refEntity.m_ÀàĞÍ)
+		m_refEntity.CoDelayDelete(1ms).RunNew();
+	else
+		EntitySystem::BroadcastEntityÃèÊö(m_refEntity, "ÔìÍêÁË");
 }
 
 bool Ôì»î¶¯µ¥Î»Component::²É¼¯¼¯½áµã¸½½üµÄ×ÊÔ´(Entity& refEntiy)const

@@ -18,13 +18,15 @@ namespace 单位
 class 造活动单位Component
 {
 public:
-	static void AddComponent(Entity& refEntity, const 单位类型 类型);
-	造活动单位Component(Entity& refEntity, const 单位类型 类型);
-	bool 可造(const 单位类型 类型) const;
+	static void AddComponent(Entity& refEntity);
+	造活动单位Component(Entity& refEntity);
+	bool 可造(const 单位类型 类型);
 	void 造兵(PlayerGateSession_Game&, const 单位类型 类型);
+	bool Is幼虫正在蜕变();
 	void TryCancel(Entity& refEntity);
 	uint16_t 等待造Count()const;
 	Position m_pos集结点;
+	bool Is幼虫()const;
 private:
 	CoTaskBool Co造活动单位();
 	bool 采集集结点附近的资源(Entity& refEntiy)const;

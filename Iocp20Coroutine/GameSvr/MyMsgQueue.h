@@ -280,10 +280,10 @@ enum 单位类型
 	枪兵,//陆战队员Marine。只能攻击，不能采矿
 	近战兵,//火蝠，喷火兵Firebat
 	三色坦克,//！不是！攻城坦克（Siege Tank）
-	工蜂,//Drone
+	工虫,//Drone
 	飞机,
-	跳虫,//Zergling
-	刺蛇,//Hydralisk
+	近战虫,//Zergling
+	枪虫,//Hydralisk
 	幼虫,//Larva
 
 	活动单位Max非法,

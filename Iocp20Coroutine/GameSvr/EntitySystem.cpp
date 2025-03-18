@@ -19,7 +19,7 @@ void EntitySystem::BroadcastChangeSkeleAnimIdle(Entity& refEntity)
 }
 void EntitySystem::BroadcastChangeSkeleAnim采集(Entity& refEntity)
 {
-	if (refEntity.m_类型 == 工蜂)
+	if (refEntity.m_类型 == 工虫)
 		refEntity.BroadcastChangeSkeleAnim("采集");
 }
 

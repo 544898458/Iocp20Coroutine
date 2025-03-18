@@ -41,7 +41,7 @@ bool Ôì½¨ÖşComponent::ÕıÔÚ½¨Ôì(const Entity& refEntity)
 		m_set¿ÉÔìÀàĞÍ.insert(»ú³¡);
 		m_set¿ÉÔìÀàĞÍ.insert(ÖØ¹¤³§);
 		break;
-	case ¹¤·ä:
+	case ¹¤³æ:
 		m_set¿ÉÔìÀàĞÍ.insert(³æ³²);
 		break;
 	default:
@@ -263,7 +263,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	case ±øÓª:
 	case »ú³¡:
 	case ÖØ¹¤³§:
-		Ôì»î¶¯µ¥Î»Component::AddComponent(refNewEntity, ÀàĞÍ);
+		Ôì»î¶¯µ¥Î»Component::AddComponent(refNewEntity);
 		break;
 	case µØ±¤:
 		µØ±¤Component::AddComponet(refNewEntity);
