@@ -92,7 +92,7 @@ CoTaskBool AttackComponent::Co顶层()
 		if (!可以攻击())
 			continue;
 
-		if ((m_b搜索新的目标) && co_await Co走向警戒范围内的目标然后攻击(m_TaskCancel.cancel))
+		if ((m_b搜索新的目标) && co_await Co走向警戒范围内的目标然后攻击())
 			continue;
 
 		if (!m_b原地坚守 && m_refEntity.m_sp走 && m_fun空闲走向此处 && !走Component::正在走(m_refEntity))//打完走向下一个目标
@@ -138,12 +138,12 @@ bool AttackComponent::可以攻击()
 	return true;
 }
 
-CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
+CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击()
 {
-	KeepCancel kc(funCancel);
+	KeepCancel kc(m_TaskCancel.cancel);
 	while (true)
 	{
-		if (co_await CoTimer::WaitNextUpdate(funCancel))
+		if (co_await CoTimer::WaitNextUpdate(m_TaskCancel.cancel))
 			co_return true;
 
 		if (!可以攻击())
@@ -231,7 +231,7 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击(FunCancel& funCancel)
 				m_refEntity.m_sp采集->m_TaskCancel.TryCancel();
 			}
 
-			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), funCancel, !b仇恨目标))
+			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), m_TaskCancel.cancel, !b仇恨目标))
 				co_return true;
 
 			continue;

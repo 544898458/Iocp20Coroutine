@@ -71,7 +71,7 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 		{
 			CHECK_WP_CONTINUE(wp);
 			const auto& refEntity = *wp.lock();
-			if (!refEntity.m_spBuilding || refEntity.m_类型 != 基地)//找离自己最近的基地
+			if (!refEntity.m_spBuilding || (refEntity.m_类型 != 基地 && refEntity.m_类型 != 虫巢))//找离自己最近的基地
 				continue;
 
 			const auto pow2 = m_refEntity.DistancePow2(refEntity);
