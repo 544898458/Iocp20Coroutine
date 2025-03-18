@@ -140,7 +140,10 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 					if (co_await AiCo::WalkToTarget(m_refEntity, wp目标资源.lock(), m_TaskCancel.cancel, false))
 						co_return true;//中断
 
-					EntitySystem::BroadcastChangeSkeleAnimIdle(m_refEntity);
+					if (m_refEntity.m_类型 == 工蜂)
+						m_refEntity.BroadcastChangeSkeleAnim("采集", true);
+					else
+						EntitySystem::BroadcastChangeSkeleAnimIdle(m_refEntity);
 				}
 			}
 
@@ -155,7 +158,7 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 
 			if (sp资源->m_可采集数量 <= 0)
 			{
-				if(晶体矿 == sp资源->m_类型)
+				if (晶体矿 == sp资源->m_类型)
 					PlayerComponent::播放声音(m_refEntity, "语音/晶体矿已枯竭女声可爱版", "晶体矿 已枯竭");
 				else
 					PlayerComponent::播放声音(m_refEntity, "语音/燃气矿已枯竭女声可爱版", "燃气矿 已枯竭");

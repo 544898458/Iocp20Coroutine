@@ -37,7 +37,7 @@
 -
    类型: 205
    名字: 工虫
-   PrefabPathName: 活动单位/工蜂
+   PrefabPathName: 活动单位/工虫
    选中音效: 语音/zdrYes00
    空闲动作: idle
 -
@@ -51,13 +51,13 @@
    名字: 枪虫
    PrefabPathName: ""
    选中音效: ""
-   空闲动作: idle
+   空闲动作: Root|待机.001
 -
    类型: 208
    名字: 近战虫
    PrefabPathName: ""
    选中音效: ""
-   空闲动作: idle
+   空闲动作: Root.001|待机
 -
    类型: 209
    名字: 幼虫
@@ -127,6 +127,6 @@
 -
    类型: 403
    名字: 工怪
-   PrefabPathName: 活动单位/工蜂
+   PrefabPathName: 活动单位/工虫
    选中音效: 语音/zdrYes00
    空闲动作: idle
