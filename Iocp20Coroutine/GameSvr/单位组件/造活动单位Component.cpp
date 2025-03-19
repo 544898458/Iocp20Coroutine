@@ -191,7 +191,7 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 				CHECK_CO_RET_FALSE(ref资源.m_sp走);
 				auto pos = m_pos集结点;
 				m_refEntity.m_refSpace.CrowdToolFindNerestPos(pos);
-				ref资源.m_sp走->WalkToPos手动控制(pos);
+				ref资源.m_sp走->WalkToPos(pos);
 			}
 		}
 	}
