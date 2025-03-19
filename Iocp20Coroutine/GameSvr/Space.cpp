@@ -351,6 +351,14 @@ int Space::Get资源单位数(const 单位类型 类型)
 		});
 }
 
+int Space::Get单位数(const 单位类型 arg类型)const
+{
+	return Get单位数([arg类型](const Entity& refEntity)
+		{
+			return refEntity.m_类型 == arg类型;
+		});
+}
+
 int Space::Get玩家单位数(const std::string& strPlayerNickName)
 {
 	return Get单位数([&strPlayerNickName](const Entity& refEntity)

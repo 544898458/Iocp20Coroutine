@@ -176,21 +176,28 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够20晶体矿后，请选中一辆工程车，然后点击“建筑单位/民房”按钮，再点击一次空旷地面");
-		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 民房))))
-			co_return 0;
+		if (0 == refSpace.Get单位数(民房))
+		{
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够20晶体矿后，请选中一辆工程车，然后点击“建筑单位/民房”按钮，再点击一次空旷地面");
+			if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 民房))))
+				co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好，民房可以提升您的活动单位数量上限");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好，民房可以提升您的活动单位数量上限");
+			if (co_await CoTimer::Wait(3s, funCancel))
+				co_return 0;
+		}
 
-		if (co_await CoTimer::Wait(3s, funCancel))
-			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请选中一辆工程车，然后点击“建筑单位/兵营”按钮，再点击一次空旷地面，就能造出一个兵营");
-		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 兵营))))
-			co_return 0;
+		if (0 == refSpace.Get单位数(兵营))
+		{
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请选中一辆工程车，然后点击“建筑单位/兵营”按钮，再点击一次空旷地面，就能造出一个兵营");
+			if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 兵营))))
+				co_return 0;
 
-		if (co_await CoTimer::Wait(10s, funCancel))
-			co_return 0;
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好，兵营可以产出枪兵和近战兵");
+			if (co_await CoTimer::Wait(10s, funCancel))
+				co_return 0;
+		}
 
 		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击选中兵营（圆环特效表示选中），然后点击“活动单位/枪兵”按钮，10秒后会在兵营旁造出一个 枪兵");
 

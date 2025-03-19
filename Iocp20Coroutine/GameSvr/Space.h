@@ -52,6 +52,7 @@ public:
 	int Get资源单位数(const 单位类型 类型);
 	int Get玩家单位数(const std::string& strPlayerNickName);
 	int Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位)const;
+	int Get单位数(const 单位类型 arg类型)const;
 	/// <summary>
 	/// 
 	/// </summary>
