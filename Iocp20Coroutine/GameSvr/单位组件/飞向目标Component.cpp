@@ -10,12 +10,20 @@ void 飞向目标Component::AddComponet(Entity& refEntity, const Position& pos目标)
 
 飞向目标Component::飞向目标Component(Entity& ref, const Position& pos目标) :m_refEntity(ref), m_pos目标(pos目标)
 {
-	m_TaskCancel.co = Co飞向目标遇敌爆炸();
+	Co飞向目标遇敌爆炸().RunNew();
+}
+
+void 飞向目标Component::TryCancel()
+{
+	if (m_funCancel) {
+		m_funCancel();
+		m_funCancel = nullptr;
+	}
 }
 
 CoTaskBool 飞向目标Component::Co飞向目标遇敌爆炸()
 {
-	while (!co_await CoTimer::WaitNextUpdate(m_TaskCancel.cancel))
+	while (!co_await CoTimer::WaitNextUpdate(m_funCancel))
 	{
 		if (m_refEntity.Pos().DistanceLessEqual(m_pos目标, 1))
 		{
