@@ -301,6 +301,10 @@ void Entity::Broadcast(const T& msg)
 	//m_refSpace.Broadcast(msg);
 }
 
+void Entity::DelayDelete(const uint32_t u32毫秒)
+{
+	CoDelayDelete(std::chrono::milliseconds(u32毫秒)).RunNew();
+}
 CoTaskBool Entity::CoDelayDelete(const std::chrono::system_clock::duration& dura)
 {
 	LOG(INFO) << "开始延时删除自己的协程";
@@ -322,6 +326,67 @@ CoTaskBool Entity::CoDelayDelete(const std::chrono::system_clock::duration& dura
 	co_return false;
 }
 
+
+WpEntity Entity::Get最近的Entity支持地堡中的单位(const FindType bFindEnemy, std::function<bool(const Entity&)> fun符合条件)
+{
+	WpEntity wp = m_wpOwner;
+	if (!m_refSpace.GetEntity(Id).expired())
+	{
+		wp = weak_from_this();
+	}
+	if (wp.expired())
+		return {};
+
+	return wp.lock()->Get最近的Entity(bFindEnemy, fun符合条件);
+}
+
+WpEntity Entity::Get最近的Entity(const FindType bFindEnemy, const 单位类型 目标类型)
+{
+	return Get最近的Entity(Entity::所有, [目标类型](const Entity& ref) {return ref.m_类型 == 目标类型; });
+}
+
+WpEntity Entity::Get最近的Entity(const FindType findType)
+{
+	return Get最近的Entity(findType, [](const Entity& ) {return true; });
+}
+
+WpEntity Entity::Get最近的Entity(const FindType bFindEnemy, std::function<bool(const Entity&)> fun符合条件)
+{
+	if (!m_upAoi)
+		return{};
+
+	std::vector<std::pair<int64_t, WpEntity>> vecEnemy;
+	std::copy_if(m_upAoi->m_map我能看到的.begin(), m_upAoi->m_map我能看到的.end(), std::back_inserter(vecEnemy),
+		[bFindEnemy, this, &fun符合条件](const auto& pair)
+		{
+			auto& wp = pair.second;
+			CHECK_FALSE(!wp.expired());
+			Entity& ref = *wp.lock();
+			const auto bEnemy = ref.IsEnemy(*this);
+			if (bFindEnemy == 敌方 && !bEnemy)
+				return false;
+			if (bFindEnemy == 友方 && bEnemy)
+				return false;
+
+			if (fun符合条件 && !fun符合条件(ref))
+				return false;
+
+			return &ref != this && !ref.IsDead();
+		});
+
+	if (vecEnemy.empty())
+	{
+		return {};
+	}
+
+	auto iterMin = std::min_element(vecEnemy.begin(), vecEnemy.end(), [this](const auto& pair1, const auto& pair2)
+		{
+			auto& sp1 = pair1.second;
+			auto& sp2 = pair2.second;
+			return this->DistancePow2(*sp1.lock()) < this->DistancePow2(*sp2.lock());
+		});
+	return iterMin->second.lock()->weak_from_this();
+}
 template void Entity::Broadcast(const MsgAddRoleRet& msg);
 template void Entity::Broadcast(const MsgDelRoleRet& msg);
 template void Entity::Broadcast(const MsgEntity描述& msg);

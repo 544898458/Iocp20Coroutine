@@ -48,11 +48,23 @@ public:
 	void BroadcastEnter();
 	void BroadcastNotifyPos();
 	void BroadcastChangeSkeleAnim(const std::string& refAniClipName, bool loop = true);
+	void DelayDelete(const uint32_t u32毫秒 = 0);
 	CoTaskBool CoDelayDelete(const std::chrono::system_clock::duration& dura = std::chrono::seconds(3));
 	template<class T> void Broadcast(const T& msg);
 	bool IsEnemy(const Entity& refEntity);
 	const Position& Pos()const { return m_Pos; }
 	void SetPos(const Position& refNewPos);
+	enum FindType
+	{
+		所有,
+		敌方,
+		友方,
+	};
+	WpEntity Get最近的Entity支持地堡中的单位(FindType bFindEnemy, std::function<bool(const Entity&)> fun符合条件);
+	WpEntity Get最近的Entity(FindType bFindEnemy, std::function<bool(const Entity&)> fun符合条件);
+	WpEntity Get最近的Entity(FindType findType);
+	WpEntity Get最近的Entity(const FindType bFindEnemy, const 单位类型 目标类型);
+
 	int m_eulerAnglesY = 0;
 	//CoTask<int> m_coWaitDelete;
 	FunCancel m_cancelDelete;

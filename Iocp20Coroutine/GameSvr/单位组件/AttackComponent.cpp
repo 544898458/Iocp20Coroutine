@@ -158,11 +158,12 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击()
 		if (!可以攻击())
 			co_return false;
 
-		auto wpEntity = m_refEntity.m_refSpace.Get最近的Entity支持地堡中的单位(m_refEntity, Space::敌方, [this](const Entity& ref)->bool
+		auto wpEntity = m_refEntity.Get最近的Entity支持地堡中的单位(Entity::敌方, [this](const Entity& ref)->bool
 			{
 				if (!EntitySystem::Is空地能打(m_refEntity.m_类型, ref.m_类型))
 					return false;
-
+				if (!ref.m_spDefence)
+					return false;
 				return nullptr != ref.m_spDefence;
 			});
 		if (wpEntity.expired())
@@ -349,7 +350,7 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 		{
 			auto wp光刺 = m_refEntity.m_refSpace.造活动单位(m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity), m_refEntity.Pos(), 光刺);
 			CHECK_WP_CO_RET_FALSE(wp光刺);
-			飞向目标Component::AddComponet(*wp光刺.lock(), refDefencer.Pos());
+			飞向目标Component::AddComponet(*wp光刺.lock(), m_refEntity.Pos(),  (refDefencer.Pos()-m_refEntity.Pos()).归一化(), m_战斗配置.f攻击距离);
 		}
 	} while (false);
 

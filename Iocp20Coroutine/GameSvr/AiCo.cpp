@@ -107,7 +107,7 @@ namespace AiCo
 
 				for (int i = 0; i < 30; ++i)
 				{
-					auto wp最近 = refThis.m_refSpace.Get最近的Entity(refThis, Space::友方, [](const Entity&) {return true; });
+					auto wp最近 = refThis.Get最近的Entity(Entity::友方, [](const Entity&) {return true; });
 					if (wp最近.expired())
 						co_return false;
 

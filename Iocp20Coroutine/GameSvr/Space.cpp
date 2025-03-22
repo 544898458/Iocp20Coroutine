@@ -90,61 +90,6 @@ WpEntity Space::GetEntity(const int64_t id)
 	return itFind->second->weak_from_this();
 }
 
-WpEntity Space::Get最近的Entity支持地堡中的单位(Entity& refEntity, const FindType bFindEnemy, std::function<bool(const Entity&)> fun符合条件)
-{
-	WpEntity wp = refEntity.m_wpOwner;
-	if (!GetEntity(refEntity.Id).expired())
-	{
-		wp = refEntity.weak_from_this();
-	}
-	if (wp.expired())
-		return {};
-
-	return Get最近的Entity(*wp.lock(), bFindEnemy, fun符合条件);
-}
-
-WpEntity Space::Get最近的Entity(Entity& refEntity, const FindType bFindEnemy, const 单位类型 目标类型)
-{
-	return Get最近的Entity(refEntity, Space::所有, [目标类型](const Entity& ref) {return ref.m_类型 == 目标类型; });
-}
-
-WpEntity Space::Get最近的Entity(Entity& refEntity, const FindType bFindEnemy, std::function<bool(const Entity&)> fun符合条件)
-{
-	if (!refEntity.m_upAoi)
-		return{};
-
-	std::vector<std::pair<int64_t, WpEntity>> vecEnemy;
-	std::copy_if(refEntity.m_upAoi->m_map我能看到的.begin(), refEntity.m_upAoi->m_map我能看到的.end(), std::back_inserter(vecEnemy),
-		[bFindEnemy, &refEntity, &fun符合条件](const auto& pair)
-		{
-			auto& wp = pair.second;
-			CHECK_FALSE(!wp.expired());
-			Entity& ref = *wp.lock();
-			const auto bEnemy = ref.IsEnemy(refEntity);
-			if (bFindEnemy == 敌方 && !bEnemy)
-				return false;
-			if (bFindEnemy == 友方 && bEnemy)
-				return false;
-
-			if (fun符合条件 && !fun符合条件(ref))
-				return false;
-
-			return &ref != &refEntity && !ref.IsDead();
-		});
-
-	if (vecEnemy.empty())
-	{
-		return {};
-	}
-
-	auto iterMin = std::min_element(vecEnemy.begin(), vecEnemy.end(), [&refEntity](const auto& pair1, const auto& pair2)
-		{
-			auto& sp1 = pair1.second;
-			auto& sp2 = pair2.second;
-			return refEntity.DistancePow2(*sp1.lock()) < refEntity.DistancePow2(*sp2.lock());
-		});
-	return iterMin->second.lock()->weak_from_this();
-}
 std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStrNickName);
 void Space::On玩家离线(const std::string& refStrNickName离线)
 {
@@ -511,7 +456,9 @@ WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 		pos, *this, std::forward<const 单位类型&&>(类型), 单位);
 	PlayerComponent::AddComponent(*spNewEntity, refSpPlayer可能空, strNickName);
 	AttackComponent::AddComponent(*spNewEntity);
-	DefenceComponent::AddComponent(*spNewEntity, 制造.u16初始Hp);
+	if(光刺!=类型)
+		DefenceComponent::AddComponent(*spNewEntity, 制造.u16初始Hp);
+
 	走Component::AddComponent(*spNewEntity);
 
 	m_mapPlayer[strNickName].m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位

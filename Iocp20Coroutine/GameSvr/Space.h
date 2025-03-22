@@ -61,16 +61,7 @@ public:
 	void AddEntity(SpEntity spNewEntity, const int32_t i32视野范围 = 0);
 	void 所有玩家全退出();
 	void OnDestory();
-	enum FindType
-	{
-		所有,
-		敌方,
-		友方,
-	};
-	WpEntity Get最近的Entity支持地堡中的单位(Entity& refEntity, FindType bFindEnemy, std::function<bool(const Entity&)> fun符合条件);
 
-	WpEntity Get最近的Entity(Entity& refEntity, FindType bFindEnemy, std::function<bool(const Entity&)> fun符合条件);
-	WpEntity Get最近的Entity(Entity& refEntity, const FindType bFindEnemy, const 单位类型 目标类型);
 	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map能看到这一格;
 	std::unordered_map<int, std::map<uint64_t, WpEntity>> m_map在这一格里;
 

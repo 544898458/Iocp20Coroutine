@@ -4,13 +4,15 @@ class Entity;
 class 飞向目标Component
 {
 public:
-	static void AddComponet(Entity& refEntity, const Position& pos目标);
-	飞向目标Component(Entity& ref, const Position& pos目标);
+	static void AddComponet(Entity& refEntity, const Position& pos起始点, const Position& pos方向, const float f最远距离);
+	飞向目标Component(Entity& ref, const Position& pos起始点, const Position& pos方向, const float f最远距离);
 	void TryCancel();
 private:
 	CoTaskBool Co飞向目标遇敌爆炸();
 	Entity& m_refEntity;
-	const Position m_pos目标;
+	const Position m_vec方向;
+	const Position m_pos起始点;
+	const float m_f最远距离;
 	FunCancel m_funCancel;
 };
 

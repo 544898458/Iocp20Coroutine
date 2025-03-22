@@ -30,23 +30,12 @@ void EntitySystem::Broadcast播放声音(Entity& refEntity, const std::string& refSt
 
 bool EntitySystem::Is视口(const Entity& refEntity)
 {
-	if (refEntity.m_spDefence)
-		return false;
-
-	if (!refEntity.m_spPlayer)
-		return false;
-
-	CHECK_RET_FALSE(refEntity.m_upAoi);
-	//_ASSERT(refEntity.m_upAoi);
-	//if (!refEntity.m_upAoi)
-		//return false;
-
-	return true;
+	return Is视口(refEntity.m_类型);
 }
 
 bool EntitySystem::距离友方单位太近(Entity& refEntity)
 {
-	const auto wp最近的正在攻击的友方单位 = refEntity.m_refSpace.Get最近的Entity(refEntity, Space::友方,
+	const auto wp最近的正在攻击的友方单位 = refEntity.Get最近的Entity(Entity::友方,
 		[](const Entity& ref)->bool
 		{
 			if (nullptr == ref.m_spDefence)
