@@ -5,6 +5,8 @@
 #define YAML_CPP_STATIC_DEFINE
 #include <yaml-cpp/yaml.h>
 
+#include <fstream>
+#include "../IocpNetwork/StrConv.h"
 #ifdef _DEBUG
 #pragma comment(lib, "../yaml-cpp-0.8.0/lib/yaml-cppd.lib")
 #else
@@ -209,7 +211,15 @@ namespace 单位
 	bool 读配置文件(const std::string& strPathName, std::unordered_map<单位类型, T>& map)
 	{
 		try {
-			YAML::Node config = YAML::LoadFile(strPathName);
+			std::ifstream file(strPathName);
+			if (!file.is_open())
+				return false;
+			std::ostringstream oss;
+			oss << file.rdbuf();
+			std::string strUtf8(oss.str());
+			file.close();
+			const auto strGbk = StrConv::Utf8ToGbk(strUtf8);
+			YAML::Node config = YAML::Load(strGbk);
 			for (auto it = config.begin(); it != config.end(); it++)
 			{
 				auto line = *it;

@@ -285,6 +285,7 @@ enum 单位类型
 	近战虫,//Zergling
 	枪虫,//Hydralisk
 	幼虫,//Larva
+	绿色坦克,//虫群单位，实际上是生物体
 
 	活动单位Max非法,
 

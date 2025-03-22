@@ -95,7 +95,7 @@ private:
 
 
 	void ForEachSelected(std::function<void(Entity& ref)> fun);
-	CoTaskBool Co进多人联机地图(WpEntity wp视口);
+	CoTaskBool Co进多人联机混战(WpEntity wp视口);
 
 	//std::vector<CoTask<int>>	m_vecCoRpc;
 	std::vector<std::shared_ptr<FunCancel>>	m_vecFunCancel;
