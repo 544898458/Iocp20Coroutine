@@ -294,13 +294,14 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 {
 	KeepCancel kc(cancel);
 	//活动单位临时阻挡 _(m_refEntity);
+	EntitySystem::恢复休闲动作 _(m_refEntity, {});
+
 	do
 	{
 		CHECK_终止攻击目标流程;
 
 		m_refEntity.m_eulerAnglesY = CalculateAngle(m_refEntity.Pos(), wpDefencer.lock()->Pos());
 		m_refEntity.BroadcastNotifyPos();
-		EntitySystem::恢复休闲动作 _(m_refEntity, {});
 		播放前摇动作();
 
 		if (0s < m_战斗配置.dura开始播放攻击动作 && co_await CoTimer::Wait(m_战斗配置.dura开始播放攻击动作, cancel))
