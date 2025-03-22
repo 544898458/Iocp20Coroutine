@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include <glog/logging.h>
 #include <cstdlib>
 #include "MyMsgQueue.h"
@@ -10,13 +10,13 @@
 #include "../IocpNetwork/StrConv.h"
 #include "AiCo.h"
 #include "Entity.h"
-#include "µ¥Î»×é¼ş/PlayerComponent.h"
+#include "å•ä½ç»„ä»¶/PlayerComponent.h"
 #include "../CoRoutine/CoRpc.h"
-#include "µ¥Î»×é¼ş/DefenceComponent.h"
+#include "å•ä½ç»„ä»¶/DefenceComponent.h"
 
 
 /// <summary>
-/// Æ½·½¾ÍÊÇ2´Î·½
+/// å¹³æ–¹å°±æ˜¯2æ¬¡æ–¹
 /// </summary>
 const float fExponent = 2.0f;
 
@@ -28,12 +28,17 @@ MsgNotifyPos::MsgNotifyPos(Entity& ref) : entityId(ref.Id), x(ref.Pos().x), z(re
 
 MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :
 	entityId(ref.Id),
-	nickName(StrConv::GbkToUtf8(ref.Í·¶¥Name())),
-	entityName(StrConv::GbkToUtf8(ref.m_ÅäÖÃ.strName)),
-	prefabName(StrConv::GbkToUtf8(ref.m_ÅäÖÃ.strPrefabName)),
+	nickName(StrConv::GbkToUtf8(ref.å¤´é¡¶Name())),
+	entityName(StrConv::GbkToUtf8(ref.m_é…ç½®.strName)),
+	prefabName(StrConv::GbkToUtf8(ref.m_é…ç½®.strPrefabName)),
 	i32HpMax(ref.m_spDefence ? ref.m_spDefence->m_i32HpMax : 0),
-	ÀàĞÍ(ref.m_ÀàĞÍ)
+	ç±»å‹(ref.m_ç±»å‹)
 {
+}
+
+Position Position::operator*(float f)const
+{
+	return { x * f,z * f };
 }
 
 bool Position::DistanceLessEqual(const Position& refPos, float fDistance) const
@@ -49,4 +54,21 @@ float Position::DistancePow2(const Position& refPos) const
 float Position::Distance(const Position& refPos) const
 {
 	return std::sqrtf(DistancePow2(refPos));
+}
+
+/// <summary>
+/// å‘é‡å½’ä¸€åŒ–(Vector Normalization)
+/// </summary>
+
+Position& Position::å½’ä¸€åŒ–()
+{
+	const float fèŒƒæ•° = std::sqrtf(std::pow(x, fExponent) + std::pow(z, fExponent));
+	if (0 == fèŒƒæ•°)
+	{
+		LOG(ERROR) << "èŒƒæ•°æ˜¯0ï¼Œæ— æ³•å½’ä¸€åŒ–," << *this;
+		return *this;
+	}
+	x /= fèŒƒæ•°;
+	z /= fèŒƒæ•°;
+	return *this;
 }

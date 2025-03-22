@@ -47,7 +47,7 @@ public:
 	void Update();
 	bool CrowdTool可站立(const Position& refPos);
 	bool CrowdToolFindNerestPos(Position& refPos);
-
+	bool CrowdTool可走直线(const Position& pos起始, const Position& pos目标);
 	int Get怪物单位数(const 单位类型 类型= 单位类型_Invalid_0)const;
 	int Get资源单位数(const 单位类型 类型);
 	int Get玩家单位数(const std::string& strPlayerNickName);

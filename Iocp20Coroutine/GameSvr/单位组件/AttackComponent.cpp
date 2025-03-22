@@ -17,11 +17,12 @@
 #include "BuildingComponent.h"
 #include "AoiComponent.h"
 #include "临时阻挡Component.h"
+#include "飞向目标Component.h"
 
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
 AttackComponent& AttackComponent::AddComponent(Entity& refEntity)
 {
-	if (refEntity.m_spAttack) 
+	if (refEntity.m_spAttack)
 	{
 		LOG(ERROR) << "不能重复加AttackComponent";
 		_ASSERT(!"不能重复加AttackComponent");
@@ -138,6 +139,14 @@ bool AttackComponent::可以攻击()
 	return true;
 }
 
+bool AttackComponent::检查穿墙(const Position& pos)
+{
+	if (绿色坦克 != m_refEntity.m_类型)
+		return true;
+
+	return m_refEntity.m_refSpace.CrowdTool可走直线(m_refEntity.Pos(), pos);
+}
+
 CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击()
 {
 	KeepCancel kc(m_TaskCancel.cancel);
@@ -165,7 +174,7 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击()
 		const bool b距离友方单位太近 = EntitySystem::距离友方单位太近(m_refEntity);
 		Entity& refTarget = *wpEntity.lock();
 
-		if (m_refEntity.DistanceLessEqual(refTarget, 攻击距离(refTarget)) && !b距离友方单位太近)
+		if (m_refEntity.DistanceLessEqual(refTarget, 攻击距离(refTarget)) && !b距离友方单位太近 && 检查穿墙(refTarget.Pos()))
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
@@ -333,7 +342,15 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 
 		播放攻击音效();
 
-		refDefencer.m_spDefence->受伤(m_战斗配置.i32伤害, m_refEntity.Id);
+		if (0 < m_战斗配置.i32伤害)
+			refDefencer.m_spDefence->受伤(m_战斗配置.i32伤害, m_refEntity.Id);
+
+		if (绿色坦克 == m_refEntity.m_类型)
+		{
+			auto wp光刺 = m_refEntity.m_refSpace.造活动单位(m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity), m_refEntity.Pos(), 光刺);
+			CHECK_WP_CO_RET_FALSE(wp光刺);
+			飞向目标Component::AddComponet(*wp光刺.lock(), refDefencer.Pos());
+		}
 	} while (false);
 
 	if (co_await CoTimer::Wait(m_战斗配置.dura后摇, cancel))//后摇

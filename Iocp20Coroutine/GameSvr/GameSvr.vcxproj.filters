@@ -354,6 +354,9 @@
     <ClCompile Include="单位组件\虫巢Component.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
+    <ClCompile Include="单位组件\飞向目标Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -567,6 +570,9 @@
       <Filter>读配置文件</Filter>
     </ClInclude>
     <ClInclude Include="单位组件\虫巢Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\飞向目标Component.h">
       <Filter>单位组件</Filter>
     </ClInclude>
   </ItemGroup>

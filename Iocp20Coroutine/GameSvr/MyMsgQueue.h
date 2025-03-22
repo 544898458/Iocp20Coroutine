@@ -25,6 +25,7 @@ struct Position
 		pos.z -= refRight.z;
 		return pos;
 	}
+	Position operator*(float f)const;
 	Position operator+(const Position& refRight)const
 	{
 		Position pos(*this);
@@ -36,6 +37,11 @@ struct Position
 
 	float DistancePow2(const Position& refPos)const;
 	float Distance(const Position& refPos)const;
+	
+	/// <summary>
+	/// 向量归一化(Vector Normalization)
+	/// </summary>
+	Position& 归一化();
 };
 struct Rect
 {
@@ -286,6 +292,7 @@ enum 单位类型
 	枪虫,//Hydralisk
 	幼虫,//Larva
 	绿色坦克,//虫群单位，实际上是生物体
+	光刺,//由绿色坦克发射，直线前进，遇敌爆炸
 
 	活动单位Max非法,
 

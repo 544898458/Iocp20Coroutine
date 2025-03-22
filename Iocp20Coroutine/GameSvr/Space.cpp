@@ -537,7 +537,11 @@ WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 	return spNewEntity;
 }
 
-
+bool CrowdTool可走直线(CrowdToolState& refCrowTool, const Position& pos起始, const Position& pos目标);
+bool Space::CrowdTool可走直线(const Position& pos起始, const Position& pos目标)
+{
+	return ::CrowdTool可走直线(*m_spCrowdToolState, pos起始, pos目标);
+}
 bool Space::可放置建筑(const Position& refPos, float f半边长)
 {
 	const Position pos左下 = { refPos.x - f半边长, refPos.z - f半边长 };
@@ -559,12 +563,12 @@ bool Space::可放置建筑(const Position& refPos, float f半边长)
 			return false;
 	}
 
-	bool CrowdTool可走直线(CrowdToolState & refCrowTool, const Position & pos起始, const Position & pos目标);
-	return	CrowdTool可走直线(*m_spCrowdToolState, pos左下, pos右上)
-		&& CrowdTool可走直线(*m_spCrowdToolState, pos左上, pos右下)
-		&& CrowdTool可走直线(*m_spCrowdToolState, pos左上, pos左下)
-		&& CrowdTool可走直线(*m_spCrowdToolState, pos右上, pos右下)
-		&& CrowdTool可走直线(*m_spCrowdToolState, pos右上, pos右下)
-		&& CrowdTool可走直线(*m_spCrowdToolState, pos左上, pos左下)
+	
+	return	CrowdTool可走直线(pos左下, pos右上)
+		&& CrowdTool可走直线(pos左上, pos右下)
+		&& CrowdTool可走直线(pos左上, pos左下)
+		&& CrowdTool可走直线(pos右上, pos右下)
+		&& CrowdTool可走直线(pos右上, pos右下)
+		&& CrowdTool可走直线(pos左上, pos左下)
 		;
 }

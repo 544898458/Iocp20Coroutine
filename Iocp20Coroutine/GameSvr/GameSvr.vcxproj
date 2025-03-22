@@ -370,6 +370,7 @@
     <ClCompile Include="单位组件\采集Component.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="单位组件\飞向目标Component.cpp" />
     <ClCompile Include="多人战局.cpp" />
     <ClInclude Include="..\CoRoutine\CoLock.h" />
     <ClInclude Include="..\IocpNetwork\MsgQueueMsgPackTemplate.h">
@@ -499,6 +500,7 @@
     <ClInclude Include="单位组件\造建筑Component.h" />
     <ClInclude Include="单位组件\造活动单位Component.h" />
     <ClInclude Include="单位组件\采集Component.h" />
+    <ClInclude Include="单位组件\飞向目标Component.h" />
     <ClInclude Include="多人战局.h" />
   </ItemGroup>
   <ItemGroup>
