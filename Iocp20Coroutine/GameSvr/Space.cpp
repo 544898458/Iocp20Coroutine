@@ -455,9 +455,11 @@ WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
 		pos, *this, std::forward<const 单位类型&&>(类型), 单位);
 	PlayerComponent::AddComponent(*spNewEntity, refSpPlayer可能空, strNickName);
-	AttackComponent::AddComponent(*spNewEntity);
-	if(光刺!=类型)
+	if (光刺 != 类型)
+	{
 		DefenceComponent::AddComponent(*spNewEntity, 制造.u16初始Hp);
+		AttackComponent::AddComponent(*spNewEntity);
+	}
 
 	走Component::AddComponent(*spNewEntity);
 
@@ -510,7 +512,7 @@ bool Space::可放置建筑(const Position& refPos, float f半边长)
 			return false;
 	}
 
-	
+
 	return	CrowdTool可走直线(pos左下, pos右上)
 		&& CrowdTool可走直线(pos左上, pos右下)
 		&& CrowdTool可走直线(pos左上, pos左下)

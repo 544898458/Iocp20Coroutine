@@ -43,6 +43,8 @@ namespace 单位
 	{
 		std::string str入场语音;
 		std::string str走路动作;
+		std::string str普通走语音;
+		std::string str强行走语音;
 	};
 	struct 怪配置
 	{

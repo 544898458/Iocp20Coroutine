@@ -56,19 +56,27 @@ float Position::Distance(const Position& refPos) const
 	return std::sqrtf(DistancePow2(refPos));
 }
 
+float Position::LengthPow2()const
+{
+	return std::pow(x, fExponent) + std::pow(z, fExponent);
+}
+
+float Position::Length()const
+{
+	return std::sqrtf(LengthPow2());
+}
 /// <summary>
 /// 向量归一化(Vector Normalization)
 /// </summary>
 
-Position& Position::归一化()
+Position Position::归一化()const
 {
 	const float f范数 = std::sqrtf(std::pow(x, fExponent) + std::pow(z, fExponent));
 	if (0 == f范数)
 	{
 		LOG(ERROR) << "范数是0，无法归一化," << *this;
-		return *this;
+		return { x ,z };
 	}
-	x /= f范数;
-	z /= f范数;
-	return *this;
+
+	return { x / f范数, z / f范数 };
 }

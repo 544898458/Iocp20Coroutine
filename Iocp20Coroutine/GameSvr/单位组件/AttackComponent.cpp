@@ -139,12 +139,27 @@ bool AttackComponent::可以攻击()
 	return true;
 }
 
-bool AttackComponent::检查穿墙(const Position& pos)
+bool AttackComponent::检查穿墙(const Entity& refEntity)
 {
 	if (绿色坦克 != m_refEntity.m_类型)
 		return true;
 
-	if (!m_refEntity.m_refSpace.CrowdTool可走直线(m_refEntity.Pos(), pos))
+	auto pos走向目标点 = refEntity.Pos();
+	const auto f建筑半边长 = BuildingComponent::建筑半边长(refEntity);
+	//单位::战斗配置 战斗配置;
+	if (0 < f建筑半边长)//&& 单位::Find战斗配置(m_refEntity.m_类型, 战斗配置))
+	{
+		const auto vec直线 = refEntity.Pos() - m_refEntity.Pos();
+
+		if (vec直线.Length() <= f建筑半边长)
+			return true;
+
+		const auto vec方向 = vec直线.归一化();
+		const auto f走到攻击范围内 = vec直线.Length() - f建筑半边长;
+		pos走向目标点 = m_refEntity.Pos() + vec方向 * f走到攻击范围内;
+	}
+
+	if (!m_refEntity.m_refSpace.CrowdTool可走直线(m_refEntity.Pos(), pos走向目标点))
 		return false;
 
 	return true;
@@ -178,7 +193,7 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击()
 		const bool b距离友方单位太近 = EntitySystem::距离友方单位太近(m_refEntity);
 		Entity& refTarget = *wpEntity.lock();
 
-		if (m_refEntity.DistanceLessEqual(refTarget, 攻击距离(refTarget)) && !b距离友方单位太近 && 检查穿墙(refTarget.Pos()))
+		if (m_refEntity.DistanceLessEqual(refTarget, 攻击距离(refTarget)) && !b距离友方单位太近 && 检查穿墙(refTarget))
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
@@ -245,7 +260,7 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击()
 				m_refEntity.m_sp采集->m_TaskCancel.TryCancel();
 			}
 
-			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), m_TaskCancel.cancel, !b仇恨目标, [this](Entity& ref) {return 检查穿墙(ref.Pos()); }))
+			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), m_TaskCancel.cancel, !b仇恨目标, [this](Entity& ref) {return 检查穿墙(ref); }))
 				co_return true;
 
 			continue;
@@ -354,7 +369,7 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 		{
 			auto wp光刺 = m_refEntity.m_refSpace.造活动单位(m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity), m_refEntity.Pos(), 光刺);
 			CHECK_WP_CO_RET_FALSE(wp光刺);
-			飞向目标Component::AddComponet(*wp光刺.lock(), m_refEntity.Pos(),  (refDefencer.Pos()-m_refEntity.Pos()).归一化(), m_战斗配置.f攻击距离);
+			飞向目标Component::AddComponet(*wp光刺.lock(), m_refEntity.Pos(), (refDefencer.Pos() - m_refEntity.Pos()).归一化(), m_战斗配置.f攻击距离);
 		}
 	} while (false);
 

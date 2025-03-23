@@ -202,7 +202,7 @@ bool CrowdTool可走直线(CrowdToolState& refCrowTool, const Position& pos起始, con
 		f总路径长 += pos.Distance(pos下一个);
 	}
 
-	const float f直线距离 = pos起始.Distance(pos目标);
+	const float f直线距离 = pos起始.Distance({ arr目标点可站立[0], arr目标点可站立[2] });
 	return f直线距离 + 0.01f > f总路径长;// refPos.DistanceLessEqual(pos, 0.1f);
 }
 

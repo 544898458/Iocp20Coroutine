@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "飞向目标Component.h"
 #include "DefenceComponent.h"
+#include "BuildingComponent.h"
 #include "../Entity.h"
 #include "../../CoRoutine/CoTimer.h"
 #include "../Space.h"
@@ -10,8 +11,8 @@ void 飞向目标Component::AddComponet(Entity& refEntity, const Position& pos起始点
 	refEntity.m_up飞向目标.reset(new 飞向目标Component(refEntity, pos起始点, pos方向, f最远距离));
 }
 
-飞向目标Component::飞向目标Component(Entity& ref, const Position& pos起始点, const Position& vec方向, const float f最远距离):
-	m_refEntity(ref), 
+飞向目标Component::飞向目标Component(Entity& ref, const Position& pos起始点, const Position& vec方向, const float f最远距离) :
+	m_refEntity(ref),
 	m_pos起始点(pos起始点),
 	m_vec方向(vec方向),
 	m_f最远距离(f最远距离)
@@ -36,12 +37,17 @@ CoTaskBool 飞向目标Component::Co飞向目标遇敌爆炸()
 	while (!co_await CoTimer::WaitNextUpdate(m_funCancel))
 	{
 		auto wp = m_refEntity.Get最近的Entity(Entity::敌方);
-		if (!wp.expired() && wp.lock()->m_spDefence && wp.lock()->Pos().DistanceLessEqual(m_refEntity.Pos(),1))
+		if (!wp.expired())
 		{
-			EntitySystem::Broadcast播放声音(m_refEntity, 配置.str攻击音效);
-			wp.lock()->m_spDefence->受伤(配置.i32伤害, m_refEntity.Id);
-			m_refEntity.DelayDelete();
-			co_return false;
+			auto &ref目标 = *wp.lock();
+			const auto f建筑半边长 = BuildingComponent::建筑半边长(ref目标);
+			if (ref目标.m_spDefence && ref目标.Pos().DistanceLessEqual(m_refEntity.Pos(), 1 + f建筑半边长))
+			{
+				EntitySystem::Broadcast播放声音(m_refEntity, 配置.str攻击音效);
+				ref目标.m_spDefence->受伤(配置.i32伤害, m_refEntity.Id);
+				m_refEntity.DelayDelete();
+				co_return false;
+			}
 		}
 
 		if (!m_refEntity.Pos().DistanceLessEqual(m_pos起始点, m_f最远距离))//超过射程

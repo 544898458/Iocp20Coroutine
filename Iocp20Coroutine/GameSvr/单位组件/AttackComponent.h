@@ -34,7 +34,7 @@ public:
 	bool m_b原地坚守 = false;//Hold Position
 private:
 	bool 可以攻击();
-	bool 检查穿墙(const Position& pos);
+	bool 检查穿墙(const Entity& refEntity);
 	CoTaskBool Co顶层();
 };
 

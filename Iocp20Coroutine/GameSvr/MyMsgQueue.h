@@ -37,11 +37,15 @@ struct Position
 
 	float DistancePow2(const Position& refPos)const;
 	float Distance(const Position& refPos)const;
+
+	float LengthPow2() const;
+
+	float Length() const;
 	
 	/// <summary>
 	/// 向量归一化(Vector Normalization)
 	/// </summary>
-	Position& 归一化();
+	Position 归一化()const;
 };
 struct Rect
 {

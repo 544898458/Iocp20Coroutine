@@ -214,6 +214,9 @@ void Entity::OnDestroy()
 	if (m_sp虫巢)
 		m_sp虫巢->TryCancel();
 
+	if (m_up飞向目标)
+		m_up飞向目标->TryCancel();
+
 	if (m_cancelDelete)
 	{
 		LOG(INFO) << "取消删除协程";
