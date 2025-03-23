@@ -37,6 +37,7 @@ void 造活动单位Component::AddComponent(Entity& refEntity)
 		m_set可造类型.insert(工虫);
 		m_set可造类型.insert(近战虫);
 		m_set可造类型.insert(枪虫);
+		m_set可造类型.insert(绿色坦克);
 		break;
 	default:
 		break;

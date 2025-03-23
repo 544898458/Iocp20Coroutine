@@ -288,8 +288,8 @@ enum 单位类型
 	三色坦克,//！不是！攻城坦克（Siege Tank）
 	工虫,//Drone
 	飞机,
-	近战虫,//Zergling
 	枪虫,//Hydralisk
+	近战虫,//Zergling
 	幼虫,//Larva
 	绿色坦克,//虫群单位，实际上是生物体
 	光刺,//由绿色坦克发射，直线前进，遇敌爆炸

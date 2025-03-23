@@ -49,14 +49,14 @@
 -
    类型: 207
    名字: 枪虫
-   PrefabPathName: ""
-   选中音效: ""
+   PrefabPathName: 活动单位/枪虫
+   选中音效: 语音/zdrYes00
    空闲动作: Root|待机.001
 -
    类型: 208
    名字: 近战虫
-   PrefabPathName: ""
-   选中音效: ""
+   PrefabPathName: 活动单位/近战虫
+   选中音效: 语音/zdrYes00
    空闲动作: Root.001|待机
 -
    类型: 209
