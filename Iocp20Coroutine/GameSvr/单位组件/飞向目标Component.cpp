@@ -32,6 +32,7 @@ CoTaskBool 飞向目标Component::Co飞向目标遇敌爆炸()
 	单位::战斗配置 配置;
 	CHECK_CO_RET_FALSE(单位::Find战斗配置(m_refEntity.m_类型, 配置));
 
+	float f首次移动倍数 = 3.f;
 	while (!co_await CoTimer::WaitNextUpdate(m_funCancel))
 	{
 		auto wp = m_refEntity.Get最近的Entity(Entity::敌方);
@@ -49,7 +50,8 @@ CoTaskBool 飞向目标Component::Co飞向目标遇敌爆炸()
 			co_return false;
 		}
 
-		const auto posNew = m_refEntity.Pos() + m_vec方向 * 配置.f每帧移动距离;
+		const auto posNew = m_refEntity.Pos() + m_vec方向 * 配置.f每帧移动距离 * f首次移动倍数;
+		f首次移动倍数 = 1.f;
 		if (!m_refEntity.m_refSpace.CrowdTool可走直线(posNew, m_refEntity.Pos()))//撞墙
 		{
 			m_refEntity.DelayDelete();
@@ -59,5 +61,6 @@ CoTaskBool 飞向目标Component::Co飞向目标遇敌爆炸()
 		m_refEntity.SetPos(posNew);
 		m_refEntity.BroadcastNotifyPos();
 	}
+	m_refEntity.DelayDelete();
 	co_return true;
 }

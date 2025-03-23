@@ -144,7 +144,10 @@ bool AttackComponent::检查穿墙(const Position& pos)
 	if (绿色坦克 != m_refEntity.m_类型)
 		return true;
 
-	return m_refEntity.m_refSpace.CrowdTool可走直线(m_refEntity.Pos(), pos);
+	if (!m_refEntity.m_refSpace.CrowdTool可走直线(m_refEntity.Pos(), pos))
+		return false;
+
+	return true;
 }
 
 CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击()
@@ -232,7 +235,8 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击()
 
 		if (m_refEntity.m_wpOwner.expired() && (b仇恨目标 || m_refEntity.DistanceLessEqual(refTarget, m_refEntity.警戒距离())) &&
 			//!走Component::正在走(m_refEntity) && 
-			(!m_refEntity.m_sp采集 || m_refEntity.m_sp采集->m_TaskCancel.co.Finished()))
+			(!m_refEntity.m_sp采集 || m_refEntity.m_sp采集->m_TaskCancel.co.Finished())
+			)
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
@@ -241,7 +245,7 @@ CoTaskBool AttackComponent::Co走向警戒范围内的目标然后攻击()
 				m_refEntity.m_sp采集->m_TaskCancel.TryCancel();
 			}
 
-			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), m_TaskCancel.cancel, !b仇恨目标))
+			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), m_TaskCancel.cancel, !b仇恨目标, [this](Entity& ref) {return 检查穿墙(ref.Pos()); }))
 				co_return true;
 
 			continue;

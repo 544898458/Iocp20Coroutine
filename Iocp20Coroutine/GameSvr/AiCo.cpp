@@ -135,7 +135,7 @@ namespace AiCo
 		co_return false;
 	}
 
-	CoTaskBool WalkToTarget(Entity& refThis, SpEntity spTarget, FunCancel& funCancel, const bool b检查警戒距离)
+	CoTaskBool WalkToTarget(Entity& refThis, SpEntity spTarget, FunCancel& funCancel, const bool b检查警戒距离, const std::function<bool(Entity&)>& fun可停下)
 	{
 		if (!refThis.m_sp走)
 			co_return false;
@@ -183,7 +183,7 @@ namespace AiCo
 				co_return false;
 			}
 			const bool b距离友方单位太近 = EntitySystem::距离友方单位太近(refThis);
-			if (!b距离友方单位太近 && refThis.DistanceLessEqual(*spTarget, refThis.攻击距离() + f建筑半边长))
+			if (!b距离友方单位太近 && refThis.DistanceLessEqual(*spTarget, refThis.攻击距离() + f建筑半边长) && fun可停下(*spTarget))
 			{
 				//LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
 				//EntitySystem::BroadcastChangeSkeleAnimIdle(refThis);
