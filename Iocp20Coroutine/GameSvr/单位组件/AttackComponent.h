@@ -22,8 +22,6 @@ public:
 	float 攻击距离(const float f目标建筑半边长) const;
 	//CoTask<int> m_coAttack;
 	FunCancel m_cancelAttack;
-	static const int INVALID_AGENT_IDX = -1;//0是合法值
-	int m_idxCrowdAgent = INVALID_AGENT_IDX;
 	Entity& m_refEntity;
 	CoTaskCancel m_TaskCancel;
 	using Fun空闲走向目标 = std::function<Position(const Position&)>;

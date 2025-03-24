@@ -455,10 +455,16 @@ WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
 		pos, *this, std::forward<const 单位类型&&>(类型), 单位);
 	PlayerComponent::AddComponent(*spNewEntity, refSpPlayer可能空, strNickName);
-	if (光刺 != 类型)
+	switch (类型)
 	{
+	case 光刺:break;
+	case 幼虫:
+		DefenceComponent::AddComponent(*spNewEntity, 制造.u16初始Hp);
+		break;
+	default:
 		DefenceComponent::AddComponent(*spNewEntity, 制造.u16初始Hp);
 		AttackComponent::AddComponent(*spNewEntity);
+		break;
 	}
 
 	走Component::AddComponent(*spNewEntity);

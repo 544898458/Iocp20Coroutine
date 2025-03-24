@@ -20,6 +20,8 @@ public:
 	static bool 正在走(const Entity& refEntity);
 	static bool WalkToTarget(Entity& refThis, SpEntity spTarget);
 	static bool WalkToPos(Entity& refThis, const Position& posTarget);
+	static const int INVALID_AGENT_IDX = -1;//0是合法值
+	int m_idxCrowdAgent = INVALID_AGENT_IDX;
 
 	CoTaskBool m_coWalk;
 	CoTaskBool m_coWalk手动控制;

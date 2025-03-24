@@ -11,7 +11,7 @@
 #include "Space.h"
 #include "Entity.h"
 #include "RecastNavigationCrowd.h"
-#include "单位组件/AttackComponent.h"
+#include "单位组件/走Component.h"
 #include "MyMsgQueue.h"
 
 std::shared_ptr<CrowdToolState> CreateCrowdToolState(const std::string& stf寻路文件)
@@ -219,29 +219,29 @@ bool CrowdTool判断单位重叠(const Position& refPosOld, const Position& refPosNew,
 RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& posTarget) :m_refEntity(refEntity)
 {
 	float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z };
-	_ASSERT(AttackComponent::INVALID_AGENT_IDX == refEntity.m_spAttack->m_idxCrowdAgent);
+	_ASSERT(走Component::INVALID_AGENT_IDX == refEntity.m_sp走->m_idxCrowdAgent);
 	auto& refCrowdToolState = refEntity.m_refSpace.GetCrowdToolState(refEntity.m_类型);
-	refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(refCrowdToolState, arrF, refEntity.m_速度每帧移动距离 * 10);
-	_ASSERT(AttackComponent::INVALID_AGENT_IDX != m_refEntity.m_spAttack->m_idxCrowdAgent);
-	refCrowdToolState.m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
+	refEntity.m_sp走->m_idxCrowdAgent = CrowToolAddAgent(refCrowdToolState, arrF, refEntity.m_速度每帧移动距离 * 10);
+	_ASSERT(走Component::INVALID_AGENT_IDX != m_refEntity.m_sp走->m_idxCrowdAgent);
+	refCrowdToolState.m_mapEntityId[refEntity.m_sp走->m_idxCrowdAgent] = refEntity.Id;
 
 	SetMoveTarget(posTarget);
 }
 
 RecastNavigationCrowd::~RecastNavigationCrowd()
 {
-	CrowToolRemoveAgent(m_refEntity.m_refSpace.GetCrowdToolState(m_refEntity.m_类型), m_refEntity.m_spAttack->m_idxCrowdAgent);
-	m_refEntity.m_spAttack->m_idxCrowdAgent = AttackComponent::INVALID_AGENT_IDX;
+	CrowToolRemoveAgent(m_refEntity.m_refSpace.GetCrowdToolState(m_refEntity.m_类型), m_refEntity.m_sp走->m_idxCrowdAgent);
+	m_refEntity.m_sp走->m_idxCrowdAgent = 走Component::INVALID_AGENT_IDX;
 }
 
 void RecastNavigationCrowd::SetMoveTarget(const Position& posTarget)
 {
 	float arrF[] = { posTarget.x,0,posTarget.z };
-	_ASSERT(AttackComponent::INVALID_AGENT_IDX != m_refEntity.m_spAttack->m_idxCrowdAgent);
-	if (AttackComponent::INVALID_AGENT_IDX == m_refEntity.m_spAttack->m_idxCrowdAgent)
+	_ASSERT(走Component::INVALID_AGENT_IDX != m_refEntity.m_sp走->m_idxCrowdAgent);
+	if (走Component::INVALID_AGENT_IDX == m_refEntity.m_sp走->m_idxCrowdAgent)
 	{
 		LOG(ERROR) << "可能超过容量";
 	}
-	CrowdToolSetMoveTarget(m_refEntity.m_refSpace.GetCrowdToolState(m_refEntity.m_类型), arrF, m_refEntity.m_spAttack->m_idxCrowdAgent);
+	CrowdToolSetMoveTarget(m_refEntity.m_refSpace.GetCrowdToolState(m_refEntity.m_类型), arrF, m_refEntity.m_sp走->m_idxCrowdAgent);
 }
 
