@@ -131,7 +131,7 @@
    dura开始伤害: 600
    str攻击音效: 音效/ZDrHit00
    str阵亡音效: 音效/ZLaDth00
-   str阵亡动作: died
+   str阵亡动作: idle
    dura后摇: 200
 -
    类型: 210
