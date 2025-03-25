@@ -77,6 +77,18 @@
    选中音效: ""
    空闲动作: ""
 -
+   类型: 212
+   名字: 房虫
+   PrefabPathName: 活动单位/房虫
+   选中音效: 语音/ZLaPss00
+   空闲动作: 骨架|stand
+-
+   类型: 213
+   名字: 飞虫
+   PrefabPathName: 活动单位/飞虫
+   选中音效: 语音/ZLaPss00
+   空闲动作: ""
+-
    类型: 301
    名字: 基地
    PrefabPathName: 建筑/基地

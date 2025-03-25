@@ -112,14 +112,22 @@ bool EntitySystem::Is单位类型(const WpEntity& wp, const 单位类型 类型)
 
 bool EntitySystem::Is空地能打(const 单位类型 攻, const 单位类型 防)
 {
-	if (防 != 飞机)
+	switch (防)
+	{
+	case 飞机:
+	case 飞虫:
+	case 房虫:
+		break;
+	default:
 		return true;
-
+	}
+	
 	switch (攻)
 	{
 	case 枪兵:
 	case 炮台:
 	case 飞机:
+	case 飞虫:
 	case 枪怪:
 		return true;
 	default:

@@ -186,7 +186,7 @@ public:
 				if (i32已处理明文 != len)
 				{
 					LOG(ERROR) << "i32已处理明文=" << i32已处理明文 << ",len=" << len << ",m_SslTls.握手OK=" << m_SslTls.握手OK();
-					_ASSERT(false);
+					//_ASSERT(false);
 					m_refSession.CloseSocket();
 				}
 			}

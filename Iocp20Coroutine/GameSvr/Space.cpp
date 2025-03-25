@@ -267,7 +267,16 @@ void Space::EraseEntity(const bool bForceEraseAll)
 
 CrowdToolState& Space::GetCrowdToolState(const 单位类型 类型)
 {
-	return 飞机 == 类型 ? *m_spCrowdToolState空中 : *m_spCrowdToolState;
+	switch (类型)
+	{
+	case 飞机:
+	case 飞虫:
+	case 房虫:
+		return *m_spCrowdToolState空中;
+	default:
+		return *m_spCrowdToolState;
+	}
+	
 }
 
 int Space::Get怪物单位数(const 单位类型 类型)const
