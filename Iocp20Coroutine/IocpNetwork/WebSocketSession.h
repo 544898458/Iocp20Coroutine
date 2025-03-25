@@ -21,7 +21,7 @@ template<class T_Callback, class T_Data>
 {
 	cb.OnRecvWsPack(nullptr, 0);
 }
-class MyWebSocketEndpoint :public WebSocketEndpoint< T_Callback, T_Data>
+class MyWebSocketEndpoint :public WebSocketEndpoint<T_Callback, T_Data>
 {
 public:
 	MyWebSocketEndpoint(T_Callback* write_cb, T_Data* work_data) :WebSocketEndpoint< T_Callback, T_Data>(write_cb, work_data)
@@ -32,43 +32,45 @@ public:
 	{
 		switch (packet.get_opcode())
 		{
-		case WebSocketPacket::WSOpcode_Continue:
-			// add your process code here
-			//std::cout << "WebSocketEndpoint - recv a Continue opcode." << std::endl;
-			//user_defined_process(packet, frame_payload);
-			break;
-		case WebSocketPacket::WSOpcode_Text:
-			// add your process code here
-			//std::cout << "WebSocketEndpoint - recv a Text opcode." << std::endl;
-			//user_defined_process(packet, frame_payload);
-			break;
+		//case WebSocketPacket::WSOpcode_Continue:
+		//	// add your process code here
+		//	//std::cout << "WebSocketEndpoint - recv a Continue opcode." << std::endl;
+		//	//user_defined_process(packet, frame_payload);
+		//	break;
+		//case WebSocketPacket::WSOpcode_Text:
+		//	// add your process code here
+		//	//std::cout << "WebSocketEndpoint - recv a Text opcode." << std::endl;
+		//	//user_defined_process(packet, frame_payload);
+		//	break;
 		case WebSocketPacket::WSOpcode_Binary:
 			// add your process code here
 			//std::cout << "WebSocketEndpoint - recv a Binary opcode." << std::endl;
 			//user_defined_process(packet, frame_payload);
+			this->nt_write_cb_->OnRecvWsPack(frame_payload.bytes(), frame_payload.length());
 			break;
-		case WebSocketPacket::WSOpcode_Close:
-			// add your process code here
-			//std::cout << "WebSocketEndpoint - recv a Close opcode." << std::endl;
-			//user_defined_process(packet, frame_payload);
-			return 0;
-			break;
-		case WebSocketPacket::WSOpcode_Ping:
-			// add your process code here
-			//std::cout << "WebSocketEndpoint - recv a Ping opcode." << std::endl;
-			user_defined_process(packet, frame_payload);
-			break;
-		case WebSocketPacket::WSOpcode_Pong:
-			// add your process code here
-			//std::cout << "WebSocketEndpoint - recv a Pong opcode." << std::endl;
-			//user_defined_process(packet, frame_payload);
-			break;
+		//case WebSocketPacket::WSOpcode_Close:
+		//	// add your process code here
+		//	//std::cout << "WebSocketEndpoint - recv a Close opcode." << std::endl;
+		//	//user_defined_process(packet, frame_payload);
+		//	return 0;
+		//	break;
+		//case WebSocketPacket::WSOpcode_Ping:
+		//	// add your process code here
+		//	//std::cout << "WebSocketEndpoint - recv a Ping opcode." << std::endl;
+		//	//user_defined_process(packet, frame_payload);
+		//	break;
+		//case WebSocketPacket::WSOpcode_Pong:
+		//	// add your process code here
+		//	//std::cout << "WebSocketEndpoint - recv a Pong opcode." << std::endl;
+		//	//user_defined_process(packet, frame_payload);
+		//	break;
 		default:
 			LOG(INFO) << "WebSocketEndpoint - recv an unknown opcode.";
+			WebSocketEndpoint<T_Callback, T_Data>::user_defined_process(packet, frame_payload);
 			break;
 		}
 
-		this->nt_write_cb_->OnRecvWsPack(frame_payload.bytes(), frame_payload.length());
+		//this->nt_write_cb_->OnRecvWsPack(frame_payload.bytes(), frame_payload.length());
 
 		return 0;
 	}
