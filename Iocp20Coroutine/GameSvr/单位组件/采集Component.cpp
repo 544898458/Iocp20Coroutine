@@ -140,10 +140,7 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 					if (co_await AiCo::WalkToTarget(m_refEntity, wp目标资源.lock(), m_TaskCancel.cancel, false))
 						co_return true;//中断
 
-					if (m_refEntity.m_类型 == 工虫)
-						m_refEntity.BroadcastChangeSkeleAnim("采集", true);
-					else
-						EntitySystem::BroadcastChangeSkeleAnimIdle(m_refEntity);
+					m_refEntity.BroadcastChangeSkeleAnim(m_refEntity.m_类型 == 工虫 ? "采集" : "2", true);
 				}
 			}
 

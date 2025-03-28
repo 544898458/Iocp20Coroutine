@@ -5,14 +5,14 @@
    f攻击距离: 5
    i32伤害: 1
    f每帧移动距离: 0.4
-   str前摇动作: ""
+   str前摇动作: 1
    dura开始播放攻击动作: 0
-   str攻击动作: attack
-   dura开始伤害: 600
+   str攻击动作: ""
+   dura开始伤害: 400
    str攻击音效: 音效/TScFir00
    str阵亡音效: TSCDth00
-   str阵亡动作: died
-   dura后摇: 100
+   str阵亡动作: 0
+   dura后摇: 1500
 -
    类型: 202
    备注: 枪兵
@@ -175,8 +175,8 @@
    str攻击动作: ""
    dura开始伤害: 0
    str攻击音效: ""
-   str阵亡音效: "音效/ZZeDth00"
-   str阵亡动作: "骨架|death"
+   str阵亡音效: 音效/ZZeDth00
+   str阵亡动作: 骨架|death
    dura后摇: 0
 -
    类型: 213
@@ -187,11 +187,11 @@
    f每帧移动距离: 0.8
    str前摇动作: ""
    dura开始播放攻击动作: 0
-   str攻击动作: 骨架|stand
+   str攻击动作: ""
    dura开始伤害: 600
-   str攻击音效: "音效/DragBull"
-   str阵亡音效: "音效/ZZeDth00"
-   str阵亡动作: "骨架|death"
+   str攻击音效: 2
+   str阵亡音效: 音效/ZZeDth00
+   str阵亡动作: 骨架|death
    dura后摇: 300
 -
    类型: 305
