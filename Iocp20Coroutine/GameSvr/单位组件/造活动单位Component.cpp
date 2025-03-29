@@ -66,6 +66,19 @@ void ‘ÏªÓ∂Øµ•ŒªComponent::‘Ï±¯(PlayerGateSession_Game& refGateSession, const µ•Œ
 		refGateSession.SayœµÕ≥("‘Ï≤ª¡À’‚÷÷µ•Œª");
 		return;
 	}
+	
+	switch (¿‡–Õ)
+	{
+	case «π≥Ê:
+	case Ω¸’Ω≥Ê:
+		if (m_refEntity.m_refSpace.GetÕÊº“µ•Œª ˝(refGateSession.NickName(), ≥Ê”™))
+		{
+			refGateSession.≤•∑≈…˘“ÙBuzz("»±…Ÿ ≥Ê”™");
+		}
+		break;
+	default:
+		break;
+	}
 
 	if (m_refEntity.m_spBuilding && !m_refEntity.m_spBuilding->“—‘Ï∫√())
 	{

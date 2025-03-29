@@ -30,7 +30,7 @@ class 飞向目标Component;
 class Entity final : public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
 public:
-	Entity(const Position& pos, Space& refSpace, 单位类型 类型);
+	Entity(const Position& pos, Space& refSpace, 单位类型 类型, const 单位::单位配置& ref配置);
 	Entity(const Entity&) = delete;
 	~Entity();
 	void Save(std::ofstream& refOf);

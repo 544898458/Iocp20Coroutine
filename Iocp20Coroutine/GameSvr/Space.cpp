@@ -276,7 +276,7 @@ CrowdToolState& Space::GetCrowdToolState(const 单位类型 类型)
 	default:
 		return *m_spCrowdToolState;
 	}
-	
+
 }
 
 int Space::Get怪物单位数(const 单位类型 类型)const
@@ -313,9 +313,9 @@ int Space::Get单位数(const 单位类型 arg类型)const
 		});
 }
 
-int Space::Get玩家单位数(const std::string& strPlayerNickName)
+int Space::Get玩家单位数(const std::string& strPlayerNickName, const 单位类型 类型)
 {
-	return Get单位数([&strPlayerNickName](const Entity& refEntity)
+	return Get单位数([&strPlayerNickName, 类型](const Entity& refEntity)
 		{
 			if (nullptr == refEntity.m_spPlayerNickName)
 				return false;
@@ -326,7 +326,8 @@ int Space::Get玩家单位数(const std::string& strPlayerNickName)
 			if (!refEntity.m_spDefence)
 				return false;//视口
 
-			return true;
+			if (类型 != 单位类型::单位类型_Invalid_0 && 类型 != refEntity.m_类型)
+				return true;
 		});
 }
 int Space::Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位)const
