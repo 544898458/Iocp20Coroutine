@@ -9,7 +9,10 @@ namespace 单位
 		std::string strPrefabName;
 		std::string str选中音效;
 		std::string str空闲动作;
-		MSGPACK_DEFINE(strName, strPrefabName, str选中音效, str空闲动作);
+		std::string str阵亡动作;
+		std::string str阵亡音效;
+		MSGPACK_DEFINE(strName, strPrefabName, str选中音效, str空闲动作, str阵亡动作, str阵亡音效);
+
 	};
 	struct 制造配置
 	{
@@ -35,8 +38,6 @@ namespace 单位
 		std::string str攻击动作;
 		std::chrono::system_clock::duration dura开始伤害;
 		std::string str攻击音效;
-		std::string str阵亡音效;
-		std::string str阵亡动作;
 		std::chrono::system_clock::duration dura后摇;
 	};
 	struct 活动单位配置

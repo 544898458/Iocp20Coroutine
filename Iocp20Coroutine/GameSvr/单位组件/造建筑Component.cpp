@@ -43,6 +43,8 @@ bool 造建筑Component::正在建造(const Entity& refEntity)
 		break;
 	case 工虫:
 		m_set可造类型.insert(虫巢);
+		m_set可造类型.insert(虫营);
+		m_set可造类型.insert(飞塔);
 		break;
 	default:
 		break;

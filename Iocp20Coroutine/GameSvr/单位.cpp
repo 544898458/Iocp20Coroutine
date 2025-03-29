@@ -18,14 +18,14 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::单位配置& _ref)
 	{
-		return _Ostr << "单位配置:" << _ref.strName << "\t" << _ref.strPrefabName << "\t" << _ref.str选中音效;
+		return _Ostr << "单位配置:" << _ref.strName << "\t" << _ref.strPrefabName << "\t" << _ref.str选中音效 << "\t" << _ref.str阵亡音效 << "\t" << _ref.str阵亡动作;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::战斗配置& _ref)
 	{
 		return _Ostr << "战斗配置," << _ref.f警戒距离 << "\t" << _ref.f攻击距离 << "\t" << _ref.i32伤害 << "\t" << _ref.f每帧移动距离
 			<< _ref.str前摇动作 << "\t" << _ref.dura开始播放攻击动作 << "\t" << _ref.str攻击动作 << "\t" << _ref.dura开始伤害
-			<< _ref.str攻击音效 << "\t" << _ref.str阵亡音效 << "\t" << _ref.str阵亡动作 << "\t" << _ref.dura后摇;
+			<< _ref.str攻击音效 << "\t" << _ref.dura后摇;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::活动单位配置& _ref)
@@ -73,7 +73,14 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::单位配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["名字"].as<std::string>(), refNode["PrefabPathName"].as<std::string>(), refNode["选中音效"].as<std::string>() , refNode["空闲动作"].as<std::string>() };
+			rhs = { refNode["名字"].as<std::string>(),
+					refNode["PrefabPathName"].as<std::string>(),
+					refNode["选中音效"].as<std::string>() ,
+					refNode["空闲动作"].as<std::string>(),
+					refNode["str阵亡动作"].as<std::string>(),
+					refNode["str阵亡音效"].as<std::string>()
+
+			};
 			return true;
 		}
 	};
@@ -96,8 +103,6 @@ namespace YAML {
 					refNode["str攻击动作"].as<std::string>(),
 					std::chrono::milliseconds(refNode["dura开始伤害"].as<int32_t>()),
 					refNode["str攻击音效"].as<std::string>(),
-					refNode["str阵亡音效"].as<std::string>(),
-					refNode["str阵亡动作"].as<std::string>(),
 					std::chrono::milliseconds(refNode["dura后摇"].as<int32_t>())
 			};
 			return true;

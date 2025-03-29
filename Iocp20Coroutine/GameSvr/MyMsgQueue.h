@@ -309,8 +309,11 @@ enum 单位类型
 	地堡,//掩体; 地堡(Bunker),可以进兵
 	炮台,//Photon Cannon
 	虫巢,//hatchery
-	机场,
-	重工厂,
+	机场,//Spaceport
+	重工厂,//Factory 
+	虫营,//对应兵营
+	飞塔,//Spore Conlony
+
 	建筑Max非法,
 
 	怪Min非法 = 400,

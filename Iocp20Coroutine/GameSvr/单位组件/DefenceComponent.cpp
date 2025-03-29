@@ -33,39 +33,15 @@ void DefenceComponent::受伤(int hp, const uint64_t idAttacker)
 	m_refEntity.BroadcastNotifyPos();
 	if (IsDead())
 	{
-		if (m_refEntity.m_spAttack)
+		单位::单位配置 单位;
+		if (单位::Find单位配置(m_refEntity.m_类型, 单位))
 		{
-			EntitySystem::Broadcast播放声音(m_refEntity, m_refEntity.m_spAttack->m_战斗配置.str阵亡音效);
-			m_refEntity.BroadcastChangeSkeleAnim(m_refEntity.m_spAttack->m_战斗配置.str阵亡动作, false);//播放阵亡动作
+			EntitySystem::Broadcast播放声音(m_refEntity, 单位.str阵亡音效);
+			m_refEntity.BroadcastChangeSkeleAnim(单位.str阵亡动作, false);//播放阵亡动作
 		}
-		else if (m_refEntity.m_spBuilding)
+		else
 		{
-			switch (m_refEntity.m_类型)
-			{
-			case 基地:
-				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
-				m_refEntity.BroadcastChangeSkeleAnim("die", false);//播放死亡动作
-				break;
-			case 炮台:
-				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
-				m_refEntity.BroadcastChangeSkeleAnim("Take 001", false);
-				break;
-			case 兵营:
-				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
-				m_refEntity.BroadcastChangeSkeleAnim("兵厂损毁", false);
-				break;
-			case 虫巢:
-				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
-				m_refEntity.BroadcastChangeSkeleAnim("虫巢死亡", false);
-				break;
-			case 地堡:
-				EntitySystem::Broadcast播放声音(m_refEntity, "explo4");
-				m_refEntity.BroadcastChangeSkeleAnim("died", false);
-				break;
-			default:
-				EntitySystem::Broadcast播放声音(m_refEntity, "EXPLOMED"); break;
-				break;
-			}
+			LOG(WARNING) << "没有类型:" << m_refEntity.m_类型;
 		}
 		m_refEntity.CoDelayDelete().RunNew();
 		CoEvent<MyEvent::单位阵亡>::OnRecvEvent({ .wpEntity = m_refEntity.weak_from_this() });
@@ -91,7 +67,7 @@ void DefenceComponent::播放正遭到攻击语音()
 	LPCSTR sz语音 = "";
 	switch (m_refEntity.m_类型)
 	{
-	case 基地:sz语音 = "语音/基地正遭到进攻女声正经版";break;
+	case 基地:sz语音 = "语音/基地正遭到进攻女声正经版"; break;
 	case 工程车:sz语音 = "语音/工程车遭到攻击女声可爱版"; break;
 	default:
 		return;
