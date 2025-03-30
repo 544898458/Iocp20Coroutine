@@ -5,14 +5,12 @@
    f攻击距离: 5
    i32伤害: 1
    f每帧移动距离: 0.4
-   str前摇动作: ""
+   str前摇动作: 1
    dura开始播放攻击动作: 0
-   str攻击动作: attack
-   dura开始伤害: 600
+   str攻击动作: ""
+   dura开始伤害: 400
    str攻击音效: 音效/TScFir00
-   str阵亡音效: TSCDth00
-   str阵亡动作: died
-   dura后摇: 100
+   dura后摇: 1500
 -
    类型: 202
    备注: 枪兵
@@ -25,8 +23,6 @@
    str攻击动作: attack
    dura开始伤害: 900
    str攻击音效: 音效/TTaFir00
-   str阵亡音效: TMaDth00
-   str阵亡动作: die01
    dura后摇: 100
 -
    类型: 203
@@ -40,8 +36,6 @@
    str攻击动作: attack
    dura开始伤害: 600
    str攻击音效: Tfrshoot
-   str阵亡音效: TMaDth00
-   str阵亡动作: died
    dura后摇: 100
 -
    类型: 204
@@ -55,8 +49,6 @@
    str攻击动作: attack_loop
    dura开始伤害: 300
    str攻击音效: 音效/TTaFi200
-   str阵亡音效: 音效/TTaDth00
-   str阵亡动作: die02
    dura后摇: 100
 -
    类型: 205
@@ -70,8 +62,6 @@
    str攻击动作: attack
    dura开始伤害: 500
    str攻击音效: 音效/ZDrHit00
-   str阵亡音效: 音效/zdrDth00
-   str阵亡动作: died
    dura后摇: 300
 -
    类型: 206
@@ -85,8 +75,6 @@
    str攻击动作: attack
    dura开始伤害: 500
    str攻击音效: TMaFir00
-   str阵亡音效: 音效/TTaDth00
-   str阵亡动作: died
    dura后摇: 100
 -
    类型: 207
@@ -100,8 +88,6 @@
    str攻击动作: Root|攻击.001
    dura开始伤害: 600
    str攻击音效: 音效/发射骨针
-   str阵亡音效: 音效/ZZeDth00
-   str阵亡动作: Root|死亡.001
    dura后摇: 100
 -
    类型: 208
@@ -115,8 +101,6 @@
    str攻击动作: Root.001|攻击
    dura开始伤害: 500
    str攻击音效: 音效/利爪攻击
-   str阵亡音效: 音效/ZDrHit00
-   str阵亡动作: Root.001|死亡
    dura后摇: 100
 -
    类型: 209
@@ -130,8 +114,6 @@
    str攻击动作: attack
    dura开始伤害: 600
    str攻击音效: 音效/ZDrHit00
-   str阵亡音效: 音效/ZLaDth00
-   str阵亡动作: idle
    dura后摇: 200
 -
    类型: 210
@@ -145,8 +127,6 @@
    str攻击动作: attack_loop
    dura开始伤害: 500
    str攻击音效: 音效/pshield
-   str阵亡音效: 音效/ZZeDth00
-   str阵亡动作: die02
    dura后摇: 900
 -
    类型: 211
@@ -160,8 +140,6 @@
    str攻击动作: ""
    dura开始伤害: 0
    str攻击音效: 音效/LASERHIT
-   str阵亡音效: ""
-   str阵亡动作: ""
    dura后摇: 0
 -
    类型: 212
@@ -175,8 +153,6 @@
    str攻击动作: ""
    dura开始伤害: 0
    str攻击音效: ""
-   str阵亡音效: "音效/ZZeDth00"
-   str阵亡动作: "骨架|death"
    dura后摇: 0
 -
    类型: 213
@@ -188,11 +164,9 @@
    str前摇动作: ""
    dura开始播放攻击动作: 0
    str攻击动作: ""
-   dura开始伤害: 0
-   str攻击音效: ""
-   str阵亡音效: "音效/ZZeDth00"
-   str阵亡动作: "骨架|death"
-   dura后摇: 0
+   dura开始伤害: 600
+   str攻击音效: 音效/DragBull
+   dura后摇: 300
 -
    类型: 305
    备注: 炮台
@@ -205,43 +179,37 @@
    str攻击动作: pao002
    dura开始伤害: 400
    str攻击音效: 音效/PhoFir00
-   str阵亡音效: 音效/explo1
-   str阵亡动作: Take 001
    dura后摇: 400
 -
    类型: 401
    备注: 枪怪
    f警戒距离: 20
-   f攻击距离: 9
-   i32伤害: 3
+   f攻击距离: 15
+   i32伤害: 4
    f每帧移动距离: 0.3
    str前摇动作: ""
    dura开始播放攻击动作: 0
    str攻击动作: Root|攻击.001
    dura开始伤害: 300
    str攻击音效: 音效/发射骨针
-   str阵亡音效: 音效/zhyDth00
-   str阵亡动作: Root|死亡.001
    dura后摇: 0
 -
    类型: 402
    备注: 近战怪
-   f警戒距离: 15
-   f攻击距离: 5
-   i32伤害: 5
+   f警戒距离: 25
+   f攻击距离: 6
+   i32伤害: 6
    f每帧移动距离: 0.4
    str前摇动作: ""
    dura开始播放攻击动作: 0
    str攻击动作: Root.001|攻击
    dura开始伤害: 400
    str攻击音效: 音效/利爪攻击
-   str阵亡音效: 音效/ZZeDth00
-   str阵亡动作: Root.001|死亡
    dura后摇: 0
 -
    类型: 403
    备注: 工怪
-   f警戒距离: 12
+   f警戒距离: 20
    f攻击距离: 6
    i32伤害: 2
    f每帧移动距离: 0.5
@@ -250,6 +218,30 @@
    str攻击动作: attack
    dura开始伤害: 600
    str攻击音效: 音效/ZDrHit00
-   str阵亡音效: 音效/zdrDth00
-   str阵亡动作: died
    dura后摇: 300
+-
+   类型: 404
+   备注: 枪兵怪
+   f警戒距离: 20
+   f攻击距离: 10
+   i32伤害: 3
+   f每帧移动距离: 0.5
+   str前摇动作: ""
+   dura开始播放攻击动作: 0
+   str攻击动作: attack
+   dura开始伤害: 900
+   str攻击音效: 音效/TTaFir00
+   dura后摇: 100
+-
+   类型: 405
+   备注: 近战兵怪
+   f警戒距离: 15
+   f攻击距离: 5
+   i32伤害: 5
+   f每帧移动距离: 0.6
+   str前摇动作: ""
+   dura开始播放攻击动作: 0
+   str攻击动作: attack
+   dura开始伤害: 600
+   str攻击音效: Tfrshoot
+   dura后摇: 100

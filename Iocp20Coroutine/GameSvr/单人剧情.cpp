@@ -42,12 +42,21 @@ namespace 单人剧情
 		PlayerComponent::剧情对话(refSpace, refStrNickName, "图片/大白胡子抽烟", "装甲指挥官：海因茨", "", "", "    " + str内容);
 		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
 	}
+	static void 房虫胡噜说(Space& refSpace, const std::string& refStrNickName, const std::string& str内容)
+	{
+		PlayerComponent::剧情对话(refSpace, refStrNickName, "图片/房虫头像", "房虫：胡噜", "", "", "    " + str内容);
+		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
+	}
 	static void 玩家说(Space& refSpace, const std::string& strPlayerNickName, const std::string& str内容, const bool b显示退出场景按钮 = false)
 	{
 		PlayerComponent::剧情对话(refSpace, strPlayerNickName, "", "", "图片/指挥学员学员青灰色军服", "玩家：" + strPlayerNickName, "    " + str内容, b显示退出场景按钮);
 		PlayerComponent::播放声音(strPlayerNickName, "音效/BUTTON", "");
 	}
-
+	static void 玩家_虫_说(Space& refSpace, const std::string& strPlayerNickName, const std::string& str内容, const bool b显示退出场景按钮 = false)
+	{
+		PlayerComponent::剧情对话(refSpace, strPlayerNickName, "", "", "图片/工虫头像", "玩家：" + strPlayerNickName, "    " + str内容, b显示退出场景按钮);
+		PlayerComponent::播放声音(strPlayerNickName, "音效/BUTTON", "");
+	}
 	static CoTask<bool> 等玩家读完(const std::string strPlayerNickName, FunCancel& funCancel)
 	{
 		const auto funSameSession = [&strPlayerNickName](const MyEvent::已阅读剧情对话& ref)
@@ -213,7 +222,7 @@ namespace 单人剧情
 			co_return 0;
 
 			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "现在已在左边给您刷了一个怪，控制兵走到怪附近，兵会自动打怪。您可以点右下角“取消选中”然后拖动地面看看怪在哪里");
-			MonsterComponent::AddMonster(refSpace, 枪怪, { -30,20 });
+			MonsterComponent::AddMonster(refSpace, 枪虫怪, { -30,20 });
 
 			if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
 				co_return 0;
@@ -237,7 +246,7 @@ namespace 单人剧情
 
 
 			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "恭喜您消灭了敌人！现在左边给您刷了更多的怪。您可以造“活动单位/地堡”,让兵进入地堡中，立足防守，再伺机进攻");
-			MonsterComponent::AddMonster(refSpace, 近战怪, { -30.0 }, 5);
+			MonsterComponent::AddMonster(refSpace, 近战虫怪, { -30.0 }, 5);
 
 			if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::单位阵亡& ref)
 				{
@@ -281,7 +290,185 @@ namespace 单人剧情
 			}
 			co_return 0;
 	}
+	CoTask<int> Co训练战_虫(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName)
+	{
+		KeepCancel kc(funCancel);
 
+		const auto fun房虫胡噜说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {房虫胡噜说(refSpace, strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家_虫_说(refSpace, strPlayerNickName, str内容); };
+
+		fun房虫胡噜说("你醒了?"); _等玩家读完returnTrue;
+		fun玩家说("我们到家了吗？"); _等玩家读完returnTrue;
+		fun房虫胡噜说("是的，我们回到地球了。但是地球已被人类占据。"); _等玩家读完returnTrue;
+		fun玩家说("我们仅仅离开了6000万年而已，想不到啊……一定要夺回我们的家园！"); _等玩家读完returnTrue;
+		fun房虫胡噜说("你睡得太久，需要一些恢复训练才能投入战斗！"); _等玩家读完returnTrue;
+		fun玩家说("好的。"); _等玩家读完returnTrue;
+		PlayerComponent::剧情对话已看完(strPlayerNickName);
+		using namespace std;
+		
+		refSpace.GetSpacePlayer(strPlayerNickName).m_u32晶体矿 += 100;
+{
+			auto wpSession = GetPlayerGateSession(strPlayerNickName);
+			CHECK_WP_CO_RET_0(wpSession);
+			auto wp视口 = wpSession.lock()->m_wp视口;
+			CHECK_WP_CO_RET_0(wp视口);
+			auto& ref视口 = *wp视口.lock();
+			//SpEntity sp工程车 = refSpace.造活动单位(wp视口.lock()->m_spPlayer, strPlayerNickName, { 5,10 }, 配置, 类型);
+			refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::工虫, { 5, 10 }, true);
+			资源Component::Add(refSpace, 晶体矿, { 20, 10 });
+		}
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击“工虫”选中，然后点击“建筑单位=>虫巢”按钮，再点击空白地面，10秒后就能造出一个虫巢");
+
+		const auto funSameSpace = [&refSpace, &strPlayerNickName](const MyEvent::AddEntity& refAddEntity, 单位类型 类型)
+			{ return MyEvent::SameSpace(refAddEntity.wpEntity, refSpace, strPlayerNickName) && EntitySystem::Is单位类型(refAddEntity.wpEntity, 类型); };
+
+		Position pos基地;
+		{
+			const auto& [stop, addEvent] = co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 虫巢));
+			if (stop)
+				co_return 0;
+
+			pos基地 = addEvent.wpEntity.lock()->Pos();
+		}
+
+
+		if (co_await CoTimer::Wait(10s, funCancel))
+			co_return 0;
+
+
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等虫巢产出幼虫后，请点击“活动单位=>工虫”按钮，让幼虫蜕变为工虫");
+
+		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 工虫))))
+			co_return 0;
+
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "现在您有工虫了，点击选中您的工虫，再点击空旷地面，命令它走向目标点");
+
+		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::MoveEntity& ref)
+			{
+				if (ref.wpEntity.expired())
+					return false;
+
+				auto spEnity = ref.wpEntity.lock();
+				if (&spEnity->m_refSpace != &refSpace)
+					return false;
+
+				if (EntitySystem::GetNickName(*spEnity) != strPlayerNickName)
+					return false;
+
+				if (!EntitySystem::Is单位类型(ref.wpEntity, 工虫))
+					return false;
+
+				return true;
+			})))
+		{
+			co_return 0;
+		}
+
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！现在给您刷了一个晶体矿，请点击晶体矿，让工虫在晶体矿和虫巢之间搬运晶体矿");
+		资源Component::Add(refSpace, 晶体矿, { pos基地.x,pos基地.z - 20 });
+		资源Component::Add(refSpace, 燃气矿, { pos基地.x + 15,pos基地.z });
+
+		if (std::get<0>(co_await CoEvent<MyEvent::开始采集晶体矿>::Wait(funCancel)))
+			co_return 0;
+
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！您的工虫正在采集晶体矿，请等他把晶体矿运回基地。现在，请先点“取消选中”，再蜕变一个工虫去采集燃气矿");
+		if (std::get<0>(co_await CoEvent<MyEvent::晶体矿已运回基地>::Wait(funCancel)))
+			co_return 0;
+
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "您的工虫已把第一车晶体矿运到基地，请查看左上角晶体矿数量变化");
+
+		if (co_await CoTimer::Wait(5s, funCancel))
+			co_return 0;
+
+		if (0 == refSpace.Get单位数(房虫))
+		{
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够20晶体矿后，请点击“活动单位/房虫”按钮，让幼虫蜕变为房虫");
+			if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 房虫))))
+				co_return 0;
+
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好，房虫可以提升您的活动单位数量上限");
+			if (co_await CoTimer::Wait(3s, funCancel))
+				co_return 0;
+		}
+
+		if (0 == refSpace.Get单位数(虫营))
+		{
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请选中一只工虫，然后点击“建筑单位/虫营”按钮，就能造出一个虫营");
+			if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 虫营))))
+				co_return 0;
+
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好，虫营可以解锁枪虫和近战虫");
+			if (co_await CoTimer::Wait(10s, funCancel))
+				co_return 0;
+		}
+
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击“活动单位/近战虫”按钮，让幼虫蜕变为近战虫");
+
+		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 近战虫))))
+			co_return 0;
+
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "点击选中您的近战虫，再点击地面，可以指挥它走向目标处");
+
+		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::MoveEntity& ref) {
+			return //&ref.wpEntity.lock()->m_refSpace == &refSpace; 
+				MyEvent::SameSpace(ref.wpEntity, refSpace, strPlayerNickName) && EntitySystem::Is单位类型(ref.wpEntity, 近战虫);
+			})))
+			co_return 0;
+
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "现在已在左边给您刷了一个敌人，控制近战虫走到敌人附近，近战虫会自动攻击。您可以点右下角“取消选中”然后拖动地面看看敌人在哪里");
+			MonsterComponent::AddMonster(refSpace, 枪兵怪, { -30,20 });
+
+			if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
+				co_return 0;
+
+			if (0 < refSpace.Get怪物单位数())
+			{
+				PlayerGateSession_Game::Say任务提示(strPlayerNickName, "您的单位阵亡了。可以多造点近战虫和枪虫去围攻敌人");
+
+				if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref)
+					{
+						auto spEntity = ref.wpEntity.lock();
+						if (&spEntity->m_refSpace != &refSpace)
+							return false;
+
+						return !spEntity->m_spPlayer;//怪物阵亡
+					})))
+				{
+					co_return 0;
+				}
+			}
+
+
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "恭喜您消灭了敌人！现在左边给您刷了更多的敌人。您可以造更多的虫巢加快幼虫的产出，造更多的房虫提升活动单位上限，加油");
+			MonsterComponent::AddMonster(refSpace, 近战兵怪, { -30.0 }, 3);
+
+			if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::单位阵亡& ref)
+				{
+					auto spEntity = ref.wpEntity.lock();
+					if (&spEntity->m_refSpace != &refSpace)
+						return false;
+
+					return 0 == refSpace.Get怪物单位数() || 0 == refSpace.Get玩家单位数(strPlayerNickName);
+				})))
+			{
+				co_return 0;
+			}
+			if (0 == refSpace.Get怪物单位数())
+			{
+				PlayerComponent::播放声音(strPlayerNickName, "音效/YouWin", "您取得了胜利！");
+
+				fun房虫胡噜说(strPlayerNickName + "，很好，夺回地球指日可待！"); _等玩家读完returnTrue;
+				玩家_虫_说(refSpace, strPlayerNickName, "期待与人类的实战。", true);//	_等玩家读完;
+			}
+			else
+			{
+				PlayerComponent::播放声音(strPlayerNickName, "音效/YouLoss", "训练失败。");
+
+				fun房虫胡噜说("这只是一次训练，不必过于在意。失败是成功之母，待情绪平复可以再试一次。"); _等玩家读完returnTrue;
+				玩家说(refSpace, strPlayerNickName, "好的。", true);//	_等玩家读完;
+			}
+			co_return 0;
+	}
 	Position 怪物走向矿附近(const Position& refOld)
 	{
 		return { -30,30 };
@@ -385,8 +572,8 @@ namespace 单人剧情
 				co_return 0;
 
 			PlayerGateSession_Game::Say系统(strPlayerNickName, std::format("第{0}波敌人正向您走来", i));
-			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 枪怪 : 近战怪, { 48,-48 }, i * 1);
-			auto vecEneity2 = MonsterComponent::AddMonster(refSpace, 工怪, { 47,-47 }, i * 1);
+			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 枪虫怪 : 近战虫怪, { 48,-48 }, i * 1);
+			auto vecEneity2 = MonsterComponent::AddMonster(refSpace, 工虫怪, { 47,-47 }, i * 1);
 			vecEneity.insert(vecEneity.end(), vecEneity2.begin(), vecEneity2.end());
 			for (auto& spEntity : vecEneity)
 			{
@@ -504,8 +691,8 @@ namespace 单人剧情
 
 			{
 				//守卫右下角虫巢的怪
-				MonsterComponent::AddMonster(refSpace, 枪怪, { 10,35.f }, 2);
-				MonsterComponent::AddMonster(refSpace, 近战怪, { 10,49.f }, 2);
+				MonsterComponent::AddMonster(refSpace, 枪虫怪, { 10,35.f }, 2);
+				MonsterComponent::AddMonster(refSpace, 近战虫怪, { 10,49.f }, 2);
 			}
 
 			auto wp虫巢右下 = 创建敌方建筑(refSpace, { 10, 40.f }, 虫巢);

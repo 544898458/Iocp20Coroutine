@@ -58,7 +58,18 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 	if (·¿³æ != ÀàĞÍ && refGateSession.»î¶¯µ¥Î»°üÀ¨ÖÆÔì¶ÓÁĞÖĞµÄ() >= refGateSession.»î¶¯µ¥Î»ÉÏÏŞ())
 	{
 		//refGateSession.²¥·ÅÉùÒô("tadErr02", "Ãñ·¿²»×ã"); //Additional supply depots required.ĞèÒª¸ü¶àµÄÊ³ÌÃ
-		refGateSession.²¥·ÅÉùÒô("ÓïÒô/Ãñ·¿²»×ãÅ®ÉùÕı¾­°æ", "Ãñ·¿²»×ã");
+		switch (ÀàĞÍ)
+		{
+		case ¹¤³æ:
+		case ·É³æ:
+		case ½üÕ½³æ:
+		case Ç¹³æ:
+			refGateSession.²¥·ÅÉùÒôBuzz("·¿³æ²»×ã");
+		default:
+			refGateSession.²¥·ÅÉùÒô("ÓïÒô/Ãñ·¿²»×ãÅ®ÉùÕı¾­°æ", "Ãñ·¿²»×ã");
+			break;
+		}
+		
 		return;
 	}
 	if (!¿ÉÔì(ÀàĞÍ))
@@ -66,14 +77,15 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 		refGateSession.SayÏµÍ³("Ôì²»ÁËÕâÖÖµ¥Î»");
 		return;
 	}
-	
+
 	switch (ÀàĞÍ)
 	{
 	case Ç¹³æ:
 	case ½üÕ½³æ:
-		if (m_refEntity.m_refSpace.GetÍæ¼Òµ¥Î»Êı(refGateSession.NickName(), ³æÓª))
+		if (0 >= m_refEntity.m_refSpace.GetÍæ¼Òµ¥Î»Êı(refGateSession.NickName(), ³æÓª))
 		{
 			refGateSession.²¥·ÅÉùÒôBuzz("È±ÉÙ ³æÓª");
+			return;
 		}
 		break;
 	default:

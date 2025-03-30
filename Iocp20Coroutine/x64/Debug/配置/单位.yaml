@@ -42,7 +42,7 @@
    动画节点路径: ""
    空闲动作: idle
    str阵亡动作: died
-   str阵亡音效: TMaDth00
+   str阵亡音效: TFbDth00
 -
    类型: 204
    名字: 三色坦克
@@ -74,25 +74,25 @@
    类型: 207
    名字: 枪虫
    PrefabPathName: 活动单位/枪虫
-   选中音效: 语音/zdrYes00
+   选中音效: 语音/zhyWht01
    动画节点路径: 甲壳虫500面带动作
    空闲动作: Root|待机.001
    str阵亡动作: Root|死亡.001
-   str阵亡音效: 音效/ZZeDth00
+   str阵亡音效: 音效/zhyDth00
 -
    类型: 208
    名字: 近战虫
    PrefabPathName: 活动单位/近战虫
-   选中音效: 语音/zdrYes00
+   选中音效: 语音/ZZeWht00
    动画节点路径: 蟑螂500面带动作
    空闲动作: Root.001|待机
    str阵亡动作: Root.001|死亡
-   str阵亡音效: 音效/ZDrHit00
+   str阵亡音效: 音效/ZZeDth00
 -
    类型: 209
    名字: 幼虫
    PrefabPathName: 活动单位/幼虫
-   选中音效: 语音/ZLaPss00
+   选中音效: 语音/ZLaWht00
    动画节点路径: idle
    空闲动作: idle
    str阵亡动作: idle
@@ -119,25 +119,25 @@
    类型: 212
    名字: 房虫
    PrefabPathName: 活动单位/房虫
-   选中音效: 语音/ZLaPss00
+   选中音效: 语音/zovWht00
    动画节点路径: 房虫
    空闲动作: 骨架|stand
    str阵亡动作: 骨架|death
-   str阵亡音效: 音效/ZZeDth00
+   str阵亡音效: 音效/zovDth00
 -
    类型: 213
    名字: 飞虫
    PrefabPathName: 活动单位/飞虫
-   选中音效: 语音/ZLaPss00
+   选中音效: 语音/zmuWht01
    动画节点路径: 飞虫-动作
    空闲动作: 骨架|stand
    str阵亡动作: 骨架|death
-   str阵亡音效: 音效/ZZeDth00
+   str阵亡音效: 音效/zmuDth00
 -
    类型: 301
    名字: 基地
    PrefabPathName: 建筑/基地
-   选中音效: tcsWht00
+   选中音效: 音效/BUTTON
    动画节点路径: ""
    空闲动作: idle
    str阵亡动作: die
@@ -146,7 +146,7 @@
    类型: 302
    名字: 兵营
    PrefabPathName: 建筑/兵厂
-   选中音效: tacWht00
+   选中音效: 音效/BUTTON
    动画节点路径: ""
    空闲动作: idle
    str阵亡动作: 兵厂损毁
@@ -155,7 +155,7 @@
    类型: 303
    名字: 民房
    PrefabPathName: 建筑/民房
-   选中音效: tclWht00
+   选中音效: 音效/BUTTON
    动画节点路径: ""
    空闲动作: idle
    str阵亡动作: ""
@@ -182,11 +182,11 @@
    类型: 306
    名字: 虫巢
    PrefabPathName: 建筑/孵化场
-   选中音效: 音效/BUTTON
+   选中音效: 音效/zhaWht00
    动画节点路径: ""
    空闲动作: idle
    str阵亡动作: 虫巢死亡
-   str阵亡音效: EXPLOMED
+   str阵亡音效: 音效/ZBldgDth
 -
    类型: 307
    名字: 机场
@@ -209,20 +209,20 @@
    类型: 309
    名字: 虫营
    PrefabPathName: 建筑/虫营
-   选中音效: 音效/BUTTON
+   选中音效: 音效/zspWht00
    动画节点路径: 虫营
    空闲动作: 骨架|stand
    str阵亡动作: 骨架|death
-   str阵亡音效: 音效/zhyDth00
+   str阵亡音效: 音效/ZBldgDth
 -
    类型: 310
    名字: 飞塔
    PrefabPathName: 建筑/飞塔
-   选中音效: 音效/BUTTON
+   选中音效: 音效/zscWht00
    动画节点路径: 飞塔
    空闲动作: 骨架|stand
    str阵亡动作: 骨架|death
-   str阵亡音效: 音效/zhyDth00
+   str阵亡音效: 音效/ZBldgDth
 -
    类型: 401
    名字: 枪怪
@@ -250,3 +250,21 @@
    空闲动作: idle
    str阵亡动作: died
    str阵亡音效: 音效/zdrDth00
+-
+   类型: 404
+   名字: 枪兵怪
+   PrefabPathName: 活动单位/步兵
+   选中音效: 语音/是男声正经版
+   动画节点路径: ""
+   空闲动作: idle
+   str阵亡动作: die01
+   str阵亡音效: TMaDth00
+-
+   类型: 405
+   名字: 近战兵怪
+   PrefabPathName: 活动单位/近战兵
+   选中音效: tfbPss00
+   动画节点路径: ""
+   空闲动作: idle
+   str阵亡动作: died
+   str阵亡音效: TFbDth00

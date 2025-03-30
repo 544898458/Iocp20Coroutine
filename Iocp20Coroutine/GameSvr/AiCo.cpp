@@ -228,11 +228,11 @@ namespace AiCo
 				const Rect rect = { {-100, -100},{100, 100} };
 				{
 					const Position pos = { rect.pos左上.x + std::rand() % rect.宽Int32(), rect.pos左上.z + std::rand() % rect.高Int32() };
-					MonsterComponent::AddMonster(refSpace, 枪怪, pos);
+					MonsterComponent::AddMonster(refSpace, 枪虫怪, pos);
 				}
 				{
 					const Position pos = { rect.pos左上.x + std::rand() % rect.宽Int32(), rect.pos左上.z + std::rand() % rect.高Int32() };
-					MonsterComponent::AddMonster(refSpace, 近战怪, pos);
+					MonsterComponent::AddMonster(refSpace, 近战虫怪, pos);
 				}
 
 			}

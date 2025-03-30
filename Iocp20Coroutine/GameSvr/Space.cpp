@@ -14,6 +14,8 @@
 #include "单位组件/采集Component.h"
 #include "单位组件/造建筑Component.h"
 #include "单位组件/造活动单位Component.h"
+#include "单位组件/BuildingComponent.h"
+
 #include <fstream>
 
 Space::Space(const 副本配置& ref) :m_配置(ref)
@@ -323,11 +325,16 @@ int Space::Get玩家单位数(const std::string& strPlayerNickName, const 单位类型 类
 			if (strPlayerNickName != refEntity.m_spPlayerNickName->m_strNickName)
 				return false;
 
-			if (!refEntity.m_spDefence)
+			if (EntitySystem::Is视口(refEntity))
 				return false;//视口
 
 			if (类型 != 单位类型::单位类型_Invalid_0 && 类型 != refEntity.m_类型)
-				return true;
+				return false;
+
+			if (refEntity.m_spBuilding && !refEntity.m_spBuilding->已造好())
+				return false;
+
+			return true;
 		});
 }
 int Space::Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位)const
