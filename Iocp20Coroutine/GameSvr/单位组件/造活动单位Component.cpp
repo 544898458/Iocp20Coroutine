@@ -65,6 +65,7 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 		case ½üÕ½³æ:
 		case Ç¹³æ:
 			refGateSession.²¥·ÅÉùÒôBuzz("·¿³æ²»×ã");
+			break;
 		default:
 			refGateSession.²¥·ÅÉùÒô("ÓïÒô/Ãñ·¿²»×ãÅ®ÉùÕı¾­°æ", "Ãñ·¿²»×ã");
 			break;
