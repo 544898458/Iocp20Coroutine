@@ -69,9 +69,11 @@ void DefenceComponent::播放正遭到攻击语音()
 	{
 	case 基地:sz语音 = "语音/基地正遭到进攻女声正经版"; break;
 	case 工程车:sz语音 = "语音/工程车遭到攻击女声可爱版"; break;
+	case 虫巢:sz语音 = "语音/虫巢正遭到攻击_男声"; break;
+	case 工虫:sz语音 = "语音/工虫遭到攻击_男声"; break;
 	default:
 		return;
 		break;
 	}
-	PlayerComponent::播放声音(m_refEntity, sz语音);
+	PlayerComponent::播放声音(m_refEntity, sz语音, m_refEntity.m_配置.strName + " 遭到攻击");
 }

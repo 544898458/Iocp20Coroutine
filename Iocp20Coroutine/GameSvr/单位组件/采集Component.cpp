@@ -156,9 +156,9 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 			if (sp资源->m_可采集数量 <= 0)
 			{
 				if (晶体矿 == sp资源->m_类型)
-					PlayerComponent::播放声音(m_refEntity, "语音/晶体矿已枯竭女声可爱版", "晶体矿 已枯竭");
+					PlayerComponent::播放声音(m_refEntity, m_refEntity.m_类型 == 工程车 ? "语音/晶体矿已枯竭女声可爱版" : "语音/晶体矿已枯竭_男声", "晶体矿 已枯竭");
 				else
-					PlayerComponent::播放声音(m_refEntity, "语音/燃气矿已枯竭女声可爱版", "燃气矿 已枯竭");
+					PlayerComponent::播放声音(m_refEntity, m_refEntity.m_类型 == 工程车 ? "语音/燃气矿已枯竭女声可爱版" : "语音/燃气矿已枯竭_男声", "燃气矿 已枯竭");
 
 				spEntity资源->CoDelayDelete().RunNew();
 				co_return false;//目标资源已采空

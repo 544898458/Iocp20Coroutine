@@ -64,7 +64,7 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 		case ·É³æ:
 		case ½üÕ½³æ:
 		case Ç¹³æ:
-			refGateSession.²¥·ÅÉùÒôBuzz("·¿³æ²»×ã");
+			refGateSession.²¥·ÅÉùÒô("ÓïÒô/·¿³æ²»×ã_ÄĞÉù", "·¿³æ²»×ã");
 			break;
 		default:
 			refGateSession.²¥·ÅÉùÒô("ÓïÒô/Ãñ·¿²»×ãÅ®ÉùÕı¾­°æ", "Ãñ·¿²»×ã");
@@ -86,6 +86,13 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 		if (0 >= m_refEntity.m_refSpace.GetÍæ¼Òµ¥Î»Êı(refGateSession.NickName(), ³æÓª))
 		{
 			refGateSession.²¥·ÅÉùÒôBuzz("È±ÉÙ ³æÓª");
+			return;
+		}
+		break;
+	case ·É³æ:
+		if (0 >= m_refEntity.m_refSpace.GetÍæ¼Òµ¥Î»Êı(refGateSession.NickName(), ·ÉËş))
+		{
+			refGateSession.²¥·ÅÉùÒôBuzz("È±ÉÙ ·ÉËş");
 			return;
 		}
 		break;
