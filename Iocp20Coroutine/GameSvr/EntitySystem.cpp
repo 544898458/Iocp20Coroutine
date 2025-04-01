@@ -75,6 +75,7 @@ bool EntitySystem::Is可进地堡(const 单位类型 类型)
 	switch (类型)
 	{
 	case 三色坦克:
+	case 绿色坦克:
 	case 飞机:
 		return false;
 	default:
