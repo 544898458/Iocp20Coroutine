@@ -547,8 +547,8 @@ namespace 单人剧情
 
 		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "防守战：只要守住，就是胜利！");
 	
-		refSpace.GetSpacePlayer(strPlayerNickName).m_u32燃气矿 += 500;
-		refSpace.GetSpacePlayer(strPlayerNickName).m_u32晶体矿 += 1500;
+		refSpace.GetSpacePlayer(strPlayerNickName).m_u32燃气矿 += 1000;
+		refSpace.GetSpacePlayer(strPlayerNickName).m_u32晶体矿 += 2000;
 	
 		auto wpSession = GetPlayerGateSession(strPlayerNickName);
 		CHECK_WP_CO_RET_0(wpSession);
@@ -564,8 +564,10 @@ namespace 单人剧情
 
 			资源Component::Add(refSpace, 晶体矿, { -20, 35 });
 			资源Component::Add(refSpace, 晶体矿, { -26, 20 });
+			资源Component::Add(refSpace, 晶体矿, { -32, 20 });
 			资源Component::Add(refSpace, 燃气矿, { -29, 35 });
 			资源Component::Add(refSpace, 燃气矿, { -20, 20 });
+			资源Component::Add(refSpace, 燃气矿, { -29, 25 });
 		}
 
 		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "5秒后将出现第1波敌人。多造虫巢和房虫，多造近战虫枪虫和飞虫，一定要在数量上压倒敌人！");
