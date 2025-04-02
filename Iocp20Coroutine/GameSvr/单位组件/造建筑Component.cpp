@@ -89,7 +89,8 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position pos, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 
 	PlayerComponent::²¥·ÅÉùÒô(m_refEntity, "ÓïÒô/Ã÷°×Å®Éù¿É°®°æ");
 
-	if (co_await AiCo::WalkToPos(m_refEntity, pos, m_cancelÔì½¨Öş, ÅäÖÃ.f°ë±ß³¤ + m_refEntity.m_spAttack->m_Õ½¶·ÅäÖÃ.f¹¥»÷¾àÀë))
+	EntitySystem::BroadcastEntityÃèÊö(m_refEntity, "×ßÏò½¨Ôìµã");
+	if (co_await AiCo::WalkToPos(m_refEntity, pos, m_cancelÔì½¨Öş, ÅäÖÃ.f°ë±ß³¤ + 1))
 		co_return true;
 
 	//È»ºó¿ªÊ¼¿ÛÇ®½¨Ôì
@@ -98,13 +99,20 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position pos, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 	if (wpEntity½¨Öş.expired())
 		co_return false;
 
-	auto &ref½¨Öş = *wpEntity½¨Öş.lock();
+	auto& ref½¨Öş = *wpEntity½¨Öş.lock();
 	CHECK_CO_RET_FALSE(ref½¨Öş.m_spBuilding);
 
 	if (¹¤³Ì³µ == m_refEntity.m_ÀàĞÍ)
 	{
+		EntitySystem::BroadcastEntityÃèÊö(m_refEntity, "ÕıÔÚ½¨Ôì");
+
+		if(m_refEntity.m_ÀàĞÍ == ¹¤³Ì³µ )
+			m_refEntity.BroadcastChangeSkeleAnim("2", true);
+
 		if (co_await Co½¨Ôì¹ı³Ì(wpEntity½¨Öş, m_cancelÔì½¨Öş))
 			co_return true;
+
+		EntitySystem::BroadcastEntityÃèÊö(m_refEntity, "");
 	}
 	else
 	{
@@ -282,7 +290,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	break;
 	case ³æ³²:
 		³æ³²Component::AddComponet(refNewEntity);
-	break;
+		break;
 	}
 	DefenceComponent::AddComponent(refNewEntity, ÖÆÔì.u16³õÊ¼Hp);
 	refSpace.m_mapPlayer[strPlayerNickName].m_mapWpEntity[refNewEntity.Id] = refNewEntity.shared_from_this();//×Ô¼º¿ØÖÆµÄµ¥Î»

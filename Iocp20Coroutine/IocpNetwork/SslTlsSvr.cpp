@@ -513,7 +513,7 @@ static void openssl_msg_cb(int write_p, int version, int content_type, const voi
 		msg_len += snprintf(msg_buffer + msg_len, sizeof(msg_buffer) - msg_len - 1, "%s", "\n");
 	}
 
-	LOG(INFO) << OPENSSL_LOG_DEB << "," << msg_buffer;
+	//LOG(INFO) << OPENSSL_LOG_DEB << "," << msg_buffer;
 }
 static void openssl_info_callback(const SSL* s, int where, int ret)
 {
@@ -758,7 +758,7 @@ int SslTlsSvr::获取准备发往前端的密文(char(&bufOut)[len])
 		return 0;
 
 	const auto read = BIO_read(m_pServer->out_bio, bufOut, sizeof(bufOut));
-	LOG(INFO) << "pending " << pending << ",read " << read;
+	//LOG(INFO) << "pending " << pending << ",read " << read;
 	return read;
 }
 

@@ -2,10 +2,9 @@
 #include "SpEntity.h"
 #include <list>
 #include "../../CoRoutine/CoTask.h"
-
+#include "../MyMsgQueue.h"
 class Entity;
-//class PlayerGateSession_Game;
-//class Space;
+
 
 class 虫巢Component
 {
@@ -14,6 +13,7 @@ public:
 	static void AddComponet(Entity& refEntity);
 	void TryCancel();
 	void OnLoad();
+	void Set集结点(const Position& pos);
 	//void OnDestroy();
 	//void OnBeforeDelayDelete();
 	//void 进(Space& refSpace, Entity& refEntity);
@@ -23,4 +23,6 @@ public:
 	Entity& m_refEntity;
 	std::list<WpEntity> m_listWp幼虫;
 	FunCancel m_Cancel造幼虫;
+private:
+	Position m_pos幼虫集结点;
 };

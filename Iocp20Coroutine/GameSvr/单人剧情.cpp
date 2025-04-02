@@ -497,6 +497,108 @@ namespace 单人剧情
 		}
 		co_return false;
 	}
+	static CoTask<bool> Is战斗结束_虫(Space& refSpace, const std::string strPlayerNickName, FunCancel& funCancel)
+	{
+		const auto fun房虫胡噜说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {房虫胡噜说(refSpace, strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家_虫_说(refSpace, strPlayerNickName, str内容); };
+
+		if (0 == refSpace.Get怪物单位数())
+		{
+			PlayerGateSession_Game::播放声音(strPlayerNickName, "音效/YouWin", "您守住了！您真是指挥天才！");
+
+			fun房虫胡噜说(strPlayerNickName + "，我果然没有看错你，你是一个指挥天才！"); _等玩家读完returnTrue;
+			fun玩家说("承蒙教官谬赞。学生谨遵教诲，自不敢有一丝懈怠，定当不负所望，继续精进。");	_等玩家读完returnTrue;
+			PlayerComponent::剧情对话(refSpace, strPlayerNickName, "图片/房虫头像", "房虫：胡噜", "", "", "    走你!", true);
+			co_return true;
+		}
+		if (0 == refSpace.Get玩家单位数(strPlayerNickName))
+		{
+			PlayerGateSession_Game::播放声音(strPlayerNickName, "音效/YouLose", "胜败乃兵家常事，请点击右上角“退出场景”离开，然后再次点击“防守战”，就可以重新来过。");
+			fun房虫胡噜说("胜败乃兵家常事，我仍然看好你的潜力！"); _等玩家读完returnTrue;
+			玩家_虫_说(refSpace, strPlayerNickName, "学生此次功败垂成，定会吸取教训，总结经验，再次努力，定不辜负教官的栽培与期望。", true);//	_等玩家读完;
+			co_return true;
+		}
+		co_return false;
+	}
+	CoTask<int> Co防守战_虫(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName)
+	{
+		KeepCancel kc(funCancel);
+		using namespace std;
+
+		const auto fun房虫胡噜说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {房虫胡噜说(refSpace, strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家_虫_说(refSpace, strPlayerNickName, str内容); };
+
+
+		fun房虫胡噜说("情报显示：敌人已发现我们的巢穴入口，即将入侵，请做好准备。");	_等玩家读完returnTrue;
+		fun玩家说("可是我仅受过简单的指挥训练。");							_等玩家读完returnTrue;
+		fun房虫胡噜说("我们会提供足够的初始晶体矿和燃气矿，你不用再从零开始采集。");	_等玩家读完returnTrue;
+		fun玩家说("我还是没有把握。");										_等玩家读完returnTrue;
+		fun房虫胡噜说("我会传授你指挥实战速成口诀，三分钟即可成为实战高手。");	_等玩家读完returnTrue;
+		fun玩家说("真有这种口诀的话就应该在训练战时告诉我啊！");			_等玩家读完returnTrue;
+		fun房虫胡噜说("实战口诀只有在九死一生的实战中才有用！");		_等玩家读完returnTrue;
+		fun玩家说("九死一生？形势严峻啊，我会全力以赴的!");					_等玩家读完returnTrue;
+		fun房虫胡噜说("一个虫巢只能照顾三只幼虫。建造更多的虫巢，才有更多的幼虫可用。多蜕变房虫，增加活动单位上限。"); _等玩家读完returnTrue;
+		fun玩家说("就是一定要在数量上占据优势吗？");	_等玩家读完returnTrue;
+		fun房虫胡噜说("是的，进攻就是最好的防守。派出地面单位堵住敌人的通道，再派出飞虫越过障碍物空袭敌人。"); _等玩家读完returnTrue;
+		fun玩家说("OK，也不是很复杂。我有信心完成任务！");					_等玩家读完returnTrue;
+		fun房虫胡噜说("走你！");										_等玩家读完returnTrue;
+
+		PlayerComponent::剧情对话已看完(strPlayerNickName);
+
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "防守战：只要守住，就是胜利！");
+	
+		refSpace.GetSpacePlayer(strPlayerNickName).m_u32燃气矿 += 500;
+		refSpace.GetSpacePlayer(strPlayerNickName).m_u32晶体矿 += 1500;
+	
+		auto wpSession = GetPlayerGateSession(strPlayerNickName);
+		CHECK_WP_CO_RET_0(wpSession);
+		auto wp视口 = wpSession.lock()->m_wp视口;
+		CHECK_WP_CO_RET_0(wp视口);
+
+		{
+			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工虫, { -10, 15 });
+			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工虫, { -10, 10 });
+			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工虫, { -15, 15 });
+			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工虫, { -15, 10 });
+			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工虫, { -30, 30 });
+
+			资源Component::Add(refSpace, 晶体矿, { -20, 35 });
+			资源Component::Add(refSpace, 晶体矿, { -26, 20 });
+			资源Component::Add(refSpace, 燃气矿, { -29, 35 });
+			资源Component::Add(refSpace, 燃气矿, { -20, 20 });
+		}
+
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "5秒后将出现第1波敌人。多造虫巢和房虫，多造近战虫枪虫和飞虫，一定要在数量上压倒敌人！");
+		if (co_await CoTimer::Wait(5s, funCancel))
+			co_return 0;
+
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "前期不用采矿。多造虫巢和房虫，多造近战虫枪虫和飞虫，一定要在数量上压倒敌人！");
+
+		for (int i = 1; i < 20; ++i)
+		{
+			if (1 < i && co_await Is战斗结束_虫(refSpace, strPlayerNickName, funCancel))
+				co_return 0;
+
+			PlayerGateSession_Game::Say系统(strPlayerNickName, std::format("第{0}波敌人正向您走来", i));
+			auto vecEneity = MonsterComponent::AddMonster(refSpace, i % 2 == 0 ? 枪兵怪 : 近战兵怪, { 48,-48 }, i * 1);
+			auto vecEneity2 = MonsterComponent::AddMonster(refSpace, 工程车怪, { 47,-47 }, i * 1);
+			vecEneity.insert(vecEneity.end(), vecEneity2.begin(), vecEneity2.end());
+			for (auto& spEntity : vecEneity)
+			{
+				spEntity->m_spAttack->m_fun空闲走向此处 = 怪物走向矿附近;
+			}
+
+			if (co_await CoTimer::Wait(25s, funCancel))
+				co_return 0;
+		}
+
+		while (!co_await CoTimer::Wait(5s, funCancel))
+		{
+			if (co_await Is战斗结束_虫(refSpace, strPlayerNickName, funCancel))
+				co_return 0;
+		}
+		co_return 0;
+	}
 	CoTask<int> Co防守战(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName)
 	{
 		KeepCancel kc(funCancel);

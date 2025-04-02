@@ -205,7 +205,7 @@ public:
 		int len密文 = m_SslTls.获取准备发往前端的密文(buf密文);
 		if (0 < len密文)
 		{
-			LOG(INFO) << "发密文给前端,len=" << len密文;
+			//LOG(INFO) << "发密文给前端,len=" << len密文;
 			m_refSession.Send(buf密文, len密文);
 		}
 	}
