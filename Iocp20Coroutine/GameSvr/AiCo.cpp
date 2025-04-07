@@ -163,6 +163,7 @@ namespace AiCo
 		单位::Find活动单位配置(refThis.m_类型, 配置);
 		EntitySystem::恢复休闲动作 __(refThis, 配置.str走路动作);
 		Position posOld;
+		CoEvent<MyEvent::MoveEntity>::OnRecvEvent({ refThis.weak_from_this() });
 		while (true)
 		{
 			if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次

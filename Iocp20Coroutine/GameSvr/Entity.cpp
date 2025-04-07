@@ -375,6 +375,9 @@ WpEntity Entity::Get最近的Entity(const FindType bFindEnemy, std::function<bool(c
 			auto& wp = pair.second;
 			CHECK_FALSE(!wp.expired());
 			Entity& ref = *wp.lock();
+			if (ref.m_cancelDelete)
+				return false;
+
 			const auto bEnemy = ref.IsEnemy(*this);
 			if (bFindEnemy == 敌方 && !bEnemy)
 				return false;

@@ -17,7 +17,7 @@
 #include "单位.h"
 #include "PlayerNickNameComponent.h"
 
-采集Component::采集Component(Entity& refEntity) : m_携带矿类型(晶体矿), m_refEntity(refEntity)
+采集Component::采集Component(Entity& refEntity) : m_携带矿类型(晶体矿), m_refEntity(refEntity), m_目标资源类型(单位类型_Invalid_0)
 {
 }
 
@@ -33,13 +33,41 @@ void 采集Component::采集(WpEntity wp目标资源)
 	m_TaskCancel.TryRun(Co采集(wp目标资源));
 }
 
-std::tuple<std::shared_ptr<Entity>, std::shared_ptr<资源Component>> Get目标资源(WpEntity& refWp目标资源)
+bool 资源可采集(WpEntity& refWp目标资源)
 {
 	if (refWp目标资源.expired())
-		return { {},{} };
+		return false;
+
+	auto sp资源 = refWp目标资源.lock()->m_sp资源;
+	CHECK_FALSE(sp资源);
+	if (sp资源->m_可采集数量 <= 0)
+	{
+		refWp目标资源.lock()->CoDelayDelete().RunNew();
+		return false;
+	}
+
+	return true;
+}
+std::tuple<SpEntity, std::shared_ptr<资源Component>> 采集Component::Get目标资源(WpEntity& refWp目标资源)
+{
+	if (!资源可采集(refWp目标资源))
+	{
+		if (单位类型::单位类型_Invalid_0 == m_目标资源类型)
+			return {};
+
+		auto wp最近 = m_refEntity.Get最近的Entity(Entity::所有, m_目标资源类型);
+		if (wp最近.expired())
+			return {};
+
+		if (!m_refEntity.DistanceLessEqual(*wp最近.lock(), 35))
+			return {};
+
+		refWp目标资源 = wp最近;
+	}
 
 	auto sp目标资源 = refWp目标资源.lock();
 	auto sp资源 = sp目标资源->m_sp资源;
+	m_目标资源类型 = sp资源->m_类型;
 	return { sp目标资源 ,sp资源 };
 }
 
@@ -100,7 +128,10 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 				m_u32携带矿 = 0;
 				auto [_, sp资源] = Get目标资源(wp目标资源);
 				if (!sp资源)
+				{
+					提醒资源枯竭();
 					co_return false;//目标资源没了
+				}
 
 				if (sp资源->m_类型 == 晶体矿)
 				{
@@ -131,7 +162,10 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 			{
 				auto [spEntity资源, _] = Get目标资源(wp目标资源);
 				if (!spEntity资源)
+				{
+					提醒资源枯竭();
 					co_return false;//目标资源没了
+				}
 
 				if (!m_refEntity.DistanceLessEqual(*spEntity资源, m_refEntity.攻击距离()))
 				{
@@ -151,16 +185,8 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 
 			auto [spEntity资源, sp资源] = Get目标资源(wp目标资源);
 			if (!spEntity资源 || !sp资源)
-				co_return false;//目标资源没了
-
-			if (sp资源->m_可采集数量 <= 0)
 			{
-				if (晶体矿 == sp资源->m_类型)
-					PlayerComponent::播放声音(m_refEntity, m_refEntity.m_类型 == 工程车 ? "语音/晶体矿已枯竭女声可爱版" : "语音/晶体矿已枯竭_男声", "晶体矿 已枯竭");
-				else
-					PlayerComponent::播放声音(m_refEntity, m_refEntity.m_类型 == 工程车 ? "语音/燃气矿已枯竭女声可爱版" : "语音/燃气矿已枯竭_男声", "燃气矿 已枯竭");
-
-				spEntity资源->CoDelayDelete().RunNew();
+				提醒资源枯竭();
 				co_return false;//目标资源已采空
 			}
 
@@ -189,6 +215,14 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 	}
 }
 
+void 采集Component::提醒资源枯竭()
+{
+	if (晶体矿 == m_携带矿类型)
+		PlayerComponent::播放声音(m_refEntity, m_refEntity.m_类型 == 工程车 ? "语音/晶体矿已枯竭女声可爱版" : "语音/晶体矿已枯竭_男声", "晶体矿 已枯竭");
+	else
+		PlayerComponent::播放声音(m_refEntity, m_refEntity.m_类型 == 工程车 ? "语音/燃气矿已枯竭女声可爱版" : "语音/燃气矿已枯竭_男声", "燃气矿 已枯竭");
+
+}
 void 采集Component::AddComponent(Entity& refEntity)
 {
 	refEntity.m_sp采集 = std::make_shared<采集Component, Entity&>(refEntity);

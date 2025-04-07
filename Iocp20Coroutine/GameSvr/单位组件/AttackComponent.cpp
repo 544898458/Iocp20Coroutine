@@ -96,7 +96,7 @@ CoTaskBool AttackComponent::Co顶层()
 		if ((m_b搜索新的目标) && co_await Co走向警戒范围内的目标然后攻击())
 			continue;
 
-		if (!m_b原地坚守 && m_refEntity.m_sp走 && m_fun空闲走向此处 && !走Component::正在走(m_refEntity))//打完走向下一个目标
+		if (!m_b原地坚守 && m_refEntity.m_sp走 && m_fun空闲走向此处 && !走Component::正在走(m_refEntity) && !采集Component::正在采集(m_refEntity))//打完走向下一个目标
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
