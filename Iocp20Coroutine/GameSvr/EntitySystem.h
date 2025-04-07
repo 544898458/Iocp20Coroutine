@@ -17,6 +17,7 @@ namespace EntitySystem
 	void BroadcastChangeSkeleAnim采集(Entity& refEntity);
 	void Broadcast播放声音(Entity& refEntity, const std::string& refStr声音, const std::string& str文本 = "");
 	bool Is视口(const Entity& refEntity);
+	bool Is光刺(const Entity& refEntity);
 	bool 距离友方单位太近(Entity& refEntity);
 	const std::string GetNickName(Entity& refEntity);
 	bool Is建筑(const 单位类型 类型);

@@ -33,6 +33,11 @@ bool EntitySystem::Is视口(const Entity& refEntity)
 	return Is视口(refEntity.m_类型);
 }
 
+bool EntitySystem::Is光刺(const Entity& refEntity)
+{
+	return 光刺 == refEntity.m_类型;
+}
+
 bool EntitySystem::距离友方单位太近(Entity& refEntity)
 {
 	const auto wp最近的正在攻击的友方单位 = refEntity.Get最近的Entity(Entity::友方,

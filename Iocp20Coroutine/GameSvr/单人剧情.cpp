@@ -37,6 +37,11 @@ namespace 单人剧情
 		PlayerComponent::剧情对话(refSpace, refStrNickName, "图片/青壮年欧洲男人脸朝右", "坦克手：齐诺维", "", "", "    " + str内容);
 		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
 	}
+	static void 绿色坦克洪隆说(Space& refSpace, const std::string& refStrNickName, const std::string& str内容)
+	{
+		PlayerComponent::剧情对话(refSpace, refStrNickName, "图片/绿色坦克头像", "绿色坦克：洪隆", "", "", "    " + str内容);
+		PlayerComponent::播放声音(refStrNickName, "音效/BUTTON", "");
+	}
 	static void 装甲指挥官海因茨说(Space& refSpace, const std::string& refStrNickName, const std::string& str内容)
 	{
 		PlayerComponent::剧情对话(refSpace, refStrNickName, "图片/大白胡子抽烟", "装甲指挥官：海因茨", "", "", "    " + str内容);
@@ -305,9 +310,9 @@ namespace 单人剧情
 		fun玩家说("好的。"); _等玩家读完returnTrue;
 		PlayerComponent::剧情对话已看完(strPlayerNickName);
 		using namespace std;
-		
+
 		refSpace.GetSpacePlayer(strPlayerNickName).m_u32晶体矿 += 100;
-{
+		{
 			auto wpSession = GetPlayerGateSession(strPlayerNickName);
 			CHECK_WP_CO_RET_0(wpSession);
 			auto wp视口 = wpSession.lock()->m_wp视口;
@@ -528,7 +533,6 @@ namespace 单人剧情
 		const auto fun房虫胡噜说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {房虫胡噜说(refSpace, strPlayerNickName, str内容); };
 		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家_虫_说(refSpace, strPlayerNickName, str内容); };
 
-
 		fun房虫胡噜说("情报显示：敌人已发现我们的巢穴入口，即将入侵，请做好准备。");	_等玩家读完returnTrue;
 		fun玩家说("可是我仅受过简单的指挥训练。");							_等玩家读完returnTrue;
 		fun房虫胡噜说("我们会提供足够的初始晶体矿和燃气矿，你不用再从零开始采集。");	_等玩家读完returnTrue;
@@ -546,10 +550,10 @@ namespace 单人剧情
 		PlayerComponent::剧情对话已看完(strPlayerNickName);
 
 		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "防守战：只要守住，就是胜利！");
-	
+
 		refSpace.GetSpacePlayer(strPlayerNickName).m_u32燃气矿 += 1000;
 		refSpace.GetSpacePlayer(strPlayerNickName).m_u32晶体矿 += 2000;
-	
+
 		auto wpSession = GetPlayerGateSession(strPlayerNickName);
 		CHECK_WP_CO_RET_0(wpSession);
 		auto wp视口 = wpSession.lock()->m_wp视口;
@@ -715,6 +719,17 @@ namespace 单人剧情
 		玩家说(refSpace, strPlayerNickName, "走！", true);
 		co_return false;
 	}
+	static CoTask<bool> 攻坚战胜利_虫(Space& refSpace, const std::string strPlayerNickName, FunCancel& funCancel)
+	{
+		//const auto fun房虫胡噜说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {房虫胡噜说(refSpace, strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家_虫_说(refSpace, strPlayerNickName, str内容); };
+		const auto fun绿色坦克洪隆说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {绿色坦克洪隆说(refSpace, strPlayerNickName, str内容); };
+		fun绿色坦克洪隆说("总算报仇了！");	_等玩家读完returnTrue;
+		fun玩家说("以后坦克不能再单独行动了，一定要带上步兵。");	_等玩家读完returnTrue;
+		fun绿色坦克洪隆说("是，指挥官！");	_等玩家读完returnTrue;
+		玩家_虫_说(refSpace, strPlayerNickName, "走！", true);
+		co_return false;
+	}
 
 	static CoTask<bool> 攻坚战失败(Space& refSpace, const std::string strPlayerNickName, FunCancel& funCancel, const bool b已营救坦克连)
 	{
@@ -734,7 +749,23 @@ namespace 单人剧情
 		}
 		co_return false;
 	}
+	static CoTask<bool> 攻坚战失败_虫(Space& refSpace, const std::string strPlayerNickName, FunCancel& funCancel, const bool b已营救坦克连)
+	{
+		const auto fun房虫胡噜说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {房虫胡噜说(refSpace, strPlayerNickName, str内容); };
+		const auto fun绿色坦克洪隆说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {绿色坦克洪隆说(refSpace, strPlayerNickName, str内容); };
 
+		if (b已营救坦克连)
+		{
+			fun绿色坦克洪隆说("早知如此就该听你的直接回去！"); _等玩家读完returnTrue;
+			玩家_虫_说(refSpace, strPlayerNickName, "现在说什么都晚了（惨叫）。", true);
+		}
+		else
+		{
+			fun房虫胡噜说("可以试试操作慢一点，先进攻右下角的虫巢。"); _等玩家读完returnTrue;
+			玩家_虫_说(refSpace, strPlayerNickName, "只能下次再试试了。", true);
+		}
+		co_return false;
+	}
 	CoTask<int> Co攻坚战(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName)
 	{
 		KeepCancel kc(funCancel);
@@ -861,6 +892,126 @@ namespace 单人剧情
 					PlayerGateSession_Game::Say任务提示(strPlayerNickName, "消灭上方两个敌方虫巢，控制好步兵保护您的坦克");
 				}
 
+			}
+		}
+
+		co_return 0;
+	}
+
+	CoTask<int> Co攻坚战_虫(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName)
+	{
+		KeepCancel kc(funCancel);
+
+		const auto fun房虫胡噜说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {房虫胡噜说(refSpace, strPlayerNickName, str内容); };
+		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家_虫_说(refSpace, strPlayerNickName, str内容); };
+		const auto fun绿色坦克洪隆说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {绿色坦克洪隆说(refSpace, strPlayerNickName, str内容); };
+
+		fun房虫胡噜说(strPlayerNickName + "，有一个好消息，我们的幼虫经过千万次的模仿，基本掌握了拟态复制人类三色坦克的方法。"); _等玩家读完returnTrue;
+		fun玩家说("太好了。那么接下来肯定还有一个坏消息吧？");	_等玩家读完returnTrue;
+		fun房虫胡噜说("是的，蜕变出的第一批绿色坦克的虫巢已遭人类攻占。"); _等玩家读完returnTrue;
+		fun玩家说("绿色坦克看来仍然打不过人类的部队啊！");	_等玩家读完returnTrue;
+		fun房虫胡噜说("绿色坦克攻击距离远，但是面对贴近的人类步兵却处于劣势。此外绿色坦克发射出的光刺会被障碍物阻挡。现在人类的科学家正在研究我们的绿色坦克。"); _等玩家读完returnTrue;
+		fun玩家说("我现在去救它们。");	_等玩家读完returnTrue;
+		PlayerComponent::剧情对话已看完(strPlayerNickName);
+
+		{
+			{
+				auto wpSession = GetPlayerGateSession(strPlayerNickName);
+				CHECK_WP_CO_RET_0(wpSession);
+				auto wp视口 = wpSession.lock()->m_wp视口;
+				CHECK_WP_CO_RET_0(wp视口);
+				auto& ref视口 = *wp视口.lock();
+
+				for (int i = 0; i < 6; ++i)
+				{
+					const float z = 10.f + i * 5;
+					refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::枪虫, { -40, z }, 2 == i);
+					refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::近战虫, { -45, z });
+				}
+			}
+			for (int i = 0; i < 6; ++i)
+			{
+				MonsterComponent::AddMonster(refSpace, 绿色坦克, { 40,-49.f + i * 5 }, 1);
+				MonsterComponent::AddMonster(refSpace, 绿色坦克, { -40,-49.f + i * 5 }, 1);
+			}
+			for (int i = 0; i < 6; ++i)
+			{
+				创建敌方建筑(refSpace, { 25,-49.f + i * 5 }, 炮台);
+				创建敌方建筑(refSpace, { 30,-49.f + i * 5 }, 炮台);
+				创建敌方建筑(refSpace, { 35,-49.f + i * 5 }, 炮台);
+
+				创建敌方建筑(refSpace, { -25,-49.f + i * 5 }, 炮台);
+				创建敌方建筑(refSpace, { -30,-49.f + i * 5 }, 炮台);
+				创建敌方建筑(refSpace, { -35,-49.f + i * 5 }, 炮台);
+			}
+
+			{
+				//守卫右下角虫巢的怪
+				MonsterComponent::AddMonster(refSpace, 枪兵怪, { 10,35.f }, 2);
+				MonsterComponent::AddMonster(refSpace, 近战兵怪, { 10,49.f }, 2);
+			}
+
+			auto wp虫巢右下 = 创建敌方建筑(refSpace, { 10, 40.f }, 基地);
+			创建敌方建筑(refSpace, { -45, -45.f }, 基地);
+			创建敌方建筑(refSpace, { 45, -45.f }, 基地);
+
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "此局没有工虫。右下方的敌方基地防守薄弱。");
+			bool b已营救坦克连 = false;
+			while (true)
+			{
+				auto [stop, responce] = co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace, wp虫巢右下](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; });
+				if (stop)
+					co_return 0;
+
+				if (0 == refSpace.Get怪物单位数(基地))
+				{
+					co_await 攻坚战胜利_虫(refSpace, strPlayerNickName, funCancel);
+					co_return 0;
+				}
+
+				if (0 == refSpace.Get玩家单位数(strPlayerNickName))
+				{
+					co_await 攻坚战失败_虫(refSpace, strPlayerNickName, funCancel, b已营救坦克连);
+					co_return 0;
+				}
+				CHECK_WP_CO_RET_0(responce.wpEntity);
+				if (!wp虫巢右下.expired() && wp虫巢右下.lock() == responce.wpEntity.lock())//救出坦克连
+				{
+					b已营救坦克连 = true;
+					std::weak_ptr<PlayerGateSession_Game> wpSession;
+					while (true)
+					{
+						wpSession = GetPlayerGateSession(strPlayerNickName);
+						if (!wpSession.expired() && !wpSession.lock()->m_wpSpace.expired() && wpSession.lock()->m_wpSpace.lock().get() == &refSpace)
+							break;
+
+						using namespace std;
+						if (co_await CoTimer::Wait(5s, funCancel))//等玩家上线
+							co_return true;
+					}
+
+					auto wp视口 = wpSession.lock()->m_wp视口;
+					CHECK_WP_CO_RET_0(wp视口);
+					auto& ref视口 = *wp视口.lock();
+
+					for (int i = 0; i < 5; ++i)
+					{
+						refSpace.造活动单位(ref视口, strPlayerNickName, 绿色坦克, { 05.f + i * 5 ,35.f });
+						refSpace.造活动单位(ref视口, strPlayerNickName, 绿色坦克, { 10.f + i * 5 ,40.f });
+					}
+
+					fun绿色坦克洪隆说("谢谢你救了我们。");	_等玩家读完returnTrue;
+					fun玩家说("你们怎么会在基地里？");	_等玩家读完returnTrue;
+					fun绿色坦克洪隆说("我也不知道，仿佛做了一场梦，什么都不记得了。");	_等玩家读完returnTrue;
+					fun玩家说("现在我的部队会护送你们回虫巢。到时候再仔细回忆一下。");	_等玩家读完returnTrue;
+					fun绿色坦克洪隆说("上面还有两个基地，我要炸掉它们再回去。");	_等玩家读完returnTrue;
+					fun玩家说("上面的基地有敌方的炮台把守，我们过不去。");	_等玩家读完returnTrue;
+					fun绿色坦克洪隆说("我专门克制炮台。一辆坦克就能全灭它们，何况我们现在有十辆。");	_等玩家读完returnTrue;
+					fun玩家说("好的，但是你们要接受我的指挥，我的部队会保护你们。");	_等玩家读完returnTrue;
+					fun绿色坦克洪隆说("是！明白！指挥官！");	_等玩家读完returnTrue;
+					PlayerComponent::剧情对话已看完(strPlayerNickName);
+					PlayerGateSession_Game::Say任务提示(strPlayerNickName, "消灭上方两个敌方基地，控制好其它单位保护您的坦克");
+				}
 			}
 		}
 

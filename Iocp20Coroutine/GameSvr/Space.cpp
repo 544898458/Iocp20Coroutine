@@ -327,7 +327,10 @@ int Space::Get玩家单位数(const std::string& strPlayerNickName, const 单位类型 类
 				return false;
 
 			if (EntitySystem::Is视口(refEntity))
-				return false;//视口
+				return false;
+
+			if (EntitySystem::Is光刺(refEntity))
+				return false;
 
 			if (类型 != 单位类型::单位类型_Invalid_0 && 类型 != refEntity.m_类型)
 				return false;
