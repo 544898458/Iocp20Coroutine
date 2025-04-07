@@ -35,7 +35,7 @@ bool EntitySystem::Is视口(const Entity& refEntity)
 
 bool EntitySystem::Is光刺(const Entity& refEntity)
 {
-	return 光刺 == refEntity.m_类型;
+	return Is光刺(refEntity.m_类型);
 }
 
 bool EntitySystem::距离友方单位太近(Entity& refEntity)
@@ -105,6 +105,10 @@ bool EntitySystem::Is怪(const 单位类型 类型)
 bool EntitySystem::Is视口(const 单位类型 类型)
 {
 	return 视口 == 类型;
+}
+bool EntitySystem::Is光刺(const 单位类型 类型)
+{
+	return 光刺 == 类型;
 }
 
 bool EntitySystem::Is单位类型(const WpEntity& wp, const 单位类型 类型)

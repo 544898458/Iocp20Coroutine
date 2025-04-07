@@ -368,8 +368,11 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 		if (绿色坦克 == m_refEntity.m_类型)
 		{
 			auto wp光刺 = m_refEntity.m_refSpace.造活动单位(m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity), m_refEntity.Pos(), 光刺);
+			_ASSERT(!wp光刺.expired());
 			CHECK_WP_CO_RET_FALSE(wp光刺);
-			飞向目标Component::AddComponet(*wp光刺.lock(), m_refEntity.Pos(), (refDefencer.Pos() - m_refEntity.Pos()).归一化(), m_战斗配置.f攻击距离);
+			auto& ref光刺 = *wp光刺.lock();
+			飞向目标Component::AddComponet(ref光刺, m_refEntity.Pos(), (refDefencer.Pos() - m_refEntity.Pos()).归一化(), m_战斗配置.f攻击距离);
+			_ASSERT(ref光刺.m_up飞向目标);
 		}
 	} while (false);
 

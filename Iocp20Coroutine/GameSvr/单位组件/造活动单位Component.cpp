@@ -64,6 +64,7 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 		case ·É³æ:
 		case ½üÕ½³æ:
 		case Ç¹³æ:
+		case ÂÌÉ«Ì¹¿Ë:
 			refGateSession.²¥·ÅÉùÒô("ÓïÒô/·¿³æ²»×ã_ÄĞÉù", "·¿³æ²»×ã");
 			break;
 		default:

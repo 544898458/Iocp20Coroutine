@@ -418,7 +418,7 @@ void Space::SpacePlayer::OnDestroy(const bool b删除玩家所有单位, Space& refSpace
 				continue;
 			}
 
-			if(EntitySystem::Is视口(ref))
+			if (EntitySystem::Is视口(ref))
 				ref.Broadcast<MsgSay>({ .content = StrConv::GbkToUtf8(refStrNickName + " 离开了") });
 
 			LOG(INFO) << "m_mapEntity.size=" << ref.m_refSpace.m_mapEntity.size();
@@ -482,7 +482,8 @@ WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 	PlayerComponent::AddComponent(*spNewEntity, refSpPlayer可能空, strNickName);
 	switch (类型)
 	{
-	case 光刺:break;
+	case 光刺:
+		break;
 	case 幼虫:
 		DefenceComponent::AddComponent(*spNewEntity, 制造.u16初始Hp);
 		break;
@@ -491,8 +492,14 @@ WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 		AttackComponent::AddComponent(*spNewEntity);
 		break;
 	}
-
-	走Component::AddComponent(*spNewEntity);
+	switch (类型)
+	{
+	case 光刺:
+		break;
+	default:
+		走Component::AddComponent(*spNewEntity);
+		break;
+	}
 
 	m_mapPlayer[strNickName].m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
 	AddEntity(spNewEntity);//全地图单位

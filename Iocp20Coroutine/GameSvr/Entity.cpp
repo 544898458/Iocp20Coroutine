@@ -81,6 +81,14 @@ bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
 {
 	SaveEntity load;
 	CHECK_FALSE(MsgPack::RecvMsgpack(load, buf, u16Size));
+
+	switch (load.m_类型)
+	{
+	case 光刺:
+		return false;
+	default:
+		break;
+	}
 	
 	WpEntity wpNew;
 	if (EntitySystem::Is建筑(load.m_类型))
@@ -288,6 +296,8 @@ void Entity::Broadcast(const T& msg)
 	auto wp = m_wpOwner;
 	if (wp.expired())
 		wp = weak_from_this();
+
+	CHECK_WP_RET_VOID(wp);
 
 	auto& ref自己或Owner = *wp.lock();
 	for (auto [k, wp能看到我] : ref自己或Owner.m_upAoi->m_map能看到我的)
