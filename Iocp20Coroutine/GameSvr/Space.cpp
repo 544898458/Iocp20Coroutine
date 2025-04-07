@@ -15,6 +15,7 @@
 #include "单位组件/造建筑Component.h"
 #include "单位组件/造活动单位Component.h"
 #include "单位组件/BuildingComponent.h"
+#include "../IocpNetwork/StrConv.h"
 
 #include <fstream>
 
@@ -405,26 +406,30 @@ void Space::SpacePlayer::OnDestroy(const bool b删除玩家所有单位, Space& refSpace
 			LOG(ERROR) << "删了单位，但是这里没删";
 			continue;
 		}
-		auto sp = wp.lock();
-		if (b删除玩家所有单位 || EntitySystem::Is视口(*sp))//删除单位
+		auto& ref = *wp.lock();
+		if (b删除玩家所有单位 || EntitySystem::Is视口(ref))//删除单位
 		{
-			if (sp->m_refSpace.GetEntity(sp->Id).expired())
+			if (ref.m_refSpace.GetEntity(ref.Id).expired())
 			{
-				LOG(INFO) << "可能是地堡里的兵" << sp->头顶Name();
+				LOG(INFO) << "可能是地堡里的兵" << ref.头顶Name();
 				continue;
 			}
-			LOG(INFO) << "m_mapEntity.size=" << sp->m_refSpace.m_mapEntity.size();
-			sp->OnDestroy();
 
-			auto countErase = m_mapWpEntity.erase(sp->Id);
+			if(EntitySystem::Is视口(ref))
+				ref.Broadcast<MsgSay>({ .content = StrConv::GbkToUtf8(refStrNickName + " 离开了") });
+
+			LOG(INFO) << "m_mapEntity.size=" << ref.m_refSpace.m_mapEntity.size();
+			ref.OnDestroy();
+
+			auto countErase = m_mapWpEntity.erase(ref.Id);
 			_ASSERT(1 == countErase);
 
-			countErase = sp->m_refSpace.m_mapEntity.erase(sp->Id);
+			countErase = ref.m_refSpace.m_mapEntity.erase(ref.Id);
 			_ASSERT(1 == countErase);
 		}
 		else//不删，只删除Session引用
 		{
-			sp->m_spPlayer.reset();
+			ref.m_spPlayer.reset();
 			//refSpace.m_map已离线PlayerEntity[refStrNickName].insert({ sp->Id,sp });
 		}
 	}
