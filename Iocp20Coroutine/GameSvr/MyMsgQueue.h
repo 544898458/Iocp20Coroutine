@@ -41,7 +41,7 @@ struct Position
 	float LengthPow2() const;
 
 	float Length() const;
-	
+
 	/// <summary>
 	/// 向量归一化(Vector Normalization)
 	/// </summary>
@@ -270,6 +270,7 @@ enum MsgId
 	建筑产出活动单位的集结点,
 	播放音乐,
 	原地坚守,
+	解锁单位,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -800,4 +801,11 @@ struct Msg原地坚守
 {
 	MsgHead msg{ .id = 原地坚守 };
 	MSGPACK_DEFINE(msg);
+};
+
+struct Msg解锁单位
+{
+	MsgHead msg{ .id = 解锁单位 };
+	单位类型 类型;
+	MSGPACK_DEFINE(msg, 类型);
 };

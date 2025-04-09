@@ -37,16 +37,17 @@ public:
 	uint16_t 活动单位包括制造队列中的() const;
 
 	void 播放声音Buzz(const std::string& str文本);
+	static void 播放声音Buzz(const std::string& refStrNickName, const std::string& str文本);
 	void 播放声音(const std::string& refStr声音, const std::string& str文本);
 	static void 播放声音(const std::string& refStrNickName, const std::string& refStr声音, const std::string& str文本);
 
 	void Send设置视口(const Entity& refEntity);
 	void 删除选中(const uint64_t id);
 
-	void 剧情对话(
-		const std::string& str头像左, const std::string& str名字左,
-		const std::string& str头像右, const std::string& str名字右,
-		const std::string& str内容, const bool b显示退出场景按钮);
+	//void 剧情对话(
+	//	const std::string& str头像左, const std::string& str名字左,
+	//	const std::string& str头像右, const std::string& str名字右,
+	//	const std::string& str内容, const bool b显示退出场景按钮);
 	void 剧情对话已看完();
 
 	uint32_t m_snRecv = 0;
@@ -85,6 +86,7 @@ private:
 	void OnRecv(const Msg剧情对话已看完& msg);
 	void OnRecv(const Msg建筑产出活动单位的集结点& msg);
 	void OnRecv(const Msg原地坚守& msg);
+	void OnRecv(const Msg解锁单位& msg);
 
 	void 选中单位(std::vector<uint64_t> vecId, bool b追加 = false);
 	std::vector<WpEntity> Get空闲工程车(单位类型 造活动单位类型, bool b包括采集中的工程车);

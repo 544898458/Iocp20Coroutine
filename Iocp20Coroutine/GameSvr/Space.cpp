@@ -394,8 +394,59 @@ void Space::OnDestory()
 	EraseEntity(true);
 }
 
-Space::SpacePlayer::SpacePlayer()
+Space::SpacePlayer::SpacePlayer() :m_map解锁状态{ {近战兵,{}}, {枪虫,{}} }
 {
+
+}
+
+bool Space::SpacePlayer::已解锁(const 单位类型 类型) const
+{
+	auto iterFind = m_map解锁状态.find(类型);
+	if (iterFind == m_map解锁状态.end())
+		return true;//无需解锁
+
+	return iterFind->second.b已解锁;
+}
+
+bool Space::SpacePlayer::解锁完成(const 单位类型 类型, Entity& refEntity在此建筑中解锁)
+{
+	auto iterFind = m_map解锁状态.find(类型);
+	CHECK_RET_FALSE(iterFind != m_map解锁状态.end());
+	auto& ref解锁状态 = iterFind->second;
+
+	CHECK_RET_FALSE(!ref解锁状态.b已解锁);
+	CHECK_WP_RET_FALSE(ref解锁状态.wpEntity在此建筑中解锁);
+	auto& ref解锁建筑 = *ref解锁状态.wpEntity在此建筑中解锁.lock();
+
+	CHECK_RET_FALSE(&ref解锁建筑 == &refEntity在此建筑中解锁);
+
+	ref解锁状态.wpEntity在此建筑中解锁.reset();
+	ref解锁状态.b已解锁 = true;
+
+	return true;
+}
+
+bool Space::SpacePlayer::开始解锁单位(const 单位类型 类型, Entity& refEntity在此建筑中解锁)
+{
+	auto iterFind = m_map解锁状态.find(类型);
+	CHECK_RET_FALSE(iterFind != m_map解锁状态.end());
+	auto& ref解锁状态 = iterFind->second;
+
+	if (ref解锁状态.b已解锁)
+	{
+		PlayerGateSession_Game::播放声音Buzz(EntitySystem::GetNickName(refEntity在此建筑中解锁), "无需重复解锁");
+		return false;
+	}
+
+	if (!ref解锁状态.wpEntity在此建筑中解锁.expired())
+	{
+		PlayerGateSession_Game::播放声音Buzz(EntitySystem::GetNickName(refEntity在此建筑中解锁), "正在解锁");
+		return false;
+	}
+
+	ref解锁状态.wpEntity在此建筑中解锁 = refEntity在此建筑中解锁.shared_from_this();
+
+	return true;
 }
 
 void Space::SpacePlayer::OnDestroy(const bool b删除玩家所有单位, Space& refSpace, const std::string& refStrNickName)

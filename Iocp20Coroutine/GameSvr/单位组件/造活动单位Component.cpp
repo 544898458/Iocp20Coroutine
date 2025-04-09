@@ -71,7 +71,7 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 			refGateSession.²¥·ÅÉùÒô("ÓïÒô/Ãñ·¿²»×ãÅ®ÉùÕı¾­°æ", "Ãñ·¿²»×ã");
 			break;
 		}
-		
+
 		return;
 	}
 	if (!¿ÉÔì(ÀàĞÍ))
@@ -101,6 +101,13 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 		break;
 	}
 
+	auto& spacePlayer = m_refEntity.m_refSpace.GetSpacePlayer(refGateSession.NickName());
+	if (!spacePlayer.ÒÑ½âËø(ÀàĞÍ))
+	{
+		refGateSession.²¥·ÅÉùÒôBuzz("ÇëÏÈÔÚ½¨ÖşÖĞ½âËø¡£");
+		return;
+	}
+
 	if (m_refEntity.m_spBuilding && !m_refEntity.m_spBuilding->ÒÑÔìºÃ())
 	{
 		refGateSession.SayÏµÍ³("½¨Öş»¹Ã»ÔìºÃ");
@@ -122,6 +129,33 @@ bool Ôì»î¶¯µ¥Î»Component::IsÓ×³æ()const
 	return Ó×³æ == m_refEntity.m_ÀàĞÍ;
 }
 
+void Ôì»î¶¯µ¥Î»Component::½âËøµ¥Î»(const µ¥Î»ÀàĞÍ ÀàĞÍ)
+{
+	auto& spacePlayer = m_refEntity.m_refSpace.GetSpacePlayer(m_refEntity);
+	if (!spacePlayer.¿ªÊ¼½âËøµ¥Î»(ÀàĞÍ, m_refEntity))
+		return;
+
+	Co½âËøµ¥Î»(ÀàĞÍ);
+}
+
+CoTaskBool Ôì»î¶¯µ¥Î»Component::Co½âËøµ¥Î»(const µ¥Î»ÀàĞÍ ÀàĞÍ)
+{
+	const int MAX½ø¶È = 10;
+	for (int i = 0; i < MAX½ø¶È; ++i)
+	{
+		using namespace std;
+		if (co_await CoTimer::Wait(1000ms, m_cancel½âËøµ¥Î»))
+			co_return false;
+
+		EntitySystem::BroadcastEntityÃèÊö(m_refEntity, std::format("½âËø½ø¶È{0}/{1}", i + 1, MAX½ø¶È));
+	}
+
+	EntitySystem::BroadcastEntityÃèÊö(m_refEntity, "");
+	auto& spacePlayer = m_refEntity.m_refSpace.GetSpacePlayer(m_refEntity);
+	spacePlayer.½âËøÍê³É(ÀàĞÍ, m_refEntity);
+    co_return true;
+}
+
 bool Ôì»î¶¯µ¥Î»Component::IsÓ×³æÕıÔÚÍÉ±ä()
 {
 	return !m_TaskCancelÔì»î¶¯µ¥Î».co.Finished() && IsÓ×³æ();
@@ -130,6 +164,8 @@ bool Ôì»î¶¯µ¥Î»Component::IsÓ×³æÕıÔÚÍÉ±ä()
 void Ôì»î¶¯µ¥Î»Component::TryCancel(Entity& refEntity)
 {
 	m_TaskCancelÔì»î¶¯µ¥Î».TryCancel();
+	if (m_cancel½âËøµ¥Î»)
+		m_cancel½âËøµ¥Î»();
 }
 
 CoTaskBool Ôì»î¶¯µ¥Î»Component::CoÔì»î¶¯µ¥Î»()

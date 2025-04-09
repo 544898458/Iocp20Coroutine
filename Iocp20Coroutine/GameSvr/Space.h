@@ -80,6 +80,16 @@ public:
 
 		void OnDestroy(const bool b删除玩家所有单位, Space& refSpace, const std::string& refStrNickName);
 		void Erase(uint64_t u64Id);
+		bool 开始解锁单位(const 单位类型 类型, Entity& refEntity在此建筑中解锁);
+		bool 解锁完成(const 单位类型 类型, Entity& refEntity在此建筑中解锁);
+		bool 已解锁(const 单位类型 类型)const;
+
+		struct 单位解锁状态
+		{
+			bool b已解锁 = false;
+			WpEntity wpEntity在此建筑中解锁;
+		};
+		std::map<单位类型, 单位解锁状态> m_map解锁状态;
 	};
 	//using SpSpacePlayer = std::shared_ptr<SpacePlayer> ;
 	std::unordered_map<std::string, SpacePlayer> m_mapPlayer;
