@@ -357,6 +357,9 @@
     <ClCompile Include="单位组件\飞向目标Component.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
+    <ClCompile Include="单位组件\解锁单位Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -573,6 +576,9 @@
       <Filter>单位组件</Filter>
     </ClInclude>
     <ClInclude Include="单位组件\飞向目标Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\解锁单位Component.h">
       <Filter>单位组件</Filter>
     </ClInclude>
   </ItemGroup>

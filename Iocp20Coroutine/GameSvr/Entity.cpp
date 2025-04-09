@@ -23,6 +23,7 @@
 #include "单位组件/AoiComponent.h"
 #include "单位组件/飞向目标Component.h"
 #include "单位组件/虫巢Component.h"
+#include "单位组件/解锁单位Component.h"
 #include "EntitySystem.h"
 #include "单位组件/PlayerNickNameComponent.h"
 #include "../IocpNetwork/MsgPack.h"

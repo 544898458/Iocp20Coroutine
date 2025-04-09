@@ -14,6 +14,7 @@
 #include "DefenceComponent.h"
 #include "BuildingComponent.h"
 #include "³æ³²Component.h"
+#include "½âËøµ¥Î»Component.h"
 
 void Ôì½¨ÖşComponent::AddComponent(Entity& refEntity)
 {
@@ -269,8 +270,14 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 
 	switch (ÀàĞÍ)
 	{
-	case »ùµØ:
+	case ³æÓª:
+		½âËøµ¥Î»Component::AddComponent(refNewEntity);
+		break;
 	case ±øÓª:
+		½âËøµ¥Î»Component::AddComponent(refNewEntity);
+		Ôì»î¶¯µ¥Î»Component::AddComponent(refNewEntity);
+		break;
+	case »ùµØ:
 	case »ú³¡:
 	case ÖØ¹¤³§:
 		Ôì»î¶¯µ¥Î»Component::AddComponent(refNewEntity);

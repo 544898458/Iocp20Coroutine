@@ -27,15 +27,12 @@ public:
 	uint16_t 等待造Count()const;
 	Position m_pos集结点;
 	bool Is幼虫()const;
-	void 解锁单位(const 单位类型 类型);
 private:
-	CoTaskBool Co解锁单位(const 单位类型 类型);
 	CoTaskBool Co造活动单位();
 	bool 采集集结点附近的资源(Entity& refEntiy)const;
 	
 private:
 	CoTaskCancel m_TaskCancel造活动单位;
-	FunCancel m_cancel解锁单位;
 	std::unordered_set<单位类型> m_set可造类型;
 	std::list<单位类型> m_list等待造;//int m_i等待造兵数 = 0;
 	Entity& m_refEntity;
