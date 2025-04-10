@@ -280,8 +280,11 @@ std::set<int32_t> AoiComponent::能看到的格子(const Position& pos) const
 	const auto [i32格子Id, i32格子X, i32格子Z] = AoiComponent::格子(pos);
 
 	int i32视野范围 = m_i32视野范围;
-	if (m_refEntity.m_spAttack)
+	if (m_refEntity.m_spAttack) 
+	{
 		i32视野范围 = std::max<int>((int)m_refEntity.m_spAttack->m_战斗配置.f警戒距离, i32视野范围);
+		i32视野范围 = std::max<int>((int)m_refEntity.m_spAttack->m_战斗配置.f攻击距离, i32视野范围);
+	}
 
 	i32视野范围 /= u8格子正方形边长;
 	++i32视野范围;//上面去掉小数了，这里加一点

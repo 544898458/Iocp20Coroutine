@@ -560,10 +560,10 @@ namespace 单人剧情
 		CHECK_WP_CO_RET_0(wp视口);
 
 		{
-			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工虫, { -10, 15 });
-			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工虫, { -10, 10 });
 			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工虫, { -15, 15 });
-			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工虫, { -15, 10 });
+			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工虫, { -15, 20 });
+			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工虫, { -20, 15 });
+			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工虫, { -20, 20 });
 			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工虫, { -30, 30 });
 
 			资源Component::Add(refSpace, 晶体矿, { -20, 35 });
@@ -658,7 +658,7 @@ namespace 单人剧情
 		CHECK_WP_CO_RET_0(wp视口);
 
 		{
-			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工程车, { -10, 10 });
+			refSpace.造活动单位(*wp视口.lock(), strPlayerNickName, 单位类型::工程车, { -15, 15 });
 
 
 			资源Component::Add(refSpace, 晶体矿, { -20, 35 });
