@@ -48,10 +48,10 @@ float AttackComponent::攻击距离(const Entity& refTarget) const
 float AttackComponent::攻击距离(const float f目标建筑半边长) const
 {
 	if (m_refEntity.m_wpOwner.expired())
-		return m_战斗配置.f攻击距离 + f目标建筑半边长;//普通战斗单位
+		return BuildingComponent::建筑半边长(m_refEntity) + m_战斗配置.f攻击距离 + f目标建筑半边长;//普通战斗单位
 
 	auto spOwner = m_refEntity.m_wpOwner.lock();
-	return m_战斗配置.f攻击距离 + f目标建筑半边长 + BuildingComponent::建筑半边长(*spOwner);
+	return BuildingComponent::建筑半边长(*spOwner) + m_战斗配置.f攻击距离 + f目标建筑半边长;
 }
 Position AttackComponent::怪物闲逛(const Position& refOld)
 {
