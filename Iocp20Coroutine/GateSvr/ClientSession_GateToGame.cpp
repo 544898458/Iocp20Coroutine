@@ -24,37 +24,48 @@ void SendToGateClient(const T& refMsg, uint64_t gateSessionId);
 /// <param name="len"></param>
 void ClientSession_GateToGame::OnRecvPack(const void* buf, const int len)
 {
-	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
-	msgpack::object obj = oh.get();
-	const auto msg = MsgHead::GetMsgId(obj);
-	//LOG(INFO) << obj;
-	//auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompletionKey<WebSocketSession<MySession>>*>(this->nt_work_data_);
-	//auto pSessionSocketCompeletionKey = this->m_pWsSession;
-	switch (msg.id)
+
+	try
 	{
-		//case MsgId::Login:m_MsgQueue.PushMsg<MsgLogin>(*this, obj); break;
-		//case MsgId::Move:m_MsgQueue.PushMsg<MsgMove>(*this, obj); break;
-		//case MsgId::Say:m_MsgQueue.PushMsg<MsgSay >(*this, obj); break;
-		//case MsgId::SelectRoles:m_MsgQueue.PushMsg<MsgSelectRoles>(*this, obj); break;
-		//case MsgId::AddRole:m_MsgQueue.PushMsg<MsgAddRole>(*this, obj); break;
-		//case MsgId::AddBuilding:m_MsgQueue.PushMsg<MsgAddBuilding>(*this, obj); break;
-	case MsgId::Gate转发:
-	{
-		const auto msg = obj.as<MsgGate转发>();
-		if (msg.vecByte.empty())
+		msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
+
+		msgpack::object obj = oh.get();
+		const auto msg = MsgHead::GetMsgId(obj);
+		//LOG(INFO) << obj;
+		//auto pSessionSocketCompeletionKey = static_cast<Iocp::SessionSocketCompletionKey<WebSocketSession<MySession>>*>(this->nt_work_data_);
+		//auto pSessionSocketCompeletionKey = this->m_pWsSession;
+		switch (msg.id)
 		{
-			LOG(ERROR) << "ERR";
-			_ASSERT(false);
-			return;
+			//case MsgId::Login:m_MsgQueue.PushMsg<MsgLogin>(*this, obj); break;
+			//case MsgId::Move:m_MsgQueue.PushMsg<MsgMove>(*this, obj); break;
+			//case MsgId::Say:m_MsgQueue.PushMsg<MsgSay >(*this, obj); break;
+			//case MsgId::SelectRoles:m_MsgQueue.PushMsg<MsgSelectRoles>(*this, obj); break;
+			//case MsgId::AddRole:m_MsgQueue.PushMsg<MsgAddRole>(*this, obj); break;
+			//case MsgId::AddBuilding:m_MsgQueue.PushMsg<MsgAddBuilding>(*this, obj); break;
+		case MsgId::Gate转发:
+		{
+			const auto msg = obj.as<MsgGate转发>();
+			if (msg.vecByte.empty())
+			{
+				LOG(ERROR) << "ERR";
+				_ASSERT(false);
+				return;
+			}
+			MsgGateSvr转发GameSvr消息给游戏前端 msg给前端(&msg.vecByte[0], (int)msg.vecByte.size());
+			SendToGateClient(msg给前端, msg.gateClientSessionId);
+
 		}
-		MsgGateSvr转发GameSvr消息给游戏前端 msg给前端(&msg.vecByte[0], (int)msg.vecByte.size());
-		SendToGateClient(msg给前端, msg.gateClientSessionId);
-		
-	}
-	break;
-	default:
-		LOG(ERROR) << "没处理msgId:" << msg.id;
-		_ASSERT(false);
 		break;
+		default:
+			LOG(ERROR) << "没处理msgId:" << msg.id;
+			_ASSERT(false);
+			break;
+		}
+	}
+	catch (const msgpack::type_error& error)
+	{
+		LOG(ERROR) << len << "=len, ClientSession_GateToGame,反序列化失败," << error.what();
+		_ASSERT(false);
+		return;
 	}
 }

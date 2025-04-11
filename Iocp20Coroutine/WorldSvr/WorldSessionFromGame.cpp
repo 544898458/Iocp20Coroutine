@@ -63,20 +63,30 @@ bool WorldSessionFromGame::Process()
 /// <param name="len"></param>
 void WorldSessionFromGame::OnRecvPack(const void* buf, int len)
 {
-	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
-	msgpack::object obj = oh.get();
-	const auto msg = MsgHead::GetMsgId(obj);
-	//LOG(INFO) << obj;
-
-	switch (msg.id)
+	try
 	{
-		/*case MsgId::Say:m_MsgQueue.PushMsg<MsgSay>(*this, obj); break;
-		case MsgId::ChangeMoney:m_MsgQueue.PushMsg<MsgChangeMoney>(*this, obj); break;
-		*/case MsgId::Gate转发:m_MsgQueue.PushMsg<MsgGate转发>(*this, obj); break;
-		default:
-			LOG(WARNING) << "没处理GameSvr发来的消息:" << msg.id;
-			_ASSERT(false);
-			break;
+		msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
+
+		msgpack::object obj = oh.get();
+		const auto msg = MsgHead::GetMsgId(obj);
+		//LOG(INFO) << obj;
+
+		switch (msg.id)
+		{
+			/*case MsgId::Say:m_MsgQueue.PushMsg<MsgSay>(*this, obj); break;
+			case MsgId::ChangeMoney:m_MsgQueue.PushMsg<MsgChangeMoney>(*this, obj); break;
+			*/case MsgId::Gate转发:m_MsgQueue.PushMsg<MsgGate转发>(*this, obj); break;
+			default:
+				LOG(WARNING) << "没处理GameSvr发来的消息:" << msg.id;
+				_ASSERT(false);
+				break;
+		}
+	}
+	catch (const msgpack::type_error& error)
+	{
+		LOG(ERROR) << len << "=len, WorldSessionFromGame,反序列化失败," << error.what();
+		_ASSERT(false);
+		return;
 	}
 }
 
@@ -95,7 +105,7 @@ CoTaskBool WorldSessionFromGame::Co收到聊天(MsgSay msg)
 
 	static FunCancel s_funCancel;
 	const bool ok = co_await g_慢操作AliyunGreen.CoAliyunGreen(strGbk, s_funCancel);
-	if(!ok)
+	if (!ok)
 		msg.content = "*";
 
 	this->m_pServer->m_Sessions.Broadcast(msg);
@@ -196,7 +206,7 @@ void WorldSessionFromGame::OnRecv(const MsgChangeMoney& msg, const uint64_t idGa
 		return;
 	}
 
-	CoChangeMoney(msg,itFind->second.NickName()).RunNew();
+	CoChangeMoney(msg, itFind->second.NickName()).RunNew();
 }
 //
 //void WorldSessionFromGame::OnRecv(const MsgLogin& msg)
