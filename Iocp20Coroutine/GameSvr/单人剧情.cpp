@@ -175,7 +175,7 @@ namespace 单人剧情
 		}
 
 		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！现在给您刷了一个晶体矿，请点击晶体矿，让工程车在晶体矿和基地之间搬运晶体矿");
-		资源Component::Add(refSpace, 晶体矿, { pos基地.x,pos基地.z - 20 });
+		资源Component::Add(refSpace, 晶体矿, { pos基地.x,pos基地.z + 20 });
 		资源Component::Add(refSpace, 燃气矿, { pos基地.x + 15,pos基地.z });
 
 		if (std::get<0>(co_await CoEvent<MyEvent::开始采集晶体矿>::Wait(funCancel)))
@@ -370,7 +370,7 @@ namespace 单人剧情
 		}
 
 		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！现在给您刷了一个晶体矿，请点击晶体矿，让工虫在晶体矿和虫巢之间搬运晶体矿");
-		资源Component::Add(refSpace, 晶体矿, { pos基地.x,pos基地.z - 20 });
+		资源Component::Add(refSpace, 晶体矿, { pos基地.x,pos基地.z + 20 });
 		资源Component::Add(refSpace, 燃气矿, { pos基地.x + 15,pos基地.z });
 
 		if (std::get<0>(co_await CoEvent<MyEvent::开始采集晶体矿>::Wait(funCancel)))
