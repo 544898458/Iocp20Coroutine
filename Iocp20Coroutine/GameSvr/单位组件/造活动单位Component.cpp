@@ -104,7 +104,19 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 	auto& spacePlayer = m_refEntity.m_refSpace.GetSpacePlayer(refGateSession.NickName());
 	if (!spacePlayer.ÒÑ½âËø(ÀàĞÍ))
 	{
-		refGateSession.²¥·ÅÉùÒôBuzz("ÇëÏÈÔÚ½¨ÖşÖĞ½âËø");
+		switch (ÀàĞÍ)
+		{
+		case ½üÕ½±ø:
+			refGateSession.²¥·ÅÉùÒôBuzz("ÇëÏÈÔÚ±øÓªÖĞ½âËø");
+			break;
+		case Ç¹³æ:
+			refGateSession.²¥·ÅÉùÒôBuzz("ÇëÏÈÔÚ³æÓªÖĞ½âËø");
+			break; 
+		default:
+			LOG(ERROR) << "Î´ÖªµÄÎ´½âËøµ¥Î»ÀàĞÍ," << ÀàĞÍ;
+			break;
+		}
+
 		return;
 	}
 

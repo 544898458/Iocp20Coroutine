@@ -271,6 +271,7 @@ enum MsgId
 	播放音乐,
 	原地坚守,
 	解锁单位,
+	已解锁单位,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -809,3 +810,11 @@ struct Msg解锁单位
 	单位类型 类型;
 	MSGPACK_DEFINE(msg, 类型);
 };
+
+struct Msg已解锁单位
+{
+	MsgHead msg{ .id = 已解锁单位 };
+	std::map<单位类型,bool> map解锁状态;
+	MSGPACK_DEFINE(msg, map解锁状态);
+};
+

@@ -40,6 +40,7 @@ public:
 	static void 播放声音Buzz(const std::string& refStrNickName, const std::string& str文本);
 	void 播放声音(const std::string& refStr声音, const std::string& str文本);
 	static void 播放声音(const std::string& refStrNickName, const std::string& refStr声音, const std::string& str文本);
+	void Send已解锁单位();
 
 	void Send设置视口(const Entity& refEntity);
 	void 删除选中(const uint64_t id);
@@ -91,6 +92,7 @@ private:
 	void 选中单位(std::vector<uint64_t> vecId, bool b追加 = false);
 	std::vector<WpEntity> Get空闲工程车(单位类型 造活动单位类型, bool b包括采集中的工程车);
 
+	
 	void Send选中音效(const Entity& refEntity);
 
 	void Send选中单位Responce();
