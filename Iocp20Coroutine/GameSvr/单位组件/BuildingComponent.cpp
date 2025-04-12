@@ -58,9 +58,9 @@ CoTaskBool BuildingComponent::Co建造过程(FunCancel& cancel)
 
 		std::ostringstream oss;
 		if (MAX建造百分比 <= this->m_n建造进度百分比)
-			oss << "建造完成";
+			oss << "变异完成";
 		else
-			oss << "正在建造:" << this->m_n建造进度百分比 << "%";
+			oss << "正在变异:" << this->m_n建造进度百分比 << "%";
 
 		this->m_refEntity.Broadcast<MsgEntity描述>({ .idEntity = this->m_refEntity.Id, .str描述 = StrConv::GbkToUtf8(oss.str()) });
 	}
