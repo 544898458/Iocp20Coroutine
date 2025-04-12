@@ -885,11 +885,11 @@ namespace 单人剧情
 					fun玩家说("现在我的部队会护送你们回基地。到时候再仔细回忆一下。");	_等玩家读完returnTrue;
 					fun坦克手齐诺维说("上面还有两个虫巢，我要炸掉它们再回去。");	_等玩家读完returnTrue;
 					fun玩家说("上面的虫巢有敌方的炮台把守，我们过不去。");	_等玩家读完returnTrue;
-					fun坦克手齐诺维说("我的坦克专门克制炮台。一辆坦克就能全灭它们，何况我现在有十辆。");	_等玩家读完returnTrue;
+					fun坦克手齐诺维说("我的坦克专门克制炮台。<color=#a0ff50>坦克的射程略远于炮台</color>。一辆坦克就能全灭它们，何况我现在有十辆。");	_等玩家读完returnTrue;
 					fun玩家说("好的，但是坦克要接受我的指挥，我的步兵会保护坦克。");	_等玩家读完returnTrue;
 					fun坦克手齐诺维说("是！明白！指挥官！");	_等玩家读完returnTrue;
 					PlayerComponent::剧情对话已看完(strPlayerNickName);
-					PlayerGateSession_Game::Say任务提示(strPlayerNickName, "消灭上方两个敌方虫巢，控制好步兵保护您的坦克");
+					PlayerGateSession_Game::Say任务提示(strPlayerNickName, "消灭上方两个敌方虫巢，控制好步兵保护您的坦克。让坦克在地方炮台的射程外攻击。");
 				}
 
 			}
@@ -905,10 +905,10 @@ namespace 单人剧情
 		const auto fun房虫胡噜说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {房虫胡噜说(refSpace, strPlayerNickName, str内容); };
 		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家_虫_说(refSpace, strPlayerNickName, str内容); };
 		const auto fun绿色坦克洪隆说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {绿色坦克洪隆说(refSpace, strPlayerNickName, str内容); };
-
+		
 		fun房虫胡噜说(strPlayerNickName + "，有一个好消息，我们的幼虫经过千万次的模仿，基本掌握了拟态复制人类三色坦克的方法。"); _等玩家读完returnTrue;
 		fun玩家说("太好了。那么接下来肯定还有一个坏消息吧？");	_等玩家读完returnTrue;
-		fun房虫胡噜说("是的，蜕变出的第一批绿色坦克的虫巢已遭人类攻占。"); _等玩家读完returnTrue;
+		fun房虫胡噜说("是的，蜕变出的第一批<color = #a0ff50>绿色坦克</color>的虫巢已遭人类攻占。"); _等玩家读完returnTrue;
 		fun玩家说("绿色坦克看来仍然打不过人类的部队啊！");	_等玩家读完returnTrue;
 		fun房虫胡噜说("绿色坦克攻击距离远，但是面对贴近的人类步兵却处于劣势。此外绿色坦克发射出的光刺会被障碍物阻挡。现在人类的科学家正在研究我们的绿色坦克。"); _等玩家读完returnTrue;
 		fun玩家说("我现在去救它们。");	_等玩家读完returnTrue;

@@ -37,7 +37,7 @@ bool 造建筑Component::正在建造(const Entity& refEntity)
 		m_set可造类型 = { 基地,民房,兵营,地堡,炮台,机场,重车厂 };
 		break;
 	case 工虫:
-		m_set可造类型 = { 虫巢,虫营,飞塔,拟态源 };
+		m_set可造类型 = { 虫巢,虫营,飞塔,拟态源,炮台 };
 		break;
 	default:
 		break;
