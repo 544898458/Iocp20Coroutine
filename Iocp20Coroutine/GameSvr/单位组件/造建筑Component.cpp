@@ -34,18 +34,10 @@ bool Ôì½¨ÖşComponent::ÕıÔÚ½¨Ôì(const Entity& refEntity)
 	switch (refEntity.m_ÀàĞÍ)
 	{
 	case ¹¤³Ì³µ:
-		m_set¿ÉÔìÀàĞÍ.insert(»ùµØ);
-		m_set¿ÉÔìÀàĞÍ.insert(Ãñ·¿);
-		m_set¿ÉÔìÀàĞÍ.insert(±øÓª);
-		m_set¿ÉÔìÀàĞÍ.insert(µØ±¤);
-		m_set¿ÉÔìÀàĞÍ.insert(ÅÚÌ¨);
-		m_set¿ÉÔìÀàĞÍ.insert(»ú³¡);
-		m_set¿ÉÔìÀàĞÍ.insert(ÖØ¹¤³§);
+		m_set¿ÉÔìÀàĞÍ = { »ùµØ,Ãñ·¿,±øÓª,µØ±¤,ÅÚÌ¨,»ú³¡,ÖØ³µ³§ };
 		break;
 	case ¹¤³æ:
-		m_set¿ÉÔìÀàĞÍ.insert(³æ³²);
-		m_set¿ÉÔìÀàĞÍ.insert(³æÓª);
-		m_set¿ÉÔìÀàĞÍ.insert(·ÉËş);
+		m_set¿ÉÔìÀàĞÍ = { ³æ³²,³æÓª,·ÉËş,ÄâÌ¬Ô´ };
 		break;
 	default:
 		break;
@@ -107,7 +99,7 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position pos, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 	{
 		EntitySystem::BroadcastEntityÃèÊö(m_refEntity, "ÕıÔÚ½¨Ôì");
 
-		if(m_refEntity.m_ÀàĞÍ == ¹¤³Ì³µ )
+		if (m_refEntity.m_ÀàĞÍ == ¹¤³Ì³µ)
 			m_refEntity.BroadcastChangeSkeleAnim("2", true);
 
 		if (co_await Co½¨Ôì¹ı³Ì(wpEntity½¨Öş, m_cancelÔì½¨Öş))
@@ -279,7 +271,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 		break;
 	case »ùµØ:
 	case »ú³¡:
-	case ÖØ¹¤³§:
+	case ÖØ³µ³§:
 		Ôì»î¶¯µ¥Î»Component::AddComponent(refNewEntity);
 		break;
 	case µØ±¤:

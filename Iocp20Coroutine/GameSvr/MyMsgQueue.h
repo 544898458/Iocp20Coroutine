@@ -313,7 +313,7 @@ enum 单位类型
 	炮台,//Photon Cannon
 	虫巢,//hatchery
 	机场,//Spaceport
-	重工厂,//Factory 
+	重车厂,//Factory 
 	虫营,//对应兵营
 	飞塔,//Spore Conlony
 	拟态源,//拟态源，原创，绿色坦克前置建筑

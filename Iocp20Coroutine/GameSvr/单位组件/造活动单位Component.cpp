@@ -30,7 +30,7 @@ void 造活动单位Component::AddComponent(Entity& refEntity)
 		m_set可造类型.insert(枪兵);
 		m_set可造类型.insert(近战兵);
 		break;
-	case 重工厂:
+	case 重车厂:
 		m_set可造类型.insert(三色坦克);
 		break;
 	case 幼虫:
