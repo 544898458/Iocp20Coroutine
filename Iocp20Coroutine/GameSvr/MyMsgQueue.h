@@ -340,7 +340,7 @@ enum 单位属性类型
     攻击速度,
     攻击范围,
 };
-
+MSGPACK_ADD_ENUM(单位属性类型);
 struct MsgHead
 {
 	//void SetSn(uint32_t snParam) const
