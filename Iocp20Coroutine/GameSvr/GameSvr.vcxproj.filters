@@ -360,6 +360,9 @@
     <ClCompile Include="单位组件\解锁单位Component.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
+    <ClCompile Include="单位组件\升级单位属性Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -579,6 +582,9 @@
       <Filter>单位组件</Filter>
     </ClInclude>
     <ClInclude Include="单位组件\解锁单位Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\升级单位属性Component.h">
       <Filter>单位组件</Filter>
     </ClInclude>
   </ItemGroup>

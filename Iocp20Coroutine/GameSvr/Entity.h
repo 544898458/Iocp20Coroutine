@@ -27,6 +27,7 @@ class PlayerGateSession_Game;
 class 虫巢Component;
 class 飞向目标Component;
 class 解锁单位Component;
+class 升级单位属性Component;
 
 class Entity final : public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
@@ -97,6 +98,8 @@ public:
 	std::unique_ptr<AoiComponent> m_upAoi;
 	std::unique_ptr<飞向目标Component> m_up飞向目标;
 	std::unique_ptr<解锁单位Component> m_up解锁单位;
+	std::unique_ptr<升级单位属性Component> m_up升级单位属性;
+	
 	/// <summary>
 	/// 地堡或运输机
 	/// </summary>
