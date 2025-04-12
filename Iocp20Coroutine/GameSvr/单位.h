@@ -14,11 +14,15 @@ namespace 单位
 		MSGPACK_DEFINE(strName, strPrefabName, str选中音效, str空闲动作, str阵亡动作, str阵亡音效);
 
 	};
-	struct 制造配置
+	struct 消耗资源
 	{
 		uint16_t u16消耗晶体矿;
 		uint16_t u16消耗燃气矿;
+	};
+	struct 制造配置
+	{
 		uint16_t u16初始Hp;
+		消耗资源 消耗;
 	};
 	struct 建筑单位配置
 	{
@@ -51,8 +55,12 @@ namespace 单位
 	{
 		uint16_t u16初始Hp;
 	};
-	
-	using 单位属性等级配置 = std::map<单位属性类型, std::map<uint16_t, uint16_t> >;
+	struct 单位属性等级配置详情
+	{
+        uint16_t u16加数值;
+		消耗资源 消耗;
+	};
+	using 单位属性等级配置 = std::map<单位属性类型, std::map<uint16_t, 单位属性等级配置详情> >;
 	//struct 资源单位配置
 	//{
 	//	单位配置 配置;
@@ -65,7 +73,8 @@ namespace 单位
 	bool Find战斗配置(const 单位类型 类型, 战斗配置& refOut);
 	bool Find怪配置(const 单位类型 类型, 怪配置& refOut);
 	bool Find制造配置(const 单位类型 类型, 制造配置& refOut);
-	bool Find单位属性等级配置(const 单位类型 单位, const 单位属性类型 属性, const uint16_t u16等级, uint16_t& refOut加数值);
+	bool Find单位解锁配置(const 单位类型 单位, 消耗资源& refOut);
+	bool Find单位属性等级配置(const 单位类型 单位, const 单位属性类型 属性, const uint16_t u16等级, 单位属性等级配置详情& refOut);
 	uint16_t 单位攻击(const 单位类型 单位, const uint16_t u16攻击等级);
 };
 

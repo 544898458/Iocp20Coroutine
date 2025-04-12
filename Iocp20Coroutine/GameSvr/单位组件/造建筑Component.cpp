@@ -188,17 +188,17 @@ WpEntity 造建筑Component::AddBuilding(const 单位类型 类型, const Position pos)
 	if (!m_refEntity.m_refSpace.可放置建筑(pos, 建筑.f半边长))
 	{
 		//播放声音("TSCErr00", "有阻挡，无法建造");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
-		PlayerComponent::播放声音(m_refEntity, "语音/无法在这里建造可爱版", "有阻挡，无法建造");
+		PlayerComponent::播放声音(m_refEntity, "语音/无法在这里建造可爱版", "有阻挡");
 		return{};
 	}
-	if (制造.u16消耗燃气矿 > Space::GetSpacePlayer(m_refEntity).m_u32燃气矿)
+	if (制造.消耗.u16消耗燃气矿 > Space::GetSpacePlayer(m_refEntity).m_u32燃气矿)
 	{
 		//std::ostringstream oss;
-		PlayerComponent::播放声音(m_refEntity, "语音/燃气矿不足可爱版", "燃气矿不足，无法建造");// << 配置.建造.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
+		PlayerComponent::播放声音(m_refEntity, "语音/燃气矿不足可爱版", "燃气矿不足无法建造");// << 配置.建造.u16消耗燃气矿;//(low error beep) Insufficient Vespene Gas.气矿不足 
 		//Say系统(oss.str());
 		return{};
 	}
-	Space::GetSpacePlayer(m_refEntity).m_u32燃气矿 -= 制造.u16消耗燃气矿;
+	Space::GetSpacePlayer(m_refEntity).m_u32燃气矿 -= 制造.消耗.u16消耗燃气矿;
 	//auto iterNew = m_vecFunCancel.insert(m_vecFunCancel.end(), std::make_shared<FunCancel>());//不能存对象，扩容可能导致引用和指针失效
 	//auto [stop, responce] = co_await AiCo::ChangeMoney(*this, 配置.建造.u16消耗晶体矿, false, **iterNew);
 	//LOG(INFO) << "协程RPC返回,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
@@ -208,15 +208,15 @@ WpEntity 造建筑Component::AddBuilding(const 单位类型 类型, const Position pos)
 	//	co_return{};
 	//}
 	//if (0 != responce.error)
-	if (制造.u16消耗晶体矿 > Space::GetSpacePlayer(m_refEntity).m_u32晶体矿)
+	if (制造.消耗.u16消耗晶体矿 > Space::GetSpacePlayer(m_refEntity).m_u32晶体矿)
 	{
 		//LOG(WARNING) << "扣钱失败,error=" << responce.error;
 		//m_u32燃气矿 += 配置.建造.u16消耗燃气矿;//返还燃气矿
-		PlayerComponent::播放声音(m_refEntity, "语音/晶体矿不足可爱版", "晶体矿不足无法建造");//Say系统("晶体矿矿不足" + 配置.建造.u16消耗晶体矿);
+		PlayerComponent::播放声音(m_refEntity, "语音/晶体矿不足可爱版", "晶体矿不足");
 
 		return{};
 	}
-	Space::GetSpacePlayer(m_refEntity).m_u32晶体矿 -= 制造.u16消耗晶体矿;
+	Space::GetSpacePlayer(m_refEntity).m_u32晶体矿 -= 制造.消耗.u16消耗晶体矿;
 
 	PlayerComponent::Send资源(m_refEntity);
 

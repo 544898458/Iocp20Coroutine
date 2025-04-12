@@ -426,9 +426,9 @@ bool Space::SpacePlayer::解锁完成(const 单位类型 类型, Entity& refEntity在此建筑
 	return true;
 }
 
-bool Space::SpacePlayer::开始解锁单位(const 单位类型 类型, Entity& refEntity在此建筑中解锁)
+bool Space::SpacePlayer::开始解锁单位(const 单位类型 单位, Entity& refEntity在此建筑中解锁)
 {
-	auto iterFind = m_map单位解锁.find(类型);
+	auto iterFind = m_map单位解锁.find(单位);
 	CHECK_RET_FALSE(iterFind != m_map单位解锁.end());
 	auto& ref解锁状态 = iterFind->second;
 
@@ -444,6 +444,30 @@ bool Space::SpacePlayer::开始解锁单位(const 单位类型 类型, Entity& refEntity在此
 		return false;
 	}
 
+	单位::消耗资源 消耗;
+	if (!单位::Find单位解锁配置(单位, 消耗))
+	{
+		PlayerGateSession_Game::播放声音Buzz(refEntity在此建筑中解锁, "已升到最高级");
+		return false;
+	}
+
+	if (消耗.u16消耗燃气矿 > m_u32燃气矿)
+	{
+		PlayerComponent::播放声音(refEntity在此建筑中解锁, "语音/燃气矿不足正经版", "燃气矿不足，不能解锁");//(low error beep) Insufficient Vespene Gas.气矿不足 
+		return false;
+	}
+	m_u32燃气矿 -= 消耗.u16消耗燃气矿;
+
+	if (消耗.u16消耗晶体矿 > m_u32晶体矿)
+	{
+		//refGateSession.m_u32燃气矿 += 配置.制造.u16消耗燃气矿;
+		PlayerComponent::播放声音(refEntity在此建筑中解锁, "语音/晶体矿不足正经版", "晶体矿不足，不能解锁");
+		return false;
+	}
+	m_u32晶体矿 -= 消耗.u16消耗晶体矿;
+
+	PlayerComponent::Send资源(refEntity在此建筑中解锁);
+
 	ref解锁状态.wpEntity在此建筑中解锁 = refEntity在此建筑中解锁.shared_from_this();
 
 	return true;
@@ -456,24 +480,40 @@ bool Space::SpacePlayer::开始解锁单位(const 单位类型 类型, Entity& refEntity在此
 /// <param name="属性"></param>
 /// <param name="refEntity在此建筑中解锁"></param>
 /// <returns></returns>
-bool Space::SpacePlayer::开始升级单位属性(const 单位类型 单位, const 单位属性类型 属性, Entity& refEntity在此建筑中解锁)
+bool Space::SpacePlayer::开始升级单位属性(const 单位类型 单位, const 单位属性类型 属性, Entity& refEntity在此建筑中升级)
 {
 	auto& ref单位属性等级 = m_map单位属性等级[单位][属性];
 	if (!ref单位属性等级.wpEntity在此建筑中升级.expired())
 	{
-		PlayerGateSession_Game::播放声音Buzz(refEntity在此建筑中解锁, "正在升级");
+		PlayerGateSession_Game::播放声音Buzz(refEntity在此建筑中升级, "正在升级");
 		return false;
 	}
 
-	uint16_t u16加数值 = 0;
-	if (!单位::Find单位属性等级配置(单位, 属性, ref单位属性等级.u16等级 + 1, u16加数值))
+	单位::单位属性等级配置详情 等级详情;
+	if (!单位::Find单位属性等级配置(单位, 属性, ref单位属性等级.u16等级 + 1, 等级详情))
 	{
-		PlayerGateSession_Game::播放声音Buzz(refEntity在此建筑中解锁, "已升到最高级");
+		PlayerGateSession_Game::播放声音Buzz(refEntity在此建筑中升级, "已升到最高级");
 		return false;
 	}
 
+	if (等级详情.消耗.u16消耗燃气矿 > m_u32燃气矿)
+	{
+		PlayerComponent::播放声音(refEntity在此建筑中升级, "语音/燃气矿不足正经版", "燃气矿不足，不能升级");//(low error beep) Insufficient Vespene Gas.气矿不足 
+		return false;
+	}
+	m_u32燃气矿 -= 等级详情.消耗.u16消耗燃气矿;
 
-	ref单位属性等级.wpEntity在此建筑中升级 = refEntity在此建筑中解锁.shared_from_this();
+	if (等级详情.消耗.u16消耗晶体矿 > m_u32晶体矿)
+	{
+		//refGateSession.m_u32燃气矿 += 配置.制造.u16消耗燃气矿;
+		PlayerComponent::播放声音(refEntity在此建筑中升级, "语音/晶体矿不足正经版", "晶体矿不足，不能升级");
+		return false;
+	}
+	m_u32晶体矿 -= 等级详情.消耗.u16消耗晶体矿;
+	
+	PlayerComponent::Send资源(refEntity在此建筑中升级);
+
+	ref单位属性等级.wpEntity在此建筑中升级 = refEntity在此建筑中升级.shared_from_this();
 
 	return true;
 }

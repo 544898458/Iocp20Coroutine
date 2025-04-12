@@ -81,8 +81,8 @@ public:
 		void OnDestroy(const bool b删除玩家所有单位, Space& refSpace, const std::string& refStrNickName);
 		void Erase(uint64_t u64Id);
 
-		bool 开始解锁单位(const 单位类型 类型, Entity& refEntity在此建筑中解锁);
-		bool 解锁完成(const 单位类型 类型, Entity& refEntity在此建筑中解锁);
+		bool 开始解锁单位(const 单位类型 类型, Entity& refEntity建筑);
+		bool 解锁完成(const 单位类型 类型, Entity& refEntity建筑);
 		bool 已解锁(const 单位类型 类型)const;
 
 		bool 开始升级单位属性(const 单位类型 类型, const 单位属性类型 属性, Entity& refEntity在此建筑中解锁);

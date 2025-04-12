@@ -66,6 +66,7 @@ void 升级单位属性Component::升级(const 单位类型 单位, const 单位属性类型 属性)
 	}
 
 	auto& spacePlayer = m_refEntity.m_refSpace.GetSpacePlayer(m_refEntity);
+
 	if (!spacePlayer.开始升级单位属性(单位, 属性, m_refEntity))
 		return;
 

@@ -38,9 +38,14 @@ namespace std
 		return _Ostr << "建筑单位配置," << _ref.f半边长;
 	}
 	template <class _Traits>
+	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::消耗资源& _ref)
+	{
+		return _Ostr << "消耗资源," << _ref.u16消耗晶体矿 << "\t" << _ref.u16消耗燃气矿;
+	}
+	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::制造配置& _ref)
 	{
-		return _Ostr << "制造配置," << _ref.u16消耗晶体矿 << "\t" << _ref.u16消耗燃气矿 << "\t" << _ref.u16初始Hp;
+		return _Ostr << "制造配置," << _ref.消耗 << "\t" << _ref.u16初始Hp;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::怪配置& _ref)
@@ -156,6 +161,22 @@ namespace YAML {
 			return true;
 		}
 	};
+
+	template<>
+	struct convert<单位::消耗资源> {
+		static Node encode(const 单位::消耗资源& rhs) {
+
+			LOG(ERROR) << "";
+			_ASSERT(false);
+			return Node();
+		}
+		static bool decode(const Node& refNode, 单位::消耗资源& rhs) {
+			CHECK_RET_FALSE(refNode.IsMap());
+			rhs = { refNode["消耗燃气矿"].as<uint16_t>(),refNode["消耗晶体矿"].as<uint16_t>() };
+			return true;
+		}
+	};
+
 	template<>
 	struct convert<单位::制造配置> {
 		static Node encode(const 单位::制造配置& rhs) {
@@ -166,7 +187,7 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::制造配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["消耗晶体矿"].as<uint16_t>(), refNode["消耗燃气矿"].as<uint16_t>(), refNode["初始HP"].as<uint16_t>() };
+			rhs = { refNode["消耗晶体矿"].as<uint16_t>(), refNode.as<单位::消耗资源>() };
 			return true;
 		}
 	};
@@ -196,7 +217,7 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::单位属性等级配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs[refNode["属性"].as<单位属性类型>()][refNode["等级"].as<uint16_t>()] = refNode["加数值"].as<uint16_t>();
+			rhs[refNode["属性"].as<单位属性类型>()][refNode["等级"].as<uint16_t>()] = { refNode["加数值"].as<uint16_t>(),refNode.as<单位::消耗资源>() };
 			return true;
 		}
 	};
@@ -211,6 +232,7 @@ namespace 单位
 	std::unordered_map<单位类型, 战斗配置> g_map战斗配置;
 	std::unordered_map<单位类型, 怪配置> g_map怪配置;
 	std::unordered_map<单位类型, 单位属性等级配置> g_map单位属性等级配置;
+	std::unordered_map<单位类型, 消耗资源> g_map单位解锁配置;
 
 	template<class T>
 	bool 读配置文件(const std::string& strPathName, std::unordered_map<单位类型, T>& map)
@@ -251,6 +273,7 @@ namespace 单位
 		CHECK_RET_FALSE(读配置文件("配置/战斗.yaml", g_map战斗配置));
 		CHECK_RET_FALSE(读配置文件("配置/怪.yaml", g_map怪配置));
 		CHECK_RET_FALSE(读配置文件("配置/单位属性等级.yaml", g_map单位属性等级配置));
+		CHECK_RET_FALSE(读配置文件("配置/单位解锁.yaml", g_map单位解锁配置));
 		return true;
 	}
 	template<typename V>
@@ -268,30 +291,35 @@ namespace 单位
 	bool Find战斗配置(const 单位类型 类型, 战斗配置& refOut) { return FindMap(g_map战斗配置, 类型, refOut); }
 	bool Find怪配置(const 单位类型 类型, 怪配置& refOut) { return FindMap(g_map怪配置, 类型, refOut); }
 	bool Find制造配置(const 单位类型 类型, 制造配置& refOut) { return FindMap(g_map制造配置, 类型, refOut); }
-	
-	bool Find单位属性等级配置(const 单位类型 单位, const 单位属性类型 属性, const uint16_t u16等级, uint16_t& refOut加数值)
+
+	bool Find单位属性等级配置(const 单位类型 单位, const 单位属性类型 属性, const uint16_t u16等级, 单位属性等级配置详情& refOut)
 	{
 		const auto iterFind单位 = g_map单位属性等级配置.find(单位);
-		if(iterFind单位 == g_map单位属性等级配置.end())
+		if (iterFind单位 == g_map单位属性等级配置.end())
 			return false;
 
-		const auto iterFind属性= iterFind单位->second.find(属性);
-        if(iterFind属性 == iterFind单位->second.end())
+		const auto iterFind属性 = iterFind单位->second.find(属性);
+		if (iterFind属性 == iterFind单位->second.end())
 			return false;
 
 		const auto iterFind加数值 = iterFind属性->second.find(u16等级);
-        if(iterFind加数值 == iterFind属性->second.end())
+		if (iterFind加数值 == iterFind属性->second.end())
 			return false;
 
-		refOut加数值 = iterFind加数值->second;
+		refOut = iterFind加数值->second;
 		return true;
 	}
 	uint16_t 单位攻击(const 单位类型 单位, const uint16_t u16攻击等级)
 	{
 		战斗配置 战斗;
 		CHECK_RET_DEFAULT(Find战斗配置(单位, 战斗));
-		uint16_t u16攻击等级加数值(0);
-		Find单位属性等级配置(单位, 攻击, u16攻击等级, u16攻击等级加数值);
-		return 战斗.i32攻击 + u16攻击等级加数值;
+		
+		单位::单位属性等级配置详情 等级详情 = {};
+		Find单位属性等级配置(单位, 攻击, u16攻击等级, 等级详情);
+		return 战斗.i32攻击 + 等级详情.u16加数值;
+	}
+	bool Find单位解锁配置(const 单位类型 单位, 消耗资源& refOut)
+	{
+		return FindMap(g_map单位解锁配置, 单位, refOut);
 	}
 }
