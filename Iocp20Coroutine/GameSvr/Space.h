@@ -90,6 +90,7 @@ public:
 			WpEntity wpEntity在此建筑中解锁;
 		};
 		std::map<单位类型, 单位解锁状态> m_map解锁状态;
+		MAP_单位属性等级 m_map单位属性等级;
 	};
 	//using SpSpacePlayer = std::shared_ptr<SpacePlayer> ;
 	std::unordered_map<std::string, SpacePlayer> m_mapPlayer;

@@ -23,7 +23,7 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::战斗配置& _ref)
 	{
-		return _Ostr << "战斗配置," << _ref.f警戒距离 << "\t" << _ref.f攻击距离 << "\t" << _ref.i32伤害 << "\t" << _ref.f每帧移动距离
+		return _Ostr << "战斗配置," << _ref.f警戒距离 << "\t" << _ref.f攻击距离 << "\t" << _ref.i32攻击 << "\t" << _ref.f每帧移动距离
 			<< _ref.str前摇动作 << "\t" << _ref.dura开始播放攻击动作 << "\t" << _ref.str攻击动作 << "\t" << _ref.dura开始伤害
 			<< _ref.str攻击音效 << "\t" << _ref.dura后摇;
 	}
@@ -96,7 +96,7 @@ namespace YAML {
 			CHECK_RET_FALSE(refNode.IsMap());
 			rhs = { refNode["f警戒距离"].as<float>(),
 					refNode["f攻击距离"].as<float>(),
-					refNode["i32伤害"].as<int32_t>(),
+					refNode["i32攻击"].as<int32_t>(),
 					refNode["f每帧移动距离"].as<float>(),
 					refNode["str前摇动作"].as<std::string>(),
 					std::chrono::milliseconds(refNode["dura开始播放攻击动作"].as<int32_t>()),

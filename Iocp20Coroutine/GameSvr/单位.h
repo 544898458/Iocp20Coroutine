@@ -31,7 +31,7 @@ namespace 单位
 	{
 		float f警戒距离;
 		float f攻击距离;
-		int32_t i32伤害;
+		int32_t i32攻击;
 		float f每帧移动距离;
 		std::string str前摇动作;
 		std::chrono::system_clock::duration dura开始播放攻击动作;

@@ -362,8 +362,8 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 
 		播放攻击音效();
 
-		if (0 < m_战斗配置.i32伤害)
-			refDefencer.m_spDefence->受伤(m_战斗配置.i32伤害, m_refEntity.Id);
+		if (0 < m_战斗配置.i32攻击)
+			refDefencer.m_spDefence->受伤(m_战斗配置.i32攻击, m_refEntity.Id);
 
 		if (绿色坦克 == m_refEntity.m_类型)
 		{
@@ -447,7 +447,7 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 					continue;
 
 				if (refDefencer.m_spDefence && refDefencer.Pos().DistanceLessEqual(posTarget, 5))
-					refDefencer.m_spDefence->受伤(m_战斗配置.i32伤害, m_refEntity.Id);
+					refDefencer.m_spDefence->受伤(m_战斗配置.i32攻击, m_refEntity.Id);
 			}
 		}
 
