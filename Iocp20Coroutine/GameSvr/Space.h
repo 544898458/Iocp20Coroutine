@@ -80,9 +80,15 @@ public:
 
 		void OnDestroy(const bool b删除玩家所有单位, Space& refSpace, const std::string& refStrNickName);
 		void Erase(uint64_t u64Id);
+
 		bool 开始解锁单位(const 单位类型 类型, Entity& refEntity在此建筑中解锁);
 		bool 解锁完成(const 单位类型 类型, Entity& refEntity在此建筑中解锁);
 		bool 已解锁(const 单位类型 类型)const;
+
+		bool 开始升级单位属性(const 单位类型 类型, const 单位属性类型 属性, Entity& refEntity在此建筑中解锁);
+		bool 升级单位属性完成(const 单位类型 单位, const 单位属性类型 属性, Entity& refEntity在此建筑中解锁);
+		uint16_t 单位属性等级(const 单位类型 单位, const 单位属性类型 属性)const;
+		
 
 		struct 单位解锁状态
 		{
@@ -90,7 +96,14 @@ public:
 			WpEntity wpEntity在此建筑中解锁;
 		};
 		std::map<单位类型, 单位解锁状态> m_map解锁状态;
-		MAP_单位属性等级 m_map单位属性等级;
+
+		struct 单位属性升级状态
+		{
+			uint16_t u16等级 = 0;
+			WpEntity wpEntity在此建筑中升级;
+		};
+		using MAP_单位属性等级 = std::map<单位类型, std::map<单位属性类型, 单位属性升级状态> >;
+		MAP_单位属性等级 m_map单位属性升级状态;
 	};
 	//using SpSpacePlayer = std::shared_ptr<SpacePlayer> ;
 	std::unordered_map<std::string, SpacePlayer> m_mapPlayer;

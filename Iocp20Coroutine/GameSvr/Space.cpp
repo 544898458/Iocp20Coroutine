@@ -449,6 +449,51 @@ bool Space::SpacePlayer::开始解锁单位(const 单位类型 类型, Entity& refEntity在此
 	return true;
 }
 
+/// <summary>
+/// 能否升级在建筑里判断，不在这里判断，这里只管升级
+/// </summary>
+/// <param name="类型"></param>
+/// <param name="属性"></param>
+/// <param name="refEntity在此建筑中解锁"></param>
+/// <returns></returns>
+bool Space::SpacePlayer::开始升级单位属性(const 单位类型 单位, const 单位属性类型 属性, Entity& refEntity在此建筑中解锁)
+{
+	auto& ref单位属性等级 = m_map单位属性升级状态[单位][属性];
+	if (!ref单位属性等级.wpEntity在此建筑中升级.expired())
+	{
+		PlayerGateSession_Game::播放声音Buzz(EntitySystem::GetNickName(refEntity在此建筑中解锁), "正在升级");
+		return false;
+	}
+
+	ref单位属性等级.wpEntity在此建筑中升级 = refEntity在此建筑中解锁.shared_from_this();
+
+	return true;
+}
+
+bool Space::SpacePlayer::升级单位属性完成(const 单位类型 单位, const 单位属性类型 属性, Entity& refEntity在此建筑中升级)
+{
+	auto& ref单位属性等级 = m_map单位属性升级状态[单位][属性];
+	CHECK_WP_RET_FALSE(ref单位属性等级.wpEntity在此建筑中升级);
+	auto& ref建筑 = *ref单位属性等级.wpEntity在此建筑中升级.lock();
+
+	CHECK_RET_FALSE(&ref建筑 == &refEntity在此建筑中升级);
+
+	ref单位属性等级.wpEntity在此建筑中升级.reset();
+	++ref单位属性等级.u16等级;
+
+	return true;
+}
+
+uint16_t Space::SpacePlayer::单位属性等级(const 单位类型 单位, const 单位属性类型 属性)const
+{
+	auto iterFind单位 = m_map单位属性升级状态.find(单位);
+	CHECK_RET_DEFAULT(iterFind单位 == m_map单位属性升级状态.end());
+	auto iterFind属性 = iterFind单位->second.find(属性);
+    CHECK_RET_DEFAULT(iterFind属性 == iterFind单位->second.end());
+
+	return iterFind属性->second.u16等级;
+}
+
 void Space::SpacePlayer::OnDestroy(const bool b删除玩家所有单位, Space& refSpace, const std::string& refStrNickName)
 {
 	auto mapLocal = m_mapWpEntity;//不能在ForEach内删除容器

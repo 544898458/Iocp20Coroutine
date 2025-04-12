@@ -41,6 +41,7 @@ public:
 	void 播放声音(const std::string& refStr声音, const std::string& str文本);
 	static void 播放声音(const std::string& refStrNickName, const std::string& refStr声音, const std::string& str文本);
 	void Send已解锁单位();
+	void Send单位属性();
 
 	void Send设置视口(const Entity& refEntity);
 	void 删除选中(const uint64_t id);
