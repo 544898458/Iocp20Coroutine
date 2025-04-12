@@ -272,11 +272,26 @@ namespace 单位
 	bool Find单位属性等级配置(const 单位类型 单位, const 单位属性类型 属性, const uint16_t u16等级, uint16_t& refOut加数值)
 	{
 		const auto iterFind单位 = g_map单位属性等级配置.find(单位);
-		CHECK_RET_DEFAULT(iterFind单位 != g_map单位属性等级配置.end());
+		if(iterFind单位 == g_map单位属性等级配置.end())
+			return false;
 
 		const auto iterFind属性= iterFind单位->second.find(属性);
-        CHECK_RET_DEFAULT(iterFind属性 != iterFind单位->second.end());
+        if(iterFind属性 == iterFind单位->second.end())
+			return false;
 
-		return iterFind属性->second[u16等级];
+		const auto iterFind加数值 = iterFind属性->second.find(u16等级);
+        if(iterFind加数值 == iterFind属性->second.end())
+			return false;
+
+		refOut加数值 = iterFind加数值->second;
+		return true;
+	}
+	uint16_t 单位攻击(const 单位类型 单位, const uint16_t u16攻击等级)
+	{
+		战斗配置 战斗;
+		CHECK_RET_DEFAULT(Find战斗配置(单位, 战斗));
+		uint16_t u16攻击等级加数值(0);
+		Find单位属性等级配置(单位, 攻击, u16攻击等级, u16攻击等级加数值);
+		return 战斗.i32攻击 + u16攻击等级加数值;
 	}
 }

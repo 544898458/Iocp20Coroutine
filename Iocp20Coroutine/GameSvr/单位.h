@@ -66,5 +66,6 @@ namespace 单位
 	bool Find怪配置(const 单位类型 类型, 怪配置& refOut);
 	bool Find制造配置(const 单位类型 类型, 制造配置& refOut);
 	bool Find单位属性等级配置(const 单位类型 单位, const 单位属性类型 属性, const uint16_t u16等级, uint16_t& refOut加数值);
+	uint16_t 单位攻击(const 单位类型 单位, const uint16_t u16攻击等级);
 };
 

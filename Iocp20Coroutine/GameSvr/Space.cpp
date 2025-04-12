@@ -495,9 +495,12 @@ bool Space::SpacePlayer::Éý¼¶µ¥Î»ÊôÐÔÍê³É(const µ¥Î»ÀàÐÍ µ¥Î», const µ¥Î»ÊôÐÔÀàÐ
 uint16_t Space::SpacePlayer::µ¥Î»ÊôÐÔµÈ¼¶(const µ¥Î»ÀàÐÍ µ¥Î», const µ¥Î»ÊôÐÔÀàÐÍ ÊôÐÔ)const
 {
 	auto iterFindµ¥Î» = m_mapµ¥Î»ÊôÐÔµÈ¼¶.find(µ¥Î»);
-	CHECK_RET_DEFAULT(iterFindµ¥Î» == m_mapµ¥Î»ÊôÐÔµÈ¼¶.end());
+	if(iterFindµ¥Î» == m_mapµ¥Î»ÊôÐÔµÈ¼¶.end())
+		return 0;
+
 	auto iterFindÊôÐÔ = iterFindµ¥Î»->second.find(ÊôÐÔ);
-    CHECK_RET_DEFAULT(iterFindÊôÐÔ == iterFindµ¥Î»->second.end());
+    if(iterFindÊôÐÔ == iterFindµ¥Î»->second.end())
+        return 0;
 
 	return iterFindÊôÐÔ->second.u16µÈ¼¶;
 }

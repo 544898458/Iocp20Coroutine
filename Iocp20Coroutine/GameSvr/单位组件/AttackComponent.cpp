@@ -362,8 +362,9 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 
 		播放攻击音效();
 
-		if (0 < m_战斗配置.i32攻击)
-			refDefencer.m_spDefence->受伤(m_战斗配置.i32攻击, m_refEntity.Id);
+		const uint16_t u16升级后的攻击 = 升级后的攻击(m_refEntity);
+		if (0 < u16升级后的攻击)
+			refDefencer.m_spDefence->受伤(u16升级后的攻击, m_refEntity.Id);
 
 		if (绿色坦克 == m_refEntity.m_类型)
 		{
@@ -387,6 +388,17 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 	co_return false;//协程正常退出
 }
 
+uint16_t AttackComponent::升级后的攻击(Entity& refEntity)
+{
+	uint16_t u16攻击等级(0);
+	if (refEntity.m_spPlayerNickName)
+	{
+		const auto& spacePlayer = refEntity.m_refSpace.GetSpacePlayer(refEntity);
+		u16攻击等级 = spacePlayer.单位属性等级(refEntity.m_类型, 攻击);
+	}
+
+	return 单位::单位攻击(refEntity.m_类型, u16攻击等级);
+}
 
 #define CHECK_终止攻击位置流程 \
 		if (m_refEntity.IsDead())\
@@ -447,7 +459,7 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 					continue;
 
 				if (refDefencer.m_spDefence && refDefencer.Pos().DistanceLessEqual(posTarget, 5))
-					refDefencer.m_spDefence->受伤(m_战斗配置.i32攻击, m_refEntity.Id);
+					refDefencer.m_spDefence->受伤(AttackComponent::升级后的攻击(m_refEntity), m_refEntity.Id);
 			}
 		}
 
