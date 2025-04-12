@@ -15,10 +15,15 @@ void 玩家带入单位进入四方对战(Space& refSpace, const Position& refPos, PlayerGat
 	refSpace.造活动单位(*refGateSession.m_wp视口.lock(), refGateSession.NickName(), 单位类型::工程车, refPos, true);
 	refSpace.造活动单位(*refGateSession.m_wp视口.lock(), refGateSession.NickName(), 单位类型::工虫, { refPos.x, refPos.z + 5 });
 
+	资源Component::Add(refSpace, 晶体矿, { refPos.x,		refPos.z - 18 });
 	资源Component::Add(refSpace, 晶体矿, { refPos.x,		refPos.z - 20 });
+	资源Component::Add(refSpace, 晶体矿, { refPos.x,		refPos.z + 18 });
 	资源Component::Add(refSpace, 晶体矿, { refPos.x,		refPos.z + 20 });
+	资源Component::Add(refSpace, 晶体矿, { refPos.x - 18,	refPos.z	});
 	资源Component::Add(refSpace, 晶体矿, { refPos.x - 20,	refPos.z	});
+	资源Component::Add(refSpace, 燃气矿, { refPos.x + 18,	refPos.z	});
 	资源Component::Add(refSpace, 燃气矿, { refPos.x + 20,	refPos.z	});
+
 	}
 
 		CoTask<int> 多人战局::Co四方对战(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName)
