@@ -19,7 +19,7 @@ namespace EntitySystem
 	bool Is视口(const Entity& refEntity);
 	bool Is光刺(const Entity& refEntity);
 	bool 距离友方单位太近(Entity& refEntity);
-	const std::string GetNickName(Entity& refEntity);
+	const std::string GetNickName(const Entity& refEntity);
 	bool Is建筑(const 单位类型 类型);
 	bool Is可进地堡(const 单位类型 类型);
 	bool Is资源(const 单位类型 类型);

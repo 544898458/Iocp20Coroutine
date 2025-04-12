@@ -394,15 +394,15 @@ void Space::OnDestory()
 	EraseEntity(true);
 }
 
-Space::SpacePlayer::SpacePlayer() :m_map½âËø×´Ì¬{ {½üÕ½±ø,{}}, {Ç¹³æ,{}} }
+Space::SpacePlayer::SpacePlayer() :m_mapµ¥Î»½âËø{ {½üÕ½±ø,{}}, {Ç¹³æ,{}} }
 {
 
 }
 
 bool Space::SpacePlayer::ÒÑ½âËø(const µ¥Î»ÀàĞÍ ÀàĞÍ) const
 {
-	auto iterFind = m_map½âËø×´Ì¬.find(ÀàĞÍ);
-	if (iterFind == m_map½âËø×´Ì¬.end())
+	auto iterFind = m_mapµ¥Î»½âËø.find(ÀàĞÍ);
+	if (iterFind == m_mapµ¥Î»½âËø.end())
 		return true;//ÎŞĞè½âËø
 
 	return iterFind->second.bÒÑ½âËø;
@@ -410,8 +410,8 @@ bool Space::SpacePlayer::ÒÑ½âËø(const µ¥Î»ÀàĞÍ ÀàĞÍ) const
 
 bool Space::SpacePlayer::½âËøÍê³É(const µ¥Î»ÀàĞÍ ÀàĞÍ, Entity& refEntityÔÚ´Ë½¨ÖşÖĞ½âËø)
 {
-	auto iterFind = m_map½âËø×´Ì¬.find(ÀàĞÍ);
-	CHECK_RET_FALSE(iterFind != m_map½âËø×´Ì¬.end());
+	auto iterFind = m_mapµ¥Î»½âËø.find(ÀàĞÍ);
+	CHECK_RET_FALSE(iterFind != m_mapµ¥Î»½âËø.end());
 	auto& ref½âËø×´Ì¬ = iterFind->second;
 
 	CHECK_RET_FALSE(!ref½âËø×´Ì¬.bÒÑ½âËø);
@@ -428,19 +428,19 @@ bool Space::SpacePlayer::½âËøÍê³É(const µ¥Î»ÀàĞÍ ÀàĞÍ, Entity& refEntityÔÚ´Ë½¨Öş
 
 bool Space::SpacePlayer::¿ªÊ¼½âËøµ¥Î»(const µ¥Î»ÀàĞÍ ÀàĞÍ, Entity& refEntityÔÚ´Ë½¨ÖşÖĞ½âËø)
 {
-	auto iterFind = m_map½âËø×´Ì¬.find(ÀàĞÍ);
-	CHECK_RET_FALSE(iterFind != m_map½âËø×´Ì¬.end());
+	auto iterFind = m_mapµ¥Î»½âËø.find(ÀàĞÍ);
+	CHECK_RET_FALSE(iterFind != m_mapµ¥Î»½âËø.end());
 	auto& ref½âËø×´Ì¬ = iterFind->second;
 
 	if (ref½âËø×´Ì¬.bÒÑ½âËø)
 	{
-		PlayerGateSession_Game::²¥·ÅÉùÒôBuzz(EntitySystem::GetNickName(refEntityÔÚ´Ë½¨ÖşÖĞ½âËø), "ÎŞĞèÖØ¸´½âËø");
+		PlayerGateSession_Game::²¥·ÅÉùÒôBuzz(refEntityÔÚ´Ë½¨ÖşÖĞ½âËø, "ÎŞĞèÖØ¸´½âËø");
 		return false;
 	}
 
 	if (!ref½âËø×´Ì¬.wpEntityÔÚ´Ë½¨ÖşÖĞ½âËø.expired())
 	{
-		PlayerGateSession_Game::²¥·ÅÉùÒôBuzz(EntitySystem::GetNickName(refEntityÔÚ´Ë½¨ÖşÖĞ½âËø), "ÕıÔÚ½âËø");
+		PlayerGateSession_Game::²¥·ÅÉùÒôBuzz(refEntityÔÚ´Ë½¨ÖşÖĞ½âËø, "ÕıÔÚ½âËø");
 		return false;
 	}
 
@@ -458,12 +458,20 @@ bool Space::SpacePlayer::¿ªÊ¼½âËøµ¥Î»(const µ¥Î»ÀàĞÍ ÀàĞÍ, Entity& refEntityÔÚ´Ë
 /// <returns></returns>
 bool Space::SpacePlayer::¿ªÊ¼Éı¼¶µ¥Î»ÊôĞÔ(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞÍ ÊôĞÔ, Entity& refEntityÔÚ´Ë½¨ÖşÖĞ½âËø)
 {
-	auto& refµ¥Î»ÊôĞÔµÈ¼¶ = m_mapµ¥Î»ÊôĞÔÉı¼¶×´Ì¬[µ¥Î»][ÊôĞÔ];
+	auto& refµ¥Î»ÊôĞÔµÈ¼¶ = m_mapµ¥Î»ÊôĞÔµÈ¼¶[µ¥Î»][ÊôĞÔ];
 	if (!refµ¥Î»ÊôĞÔµÈ¼¶.wpEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶.expired())
 	{
-		PlayerGateSession_Game::²¥·ÅÉùÒôBuzz(EntitySystem::GetNickName(refEntityÔÚ´Ë½¨ÖşÖĞ½âËø), "ÕıÔÚÉı¼¶");
+		PlayerGateSession_Game::²¥·ÅÉùÒôBuzz(refEntityÔÚ´Ë½¨ÖşÖĞ½âËø, "ÕıÔÚÉı¼¶");
 		return false;
 	}
+
+	uint16_t u16¼ÓÊıÖµ = 0;
+	if (!µ¥Î»::Findµ¥Î»ÊôĞÔµÈ¼¶ÅäÖÃ(µ¥Î», ÊôĞÔ, refµ¥Î»ÊôĞÔµÈ¼¶.u16µÈ¼¶ + 1, u16¼ÓÊıÖµ))
+	{
+		PlayerGateSession_Game::²¥·ÅÉùÒôBuzz(refEntityÔÚ´Ë½¨ÖşÖĞ½âËø, "ÒÑÉıµ½×î¸ß¼¶");
+		return false;
+	}
+
 
 	refµ¥Î»ÊôĞÔµÈ¼¶.wpEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶ = refEntityÔÚ´Ë½¨ÖşÖĞ½âËø.shared_from_this();
 
@@ -472,7 +480,7 @@ bool Space::SpacePlayer::¿ªÊ¼Éı¼¶µ¥Î»ÊôĞÔ(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞ
 
 bool Space::SpacePlayer::Éı¼¶µ¥Î»ÊôĞÔÍê³É(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞÍ ÊôĞÔ, Entity& refEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶)
 {
-	auto& refµ¥Î»ÊôĞÔµÈ¼¶ = m_mapµ¥Î»ÊôĞÔÉı¼¶×´Ì¬[µ¥Î»][ÊôĞÔ];
+	auto& refµ¥Î»ÊôĞÔµÈ¼¶ = m_mapµ¥Î»ÊôĞÔµÈ¼¶[µ¥Î»][ÊôĞÔ];
 	CHECK_WP_RET_FALSE(refµ¥Î»ÊôĞÔµÈ¼¶.wpEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶);
 	auto& ref½¨Öş = *refµ¥Î»ÊôĞÔµÈ¼¶.wpEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶.lock();
 
@@ -486,8 +494,8 @@ bool Space::SpacePlayer::Éı¼¶µ¥Î»ÊôĞÔÍê³É(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞ
 
 uint16_t Space::SpacePlayer::µ¥Î»ÊôĞÔµÈ¼¶(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞÍ ÊôĞÔ)const
 {
-	auto iterFindµ¥Î» = m_mapµ¥Î»ÊôĞÔÉı¼¶×´Ì¬.find(µ¥Î»);
-	CHECK_RET_DEFAULT(iterFindµ¥Î» == m_mapµ¥Î»ÊôĞÔÉı¼¶×´Ì¬.end());
+	auto iterFindµ¥Î» = m_mapµ¥Î»ÊôĞÔµÈ¼¶.find(µ¥Î»);
+	CHECK_RET_DEFAULT(iterFindµ¥Î» == m_mapµ¥Î»ÊôĞÔµÈ¼¶.end());
 	auto iterFindÊôĞÔ = iterFindµ¥Î»->second.find(ÊôĞÔ);
     CHECK_RET_DEFAULT(iterFindÊôĞÔ == iterFindµ¥Î»->second.end());
 

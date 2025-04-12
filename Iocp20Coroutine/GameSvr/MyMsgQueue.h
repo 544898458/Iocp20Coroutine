@@ -272,7 +272,7 @@ enum MsgId
 	原地坚守,
 	解锁单位,
 	已解锁单位,
-	单位属性等级,
+	所有单位属性等级,
 	升级单位属性,
 };
 MSGPACK_ADD_ENUM(MsgId);
@@ -334,7 +334,8 @@ MSGPACK_ADD_ENUM(单位类型);
 
 enum 单位属性类型
 {
-	攻击,
+	单位属性类型_最小_无效,
+    攻击,
 	防御,
 	HP,
 	移动速度,
@@ -834,7 +835,7 @@ struct Msg已解锁单位
 using MAP_单位属性等级 = std::map<单位类型, std::map<单位属性类型, uint16_t> >;
 struct Msg单位属性等级
 {
-	MsgHead msg{ .id = 单位属性等级 };
+	MsgHead msg{ .id = 所有单位属性等级 };
 	MAP_单位属性等级 map单位属性等级;
 	MSGPACK_DEFINE(msg, map单位属性等级);
 };

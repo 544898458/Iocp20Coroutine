@@ -31,7 +31,7 @@ void 解锁单位Component::解锁单位(const 单位类型 类型)
 	if (!m_refEntity.m_spBuilding->已造好())
 	{
 		//播放声音
-        PlayerGateSession_Game::播放声音Buzz(EntitySystem::GetNickName(m_refEntity), "还没造好建筑");
+        PlayerGateSession_Game::播放声音Buzz(m_refEntity, "还没造好建筑");
 		return;
 	}
 

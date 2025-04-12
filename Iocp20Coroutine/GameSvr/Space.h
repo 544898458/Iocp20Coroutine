@@ -90,20 +90,20 @@ public:
 		uint16_t 单位属性等级(const 单位类型 单位, const 单位属性类型 属性)const;
 		
 
-		struct 单位解锁状态
+		struct 单位解锁
 		{
 			bool b已解锁 = false;
 			WpEntity wpEntity在此建筑中解锁;
 		};
-		std::map<单位类型, 单位解锁状态> m_map解锁状态;
+		std::map<单位类型, 单位解锁> m_map单位解锁;
 
-		struct 单位属性升级状态
+		struct 单位_属性等级
 		{
 			uint16_t u16等级 = 0;
 			WpEntity wpEntity在此建筑中升级;
 		};
-		using MAP_单位属性等级 = std::map<单位类型, std::map<单位属性类型, 单位属性升级状态> >;
-		MAP_单位属性等级 m_map单位属性升级状态;
+		using MAP_单位属性等级 = std::map<单位类型, std::map<单位属性类型, 单位_属性等级 > >;
+		MAP_单位属性等级 m_map单位属性等级;
 	};
 	//using SpSpacePlayer = std::shared_ptr<SpacePlayer> ;
 	std::unordered_map<std::string, SpacePlayer> m_mapPlayer;

@@ -43,22 +43,24 @@ void 升级单位属性Component::升级(const 单位类型 单位, const 单位属性类型 属性)
 	if (!m_refEntity.m_spBuilding->已造好())
 	{
 		//播放声音
-		PlayerGateSession_Game::播放声音Buzz(EntitySystem::GetNickName(m_refEntity), "还没造好建筑");
+		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "还没造好建筑");
 		return;
 	}
+
 	{
 		//判断可升级单位
-		auto iterFind = m_map可升级单位属性.find(单位);
-		if (iterFind == m_map可升级单位属性.end())
+		auto iterFind单位 = m_map可升级单位属性.find(单位);
+		if (iterFind单位 == m_map可升级单位属性.end())
 		{
-			PlayerGateSession_Game::播放声音Buzz(EntitySystem::GetNickName(m_refEntity), "不能升级此单位的属性");
+			PlayerGateSession_Game::播放声音Buzz(m_refEntity, "不能升级此单位的属性");
 			return;
 		}
 
 		//判断可升级此属性
-		if (iterFind->second.end() == iterFind->second.find(属性))
+		auto iterFind属性 = iterFind单位->second.find(属性);
+		if (iterFind单位->second.end() == iterFind属性)
 		{
-			PlayerGateSession_Game::播放声音Buzz(EntitySystem::GetNickName(m_refEntity), "不能升级此单位此属性");
+			PlayerGateSession_Game::播放声音Buzz(m_refEntity, "不能升级此单位此属性");
 			return;
 		}
 	}
