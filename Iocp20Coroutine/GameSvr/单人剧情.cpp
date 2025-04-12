@@ -85,13 +85,13 @@ namespace 单人剧情
 		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 
 		fun总教官凌云说("即时战略游戏的操作并不复杂，老年间便有四句童谣：\n"
-			"\t\t\t工程车，造基地；\n"
+			"\t\t\t<color=#a0ff50>工程车</color>，造<color=#a0ff50>基地</color>；\n"
 			"\t\t\t基地又产工程车。\n"
-			"\t\t\t工程车，造兵营，\n"
+			"\t\t\t工程车，造<color=#a0ff50>兵营</color>，\n"
 			"\t\t\t兵营产兵欢乐多！"
 		); _等玩家读完returnTrue;
-		fun玩家说("听说工程车还可以造地堡和炮台，我也要试试。"); _等玩家读完returnTrue;
-		fun总教官凌云说("造完基地应该先安排工程车去采集晶体矿和燃气矿，这是一切生产建造的基础。此外建造民房可以提升活动单位上限。\n加油！"); _等玩家读完returnTrue;
+		fun玩家说("听说工程车还可以造<color=#a0ff50>地堡</color>和<color=#a0ff50>炮台</color>，我也要试试。"); _等玩家读完returnTrue;
+		fun总教官凌云说("造完基地应该先安排工程车去采集<color=#a0ff50>晶体矿</color>和<color=#a0ff50>燃气矿</color>，这是一切生产建造的基础。此外建造<color=#a0ff50>民房</color>可以提升活动单位上限。\n加油！"); _等玩家读完returnTrue;
 		fun玩家说("我只想单手操作，拖动视口 和 选中多个单位 如何操作呢？"); _等玩家读完returnTrue;
 		fun总教官凌云说("\t\t拖动地面就可以移动视口，此外设置（齿轮图标）界面还有视口镜头投影切换、放大、缩小按钮。当然也支持双指缩放视口。\n"
 			"\t\t先点击右边“框选”按钮，然后在屏幕中拖动，即可框选多个单位。在设置（齿轮图标）界面中可以切换菱形框选或方形框选。\n"
@@ -101,7 +101,7 @@ namespace 单人剧情
 		fun总教官凌云说("走你!"); _等玩家读完returnTrue;
 		PlayerComponent::剧情对话已看完(strPlayerNickName);
 		using namespace std;
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "欢迎来到RTS即时战略游戏，现在您要接受基础的训练");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "欢迎来到<color=#a0ff50>即时战略指挥</color>，现在您要接受基础的训练");
 
 		//auto [stop, msgResponce] = co_await AiCo::ChangeMoney(refGateSession, 100, true, funCancel);
 		//if (stop)
@@ -127,7 +127,7 @@ namespace 单人剧情
 			refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::工程车, { 5, 10 }, true);
 			资源Component::Add(refSpace, 晶体矿, { 20, 10 });
 		}
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击“工程车”选中，然后点击“建筑单位=>基地”按钮，再点击空白地面，10秒后就能造出一个基地");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击<color=#a0ff50>工程车</color>选中，然后点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>基地</color>”按钮，再点击空白地面，10秒后就能造出一个基地");
 
 		const auto funSameSpace = [&refSpace, &strPlayerNickName](const MyEvent::AddEntity& refAddEntity, 单位类型 类型)
 			{ return MyEvent::SameSpace(refAddEntity.wpEntity, refSpace, strPlayerNickName) && EntitySystem::Is单位类型(refAddEntity.wpEntity, 类型); };
@@ -146,12 +146,12 @@ namespace 单人剧情
 			co_return 0;
 
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击选中基地（圆环特效表示选中），然后点击“活动单位/工程车”按钮，5秒后会在基地旁造出一个工程车");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击选中<color=#a0ff50>基地</color>（圆环特效表示选中），然后点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>工程车</color>”按钮，5秒后会在基地旁造出一个工程车");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 工程车))))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "现在您有工程车了，点击选中您的工程车，再点击空旷地面，命令它走向目标点");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "现在您有工程车了，点击选中您的<color=#a0ff50>工程车</color>，再点击空旷地面，命令它走向目标点");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::MoveEntity& ref)
 			{
@@ -174,25 +174,25 @@ namespace 单人剧情
 			co_return 0;
 		}
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！现在给您刷了一个晶体矿，请点击晶体矿，让工程车在晶体矿和基地之间搬运晶体矿");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！现在给您刷了一个<color=#a0ff50>晶体矿</color>，请点击晶体矿，让工程车在晶体矿和基地之间搬运晶体矿");
 		资源Component::Add(refSpace, 晶体矿, { pos基地.x,pos基地.z + 20 });
 		资源Component::Add(refSpace, 燃气矿, { pos基地.x + 15,pos基地.z });
 
 		if (std::get<0>(co_await CoEvent<MyEvent::开始采集晶体矿>::Wait(funCancel)))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！您的工程车正在采集晶体矿，请等他把晶体矿运回基地。现在，请先点“取消选中”，再选中另一辆工程车去采集燃气矿");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！您的工程车正在采集晶体矿，请等他把晶体矿运回基地。现在，请先点“取消选中”，再选中另一辆工程车去采集<color=#a0ff50>燃气矿</color>");
 		if (std::get<0>(co_await CoEvent<MyEvent::晶体矿已运回基地>::Wait(funCancel)))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "您的工程车已把第一车晶体矿运到基地，请查看左上角晶体矿数量变化");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "您的工程车已把第一车晶体矿运到基地，请查看左上角<<color=#a0ff50>晶体矿</color>数量变化");
 
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
 		if (0 == refSpace.Get单位数(民房))
 		{
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够20晶体矿后，请选中一辆工程车，然后点击“建筑单位/民房”按钮，再点击一次空旷地面");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够20晶体矿后，请选中一辆工程车，然后点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>民房</color>”按钮，再点击一次空旷地面");
 			if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 民房))))
 				co_return 0;
 
@@ -204,21 +204,21 @@ namespace 单人剧情
 
 		if (0 == refSpace.Get单位数(兵营))
 		{
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请选中一辆工程车，然后点击“建筑单位/兵营”按钮，再点击一次空旷地面，就能造出一个兵营");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请选中一辆工程车，然后点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>兵营</color>”按钮，再点击一次空旷地面，就能造出一个兵营");
 			if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 兵营))))
 				co_return 0;
 
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好，兵营可以产出枪兵和近战兵");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好，兵营可以产出<color=#a0ff50>枪兵</color>和<color=#a0ff50>近战兵</color>");
 			if (co_await CoTimer::Wait(10s, funCancel))
 				co_return 0;
 		}
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击选中兵营（圆环特效表示选中），然后点击“活动单位/枪兵”按钮，10秒后会在兵营旁造出一个 枪兵");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击选中兵营（圆环特效表示选中），然后点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>枪兵</color>”按钮，10秒后会在兵营旁造出一个枪兵");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 枪兵))))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "点击选中您的兵，再点击地面，可以指挥他走向目标处");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "点击选中您的枪兵，再点击地面，可以指挥他走向目标处");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::MoveEntity& ref) {
 			return //&ref.wpEntity.lock()->m_refSpace == &refSpace; 
@@ -226,7 +226,7 @@ namespace 单人剧情
 			})))
 			co_return 0;
 
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "现在已在左边给您刷了一个怪，控制兵走到怪附近，兵会自动打怪。您可以点右下角“取消选中”然后拖动地面看看怪在哪里");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "现在已在左边给您刷了一个怪，控制兵走到怪附近，兵会自动打怪。您可以点右下角<color=#a0ff50>取消选中</color>，然后拖动地面看看怪在哪里");
 			MonsterComponent::AddMonster(refSpace, 枪虫怪, { -30,20 });
 
 			if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
@@ -250,7 +250,7 @@ namespace 单人剧情
 			}
 
 
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "恭喜您消灭了敌人！现在左边给您刷了更多的怪。您可以造“活动单位/地堡”,让兵进入地堡中，立足防守，再伺机进攻");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "恭喜您消灭了敌人！现在左边给您刷了更多的怪。您可以造<color=#a0ff50>活动单位</color>=><color=#a0ff50>地堡</color>”,让兵进入地堡中，立足防守，再伺机进攻");
 			MonsterComponent::AddMonster(refSpace, 近战虫怪, { -30.0 }, 5);
 
 			if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::单位阵亡& ref)
@@ -275,7 +275,7 @@ namespace 单人剧情
 				fun总教官凌云说("在“多人联机混战”和“其他人的多人战局列表”可能会遇到他们，不要轻敌。要善用战斗单位的克制关系：\n"
 					"\t\t小兵 克制 坦克\n"
 					"\t\t坦克 克制 地堡和炮台\n"
-					"\t\t地堡和炮台 克制 小兵\n"
+					"\t\t地堡和炮台 克制 步兵\n"
 				); _等玩家读完returnTrue;
 				fun玩家说("这些克制关系是怎么产生的呢？"); _等玩家读完returnTrue;
 				fun总教官凌云说("坦克虽然伤害最高，但是价格昂贵，攻击前摇最久，移动速度最慢；前摇开始后炸点无法改变，敌方单位很容易躲开炸点，此外坦克炸点的爆炸溅射会伤害附近的己方单位。\n"
@@ -936,13 +936,13 @@ namespace 单人剧情
 			}
 			for (int i = 0; i < 6; ++i)
 			{
+				创建敌方建筑(refSpace, { 20,-49.f + i * 5 }, 炮台);
 				创建敌方建筑(refSpace, { 25,-49.f + i * 5 }, 炮台);
 				创建敌方建筑(refSpace, { 30,-49.f + i * 5 }, 炮台);
-				创建敌方建筑(refSpace, { 35,-49.f + i * 5 }, 炮台);
 
+				创建敌方建筑(refSpace, { -20,-49.f + i * 5 }, 炮台);
 				创建敌方建筑(refSpace, { -25,-49.f + i * 5 }, 炮台);
 				创建敌方建筑(refSpace, { -30,-49.f + i * 5 }, 炮台);
-				创建敌方建筑(refSpace, { -35,-49.f + i * 5 }, 炮台);
 			}
 
 			{
@@ -1006,11 +1006,11 @@ namespace 单人剧情
 					fun玩家说("现在我的部队会护送你们回虫巢。到时候再仔细回忆一下。");	_等玩家读完returnTrue;
 					fun绿色坦克洪隆说("上面还有两个基地，我要炸掉它们再回去。");	_等玩家读完returnTrue;
 					fun玩家说("上面的基地有敌方的炮台把守，我们过不去。");	_等玩家读完returnTrue;
-					fun绿色坦克洪隆说("我专门克制炮台。一辆坦克就能全灭它们，何况我们现在有十辆。");	_等玩家读完returnTrue;
+					fun绿色坦克洪隆说("我专门克制炮台。<color=#a0ff50>坦克的射程略远于炮台</color>。一辆坦克就能全灭它们，何况我们现在有十辆。");	_等玩家读完returnTrue;
 					fun玩家说("好的，但是你们要接受我的指挥，我的部队会保护你们。");	_等玩家读完returnTrue;
 					fun绿色坦克洪隆说("是！明白！指挥官！");	_等玩家读完returnTrue;
 					PlayerComponent::剧情对话已看完(strPlayerNickName);
-					PlayerGateSession_Game::Say任务提示(strPlayerNickName, "消灭上方两个敌方基地，控制好其它单位保护您的坦克");
+					PlayerGateSession_Game::Say任务提示(strPlayerNickName, "消灭上方两个敌方基地，控制好其它单位保护您的坦克。坦克的射程略远于炮台，不要让坦克进入地方炮台的射程。");
 				}
 			}
 		}
