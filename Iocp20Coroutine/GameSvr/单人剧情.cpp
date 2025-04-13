@@ -541,7 +541,7 @@ namespace 单人剧情
 		fun玩家说("真有这种口诀的话就应该在训练战时告诉我啊！");			_等玩家读完returnTrue;
 		fun房虫胡噜说("实战口诀只有在九死一生的实战中才有用！");		_等玩家读完returnTrue;
 		fun玩家说("九死一生？形势严峻啊，我会全力以赴的!");					_等玩家读完returnTrue;
-		fun房虫胡噜说("1个虫巢只能照顾<color=#a0ff50>3只幼虫</color>。<color=#a0ff50>建造更多的虫巢</color>，才有更多的幼虫可共蜕变。<color=#a0ff50>多蜕变房虫</color>，增加活动单位上限。"); _等玩家读完returnTrue;
+		fun房虫胡噜说("1个虫巢只能照顾<color=#a0ff50>3只幼虫</color>。<color=#a0ff50>让工虫变异更多的虫巢</color>，才有更多的幼虫可供蜕变。<color=#a0ff50>多蜕变房虫</color>，增加活动单位上限。"); _等玩家读完returnTrue;
 		fun玩家说("就是一定要在数量上占据优势吗？");	_等玩家读完returnTrue;
 		fun房虫胡噜说("是的，进攻就是最好的防守。派出地面单位堵住敌人的通道，再派出飞虫越过障碍物空袭敌人。"); _等玩家读完returnTrue;
 		fun玩家说("OK，也不是很复杂。我有信心完成任务！");					_等玩家读完returnTrue;
