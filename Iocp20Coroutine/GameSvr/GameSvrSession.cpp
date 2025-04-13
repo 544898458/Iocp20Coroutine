@@ -194,7 +194,7 @@ void GameSvrSession::OnRecv(const MsgGateDeleteSession& msg, const uint64_t idGa
 	auto iterOld = m_mapPlayerGateSession.find(idGateClientSession);
 	if (m_mapPlayerGateSession.end() == iterOld)
 	{
-		LOG(ERROR) << "err";
+		LOG(ERROR) << "ÎÞ·¨É¾³ýidGateClientSession:" << idGateClientSession;
 		//_ASSERT(false);
 		return;
 	}
