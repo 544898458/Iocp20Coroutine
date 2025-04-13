@@ -318,6 +318,15 @@ namespace 单位
 		Find单位属性等级配置(单位, 攻击, u16攻击等级, 等级详情);
 		return 战斗.i32攻击 + 等级详情.u16加数值;
 	}
+	uint16_t 单位防御(const 单位类型 单位, const uint16_t u16防御等级)
+	{
+		战斗配置 战斗;
+		CHECK_RET_DEFAULT(Find战斗配置(单位, 战斗));
+
+		单位::单位属性等级配置详情 等级详情 = {};
+		Find单位属性等级配置(单位, 防御, u16防御等级, 等级详情);
+		return  等级详情.u16加数值;
+	}
 	bool Find单位解锁配置(const 单位类型 单位, 消耗资源& refOut)
 	{
 		return FindMap(g_map单位解锁配置, 单位, refOut);

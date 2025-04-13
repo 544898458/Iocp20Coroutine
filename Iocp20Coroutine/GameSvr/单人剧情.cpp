@@ -250,7 +250,7 @@ namespace 单人剧情
 			}
 
 
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "恭喜您消灭了敌人！现在左边给您刷了更多的怪。您可以造<color=#a0ff50>活动单位</color>=><color=#a0ff50>地堡</color>”,让兵进入地堡中，立足防守，再伺机进攻");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "恭喜您消灭了敌人！现在左边给您刷了更多的怪。您可以造<color=#a0ff50>建筑单位</color>=><color=#a0ff50>地堡</color>”,让兵进入地堡中，立足防守，再伺机进攻");
 			MonsterComponent::AddMonster(refSpace, 近战虫怪, { -30.0 }, 5);
 
 			if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::单位阵亡& ref)
@@ -278,12 +278,12 @@ namespace 单人剧情
 					"\t\t地堡和炮台 克制 步兵\n"
 				); _等玩家读完returnTrue;
 				fun玩家说("这些克制关系是怎么产生的呢？"); _等玩家读完returnTrue;
-				fun总教官凌云说("坦克虽然伤害最高，但是价格昂贵，攻击前摇最久，移动速度最慢；前摇开始后炸点无法改变，敌方单位很容易躲开炸点，此外坦克炸点的爆炸溅射会伤害附近的己方单位。\n"
+				fun总教官凌云说("坦克虽然伤害最高，但是价格昂贵，攻击前摇最久，移动速度最慢；<color=#a0ff50>前摇开始后炸点无法改变</color>，敌方单位很容易躲开炸点，此外坦克炸点的爆炸溅射会伤害附近的己方单位。\n"
 					"\t\t近战兵移动速度快，攻击速度快，价格便宜，很容易躲开坦克炸点，也很容易在坦克攻击前摇结束之前将坦克打掉。"); _等玩家读完returnTrue;
-				fun总教官凌云说("坦克，攻击距离最远，可以在炮台和地堡内单位的射程外攻击，是拆除建筑的利器。"); _等玩家读完returnTrue;
+				fun总教官凌云说("坦克，攻击距离最远，可以<color=#a0ff50>在炮台和地堡内单位的射程外攻击</color>，是拆除建筑的利器。"); _等玩家读完returnTrue;
 				fun总教官凌云说("炮台价格便宜，攻击速度快，攻击距离仅次于坦克，集中放置后可对快速移动的敌方小兵群体造成有效伤害。"); _等玩家读完returnTrue;
 				fun玩家说("我会在实战中体会摸索。"); _等玩家读完returnTrue;
-				fun总教官凌云说("一个人的时候，可以试试“防守战”，有助于体会炮台、坦克、地堡的威力。也可以试试“攻坚战”，练习小兵与坦克的配合"); _等玩家读完returnTrue;
+				fun总教官凌云说("一个人的时候，可以试试<color=#a0ff50>防守战</color>，有助于体会炮台、坦克、地堡的特点。也可以试试<color=#a0ff50>攻坚战</color>，练习步兵与坦克的配合"); _等玩家读完returnTrue;
 				玩家说(refSpace, strPlayerNickName, "好的。", true);//	_等玩家读完;
 			}
 			else
@@ -322,7 +322,7 @@ namespace 单人剧情
 			refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::工虫, { 5, 10 }, true);
 			资源Component::Add(refSpace, 晶体矿, { 20, 10 });
 		}
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击“工虫”选中，然后点击“建筑单位=>虫巢”按钮，再点击空白地面，10秒后就能造出一个虫巢");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击<color=#a0ff50>工虫</color>选中，然后点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>虫巢</color>”按钮，再点击空白地面，工虫会在10秒内变异为虫巢");
 
 		const auto funSameSpace = [&refSpace, &strPlayerNickName](const MyEvent::AddEntity& refAddEntity, 单位类型 类型)
 			{ return MyEvent::SameSpace(refAddEntity.wpEntity, refSpace, strPlayerNickName) && EntitySystem::Is单位类型(refAddEntity.wpEntity, 类型); };
@@ -341,12 +341,12 @@ namespace 单人剧情
 			co_return 0;
 
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等虫巢产出幼虫后，请点击“活动单位=>工虫”按钮，让幼虫蜕变为工虫");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等虫巢产出<color=#a0ff50>幼虫</color>后，请点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>工虫</color>”按钮，让幼虫蜕变为工虫");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 工虫))))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "现在您有工虫了，点击选中您的工虫，再点击空旷地面，命令它走向目标点");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "现在您有工虫了，点击选中您的<color=#a0ff50>工虫</color>，再点击空旷地面，命令它走向目标点");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::MoveEntity& ref)
 			{
@@ -369,36 +369,36 @@ namespace 单人剧情
 			co_return 0;
 		}
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！现在给您刷了一个晶体矿，请点击晶体矿，让工虫在晶体矿和虫巢之间搬运晶体矿");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！现在给您刷了一个晶体矿，请点击<color=#a0ff50>晶体矿</color>，让工虫在晶体矿和虫巢之间搬运晶体矿");
 		资源Component::Add(refSpace, 晶体矿, { pos基地.x,pos基地.z + 20 });
 		资源Component::Add(refSpace, 燃气矿, { pos基地.x + 15,pos基地.z });
 
 		if (std::get<0>(co_await CoEvent<MyEvent::开始采集晶体矿>::Wait(funCancel)))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！您的工虫正在采集晶体矿，请等他把晶体矿运回基地。现在，请先点“取消选中”，再蜕变一个工虫去采集燃气矿");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！您的工虫正在采集晶体矿，请等他把晶体矿运回基地。现在，请先点“取消选中”，再蜕变一个工虫去采集<color=#a0ff50>燃气矿</color>");
 		if (std::get<0>(co_await CoEvent<MyEvent::晶体矿已运回基地>::Wait(funCancel)))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "您的工虫已把第一车晶体矿运到基地，请查看左上角晶体矿数量变化");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "您的工虫已把第一车晶体矿运到基地，请查看<color=#a0ff50>左上角</color>晶体矿数量变化");
 
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
 		if (0 == refSpace.Get单位数(房虫))
 		{
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够20晶体矿后，请点击“活动单位/房虫”按钮，让幼虫蜕变为房虫");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够20晶体矿后，请点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>房虫</color>”按钮，让幼虫蜕变为房虫");
 			if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 房虫))))
 				co_return 0;
 
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好，房虫可以提升您的活动单位数量上限");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好，房虫可以提升您的<color=#a0ff50>活动单位数量上限</color>");
 			if (co_await CoTimer::Wait(3s, funCancel))
 				co_return 0;
 		}
 
 		if (0 == refSpace.Get单位数(虫营))
 		{
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请选中一只工虫，然后点击“建筑单位/虫营”按钮，就能造出一个虫营");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请选中一只工虫，然后点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>虫营</color>按钮，就能造出一个虫营");
 			if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 虫营))))
 				co_return 0;
 
@@ -407,12 +407,12 @@ namespace 单人剧情
 				co_return 0;
 		}
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击“活动单位/近战虫”按钮，让幼虫蜕变为近战虫");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>近战虫</color>按钮，让幼虫蜕变为近战虫");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 近战虫))))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "点击选中您的近战虫，再点击地面，可以指挥它走向目标处");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "点击选中您的<color=#a0ff50>近战虫</color>，再点击地面，可以指挥它走向目标处");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::MoveEntity>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::MoveEntity& ref) {
 			return //&ref.wpEntity.lock()->m_refSpace == &refSpace; 
@@ -420,7 +420,7 @@ namespace 单人剧情
 			})))
 			co_return 0;
 
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "现在已在左边给您刷了一个敌人，控制近战虫走到敌人附近，近战虫会自动攻击。您可以点右下角“取消选中”然后拖动地面看看敌人在哪里");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "现在已在左边给您刷了一个敌人，控制近战虫<color=#a0ff50>走到敌人附近</color>，近战虫会自动攻击。您可以点右下角“取消选中”然后拖动地面看看敌人在哪里");
 			MonsterComponent::AddMonster(refSpace, 枪兵怪, { -30,20 });
 
 			if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
@@ -444,7 +444,7 @@ namespace 单人剧情
 			}
 
 
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "恭喜您消灭了敌人！现在左边给您刷了更多的敌人。您可以造更多的虫巢加快幼虫的产出，造更多的房虫提升活动单位上限，加油");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "恭喜您消灭了敌人！现在左边给您刷了更多的敌人。您可以变异更多的<color=#a0ff50>虫巢</color>加快幼虫的产出，蜕变更多的<color=#a0ff50>房虫</color>提升活动单位上限，加油");
 			MonsterComponent::AddMonster(refSpace, 近战兵怪, { -30.0 }, 3);
 
 			if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, [&refSpace, &strPlayerNickName](const MyEvent::单位阵亡& ref)
@@ -512,13 +512,13 @@ namespace 单人剧情
 			PlayerGateSession_Game::播放声音(strPlayerNickName, "音效/YouWin", "您守住了！您真是指挥天才！");
 
 			fun房虫胡噜说(strPlayerNickName + "，我果然没有看错你，你是一个指挥天才！"); _等玩家读完returnTrue;
-			fun玩家说("承蒙教官谬赞。学生谨遵教诲，自不敢有一丝懈怠，定当不负所望，继续精进。");	_等玩家读完returnTrue;
+			fun玩家说("承蒙谬赞。学生谨遵教诲，自不敢有一丝懈怠，定当不负所望，继续精进。");	_等玩家读完returnTrue;
 			PlayerComponent::剧情对话(refSpace, strPlayerNickName, "图片/房虫头像", "房虫：胡噜", "", "", "    走你!", true);
 			co_return true;
 		}
 		if (0 == refSpace.Get玩家单位数(strPlayerNickName))
 		{
-			PlayerGateSession_Game::播放声音(strPlayerNickName, "音效/YouLose", "胜败乃兵家常事，请点击右上角“退出场景”离开，然后再次点击“防守战”，就可以重新来过。");
+			PlayerGateSession_Game::播放声音(strPlayerNickName, "音效/YouLose", "胜败乃兵家常事，请点击右上角“退出场景”离开，就可以重新来过。");
 			fun房虫胡噜说("胜败乃兵家常事，我仍然看好你的潜力！"); _等玩家读完returnTrue;
 			玩家_虫_说(refSpace, strPlayerNickName, "学生此次功败垂成，定会吸取教训，总结经验，再次努力，定不辜负教官的栽培与期望。", true);//	_等玩家读完;
 			co_return true;
@@ -535,13 +535,13 @@ namespace 单人剧情
 
 		fun房虫胡噜说("情报显示：敌人已发现我们的巢穴入口，即将入侵，请做好准备。");	_等玩家读完returnTrue;
 		fun玩家说("可是我仅受过简单的指挥训练。");							_等玩家读完returnTrue;
-		fun房虫胡噜说("我们会提供足够的初始晶体矿和燃气矿，你不用再从零开始采集。");	_等玩家读完returnTrue;
+		fun房虫胡噜说("我们会提供足够的初始晶体矿和燃气矿，你<color=#a0ff50>不用再从零开始采集</color>。");	_等玩家读完returnTrue;
 		fun玩家说("我还是没有把握。");										_等玩家读完returnTrue;
 		fun房虫胡噜说("我会传授你指挥实战速成口诀，三分钟即可成为实战高手。");	_等玩家读完returnTrue;
 		fun玩家说("真有这种口诀的话就应该在训练战时告诉我啊！");			_等玩家读完returnTrue;
 		fun房虫胡噜说("实战口诀只有在九死一生的实战中才有用！");		_等玩家读完returnTrue;
 		fun玩家说("九死一生？形势严峻啊，我会全力以赴的!");					_等玩家读完returnTrue;
-		fun房虫胡噜说("一个虫巢只能照顾三只幼虫。建造更多的虫巢，才有更多的幼虫可用。多蜕变房虫，增加活动单位上限。"); _等玩家读完returnTrue;
+		fun房虫胡噜说("1个虫巢只能照顾<color=#a0ff50>3只幼虫</color>。<color=#a0ff50>建造更多的虫巢</color>，才有更多的幼虫可共蜕变。<color=#a0ff50>多蜕变房虫</color>，增加活动单位上限。"); _等玩家读完returnTrue;
 		fun玩家说("就是一定要在数量上占据优势吗？");	_等玩家读完returnTrue;
 		fun房虫胡噜说("是的，进攻就是最好的防守。派出地面单位堵住敌人的通道，再派出飞虫越过障碍物空袭敌人。"); _等玩家读完returnTrue;
 		fun玩家说("OK，也不是很复杂。我有信心完成任务！");					_等玩家读完returnTrue;
@@ -578,7 +578,7 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "前期不用采矿。多造虫巢和房虫，多造近战虫枪虫和飞虫，一定要在数量上压倒敌人！");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "<color=#a0ff50>前期不用采集资源</color>。多造虫巢和房虫，多造近战虫枪虫和飞虫，一定要在数量上压制敌人！");
 
 		for (int i = 1; i < 20; ++i)
 		{
@@ -621,11 +621,11 @@ namespace 单人剧情
 		fun玩家说("真有这种口诀的话就应该在训练战时告诉我啊！");			_等玩家读完returnTrue;
 		fun总教官凌云说("实战口诀只有在九死一生的实战中才有用！");		_等玩家读完returnTrue;
 		fun玩家说("九死一生？形势严峻啊，我会全力以赴的!");					_等玩家读完returnTrue;
-		fun总教官凌云说("坦克可以超远距离造成超高伤害，而且是范围伤害，但是坦克锁定炮弹落点后有超长前摇时长，前摇结束后，敌方目标可能已经远离炮弹落点。炮弹落点附近的我方单位也会受到伤害。"); _等玩家读完returnTrue;
+		fun总教官凌云说("<color=#a0ff50>坦克</color>可以超远距离造成超高伤害，而且是范围伤害，但是坦克锁定炮弹落点后有超长前摇时长，前摇结束后，敌方目标可能已经远离炮弹落点。炮弹落点附近的我方单位也会受到伤害。"); _等玩家读完returnTrue;
 		fun玩家说("有点鸡肋的感觉，不是红警中的高速坦克，与星际中的攻城坦克也有些不同。");	_等玩家读完returnTrue;
-		fun总教官凌云说("…不知道你在说什么…有一种叫“炮台”的建筑单位，攻击距离很远，仅次于坦克；前摇时长很短，可以快速攻击；缺陷是伤害较低；不过多造点集中防守某一块区域还是很实用的。"); _等玩家读完returnTrue;
-		fun玩家说("看来只要有坦克和炮台就能守住对吗？");					_等玩家读完returnTrue;
-		fun总教官凌云说("是的，这是其他指挥官总结的经验。大概10个炮台和5辆坦克沿墙边布置就能守住。当然还有其他多种可行的防守方法，要靠你自行摸索。"); _等玩家读完returnTrue;
+		fun总教官凌云说("…不知道你在说什么…有一种叫<color=#a0ff50>炮台</color>的建筑单位，攻击距离很远，仅次于坦克；前摇时长很短，可以快速攻击；缺陷是伤害较低；不过多造点集中防守某一块区域还是很实用的。"); _等玩家读完returnTrue;
+		fun玩家说("看来<color=#a0ff50>只要有坦克和炮台就能守住</color>对吗？");					_等玩家读完returnTrue;
+		fun总教官凌云说("是的，这是其他指挥官总结的经验。大概<color=#a0ff50>10个炮台和5辆坦克沿墙边布置就能守住</color>。当然还有其他多种可行的防守方法，要靠你自行摸索。"); _等玩家读完returnTrue;
 		fun玩家说("OK，也不是很复杂。我有信心完成任务！");					_等玩家读完returnTrue;
 		fun总教官凌云说("走你！");										_等玩家读完returnTrue;
 
@@ -672,7 +672,7 @@ namespace 单人剧情
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "不用采矿。沿右边迷宫出口墙边布置一排炮台，再放置坦克加强防御。");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "<color=#a0ff50>前期不用采集资源</color>。沿右边迷宫出口墙边布置一排<color=#a0ff50>炮台</color>，再放置<color=#a0ff50>坦克</color>加强防御。");
 
 		for (int i = 1; i < 20; ++i)
 		{
@@ -744,7 +744,7 @@ namespace 单人剧情
 		}
 		else
 		{
-			fun装甲指挥官海因茨说("可以试试操作慢一点，先进攻右下角的虫巢。"); _等玩家读完returnTrue;
+			fun装甲指挥官海因茨说("可以试试操作慢一点，先进攻<color=#a0ff50>右下角的虫巢</color>。"); _等玩家读完returnTrue;
 			玩家说(refSpace, strPlayerNickName, "只能下次再试试了。", true);
 		}
 		co_return false;
@@ -834,7 +834,7 @@ namespace 单人剧情
 			创建敌方建筑(refSpace, { -45, -45.f }, 虫巢);
 			创建敌方建筑(refSpace, { 45, -45.f }, 虫巢);
 
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "此局没有工程车。右下方的敌方虫巢防守薄弱。");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "此局没有工程车。<color=#a0ff50>右下方的敌方虫巢防守薄弱</color>。");
 			bool b已营救坦克连 = false;
 			while (true)
 			{
@@ -889,7 +889,7 @@ namespace 单人剧情
 					fun玩家说("好的，但是坦克要接受我的指挥，我的步兵会保护坦克。");	_等玩家读完returnTrue;
 					fun坦克手齐诺维说("是！明白！指挥官！");	_等玩家读完returnTrue;
 					PlayerComponent::剧情对话已看完(strPlayerNickName);
-					PlayerGateSession_Game::Say任务提示(strPlayerNickName, "消灭上方两个敌方虫巢，控制好步兵保护您的坦克。让坦克在地方炮台的射程外攻击。");
+					PlayerGateSession_Game::Say任务提示(strPlayerNickName, "消灭上方两个敌方虫巢，控制好步兵保护您的坦克。<color=#a0ff50>让坦克在地方炮台的射程外攻击</color>。");
 				}
 
 			}
@@ -907,7 +907,7 @@ namespace 单人剧情
 		const auto fun绿色坦克洪隆说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {绿色坦克洪隆说(refSpace, strPlayerNickName, str内容); };
 		
 		fun房虫胡噜说(strPlayerNickName + "，有一个好消息，我们的幼虫经过千万次的模仿，基本掌握了拟态复制人类三色坦克的方法。"); _等玩家读完returnTrue;
-		fun玩家说("太好了。那么接下来肯定还有一个坏消息吧？");	_等玩家读完returnTrue;
+		fun玩家说("太好了……那么接下来肯定还有一个坏消息吧？");	_等玩家读完returnTrue;
 		fun房虫胡噜说("是的，蜕变出的第一批<color = #a0ff50>绿色坦克</color>的虫巢已遭人类攻占。"); _等玩家读完returnTrue;
 		fun玩家说("绿色坦克看来仍然打不过人类的部队啊！");	_等玩家读完returnTrue;
 		fun房虫胡噜说("绿色坦克攻击距离远，但是面对贴近的人类步兵却处于劣势。此外绿色坦克发射出的光刺会被障碍物阻挡。现在人类的科学家正在研究我们的绿色坦克。"); _等玩家读完returnTrue;
@@ -955,7 +955,7 @@ namespace 单人剧情
 			创建敌方建筑(refSpace, { -45, -45.f }, 基地);
 			创建敌方建筑(refSpace, { 45, -45.f }, 基地);
 
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "此局没有工虫。右下方的敌方基地防守薄弱。");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "此局没有工虫。<color=#a0ff50>右下方的敌方基地防守薄弱</color>。");
 			bool b已营救坦克连 = false;
 			while (true)
 			{
@@ -1010,7 +1010,7 @@ namespace 单人剧情
 					fun玩家说("好的，但是你们要接受我的指挥，我的部队会保护你们。");	_等玩家读完returnTrue;
 					fun绿色坦克洪隆说("是！明白！指挥官！");	_等玩家读完returnTrue;
 					PlayerComponent::剧情对话已看完(strPlayerNickName);
-					PlayerGateSession_Game::Say任务提示(strPlayerNickName, "消灭上方两个敌方基地，控制好其它单位保护您的坦克。坦克的射程略远于炮台，不要让坦克进入地方炮台的射程。");
+					PlayerGateSession_Game::Say任务提示(strPlayerNickName, "消灭上方两个敌方基地，控制好其它单位保护您的坦克。坦克的射程略远于炮台，<color=#a0ff50>不要让坦克进入敌方炮台的射程</color>。");
 				}
 			}
 		}

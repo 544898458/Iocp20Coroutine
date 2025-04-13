@@ -6,6 +6,7 @@ class DefenceComponent
 public:
 	DefenceComponent(Entity& refEntity, const int i32HpMax);
 	static void AddComponent(Entity& refEntity, uint16_t u16初始Hp);
+	static uint16_t 升级后的防御(Entity& refEntity);
 	void 受伤(int hp, const uint64_t idAttacker);
 	bool IsDead() const;
 	void 播放正遭到攻击语音();

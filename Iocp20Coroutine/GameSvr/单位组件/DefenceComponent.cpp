@@ -8,6 +8,7 @@
 #include "AttackComponent.h"
 #include "PlayerComponent.h"
 #include "BuildingComponent.h"
+#include "../Space.h"
 
 DefenceComponent::DefenceComponent(Entity& refEntity, const int i32HpMax) : m_refEntity(refEntity), m_i32HpMax(i32HpMax), m_hp(i32HpMax)
 {
@@ -19,15 +20,28 @@ void DefenceComponent::AddComponent(Entity& refEntity, uint16_t u16初始Hp)
 	refEntity.m_spDefence = std::make_shared<DefenceComponent, Entity&, const int>(refEntity, u16初始Hp);
 }
 
-
-void DefenceComponent::受伤(int hp, const uint64_t idAttacker)
+uint16_t DefenceComponent::升级后的防御(Entity& refEntity)
 {
-	CHECK_GE(hp, 0);
+	uint16_t u16等级(0);
+	if (refEntity.m_spPlayerNickName)
+	{
+		const auto& spacePlayer = refEntity.m_refSpace.GetSpacePlayer(refEntity);
+		u16等级 = spacePlayer.单位属性等级(refEntity.m_类型, 防御);
+	}
+
+	return 单位::单位防御(refEntity.m_类型, u16等级);
+}
+void DefenceComponent::受伤(const int 攻击, const uint64_t idAttacker)
+{
+	CHECK_GE(攻击, 0);
 	if (IsDead())
 		return;
 
-	this->m_hp -= hp;
-	m_map对我伤害[idAttacker] += hp;
+	const auto 防御 = 升级后的防御(m_refEntity);
+	const auto 伤害 = std::max(攻击 - 防御, 1);
+
+	this->m_hp -= 伤害;
+	m_map对我伤害[idAttacker] += 伤害;
 
 	播放正遭到攻击语音();
 	m_refEntity.BroadcastNotifyPos();
