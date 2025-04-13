@@ -320,8 +320,8 @@ namespace 单位
 	}
 	uint16_t 单位防御(const 单位类型 单位, const uint16_t u16防御等级)
 	{
-		战斗配置 战斗;
-		CHECK_RET_DEFAULT(Find战斗配置(单位, 战斗));
+		//战斗配置 战斗;
+		//CHECK_RET_DEFAULT(Find战斗配置(单位, 战斗));
 
 		单位::单位属性等级配置详情 等级详情 = {};
 		Find单位属性等级配置(单位, 防御, u16防御等级, 等级详情);

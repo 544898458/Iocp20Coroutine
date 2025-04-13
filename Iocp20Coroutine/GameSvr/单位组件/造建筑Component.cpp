@@ -273,9 +273,15 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 		Éı¼¶µ¥Î»ÊôĞÔComponent::AddComponent(refNewEntity);
 		break;
 	case »ùµØ:
+		Ôì»î¶¯µ¥Î»Component::AddComponent(refNewEntity);
+		break;
 	case »ú³¡:
 	case ÖØ³µ³§:
+		Éı¼¶µ¥Î»ÊôĞÔComponent::AddComponent(refNewEntity);
 		Ôì»î¶¯µ¥Î»Component::AddComponent(refNewEntity);
+		break;
+	case ·ÉËş:
+		Éı¼¶µ¥Î»ÊôĞÔComponent::AddComponent(refNewEntity);
 		break;
 	case µØ±¤:
 		µØ±¤Component::AddComponet(refNewEntity);
@@ -283,13 +289,8 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	case Ãñ·¿:
 		break;
 	case ÅÚÌ¨:
-	{
-		using namespace std;
-		//						¾¯¾à ¹¥¾à ÉËº¦ ÒÆËÙ
-		//µ¥Î»::Õ½¶·ÅäÖÃ Õ½¶· = { 20,	20,		4,	0,	"", 0ms,"pao002",400ms,"ÒôĞ§/PhoFir00","ÒôĞ§/explo1","Take 001", 400ms };
 		AttackComponent::AddComponent(refNewEntity);
-	}
-	break;
+		break;
 	case ³æ³²:
 		³æ³²Component::AddComponet(refNewEntity);
 		break;

@@ -20,6 +20,18 @@
 	case 虫营:
 		m_map可升级单位属性 = { {枪虫, {防御}}, {近战虫, {攻击}} };
 		break;
+	case 重车厂:
+		m_map可升级单位属性 = { {三色坦克, {移动速度}} };
+		break;
+	case 机场:
+		m_map可升级单位属性 = { {飞机, {攻击速度}} };
+		break;
+	case 拟态源:
+		m_map可升级单位属性 = { {绿色坦克, {攻击速度}} };
+		break;
+	case 飞塔:
+		m_map可升级单位属性 = { {飞虫, {移动速度}} };
+		break;
 	default:
 		LOG(ERROR) << "不能升级单位属性:" << m_refEntity.m_类型;
 		break;
