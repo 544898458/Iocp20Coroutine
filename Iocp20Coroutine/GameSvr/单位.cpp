@@ -172,7 +172,7 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::消耗资源& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["消耗燃气矿"].as<uint16_t>(),refNode["消耗晶体矿"].as<uint16_t>() };
+			rhs = { refNode["消耗晶体矿"].as<uint16_t>(),refNode["消耗燃气矿"].as<uint16_t>() };
 			return true;
 		}
 	};
@@ -187,7 +187,7 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::制造配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["消耗晶体矿"].as<uint16_t>(), refNode.as<单位::消耗资源>() };
+			rhs = { refNode["初始HP"].as<uint16_t>(), refNode.as<单位::消耗资源>() };
 			return true;
 		}
 	};

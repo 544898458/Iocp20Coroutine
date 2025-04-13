@@ -3,6 +3,7 @@
 #include "解锁单位Component.h"
 #include "造活动单位Component.h"
 #include "BuildingComponent.h"
+#include "升级单位属性Component.h"
 #include "../Entity.h"
 #include "../../CoRoutine/CoTimer.h"
 #include "../Space.h"
@@ -31,15 +32,27 @@ void 解锁单位Component::解锁单位(const 单位类型 类型)
 	if (!m_refEntity.m_spBuilding->已造好())
 	{
 		//播放声音
-        PlayerGateSession_Game::播放声音Buzz(m_refEntity, "还没造好建筑");
+		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "还没造好建筑，不能解锁单位");
 		return;
 	}
+
+	if (m_refEntity.m_up升级单位属性 && m_refEntity.m_up升级单位属性->正在升级())
+	{
+		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "正在解锁单位，不能升级属性");
+		return;
+	}
+
 
 	auto& spacePlayer = m_refEntity.m_refSpace.GetSpacePlayer(m_refEntity);
 	if (!spacePlayer.开始解锁单位(类型, m_refEntity))
 		return;
 
 	Co解锁单位(类型).RunNew();
+}
+
+bool 解锁单位Component::正在解锁() const
+{
+	return m_cancel解锁单位.operator bool();
 }
 
 CoTaskBool 解锁单位Component::Co解锁单位(const 单位类型 类型)
@@ -58,7 +71,7 @@ CoTaskBool 解锁单位Component::Co解锁单位(const 单位类型 类型)
 	auto& spacePlayer = m_refEntity.m_refSpace.GetSpacePlayer(m_refEntity);
 	spacePlayer.解锁完成(类型, m_refEntity);
 	std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string & refStrNickName);
-	auto wp = GetPlayerGateSession(EntitySystem::GetNickName( m_refEntity));
+	auto wp = GetPlayerGateSession(EntitySystem::GetNickName(m_refEntity));
 	if (!wp.expired())
 		wp.lock()->Send已解锁单位();
 

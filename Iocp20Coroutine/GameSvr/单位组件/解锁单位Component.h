@@ -13,7 +13,7 @@ public:
 	static void AddComponent(Entity& refEntity);
 	void TryCancel();
 	void 解锁单位(const 单位类型 类型);
-	
+	bool 正在解锁()const;
 private:
 	CoTaskBool Co解锁单位(const 单位类型 类型);
 	Entity& m_refEntity;

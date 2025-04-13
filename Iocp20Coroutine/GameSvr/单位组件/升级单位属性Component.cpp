@@ -3,6 +3,7 @@
 #include "升级单位属性Component.h"
 #include "造活动单位Component.h"
 #include "BuildingComponent.h"
+#include "解锁单位Component.h"
 #include "../Entity.h"
 #include "../../CoRoutine/CoTimer.h"
 #include "../Space.h"
@@ -14,10 +15,10 @@
 	switch (m_refEntity.m_类型)
 	{
 	case 兵营:
-		m_map可升级单位属性 = { {枪兵, {攻击}}, {近战兵, {攻击}} };
+		m_map可升级单位属性 = { {枪兵, {攻击}}, {近战兵, {防御}} };
 		break;
 	case 虫营:
-		m_map可升级单位属性 = { {枪虫, {攻击}}, {近战虫, {攻击}} };
+		m_map可升级单位属性 = { {枪虫, {防御}}, {近战虫, {攻击}} };
 		break;
 	default:
 		LOG(ERROR) << "不能升级单位属性:" << m_refEntity.m_类型;
@@ -42,8 +43,13 @@ void 升级单位属性Component::升级(const 单位类型 单位, const 单位属性类型 属性)
 	CHECK_RET_VOID(m_refEntity.m_spBuilding);
 	if (!m_refEntity.m_spBuilding->已造好())
 	{
-		//播放声音
-		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "还没造好建筑");
+		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "还没造好建筑，不能升级单位属性");
+		return;
+	}
+
+	if (m_refEntity.m_up解锁单位 && m_refEntity.m_up解锁单位->正在解锁())
+	{
+		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "正在解锁单位，不能升级属性");
 		return;
 	}
 
@@ -71,6 +77,11 @@ void 升级单位属性Component::升级(const 单位类型 单位, const 单位属性类型 属性)
 		return;
 
 	Co升级(单位, 属性).RunNew();
+}
+
+bool 升级单位属性Component::正在升级() const
+{
+	return m_cancel升级单位属性.operator bool();
 }
 
 CoTaskBool 升级单位属性Component::Co升级(const 单位类型 单位, const 单位属性类型 属性)

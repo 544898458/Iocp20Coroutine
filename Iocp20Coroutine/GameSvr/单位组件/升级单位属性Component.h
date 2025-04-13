@@ -9,11 +9,11 @@ class Entity;
 class 升级单位属性Component
 {
 public:
-	升级单位属性Component(Entity &ref);
+	升级单位属性Component(Entity& ref);
 	static void AddComponent(Entity& refEntity);
 	void TryCancel();
 	void 升级(const 单位类型 单位, const 单位属性类型 属性);
-	
+	bool 正在升级()const;
 private:
 	CoTaskBool Co升级(const 单位类型 单位, const 单位属性类型 属性);
 	Entity& m_refEntity;
