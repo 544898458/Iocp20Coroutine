@@ -57,7 +57,7 @@ namespace 单位
 	};
 	struct 单位属性等级配置详情
 	{
-        uint16_t u16加数值;
+        uint16_t u16数值;
 		消耗资源 消耗;
 	};
 	using 单位属性等级配置 = std::map<单位属性类型, std::map<uint16_t, 单位属性等级配置详情> >;
