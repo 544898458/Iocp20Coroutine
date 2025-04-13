@@ -31,14 +31,19 @@ void 解锁单位Component::解锁单位(const 单位类型 类型)
 	CHECK_RET_VOID(m_refEntity.m_spBuilding);
 	if (!m_refEntity.m_spBuilding->已造好())
 	{
-		//播放声音
 		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "还没造好建筑，不能解锁单位");
+		return;
+	}
+
+	if (正在解锁())
+	{
+		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "正在解锁");
 		return;
 	}
 
 	if (m_refEntity.m_up升级单位属性 && m_refEntity.m_up升级单位属性->正在升级())
 	{
-		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "正在解锁单位，不能升级属性");
+		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "正在升级，不能解锁单位");
 		return;
 	}
 

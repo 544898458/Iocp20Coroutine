@@ -447,7 +447,7 @@ bool Space::SpacePlayer::¿ªÊ¼½âËøµ¥Î»(const µ¥Î»ÀàĞÍ µ¥Î», Entity& refEntityÔÚ´Ë
 	µ¥Î»::ÏûºÄ×ÊÔ´ ÏûºÄ;
 	if (!µ¥Î»::Findµ¥Î»½âËøÅäÖÃ(µ¥Î», ÏûºÄ))
 	{
-		PlayerGateSession_Game::²¥·ÅÉùÒôBuzz(refEntityÔÚ´Ë½¨ÖşÖĞ½âËø, "ÒÑÉıµ½×î¸ß¼¶");
+		PlayerGateSession_Game::²¥·ÅÉùÒôBuzz(refEntityÔÚ´Ë½¨ÖşÖĞ½âËø, "ÎŞĞè½âËø");
 		return false;
 	}
 
@@ -492,7 +492,7 @@ bool Space::SpacePlayer::¿ªÊ¼Éı¼¶µ¥Î»ÊôĞÔ(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞ
 	µ¥Î»::µ¥Î»ÊôĞÔµÈ¼¶ÅäÖÃÏêÇé µÈ¼¶ÏêÇé;
 	if (!µ¥Î»::Findµ¥Î»ÊôĞÔµÈ¼¶ÅäÖÃ(µ¥Î», ÊôĞÔ, refµ¥Î»ÊôĞÔµÈ¼¶.u16µÈ¼¶ + 1, µÈ¼¶ÏêÇé))
 	{
-		PlayerGateSession_Game::²¥·ÅÉùÒôBuzz(refEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶, "ÒÑÉıµ½×î¸ß¼¶");
+		PlayerGateSession_Game::²¥·ÅÉùÒôBuzz(refEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶, "ÒÑÂú¼¶");
 		return false;
 	}
 

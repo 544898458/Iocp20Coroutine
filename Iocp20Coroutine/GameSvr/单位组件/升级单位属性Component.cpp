@@ -46,7 +46,11 @@ void 升级单位属性Component::升级(const 单位类型 单位, const 单位属性类型 属性)
 		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "还没造好建筑，不能升级单位属性");
 		return;
 	}
-
+	if (正在升级())
+	{
+		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "正在升级");
+		return;
+	}
 	if (m_refEntity.m_up解锁单位 && m_refEntity.m_up解锁单位->正在解锁())
 	{
 		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "正在解锁单位，不能升级属性");
