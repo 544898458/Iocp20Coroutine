@@ -29,8 +29,9 @@ AttackComponent& AttackComponent::AddComponent(Entity& refEntity)
 		_ASSERT(!"不能重复加AttackComponent");
 		return *refEntity.m_spAttack;
 	}
-	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&>(refEntity);
+
 	找目标走过去Component::AddComponent(refEntity);
+	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&>(refEntity);
 	return *refEntity.m_spAttack;
 }
 
@@ -38,11 +39,13 @@ using namespace std;
 AttackComponent::AttackComponent(Entity& refEntity) :
 	m_refEntity(refEntity)
 {
+	CHECK_RET_VOID(m_refEntity.m_up找目标走过去);
+
 	m_refEntity.m_up找目标走过去->Co顶层(
 		[this]()->bool {return this->可以攻击(); },
 		[this]()->WpEntity {return Get最近的敌人(); },
 		[this](const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去)->CoTask<std::tuple<bool, bool>> {return Co攻击(refTarget, wpEntity, ref找目标走过去); },
-		[this](WpEntity& wpEntity, bool ref仇恨目标)->void{ this->处理仇恨目标(wpEntity, ref仇恨目标); }
+		[this](WpEntity& wpEntity, bool& ref仇恨目标)->void{ this->处理仇恨目标(wpEntity, ref仇恨目标); }
 	).RunNew();
 }
 
@@ -249,6 +252,7 @@ void AttackComponent::处理仇恨目标(WpEntity& wpEntity, bool& ref仇恨目标)
 	//仇恨列表
 	if (m_refEntity.m_spDefence)
 	{
+		//找对我伤害最大的敌人
 		auto& refMap = m_refEntity.m_spDefence->m_map对我伤害;
 		while (!refMap.empty())
 		{
@@ -271,7 +275,16 @@ void AttackComponent::处理仇恨目标(WpEntity& wpEntity, bool& ref仇恨目标)
 				refMap.erase(iterBegin);
 				continue;
 			}
-
+			if(!EntitySystem::Is空地能打(m_refEntity.m_类型, refEntity.m_类型))
+			{
+				refMap.erase(iterBegin);
+				continue;
+			}
+			if (m_refEntity.IsDead())
+			{
+				refMap.erase(iterBegin);
+				continue;
+			}
 			wpEntity = wp;
 			ref仇恨目标 = true;
 			break;

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "走Component.h"
-#include "Entity.h"
+#include "../Entity.h"
+#include "../EntitySystem.h"
 #include "PlayerComponent.h"
 #include "AttackComponent.h"
 #include "AiCo.h"
@@ -83,11 +84,12 @@ void 走Component::WalkToPos手动控制(const Position& posTarget)
 
 	m_coWalk.Run();
 	_ASSERT(m_coWalk.Finished());//20240205
-	if (m_refEntity.m_spAttack)
-	{
-		m_refEntity.m_spAttack->TryCancel();
-		//_ASSERT(m_refEntity.m_spAttack->m_coAttack.Finished());//20240205
-	}
+	//if (m_refEntity.m_spAttack)
+	//{
+	//	m_refEntity.m_spAttack->TryCancel();
+	//	//_ASSERT(m_refEntity.m_spAttack->m_coAttack.Finished());//20240205
+	//}
+	EntitySystem::停止攻击和治疗(m_refEntity);
 	/*m_coStop = false;*/
 	_ASSERT(!m_cancel);
 	m_coWalk手动控制 = AiCo::WalkToPos(m_refEntity, posTarget, m_cancel);
@@ -119,14 +121,15 @@ void 走Component::TryCancel()
 
 void 走Component::走进地堡(WpEntity wpEntity地堡)
 {
-	if (m_refEntity.m_spAttack)
-		m_refEntity.m_spAttack->TryCancel();
+	//if (m_refEntity.m_spAttack)
+	//	m_refEntity.m_spAttack->TryCancel();
 
-	if (m_refEntity.m_up找目标走过去)
-		m_refEntity.m_up找目标走过去->TryCancel();
+	//if (m_refEntity.m_up找目标走过去)
+	//	m_refEntity.m_up找目标走过去->TryCancel();
 
-	if (m_refEntity.m_up医疗兵)
-		m_refEntity.m_up医疗兵->TryCancel();
+	//if (m_refEntity.m_up医疗兵)
+	//	m_refEntity.m_up医疗兵->TryCancel();
+	EntitySystem::停止攻击和治疗(m_refEntity);
 
 	if (wpEntity地堡.expired())
 		return;
@@ -146,9 +149,9 @@ void 走Component::走进地堡(WpEntity wpEntity地堡)
 		return;
 	}
 
-	if (m_refEntity.m_spAttack)
-		m_refEntity.m_spAttack->TryCancel();
-
+	//if (m_refEntity.m_spAttack)
+	//	m_refEntity.m_spAttack->TryCancel();
+	EntitySystem::停止攻击和治疗(m_refEntity);
 	Cancel所有包含走路的协程(m_refEntity);
 	_ASSERT(!m_cancel);
 	_ASSERT(m_coWalk进地堡.Finished());
@@ -196,7 +199,7 @@ CoTaskBool 走Component::Co走进地堡(WpEntity wpEntity地堡)
 
 void 走Component::Cancel所有包含走路的协程(Entity& refEntity, const bool b停止攻击)
 {
-	if (b停止攻击 && refEntity.m_spAttack)refEntity.m_spAttack->TryCancel();
+	if (b停止攻击 )EntitySystem::停止攻击和治疗(refEntity);
 	if (refEntity.m_sp采集)		refEntity.m_sp采集->m_TaskCancel.TryCancel();
 	if (refEntity.m_sp走)		refEntity.m_sp走->TryCancel();
 	if (refEntity.m_sp造建筑)	refEntity.m_sp造建筑->TryCancel();

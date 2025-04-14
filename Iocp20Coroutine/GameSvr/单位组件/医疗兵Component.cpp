@@ -15,6 +15,7 @@
 
 医疗兵Component::医疗兵Component(Entity& refEntity) :m_refEntity(refEntity)
 {
+	CHECK_RET_VOID(m_refEntity.m_up找目标走过去);
 	m_refEntity.m_up找目标走过去->Co顶层(
 		[this]()->bool {return this->可以治疗(); },
 		[this]()->WpEntity {return Get最近的可治疗友方单位(); },
@@ -26,6 +27,7 @@
 void 医疗兵Component::AddComponent(Entity& refEntity)
 {
 	CHECK_VOID(!refEntity.m_up医疗兵);
+	找目标走过去Component::AddComponent(refEntity);
 	refEntity.m_up医疗兵.reset(new 医疗兵Component(refEntity));
 }
 
@@ -70,9 +72,9 @@ WpEntity 医疗兵Component::Get最近的可治疗友方单位()
 		{
 			if (!ref.m_spDefence)
 				return false;
-			
-			if(ref.m_spDefence->已满血())
-                return false;
+
+			if (ref.m_spDefence->已满血())
+				return false;
 
 			return true;
 		});
@@ -108,41 +110,57 @@ CoTaskBool 医疗兵Component::Co治疗目标(WpEntity wp目标, FunCancel& cancel)
 
 		m_refEntity.m_eulerAnglesY = CalculateAngle(m_refEntity.Pos(), wp目标.lock()->Pos());
 		m_refEntity.BroadcastNotifyPos();
-		找目标走过去Component::播放前摇动作(m_refEntity);
+		//找目标走过去Component::播放前摇动作(m_refEntity);
 
 		CHECK_CO_RET_FALSE(m_refEntity.m_up找目标走过去);
 		using namespace std;
-		if (0s < m_refEntity.m_up找目标走过去->m_战斗配置.dura开始播放攻击动作 && co_await CoTimer::Wait(m_refEntity.m_up找目标走过去->m_战斗配置.dura开始播放攻击动作, cancel))
-			co_return true;//协程取消
+		//if (0s < m_refEntity.m_up找目标走过去->m_战斗配置.dura开始播放攻击动作 && co_await CoTimer::Wait(m_refEntity.m_up找目标走过去->m_战斗配置.dura开始播放攻击动作, cancel))
+		//	co_return true;//协程取消
 
 		CHECK_终止治疗目标流程;
 
 		找目标走过去Component::播放攻击动作(m_refEntity);
-		const auto u16开始伤害 = EntitySystem::升级后攻击前摇_伤害耗时(m_refEntity);
-		if (0 < u16开始伤害 && co_await CoTimer::Wait(std::chrono::milliseconds(u16开始伤害), cancel))
-			co_return true;//协程取消
+
+		while (true)
+		{
+			const auto u16开始伤害 = EntitySystem::升级后攻击前摇_伤害耗时(m_refEntity);
+			if (0 < u16开始伤害 && co_await CoTimer::Wait(std::chrono::milliseconds(u16开始伤害), cancel))
+				co_return true;//协程取消
+
+			CHECK_终止治疗目标流程;
+
+			auto& ref目标 = *wp目标.lock();
+
+			if (!ref目标.m_spDefence)
+			{
+				LOG(ERROR) << "!ref目标.m_spDefence";
+				break;
+			}
+
+			if(ref目标.m_spDefence->已满血())
+                break;
+
+			CHECK_CO_RET_FALSE(m_refEntity.m_up找目标走过去);
+			if (!m_refEntity.DistanceLessEqual(ref目标, m_refEntity.m_up找目标走过去->攻击距离(ref目标)))
+				break;//要执行后摇
+
+			if (!ref目标.m_spDefence)
+				break;//目标打不了
+
+			找目标走过去Component::播放攻击音效(m_refEntity);
+
+			ref目标.m_spDefence->m_hp += EntitySystem::升级后攻击(m_refEntity);
+			ref目标.BroadcastNotifyPos();
+		}
 
 		CHECK_终止治疗目标流程;
 
-		auto& refDefencer = *wp目标.lock();
-		CHECK_CO_RET_FALSE(m_refEntity.m_up找目标走过去);
-		if (!m_refEntity.DistanceLessEqual(refDefencer, m_refEntity.m_up找目标走过去->攻击距离(refDefencer)))
-			break;//要执行后摇
-
-		if (!refDefencer.m_spDefence)
-			break;//目标打不了
-
-		找目标走过去Component::播放攻击音效(m_refEntity);
-
-		const uint16_t u16升级后的攻击 = EntitySystem::升级后攻击(m_refEntity);
-		if (0 < u16升级后的攻击)
-			refDefencer.m_spDefence->受伤(u16升级后的攻击, m_refEntity.Id);
 
 	} while (false);
 
 	CHECK_CO_RET_FALSE(m_refEntity.m_up找目标走过去);
-	if (co_await CoTimer::Wait(m_refEntity.m_up找目标走过去->m_战斗配置.dura后摇, cancel))//后摇
-		co_return true;//协程取消
+	//if (co_await CoTimer::Wait(m_refEntity.m_up找目标走过去->m_战斗配置.dura后摇, cancel))//后摇
+	//	co_return true;//协程取消
 
 	if (!m_refEntity.IsDead())
 	{

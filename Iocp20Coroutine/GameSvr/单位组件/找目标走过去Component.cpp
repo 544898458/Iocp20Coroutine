@@ -40,10 +40,10 @@ float 找目标走过去Component::攻击距离(const float f目标建筑半边长) const
 
 
 CoTaskBool 找目标走过去Component::Co顶层(
-	const std::function<bool()>& fun可以操作,
-	const std::function<WpEntity()>& fun找最近的目标,
-	const std::function<CoTask<std::tuple<bool, bool>>(const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去)>& fun操作最近的目标,
-	const std::function<void(WpEntity& wpEntity, bool& ref仇恨目标)>& fun处理仇恨目标)
+	const std::function<bool()> fun可以操作,
+	const std::function<WpEntity()> fun找最近的目标,
+	const std::function<CoTask<std::tuple<bool, bool>>(const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去)> fun操作最近的目标,
+	const std::function<void(WpEntity& wpEntity, bool& ref仇恨目标)> fun处理仇恨目标)
 {
 	using namespace std;
 	//while (!co_await CoTimer::Wait(1000ms, m_funCancel顶层))
@@ -83,10 +83,10 @@ CoTaskBool 找目标走过去Component::Co顶层(
 
 
 CoTaskBool 找目标走过去Component::Co走向警戒范围内的目标然后操作(
-	const std::function<bool()>& fun可以操作,
-	const std::function<WpEntity()>& fun找最近的目标,
-	const std::function<CoTask<std::tuple<bool, bool>>(const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去)>& fun操作最近的目标,
-	const std::function<void(WpEntity& wpEntity, bool& ref仇恨目标)>& fun处理仇恨目标)
+	const std::function<bool()> fun可以操作,
+	const std::function<WpEntity()> fun找最近的目标,
+	const std::function<CoTask<std::tuple<bool, bool>>(const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去)> fun操作最近的目标,
+	const std::function<void(WpEntity& wpEntity, bool& ref仇恨目标)> fun处理仇恨目标)
 {
 	KeepCancel kc(m_TaskCancel.cancel);
 	while (true)
@@ -146,7 +146,7 @@ CoTaskBool 找目标走过去Component::Co走向警戒范围内的目标然后操作(
 			continue;
 		}
 
-		co_return false;
+		continue;
 	}
 
 	co_return false;
