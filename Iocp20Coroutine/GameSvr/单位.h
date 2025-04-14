@@ -35,12 +35,13 @@ namespace 单位
 	{
 		float f警戒距离;
 		float f攻击距离;
-		int32_t i32攻击;
+		uint16_t u16攻击;
+		uint16_t u16防御;
 		float f每帧移动距离;
 		std::string str前摇动作;
 		std::chrono::system_clock::duration dura开始播放攻击动作;
 		std::string str攻击动作;
-		std::chrono::system_clock::duration dura开始伤害;
+		uint16_t u16开始伤害;
 		std::string str攻击音效;
 		std::chrono::system_clock::duration dura后摇;
 	};
@@ -57,7 +58,7 @@ namespace 单位
 	};
 	struct 单位属性等级配置详情
 	{
-        uint16_t u16数值;
+        float f数值;
 		消耗资源 消耗;
 	};
 	using 单位属性等级配置 = std::map<单位属性类型, std::map<uint16_t, 单位属性等级配置详情> >;
@@ -75,7 +76,10 @@ namespace 单位
 	bool Find制造配置(const 单位类型 类型, 制造配置& refOut);
 	bool Find单位解锁配置(const 单位类型 单位, 消耗资源& refOut);
 	bool Find单位属性等级配置(const 单位类型 单位, const 单位属性类型 属性, const uint16_t u16等级, 单位属性等级配置详情& refOut);
-	uint16_t 单位攻击(const 单位类型 单位, const uint16_t u16攻击等级);
-	uint16_t 单位防御(const 单位类型 单位, const uint16_t u16防御等级);
+	template<typename T_成员>
+	T_成员 单位升级后属性(const 单位类型 单位, const 单位属性类型 属性, const uint16_t u16等级, T_成员 战斗配置::* p成员);
+	//uint16_t 单位攻击(const 单位类型 单位, const uint16_t u16攻击等级);
+	//uint16_t 单位防御(const 单位类型 单位, const uint16_t u16防御等级);
+	//float 单位速度每帧移动距离(const 单位类型 单位, const uint16_t u16移速等级);
 };
 

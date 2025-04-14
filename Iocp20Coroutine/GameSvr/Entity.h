@@ -73,7 +73,6 @@ public:
 
 	const uint64_t Id;
 	bool m_bNeedDelete = false;
-	float m_速度每帧移动距离 = 0.5f;//每帧多少米
 	float 攻击距离()const;
 	float 警戒距离()const;
 
@@ -99,7 +98,7 @@ public:
 	std::unique_ptr<飞向目标Component> m_up飞向目标;
 	std::unique_ptr<解锁单位Component> m_up解锁单位;
 	std::unique_ptr<升级单位属性Component> m_up升级单位属性;
-	
+
 	/// <summary>
 	/// 地堡或运输机
 	/// </summary>

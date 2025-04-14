@@ -339,8 +339,8 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 		CHECK_终止攻击目标流程;
 
 		播放攻击动作();
-
-		if (0s < m_战斗配置.dura开始伤害 && co_await CoTimer::Wait(m_战斗配置.dura开始伤害, cancel))
+		const auto u16开始伤害 = EntitySystem::升级后攻击前摇_伤害耗时(m_refEntity);
+		if (0 < u16开始伤害 && co_await CoTimer::Wait(std::chrono::milliseconds(u16开始伤害), cancel))
 			co_return true;//协程取消
 
 		switch (m_refEntity.m_类型)
@@ -362,7 +362,7 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 
 		播放攻击音效();
 
-		const uint16_t u16升级后的攻击 = 升级后的攻击(m_refEntity);
+		const uint16_t u16升级后的攻击 = EntitySystem::升级后攻击(m_refEntity);
 		if (0 < u16升级后的攻击)
 			refDefencer.m_spDefence->受伤(u16升级后的攻击, m_refEntity.Id);
 
@@ -388,18 +388,6 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 	co_return false;//协程正常退出
 }
 
-uint16_t AttackComponent::升级后的攻击(Entity& refEntity)
-{
-	uint16_t u16攻击等级(0);
-	if (refEntity.m_spPlayerNickName)
-	{
-		const auto& spacePlayer = refEntity.m_refSpace.GetSpacePlayer(refEntity);
-		u16攻击等级 = spacePlayer.单位属性等级(refEntity.m_类型, 攻击);
-	}
-
-	return 单位::单位攻击(refEntity.m_类型, u16攻击等级);
-}
-
 #define CHECK_终止攻击位置流程 \
 		if (m_refEntity.IsDead())\
 			co_return false;\
@@ -417,12 +405,15 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 		m_refEntity.BroadcastNotifyPos();
 		播放前摇动作();
 		EntitySystem::BroadcastEntity描述(m_refEntity, "准备开炮");
+
+		const auto u16开始伤害 = EntitySystem::升级后攻击前摇_伤害耗时(m_refEntity);
+
 		{
 			SpEntity spEntity特效 = std::make_shared<Entity, const Position&, Space&, 单位类型, const 单位::单位配置&>(
 				posTarget, m_refEntity.m_refSpace, 特效, { "炸点" ,"特效/炸点","" });
 			m_refEntity.m_refSpace.AddEntity(spEntity特效, 0);
 			spEntity特效->BroadcastEnter();
-			spEntity特效->CoDelayDelete(m_战斗配置.dura开始播放攻击动作 + m_战斗配置.dura开始伤害).RunNew();
+			spEntity特效->CoDelayDelete(m_战斗配置.dura开始播放攻击动作 + std::chrono::milliseconds(u16开始伤害)).RunNew();
 		}
 		if (0s < m_战斗配置.dura开始播放攻击动作 && co_await CoTimer::Wait(m_战斗配置.dura开始播放攻击动作, cancel))
 			co_return true;//协程取消
@@ -430,7 +421,7 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 		CHECK_终止攻击位置流程;
 		EntitySystem::BroadcastEntity描述(m_refEntity, "");
 		播放攻击动作();
-		if (0s < m_战斗配置.dura开始伤害 && co_await CoTimer::Wait(m_战斗配置.dura开始伤害, cancel))
+		if (0 < u16开始伤害 && co_await CoTimer::Wait(std::chrono::milliseconds(u16开始伤害), cancel))
 			co_return true;//协程取消
 
 		CHECK_终止攻击位置流程;
@@ -459,7 +450,7 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 					continue;
 
 				if (refDefencer.m_spDefence && refDefencer.Pos().DistanceLessEqual(posTarget, 5))
-					refDefencer.m_spDefence->受伤(AttackComponent::升级后的攻击(m_refEntity), m_refEntity.Id);
+					refDefencer.m_spDefence->受伤(EntitySystem::升级后攻击(m_refEntity), m_refEntity.Id);
 			}
 		}
 

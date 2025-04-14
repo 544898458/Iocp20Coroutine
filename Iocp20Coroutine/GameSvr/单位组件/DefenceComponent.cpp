@@ -22,14 +22,15 @@ void DefenceComponent::AddComponent(Entity& refEntity, uint16_t u16初始Hp)
 
 uint16_t DefenceComponent::升级后的防御(Entity& refEntity)
 {
-	uint16_t u16等级(0);
-	if (refEntity.m_spPlayerNickName)
-	{
-		const auto& spacePlayer = refEntity.m_refSpace.GetSpacePlayer(refEntity);
-		u16等级 = spacePlayer.单位属性等级(refEntity.m_类型, 防御);
-	}
+	//uint16_t u16等级(0);
+	//if (refEntity.m_spPlayerNickName)
+	//{
+	//	const auto& spacePlayer = refEntity.m_refSpace.GetSpacePlayer(refEntity);
+	//	u16等级 = spacePlayer.单位属性等级(refEntity.m_类型, 防御);
+	//}
 
-	return 单位::单位防御(refEntity.m_类型, u16等级);
+	//return 单位::单位防御(refEntity.m_类型, u16等级);
+	return EntitySystem::升级后防御(refEntity);
 }
 void DefenceComponent::受伤(const int 攻击, const uint64_t idAttacker)
 {

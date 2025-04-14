@@ -623,7 +623,7 @@ WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 	CHECK_RET_DEFAULT(单位::Find活动单位配置(类型, 活动));
 	CHECK_RET_DEFAULT(单位::Find单位配置(类型, 单位));
 	CHECK_RET_DEFAULT(单位::Find制造配置(类型, 制造));
-	CHECK_RET_DEFAULT(单位::Find战斗配置(类型, 战斗));
+	
 	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
 		pos, *this, std::forward<const 单位类型&&>(类型), 单位);
 	PlayerComponent::AddComponent(*spNewEntity, refSpPlayer可能空, strNickName);
@@ -650,7 +650,7 @@ WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 
 	m_mapPlayer[strNickName].m_mapWpEntity[spNewEntity->Id] = spNewEntity;//自己控制的单位
 	AddEntity(spNewEntity);//全地图单位
-	spNewEntity->m_速度每帧移动距离 = 战斗.f每帧移动距离;
+	
 	PlayerComponent::播放声音(*spNewEntity, 活动.str入场语音); //SCV, good to go, sir. SCV可以开工了
 	switch (类型)
 	{

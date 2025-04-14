@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include "Space.h"
 #include "Entity.h"
+#include "EntitySystem.h"
 #include "RecastNavigationCrowd.h"
 #include "单位组件/走Component.h"
 #include "MyMsgQueue.h"
@@ -218,10 +219,11 @@ bool CrowdTool判断单位重叠(const Position& refPosOld, const Position& refPosNew,
 
 RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& posTarget) :m_refEntity(refEntity)
 {
+	CHECK_RET_VOID(refEntity.m_sp走);
 	float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z };
 	_ASSERT(走Component::INVALID_AGENT_IDX == refEntity.m_sp走->m_idxCrowdAgent);
 	auto& refCrowdToolState = refEntity.m_refSpace.GetCrowdToolState(refEntity.m_类型);
-	refEntity.m_sp走->m_idxCrowdAgent = CrowToolAddAgent(refCrowdToolState, arrF, refEntity.m_速度每帧移动距离 * 10);
+	refEntity.m_sp走->m_idxCrowdAgent = CrowToolAddAgent(refCrowdToolState, arrF, EntitySystem::升级后速度每帧移动距离(refEntity) * 10);
 	_ASSERT(走Component::INVALID_AGENT_IDX != m_refEntity.m_sp走->m_idxCrowdAgent);
 	refCrowdToolState.m_mapEntityId[refEntity.m_sp走->m_idxCrowdAgent] = refEntity.Id;
 

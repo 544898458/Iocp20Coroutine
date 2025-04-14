@@ -28,7 +28,6 @@ MonsterComponent::MonsterComponent(Entity& refThis)
 
 std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const 单位类型 类型, const Position& refPos, const int count)
 {
-	//CHECK_RET_DEFAULT(EntitySystem::Is怪(类型));
 	std::vector<SpEntity> vecRet;
 	单位::怪配置 怪配置;
 	单位::单位配置 单位配置;
@@ -45,9 +44,8 @@ std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const 单位类
 		DefenceComponent::AddComponent(*spEntityMonster, 怪配置.u16初始Hp);
 		走Component::AddComponent(*spEntityMonster);
 		AddComponent(*spEntityMonster);
-		//spEntityMonster->m_f警戒距离 = 配置.战斗.f警戒距离;
-		spEntityMonster->m_速度每帧移动距离 = 战斗配置.f每帧移动距离;
-		//refSpace.m_mapEntity.insert({ (int64_t)spEntityMonster.get() ,spEntityMonster });
+		
+		
 		refSpace.AddEntity(spEntityMonster);
 		//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 		spEntityMonster->BroadcastEnter();
