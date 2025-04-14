@@ -10,7 +10,7 @@
 #include "BuildingComponent.h"
 #include "找目标走过去Component.h"
 #include "DefenceComponent.h"
-
+#include "AoiComponent.h"
 
 找目标走过去Component::找目标走过去Component(Entity& refEntity) :m_refEntity(refEntity)
 {
@@ -86,6 +86,7 @@ CoTaskBool 找目标走过去Component::Co走向警戒范围内的目标然后操作(
 	const std::function<CoTask<std::tuple<bool, bool>>(const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去)> fun操作最近的目标,
 	const std::function<void(WpEntity& wpEntity, bool& ref仇恨目标)> fun处理仇恨目标)
 {
+	CHECK_CO_RET_FALSE(m_refEntity.m_upAoi);
 	KeepCancel kc(m_TaskCancel.cancel);
 	while (true)
 	{
@@ -95,10 +96,16 @@ CoTaskBool 找目标走过去Component::Co走向警戒范围内的目标然后操作(
 		if (!fun可以操作())
 			co_return false;
 
+		//CHECK_CO_RET_FALSE(m_refEntity.m_upAoi);
+		//if (m_refEntity.m_upAoi->m_map我能看到的.empty())
+		//{
+		//	m_b搜索新的目标 = false;//AOI内警戒范围内没有目标
+		//	co_return false;
+		//}
+
 		auto wpEntity = fun找最近的目标();
 		if (wpEntity.expired())
 		{
-			m_b搜索新的目标 = false;//警戒范围内没有目标
 			co_return false;
 		}
 
@@ -121,7 +128,7 @@ CoTaskBool 找目标走过去Component::Co走向警戒范围内的目标然后操作(
 
 		if (wpEntity.expired())
 		{
-			m_b搜索新的目标 = false;//警戒范围内没有目标
+			//m_b搜索新的目标 = false;//警戒范围内没有目标
 			co_return false;
 		}
 

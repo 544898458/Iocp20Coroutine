@@ -228,7 +228,7 @@ const uint16_t u16X坐标放大倍数 = 10000;//坐标不能超过9999
 
 int AoiComponent::格子Id(const int32_t i32格子X, const int32_t i32格子Z)
 {
-	const int32_t i32格子ID = (u16X坐标放大倍数 + i32格子X) * u16X坐标放大倍数 + (u16X坐标放大倍数 + i32格子Z);
+	const int32_t i32格子ID = (u16X坐标放大倍数/2 + i32格子X) * u16X坐标放大倍数 + (u16X坐标放大倍数/2 + i32格子Z);
 	return i32格子ID;
 }
 std::tuple<int, int, int> AoiComponent::格子(const Position& refPos)
@@ -280,7 +280,7 @@ std::set<int32_t> AoiComponent::能看到的格子(const Position& pos) const
 	const auto [i32格子Id, i32格子X, i32格子Z] = AoiComponent::格子(pos);
 
 	int i32视野范围 = m_i32视野范围;
-	if (m_refEntity.m_spAttack) 
+	if (m_refEntity.m_up找目标走过去)
 	{
 		i32视野范围 = std::max<int>((int)m_refEntity.m_up找目标走过去->m_战斗配置.f警戒距离, i32视野范围);
 		i32视野范围 = std::max<int>((int)m_refEntity.m_up找目标走过去->m_战斗配置.f攻击距离, i32视野范围);
