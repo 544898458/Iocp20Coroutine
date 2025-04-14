@@ -24,24 +24,14 @@ void Ôì»î¶¯µ¥Î»Component::AddComponent(Entity& refEntity)
 {
 	switch (refEntity.m_ÀàĞÍ)
 	{
-	case »ùµØ:m_set¿ÉÔìÀàĞÍ.insert(¹¤³Ì³µ); break;
-	case »ú³¡:m_set¿ÉÔìÀàĞÍ.insert(·É»ú); break;
-	case ±øÓª:
-		m_set¿ÉÔìÀàĞÍ.insert(Ç¹±ø);
-		m_set¿ÉÔìÀàĞÍ.insert(½üÕ½±ø);
-		break;
-	case ÖØ³µ³§:
-		m_set¿ÉÔìÀàĞÍ.insert(ÈıÉ«Ì¹¿Ë);
-		break;
-	case Ó×³æ:
-		m_set¿ÉÔìÀàĞÍ.insert(¹¤³æ);
-		m_set¿ÉÔìÀàĞÍ.insert(½üÕ½³æ);
-		m_set¿ÉÔìÀàĞÍ.insert(Ç¹³æ);
-		m_set¿ÉÔìÀàĞÍ.insert(ÂÌÉ«Ì¹¿Ë);
-		m_set¿ÉÔìÀàĞÍ.insert(·É³æ);
-		m_set¿ÉÔìÀàĞÍ.insert(·¿³æ);
-		break;
+	case »ùµØ:m_set¿ÉÔìÀàĞÍ = { ¹¤³Ì³µ, Ò½ÁÆ±ø }; break;
+	case »ú³¡:m_set¿ÉÔìÀàĞÍ = { ·É»ú }; break;
+	case ±øÓª:m_set¿ÉÔìÀàĞÍ = { Ç¹±ø,½üÕ½±ø }; break;
+	case ÖØ³µ³§:m_set¿ÉÔìÀàĞÍ = { ÈıÉ«Ì¹¿Ë }; break;
+	case Ó×³æ:m_set¿ÉÔìÀàĞÍ = { ¹¤³æ, ½üÕ½³æ, Ç¹³æ, ÂÌÉ«Ì¹¿Ë, ·É³æ, ·¿³æ }; break;
 	default:
+		LOG(ERROR) << "Î´ÖªµÄ½¨Ôìµ¥Î»ÀàĞÍ," << refEntity.m_ÀàĞÍ;
+		_ASSERT(!"Î´ÖªµÄ½¨Ôìµ¥Î»ÀàĞÍ");
 		break;
 	}
 	m_pos¼¯½áµã = refEntity.Pos();
@@ -50,6 +40,18 @@ void Ôì»î¶¯µ¥Î»Component::AddComponent(Entity& refEntity)
 bool Ôì»î¶¯µ¥Î»Component::¿ÉÔì(const µ¥Î»ÀàĞÍ ÀàĞÍ)
 {
 	return m_set¿ÉÔìÀàĞÍ.end() != m_set¿ÉÔìÀàĞÍ.find(ÀàĞÍ) && !IsÓ×³æÕıÔÚÍÉ±ä();
+}
+
+bool Ôì»î¶¯µ¥Î»Component::ÅĞ¶Ï²¢ÌáÊ¾È±ÉÙ½¨Öş(PlayerGateSession_Game& refGateSession, const µ¥Î»ÀàĞÍ µ¥Î»)
+{
+	if (0 < m_refEntity.m_refSpace.GetÍæ¼Òµ¥Î»Êı(refGateSession.NickName(), µ¥Î»))
+		return true;
+
+	µ¥Î»::µ¥Î»ÅäÖÃ ÅäÖÃ;
+	CHECK_RET_DEFAULT(µ¥Î»::Findµ¥Î»ÅäÖÃ(µ¥Î», ÅäÖÃ));
+
+	refGateSession.²¥·ÅÉùÒôBuzz(std::format("È±ÉÙ {0}", ÅäÖÃ.strName));
+	return false;
 }
 
 void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î»ÀàĞÍ ÀàĞÍ)
@@ -80,29 +82,19 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 		return;
 	}
 
+#define CHECK_È±ÉÙµ¥Î»_RET(µ¥Î») if(!ÅĞ¶Ï²¢ÌáÊ¾È±ÉÙ½¨Öş(refGateSession, µ¥Î»))return;
+
 	switch (ÀàĞÍ)
 	{
 	case Ç¹³æ:
 	case ½üÕ½³æ:
-		if (0 >= m_refEntity.m_refSpace.GetÍæ¼Òµ¥Î»Êı(refGateSession.NickName(), ³æÓª))
-		{
-			refGateSession.²¥·ÅÉùÒôBuzz("È±ÉÙ ³æÓª");
-			return;
-		}
+		CHECK_È±ÉÙµ¥Î»_RET(³æÓª);
 		break;
 	case ·É³æ:
-		if (0 >= m_refEntity.m_refSpace.GetÍæ¼Òµ¥Î»Êı(refGateSession.NickName(), ·ÉËş))
-		{
-			refGateSession.²¥·ÅÉùÒôBuzz("È±ÉÙ ·ÉËş");
-			return;
-		}
+		CHECK_È±ÉÙµ¥Î»_RET(·ÉËş);
 		break;
 	case ÂÌÉ«Ì¹¿Ë:
-		if (0 >= m_refEntity.m_refSpace.GetÍæ¼Òµ¥Î»Êı(refGateSession.NickName(), ÄâÌ¬Ô´))
-		{
-			refGateSession.²¥·ÅÉùÒôBuzz("È±ÉÙ ÄâÌ¬Ô´");
-			return;
-		}
+		CHECK_È±ÉÙµ¥Î»_RET(ÄâÌ¬Ô´);
 		break;
 	default:
 		break;

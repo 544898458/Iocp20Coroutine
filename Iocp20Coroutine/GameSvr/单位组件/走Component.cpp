@@ -10,6 +10,8 @@
 #include "采集Component.h"
 #include "造建筑Component.h"
 #include "BuildingComponent.h"
+#include "找目标走过去Component.h"
+#include "医疗兵Component.h"
 
 void 走Component::AddComponent(Entity& refEntity)
 {
@@ -119,6 +121,12 @@ void 走Component::走进地堡(WpEntity wpEntity地堡)
 {
 	if (m_refEntity.m_spAttack)
 		m_refEntity.m_spAttack->TryCancel();
+
+	if (m_refEntity.m_up找目标走过去)
+		m_refEntity.m_up找目标走过去->TryCancel();
+
+	if (m_refEntity.m_up医疗兵)
+		m_refEntity.m_up医疗兵->TryCancel();
 
 	if (wpEntity地堡.expired())
 		return;

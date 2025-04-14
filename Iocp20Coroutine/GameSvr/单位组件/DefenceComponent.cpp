@@ -92,3 +92,8 @@ void DefenceComponent::²¥·ÅÕýÔâµ½¹¥»÷ÓïÒô()
 	}
 	PlayerComponent::²¥·ÅÉùÒô(m_refEntity, szÓïÒô, m_refEntity.m_ÅäÖÃ.strName + " Ôâµ½¹¥»÷");
 }
+
+bool DefenceComponent::ÒÑÂúÑª() const
+{
+	return m_hp >= m_i32HpMax;
+}

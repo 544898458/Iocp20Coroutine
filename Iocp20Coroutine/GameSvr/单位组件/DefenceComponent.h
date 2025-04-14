@@ -10,6 +10,7 @@ public:
 	void 受伤(int hp, const uint64_t idAttacker);
 	bool IsDead() const;
 	void 播放正遭到攻击语音();
+	bool 已满血()const;
 	int m_hp = 20;
 	const int32_t m_i32HpMax;
 	std::map<uint64_t, int> m_map对我伤害;

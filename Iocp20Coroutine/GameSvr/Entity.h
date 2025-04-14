@@ -28,6 +28,8 @@ class 虫巢Component;
 class 飞向目标Component;
 class 解锁单位Component;
 class 升级单位属性Component;
+class 医疗兵Component;
+class 找目标走过去Component;
 
 class Entity final : public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
@@ -98,6 +100,8 @@ public:
 	std::unique_ptr<飞向目标Component> m_up飞向目标;
 	std::unique_ptr<解锁单位Component> m_up解锁单位;
 	std::unique_ptr<升级单位属性Component> m_up升级单位属性;
+	std::unique_ptr<医疗兵Component> m_up医疗兵;
+	std::unique_ptr<找目标走过去Component> m_up找目标走过去;
 
 	/// <summary>
 	/// 地堡或运输机

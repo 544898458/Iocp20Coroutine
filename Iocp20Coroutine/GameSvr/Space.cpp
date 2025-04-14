@@ -15,6 +15,7 @@
 #include "µ¥Î»×é¼ş/Ôì½¨ÖşComponent.h"
 #include "µ¥Î»×é¼ş/Ôì»î¶¯µ¥Î»Component.h"
 #include "µ¥Î»×é¼ş/BuildingComponent.h"
+#include "µ¥Î»×é¼ş/Ò½ÁÆ±øComponent.h"
 #include "../IocpNetwork/StrConv.h"
 
 #include <fstream>
@@ -510,7 +511,7 @@ bool Space::SpacePlayer::¿ªÊ¼Éı¼¶µ¥Î»ÊôĞÔ(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞ
 		return false;
 	}
 	m_u32¾§Ìå¿ó -= µÈ¼¶ÏêÇé.ÏûºÄ.u16ÏûºÄ¾§Ìå¿ó;
-	
+
 	PlayerComponent::Send×ÊÔ´(refEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶);
 
 	refµ¥Î»ÊôĞÔµÈ¼¶.wpEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶ = refEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶.shared_from_this();
@@ -535,12 +536,12 @@ bool Space::SpacePlayer::Éı¼¶µ¥Î»ÊôĞÔÍê³É(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞ
 uint16_t Space::SpacePlayer::µ¥Î»ÊôĞÔµÈ¼¶(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞÍ ÊôĞÔ)const
 {
 	auto iterFindµ¥Î» = m_mapµ¥Î»ÊôĞÔµÈ¼¶.find(µ¥Î»);
-	if(iterFindµ¥Î» == m_mapµ¥Î»ÊôĞÔµÈ¼¶.end())
+	if (iterFindµ¥Î» == m_mapµ¥Î»ÊôĞÔµÈ¼¶.end())
 		return 0;
 
 	auto iterFindÊôĞÔ = iterFindµ¥Î»->second.find(ÊôĞÔ);
-    if(iterFindÊôĞÔ == iterFindµ¥Î»->second.end())
-        return 0;
+	if (iterFindÊôĞÔ == iterFindµ¥Î»->second.end())
+		return 0;
 
 	return iterFindÊôĞÔ->second.u16µÈ¼¶;
 }
@@ -623,22 +624,23 @@ WpEntity Space::Ôì»î¶¯µ¥Î»(std::shared_ptr<PlayerComponent>& refSpPlayer¿ÉÄÜ¿Õ, 
 	CHECK_RET_DEFAULT(µ¥Î»::Find»î¶¯µ¥Î»ÅäÖÃ(ÀàĞÍ, »î¶¯));
 	CHECK_RET_DEFAULT(µ¥Î»::Findµ¥Î»ÅäÖÃ(ÀàĞÍ, µ¥Î»));
 	CHECK_RET_DEFAULT(µ¥Î»::FindÖÆÔìÅäÖÃ(ÀàĞÍ, ÖÆÔì));
-	
+
 	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const µ¥Î»ÀàĞÍ, const µ¥Î»::µ¥Î»ÅäÖÃ&>(
 		pos, *this, std::forward<const µ¥Î»ÀàĞÍ&&>(ÀàĞÍ), µ¥Î»);
 	PlayerComponent::AddComponent(*spNewEntity, refSpPlayer¿ÉÄÜ¿Õ, strNickName);
 	switch (ÀàĞÍ)
 	{
-	case ¹â´Ì:
-		break;
-	case Ó×³æ:
-		DefenceComponent::AddComponent(*spNewEntity, ÖÆÔì.u16³õÊ¼Hp);
+	case Ò½ÁÆ±ø:
+		Ò½ÁÆ±øComponent::AddComponent(*spNewEntity);
 		break;
 	default:
-		DefenceComponent::AddComponent(*spNewEntity, ÖÆÔì.u16³õÊ¼Hp);
 		AttackComponent::AddComponent(*spNewEntity);
 		break;
 	}
+
+	if (¹â´Ì != ÀàĞÍ)
+		DefenceComponent::AddComponent(*spNewEntity, ÖÆÔì.u16³õÊ¼Hp);
+
 	switch (ÀàĞÍ)
 	{
 	case ¹â´Ì:
@@ -650,7 +652,7 @@ WpEntity Space::Ôì»î¶¯µ¥Î»(std::shared_ptr<PlayerComponent>& refSpPlayer¿ÉÄÜ¿Õ, 
 
 	m_mapPlayer[strNickName].m_mapWpEntity[spNewEntity->Id] = spNewEntity;//×Ô¼º¿ØÖÆµÄµ¥Î»
 	AddEntity(spNewEntity);//È«µØÍ¼µ¥Î»
-	
+
 	PlayerComponent::²¥·ÅÉùÒô(*spNewEntity, »î¶¯.strÈë³¡ÓïÒô); //SCV, good to go, sir. SCV¿ÉÒÔ¿ª¹¤ÁË
 	switch (ÀàĞÍ)
 	{

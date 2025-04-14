@@ -21,6 +21,7 @@ public:
 	static void AddComponent(Entity& refEntity);
 	造活动单位Component(Entity& refEntity);
 	bool 可造(const 单位类型 类型);
+	bool 判断并提示缺少建筑(PlayerGateSession_Game& refGateSession, const 单位类型 类型);
 	void 造兵(PlayerGateSession_Game&, const 单位类型 类型);
 	bool Is幼虫正在蜕变();
 	void TryCancel(Entity& refEntity);

@@ -7,13 +7,16 @@
 #include "GameSvr.h"
 #include "AiCo.h"
 #include <cmath>
-#include "单位组件/PlayerComponent.h"
+#include <fstream>
 #include "AiCo.h"
+#include "PlayerGateSession_Game.h"
 #include "../IocpNetwork/StrConv.h"
+#include "EntitySystem.h"
+#include "../IocpNetwork/MsgPack.h"
+#include "单位组件/PlayerComponent.h"
 #include "单位组件/MonsterComponent.h"
 #include "单位组件/AttackComponent.h"
 #include "单位组件/BuildingComponent.h"
-#include "PlayerGateSession_Game.h"
 #include "单位组件/采集Component.h"
 #include "单位组件/造活动单位Component.h"
 #include "单位组件/DefenceComponent.h"
@@ -25,10 +28,9 @@
 #include "单位组件/虫巢Component.h"
 #include "单位组件/解锁单位Component.h"
 #include "单位组件/升级单位属性Component.h"
-#include "EntitySystem.h"
 #include "单位组件/PlayerNickNameComponent.h"
-#include "../IocpNetwork/MsgPack.h"
-#include <fstream>
+#include "单位组件/医疗兵Component.h"
+#include "单位组件/找目标走过去Component.h"
 
 using namespace std;
 
@@ -164,15 +166,15 @@ void Entity::SetPos(const Position& refNewPos)
 
 float Entity::攻击距离() const
 {
-	if (m_spAttack)
-		return m_spAttack->m_战斗配置.f攻击距离;
+	if (m_up找目标走过去)
+		return m_up找目标走过去->m_战斗配置.f攻击距离;
 
 	return 0;
 }
 float Entity::警戒距离() const
 {
-	if (m_spAttack)
-		return m_spAttack->m_战斗配置.f警戒距离;
+	if (m_up找目标走过去)
+		return m_up找目标走过去->m_战斗配置.f警戒距离;
 
 	return 0;
 }
@@ -199,6 +201,12 @@ void Entity::OnDestroy()
 	//应该用proxy库同意调用下面的，免得忘了
 	if (m_spAttack)
 		m_spAttack->TryCancel(true);
+
+	if(m_up找目标走过去)
+		m_up找目标走过去->TryCancel(true);
+
+	if (m_up医疗兵)
+		m_up医疗兵->TryCancel();
 
 	if (m_sp造活动单位)
 		m_sp造活动单位->TryCancel(*this);

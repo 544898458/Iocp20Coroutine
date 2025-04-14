@@ -5,7 +5,7 @@
 #include "Space.h"
 #include "AttackComponent.h"
 #include "地堡Component.h"
-
+#include "找目标走过去Component.h"
 void AoiComponent::Add(Space& refSpace, Entity& refEntity, const int32_t i32视野范围)
 {
 	refEntity.m_upAoi.reset(new AoiComponent(refSpace, refEntity));// std::make_unique<AoiComponent>();
@@ -90,16 +90,16 @@ void AoiComponent::看到(Entity& refEntity被看)
 		const auto [iter, ok] = m_refEntity.m_upAoi->m_map我能看到的.insert({ refEntity被看.Id, refEntity被看.weak_from_this() });
 		_ASSERT(ok);
 
-		if (m_refEntity.m_spAttack)
+		if (m_refEntity.m_up找目标走过去)
 		{
-			m_refEntity.m_spAttack->m_b搜索新的目标 = true;
+			m_refEntity.m_up找目标走过去->m_b搜索新的目标 = true;
 		}
 		else if (m_refEntity.m_sp地堡) {
 			for (auto sp : m_refEntity.m_sp地堡->m_listSpEntity)
 			{
-				if (sp->m_spAttack)
+				if (sp->m_up找目标走过去)
 				{
-					sp->m_spAttack->m_b搜索新的目标 = true;
+					sp->m_up找目标走过去->m_b搜索新的目标 = true;
 				}
 			}
 		}
@@ -282,8 +282,8 @@ std::set<int32_t> AoiComponent::能看到的格子(const Position& pos) const
 	int i32视野范围 = m_i32视野范围;
 	if (m_refEntity.m_spAttack) 
 	{
-		i32视野范围 = std::max<int>((int)m_refEntity.m_spAttack->m_战斗配置.f警戒距离, i32视野范围);
-		i32视野范围 = std::max<int>((int)m_refEntity.m_spAttack->m_战斗配置.f攻击距离, i32视野范围);
+		i32视野范围 = std::max<int>((int)m_refEntity.m_up找目标走过去->m_战斗配置.f警戒距离, i32视野范围);
+		i32视野范围 = std::max<int>((int)m_refEntity.m_up找目标走过去->m_战斗配置.f攻击距离, i32视野范围);
 	}
 
 	i32视野范围 /= u8格子正方形边长;

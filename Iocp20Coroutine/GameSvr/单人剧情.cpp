@@ -14,6 +14,7 @@
 #include "单位组件/走Component.h"
 #include "单位组件/造建筑Component.h"
 #include "单位组件/BuildingComponent.h"
+#include "单位组件/找目标走过去Component.h"
 #include "单位.h"
 #include "AiCo.h"
 
@@ -591,7 +592,8 @@ namespace 单人剧情
 			vecEneity.insert(vecEneity.end(), vecEneity2.begin(), vecEneity2.end());
 			for (auto& spEntity : vecEneity)
 			{
-				spEntity->m_spAttack->m_fun空闲走向此处 = 怪物走向矿附近;
+				if(spEntity->m_up找目标走过去)
+					spEntity->m_up找目标走过去->m_fun空闲走向此处 = 怪物走向矿附近;
 			}
 
 			if (co_await CoTimer::Wait(25s, funCancel))
@@ -685,7 +687,8 @@ namespace 单人剧情
 			vecEneity.insert(vecEneity.end(), vecEneity2.begin(), vecEneity2.end());
 			for (auto& spEntity : vecEneity)
 			{
-				spEntity->m_spAttack->m_fun空闲走向此处 = 怪物走向矿附近;
+				if(spEntity->m_up找目标走过去)
+					spEntity->m_up找目标走过去->m_fun空闲走向此处 = 怪物走向矿附近;
 			}
 
 			if (co_await CoTimer::Wait(25s, funCancel))
