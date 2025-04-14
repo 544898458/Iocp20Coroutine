@@ -280,7 +280,7 @@ void AttackComponent::处理仇恨目标(WpEntity& wpEntity, bool& ref仇恨目标)
 				refMap.erase(iterBegin);
 				continue;
 			}
-			if (m_refEntity.IsDead())
+			if (refEntity.IsDead())
 			{
 				refMap.erase(iterBegin);
 				continue;

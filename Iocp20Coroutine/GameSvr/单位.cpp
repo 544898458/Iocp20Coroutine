@@ -253,6 +253,11 @@ namespace 单位
 				auto line = *it;
 				const auto obj = line.as<T>();
 				const auto 类型 = line["类型"].as<单位类型>();
+				if (map.end() != map.find(类型))
+				{
+					LOG(ERROR) << "重复的类型:" << 类型;
+					_ASSERT(false);
+				}
 				map[类型] = obj;
 				LOG(INFO) << 类型 << "," << obj;
 			}
@@ -312,7 +317,7 @@ namespace 单位
 	}
 
 	template<typename T_成员>
-	T_成员 单位升级后属性(const 单位类型 单位, const 单位属性类型 属性, const uint16_t u16等级, T_成员 战斗配置::*p成员)
+	T_成员 单位升级后属性(const 单位类型 单位, const 单位属性类型 属性, const uint16_t u16等级, T_成员 战斗配置::* p成员)
 	{
 		战斗配置 战斗;
 		CHECK_RET_DEFAULT(Find战斗配置(单位, 战斗));
