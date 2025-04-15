@@ -16,12 +16,12 @@
 医疗兵Component::医疗兵Component(Entity& refEntity) :m_refEntity(refEntity)
 {
 	CHECK_RET_VOID(m_refEntity.m_up找目标走过去);
-	m_refEntity.m_up找目标走过去->Co顶层(
+	m_refEntity.m_up找目标走过去->顶层大循环(
 		[this]()->bool {return this->可以治疗(); },
 		[this]()->WpEntity {return Get最近的可治疗友方单位(); },
 		[this](const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去)->CoTask<std::tuple<bool, bool>> {return Co治疗(refTarget, wpEntity, ref找目标走过去); },
 		[this](WpEntity& wpEntity, bool ref仇恨目标)->void {}
-	).RunNew();
+	);
 }
 
 void 医疗兵Component::AddComponent(Entity& refEntity)
@@ -87,6 +87,7 @@ void 医疗兵Component::TryCancel()
 	{
 		//LOG(INFO) << "调用m_cancel";
 		m_cancel治疗();
+		m_cancel治疗 = nullptr;
 	}
 }
 

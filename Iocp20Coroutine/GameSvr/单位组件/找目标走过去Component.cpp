@@ -38,6 +38,14 @@ float 找目标走过去Component::攻击距离(const float f目标建筑半边长) const
 	return BuildingComponent::建筑半边长(*spOwner) + m_refEntity.m_up找目标走过去->m_战斗配置.f攻击距离 + f目标建筑半边长;
 }
 
+void 找目标走过去Component::顶层大循环(
+	const std::function<bool()> fun可以操作,
+	const std::function<WpEntity()> fun找最近的目标,
+	const std::function<CoTask<std::tuple<bool, bool>>(const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去)> fun操作最近的目标,
+	const std::function<void(WpEntity& wpEntity, bool& ref仇恨目标)> fun处理仇恨目标)
+{
+	m_TaskCancel顶层.TryRun(CoTaskBool(Co顶层(fun可以操作, fun找最近的目标, fun操作最近的目标, fun处理仇恨目标)));
+}
 
 CoTaskBool 找目标走过去Component::Co顶层(
 	const std::function<bool()> fun可以操作,
@@ -47,8 +55,18 @@ CoTaskBool 找目标走过去Component::Co顶层(
 {
 	using namespace std;
 	//while (!co_await CoTimer::Wait(1000ms, m_funCancel顶层))
-	while (!co_await CoTimer::WaitNextUpdate(m_funCancel顶层))
+	KeepCancel kc(m_TaskCancel顶层.cancel);
+	bool b外部取消协程 = false;
+	FunCancel funCancel = [&b外部取消协程]()
+		{
+			b外部取消协程 = true;
+		};
+	m_TaskCancel顶层.cancel = funCancel;
+	while (!co_await CoTimer::WaitNextUpdate(m_TaskCancel顶层.cancel))
 	{
+		if (b外部取消协程)
+			co_return true;
+
 		if (m_refEntity.IsDead())
 			co_return false;
 
@@ -57,7 +75,9 @@ CoTaskBool 找目标走过去Component::Co顶层(
 
 		if (m_b搜索新的目标 && co_await Co走向警戒范围内的目标然后操作(fun可以操作, fun找最近的目标, fun操作最近的目标, fun处理仇恨目标))
 		{
-			//co_return true;
+			if (b外部取消协程)
+				co_return true;
+
 			continue;//这里可能有问题，无法区分是手动停止走路打断还是销毁对象打断
 		}
 		if (!m_b原地坚守 && m_refEntity.m_sp走 && m_fun空闲走向此处 && !走Component::正在走(m_refEntity) && !采集Component::正在采集(m_refEntity))//打完走向下一个目标
@@ -88,6 +108,12 @@ CoTaskBool 找目标走过去Component::Co走向警戒范围内的目标然后操作(
 {
 	CHECK_CO_RET_FALSE(m_refEntity.m_upAoi);
 	KeepCancel kc(m_TaskCancel.cancel);
+	bool b外部取消协程(false);
+	FunCancel funCancel = [&b外部取消协程]()
+		{
+			b外部取消协程 = true;
+		};
+	m_TaskCancel.cancel = funCancel;
 	while (true)
 	{
 		if (co_await CoTimer::WaitNextUpdate(m_TaskCancel.cancel))
@@ -112,6 +138,9 @@ CoTaskBool 找目标走过去Component::Co走向警戒范围内的目标然后操作(
 		{
 			Entity& refTarget = *wpEntity.lock();
 			const auto [bStop, bContinue] = co_await fun操作最近的目标(refTarget, wpEntity, *this);
+			if(b外部取消协程)
+				co_return true;
+
 			if (bStop)
 				co_return true;
 
@@ -186,10 +215,12 @@ bool 找目标走过去Component::检查穿墙(const Entity& refEntity)
 
 void 找目标走过去Component::TryCancel(const bool bDestroy)
 {
-	m_TaskCancel.TryCancel();
+	if (bDestroy)
+	{
+		m_TaskCancel顶层.TryCancel();
+	}
 
-	if (bDestroy && m_funCancel顶层)
-		m_funCancel顶层();
+	m_TaskCancel.TryCancel();
 }
 
 

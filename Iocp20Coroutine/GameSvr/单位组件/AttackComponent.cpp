@@ -41,12 +41,12 @@ AttackComponent::AttackComponent(Entity& refEntity) :
 {
 	CHECK_RET_VOID(m_refEntity.m_up找目标走过去);
 
-	m_refEntity.m_up找目标走过去->Co顶层(
+	m_refEntity.m_up找目标走过去->顶层大循环(
 		[this]()->bool {return this->可以攻击(); },
 		[this]()->WpEntity {return Get最近的敌人(); },
 		[this](const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去)->CoTask<std::tuple<bool, bool>> {return Co攻击(refTarget, wpEntity, ref找目标走过去); },
 		[this](WpEntity& wpEntity, bool& ref仇恨目标)->void{ this->处理仇恨目标(wpEntity, ref仇恨目标); }
-	).RunNew();
+	);
 }
 
 void AttackComponent::TryCancel(const bool bDestroy)
@@ -55,6 +55,7 @@ void AttackComponent::TryCancel(const bool bDestroy)
 	{
 		//LOG(INFO) << "调用m_cancel";
 		m_cancelAttack();
+		m_cancelAttack = nullptr;
 	}
 }
 

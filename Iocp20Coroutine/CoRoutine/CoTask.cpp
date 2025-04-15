@@ -1,12 +1,18 @@
 #include "pch.h"
 #include "CoTask.h"
 
+CoTaskCancel::~CoTaskCancel()
+{
+	_ASSERT(co.Finished());
+}
+
 void CoTaskCancel::TryCancel()
 {
 	if (cancel)
 	{
 		//LOG(INFO) << "µ÷ÓÃm_cancel";
 		cancel();
+		cancel = nullptr;
 		LOG_IF(ERROR, !co.Finished()) << "";
 		_ASSERT(co.Finished());
 	}

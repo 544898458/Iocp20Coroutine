@@ -437,8 +437,9 @@ private:
 typedef CoAwaiter<bool> CoAwaiterBool;
 //typedef CoTask<uint8_t> CoTaskUint8;
 typedef CoTask<bool> CoTaskBool;
-struct CoTaskCancel
+struct CoTaskCancel final
 {
+	~CoTaskCancel();
 	CoTaskBool co;
 	FunCancel cancel;
 	void TryCancel();

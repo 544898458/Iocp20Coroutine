@@ -64,8 +64,9 @@ namespace CoTimer
 		//FunCancel old = cancel;
 		cancel = [sn]()
 			{
+				auto snLocal = sn;
 				//LOG(INFO) << "WaitNextUpdateÈ¡Ïû" << sn;
-				auto itFind = g_NextUpdate.find(sn);
+				auto itFind = g_NextUpdate.find(snLocal);
 				if (itFind == g_NextUpdate.end())
 				{
 					LOG(ERROR) << "";
@@ -73,7 +74,8 @@ namespace CoTimer
 					return;
 				}
 				itFind->second.Run(true);
-				g_NextUpdate.erase(sn);
+				const auto countÉ¾³ý = g_NextUpdate.erase(snLocal);
+				_ASSERT(countÉ¾³ý == 1);
 				//cancel = old;
 			};
 		return pair.first->second;

@@ -199,14 +199,18 @@ void Entity::OnDestroy()
 		_ASSERT(1 == sizeCount);
 	}
 	//应该用proxy库同意调用下面的，免得忘了
+	走Component::Cancel所有包含走路的协程(*this, true); 
+
+
 	if (m_spAttack)
 		m_spAttack->TryCancel(true);
 
-	if(m_up找目标走过去)
-		m_up找目标走过去->TryCancel(true);
-
 	if (m_up医疗兵)
 		m_up医疗兵->TryCancel();
+
+	if (m_up找目标走过去)
+		m_up找目标走过去->TryCancel(true);
+
 
 	if (m_sp造活动单位)
 		m_sp造活动单位->TryCancel(*this);

@@ -146,7 +146,9 @@
     <ClCompile Include="..\CoRoutine\CoRpc.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\CoRoutine\CoTimer.cpp" />
+    <ClCompile Include="..\CoRoutine\CoTimer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\IocpNetwork\ByteQueue.cpp" />
     <ClCompile Include="..\IocpNetwork\Client.cpp" />
     <ClCompile Include="..\IocpNetwork\ListenSocketCompletionKey.cpp" />
@@ -154,13 +156,17 @@
     <ClCompile Include="..\IocpNetwork\MsgQueue.cpp" />
     <ClCompile Include="..\IocpNetwork\Overlapped.cpp" />
     <ClCompile Include="..\IocpNetwork\Server.cpp" />
-    <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp" />
+    <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\IocpNetwork\SslTlsSvr.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;GLOG_NO_ABBREVIATED_SEVERITIES;GLOG_USE_GLOG_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="..\IocpNetwork\StrConv.cpp" />
+    <ClCompile Include="..\IocpNetwork\StrConv.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\IocpNetwork\ThreadPool.cpp" />
     <ClCompile Include="..\IocpNetwork\WsaStartUp.cpp" />
     <ClCompile Include="..\MiniDump\MiniDump.cpp">
