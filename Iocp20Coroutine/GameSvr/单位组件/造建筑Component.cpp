@@ -284,7 +284,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 		Éı¼¶µ¥Î»ÊôĞÔComponent::AddComponent(refNewEntity);
 		break;
 	case µØ±¤:
-		µØ±¤Component::AddComponet(refNewEntity);
+		µØ±¤Component::AddComponent(refNewEntity);
 		break;
 	case Ãñ·¿:
 		break;
@@ -292,7 +292,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 		AttackComponent::AddComponent(refNewEntity);
 		break;
 	case ³æ³²:
-		³æ³²Component::AddComponet(refNewEntity);
+		³æ³²Component::AddComponent(refNewEntity);
 		break;
 	}
 	DefenceComponent::AddComponent(refNewEntity, ÖÆÔì.u16³õÊ¼Hp);

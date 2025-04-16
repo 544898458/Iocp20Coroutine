@@ -10,7 +10,7 @@ class ³æ³²Component
 {
 public:
 	³æ³²Component(Entity &ref);
-	static void AddComponet(Entity& refEntity);
+	static void AddComponent(Entity& refEntity);
 	void TryCancel();
 	void OnLoad();
 	void Set¼¯½áµã(const Position& pos);

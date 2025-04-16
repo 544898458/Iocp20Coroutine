@@ -31,7 +31,7 @@
 #include "单位组件/PlayerNickNameComponent.h"
 #include "单位组件/医疗兵Component.h"
 #include "单位组件/找目标走过去Component.h"
-
+#include "单位组件/定时改数值Component.h"
 using namespace std;
 
 Entity::Entity(const Position& pos, Space& space, const 单位类型 类型, const 单位::单位配置& ref配置) :
@@ -239,18 +239,22 @@ void Entity::OnDestroy()
 	if (m_up飞向目标)
 		m_up飞向目标->TryCancel();
 
+	if (m_upAoi)
+		m_upAoi->OnDestory();
+
+    if (m_up定时改数值)
+		m_up定时改数值->OnDestroy();
+
 	if (m_cancelDelete)
 	{
 		LOG(INFO) << "取消删除协程";
 		m_cancelDelete();
+		m_cancelDelete = nullptr;
 	}
 	else
 	{
 		LOG(INFO) << "没有删除协程";
 	}
-
-	if (m_upAoi)
-		m_upAoi->OnDestory();
 }
 
 void Entity::BroadcastLeave()

@@ -149,7 +149,7 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 			CHECK_WP_CO_RET_FALSE(wp光刺);
 			auto& ref光刺 = *wp光刺.lock();
 			CHECK_CO_RET_FALSE(m_refEntity.m_up找目标走过去);
-			飞向目标Component::AddComponet(ref光刺, m_refEntity.Pos(), (refDefencer.Pos() - m_refEntity.Pos()).归一化(), m_refEntity.m_up找目标走过去->m_战斗配置.f攻击距离);
+			飞向目标Component::AddComponent(ref光刺, m_refEntity.Pos(), (refDefencer.Pos() - m_refEntity.Pos()).归一化(), m_refEntity.m_up找目标走过去->m_战斗配置.f攻击距离);
 			_ASSERT(ref光刺.m_up飞向目标);
 		}
 	} while (false);

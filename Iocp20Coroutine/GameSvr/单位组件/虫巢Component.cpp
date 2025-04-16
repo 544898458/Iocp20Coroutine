@@ -12,7 +12,7 @@ inline ³æ³²Component::³æ³²Component(Entity& ref) :m_refEntity(ref), m_posÓ×³æ¼¯½
 	CoÔìÓ×³æ().RunNew();
 }
 
-void ³æ³²Component::AddComponet(Entity& refEntity)
+void ³æ³²Component::AddComponent(Entity& refEntity)
 {
 	refEntity.m_sp³æ³² = std::make_shared<³æ³²Component, Entity&>(refEntity);
 }

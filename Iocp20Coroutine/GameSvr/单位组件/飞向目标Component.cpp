@@ -7,7 +7,7 @@
 #include "../../CoRoutine/CoTimer.h"
 #include "../Space.h"
 #include "../EntitySystem.h"
-void 飞向目标Component::AddComponet(Entity& refEntity, const Position& pos起始点, const Position& pos方向, const float f最远距离)
+void 飞向目标Component::AddComponent(Entity& refEntity, const Position& pos起始点, const Position& pos方向, const float f最远距离)
 {
 	refEntity.m_up飞向目标.reset(new 飞向目标Component(refEntity, pos起始点, pos方向, f最远距离));
 }

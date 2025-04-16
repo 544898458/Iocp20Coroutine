@@ -9,7 +9,7 @@ class µØ±¤Component
 {
 public:
 	µØ±¤Component(Entity &ref):m_refEntity(ref){}
-	static void AddComponet(Entity& refEntity);
+	static void AddComponent(Entity& refEntity);
 	void OnDestroy();
 	void OnBeforeDelayDelete();
 	void ½ø(Space& refSpace, Entity& refEntity);

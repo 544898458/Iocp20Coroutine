@@ -133,6 +133,15 @@
   空闲动作: 骨架|stand
   类型: 213
   选中音效: 音效/zmuWht01
+- PrefabPathName: 活动单位/医疗兵
+  str阵亡动作: 2
+  str阵亡音效: 语音/TMdDth00
+  动画节点路径: Dwarf Idle
+  名字: 医疗兵
+  描述: 可给友方单位恢复HP
+  空闲动作: 0
+  类型: 214
+  选中音效: 语音/TMdWht00
 - PrefabPathName: 建筑/基地
   str阵亡动作: die
   str阵亡音效: explo4
