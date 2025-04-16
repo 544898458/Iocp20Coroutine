@@ -166,7 +166,11 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 		using namespace std;
 		const auto posBuilding = m_refEntity.Pos();
 		Position pos = { posBuilding.x - 5 + std::rand() % 10, posBuilding.z - 5 + std::rand() % 10 };
-		if (!Is幼虫())
+		if (Is幼虫())
+		{
+			走Component::Cancel所有包含走路的协程(m_refEntity, true);
+		}
+		else
 		{
 			const auto ok = refSpace.CrowdToolFindNerestPos(pos);
 			_ASSERT(ok);
