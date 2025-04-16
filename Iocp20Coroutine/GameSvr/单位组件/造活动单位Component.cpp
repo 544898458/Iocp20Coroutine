@@ -166,6 +166,7 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 		using namespace std;
 		const auto posBuilding = m_refEntity.Pos();
 		Position pos = { posBuilding.x - 5 + std::rand() % 10, posBuilding.z - 5 + std::rand() % 10 };
+		if (!Is幼虫())
 		{
 			const auto ok = refSpace.CrowdToolFindNerestPos(pos);
 			_ASSERT(ok);
@@ -200,6 +201,9 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 			co_return{};
 		}
 		Space::GetSpacePlayer(m_refEntity).m_u32晶体矿 -= 制造.消耗.u16消耗晶体矿;
+
+		if (Is幼虫())
+			m_refEntity.BroadcastChangeSkeleAnim("Armature|Armature.003|Take 001|BaseLayer");
 
 		const int MAX进度 = 10;
 		for (int i = 0; i < 10; ++i)

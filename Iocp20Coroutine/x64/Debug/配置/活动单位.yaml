@@ -51,7 +51,7 @@
   强行走语音: 音效/ZLaPss00
   普通走语音: 音效/ZLaPss00
   类型: 209
-  走路动作: run
+  走路动作: Armature|Armature.002|Take 001|BaseLayer
 - 入场语音: 音效/zdrRdy00
   备注: 绿色坦克
   强行走语音: 音效/zdrYes01

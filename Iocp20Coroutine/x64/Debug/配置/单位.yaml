@@ -89,12 +89,12 @@
   类型: 208
   选中音效: 音效/ZZeWht00
 - PrefabPathName: 活动单位/幼虫
-  str阵亡动作: idle
+  str阵亡动作: Armature|Armature.004|Take 001|BaseLayer
   str阵亡音效: 音效/ZLaDth00
-  动画节点路径: idle
+  动画节点路径: 幼虫已加动作
   名字: 幼虫
   描述: 可蜕变为其它活动单位
-  空闲动作: idle
+  空闲动作: Armature|Armature.001|Take 001|BaseLayer
   类型: 209
   选中音效: 音效/ZLaWht00
 - PrefabPathName: 活动单位/绿色坦克
