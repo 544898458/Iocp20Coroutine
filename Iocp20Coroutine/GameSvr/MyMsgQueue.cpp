@@ -10,10 +10,11 @@
 #include "../IocpNetwork/StrConv.h"
 #include "AiCo.h"
 #include "Entity.h"
-#include "单位组件/PlayerComponent.h"
 #include "../CoRoutine/CoRpc.h"
-#include "单位组件/DefenceComponent.h"
 
+#include "单位组件/PlayerComponent.h"
+#include "单位组件/DefenceComponent.h"
+#include "单位组件/苔蔓Component.h"
 
 /// <summary>
 /// 平方就是2次方
@@ -79,4 +80,10 @@ Position Position::归一化()const
 	}
 
 	return { x / f范数, z / f范数 };
+}
+
+Msg苔蔓半径::Msg苔蔓半径(Entity& refEntity):idEntity(refEntity.Id)
+{
+	CHECK_RET_VOID(refEntity.m_up苔蔓);
+	半径 = refEntity.m_up苔蔓->m_i16半径;
 }

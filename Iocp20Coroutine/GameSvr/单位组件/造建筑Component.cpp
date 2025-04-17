@@ -304,7 +304,9 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	default:
 		break;
 	}
-	DefenceComponent::AddComponent(refNewEntity, ÖÆÔì.u16³õÊ¼Hp);
+	if(Ì¦Âû!= ÀàĞÍ)
+		DefenceComponent::AddComponent(refNewEntity, ÖÆÔì.u16³õÊ¼Hp);
+
 	refSpace.m_mapPlayer[strPlayerNickName].m_mapWpEntity[refNewEntity.Id] = refNewEntity.shared_from_this();//×Ô¼º¿ØÖÆµÄµ¥Î»
 	refSpace.AddEntity(refNewEntity.shared_from_this());
 

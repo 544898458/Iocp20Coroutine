@@ -856,6 +856,7 @@ struct MsgÉı¼¶µ¥Î»ÊôĞÔ
 
 struct MsgÌ¦Âû°ë¾¶
 {
+	MsgÌ¦Âû°ë¾¶(Entity& refEntity);
 	MsgHead msg{ .id = Ì¦Âû°ë¾¶ };
 	uint64_t idEntity;
 	int16_t °ë¾¶;
