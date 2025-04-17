@@ -11,7 +11,8 @@
 void BuildingComponent::AddComponent(Entity& refThis, float f半边长)
 {
 	refThis.m_spBuilding = std::make_shared<BuildingComponent, Entity&>(refThis);
-	临时阻挡Component::AddComponent(refThis, f半边长);
+	if (苔蔓 != refThis.m_类型)
+		临时阻挡Component::AddComponent(refThis, f半边长);
 }
 
 void BuildingComponent::StartCo建造过程()

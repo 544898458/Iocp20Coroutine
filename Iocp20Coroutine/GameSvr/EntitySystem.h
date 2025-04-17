@@ -36,5 +36,6 @@ namespace EntitySystem
 	uint16_t 升级后攻击前摇_伤害耗时(Entity& refEntity);
 	float 升级后速度每帧移动距离(Entity& refEntity);
 	void 停止攻击和治疗(Entity& refEntity);
+	void BroadcastEntity苔蔓半径(Entity& refEntity);
 };
 

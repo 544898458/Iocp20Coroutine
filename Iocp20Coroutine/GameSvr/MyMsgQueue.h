@@ -274,6 +274,7 @@ enum MsgId
 	已解锁单位,
 	所有单位属性等级,
 	升级单位属性,
+	苔蔓半径,
 };
 MSGPACK_ADD_ENUM(MsgId);
 
@@ -319,7 +320,8 @@ enum 单位类型
 	虫营,//对应兵营
 	飞塔,//Spore Conlony
 	拟态源,//拟态源，原创，绿色坦克前置建筑
-
+	太岁,	//Creep Colony
+	苔蔓,	//Creep
 	建筑Max非法,
 
 	怪Min非法 = 400,
@@ -851,3 +853,12 @@ struct Msg升级单位属性
 	单位属性类型 属性;
 	MSGPACK_DEFINE(msg, 单位, 属性);
 };
+
+struct Msg苔蔓半径
+{
+	MsgHead msg{ .id = 苔蔓半径 };
+	uint64_t idEntity;
+	int16_t 半径;
+	MSGPACK_DEFINE(msg, idEntity, 半径);
+};
+

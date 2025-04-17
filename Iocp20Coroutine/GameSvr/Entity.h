@@ -30,6 +30,9 @@ class 升级单位属性Component;
 class 医疗兵Component;
 class 找目标走过去Component;
 class 定时改数值Component;
+class 苔蔓Component;
+class 苔蔓扩张Component;
+
 
 class Entity final : public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
 {
@@ -103,6 +106,8 @@ public:
 	std::unique_ptr<医疗兵Component> m_up医疗兵;
 	std::unique_ptr<找目标走过去Component> m_up找目标走过去;
 	std::unique_ptr<定时改数值Component> m_up定时改数值;
+	std::unique_ptr<苔蔓Component> m_up苔蔓;
+	std::unique_ptr<苔蔓扩张Component> m_up苔蔓扩张;
 	
 
 	/// <summary>

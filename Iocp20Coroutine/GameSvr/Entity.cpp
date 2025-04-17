@@ -32,6 +32,9 @@
 #include "µ¥Î»×é¼ş/Ò½ÁÆ±øComponent.h"
 #include "µ¥Î»×é¼ş/ÕÒÄ¿±ê×ß¹ıÈ¥Component.h"
 #include "µ¥Î»×é¼ş/¶¨Ê±¸ÄÊıÖµComponent.h"
+#include "µ¥Î»×é¼ş/Ì¦ÂûÀ©ÕÅComponent.h"
+#include "µ¥Î»×é¼ş/Ì¦ÂûComponent.h"
+
 using namespace std;
 
 Entity::Entity(const Position& pos, Space& space, const µ¥Î»ÀàĞÍ ÀàĞÍ, const µ¥Î»::µ¥Î»ÅäÖÃ& refÅäÖÃ) :
@@ -93,7 +96,7 @@ bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
 	default:
 		break;
 	}
-	
+
 	WpEntity wpNew;
 	if (EntitySystem::Is½¨Öş(load.m_ÀàĞÍ))
 	{
@@ -105,19 +108,19 @@ bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
 		CHECK_NOTNULL_RET_FALSE(spNewEntity->m_spBuilding);
 		wpNew = spNewEntity;
 	}
-	else if(EntitySystem::Is»î¶¯µ¥Î»(load.m_ÀàĞÍ)) {
+	else if (EntitySystem::Is»î¶¯µ¥Î»(load.m_ÀàĞÍ)) {
 		std::shared_ptr<PlayerComponent> spNull;
 		µ¥Î»::»î¶¯µ¥Î»ÅäÖÃ »î¶¯µ¥Î»ÅäÖÃ;
 		CHECK_FALSE(µ¥Î»::Find»î¶¯µ¥Î»ÅäÖÃ(load.m_ÀàĞÍ, »î¶¯µ¥Î»ÅäÖÃ));
 
 		wpNew = refSpace.Ôì»î¶¯µ¥Î»(spNull, load.m_strNickName, load.m_Pos, load.m_ÀàĞÍ);
 	}
-	else 
+	else
 	{
 		_ASSERT(false);
 		return false;
 	}
-	
+
 	CHECK_WP_RET_FALSE(wpNew);
 	wpNew.lock()->OnLoad();
 	return true;
@@ -179,9 +182,9 @@ float Entity::¾¯½ä¾àÀë() const
 	return 0;
 }
 
-void Entity::OnLoad() 
+void Entity::OnLoad()
 {
-	if(m_spBuilding)
+	if (m_spBuilding)
 		m_spBuilding->Ö±½ÓÔìºÃ();
 
 	if (m_sp³æ³²)
@@ -199,7 +202,7 @@ void Entity::OnDestroy()
 		_ASSERT(1 == sizeCount);
 	}
 	//Ó¦¸ÃÓÃproxy¿âÍ¬Òâµ÷ÓÃÏÂÃæµÄ£¬ÃâµÃÍüÁË
-	×ßComponent::CancelËùÓĞ°üº¬×ßÂ·µÄĞ­³Ì(*this, true); 
+	×ßComponent::CancelËùÓĞ°üº¬×ßÂ·µÄĞ­³Ì(*this, true);
 
 
 	if (m_spAttack)
@@ -242,8 +245,14 @@ void Entity::OnDestroy()
 	if (m_upAoi)
 		m_upAoi->OnDestory();
 
-    if (m_up¶¨Ê±¸ÄÊıÖµ)
+	if (m_up¶¨Ê±¸ÄÊıÖµ)
 		m_up¶¨Ê±¸ÄÊıÖµ->OnDestroy();
+
+	if (m_upÌ¦ÂûÀ©ÕÅ)
+		m_upÌ¦ÂûÀ©ÕÅ->TryCancel();
+
+	if (m_upÌ¦Âû)
+		m_upÌ¦Âû->TryCancel();
 
 	if (m_cancelDelete)
 	{
@@ -292,6 +301,10 @@ void Entity::BroadcastEnter()
 	//LOG(INFO) << NickName() << "µ÷ÓÃEntity::BroadcastEnter," << Id;
 	Broadcast(MsgAddRoleRet(*this));//×Ô¼º¹ã²¥¸ø±ğÈË
 	BroadcastNotifyPos();
+
+	if (Ì¦Âû == m_ÀàĞÍ)
+		EntitySystem::BroadcastEntityÌ¦Âû°ë¾¶(*this);
+
 	CoEvent<MyEvent::AddEntity>::OnRecvEvent({ weak_from_this() });
 }
 
@@ -378,7 +391,7 @@ WpEntity Entity::Get×î½üµÄEntity(const FindType bFindEnemy, const µ¥Î»ÀàĞÍ Ä¿±êÀ
 
 WpEntity Entity::Get×î½üµÄEntity(const FindType findType)
 {
-	return Get×î½üµÄEntity(findType, [](const Entity& ) {return true; });
+	return Get×î½üµÄEntity(findType, [](const Entity&) {return true; });
 }
 
 WpEntity Entity::Get×î½üµÄEntity(const FindType bFindEnemy, std::function<bool(const Entity&)> fun·ûºÏÌõ¼ş)
@@ -427,3 +440,4 @@ template void Entity::Broadcast(const MsgEntityÃèÊö& msg);
 template void Entity::Broadcast(const Msg²¥·ÅÉùÒô& msg);
 template void Entity::Broadcast(const Msgµ¯ÍèÌØĞ§& msg);
 template void Entity::Broadcast(const MsgSay& msg);
+template void Entity::Broadcast(const MsgÌ¦Âû°ë¾¶& msg);

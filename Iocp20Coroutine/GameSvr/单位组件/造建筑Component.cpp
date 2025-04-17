@@ -16,6 +16,10 @@
 #include "³æ³²Component.h"
 #include "½âËøµ¥Î»Component.h"
 #include "Éý¼¶µ¥Î»ÊôÐÔComponent.h"
+#include "Ì¦ÂûComponent.h"
+#include "Ì¦ÂûÀ©ÕÅComponent.h"
+#include "Ì¦ÂûComponent.h"
+
 
 void Ôì½¨ÖþComponent::AddComponent(Entity& refEntity)
 {
@@ -242,7 +246,6 @@ WpEntity Ôì½¨ÖþComponent::´´½¨½¨Öþ(Space& refSpace, const Position& pos, const µ
 	//spNewEntity->AddComponentAttack();
 	¸ù¾Ý½¨ÖþÀàÐÍAddComponent(refSpace, ÀàÐÍ, *spNewEntity, spPlayer, strPlayerNickName);
 
-
 	spNewEntity->BroadcastEnter();
 	return spNewEntity;
 }
@@ -293,9 +296,28 @@ void Ôì½¨ÖþComponent::¸ù¾Ý½¨ÖþÀàÐÍAddComponent(Space& refSpace, const µ¥Î»ÀàÐÍ À
 		break;
 	case ³æ³²:
 		³æ³²Component::AddComponent(refNewEntity);
+		Ì¦ÂûÀ©ÕÅComponent::AddComponent(refNewEntity);
+		break;
+	case Ì¦Âû:
+		Ì¦ÂûComponent::AddComponent(refNewEntity);
+		break;
+	default:
 		break;
 	}
 	DefenceComponent::AddComponent(refNewEntity, ÖÆÔì.u16³õÊ¼Hp);
 	refSpace.m_mapPlayer[strPlayerNickName].m_mapWpEntity[refNewEntity.Id] = refNewEntity.shared_from_this();//×Ô¼º¿ØÖÆµÄµ¥Î»
 	refSpace.AddEntity(refNewEntity.shared_from_this());
+
+	if(ÀàÐÍ == ³æ³²)
+	{
+		auto wpÌ¦Âû = Ôì½¨ÖþComponent::´´½¨½¨Öþ(refSpace, refNewEntity.Pos(), Ì¦Âû, spPlayer, strPlayerNickName);
+		CHECK_WP_RET_VOID(wpÌ¦Âû);
+		auto& refÌ¦Âû = *wpÌ¦Âû.lock();
+
+		CHECK_RET_VOID(refÌ¦Âû.m_upÌ¦Âû->m_wp¸½×Å½¨Öþ.expired());
+		refÌ¦Âû.m_upÌ¦Âû->m_wp¸½×Å½¨Öþ = refNewEntity.shared_from_this();
+
+		CHECK_RET_VOID(refNewEntity.m_upÌ¦ÂûÀ©ÕÅ->m_wpÌ¦Âû.expired());
+		refNewEntity.m_upÌ¦ÂûÀ©ÕÅ->m_wpÌ¦Âû = wpÌ¦Âû;
+	}
 }
