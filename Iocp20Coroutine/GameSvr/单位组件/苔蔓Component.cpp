@@ -2,6 +2,7 @@
 #include "Ì¦ÂûComponent.h"
 #include "Entity.h"
 #include "../../CoRoutine/CoTimer.h"
+#include "../EntitySystem.h"
 
 void Ì¦ÂûComponent::AddComponent(Entity& refEntity)
 {
@@ -20,11 +21,6 @@ void Ì¦ÂûComponent::TryCancel()
 
 Ì¦ÂûComponent::Ì¦ÂûComponent(Entity& ref):m_refEntity(ref)
 {
-	if (!ref.m_spAttack)
-	{
-		LOG(ERROR) << "m_spAttack";
-		return;
-	}
 	CoÌ¦ÂûÏûÍö().RunNew();
 }
 
@@ -33,10 +29,12 @@ CoTaskBool Ì¦ÂûComponent::CoÌ¦ÂûÏûÍö()
 	using namespace std;
 	while (!co_await CoTimer::Wait(20s, m_funCancel))
 	{
-		if (m_wp¸½×Å½¨Öş.expired())
+		if (!m_wp¸½×Å½¨Öş.expired())
 			continue;
 
-		m_i16°ë¾¶ += 2;
+		m_i16°ë¾¶ -= 2;
+		EntitySystem::BroadcastEntityÌ¦Âû°ë¾¶(m_refEntity);
+
 		if (m_i16°ë¾¶ < 0)
 		{
 			m_refEntity.DelayDelete();
