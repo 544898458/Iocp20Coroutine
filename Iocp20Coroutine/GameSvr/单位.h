@@ -12,7 +12,7 @@ namespace 单位
 		std::string str空闲动作;
 		std::string str阵亡动作;
 		std::string str阵亡音效;
-		MSGPACK_DEFINE(strName, strPrefabName, str选中音效, str空闲动作, str阵亡动作, str阵亡音效);
+		MSGPACK_DEFINE(strName, 种族, strPrefabName, str选中音效, str空闲动作, str阵亡动作, str阵亡音效);
 
 	};
 	struct 消耗资源
