@@ -102,5 +102,7 @@ void BuffComponent::OnDestroy()
 		m_funCancel();
 		m_funCancel = nullptr;
 	}
+	
+	m_map Ù–‘ ˝÷µ.clear();
 }
 

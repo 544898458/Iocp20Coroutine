@@ -57,7 +57,7 @@ CoTaskBool 苔蔓Component::Co萎缩消亡()
 CoTaskBool 苔蔓Component::Co给周围加Buff()
 {
 	using namespace std;
-	while (!co_await CoTimer::Wait(1s, m_funCancel萎缩消亡))
+	while (!co_await CoTimer::Wait(500ms, m_funCancel给周围加Buff))
 	{
 		if (m_refEntity.IsDead())
 			co_return false;
@@ -76,7 +76,7 @@ CoTaskBool 苔蔓Component::Co给周围加Buff()
 			if (!refEntity.m_upBuff)
 				continue;
 
-			refEntity.m_upBuff->加属性(0, 移动速度, 0.2f, 2s);
+			refEntity.m_upBuff->加属性(0, 移动速度, 0.2f, 1000ms);
 		}
 	}
 	co_return false;
