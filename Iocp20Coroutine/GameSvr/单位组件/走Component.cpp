@@ -2,6 +2,8 @@
 #include "走Component.h"
 #include "../Entity.h"
 #include "../EntitySystem.h"
+#include "../../CoRoutine/CoTimer.h"
+#include "../../CoRoutine/CoEvent.h"
 #include "PlayerComponent.h"
 #include "AttackComponent.h"
 #include "AiCo.h"
@@ -13,6 +15,8 @@
 #include "BuildingComponent.h"
 #include "找目标走过去Component.h"
 #include "医疗兵Component.h"
+#include "临时阻挡Component.h"
+#include "../RecastNavigationCrowd.h"
 
 void 走Component::AddComponent(Entity& refEntity)
 {
@@ -40,8 +44,106 @@ void 走Component::WalkToTarget(SpEntity spTarget)
 {
 	_ASSERT(!m_cancel);
 	_ASSERT(m_coWalk.Finished());
-	m_coWalk = AiCo::WalkToTarget(m_refEntity, spTarget, m_cancel);
+	m_coWalk = WalkToTarget(spTarget, m_cancel);
 	m_coWalk.Run();
+}
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="refThis"></param>
+/// <param name="localTarget"></param>
+/// <returns>是否还要走下一步</returns>
+bool 已走到目标附近(Entity& refThis, const Position localTarget, const float f距离目标小于此距离停下 = 0)
+{
+	CHECK_RET_DEFAULT(refThis.m_sp走);
+	const float step = std::max(EntitySystem::升级后速度每帧移动距离(refThis), f距离目标小于此距离停下);
+	auto& x = refThis.Pos().x;
+	auto& z = refThis.Pos().z;
+	if (std::abs(localTarget.x - x) < step && std::abs(localTarget.z - z) < step)
+	{
+		//LOG(INFO) << "已走到" << localTarget.x << "," << localTarget.z << "附近，协程正常退出";
+		//EntitySystem::BroadcastChangeSkeleAnimIdle(refThis);
+		return true;
+	}
+
+	//refThis.m_eulerAnglesY = CalculateAngle(refThis.Pos(), localTarget);
+	refThis.BroadcastNotifyPos();
+
+	return false;
+}
+
+CoTaskBool 走Component::WalkToTarget(SpEntity spTarget, FunCancel& funCancel, const bool b检查警戒距离, const std::function<bool(Entity&)>& fun可停下)
+{
+	//if (!refThis.m_sp走)
+	//	co_return false;
+
+	if (m_refEntity.IsDead())
+	{
+		LOG(WARNING) << m_refEntity.头顶Name() << ",已阵亡不用走";
+		co_return false;
+	}
+
+	auto posTarget = spTarget->Pos();
+	{
+		const auto ok = m_refEntity.m_refSpace.CrowdToolFindNerestPos(posTarget);
+		LOG_IF(ERROR, !ok) << "";
+		_ASSERT(ok);
+	}
+	活动单位走完路加阻挡 _(m_refEntity);
+	RecastNavigationCrowd rnc(m_refEntity, posTarget);
+	KeepCancel kc(funCancel);
+	const float f建筑半边长 = BuildingComponent::建筑半边长(*spTarget);
+
+
+	//refThis.BroadcastChangeSkeleAnim("run");
+	单位::活动单位配置 配置;
+	单位::Find活动单位配置(m_refEntity.m_类型, 配置);
+	EntitySystem::恢复休闲动作 __(m_refEntity, 配置.str走路动作);
+	Position posOld;
+	CoEvent<MyEvent::MoveEntity>::OnRecvEvent({ m_refEntity.weak_from_this() });
+	while (true)
+	{
+		if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
+		{
+			LOG(INFO) << "走向" << spTarget << "的协程取消了";
+			co_return true;
+		}
+		if (m_refEntity.IsDead())
+		{
+			LOG(INFO) << "自己阵亡，走向[" << spTarget->头顶Name() << "]的协程取消了";
+			//PlayerComponent::Say(m_refEntity, "自己阵亡", SayChannel::系统);
+
+			co_return false;
+		}
+		if (b检查警戒距离 && !m_refEntity.DistanceLessEqual(*spTarget, m_refEntity.警戒距离()))
+		{
+			LOG(INFO) << "离开自己的警戒距离" << spTarget << "的协程取消了";
+			co_return false;
+		}
+		const bool b距离友方单位太近 = EntitySystem::距离友方单位太近(m_refEntity);
+		if (!b距离友方单位太近 && m_refEntity.DistanceLessEqual(*spTarget, m_refEntity.攻击距离() + f建筑半边长) && fun可停下(*spTarget))
+		{
+			//LOG(INFO) << "已走到" << spTarget << "附近，协程正常退出";
+			//EntitySystem::BroadcastChangeSkeleAnimIdle(m_refEntity);
+			//EntitySystem::BroadcastEntity描述(m_refEntity, "已走到目标附近");
+			co_return false;
+		}
+
+		if (posOld != spTarget->Pos())
+		{
+			rnc.SetMoveTarget(spTarget->Pos());
+			posOld = spTarget->Pos();
+		}
+
+		if (已走到目标附近(m_refEntity, spTarget->Pos()))
+		{
+			co_return false;
+		}
+		//EntitySystem::BroadcastEntity描述(m_refEntity, std::format("距目标{0}米", (int)m_refEntity.Distance(*spTarget)));
+	}
+	LOG(INFO) << "走向目标协程结束:" << m_refEntity.Pos();
+	co_return false;
 }
 
 bool 走Component::WalkToTarget(Entity& refThis, SpEntity spTarget)
@@ -55,7 +157,7 @@ void 走Component::WalkToPos(const Position& posTarget)
 {
 	_ASSERT(!m_cancel);
 	_ASSERT(m_coWalk.Finished());
-	m_coWalk = AiCo::WalkToPos(m_refEntity, posTarget, m_cancel);
+	m_coWalk = WalkToPos(posTarget, m_cancel);
 	m_coWalk.Run();//协程离开开始运行（运行到第一个co_await
 }
 
@@ -64,6 +166,80 @@ bool 走Component::WalkToPos(Entity& refThis, const Position& posTarget)
 	CHECK_RET_FALSE(refThis.m_sp走);
 	refThis.m_sp走->WalkToPos(posTarget);
 	return true;
+}
+
+CoTaskBool 走Component::WalkToPos(const Position posTarget, FunCancel& funCancel, const float f距离目标小于此距离停下)
+{
+	if (m_refEntity.IsDead())
+	{
+		LOG(WARNING) << posTarget << ",已阵亡不用走";
+		co_return false;
+	}
+	if (!m_refEntity.m_refSpace.CrowdTool可站立(posTarget))
+	{
+		LOG(INFO) << posTarget << "不可站立";
+		co_return false;
+	}
+	const auto posOld = m_refEntity.Pos();
+	活动单位走完路加阻挡 _(m_refEntity);
+	RecastNavigationCrowd rnc(m_refEntity, posTarget);
+	KeepCancel kc(funCancel);
+	const auto posLocalTarget = posTarget;
+	//m_refEntity.BroadcastChangeSkeleAnim("run");
+	单位::活动单位配置 配置;
+	单位::Find活动单位配置(m_refEntity.m_类型, 配置);
+	EntitySystem::恢复休闲动作 __(m_refEntity, 配置.str走路动作);
+	CoEvent<MyEvent::MoveEntity>::OnRecvEvent({ m_refEntity.weak_from_this() });
+	while (true)
+	{
+		if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
+		{
+			LOG(INFO) << "走向" << posLocalTarget << "的协程取消了";
+			co_return true;
+		}
+		if (m_refEntity.IsDead())
+		{
+			LOG(INFO) << "自己阵亡，走向" << posLocalTarget << "的协程取消了";
+			//PlayerComponent::Say(m_refEntity, "自己阵亡", SayChannel::系统);
+
+			co_return true;
+		}
+
+		if (已走到目标附近(m_refEntity, posLocalTarget, f距离目标小于此距离停下))
+		{
+			if (m_refEntity.m_spPlayer)
+			{
+				int a = 0;
+			}
+
+			for (int i = 0; i < 30; ++i)
+			{
+				auto wp最近 = m_refEntity.Get最近的Entity(Entity::友方, [](const Entity&) {return true; });
+				if (wp最近.expired())
+					co_return false;
+
+				Entity& ref最近 = *wp最近.lock();
+
+				if (!m_refEntity.DistanceLessEqual(ref最近, 2.0f))
+				{
+					//LOG(INFO) << "附近没有友方单位，停止走向" << posLocalTarget;
+					co_return false;
+				}
+				if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
+				{
+					LOG(INFO) << "已走到目标附近，走向" << posLocalTarget << "的协程取消了";
+					co_return true;
+				}
+			}
+
+			LOG(INFO) << "已走到目标附近，附近都是友方单位," << posLocalTarget;
+			co_return false;
+		}
+
+		//EntitySystem::BroadcastEntity描述(refThis, std::format("距目标{0}米", (int)refThis.Pos().Distance(posTarget)));
+	}
+	LOG(INFO) << "走向目标协程结束:" << posTarget;
+	co_return false;
 }
 
 void 走Component::WalkToPos手动控制(const Position& posTarget)
@@ -92,7 +268,7 @@ void 走Component::WalkToPos手动控制(const Position& posTarget)
 	EntitySystem::停止攻击和治疗(m_refEntity);
 	/*m_coStop = false;*/
 	_ASSERT(!m_cancel);
-	m_coWalk手动控制 = AiCo::WalkToPos(m_refEntity, posTarget, m_cancel);
+	m_coWalk手动控制 = WalkToPos(posTarget, m_cancel);
 	m_coWalk手动控制.Run();//协程离开开始运行（运行到第一个co_await
 }
 
@@ -189,7 +365,7 @@ CoTaskBool 走Component::Co走进地堡(WpEntity wpEntity地堡)
 		}
 
 		_ASSERT(!m_cancel);
-		if (co_await AiCo::WalkToTarget(m_refEntity, spEntity地堡, m_cancel, false))
+		if (co_await WalkToTarget(spEntity地堡, m_cancel, false))
 			co_return true;
 
 	}

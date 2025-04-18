@@ -152,7 +152,9 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 			//离基地太远，走向基地
 			//m_refEntity.m_spAttack->TryCancel();
 			EntitySystem::停止攻击和治疗(m_refEntity);
-			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity基地.lock(), m_TaskCancel.cancel, false))
+
+			CHECK_CO_RET_FALSE(m_refEntity.m_sp走);
+			if (co_await m_refEntity.m_sp走->WalkToTarget(wpEntity基地.lock(), m_TaskCancel.cancel, false))
 				co_return true;//中断，可能打怪去了
 
 			continue;

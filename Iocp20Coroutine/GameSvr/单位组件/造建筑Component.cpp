@@ -19,7 +19,7 @@
 #include "苔蔓Component.h"
 #include "苔蔓扩张Component.h"
 #include "苔蔓Component.h"
-
+#include "走Component.h"
 
 void 造建筑Component::AddComponent(Entity& refEntity)
 {
@@ -88,7 +88,9 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 单位类型 类型)
 	PlayerComponent::播放声音(m_refEntity, "语音/明白女声可爱版");
 
 	EntitySystem::BroadcastEntity描述(m_refEntity, "走向建造点");
-	if (co_await AiCo::WalkToPos(m_refEntity, pos, m_cancel造建筑, 配置.f半边长 + 1))
+
+	CHECK_CO_RET_FALSE(m_refEntity.m_sp走);
+	if (co_await m_refEntity.m_sp走->WalkToPos(pos, m_cancel造建筑, 配置.f半边长 + 1))
 		co_return true;
 
 	//然后开始扣钱建造

@@ -175,7 +175,8 @@ CoTaskBool 找目标走过去Component::Co走向警戒范围内的目标然后操作(
 				m_refEntity.m_sp采集->m_TaskCancel.TryCancel();
 			}
 
-			if (co_await AiCo::WalkToTarget(m_refEntity, wpEntity.lock(), m_TaskCancel.cancel, !b仇恨目标, [this](Entity& ref) {return 检查穿墙(ref); }))
+			CHECK_CO_RET_FALSE(m_refEntity.m_sp走);
+			if (co_await m_refEntity.m_sp走->WalkToTarget(wpEntity.lock(), m_TaskCancel.cancel, !b仇恨目标, [this](Entity& ref) {return 检查穿墙(ref); }))
 				co_return true;
 
 			continue;//可能已走到攻击距离内，再攻击试试
