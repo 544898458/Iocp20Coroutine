@@ -306,13 +306,14 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	default:
 		break;
 	}
-	if(Ì¦Âû!= ÀàĞÍ)
+	if (Ì¦Âû != ÀàĞÍ)
 		DefenceComponent::AddComponent(refNewEntity, ÖÆÔì.u16³õÊ¼Hp);
 
 	refSpace.m_mapPlayer[strPlayerNickName].m_mapWpEntity[refNewEntity.Id] = refNewEntity.shared_from_this();//×Ô¼º¿ØÖÆµÄµ¥Î»
+	const int i32ÊÓÒ°·¶Î§ = Ì¦Âû == ÀàĞÍ ? 0;
 	refSpace.AddEntity(refNewEntity.shared_from_this());
 
-	if(ÀàĞÍ == ³æ³²)
+	if (ÀàĞÍ == ³æ³²)
 	{
 		auto wpÌ¦Âû = Ôì½¨ÖşComponent::´´½¨½¨Öş(refSpace, refNewEntity.Pos(), Ì¦Âû, spPlayer, strPlayerNickName);
 		CHECK_WP_RET_VOID(wpÌ¦Âû);

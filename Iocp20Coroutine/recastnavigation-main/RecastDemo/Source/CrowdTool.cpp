@@ -766,6 +766,13 @@ void CrowdToolState::setMoveTarget(const float* p, bool adjust)
 	}
 }
 
+void CrowdToolState::SetSpeed(const int idxAgent, const float fSpeed)
+{
+	dtCrowd* crowd = m_sample->getCrowd();
+	CHECK_RET_VOID(crowd);
+	crowd->updateAgentSpeed(idxAgent, fSpeed);
+}
+
 int CrowdToolState::hitTestAgents(const float* s, const float* p)
 {
 	if (!m_sample) return -1;

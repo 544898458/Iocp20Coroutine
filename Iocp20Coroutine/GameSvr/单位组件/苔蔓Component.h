@@ -7,7 +7,6 @@ class 苔蔓Component
 {
 public:
 	苔蔓Component(Entity&);
-	CoTaskBool Co苔蔓消亡();
 	static void AddComponent(Entity& refEntity);
 	void TryCancel();
 	int16_t m_i16半径 = 5;
@@ -17,7 +16,11 @@ public:
 	WpEntity m_wp附着建筑;
 
 private:
-	FunCancel m_funCancel;
+	CoTaskBool Co萎缩消亡();
+	CoTaskBool Co给周围加Buff();
+
+	FunCancel m_funCancel萎缩消亡;
+	FunCancel m_funCancel给周围加Buff;
 	/// <summary>
 	/// 自己是苔蔓
 	/// </summary>

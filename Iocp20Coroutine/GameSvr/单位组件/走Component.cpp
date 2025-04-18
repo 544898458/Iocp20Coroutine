@@ -182,7 +182,20 @@ CoTaskBool 走Component::WalkToPos(const Position posTarget, FunCancel& funCancel
 	}
 	const auto posOld = m_refEntity.Pos();
 	活动单位走完路加阻挡 _(m_refEntity);
-	RecastNavigationCrowd rnc(m_refEntity, posTarget);
+	std::shared_ptr<RecastNavigationCrowd> sp;
+	if (m_wpRecastNavigationCrowd.expired())
+	{
+		sp = std::make_shared<RecastNavigationCrowd, Entity&, const Position&>(m_refEntity, posTarget);
+	}
+	else
+	{
+		auto& ref = *m_wpRecastNavigationCrowd.lock();
+		ref.SetMoveTarget(posTarget);
+		ref.SetSpeed();
+	}
+
+	
+	m_wpRecastNavigationCrowd = sp;
 	KeepCancel kc(funCancel);
 	const auto posLocalTarget = posTarget;
 	//m_refEntity.BroadcastChangeSkeleAnim("run");

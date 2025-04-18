@@ -10,24 +10,31 @@ void 苔蔓Component::AddComponent(Entity& refEntity)
 	refEntity.m_up苔蔓.reset(new 苔蔓Component(refEntity));
 }
 
+苔蔓Component::苔蔓Component(Entity& ref) :m_refEntity(ref)
+{
+	Co萎缩消亡().RunNew();
+	Co给周围加Buff().RunNew();
+}
+
 void 苔蔓Component::TryCancel()
 {
-	if (m_funCancel)
+	if (m_funCancel萎缩消亡)
 	{
-		m_funCancel();
-		m_funCancel = nullptr;
+		m_funCancel萎缩消亡();
+		m_funCancel萎缩消亡 = nullptr;
+	}
+
+	if (m_funCancel给周围加Buff)
+	{
+		m_funCancel给周围加Buff();
+        m_funCancel给周围加Buff = nullptr;
 	}
 }
 
-苔蔓Component::苔蔓Component(Entity& ref):m_refEntity(ref)
-{
-	Co苔蔓消亡().RunNew();
-}
-
-CoTaskBool 苔蔓Component::Co苔蔓消亡()
+CoTaskBool 苔蔓Component::Co萎缩消亡()
 {
 	using namespace std;
-	while (!co_await CoTimer::Wait(20s, m_funCancel))
+	while (!co_await CoTimer::Wait(20s, m_funCancel萎缩消亡))
 	{
 		if (!m_wp附着建筑.expired())
 			continue;
@@ -40,6 +47,21 @@ CoTaskBool 苔蔓Component::Co苔蔓消亡()
 			m_refEntity.DelayDelete();
 			co_return false;
 		}
+	}
+	co_return false;
+}
+
+
+CoTaskBool 苔蔓Component::Co给周围加Buff()
+{
+	//每隔3秒给周围加5秒的Buff
+	using namespace std;
+	while (!co_await CoTimer::Wait(3s, m_funCancel萎缩消亡))
+	{
+		if (m_refEntity.IsDead())
+			co_return false;
+
+		
 	}
 	co_return false;
 }

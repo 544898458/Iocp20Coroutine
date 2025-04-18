@@ -505,6 +505,14 @@ void dtCrowd::updateAgentParameters(const int idx, const dtCrowdAgentParams* par
 	memcpy(&m_agents[idx].params, params, sizeof(dtCrowdAgentParams));
 }
 
+void dtCrowd::updateAgentSpeed(const int idx, const float fSpeed)
+{
+	if (idx < 0 || idx >= m_maxAgents)
+		return;
+
+	m_agents[idx].params.maxSpeed = fSpeed;
+}
+
 /// @par
 ///
 /// The agent's position will be constrained to the surface of the navigation mesh.

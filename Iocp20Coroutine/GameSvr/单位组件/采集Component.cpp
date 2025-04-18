@@ -174,7 +174,9 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 				{
 					EntitySystem::BroadcastEntity描述(m_refEntity, std::format("走向{0}", spEntity资源->m_类型 == 晶体矿 ? "晶体矿" : "燃气矿"));
 					//m_refEntity.m_spAttack->TryCancel();
-					if (co_await AiCo::WalkToTarget(m_refEntity, wp目标资源.lock(), m_TaskCancel.cancel, false))
+
+					CHECK_CO_RET_FALSE(m_refEntity.m_sp走);
+					if (co_await m_refEntity.m_sp走->WalkToTarget(wp目标资源.lock(), m_TaskCancel.cancel, false))
 						co_return true;//中断
 
 					m_refEntity.BroadcastChangeSkeleAnim(m_refEntity.m_类型 == 工虫 ? "采集" : "2", true);

@@ -104,6 +104,7 @@ public:
 	void updateAgentParams();
 	int hitTestAgents(const float* s, const float* p);
 	void setMoveTarget(const float* p, bool adjust);
+	void SetSpeed(const int idxAgent, const float fSpeed);
 	void updateTick(const float dt);
 
 	inline CrowdToolParams* getToolParams() { return &m_toolParams; }

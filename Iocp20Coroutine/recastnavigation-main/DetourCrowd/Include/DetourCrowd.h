@@ -283,7 +283,7 @@ public:
 	///  @param[in]		idx		The agent index. [Limits: 0 <= value < #getAgentCount()]
 	///  @param[in]		params	The new agent configuration.
 	void updateAgentParameters(const int idx, const dtCrowdAgentParams* params);
-
+	void updateAgentSpeed(const int idx, const float fSpeed);
 	/// Removes the agent from the crowd.
 	///  @param[in]		idx		The agent index. [Limits: 0 <= value < #getAgentCount()]
 	void removeAgent(const int idx);

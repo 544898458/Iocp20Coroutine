@@ -3,7 +3,7 @@
 #include "../CoRoutine/CoTask.h"
 
 struct Position;
-
+class RecastNavigationCrowd;
 
 
 class 走Component
@@ -31,7 +31,7 @@ public:
 	CoTaskBool m_coWalk手动控制;
 	CoTaskBool m_coWalk进地堡;
 	FunCancel m_cancel;
-
+	std::weak_ptr<RecastNavigationCrowd> m_wpRecastNavigationCrowd;
 private:
 	CoTaskBool Co走进地堡(WpEntity wpEntity地堡);
 
