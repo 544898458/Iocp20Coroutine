@@ -29,7 +29,7 @@ CoTaskBool Ì¦ÂûÀ©ÕÅComponent::CoÌ¦ÂûÀ©ÕÅ()
 		refÌ¦Âû.m_upÌ¦Âû->m_i16°ë¾¶ += 2;
 		EntitySystem::BroadcastEntityÌ¦Âû°ë¾¶(refÌ¦Âû);
 
-		if (refÌ¦Âû.m_upÌ¦Âû->m_i16°ë¾¶ > 20)
+		if (refÌ¦Âû.m_upÌ¦Âû->m_i16°ë¾¶ > Ì¦ÂûComponent::MAX°ë¾¶)
 		{
 			co_return false;
 		}

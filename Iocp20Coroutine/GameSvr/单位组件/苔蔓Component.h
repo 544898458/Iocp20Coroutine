@@ -3,9 +3,11 @@
 #include "../CoRoutine/CoTask.h"
 #include "../SpEntity.h"
 
+
 class Ì¦ÂûComponent
 {
 public:
+	static const uint16_t MAX°ë¾¶ = 20;
 	Ì¦ÂûComponent(Entity&);
 	static void AddComponent(Entity& refEntity);
 	void TryCancel();

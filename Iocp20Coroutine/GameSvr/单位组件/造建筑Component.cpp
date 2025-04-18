@@ -310,7 +310,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 		DefenceComponent::AddComponent(refNewEntity, ÖÆÔì.u16³õÊ¼Hp);
 
 	refSpace.m_mapPlayer[strPlayerNickName].m_mapWpEntity[refNewEntity.Id] = refNewEntity.shared_from_this();//×Ô¼º¿ØÖÆµÄµ¥Î»
-	const int i32ÊÓÒ°·¶Î§ = Ì¦Âû == ÀàĞÍ ? 0;
+	const int i32ÊÓÒ°·¶Î§ = Ì¦Âû == ÀàĞÍ ? Ì¦ÂûComponent::MAX°ë¾¶ : 0;
 	refSpace.AddEntity(refNewEntity.shared_from_this());
 
 	if (ÀàĞÍ == ³æ³²)

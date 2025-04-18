@@ -188,7 +188,7 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 
 		{
 			SpEntity spEntity特效 = std::make_shared<Entity, const Position&, Space&, 单位类型, const 单位::单位配置&>(
-				posTarget, m_refEntity.m_refSpace, 特效, { "炸点" ,"特效/炸点","" });
+				posTarget, m_refEntity.m_refSpace, 特效, { "炸点" ,无, "特效/炸点","" });
 			m_refEntity.m_refSpace.AddEntity(spEntity特效, 0);
 			spEntity特效->BroadcastEnter();
 			CHECK_CO_RET_FALSE(m_refEntity.m_up找目标走过去);
@@ -213,7 +213,7 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 		找目标走过去Component::播放攻击音效(m_refEntity);
 		{
 			SpEntity spEntity特效 = std::make_shared<Entity, const Position&, Space&, 单位类型, const 单位::单位配置&>(
-				posTarget, m_refEntity.m_refSpace, 特效, { "爆炸溅射" ,"特效/黄光爆闪","" });
+				posTarget, m_refEntity.m_refSpace, 特效, { "爆炸溅射" ,无 ,"特效/黄光爆闪","" });
 			m_refEntity.m_refSpace.AddEntity(spEntity特效, 0);
 			spEntity特效->BroadcastEnter();
 			spEntity特效->CoDelayDelete(1s).RunNew();
