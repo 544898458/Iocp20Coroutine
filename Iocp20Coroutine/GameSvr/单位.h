@@ -6,6 +6,7 @@ namespace 单位
 	struct 单位配置
 	{
 		std::string strName;
+		种族 种族;
 		std::string strPrefabName;
 		std::string str选中音效;
 		std::string str空闲动作;
@@ -78,6 +79,7 @@ namespace 单位
 	bool Find单位属性等级配置(const 单位类型 单位, const 单位属性类型 属性, const uint16_t u16等级, 单位属性等级配置详情& refOut);
 	template<typename T_成员>
 	T_成员 单位升级后属性(const 单位类型 单位, const 单位属性类型 属性, const uint16_t u16等级, T_成员 战斗配置::* p成员);
+	bool Is虫(const 单位类型 单位);
 	//uint16_t 单位攻击(const 单位类型 单位, const uint16_t u16攻击等级);
 	//uint16_t 单位防御(const 单位类型 单位, const uint16_t u16防御等级);
 	//float 单位速度每帧移动距离(const 单位类型 单位, const uint16_t u16移速等级);

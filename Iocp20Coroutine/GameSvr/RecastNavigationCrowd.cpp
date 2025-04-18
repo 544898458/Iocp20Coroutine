@@ -223,7 +223,7 @@ RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& 
 	float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z };
 	_ASSERT(走Component::INVALID_AGENT_IDX == refEntity.m_sp走->m_idxCrowdAgent);
 	auto& refCrowdToolState = refEntity.m_refSpace.GetCrowdToolState(refEntity.m_类型);
-	refEntity.m_sp走->m_idxCrowdAgent = CrowToolAddAgent(refCrowdToolState, arrF, EntitySystem::升级后速度每帧移动距离(refEntity) * 10);
+	refEntity.m_sp走->m_idxCrowdAgent = CrowToolAddAgent(refCrowdToolState, arrF, EntitySystem::升级后速度每秒移动距离(refEntity));
 	_ASSERT(走Component::INVALID_AGENT_IDX != m_refEntity.m_sp走->m_idxCrowdAgent);
 	refCrowdToolState.m_mapEntityId[refEntity.m_sp走->m_idxCrowdAgent] = refEntity.Id;
 
@@ -249,6 +249,6 @@ void RecastNavigationCrowd::SetMoveTarget(const Position& posTarget)
 
 void RecastNavigationCrowd::SetSpeed()
 {
-	m_refEntity.m_refSpace.GetCrowdToolState(m_refEntity.m_类型).SetSpeed(m_refEntity.m_sp走->m_idxCrowdAgent, EntitySystem::升级后速度每帧移动距离(m_refEntity) * 10);
+	m_refEntity.m_refSpace.GetCrowdToolState(m_refEntity.m_类型).SetSpeed(m_refEntity.m_sp走->m_idxCrowdAgent, EntitySystem::升级后速度每帧移动距离(m_refEntity));
 }
 

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "苔蔓Component.h"
+#include "AoiComponent.h"
 #include "Entity.h"
 #include "../../CoRoutine/CoTimer.h"
 #include "../EntitySystem.h"
@@ -61,7 +62,19 @@ CoTaskBool 苔蔓Component::Co给周围加Buff()
 		if (m_refEntity.IsDead())
 			co_return false;
 
-		
+		CHECK_CO_RET_FALSE(m_refEntity.m_upAoi);
+		for (auto& [_, wp] : m_refEntity.m_upAoi->m_map我能看到的)
+		{
+			CHECK_WP_CO_RET_FALSE(wp);
+			auto& refEntity = *wp.lock();
+			if (!m_refEntity.DistanceLessEqual(refEntity, m_i16半径))
+				continue;
+
+			if (!单位::Is虫(refEntity.m_类型))
+				continue;
+			
+			//CHECK_CO_RET_FALSE(refEntity.m_upBuff->AddBuff(m_i16半径, 5s, m_funCancel));
+		}
 	}
 	co_return false;
 }

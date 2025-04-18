@@ -679,7 +679,7 @@ WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 	case 虫营:
 	case 飞塔:
 	case 拟态源:
-		定时改数值Component::AddComponent(*spNewEntity);
+		定时改数值Component::AddComponent(*spNewEntity).定时回血();
 		break;
 	default:
 		break;

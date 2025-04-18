@@ -351,6 +351,14 @@ enum 单位属性类型
 };
 MSGPACK_ADD_ENUM(单位属性类型);
 
+enum 种族 
+{
+	无,//资源
+	人,
+	虫,
+};
+MSGPACK_ADD_ENUM(种族);
+
 struct MsgHead
 {
 	//void SetSn(uint32_t snParam) const

@@ -18,7 +18,7 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::单位配置& _ref)
 	{
-		return _Ostr << "单位配置:" << _ref.strName << "\t" << _ref.strPrefabName << "\t" << _ref.str选中音效 << "\t" << _ref.str阵亡音效 << "\t" << _ref.str阵亡动作;
+		return _Ostr << "单位配置:" << _ref.strName << "\t" << _ref.种族 << "\t" << _ref.strPrefabName << "\t" << _ref.str选中音效 << "\t" << _ref.str阵亡音效 << "\t" << _ref.str阵亡动作;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::战斗配置& _ref)
@@ -85,6 +85,18 @@ namespace YAML {
 		}
 	};
 	template<>
+	struct convert<种族> {
+		static Node encode(const 种族& rhs) {
+
+			return Node((int)rhs);
+		}
+		static bool decode(const Node& refNode, 种族& rhs) {
+			CHECK_RET_FALSE(refNode.IsScalar());
+			rhs = (种族)refNode.as<int>();
+			return true;
+		}
+	};
+	template<>
 	struct convert<单位::单位配置> {
 		static Node encode(const 单位::单位配置& rhs) {
 
@@ -95,6 +107,7 @@ namespace YAML {
 		static bool decode(const Node& refNode, 单位::单位配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
 			rhs = { refNode["名字"].as<std::string>(),
+					refNode["种族"].as<种族>(),
 					refNode["PrefabPathName"].as<std::string>(),
 					refNode["选中音效"].as<std::string>() ,
 					refNode["空闲动作"].as<std::string>(),
@@ -356,5 +369,10 @@ namespace 单位
 	{
 		return FindMap(g_map单位解锁配置, 单位, refOut);
 	}
-
+	bool Is虫(const 单位类型 单位)
+	{
+		单位配置 配置;
+		CHECK_RET_DEFAULT(Find单位配置(单位, 配置));
+		return 虫 == 配置.种族;
+	}
 }
