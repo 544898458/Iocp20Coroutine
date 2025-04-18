@@ -18,7 +18,7 @@
 #include "单位组件/造活动单位Component.h"
 #include "单位组件/BuildingComponent.h"
 #include "单位组件/医疗兵Component.h"
-#include "单位组件/定时改数值Component.h"
+#include "单位组件/BuffComponent.h"
 
 Space::Space(const 副本配置& ref) :m_配置(ref)
 {
@@ -667,22 +667,14 @@ WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 	default:break;
 	}
 
-	switch (类型)
+	if (EntitySystem::Is活动单位(类型) || EntitySystem::Is建筑(类型) || EntitySystem::Is怪(类型))
 	{
-	case 幼虫:
-	case 工虫:
-	case 近战虫:
-	case 枪虫:
-	case 飞虫:
-	case 绿色坦克:
-	case 虫巢:
-	case 虫营:
-	case 飞塔:
-	case 拟态源:
-		定时改数值Component::AddComponent(*spNewEntity).定时回血();
-		break;
-	default:
-		break;
+		BuffComponent::AddComponent(*spNewEntity);
+
+		if (单位::Is虫(类型))
+		{
+			spNewEntity->m_upBuff->定时回血();
+		}
 	}
 
 	spNewEntity->BroadcastEnter();

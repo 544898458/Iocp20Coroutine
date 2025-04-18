@@ -19,7 +19,7 @@ void Ì¦ÂûÀ©ÕÅComponent::AddComponent(Entity& refEntity)
 CoTaskBool Ì¦ÂûÀ©ÕÅComponent::CoÌ¦ÂûÀ©ÕÅ()
 {
 	using namespace std;
-	while (!co_await CoTimer::Wait(20s, m_funCancel))
+	while (!co_await CoTimer::Wait(10s, m_funCancel))
 	{
 		CHECK_WP_CO_RET_FALSE(m_wpÌ¦Âû);
 		auto& refÌ¦Âû = *m_wpÌ¦Âû.lock();

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "苔蔓Component.h"
 #include "AoiComponent.h"
+#include "BuffComponent.h"
 #include "Entity.h"
 #include "../../CoRoutine/CoTimer.h"
 #include "../EntitySystem.h"
@@ -55,9 +56,8 @@ CoTaskBool 苔蔓Component::Co萎缩消亡()
 
 CoTaskBool 苔蔓Component::Co给周围加Buff()
 {
-	//每隔3秒给周围加5秒的Buff
 	using namespace std;
-	while (!co_await CoTimer::Wait(3s, m_funCancel萎缩消亡))
+	while (!co_await CoTimer::Wait(1s, m_funCancel萎缩消亡))
 	{
 		if (m_refEntity.IsDead())
 			co_return false;
@@ -73,7 +73,10 @@ CoTaskBool 苔蔓Component::Co给周围加Buff()
 			if (!单位::Is虫(refEntity.m_类型))
 				continue;
 			
-			//CHECK_CO_RET_FALSE(refEntity.m_upBuff->AddBuff(m_i16半径, 5s, m_funCancel));
+			if (!refEntity.m_upBuff)
+				continue;
+
+			refEntity.m_upBuff->加属性(0, 移动速度, 0.2f, 2s);
 		}
 	}
 	co_return false;

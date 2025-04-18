@@ -31,7 +31,7 @@
 #include "单位组件/PlayerNickNameComponent.h"
 #include "单位组件/医疗兵Component.h"
 #include "单位组件/找目标走过去Component.h"
-#include "单位组件/定时改数值Component.h"
+#include "单位组件/BuffComponent.h"
 #include "单位组件/苔蔓扩张Component.h"
 #include "单位组件/苔蔓Component.h"
 
@@ -245,8 +245,8 @@ void Entity::OnDestroy()
 	if (m_upAoi)
 		m_upAoi->OnDestory();
 
-	if (m_up定时改数值)
-		m_up定时改数值->OnDestroy();
+	if (m_upBuff)
+		m_upBuff->OnDestroy();
 
 	if (m_up苔蔓扩张)
 		m_up苔蔓扩张->TryCancel();

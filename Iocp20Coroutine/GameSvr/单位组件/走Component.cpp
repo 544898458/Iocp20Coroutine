@@ -189,9 +189,9 @@ CoTaskBool ×ßComponent::WalkToPos(const Position posTarget, FunCancel& funCancel
 	}
 	else
 	{
-		auto& ref = *m_wpRecastNavigationCrowd.lock();
-		ref.SetMoveTarget(posTarget);
-		ref.SetSpeed();
+		sp = m_wpRecastNavigationCrowd.lock();
+		sp->SetMoveTarget(posTarget);
+		//ref.SetSpeed();
 	}
 
 	

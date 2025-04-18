@@ -249,6 +249,6 @@ void RecastNavigationCrowd::SetMoveTarget(const Position& posTarget)
 
 void RecastNavigationCrowd::SetSpeed()
 {
-	m_refEntity.m_refSpace.GetCrowdToolState(m_refEntity.m_类型).SetSpeed(m_refEntity.m_sp走->m_idxCrowdAgent, EntitySystem::升级后速度每帧移动距离(m_refEntity));
+	m_refEntity.m_refSpace.GetCrowdToolState(m_refEntity.m_类型).SetSpeed(m_refEntity.m_sp走->m_idxCrowdAgent, EntitySystem::升级后速度每秒移动距离(m_refEntity));
 }
 

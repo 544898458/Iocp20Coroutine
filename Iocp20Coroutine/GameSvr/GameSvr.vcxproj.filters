@@ -369,7 +369,7 @@
     <ClCompile Include="单位组件\找目标走过去Component.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
-    <ClCompile Include="单位组件\定时改数值Component.cpp">
+    <ClCompile Include="单位组件\BuffComponent.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
     <ClCompile Include="单位组件\苔蔓扩张Component.cpp">
@@ -608,7 +608,7 @@
     <ClInclude Include="单位组件\找目标走过去Component.h">
       <Filter>单位组件</Filter>
     </ClInclude>
-    <ClInclude Include="单位组件\定时改数值Component.h">
+    <ClInclude Include="单位组件\BuffComponent.h">
       <Filter>单位组件</Filter>
     </ClInclude>
     <ClInclude Include="单位组件\苔蔓扩张Component.h">

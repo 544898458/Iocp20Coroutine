@@ -29,7 +29,7 @@ class 解锁单位Component;
 class 升级单位属性Component;
 class 医疗兵Component;
 class 找目标走过去Component;
-class 定时改数值Component;
+class BuffComponent;
 class 苔蔓Component;
 class 苔蔓扩张Component;
 
@@ -105,7 +105,7 @@ public:
 	std::unique_ptr<升级单位属性Component> m_up升级单位属性;
 	std::unique_ptr<医疗兵Component> m_up医疗兵;
 	std::unique_ptr<找目标走过去Component> m_up找目标走过去;
-	std::unique_ptr<定时改数值Component> m_up定时改数值;
+	std::unique_ptr<BuffComponent> m_upBuff;
 	std::unique_ptr<苔蔓Component> m_up苔蔓;
 	std::unique_ptr<苔蔓扩张Component> m_up苔蔓扩张;
 	

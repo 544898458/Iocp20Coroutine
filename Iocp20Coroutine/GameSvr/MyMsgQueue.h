@@ -356,6 +356,7 @@ enum 种族
 	无,//资源
 	人,
 	虫,
+	神,
 };
 MSGPACK_ADD_ENUM(种族);
 

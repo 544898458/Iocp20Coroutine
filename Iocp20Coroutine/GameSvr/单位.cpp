@@ -372,7 +372,9 @@ namespace 单位
 	bool Is虫(const 单位类型 单位)
 	{
 		单位配置 配置;
-		CHECK_RET_DEFAULT(Find单位配置(单位, 配置));
+		if(!Find单位配置(单位, 配置))
+			return false;
+
 		return 虫 == 配置.种族;
 	}
 }
