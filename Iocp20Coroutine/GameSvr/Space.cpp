@@ -482,7 +482,7 @@ bool Space::SpacePlayer::¿ªÊ¼½âËøµ¥Î»(const µ¥Î»ÀàĞÍ µ¥Î», Entity& refEntityÔÚ´Ë
 /// <param name="ÊôĞÔ"></param>
 /// <param name="refEntityÔÚ´Ë½¨ÖşÖĞ½âËø"></param>
 /// <returns></returns>
-bool Space::SpacePlayer::¿ªÊ¼Éı¼¶µ¥Î»ÊôĞÔ(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞÍ ÊôĞÔ, Entity& refEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶)
+bool Space::SpacePlayer::¿ªÊ¼Éı¼¶µ¥Î»ÊôĞÔ(const µ¥Î»ÀàĞÍ µ¥Î», const ÊôĞÔÀàĞÍ ÊôĞÔ, Entity& refEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶)
 {
 	auto& refµ¥Î»ÊôĞÔµÈ¼¶ = m_mapµ¥Î»ÊôĞÔµÈ¼¶[µ¥Î»][ÊôĞÔ];
 	if (!refµ¥Î»ÊôĞÔµÈ¼¶.wpEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶.expired())
@@ -520,7 +520,7 @@ bool Space::SpacePlayer::¿ªÊ¼Éı¼¶µ¥Î»ÊôĞÔ(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞ
 	return true;
 }
 
-bool Space::SpacePlayer::Éı¼¶µ¥Î»ÊôĞÔÍê³É(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞÍ ÊôĞÔ, Entity& refEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶)
+bool Space::SpacePlayer::Éı¼¶µ¥Î»ÊôĞÔÍê³É(const µ¥Î»ÀàĞÍ µ¥Î», const ÊôĞÔÀàĞÍ ÊôĞÔ, Entity& refEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶)
 {
 	auto& refµ¥Î»ÊôĞÔµÈ¼¶ = m_mapµ¥Î»ÊôĞÔµÈ¼¶[µ¥Î»][ÊôĞÔ];
 	CHECK_WP_RET_FALSE(refµ¥Î»ÊôĞÔµÈ¼¶.wpEntityÔÚ´Ë½¨ÖşÖĞÉı¼¶);
@@ -534,7 +534,7 @@ bool Space::SpacePlayer::Éı¼¶µ¥Î»ÊôĞÔÍê³É(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞ
 	return true;
 }
 
-uint16_t Space::SpacePlayer::µ¥Î»ÊôĞÔµÈ¼¶(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞÍ ÊôĞÔ)const
+uint16_t Space::SpacePlayer::µ¥Î»ÊôĞÔµÈ¼¶(const µ¥Î»ÀàĞÍ µ¥Î», const ÊôĞÔÀàĞÍ ÊôĞÔ)const
 {
 	auto iterFindµ¥Î» = m_mapµ¥Î»ÊôĞÔµÈ¼¶.find(µ¥Î»);
 	if (iterFindµ¥Î» == m_mapµ¥Î»ÊôĞÔµÈ¼¶.end())

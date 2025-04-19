@@ -33,7 +33,7 @@ namespace EntitySystem
 	bool Is光刺(const 单位类型 类型);
 	bool Is活动单位建筑怪(const 单位类型 类型);
 	template<typename T_成员>
-	T_成员 升级后属性(const Entity& refEntity, const 单位属性类型 属性, T_成员 单位::战斗配置::* p成员);
+	T_成员 升级后属性(const Entity& refEntity, const 属性类型 属性, T_成员 单位::战斗配置::* p成员);
 	uint16_t 升级后攻击(Entity& refEntity);
 	uint16_t 升级后防御(Entity& refEntity);
 	uint16_t 升级后攻击前摇_伤害耗时(Entity& refEntity);

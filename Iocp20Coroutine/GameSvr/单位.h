@@ -62,11 +62,14 @@ namespace 单位
         float f数值;
 		消耗资源 消耗;
 	};
-	using 单位属性等级配置 = std::map<单位属性类型, std::map<uint16_t, 单位属性等级配置详情> >;
-	//struct 资源单位配置
-	//{
-	//	单位配置 配置;
-	//};
+	using 单位属性等级配置 = std::map<属性类型, std::map<uint16_t, 单位属性等级配置详情> >;
+
+	struct Buff配置
+	{
+		属性类型 属性;
+		float f变化值;
+		std::chrono::system_clock::duration dura间隔;
+	};
 
 	bool 读配置文件();
 	bool Find建筑单位配置(const 单位类型 类型, 建筑单位配置& refOut);
@@ -76,12 +79,13 @@ namespace 单位
 	bool Find怪配置(const 单位类型 类型, 怪配置& refOut);
 	bool Find制造配置(const 单位类型 类型, 制造配置& refOut);
 	bool Find单位解锁配置(const 单位类型 单位, 消耗资源& refOut);
-	bool Find单位属性等级配置(const 单位类型 单位, const 单位属性类型 属性, const uint16_t u16等级, 单位属性等级配置详情& refOut);
+	bool Find单位属性等级配置(const 单位类型 单位, const 属性类型 属性, const uint16_t u16等级, 单位属性等级配置详情& refOut);
+	bool FindBuff配置(const BuffId 类型, Buff配置& refOut);
+
 	template<typename T_成员>
-	T_成员 单位升级后属性(const 单位类型 单位, const 单位属性类型 属性, const uint16_t u16等级, T_成员 战斗配置::* p成员);
+	T_成员 单位升级后属性(const 单位类型 单位, const 属性类型 属性, const uint16_t u16等级, T_成员 战斗配置::* p成员);
 	bool Is虫(const 单位类型 单位);
 	//uint16_t 单位攻击(const 单位类型 单位, const uint16_t u16攻击等级);
 	//uint16_t 单位防御(const 单位类型 单位, const uint16_t u16防御等级);
 	//float 单位速度每帧移动距离(const 单位类型 单位, const uint16_t u16移速等级);
 };
-

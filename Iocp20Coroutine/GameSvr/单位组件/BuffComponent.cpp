@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "../Ã¶¾Ù/BuffId.h"
 #include "BuffComponent.h"
 #include "DefenceComponent.h"
 #include "×ßComponent.h"
@@ -30,28 +31,28 @@ BuffComponent& BuffComponent::AddComponent(Entity& refEntity)
 	return *refEntity.m_upBuff;
 }
 
-void BuffComponent::¼ÓÊôĞÔ(uint32_t u32Buff±íId, µ¥Î»ÊôĞÔÀàĞÍ ÊôĞÔÀàĞÍ, float f±ä»¯, std::chrono::system_clock::duration duraÉ¾³ı)
+void BuffComponent::¼ÓÊôĞÔ(BuffId idBuff±í, ÊôĞÔÀàĞÍ ÊôĞÔÀàĞÍ, float f±ä»¯, std::chrono::system_clock::duration duraÉ¾³ı)
 {
 	auto& refMapÊôĞÔ = m_mapÊôĞÔÊıÖµ[ÊôĞÔÀàĞÍ];
-	auto iterOldÊôĞÔ = refMapÊôĞÔ.find(u32Buff±íId);
+	auto iterOldÊôĞÔ = refMapÊôĞÔ.find(idBuff±í);
 	float fOld±ä»¯ = 0;
 	if (iterOldÊôĞÔ != refMapÊôĞÔ.end())
 	{
 		fOld±ä»¯ = iterOldÊôĞÔ->second.±ä»¯;
 		refMapÊôĞÔ.erase(iterOldÊôĞÔ);
 	}
-	auto [pair, ok] = refMapÊôĞÔ.insert({ u32Buff±íId, {f±ä»¯} });
+	auto [pair, ok] = refMapÊôĞÔ.insert({ idBuff±í, {f±ä»¯} });
 	CHECK_RET_VOID(ok);
-	[ÊôĞÔÀàĞÍ, u32Buff±íId, &refMapÊôĞÔ, this, duraÉ¾³ı](FunCancel& fun)->CoTaskBool
+	[ÊôĞÔÀàĞÍ, idBuff±í, &refMapÊôĞÔ, this, duraÉ¾³ı](FunCancel& fun)->CoTaskBool
 		{
 			const auto localÊôĞÔÀàĞÍ = ÊôĞÔÀàĞÍ;
-			const auto u32Buff±íIdLocal = u32Buff±íId;
+			const auto idBuff±íLocal = idBuff±í;
 			auto& refEntity = *this;
 			auto& refMapÊôĞÔLocal = refMapÊôĞÔ;
 			if (co_await CoTimer::Wait(duraÉ¾³ı, fun))
 				co_return true;
 
-			const auto sizeErase = refMapÊôĞÔLocal.erase(u32Buff±íIdLocal);//Ïú»ÙÕû¸öĞ­³Ì£¬ÏÂÃæ´úÂëÖ»ÄÜµ÷ÓÃ¾Ö²¿±äÁ¿
+			const auto sizeErase = refMapÊôĞÔLocal.erase(idBuff±íLocal);//Ïú»ÙÕû¸öĞ­³Ì£¬ÏÂÃæ´úÂëÖ»ÄÜµ÷ÓÃ¾Ö²¿±äÁ¿
 			CHECK_CO_RET_FALSE(sizeErase == 1);
 			refEntity.OnÊôĞÔ±ä»¯(localÊôĞÔÀàĞÍ);
 			co_return true;
@@ -63,15 +64,15 @@ void BuffComponent::¼ÓÊôĞÔ(uint32_t u32Buff±íId, µ¥Î»ÊôĞÔÀàĞÍ ÊôĞÔÀàĞÍ, float f±
 		}
 }
 
-void BuffComponent::OnÊôĞÔ±ä»¯(µ¥Î»ÊôĞÔÀàĞÍ ÊôĞÔÀàĞÍ)
+void BuffComponent::OnÊôĞÔ±ä»¯(ÊôĞÔÀàĞÍ ÊôĞÔÀàĞÍ)
 {
-	if (ÊôĞÔÀàĞÍ == µ¥Î»ÊôĞÔÀàĞÍ::ÒÆ¶¯ËÙ¶È && m_refEntity.m_sp×ß)
+	if (ÊôĞÔÀàĞÍ == ÊôĞÔÀàĞÍ::ÒÆ¶¯ËÙ¶È && m_refEntity.m_sp×ß)
 	{
 		if (!m_refEntity.m_sp×ß->m_wpRecastNavigationCrowd.expired())
 			m_refEntity.m_sp×ß->m_wpRecastNavigationCrowd.lock()->SetSpeed();
 	}
 }
-float BuffComponent::ÊôĞÔ(µ¥Î»ÊôĞÔÀàĞÍ ÊôĞÔ) const
+float BuffComponent::ÊôĞÔ(ÊôĞÔÀàĞÍ ÊôĞÔ) const
 {
 	const auto iterFind = m_mapÊôĞÔÊıÖµ.find(ÊôĞÔ);
 	if (iterFind == m_mapÊôĞÔÊıÖµ.end())
@@ -88,6 +89,14 @@ float BuffComponent::ÊôĞÔ(µ¥Î»ÊôĞÔÀàĞÍ ÊôĞÔ) const
 void BuffComponent::¶¨Ê±»ØÑª()
 {
 	using namespace std;
+	Co¶¨Ê±¸ÄÊıÖµ(2s, 1).RunNew();
+}
+
+void BuffComponent::¶¨Ê±¸ÄÊıÖµ(const BuffId id)
+{
+	using namespace std;
+    µ¥Î»::BuffÅäÖÃ buffÅäÖÃ;
+	CHECK_RET_VOID(µ¥Î»::FindBuffÅäÖÃ(id, buffÅäÖÃ));
 	Co¶¨Ê±¸ÄÊıÖµ(2s, 1).RunNew();
 }
 

@@ -336,20 +336,8 @@ enum 单位类型
 };
 MSGPACK_ADD_ENUM(单位类型);
 
-enum 单位属性类型
-{
-	单位属性类型_最小_无效,
-    攻击,
-	防御,
-	HP,
-	移动速度,
-	/// <summary>
-	/// 毫秒
-	/// </summary>
-	攻击前摇_伤害耗时,
-	攻击距离,
-};
-MSGPACK_ADD_ENUM(单位属性类型);
+enum 属性类型;
+MSGPACK_ADD_ENUM(属性类型);
 
 enum 种族 
 {
@@ -359,6 +347,9 @@ enum 种族
 	神,
 };
 MSGPACK_ADD_ENUM(种族);
+
+enum BuffId;
+MSGPACK_ADD_ENUM(BuffId);
 
 struct MsgHead
 {
@@ -848,7 +839,7 @@ struct Msg已解锁单位
 	MSGPACK_DEFINE(msg, map解锁状态);
 };
 
-using MAP_单位属性等级 = std::map<单位类型, std::map<单位属性类型, uint16_t> >;
+using MAP_单位属性等级 = std::map<单位类型, std::map<属性类型, uint16_t> >;
 struct Msg单位属性等级
 {
 	MsgHead msg{ .id = 所有单位属性等级 };
@@ -860,7 +851,7 @@ struct Msg升级单位属性
 {
 	MsgHead msg{ .id = 升级单位属性 };
 	单位类型 单位;
-	单位属性类型 属性;
+	属性类型 属性;
 	MSGPACK_DEFINE(msg, 单位, 属性);
 };
 

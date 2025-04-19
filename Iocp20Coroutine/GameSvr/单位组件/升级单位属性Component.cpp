@@ -50,7 +50,7 @@ void 升级单位属性Component::TryCancel()
 }
 
 
-void 升级单位属性Component::升级(const 单位类型 单位, const 单位属性类型 属性)
+void 升级单位属性Component::升级(const 单位类型 单位, const 属性类型 属性)
 {
 	CHECK_RET_VOID(m_refEntity.m_spBuilding);
 	if (!m_refEntity.m_spBuilding->已造好())
@@ -100,7 +100,7 @@ bool 升级单位属性Component::正在升级() const
 	return m_cancel升级单位属性.operator bool();
 }
 
-CoTaskBool 升级单位属性Component::Co升级(const 单位类型 单位, const 单位属性类型 属性)
+CoTaskBool 升级单位属性Component::Co升级(const 单位类型 单位, const 属性类型 属性)
 {
 	const int MAX进度 = 10;
 	for (int i = 0; i < MAX进度; ++i)

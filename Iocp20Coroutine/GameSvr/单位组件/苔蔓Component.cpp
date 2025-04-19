@@ -88,7 +88,7 @@ CoTaskBool 苔蔓Component::Co给周围加Buff()
 
 			if (单位::Is虫(refEntity.m_类型))
 			{
-				refEntity.m_upBuff->加属性(0, 移动速度, 0.2f, 1500ms);
+				refEntity.m_upBuff->加属性(苔蔓给虫单位加移动速度, 移动速度, 0.2f, 1500ms);
 				refEntity.m_spDefence->加血(1);
 			}
 			else

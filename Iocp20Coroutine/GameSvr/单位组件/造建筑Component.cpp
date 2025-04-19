@@ -22,6 +22,7 @@
 #include "×ßComponent.h"
 #include "AoiComponent.h"
 #include "BuffComponent.h"
+#include "Àë¿ª¾úÌº¾Í³ÖĞøµôÑªComponent.h"
 
 void Ôì½¨ÖşComponent::AddComponent(Entity& refEntity)
 {
@@ -350,6 +351,10 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	{
 		DefenceComponent::AddComponent(refNewEntity, ÖÆÔì.u16³õÊ¼Hp);
 		BuffComponent::AddComponent(refNewEntity);
+	}
+	if (µ¥Î»::Is³æ(ÀàĞÍ) && EntitySystem::Is½¨Öş(ÀàĞÍ))
+	{
+        ÎŞÌ¦Âû¾Í³ÖĞøµôÑªComponent::AddComponent(refNewEntity);
 	}
 
 	refSpace.m_mapPlayer[strPlayerNickName].m_mapWpEntity[refNewEntity.Id] = refNewEntity.shared_from_this();//×Ô¼º¿ØÖÆµÄµ¥Î»

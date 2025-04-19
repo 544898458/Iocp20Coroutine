@@ -85,9 +85,9 @@ public:
 		bool 解锁完成(const 单位类型 类型, Entity& refEntity建筑);
 		bool 已解锁(const 单位类型 类型)const;
 
-		bool 开始升级单位属性(const 单位类型 类型, const 单位属性类型 属性, Entity& refEntity在此建筑中解锁);
-		bool 升级单位属性完成(const 单位类型 单位, const 单位属性类型 属性, Entity& refEntity在此建筑中解锁);
-		uint16_t 单位属性等级(const 单位类型 单位, const 单位属性类型 属性)const;
+		bool 开始升级单位属性(const 单位类型 类型, const 属性类型 属性, Entity& refEntity在此建筑中解锁);
+		bool 升级单位属性完成(const 单位类型 单位, const 属性类型 属性, Entity& refEntity在此建筑中解锁);
+		uint16_t 单位属性等级(const 单位类型 单位, const 属性类型 属性)const;
 		
 
 		struct 单位解锁
@@ -102,7 +102,7 @@ public:
 			uint16_t u16等级 = 0;
 			WpEntity wpEntity在此建筑中升级;
 		};
-		using MAP_单位属性等级 = std::map<单位类型, std::map<单位属性类型, 单位_属性等级 > >;
+		using MAP_单位属性等级 = std::map<单位类型, std::map<属性类型, 单位_属性等级 > >;
 		MAP_单位属性等级 m_map单位属性等级;
 	};
 	//using SpSpacePlayer = std::shared_ptr<SpacePlayer> ;

@@ -61,6 +61,9 @@
     <Filter Include="读配置文件">
       <UniqueIdentifier>{b2ab4215-4e2a-452d-b717-6c058823c9c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="枚举">
+      <UniqueIdentifier>{e13b46b3-596e-4fa9-b74e-c40de239efe2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Space.cpp">
@@ -378,6 +381,9 @@
     <ClCompile Include="单位组件\苔蔓Component.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
+    <ClCompile Include="单位组件\无苔蔓就持续掉血Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -616,6 +622,15 @@
     </ClInclude>
     <ClInclude Include="单位组件\苔蔓Component.h">
       <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\无苔蔓就持续掉血Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="枚举\BuffId.h">
+      <Filter>枚举</Filter>
+    </ClInclude>
+    <ClInclude Include="枚举\属性类型.h">
+      <Filter>枚举</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
