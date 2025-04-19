@@ -44,7 +44,7 @@ bool Ôì½¨ÖşComponent::ÕıÔÚ½¨Ôì(const Entity& refEntity)
 		m_set¿ÉÔìÀàĞÍ = { »ùµØ,Ãñ·¿,±øÓª,µØ±¤,ÅÚÌ¨,»ú³¡,ÖØ³µ³§ };
 		break;
 	case ¹¤³æ:
-		m_set¿ÉÔìÀàĞÍ = { ³æ³²,³æÓª,·ÉËş,ÄâÌ¬Ô´,ÅÚÌ¨ };
+		m_set¿ÉÔìÀàĞÍ = { ³æ³²,³æÓª,·ÉËş,ÄâÌ¬Ô´,ÅÚÌ¨,Ì«Ëê };
 		break;
 	default:
 		break;
@@ -266,7 +266,7 @@ bool Ôì½¨ÖşComponent::´Ë´¦ÓĞÌ¦ÂûÂğ(const Position pos)
 		CHECK_WP_CONTINUE(wp);
 		const auto& refEntity = *wp.lock();
 		if (refEntity.m_upÌ¦Âû && refEntity.m_upÌ¦Âû->ÔÚ°ë¾¶ÄÚ(pos))
-            return true;
+			return true;
 	}
 	return false;
 }
@@ -337,13 +337,16 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 		³æ³²Component::AddComponent(refNewEntity);
 		Ì¦ÂûÀ©ÕÅComponent::AddComponent(refNewEntity);
 		break;
+	case Ì«Ëê:
+		Ì¦ÂûÀ©ÕÅComponent::AddComponent(refNewEntity);
+		break;
 	case Ì¦Âû:
 		Ì¦ÂûComponent::AddComponent(refNewEntity);
 		break;
 	default:
 		break;
 	}
-	if (Ì¦Âû != ÀàĞÍ) 
+	if (Ì¦Âû != ÀàĞÍ)
 	{
 		DefenceComponent::AddComponent(refNewEntity, ÖÆÔì.u16³õÊ¼Hp);
 		BuffComponent::AddComponent(refNewEntity);
@@ -353,7 +356,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	const int i32ÊÓÒ°·¶Î§ = Ì¦Âû == ÀàĞÍ ? Ì¦ÂûComponent::MAX°ë¾¶ : 0;
 	refSpace.AddEntity(refNewEntity.shared_from_this(), i32ÊÓÒ°·¶Î§);
 
-	if (ÀàĞÍ == ³æ³²)
+	if (³æ³² == ÀàĞÍ || Ì«Ëê == ÀàĞÍ)
 	{
 		auto wpÌ¦Âû = Ôì½¨ÖşComponent::´´½¨½¨Öş(refSpace, refNewEntity.Pos(), Ì¦Âû, spPlayer, strPlayerNickName);
 		CHECK_WP_RET_VOID(wpÌ¦Âû);

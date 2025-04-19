@@ -47,7 +47,7 @@ void Space::Save(const uint8_t idSpace)
 		if (!spEntity->m_spPlayerNickName)
 			continue;//只存玩家单位
 
-		if (EntitySystem::Is视口(*spEntity))
+		if (EntitySystem::Is视口(*spEntity) || 苔蔓 == spEntity->m_类型)
 			continue;
 		//if (spEntity->m_spBuilding && !spEntity->m_sp资源)
 		spEntity->Save(file);
