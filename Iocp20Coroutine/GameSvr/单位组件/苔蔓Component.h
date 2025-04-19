@@ -3,6 +3,7 @@
 #include "../CoRoutine/CoTask.h"
 #include "../SpEntity.h"
 
+struct Position;
 
 class 苔蔓Component
 {
@@ -11,6 +12,7 @@ public:
 	苔蔓Component(Entity&);
 	static void AddComponent(Entity& refEntity);
 	void TryCancel();
+	bool 在半径内(const Position& pos)const;
 	int16_t m_i16半径 = 5;
 	/// <summary>
 	/// 如果附着建筑消失，就逐渐消亡

@@ -68,6 +68,16 @@ class StrategyLog
 		return {};\
 	}\
 }
+
+#define CHECK_NOT_RETURN(EXP) \
+{\
+	if (!(EXP)) \
+	{\
+		LOG(ERROR) << #EXP; \
+		_ASSERT(false); \
+	}\
+}
+
 #define CHECK_NOTNULL_RET_FALSE( PTR ) \
 {\
 	if (nullptr == (PTR)) \

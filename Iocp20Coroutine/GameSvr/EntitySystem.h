@@ -18,9 +18,11 @@ namespace EntitySystem
 	void Broadcast播放声音(Entity& refEntity, const std::string& refStr声音, const std::string& str文本 = "");
 	bool Is视口(const Entity& refEntity);
 	bool Is光刺(const Entity& refEntity);
+	bool Is活动单位建筑怪(const Entity& refEntity);
 	bool 距离友方单位太近(Entity& refEntity);
 	const std::string GetNickName(const Entity& refEntity);
 	bool Is建筑(const 单位类型 类型);
+	bool Is建筑(const Entity& refEntity);
 	bool Is可进地堡(const 单位类型 类型);
 	bool Is资源(const 单位类型 类型);
 	bool Is活动单位(const 单位类型 类型);
@@ -29,6 +31,7 @@ namespace EntitySystem
 	bool Is怪(const 单位类型 类型);
 	bool Is视口(const 单位类型 类型);
 	bool Is光刺(const 单位类型 类型);
+	bool Is活动单位建筑怪(const 单位类型 类型);
 	template<typename T_成员>
 	T_成员 升级后属性(const Entity& refEntity, const 单位属性类型 属性, T_成员 单位::战斗配置::* p成员);
 	uint16_t 升级后攻击(Entity& refEntity);

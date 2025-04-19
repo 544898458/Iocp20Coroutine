@@ -20,6 +20,8 @@
 #include "Ì¦ÂûÀ©ÕÅComponent.h"
 #include "Ì¦ÂûComponent.h"
 #include "×ßComponent.h"
+#include "AoiComponent.h"
+#include "BuffComponent.h"
 
 void Ôì½¨ÖşComponent::AddComponent(Entity& refEntity)
 {
@@ -59,6 +61,11 @@ bool Ôì½¨ÖşComponent::¿ÉÔì(const µ¥Î»ÀàĞÍ ÀàĞÍ)const
 	return m_set¿ÉÔìÀàĞÍ.end() != m_set¿ÉÔìÀàĞÍ.find(ÀàĞÍ);
 }
 
+void Ôì½¨ÖşComponent::Ôì½¨Öş(const Position pos, const µ¥Î»ÀàĞÍ ÀàĞÍ)
+{
+	CoÔì½¨Öş(pos, ÀàĞÍ).RunNew();
+}
+
 CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position pos, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 {
 	if (!¿ÉÔì(ÀàĞÍ))
@@ -79,10 +86,26 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position pos, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 		PlayerComponent::²¥·ÅÉùÒô(m_refEntity, "ÓïÒô/ÎŞ·¨ÔÚÕâÀï½¨Ôì¿É°®°æ", "ÓĞ×èµ²£¬ÎŞ·¨½¨Ôì");
 		co_return true;
 	}
-	if (!m_refEntity.m_spAttack)
+
+	//Ö»ÓĞ³æÀà½¨Öşµ¥Î»¿ÉÒÔÔìÔÚÌ¦ÂûÉÏ£¬¶øÇÒ±ØĞëÔìÔÚÌ¦ÂûÉÏ£¨³æ³²³ıÍâ£©
 	{
-		_ASSERT(false);
-		co_return true;
+		bool b´Ë´¦ÓĞÌ¦Âû = ´Ë´¦ÓĞÌ¦ÂûÂğ(pos);
+		if (µ¥Î»::Is³æ(ÀàĞÍ))
+		{
+			if (³æ³² != ÀàĞÍ && !b´Ë´¦ÓĞÌ¦Âû)
+			{
+				PlayerGateSession_Game::²¥·ÅÉùÒôBuzz(m_refEntity, "ÇëÔÚÓĞÌ¦ÂûµÄµØ·½±äÒì");
+				co_return false;
+			}
+		}
+		else
+		{
+			if (b´Ë´¦ÓĞÌ¦Âû)
+			{
+				PlayerGateSession_Game::²¥·ÅÉùÒôBuzz(m_refEntity, "ÇëÔÚÃ»ÓĞÌ¦ÂûµÄµØ·½½¨Ôì");
+				co_return false;
+			}
+		}
 	}
 
 	PlayerComponent::²¥·ÅÉùÒô(m_refEntity, "ÓïÒô/Ã÷°×Å®Éù¿É°®°æ");
@@ -234,6 +257,20 @@ WpEntity Ôì½¨ÖşComponent::AddBuilding(const µ¥Î»ÀàĞÍ ÀàĞÍ, const Position pos)
 	return wpNew;
 }
 
+bool Ôì½¨ÖşComponent::´Ë´¦ÓĞÌ¦ÂûÂğ(const Position pos)
+{
+	const auto [id¸ñ×Ó, _, __] = AoiComponent::¸ñ×Ó(pos);
+	auto mapWp = m_refEntity.m_refSpace.m_mapÄÜ¿´µ½ÕâÒ»¸ñ[id¸ñ×Ó];
+	for (const auto& [id, wp] : mapWp)
+	{
+		CHECK_WP_CONTINUE(wp);
+		const auto& refEntity = *wp.lock();
+		if (refEntity.m_upÌ¦Âû && refEntity.m_upÌ¦Âû->ÔÚ°ë¾¶ÄÚ(pos))
+            return true;
+	}
+	return false;
+}
+
 WpEntity Ôì½¨ÖşComponent::´´½¨½¨Öş(Space& refSpace, const Position& pos, const µ¥Î»ÀàĞÍ ÀàĞÍ, SpPlayerComponent spPlayer, const std::string& strPlayerNickName)
 {
 	µ¥Î»::½¨Öşµ¥Î»ÅäÖÃ ½¨Öş;
@@ -306,8 +343,11 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	default:
 		break;
 	}
-	if (Ì¦Âû != ÀàĞÍ)
+	if (Ì¦Âû != ÀàĞÍ) 
+	{
 		DefenceComponent::AddComponent(refNewEntity, ÖÆÔì.u16³õÊ¼Hp);
+		BuffComponent::AddComponent(refNewEntity);
+	}
 
 	refSpace.m_mapPlayer[strPlayerNickName].m_mapWpEntity[refNewEntity.Id] = refNewEntity.shared_from_this();//×Ô¼º¿ØÖÆµÄµ¥Î»
 	const int i32ÊÓÒ°·¶Î§ = Ì¦Âû == ÀàĞÍ ? Ì¦ÂûComponent::MAX°ë¾¶ : 0;

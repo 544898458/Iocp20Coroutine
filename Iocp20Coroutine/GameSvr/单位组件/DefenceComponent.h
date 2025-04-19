@@ -11,6 +11,7 @@ public:
 	bool IsDead() const;
 	void 播放正遭到攻击语音();
 	bool 已满血()const;
+	void 加血(int16_t i16变化);
 	int m_hp = 20;
 	const int32_t m_i32HpMax;
 	std::map<uint64_t, int> m_map对我伤害;

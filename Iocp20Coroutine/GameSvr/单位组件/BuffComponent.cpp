@@ -18,10 +18,7 @@ CoTaskBool BuffComponent::Co∂® ±∏ƒ ˝÷µ(std::chrono::system_clock::duration duraº
 		if (m_refEntity.IsDead())
 			co_return false;
 
-		if (m_refEntity.m_spDefence->“—¬˙—™())
-			continue;
-
-		m_refEntity.m_spDefence->m_hp += i16±‰ªØ;
+		m_refEntity.m_spDefence->º”—™(i16±‰ªØ);
 		m_refEntity.BroadcastNotifyPos();
 	}
 	co_return false;
@@ -68,9 +65,8 @@ void BuffComponent::º” Ù–‘(uint32_t u32Buff±ÌId, µ•Œª Ù–‘¿‡–Õ  Ù–‘¿‡–Õ, float f±
 
 void BuffComponent::On Ù–‘±‰ªØ(µ•Œª Ù–‘¿‡–Õ  Ù–‘¿‡–Õ)
 {
-	if ( Ù–‘¿‡–Õ == µ•Œª Ù–‘¿‡–Õ::“∆∂ØÀŸ∂»)
+	if ( Ù–‘¿‡–Õ == µ•Œª Ù–‘¿‡–Õ::“∆∂ØÀŸ∂» && m_refEntity.m_sp◊ﬂ)
 	{
-		CHECK_RET_VOID(m_refEntity.m_sp◊ﬂ);
 		if (!m_refEntity.m_sp◊ﬂ->m_wpRecastNavigationCrowd.expired())
 			m_refEntity.m_sp◊ﬂ->m_wpRecastNavigationCrowd.lock()->SetSpeed();
 	}
@@ -102,7 +98,7 @@ void BuffComponent::OnDestroy()
 		m_funCancel();
 		m_funCancel = nullptr;
 	}
-	
+
 	m_map Ù–‘ ˝÷µ.clear();
 }
 

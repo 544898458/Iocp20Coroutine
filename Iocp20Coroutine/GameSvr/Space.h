@@ -79,7 +79,7 @@ public:
 		Msg剧情对话 m_msg上次发给前端的剧情对话;
 
 		void OnDestroy(const bool b删除玩家所有单位, Space& refSpace, const std::string& refStrNickName);
-		void Erase(uint64_t u64Id);
+		size_t Erase(uint64_t u64Id);
 
 		bool 开始解锁单位(const 单位类型 类型, Entity& refEntity建筑);
 		bool 解锁完成(const 单位类型 类型, Entity& refEntity建筑);

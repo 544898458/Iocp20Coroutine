@@ -97,3 +97,14 @@ bool DefenceComponent::已满血() const
 {
 	return m_hp >= m_i32HpMax;
 }
+
+void DefenceComponent::加血(int16_t i16变化)
+{
+	if (0 == i16变化)
+		return;
+
+	CHECK_RET_VOID(i16变化 > 0);
+	m_hp = std::min(m_i32HpMax, m_hp + i16变化);
+
+	m_refEntity.BroadcastNotifyPos();
+}

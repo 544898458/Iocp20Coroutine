@@ -260,7 +260,8 @@ void Space::EraseEntity(const bool bForceEraseAll)
 
 		if (spEntity->m_spPlayerNickName)
 		{
-			m_mapPlayer[spEntity->m_spPlayerNickName->m_strNickName].Erase(spEntity->Id);
+			const auto sizeErase = m_mapPlayer[spEntity->m_spPlayerNickName->m_strNickName].Erase(spEntity->Id);
+			CHECK_NOT_RETURN(1 == sizeErase);
 		}
 
 		LOG(INFO) << "É¾³ı¹ıÆÚ¶ÔÏó," << spEntity->Í·¶¥Name() << ",Id=" << spEntity->Id << ",É¾³ıÇ°Ê£Óà" << m_mapEntity.size();
@@ -549,6 +550,7 @@ uint16_t Space::SpacePlayer::µ¥Î»ÊôĞÔµÈ¼¶(const µ¥Î»ÀàĞÍ µ¥Î», const µ¥Î»ÊôĞÔÀàĞ
 void Space::SpacePlayer::OnDestroy(const bool bÉ¾³ıÍæ¼ÒËùÓĞµ¥Î», Space& refSpace, const std::string& refStrNickName)
 {
 	auto mapLocal = m_mapWpEntity;//²»ÄÜÔÚForEachÄÚÉ¾³ıÈİÆ÷
+	bool bÒÑÉ¾³ıÊÓ¿Ú = false;
 	for (auto [_, wp] : mapLocal)
 	{
 		//_ASSERT(!wp.expired());
@@ -558,7 +560,8 @@ void Space::SpacePlayer::OnDestroy(const bool bÉ¾³ıÍæ¼ÒËùÓĞµ¥Î», Space& refSpace
 			continue;
 		}
 		auto& ref = *wp.lock();
-		if (bÉ¾³ıÍæ¼ÒËùÓĞµ¥Î» || EntitySystem::IsÊÓ¿Ú(ref))//É¾³ıµ¥Î»
+		const bool bÊÓ¿Ú = EntitySystem::IsÊÓ¿Ú(ref);
+		if (bÉ¾³ıÍæ¼ÒËùÓĞµ¥Î» || bÊÓ¿Ú)//É¾³ıµ¥Î»
 		{
 			if (ref.m_refSpace.GetEntity(ref.Id).expired())
 			{
@@ -566,17 +569,20 @@ void Space::SpacePlayer::OnDestroy(const bool bÉ¾³ıÍæ¼ÒËùÓĞµ¥Î», Space& refSpace
 				continue;
 			}
 
-			if (EntitySystem::IsÊÓ¿Ú(ref))
+			if (bÊÓ¿Ú)
+			{
 				ref.Broadcast<MsgSay>({ .content = StrConv::GbkToUtf8(refStrNickName + " Àë¿ªÁË") });
-
+				CHECK_NOT_RETURN(!bÒÑÉ¾³ıÊÓ¿Ú);
+				bÒÑÉ¾³ıÊÓ¿Ú = true;
+			}
 			LOG(INFO) << "m_mapEntity.size=" << ref.m_refSpace.m_mapEntity.size();
 			ref.OnDestroy();
 
 			auto countErase = m_mapWpEntity.erase(ref.Id);
-			_ASSERT(1 == countErase);
+			CHECK_NOT_RETURN(1 == countErase);
 
 			countErase = ref.m_refSpace.m_mapEntity.erase(ref.Id);
-			_ASSERT(1 == countErase);
+			CHECK_NOT_RETURN(1 == countErase);
 		}
 		else//²»É¾£¬Ö»É¾³ıSessionÒıÓÃ
 		{
@@ -584,19 +590,14 @@ void Space::SpacePlayer::OnDestroy(const bool bÉ¾³ıÍæ¼ÒËùÓĞµ¥Î», Space& refSpace
 			//refSpace.m_mapÒÑÀëÏßPlayerEntity[refStrNickName].insert({ sp->Id,sp });
 		}
 	}
-
+	CHECK_NOT_RETURN(bÒÑÉ¾³ıÊÓ¿Ú);
 	//m_mapWpEntity.clear();
 }
 
-inline void Space::SpacePlayer::Erase(uint64_t u64Id)
+size_t Space::SpacePlayer::Erase(uint64_t u64Id)
 {
-	if (!m_mapWpEntity.contains(u64Id))
-	{
-		LOG(WARNING) << "ERR";
-		return;
-	}
-
-	m_mapWpEntity.erase(u64Id);
+	CHECK_RET_DEFAULT(m_mapWpEntity.contains(u64Id));
+	return m_mapWpEntity.erase(u64Id);
 }
 
 std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStrNickName);
@@ -650,7 +651,8 @@ WpEntity Space::Ôì»î¶¯µ¥Î»(std::shared_ptr<PlayerComponent>& refSpPlayer¿ÉÄÜ¿Õ, 
 		break;
 	}
 
-	m_mapPlayer[strNickName].m_mapWpEntity[spNewEntity->Id] = spNewEntity;//×Ô¼º¿ØÖÆµÄµ¥Î»
+	auto [pair, ok] = m_mapPlayer[strNickName].m_mapWpEntity.insert({ spNewEntity->Id, spNewEntity });//×Ô¼º¿ØÖÆµÄµ¥Î»
+	CHECK_NOT_RETURN(ok);
 	AddEntity(spNewEntity);//È«µØÍ¼µ¥Î»
 
 	PlayerComponent::²¥·ÅÉùÒô(*spNewEntity, »î¶¯.strÈë³¡ÓïÒô); //SCV, good to go, sir. SCV¿ÉÒÔ¿ª¹¤ÁË
@@ -703,6 +705,8 @@ bool Space::¿É·ÅÖÃ½¨Öş(const Position& refPos, float f°ë±ß³¤)
 	for (const auto& kv : m_mapEntity)
 	{
 		auto& refEntity = *kv.second;
+		if (!EntitySystem::Is½¨Öş(refEntity))
+			continue;
 		const auto& refPosOld = refEntity.Pos();
 		bool CrowdToolÅĞ¶Ïµ¥Î»ÖØµş(const Position & refPosOld, const Position & refPosNew, const float f°ë±ß³¤);
 		if (CrowdToolÅĞ¶Ïµ¥Î»ÖØµş(refPos, refPosOld, f°ë±ß³¤))
