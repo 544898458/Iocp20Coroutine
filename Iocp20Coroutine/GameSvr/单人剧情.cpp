@@ -592,7 +592,7 @@ namespace 单人剧情
 			vecEneity.insert(vecEneity.end(), vecEneity2.begin(), vecEneity2.end());
 			for (auto& spEntity : vecEneity)
 			{
-				if(spEntity->m_up找目标走过去)
+				if (spEntity->m_up找目标走过去)
 					spEntity->m_up找目标走过去->m_fun空闲走向此处 = 怪物走向矿附近;
 			}
 
@@ -687,7 +687,7 @@ namespace 单人剧情
 			vecEneity.insert(vecEneity.end(), vecEneity2.begin(), vecEneity2.end());
 			for (auto& spEntity : vecEneity)
 			{
-				if(spEntity->m_up找目标走过去)
+				if (spEntity->m_up找目标走过去)
 					spEntity->m_up找目标走过去->m_fun空闲走向此处 = 怪物走向矿附近;
 			}
 
@@ -811,7 +811,7 @@ namespace 单人剧情
 					refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::近战兵, { -45, z });
 				}
 			}
-			for (int i = 0; i < 6; ++i)
+			for (int i = 0; i < 3; ++i)
 			{
 				MonsterComponent::AddMonster(refSpace, 三色坦克, { 40,-49.f + i * 5 }, 1);
 				MonsterComponent::AddMonster(refSpace, 三色坦克, { -40,-49.f + i * 5 }, 1);
@@ -820,11 +820,11 @@ namespace 单人剧情
 			{
 				创建敌方建筑(refSpace, { 25,-49.f + i * 5 }, 炮台);
 				创建敌方建筑(refSpace, { 30,-49.f + i * 5 }, 炮台);
-				创建敌方建筑(refSpace, { 35,-49.f + i * 5 }, 炮台);
+				//创建敌方建筑(refSpace, { 35,-49.f + i * 5 }, 炮台);
 
 				创建敌方建筑(refSpace, { -25,-49.f + i * 5 }, 炮台);
 				创建敌方建筑(refSpace, { -30,-49.f + i * 5 }, 炮台);
-				创建敌方建筑(refSpace, { -35,-49.f + i * 5 }, 炮台);
+				//创建敌方建筑(refSpace, { -35,-49.f + i * 5 }, 炮台);
 			}
 
 			{
@@ -908,7 +908,7 @@ namespace 单人剧情
 		const auto fun房虫胡噜说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {房虫胡噜说(refSpace, strPlayerNickName, str内容); };
 		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家_虫_说(refSpace, strPlayerNickName, str内容); };
 		const auto fun绿色坦克洪隆说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {绿色坦克洪隆说(refSpace, strPlayerNickName, str内容); };
-		
+
 		fun房虫胡噜说(strPlayerNickName + "，有一个好消息，我们的幼虫经过千万次的模仿，基本掌握了拟态复制人类三色坦克的方法。"); _等玩家读完returnTrue;
 		fun玩家说("太好了……那么接下来肯定还有一个坏消息吧？");	_等玩家读完returnTrue;
 		fun房虫胡噜说("是的，蜕变出的第一批<color = #a0ff50>绿色坦克</color>的虫巢已遭人类攻占。"); _等玩家读完returnTrue;
@@ -932,18 +932,18 @@ namespace 单人剧情
 					refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::近战虫, { -45, z });
 				}
 			}
-			for (int i = 0; i < 6; ++i)
+			for (int i = 0; i < 3; ++i)
 			{
 				MonsterComponent::AddMonster(refSpace, 绿色坦克, { 40,-49.f + i * 5 }, 1);
 				MonsterComponent::AddMonster(refSpace, 绿色坦克, { -40,-49.f + i * 5 }, 1);
 			}
 			for (int i = 0; i < 6; ++i)
 			{
-				创建敌方建筑(refSpace, { 20,-49.f + i * 5 }, 炮台);
+				//创建敌方建筑(refSpace, { 20,-49.f + i * 5 }, 炮台);
 				创建敌方建筑(refSpace, { 25,-49.f + i * 5 }, 炮台);
 				创建敌方建筑(refSpace, { 30,-49.f + i * 5 }, 炮台);
 
-				创建敌方建筑(refSpace, { -20,-49.f + i * 5 }, 炮台);
+				//创建敌方建筑(refSpace, { -20,-49.f + i * 5 }, 炮台);
 				创建敌方建筑(refSpace, { -25,-49.f + i * 5 }, 炮台);
 				创建敌方建筑(refSpace, { -30,-49.f + i * 5 }, 炮台);
 			}
