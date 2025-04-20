@@ -35,6 +35,7 @@
 #include "单位组件/苔蔓扩张Component.h"
 #include "单位组件/苔蔓Component.h"
 #include "单位组件/无苔蔓就持续掉血Component.h"
+#include "单位组件/太岁Component.h"
 
 using namespace std;
 

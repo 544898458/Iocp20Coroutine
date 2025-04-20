@@ -102,3 +102,8 @@ CoTaskBool Ì¦ÂûComponent::Co¸øÖÜÎ§¼ÓBuff()
 	}
 	co_return false;
 }
+
+bool Ì¦ÂûComponent::À©ÕÅ½áÊø()const
+{
+	return m_i16°ë¾¶ >= MAX°ë¾¶;
+}

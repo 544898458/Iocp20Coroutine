@@ -23,6 +23,7 @@
 #include "AoiComponent.h"
 #include "BuffComponent.h"
 #include "ÎŞÌ¦Âû¾Í³ÖĞøµôÑªComponent.h"
+#include "Ì«ËêComponent.h"
 
 void Ôì½¨ÖşComponent::AddComponent(Entity& refEntity)
 {
@@ -336,6 +337,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 		break;
 	case Ì«Ëê:
 		Ì¦ÂûÀ©ÕÅComponent::AddComponent(refNewEntity);
+		Ì«ËêComponent::AddComponent(refNewEntity);
 		break;
 	case Ì¦Âû:
 		Ì¦ÂûComponent::AddComponent(refNewEntity);

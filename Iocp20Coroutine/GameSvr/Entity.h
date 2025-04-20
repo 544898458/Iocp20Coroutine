@@ -33,6 +33,7 @@ class BuffComponent;
 class 苔蔓Component;
 class 苔蔓扩张Component;
 class 无苔蔓就持续掉血Component;
+class 太岁Component;
 
 
 class Entity final : public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
@@ -110,6 +111,7 @@ public:
 	std::unique_ptr<苔蔓Component> m_up苔蔓;
 	std::unique_ptr<苔蔓扩张Component> m_up苔蔓扩张;
 	std::unique_ptr<无苔蔓就持续掉血Component> m_up无苔蔓就持续掉血;
+	std::unique_ptr<太岁Component> m_up太岁;
 	
 
 	/// <summary>

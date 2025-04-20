@@ -90,6 +90,7 @@ private:
 	void OnRecv(const Msg建筑产出活动单位的集结点& msg);
 	void OnRecv(const Msg原地坚守& msg);
 	void OnRecv(const Msg解锁单位& msg);
+	void OnRecv(const Msg太岁分裂& msg);
 	void OnRecv(const Msg升级单位属性& msg);
 
 	void 选中单位(std::vector<uint64_t> vecId, bool b追加 = false);

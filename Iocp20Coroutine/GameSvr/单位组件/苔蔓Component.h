@@ -13,6 +13,8 @@ public:
 	static void AddComponent(Entity& refEntity);
 	void TryCancel();
 	bool 在半径内(const Position& pos)const;
+	bool 扩张结束() const;
+	
 	int16_t m_i16半径 = 5;
 	/// <summary>
 	/// 如果附着建筑消失，就逐渐消亡
@@ -23,6 +25,7 @@ private:
 	CoTaskBool Co萎缩消亡();
 	CoTaskBool Co给周围加Buff();
 
+	
 	FunCancel m_funCancel萎缩消亡;
 	FunCancel m_funCancel给周围加Buff;
 	/// <summary>

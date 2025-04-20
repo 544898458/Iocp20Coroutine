@@ -384,6 +384,9 @@
     <ClCompile Include="单位组件\无苔蔓就持续掉血Component.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
+    <ClCompile Include="单位组件\太岁Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -634,6 +637,12 @@
     </ClInclude>
     <ClInclude Include="枚举\单位类型.h">
       <Filter>枚举</Filter>
+    </ClInclude>
+    <ClInclude Include="枚举\MsgId.h">
+      <Filter>枚举</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\太岁Component.h">
+      <Filter>单位组件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
