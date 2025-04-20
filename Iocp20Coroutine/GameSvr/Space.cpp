@@ -673,11 +673,11 @@ WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 	if (EntitySystem::Is活动单位(类型) || EntitySystem::Is建筑(类型) || EntitySystem::Is怪(类型))
 	{
 		BuffComponent::AddComponent(*spNewEntity);
+	}
 
-		if (单位::Is虫(类型))
-		{
-			spNewEntity->m_upBuff->定时改数值(虫持续加血);
-		}
+	if (单位::Is虫(类型) && EntitySystem::Is活动单位(类型))
+	{
+		spNewEntity->m_upBuff->定时改数值(虫活动单位持续加血, spNewEntity->Id);
 	}
 
 	spNewEntity->BroadcastEnter();

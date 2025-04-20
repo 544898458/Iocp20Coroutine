@@ -12,7 +12,7 @@ BuffComponent::BuffComponent(Entity& ref) :m_refEntity(ref)
 {
 }
 
-CoTaskBool BuffComponent::Co∂® ±∏ƒ ˝÷µ(std::chrono::system_clock::duration duraº‰∏Ù, int16_t i16±‰ªØ, FunCancel& funCancel)
+CoTaskBool BuffComponent::Co∂® ±∏ƒ ˝÷µ(std::chrono::system_clock::duration duraº‰∏Ù, int16_t i16±‰ªØ, FunCancel& funCancel, const uint64_t idAttacker)
 {
 	while (!co_await CoTimer::Wait(duraº‰∏Ù, funCancel))
 	{
@@ -20,7 +20,13 @@ CoTaskBool BuffComponent::Co∂® ±∏ƒ ˝÷µ(std::chrono::system_clock::duration duraº
 		if (m_refEntity.IsDead())
 			co_return false;
 
-		m_refEntity.m_spDefence->º”—™(i16±‰ªØ);
+		if(0<i16±‰ªØ)
+			m_refEntity.m_spDefence->º”—™(i16±‰ªØ);
+		else if(0>i16±‰ªØ)
+            m_refEntity.m_spDefence-> ‹…À(-i16±‰ªØ, idAttacker);
+		else
+			LOG(ERROR) << "BuffComponent::º” Ù–‘ ±‰ªØ÷µ¥ÌŒÛ";
+			
 		m_refEntity.BroadcastNotifyPos();
 	}
 	co_return false;
@@ -89,13 +95,13 @@ float BuffComponent:: Ù–‘( Ù–‘¿‡–Õ  Ù–‘) const
 	return  Ù–‘÷µ;
 }
 
-void BuffComponent::∂® ±∏ƒ ˝÷µ(const BuffId id)
+void BuffComponent::∂® ±∏ƒ ˝÷µ(const BuffId id, const uint64_t idAttacker)
 {
 	using namespace std;
 	µ•Œª::Buff≈‰÷√ buff≈‰÷√;
 	CHECK_RET_VOID(µ•Œª::FindBuff≈‰÷√(id, buff≈‰÷√));
 	…æBuff(id);
-	Co∂® ±∏ƒ ˝÷µ(buff≈‰÷√.duraº‰∏Ù, (int16_t)buff≈‰÷√.f±‰ªØ÷µ, m_mapFunCancel[id]).RunNew();
+	Co∂® ±∏ƒ ˝÷µ(buff≈‰÷√.duraº‰∏Ù, (int16_t)buff≈‰÷√.f±‰ªØ÷µ, m_mapFunCancel[id], idAttacker).RunNew();
 }
 
 void BuffComponent::…æBuff(BuffId id)
@@ -106,6 +112,12 @@ void BuffComponent::…æBuff(BuffId id)
 		iterFind->second();
 		iterFind->second = nullptr;
 	}
+	m_mapFunCancel.erase(id);
+}
+
+bool BuffComponent::“—”–Buff(BuffId id) const
+{
+	return m_mapFunCancel.find(id) != m_mapFunCancel.end();
 }
 
 void BuffComponent::OnDestroy()

@@ -44,12 +44,12 @@ bool Ì¦ÂûComponent::ÔÚ°ë¾¶ÄÚ(const Position& pos) const
 CoTaskBool Ì¦ÂûComponent::CoÎ®ËõÏûÍö()
 {
 	using namespace std;
-	while (!co_await CoTimer::Wait(20s, m_funCancelÎ®ËõÏûÍö))
+	while (!co_await CoTimer::Wait(10s, m_funCancelÎ®ËõÏûÍö))
 	{
 		if (!m_wp¸½×Å½¨Öş.expired())
 			continue;
 
-		m_i16°ë¾¶ -= 2;
+		m_i16°ë¾¶ -= 1;
 		EntitySystem::BroadcastEntityÌ¦Âû°ë¾¶(m_refEntity);
 
 		if (m_i16°ë¾¶ < 0)

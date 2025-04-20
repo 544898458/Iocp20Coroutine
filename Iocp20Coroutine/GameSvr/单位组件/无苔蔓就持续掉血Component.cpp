@@ -25,7 +25,8 @@ CoTaskBool 无苔蔓就持续掉血Component::Co反复加持续掉血Buff()
 	{
 		CHECK_CO_RET_FALSE(m_refEntity.m_upBuff);
 		auto& ref苔蔓 = *m_wp苔蔓.lock();
-		m_refEntity.m_upBuff->定时改数值(离开苔蔓的虫建筑持续扣血);
+		if (!m_refEntity.m_upBuff->已有Buff(离开苔蔓的虫建筑持续扣血))
+			m_refEntity.m_upBuff->定时改数值(离开苔蔓的虫建筑持续扣血, 0);
 	}
 	co_return false;
 }

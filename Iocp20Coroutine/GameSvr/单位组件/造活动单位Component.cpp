@@ -179,17 +179,17 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 			pos = { posBuilding.x - 5 + std::rand() % 10, posBuilding.z - 5 + std::rand() % 10 };
 			const auto ok = refSpace.CrowdToolFindNerestPos(pos);
 			_ASSERT(ok);
-		}
 
-		if (!refSpace.CrowdTool可站立(pos))
-		{
-			PlayerComponent::播放声音(m_refEntity, "此处不可放置");
-			if (co_await CoTimer::Wait(1s, m_TaskCancel造活动单位.cancel))
+			if (!refSpace.CrowdTool可站立(pos))
 			{
-				m_list等待造.clear();
-				co_return{};
+				PlayerComponent::播放声音(m_refEntity, "此处不可放置");
+				if (co_await CoTimer::Wait(1s, m_TaskCancel造活动单位.cancel))
+				{
+					m_list等待造.clear();
+					co_return{};
+				}
+				continue;
 			}
-			continue;
 		}
 
 		if (制造.消耗.u16消耗燃气矿 > Space::GetSpacePlayer(m_refEntity).m_u32燃气矿)

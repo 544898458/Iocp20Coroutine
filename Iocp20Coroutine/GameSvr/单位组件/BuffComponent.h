@@ -15,11 +15,12 @@ public:
 
 	void 加属性(BuffId idBuff表);
 	float 属性(属性类型 属性类型)const;
-	void 定时改数值(const BuffId id);
+	void 定时改数值(const BuffId id, const uint64_t idAttacker);
 	void 删Buff(BuffId id);
+	bool 已有Buff(BuffId id)const;
 private:
 	void On属性变化(属性类型 属性类型);
-	CoTaskBool Co定时改数值(std::chrono::system_clock::duration dura间隔, int16_t i16变化, FunCancel& funCancel);
+	CoTaskBool Co定时改数值(std::chrono::system_clock::duration dura间隔, int16_t i16变化, FunCancel& funCancel, const uint64_t idAttacker);
 	Entity& m_refEntity;
 	std::map<BuffId, FunCancel> m_mapFunCancel;
 	struct 属性数值 final
