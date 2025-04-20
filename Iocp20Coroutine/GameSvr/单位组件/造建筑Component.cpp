@@ -274,12 +274,8 @@ bool Ôì½¨ÖşComponent::´Ë´¦ÓĞÌ¦ÂûÂğ(const Position pos)
 
 WpEntity Ôì½¨ÖşComponent::´´½¨½¨Öş(Space& refSpace, const Position& pos, const µ¥Î»ÀàĞÍ ÀàĞÍ, SpPlayerComponent spPlayer, const std::string& strPlayerNickName)
 {
-	µ¥Î»::½¨Öşµ¥Î»ÅäÖÃ ½¨Öş;
 	µ¥Î»::µ¥Î»ÅäÖÃ µ¥Î»;
-	µ¥Î»::ÖÆÔìÅäÖÃ ÖÆÔì;
-	CHECK_RET_DEFAULT(µ¥Î»::Find½¨Öşµ¥Î»ÅäÖÃ(ÀàĞÍ, ½¨Öş));
 	CHECK_RET_DEFAULT(µ¥Î»::Findµ¥Î»ÅäÖÃ(ÀàĞÍ, µ¥Î»));
-	CHECK_RET_DEFAULT(µ¥Î»::FindÖÆÔìÅäÖÃ(ÀàĞÍ, ÖÆÔì));
 
 	auto spNewEntity = std::make_shared<Entity, const Position&, Space&, const µ¥Î»ÀàĞÍ, const µ¥Î»::µ¥Î»ÅäÖÃ& >(
 		pos, refSpace, std::forward<const µ¥Î»ÀàĞÍ&&>(ÀàĞÍ), µ¥Î»);
@@ -294,15 +290,15 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 {
 	µ¥Î»::½¨Öşµ¥Î»ÅäÖÃ ½¨Öş;
 	µ¥Î»::µ¥Î»ÅäÖÃ µ¥Î»;
-	µ¥Î»::ÖÆÔìÅäÖÃ ÖÆÔì;
 	CHECK_RET_VOID(µ¥Î»::Find½¨Öşµ¥Î»ÅäÖÃ(ÀàĞÍ, ½¨Öş));
 	CHECK_RET_VOID(µ¥Î»::Findµ¥Î»ÅäÖÃ(ÀàĞÍ, µ¥Î»));
-	CHECK_RET_VOID(µ¥Î»::FindÖÆÔìÅäÖÃ(ÀàĞÍ, ÖÆÔì));
+	
 
 	if (spPlayer)
 		PlayerComponent::AddComponent(refNewEntity, spPlayer, spPlayer->m_refSession.NickName());
 
-	BuildingComponent::AddComponent(refNewEntity, ½¨Öş.f°ë±ß³¤);
+	if (0 < ½¨Öş.f°ë±ß³¤)
+		BuildingComponent::AddComponent(refNewEntity, ½¨Öş.f°ë±ß³¤);
 
 	switch (ÀàĞÍ)
 	{
@@ -349,12 +345,14 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	}
 	if (Ì¦Âû != ÀàĞÍ)
 	{
+		µ¥Î»::ÖÆÔìÅäÖÃ ÖÆÔì;
+		CHECK_RET_VOID(µ¥Î»::FindÖÆÔìÅäÖÃ(ÀàĞÍ, ÖÆÔì));
 		DefenceComponent::AddComponent(refNewEntity, ÖÆÔì.u16³õÊ¼Hp);
 		BuffComponent::AddComponent(refNewEntity);
 	}
 	if (µ¥Î»::Is³æ(ÀàĞÍ) && EntitySystem::Is½¨Öş(ÀàĞÍ))
 	{
-        ÎŞÌ¦Âû¾Í³ÖĞøµôÑªComponent::AddComponent(refNewEntity);
+		ÎŞÌ¦Âû¾Í³ÖĞøµôÑªComponent::AddComponent(refNewEntity);
 	}
 
 	refSpace.m_mapPlayer[strPlayerNickName].m_mapWpEntity[refNewEntity.Id] = refNewEntity.shared_from_this();//×Ô¼º¿ØÖÆµÄµ¥Î»
