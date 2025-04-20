@@ -59,11 +59,11 @@ CoTaskBool 飞向目标Component::Co飞向目标遇敌爆炸()
 
 		const auto posNew = m_refEntity.Pos() + m_vec方向 * 配置.f每帧移动距离 * f首次移动倍数;
 		f首次移动倍数 = 1.f;
-		if (!m_refEntity.m_refSpace.CrowdTool可走直线(posNew, m_refEntity.Pos()))//撞墙
-		{
-			m_refEntity.DelayDelete();
-			co_return false;
-		}
+		//if (!m_refEntity.m_refSpace.CrowdTool可走直线(posNew, m_refEntity.Pos()))//撞墙
+		//{
+		//	m_refEntity.DelayDelete();
+		//	co_return false;
+		//}
 
 		m_refEntity.SetPos(posNew);
 		m_refEntity.BroadcastNotifyPos();
