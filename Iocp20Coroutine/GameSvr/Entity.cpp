@@ -255,6 +255,9 @@ void Entity::OnDestroy()
 	if (m_up苔蔓)
 		m_up苔蔓->TryCancel();
 
+	if (m_up无苔蔓就持续掉血)
+		m_up无苔蔓就持续掉血->TryCancel();
+
 	if (m_cancelDelete)
 	{
 		LOG(INFO) << "取消删除协程";

@@ -88,18 +88,15 @@ CoTaskBool 苔蔓Component::Co给周围加Buff()
 			if (!refEntity.m_spDefence)
 				continue;
 
-			if (单位::Is虫(refEntity.m_类型))
+			if (单位::Is虫(refEntity.m_类型)&& !m_refEntity.IsEnemy(refEntity))//只给友方虫族单位加速度
 			{
-				refEntity.m_upBuff->加属性(苔蔓给虫单位加移动速度, 移动速度, 0.2f, 1500ms);
+				refEntity.m_upBuff->加属性(苔蔓给虫单位加移动速度);
+				refEntity.m_upBuff->删Buff(离开苔蔓的虫建筑持续扣血);
 				refEntity.m_spDefence->加血(1);
 			}
-			else
+			else if (EntitySystem::Is建筑(refEntity))//给人类建筑扣血（不分敌我）
 			{
-				//给人类建筑扣血
-				if (EntitySystem::Is建筑(refEntity))
-				{
-					refEntity.m_spDefence->受伤(1, m_refEntity.Id);
-				}
+				refEntity.m_spDefence->受伤(1, m_refEntity.Id);
 			}
 		}
 	}

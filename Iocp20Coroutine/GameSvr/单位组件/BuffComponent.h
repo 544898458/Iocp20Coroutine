@@ -13,14 +13,15 @@ public:
 	static BuffComponent& AddComponent(Entity& refEntity);
 	void OnDestroy();
 
-	void 加属性(BuffId idBuff表, 属性类型 属性类型, float f变化, std::chrono::system_clock::duration dura删除);
+	void 加属性(BuffId idBuff表);
 	float 属性(属性类型 属性类型)const;
 	void 定时改数值(const BuffId id);
+	void 删Buff(BuffId id);
 private:
 	void On属性变化(属性类型 属性类型);
-	CoTaskBool Co定时改数值(std::chrono::system_clock::duration dura间隔, int16_t i16变化);
+	CoTaskBool Co定时改数值(std::chrono::system_clock::duration dura间隔, int16_t i16变化, FunCancel& funCancel);
 	Entity& m_refEntity;
-	FunCancel m_funCancel;
+	std::map<BuffId, FunCancel> m_mapFunCancel;
 	struct 属性数值 final
 	{
 		~属性数值()

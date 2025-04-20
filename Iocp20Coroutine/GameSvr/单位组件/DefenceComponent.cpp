@@ -105,6 +105,9 @@ void DefenceComponent::加血(int16_t i16变化)
 
 	CHECK_RET_VOID(i16变化 > 0);
 	const auto old = m_hp;
+	if (m_hp >= m_i32HpMax)
+		return;
+
 	m_hp = std::min(m_i32HpMax, m_hp + i16变化);
 
 	if(old != m_hp)

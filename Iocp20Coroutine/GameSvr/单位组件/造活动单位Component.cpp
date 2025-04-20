@@ -134,7 +134,8 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 	}
 
 	m_listµÈ´ıÔì.emplace_back(ÀàĞÍ);//++m_iµÈ´ıÔì±øÊı;
-	m_TaskCancelÔì»î¶¯µ¥Î».TryRun(CoÔì»î¶¯µ¥Î»());
+	if(m_TaskCancelÔì»î¶¯µ¥Î».co.Finished())
+		m_TaskCancelÔì»î¶¯µ¥Î».TryRun(CoÔì»î¶¯µ¥Î»());
 }
 
 bool Ôì»î¶¯µ¥Î»Component::IsÓ×³æ()const
@@ -167,13 +168,15 @@ CoTaskBool Ôì»î¶¯µ¥Î»Component::CoÔì»î¶¯µ¥Î»()
 		auto& refSpace = m_refEntity.m_refSpace;
 		using namespace std;
 		const auto posBuilding = m_refEntity.Pos();
-		Position pos = { posBuilding.x - 5 + std::rand() % 10, posBuilding.z - 5 + std::rand() % 10 };
+		Position pos;
 		if (IsÓ×³æ())
 		{
+			pos = posBuilding;
 			×ßComponent::CancelËùÓĞ°üº¬×ßÂ·µÄĞ­³Ì(m_refEntity, true);
 		}
 		else
 		{
+			pos = { posBuilding.x - 5 + std::rand() % 10, posBuilding.z - 5 + std::rand() % 10 };
 			const auto ok = refSpace.CrowdToolFindNerestPos(pos);
 			_ASSERT(ok);
 		}
@@ -219,6 +222,7 @@ CoTaskBool Ôì»î¶¯µ¥Î»Component::CoÔì»î¶¯µ¥Î»()
 				m_listµÈ´ıÔì.clear();
 				co_return{};
 			}
+			LOG(INFO) << std::format("½ø¶È{0}/{1}", i, MAX½ø¶È);
 			if (IsÓ×³æ())
 				EntitySystem::BroadcastEntityÃèÊö(m_refEntity, std::format("ÍÉ±ä½ø¶È{0}/{1}", i, MAX½ø¶È));
 			else

@@ -26,10 +26,10 @@ CoTaskBool Ì¦ÂûÀ©ÕÅComponent::Co·´¸´¼Ó³ÖĞøµôÑªBuff()
 
 		CHECK_CO_RET_FALSE(refÌ¦Âû.m_upÌ¦Âû);
 
-		refÌ¦Âû.m_upÌ¦Âû->m_i16°ë¾¶ += 2;
+		refÌ¦Âû.m_upÌ¦Âû->m_i16°ë¾¶ += 1;
 		EntitySystem::BroadcastEntityÌ¦Âû°ë¾¶(refÌ¦Âû);
 
-		if (refÌ¦Âû.m_upÌ¦Âû->m_i16°ë¾¶ > Ì¦ÂûComponent::MAX°ë¾¶)
+		if (refÌ¦Âû.m_upÌ¦Âû->m_i16°ë¾¶ >= Ì¦ÂûComponent::MAX°ë¾¶)
 		{
 			co_return false;
 		}

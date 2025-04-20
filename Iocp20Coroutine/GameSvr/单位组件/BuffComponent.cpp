@@ -12,9 +12,9 @@ BuffComponent::BuffComponent(Entity& ref) :m_refEntity(ref)
 {
 }
 
-CoTaskBool BuffComponent::Co定时改数值(std::chrono::system_clock::duration dura间隔, int16_t i16变化)
+CoTaskBool BuffComponent::Co定时改数值(std::chrono::system_clock::duration dura间隔, int16_t i16变化, FunCancel& funCancel)
 {
-	while (!co_await CoTimer::Wait(dura间隔, m_funCancel))
+	while (!co_await CoTimer::Wait(dura间隔, funCancel))
 	{
 		CHECK_CO_RET_FALSE(m_refEntity.m_spDefence);
 		if (m_refEntity.IsDead())
@@ -32,9 +32,11 @@ BuffComponent& BuffComponent::AddComponent(Entity& refEntity)
 	return *refEntity.m_upBuff;
 }
 
-void BuffComponent::加属性(BuffId idBuff表, 属性类型 属性类型, float f变化, std::chrono::system_clock::duration dura删除)
+void BuffComponent::加属性(BuffId idBuff表)
 {
-	auto& refMap属性 = m_map属性数值[属性类型];
+	单位::Buff配置 buff配置;
+	CHECK_RET_VOID(单位::FindBuff配置(idBuff表, buff配置));
+	auto& refMap属性 = m_map属性数值[buff配置.属性];
 	auto iterOld属性 = refMap属性.find(idBuff表);
 	float fOld变化 = 0;
 	if (iterOld属性 != refMap属性.end())
@@ -42,15 +44,15 @@ void BuffComponent::加属性(BuffId idBuff表, 属性类型 属性类型, float f变化, std:
 		fOld变化 = iterOld属性->second.变化;
 		refMap属性.erase(iterOld属性);
 	}
-	auto [pair, ok] = refMap属性.insert({ idBuff表, {f变化} });
+	auto [pair, ok] = refMap属性.insert({ idBuff表, {buff配置.f变化值} });
 	CHECK_RET_VOID(ok);
-	[属性类型, idBuff表, &refMap属性, this, dura删除](FunCancel& fun)->CoTaskBool
+	[buff配置, idBuff表, &refMap属性, this](FunCancel& fun)->CoTaskBool
 		{
-			const auto local属性类型 = 属性类型;
+			const auto local属性类型 = buff配置.属性;
 			const auto idBuff表Local = idBuff表;
 			auto& refEntity = *this;
 			auto& refMap属性Local = refMap属性;
-			if (co_await CoTimer::Wait(dura删除, fun))
+			if (co_await CoTimer::Wait(buff配置.dura间隔, fun))
 				co_return true;
 
 			const auto sizeErase = refMap属性Local.erase(idBuff表Local);//销毁整个协程，下面代码只能调用局部变量
@@ -59,9 +61,9 @@ void BuffComponent::加属性(BuffId idBuff表, 属性类型 属性类型, float f变化, std:
 			co_return true;
 		}(pair->second.funCancel).RunNew();
 
-		if (f变化 != fOld变化)
+		if (buff配置.f变化值 != fOld变化)
 		{
-			On属性变化(属性类型);
+			On属性变化(buff配置.属性);
 		}
 }
 
@@ -90,18 +92,33 @@ float BuffComponent::属性(属性类型 属性) const
 void BuffComponent::定时改数值(const BuffId id)
 {
 	using namespace std;
-    单位::Buff配置 buff配置;
+	单位::Buff配置 buff配置;
 	CHECK_RET_VOID(单位::FindBuff配置(id, buff配置));
-	Co定时改数值(buff配置.dura间隔, (int16_t)buff配置.f变化值).RunNew();
+	删Buff(id);
+	Co定时改数值(buff配置.dura间隔, (int16_t)buff配置.f变化值, m_mapFunCancel[id]).RunNew();
+}
+
+void BuffComponent::删Buff(BuffId id)
+{
+	auto iterFind = m_mapFunCancel.find(id);
+	if (iterFind != m_mapFunCancel.end() && iterFind->second)
+	{
+		iterFind->second();
+		iterFind->second = nullptr;
+	}
 }
 
 void BuffComponent::OnDestroy()
 {
-	if (m_funCancel)
+	for (auto& [id, refFunCancel] : m_mapFunCancel)
 	{
-		m_funCancel();
-		m_funCancel = nullptr;
+		if (refFunCancel)
+		{
+			refFunCancel();
+			refFunCancel = nullptr;
+		}
 	}
+	m_mapFunCancel.clear();
 
 	m_map属性数值.clear();
 }
