@@ -11,11 +11,11 @@ class BuffComponent
 public:
 	BuffComponent(Entity& ref);
 	static BuffComponent& AddComponent(Entity& refEntity);
+	void OnDestroy();
+
 	void 加属性(BuffId idBuff表, 属性类型 属性类型, float f变化, std::chrono::system_clock::duration dura删除);
 	float 属性(属性类型 属性类型)const;
-	void 定时回血();
 	void 定时改数值(const BuffId id);
-	void OnDestroy();
 private:
 	void On属性变化(属性类型 属性类型);
 	CoTaskBool Co定时改数值(std::chrono::system_clock::duration dura间隔, int16_t i16变化);

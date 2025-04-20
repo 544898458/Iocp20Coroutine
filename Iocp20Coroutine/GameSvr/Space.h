@@ -6,6 +6,8 @@
 #include "SpEntity.h"
 #include "Entity.h"
 #include "SpSpace.h"
+#include "枚举/单位类型.h"
+
 class CrowdToolState;
 struct 副本配置
 {

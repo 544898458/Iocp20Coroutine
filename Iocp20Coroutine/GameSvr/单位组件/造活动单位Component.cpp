@@ -6,6 +6,7 @@
 #include "单位.h"
 #include "../CoRoutine/CoRpc.h"
 #include "../CoRoutine/CoTimer.h"
+#include "../枚举/单位类型.h"
 #include "AiCo.h"
 #include "AttackComponent.h"
 #include "DefenceComponent.h"
@@ -14,6 +15,7 @@
 #include "EntitySystem.h"
 #include "BuildingComponent.h"
 #include "AoiComponent.h"
+
 
 void 造活动单位Component::AddComponent(Entity& refEntity)
 {

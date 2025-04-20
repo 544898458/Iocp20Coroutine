@@ -1,9 +1,11 @@
 #include "pch.h"
-#include "离开菌毯就持续掉血Component.h"
+#include "无苔蔓就持续掉血Component.h"
 #include "苔蔓Component.h"
 #include "Entity.h"
 #include "../../CoRoutine/CoTimer.h"
 #include "../EntitySystem.h"
+#include "BuffComponent.h"
+#include "../枚举/BuffId.h"
 
 void 无苔蔓就持续掉血Component::AddComponent(Entity& refEntity)
 {
@@ -13,26 +15,17 @@ void 无苔蔓就持续掉血Component::AddComponent(Entity& refEntity)
 
 无苔蔓就持续掉血Component::无苔蔓就持续掉血Component(Entity& ref) :m_refEntity(ref)
 {
-	Co苔蔓扩张().RunNew();
+	Co反复加持续掉血Buff().RunNew();
 }
 
-CoTaskBool 无苔蔓就持续掉血Component::Co苔蔓扩张()
+CoTaskBool 无苔蔓就持续掉血Component::Co反复加持续掉血Buff()
 {
 	using namespace std;
 	while (!co_await CoTimer::Wait(5s, m_funCancel))
 	{
-		CHECK_WP_CO_RET_FALSE(m_wp苔蔓);
+		CHECK_CO_RET_FALSE(m_refEntity.m_upBuff);
 		auto& ref苔蔓 = *m_wp苔蔓.lock();
-
-		CHECK_CO_RET_FALSE(ref苔蔓.m_up苔蔓);
-
-		ref苔蔓.m_up苔蔓->m_i16半径 += 2;
-		EntitySystem::BroadcastEntity苔蔓半径(ref苔蔓);
-
-		if (ref苔蔓.m_up苔蔓->m_i16半径 > 苔蔓Component::MAX半径)
-		{
-			co_return false;
-		}
+		m_refEntity.m_upBuff->定时改数值(离开苔蔓的虫建筑持续扣血);
 	}
 	co_return false;
 }

@@ -519,6 +519,7 @@
     <ClInclude Include="单位组件\飞向目标Component.h" />
     <ClInclude Include="多人战局.h" />
     <ClInclude Include="枚举\BuffId.h" />
+    <ClInclude Include="枚举\单位类型.h" />
     <ClInclude Include="枚举\属性类型.h" />
   </ItemGroup>
   <ItemGroup>

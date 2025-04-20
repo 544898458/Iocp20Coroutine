@@ -4,6 +4,7 @@
 #include "EntitySystem.h"
 #include "GameSvrSession.h"
 #include "../IocpNetwork/StrConv.h"
+#include "枚举/BuffId.h"
 #include <fstream>
 #include "单位组件/PlayerComponent.h"
 #include "单位组件/资源Component.h"
@@ -675,7 +676,7 @@ WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, 
 
 		if (单位::Is虫(类型))
 		{
-			spNewEntity->m_upBuff->定时回血();
+			spNewEntity->m_upBuff->定时改数值(虫持续加血);
 		}
 	}
 
@@ -707,6 +708,7 @@ bool Space::可放置建筑(const Position& refPos, float f半边长)
 		auto& refEntity = *kv.second;
 		if (!EntitySystem::Is建筑(refEntity))
 			continue;
+
 		const auto& refPosOld = refEntity.Pos();
 		bool CrowdTool判断单位重叠(const Position & refPosOld, const Position & refPosNew, const float f半边长);
 		if (CrowdTool判断单位重叠(refPos, refPosOld, f半边长))

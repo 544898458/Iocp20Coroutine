@@ -632,6 +632,9 @@
     <ClInclude Include="枚举\属性类型.h">
       <Filter>枚举</Filter>
     </ClInclude>
+    <ClInclude Include="枚举\单位类型.h">
+      <Filter>枚举</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\websocketfiles-master\src\string_helper.inl">

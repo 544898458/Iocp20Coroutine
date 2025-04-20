@@ -22,7 +22,7 @@
 #include "走Component.h"
 #include "AoiComponent.h"
 #include "BuffComponent.h"
-#include "离开菌毯就持续掉血Component.h"
+#include "无苔蔓就持续掉血Component.h"
 
 void 造建筑Component::AddComponent(Entity& refEntity)
 {

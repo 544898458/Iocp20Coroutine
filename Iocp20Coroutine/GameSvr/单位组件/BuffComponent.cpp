@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "../枚举/BuffId.h"
+#include "../枚举/属性类型.h"
 #include "BuffComponent.h"
 #include "DefenceComponent.h"
 #include "走Component.h"
@@ -86,18 +87,12 @@ float BuffComponent::属性(属性类型 属性) const
 	return 属性值;
 }
 
-void BuffComponent::定时回血()
-{
-	using namespace std;
-	Co定时改数值(2s, 1).RunNew();
-}
-
 void BuffComponent::定时改数值(const BuffId id)
 {
 	using namespace std;
     单位::Buff配置 buff配置;
 	CHECK_RET_VOID(单位::FindBuff配置(id, buff配置));
-	Co定时改数值(2s, 1).RunNew();
+	Co定时改数值(buff配置.dura间隔, (int16_t)buff配置.f变化值).RunNew();
 }
 
 void BuffComponent::OnDestroy()

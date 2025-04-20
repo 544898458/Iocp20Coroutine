@@ -13,10 +13,10 @@ void 苔蔓扩张Component::AddComponent(Entity& refEntity)
 
 苔蔓扩张Component::苔蔓扩张Component(Entity& ref) :m_refEntity(ref)
 {
-	Co苔蔓扩张().RunNew();
+	Co反复加持续掉血Buff().RunNew();
 }
 
-CoTaskBool 苔蔓扩张Component::Co苔蔓扩张()
+CoTaskBool 苔蔓扩张Component::Co反复加持续掉血Buff()
 {
 	using namespace std;
 	while (!co_await CoTimer::Wait(5s, m_funCancel))

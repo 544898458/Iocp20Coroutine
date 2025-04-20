@@ -1,6 +1,8 @@
 ﻿#include "pch.h"
 #include "单位.h"
 #include "枚举/BuffId.h"
+#include "枚举/属性类型.h"
+#include "枚举/单位类型.h"
 #include <unordered_map>
 
 #define YAML_CPP_STATIC_DEFINE
@@ -263,7 +265,7 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::Buff配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["属性"].as<属性类型>(), refNode["变化值"].as<float>(), std::chrono::milliseconds(refNode["间隔时长"].as<int16_t>())};
+			rhs = { refNode["属性"].as<属性类型>(), refNode["变化值"].as<float>(), std::chrono::milliseconds(refNode["间隔时长"].as<int16_t>()) };
 			return true;
 		}
 	};
@@ -282,7 +284,7 @@ namespace 单位
 	std::unordered_map<BuffId, Buff配置> g_mapBuff配置;
 
 	template<typename K, typename T>
-	bool 读配置文件(const std::string& strPathName, std::unordered_map<K, T>& map)
+	bool 读配置文件(const std::string& strPathName, std::unordered_map<K, T>& map, const std::string& strKeyName = "类型")
 	{
 		try {
 			std::ifstream file(strPathName);
@@ -298,7 +300,7 @@ namespace 单位
 			{
 				auto line = *it;
 				const auto obj = line.as<T>();
-				const auto 类型 = line["类型"].as<K>();
+				const auto 类型 = line[strKeyName].as<K>();
 				if (map.end() != map.find(类型))
 				{
 					LOG(ERROR) << "重复的类型:" << 类型;
@@ -326,7 +328,7 @@ namespace 单位
 		CHECK_RET_FALSE(读配置文件("配置/怪.yaml", g_map怪配置));
 		CHECK_RET_FALSE(读配置文件("配置/单位属性等级.yaml", g_map单位属性等级配置));
 		CHECK_RET_FALSE(读配置文件("配置/单位解锁.yaml", g_map单位解锁配置));
-		CHECK_RET_FALSE(读配置文件("配置/Buff.yaml", g_mapBuff配置));
+		CHECK_RET_FALSE(读配置文件("配置/Buff.yaml", g_mapBuff配置, "ID"));
 		return true;
 	}
 	template<typename K, typename V>
@@ -384,7 +386,7 @@ namespace 单位
 	bool Is虫(const 单位类型 单位)
 	{
 		单位配置 配置;
-		if(!Find单位配置(单位, 配置))
+		if (!Find单位配置(单位, 配置))
 			return false;
 
 		return 虫 == 配置.种族;

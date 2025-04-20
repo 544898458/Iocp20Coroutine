@@ -3,9 +3,11 @@
 #include "AoiComponent.h"
 #include "BuffComponent.h"
 #include "Entity.h"
+#include "DefenceComponent.h"
 #include "../../CoRoutine/CoTimer.h"
 #include "../EntitySystem.h"
-#include "DefenceComponent.h"
+#include "../枚举/BuffId.h"
+#include "../枚举/属性类型.h"
 
 void 苔蔓Component::AddComponent(Entity& refEntity)
 {
