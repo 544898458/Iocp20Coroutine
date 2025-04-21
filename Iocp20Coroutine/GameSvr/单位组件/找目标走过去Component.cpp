@@ -19,8 +19,7 @@
 
 void 找目标走过去Component::AddComponent(Entity& refEntity)
 {
-	CHECK_VOID(!refEntity.m_up找目标走过去);
-	refEntity.m_up找目标走过去.reset(new 找目标走过去Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up找目标走过去, new 找目标走过去Component(refEntity));
 }
 
 float 找目标走过去Component::攻击距离(const Entity& refTarget) const
@@ -215,7 +214,7 @@ bool 找目标走过去Component::检查穿墙(const Entity& refEntity)
 	return true;
 }
 
-void 找目标走过去Component::TryCancel(const bool bDestroy)
+void 找目标走过去Component::OnEntityDestroy(const bool bDestroy)
 {
 	if (bDestroy)
 	{

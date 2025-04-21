@@ -11,7 +11,7 @@ class 医疗兵Component
 public:
 	static void AddComponent(Entity& refEntity);
 	医疗兵Component(Entity& refEntity);
-	void TryCancel();
+	void OnEntityDestroy(const bool bDestroy);
 private:
 	bool 可以治疗();
 	CoTask<std::tuple<bool, bool>> Co治疗(const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去);

@@ -209,11 +209,11 @@ void Entity::OnDestroy()
 	//if (m_upAttack)
 	//	m_upAttack->OnEntityDestroy(true);
 
-	if (m_up医疗兵)
-		m_up医疗兵->TryCancel();
+	//if (m_up医疗兵)
+	//	m_up医疗兵->TryCancel();
 
-	if (m_up找目标走过去)
-		m_up找目标走过去->TryCancel(true);
+	//if (m_up找目标走过去)
+	//	m_up找目标走过去->TryCancel(true);
 
 
 	if (m_sp造活动单位)

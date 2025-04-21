@@ -26,7 +26,7 @@ public:
 	bool m_b原地坚守 = false;//Hold Position
 	using Fun空闲走向目标 = std::function<Position(const Position&)>;
 	Fun空闲走向目标 m_fun空闲走向此处;
-	void TryCancel(const bool bDestroy = false);
+	void OnEntityDestroy(const bool bDestroy = false);
 	bool 检查穿墙(const Entity& refEntity);
 
 private:

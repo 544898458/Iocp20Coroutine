@@ -26,9 +26,8 @@
 
 void 医疗兵Component::AddComponent(Entity& refEntity)
 {
-	CHECK_VOID(!refEntity.m_up医疗兵);
 	找目标走过去Component::AddComponent(refEntity);
-	refEntity.m_up医疗兵.reset(new 医疗兵Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up医疗兵,new 医疗兵Component(refEntity));
 }
 
 
@@ -81,7 +80,7 @@ WpEntity 医疗兵Component::Get最近的可治疗友方单位()
 }
 
 
-void 医疗兵Component::TryCancel()
+void 医疗兵Component::OnEntityDestroy(const bool bDestroy)
 {
 	if (m_cancel治疗)
 	{
