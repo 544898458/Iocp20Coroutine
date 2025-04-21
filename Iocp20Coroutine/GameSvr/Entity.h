@@ -4,6 +4,7 @@
 #include "MyMsgQueue.h"
 #include "SpEntity.h"
 #include "单位.h"
+#include "../proxy/proxy.h"
 
 class Space;
 class GameSvrSession;
@@ -34,6 +35,11 @@ class 苔蔓Component;
 class 苔蔓扩张Component;
 class 无苔蔓就持续掉血Component;
 class 太岁Component;
+
+PRO_DEF_MEM_DISPATCH(EntityDestroy, OnEntityDestroy);
+struct Component : pro::facade_builder
+	::add_convention<EntityDestroy, void(bool)>
+	::build {};
 
 
 class Entity final : public std::enable_shared_from_this<Entity>//必须公有继承，否则无效
@@ -73,6 +79,25 @@ public:
 	WpEntity Get最近的Entity(FindType bFindEnemy, std::function<bool(const Entity&)> fun符合条件);
 	WpEntity Get最近的Entity(FindType findType);
 	WpEntity Get最近的Entity(const FindType bFindEnemy, const 单位类型 目标类型);
+	template<class T>
+	bool AddComponentOnDestroy(std::unique_ptr<T> Entity::* pMem, T* pNew)
+	{
+		CHECK_RET_FALSE(pNew);
+		const std::string str组件类名 = typeid(T).name();
+
+		std::unique_ptr<T>& up成员 = this->*pMem;
+		if (up成员)
+		{
+			LOG(ERROR) << "不能重复加" << str组件类名;
+			_ASSERT(!"不能重复加组件");
+			return false;// *refEntity.m_upAttack;
+		}
+		up成员.reset(pNew);
+		CHECK_RET_FALSE(m_mapComponentOnEntityDstroy.end() == m_mapComponentOnEntityDstroy.find(str组件类名));
+		//pro::proxy<Component> pro = pro::make_proxy<Component>(up成员.get());
+		m_mapComponentOnEntityDstroy.insert({ str组件类名, pNew });
+		return true;
+	}
 
 	int m_eulerAnglesY = 0;
 	//CoTask<int> m_coWaitDelete;
@@ -89,7 +114,7 @@ public:
 	//静态ECS，没有基类强转子类
 	std::shared_ptr<PlayerComponent> m_spPlayer;
 	std::shared_ptr<PlayerNickNameComponent> m_spPlayerNickName;
-	std::shared_ptr<AttackComponent> m_spAttack;
+	std::unique_ptr<AttackComponent> m_upAttack;
 	std::shared_ptr<DefenceComponent> m_spDefence;
 	std::shared_ptr<MonsterComponent> m_spMonster;
 	std::shared_ptr<BuildingComponent> m_spBuilding;
@@ -112,7 +137,7 @@ public:
 	std::unique_ptr<苔蔓扩张Component> m_up苔蔓扩张;
 	std::unique_ptr<无苔蔓就持续掉血Component> m_up无苔蔓就持续掉血;
 	std::unique_ptr<太岁Component> m_up太岁;
-	
+
 
 	/// <summary>
 	/// 地堡或运输机
@@ -122,6 +147,7 @@ public:
 	Space& m_refSpace;
 private:
 	Position m_Pos;
+	std::map<std::string, pro::proxy<Component> > m_mapComponentOnEntityDstroy;
 
 };
 

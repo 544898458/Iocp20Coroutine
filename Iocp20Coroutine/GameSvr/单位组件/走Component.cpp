@@ -24,8 +24,8 @@ void 走Component::AddComponent(Entity& refEntity)
 	refEntity.m_sp走 = std::make_shared<走Component, Entity&>(refEntity);
 	//float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z};
 	//int CrowToolAddAgent(float arrF[]);
-	//refEntity.m_spAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);
-	//m_mapEntityId[refEntity.m_spAttack->m_idxCrowdAgent] = refEntity.Id;
+	//refEntity.m_upAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);
+	//m_mapEntityId[refEntity.m_upAttack->m_idxCrowdAgent] = refEntity.Id;
 }
 
 走Component::走Component(Entity& refEntity) :m_refEntity(refEntity)
@@ -259,7 +259,7 @@ void 走Component::WalkToPos手动控制(const Position& posTarget)
 {
 	//void CrowdToolSetMoveTarget(const float* p, const int idx);
 	//float arrFloat[] = { posTarget.x,0,posTarget.z };
-	//CrowdToolSetMoveTarget(arrFloat, refEntity.m_spAttack->m_idxCrowdAgent);
+	//CrowdToolSetMoveTarget(arrFloat, refEntity.m_upAttack->m_idxCrowdAgent);
 	//return;
 	if (m_refEntity.IsDead())
 	{
@@ -273,10 +273,10 @@ void 走Component::WalkToPos手动控制(const Position& posTarget)
 
 	m_coWalk.Run();
 	_ASSERT(m_coWalk.Finished());//20240205
-	//if (m_refEntity.m_spAttack)
+	//if (m_refEntity.m_upAttack)
 	//{
-	//	m_refEntity.m_spAttack->TryCancel();
-	//	//_ASSERT(m_refEntity.m_spAttack->m_coAttack.Finished());//20240205
+	//	m_refEntity.m_upAttack->TryCancel();
+	//	//_ASSERT(m_refEntity.m_upAttack->m_coAttack.Finished());//20240205
 	//}
 	EntitySystem::停止攻击和治疗(m_refEntity);
 	/*m_coStop = false;*/
@@ -310,8 +310,8 @@ void 走Component::TryCancel()
 
 void 走Component::走进地堡(WpEntity wpEntity地堡)
 {
-	//if (m_refEntity.m_spAttack)
-	//	m_refEntity.m_spAttack->TryCancel();
+	//if (m_refEntity.m_upAttack)
+	//	m_refEntity.m_upAttack->TryCancel();
 
 	//if (m_refEntity.m_up找目标走过去)
 	//	m_refEntity.m_up找目标走过去->TryCancel();
@@ -338,8 +338,8 @@ void 走Component::走进地堡(WpEntity wpEntity地堡)
 		return;
 	}
 
-	//if (m_refEntity.m_spAttack)
-	//	m_refEntity.m_spAttack->TryCancel();
+	//if (m_refEntity.m_upAttack)
+	//	m_refEntity.m_upAttack->TryCancel();
 	EntitySystem::停止攻击和治疗(m_refEntity);
 	Cancel所有包含走路的协程(m_refEntity);
 	_ASSERT(!m_cancel);
@@ -352,7 +352,7 @@ CoTaskBool 走Component::Co走进地堡(WpEntity wpEntity地堡)
 {
 	KeepCancel kc(m_cancel);
 
-	if (m_refEntity.m_spAttack)
+	if (m_refEntity.m_upAttack)
 	{
 		switch (m_refEntity.m_类型)
 		{

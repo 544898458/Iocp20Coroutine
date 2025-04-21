@@ -13,7 +13,6 @@ public:
 	void OnDestroy();
 	void OnBeforeDelayDelete();
 	void 进(Space& refSpace, Entity& refEntity);
-	void Update();
 	void 全都出地堡();
 	Entity& m_refEntity;
 	std::list<SpEntity> m_listSpEntity;

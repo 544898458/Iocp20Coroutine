@@ -131,11 +131,6 @@ bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
 //主线程单线程执行
 void Entity::Update()
 {
-	if (m_spAttack)
-		m_spAttack->Update();
-
-	if (m_sp地堡)
-		m_sp地堡->Update();
 }
 
 bool Entity::IsEnemy(const Entity& refEntity)
@@ -203,12 +198,16 @@ void Entity::OnDestroy()
 		LOG_IF(ERROR, 1 != sizeCount) << "";
 		_ASSERT(1 == sizeCount);
 	}
-	//应该用proxy库同意调用下面的，免得忘了
+
 	走Component::Cancel所有包含走路的协程(*this, true);
 
+	for (auto& [id, proComponent] : m_mapComponentOnEntityDstroy)
+	{
+		proComponent->OnEntityDestroy(true);
+	}
 
-	if (m_spAttack)
-		m_spAttack->TryCancel(true);
+	//if (m_upAttack)
+	//	m_upAttack->OnEntityDestroy(true);
 
 	if (m_up医疗兵)
 		m_up医疗兵->TryCancel();

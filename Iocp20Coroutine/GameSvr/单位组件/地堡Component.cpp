@@ -61,15 +61,6 @@ void 地堡Component::进(Space& refSpace, Entity& refEntity)
 	EntitySystem::BroadcastEntity描述(m_refEntity, std::format("地堡内有{0}人", m_listSpEntity.size()));
 }
 
-void 地堡Component::Update()
-{
-	for (auto& sp : m_listSpEntity) 
-	{
-		if (sp->m_spAttack)
-			sp->m_spAttack->Update();
-	}
-}
-
 void 地堡Component::全都出地堡()
 {
 	auto list = m_listSpEntity;

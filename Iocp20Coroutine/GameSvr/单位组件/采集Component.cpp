@@ -150,7 +150,7 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 			}
 
 			//离基地太远，走向基地
-			//m_refEntity.m_spAttack->TryCancel();
+			//m_refEntity.m_upAttack->TryCancel();
 			EntitySystem::停止攻击和治疗(m_refEntity);
 
 			CHECK_CO_RET_FALSE(m_refEntity.m_sp走);
@@ -173,7 +173,7 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 				if (!m_refEntity.DistanceLessEqual(*spEntity资源, m_refEntity.攻击距离()))
 				{
 					EntitySystem::BroadcastEntity描述(m_refEntity, std::format("走向{0}", spEntity资源->m_类型 == 晶体矿 ? "晶体矿" : "燃气矿"));
-					//m_refEntity.m_spAttack->TryCancel();
+					//m_refEntity.m_upAttack->TryCancel();
 
 					CHECK_CO_RET_FALSE(m_refEntity.m_sp走);
 					if (co_await m_refEntity.m_sp走->WalkToTarget(wp目标资源.lock(), m_TaskCancel.cancel, false))

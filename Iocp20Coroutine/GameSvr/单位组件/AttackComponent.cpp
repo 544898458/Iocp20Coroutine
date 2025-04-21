@@ -23,16 +23,9 @@
 extern std::unordered_map<int, uint64_t> m_mapEntityId;
 AttackComponent& AttackComponent::AddComponent(Entity& refEntity)
 {
-	if (refEntity.m_spAttack)
-	{
-		LOG(ERROR) << "不能重复加AttackComponent";
-		_ASSERT(!"不能重复加AttackComponent");
-		return *refEntity.m_spAttack;
-	}
-
 	找目标走过去Component::AddComponent(refEntity);
-	refEntity.m_spAttack = std::make_shared<AttackComponent, Entity&>(refEntity);
-	return *refEntity.m_spAttack;
+	refEntity.AddComponentOnDestroy(&Entity::m_upAttack, new AttackComponent(refEntity));
+	return *refEntity.m_upAttack;
 }
 
 using namespace std;
@@ -49,7 +42,7 @@ AttackComponent::AttackComponent(Entity& refEntity) :
 	);
 }
 
-void AttackComponent::TryCancel(const bool bDestroy)
+void AttackComponent::OnEntityDestroy(const bool bDestroy)
 {
 	if (m_cancelAttack)
 	{
@@ -57,10 +50,6 @@ void AttackComponent::TryCancel(const bool bDestroy)
 		m_cancelAttack();
 		m_cancelAttack = nullptr;
 	}
-}
-
-void AttackComponent::Update()
-{
 }
 
 bool AttackComponent::可以攻击()

@@ -181,7 +181,7 @@ CoTaskBool 造建筑Component::Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel)
 		PlayerComponent::Send资源(m_refEntity);
 	}
 
-	if (m_refEntity.m_spAttack)
+	if (m_refEntity.m_upAttack)
 	{
 		switch (m_refEntity.m_类型)
 		{

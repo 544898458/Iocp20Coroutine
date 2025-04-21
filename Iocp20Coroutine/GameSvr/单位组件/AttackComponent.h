@@ -9,8 +9,7 @@ class AttackComponent final
 {
 public:
 	AttackComponent(Entity& refEntity);
-	void TryCancel(const bool bDestroy = false);
-	void Update();
+	void OnEntityDestroy(const bool bDestroy = false);
 	CoTaskBool CoAttack目标(WpEntity wpDefencer, FunCancel& cancel);
 	CoTaskBool CoAttack位置(const Position pos, const float f目标建筑半边长, FunCancel& cancel);
 	void 处理仇恨目标(WpEntity& wpEntity, bool& ref仇恨目标);

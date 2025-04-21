@@ -18,12 +18,12 @@ void MonsterComponent::AddComponent(Entity& refEntity)
 
 MonsterComponent::MonsterComponent(Entity& refThis)
 {
-	if (!refThis.m_spAttack)
+	if (!refThis.m_upAttack)
 	{
-		LOG(ERROR) << "m_spAttack";
+		LOG(ERROR) << "m_upAttack";
 		return;
 	}
-	//m_coIdle = AiCo::Idle(refThis.shared_from_this(), refThis.m_spAttack->m_cancel);
+	//m_coIdle = AiCo::Idle(refThis.shared_from_this(), refThis.m_upAttack->m_cancel);
 	//m_coIdle.Run();
 }
 
