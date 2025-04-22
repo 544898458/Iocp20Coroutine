@@ -238,7 +238,7 @@
   空闲动作: 平常状态
   类型: 305
   选中音效: 音效/BUTTON
-- PrefabPathName: 建筑/孵化场
+- PrefabPathName: 建筑/虫巢
   str阵亡动作: 1
   str阵亡音效: 音效/ZBldgDth
   动画节点路径: hatchery_skin

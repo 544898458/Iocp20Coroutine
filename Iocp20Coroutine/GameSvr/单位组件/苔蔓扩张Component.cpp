@@ -7,8 +7,7 @@
 
 void 苔蔓扩张Component::AddComponent(Entity& refEntity)
 {
-	LOG_IF(ERROR, refEntity.m_up苔蔓扩张) << "m_upm_up苔蔓扩张";
-	refEntity.m_up苔蔓扩张.reset(new 苔蔓扩张Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up苔蔓扩张,new 苔蔓扩张Component(refEntity));
 }
 
 苔蔓扩张Component::苔蔓扩张Component(Entity& ref) :m_refEntity(ref)
@@ -37,7 +36,7 @@ CoTaskBool 苔蔓扩张Component::Co反复加持续掉血Buff()
 	co_return false;
 }
 
-void 苔蔓扩张Component::TryCancel()
+void 苔蔓扩张Component::OnEntityDestroy(const bool bDestroy)
 {
 	if (m_funCancel)
 	{

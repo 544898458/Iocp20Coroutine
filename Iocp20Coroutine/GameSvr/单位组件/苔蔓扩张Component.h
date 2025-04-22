@@ -7,7 +7,7 @@ class 苔蔓扩张Component
 public:
 	苔蔓扩张Component(Entity&);
 	CoTaskBool Co反复加持续掉血Buff();
-	void TryCancel();
+	void OnEntityDestroy(const bool bDestroy);
 	static void AddComponent(Entity& refEntity);
 	WpEntity m_wp苔蔓;
 

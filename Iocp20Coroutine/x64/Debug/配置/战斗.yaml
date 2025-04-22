@@ -130,7 +130,7 @@
   f攻击距离: 25
   f每帧移动距离: 0.3
   f警戒距离: 35
-  i32攻击: 1
+  i32攻击: 0
   str前摇动作: idle
   str攻击动作: attack_loop
   str攻击音效: 音效/pshield

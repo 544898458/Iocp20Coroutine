@@ -249,8 +249,8 @@ void Entity::OnDestroy()
 	if (m_upBuff)
 		m_upBuff->OnDestroy();
 
-	if (m_upÌ¦ÂûÀ©ÕÅ)
-		m_upÌ¦ÂûÀ©ÕÅ->TryCancel();
+	//if (m_upÌ¦ÂûÀ©ÕÅ)
+	//	m_upÌ¦ÂûÀ©ÕÅ->TryCancel();
 
 	if (m_upÌ¦Âû)
 		m_upÌ¦Âû->TryCancel();
