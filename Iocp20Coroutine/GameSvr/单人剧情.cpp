@@ -124,7 +124,7 @@ namespace 单人剧情
 			auto wp视口 = wpSession.lock()->m_wp视口;
 			CHECK_WP_CO_RET_0(wp视口);
 			auto& ref视口 = *wp视口.lock();
-			//SpEntity sp工程车 = refSpace.造活动单位(wp视口.lock()->m_spPlayer, strPlayerNickName, { 5,10 }, 配置, 类型);
+			//SpEntity sp工程车 = refSpace.造活动单位(wp视口.lock()->m_upPlayer, strPlayerNickName, { 5,10 }, 配置, 类型);
 			refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::工程车, { 5, 10 }, true);
 			资源Component::Add(refSpace, 晶体矿, { 20, 10 });
 		}
@@ -319,7 +319,7 @@ namespace 单人剧情
 			auto wp视口 = wpSession.lock()->m_wp视口;
 			CHECK_WP_CO_RET_0(wp视口);
 			auto& ref视口 = *wp视口.lock();
-			//SpEntity sp工程车 = refSpace.造活动单位(wp视口.lock()->m_spPlayer, strPlayerNickName, { 5,10 }, 配置, 类型);
+			//SpEntity sp工程车 = refSpace.造活动单位(wp视口.lock()->m_upPlayer, strPlayerNickName, { 5,10 }, 配置, 类型);
 			refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::工虫, { 5, 10 }, true);
 			资源Component::Add(refSpace, 晶体矿, { 20, 10 });
 		}

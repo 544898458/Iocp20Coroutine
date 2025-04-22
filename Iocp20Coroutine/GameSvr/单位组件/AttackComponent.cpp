@@ -181,7 +181,7 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 			m_refEntity.m_refSpace.AddEntity(spEntity特效, 0);
 			spEntity特效->BroadcastEnter();
 			CHECK_CO_RET_FALSE(m_refEntity.m_up找目标走过去);
-			spEntity特效->CoDelayDelete(m_refEntity.m_up找目标走过去->m_战斗配置.dura开始播放攻击动作 + std::chrono::milliseconds(u16开始伤害)).RunNew();
+			spEntity特效->DelayDelete(m_refEntity.m_up找目标走过去->m_战斗配置.dura开始播放攻击动作 + std::chrono::milliseconds(u16开始伤害));
 		}
 		CHECK_CO_RET_FALSE(m_refEntity.m_up找目标走过去);
 		if (0s < m_refEntity.m_up找目标走过去->m_战斗配置.dura开始播放攻击动作 && co_await CoTimer::Wait(m_refEntity.m_up找目标走过去->m_战斗配置.dura开始播放攻击动作, cancel))
@@ -205,7 +205,7 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 				posTarget, m_refEntity.m_refSpace, 特效, { "爆炸溅射" ,无 ,"特效/黄光爆闪","" });
 			m_refEntity.m_refSpace.AddEntity(spEntity特效, 0);
 			spEntity特效->BroadcastEnter();
-			spEntity特效->CoDelayDelete(1s).RunNew();
+			spEntity特效->DelayDelete(1s);
 		}
 		_ASSERT(m_refEntity.m_upAoi);
 		if (m_refEntity.m_upAoi)

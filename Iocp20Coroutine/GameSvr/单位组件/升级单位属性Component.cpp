@@ -44,7 +44,7 @@ void 升级单位属性Component::AddComponent(Entity& refEntity)
 	refEntity.m_up升级单位属性.reset(new 升级单位属性Component(refEntity));
 }
 
-void 升级单位属性Component::TryCancel()
+void 升级单位属性Component::OnEntityDestroy(const bool bDestroy)
 {
 	if (m_cancel升级单位属性)
 		m_cancel升级单位属性();

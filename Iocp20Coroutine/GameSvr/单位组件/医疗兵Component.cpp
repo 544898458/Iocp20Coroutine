@@ -57,7 +57,7 @@ CoTask<std::tuple<bool, bool>> 医疗兵Component::Co治疗(const Entity& refTarget, 
 	if (!m_refEntity.DistanceLessEqual(refTarget, ref找目标走过去.攻击距离(refTarget)) || !ref找目标走过去.检查穿墙(refTarget))
 		co_return{ false, false };
 
-	走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
+	走Component::Cancel所有包含走路的协程(m_refEntity); //OnEntityDestroy(const bool bDestroy);
 
 	if (co_await Co治疗目标(wpEntity, m_cancel治疗))
 		co_return{ true, false };
@@ -133,7 +133,7 @@ CoTaskBool 医疗兵Component::Co治疗目标(WpEntity wp目标, FunCancel& cancel)
 
 			if (!ref目标.m_upDefence)
 			{
-				LOG(ERROR) << "!ref目标.m_spDefence";
+				LOG(ERROR) << "!ref目标.m_upDefence";
 				break;
 			}
 

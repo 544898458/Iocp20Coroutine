@@ -17,7 +17,11 @@
 	//	LOG(ERROR) << "m_spCrowdToolState";
 	//	return;
 	//}
+	OnEntityDestroy(true);
+}
 
+void 還奀郯結Component::OnEntityDestroy(const bool bDestroy)
+{
 	bool CrowToolRemove郯結(CrowdToolState & ref, const uint32_t u32DtObstacleRef);
 	CrowToolRemove郯結(m_refSpace.GetCrowdToolState(m_refEntity.m_濬倰), m_u32DtObstacleRef);
 }
@@ -29,7 +33,7 @@ bool 還奀郯結Component::AddComponent(Entity& refEntity, float f圉晚酗)
 		_ASSERT(false);
 		return false;
 	}
-	refEntity.m_up還奀郯結 = std::make_shared<還奀郯結Component, Entity&, const float&>(refEntity, f圉晚酗);
+	refEntity.AddComponentOnDestroy(&Entity::m_up還奀郯結, new 還奀郯結Component(refEntity, f圉晚酗));
 	return true;
 }
 

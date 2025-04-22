@@ -24,7 +24,7 @@ public:
 	bool 判断并提示缺少建筑(PlayerGateSession_Game& refGateSession, const 单位类型 类型);
 	void 造兵(PlayerGateSession_Game&, const 单位类型 类型);
 	bool Is幼虫正在蜕变();
-	void TryCancel(Entity& refEntity);
+	void OnEntityDestroy(const bool bDestroy);
 	uint16_t 等待造Count()const;
 	Position m_pos集结点;
 	bool Is幼虫()const;

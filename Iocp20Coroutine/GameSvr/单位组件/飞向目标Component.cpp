@@ -34,6 +34,8 @@ CoTaskBool 飞向目标Component::Co飞向目标遇敌爆炸()
 	单位::战斗配置 配置;
 	CHECK_CO_RET_FALSE(单位::Find战斗配置(m_refEntity.m_类型, 配置));
 
+	using namespace std;
+
 	float f首次移动倍数 = 3.f;
 	while (!co_await CoTimer::WaitNextUpdate(m_funCancel))
 	{
@@ -46,14 +48,14 @@ CoTaskBool 飞向目标Component::Co飞向目标遇敌爆炸()
 			{
 				EntitySystem::Broadcast播放声音(m_refEntity, 配置.str攻击音效);
 				ref目标.m_upDefence->受伤(EntitySystem::升级后攻击(m_refEntity), m_refEntity.Id);
-				m_refEntity.DelayDelete();
+				m_refEntity.DelayDelete(0s);
 				co_return false;
 			}
 		}
 
 		if (!m_refEntity.Pos().DistanceLessEqual(m_pos起始点, m_f最远距离))//超过射程
 		{
-			m_refEntity.DelayDelete();
+			m_refEntity.DelayDelete(0s);
 			co_return false;
 		}
 
@@ -68,6 +70,6 @@ CoTaskBool 飞向目标Component::Co飞向目标遇敌爆炸()
 		m_refEntity.SetPos(posNew);
 		m_refEntity.BroadcastNotifyPos();
 	}
-	m_refEntity.DelayDelete();
+	m_refEntity.DelayDelete(0s);
 	co_return true;
 }

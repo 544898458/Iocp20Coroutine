@@ -38,17 +38,17 @@ bool 资源可采集(WpEntity& refWp目标资源)
 	if (refWp目标资源.expired())
 		return false;
 
-	auto sp资源 = refWp目标资源.lock()->m_up资源;
-	CHECK_FALSE(sp资源);
-	if (sp资源->m_可采集数量 <= 0)
+	auto& ref资源 = *refWp目标资源.lock();
+	CHECK_FALSE(ref资源.m_up资源);
+	if (ref资源.m_up资源->m_可采集数量 <= 0)
 	{
-		refWp目标资源.lock()->CoDelayDelete().RunNew();
+		ref资源.DelayDelete();
 		return false;
 	}
 
 	return true;
 }
-std::tuple<SpEntity, std::shared_ptr<资源Component>> 采集Component::Get目标资源(WpEntity& refWp目标资源)
+WpEntity 采集Component::Get目标资源(WpEntity& refWp目标资源)
 {
 	if (!资源可采集(refWp目标资源))
 	{
@@ -66,9 +66,9 @@ std::tuple<SpEntity, std::shared_ptr<资源Component>> 采集Component::Get目标资源(
 	}
 
 	auto sp目标资源 = refWp目标资源.lock();
-	auto sp资源 = sp目标资源->m_up资源;
-	m_目标资源类型 = sp资源->m_类型;
-	return { sp目标资源 ,sp资源 };
+	CHECK_RET_DEFAULT(sp目标资源->m_up资源);
+	m_目标资源类型 = sp目标资源->m_up资源->m_类型;
+	return sp目标资源;
 }
 
 CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
@@ -126,14 +126,15 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 
 				const auto u32携带矿 = m_u32携带矿;
 				m_u32携带矿 = 0;
-				auto [_, sp资源] = Get目标资源(wp目标资源);
-				if (!sp资源)
+				auto wpEntity资源 = Get目标资源(wp目标资源);
+				if (wpEntity资源.expired())
 				{
 					提醒资源枯竭();
 					co_return false;//目标资源没了
 				}
 
-				if (sp资源->m_类型 == 晶体矿)
+				Entity& ref资源 = *wpEntity资源.lock();
+				if (ref资源.m_类型 == 晶体矿)
 				{
 					//const auto& [stop, _] = co_await AiCo::ChangeMoney(refGateSession, addMoney, true, m_TaskCancel.cancel);
 					//if (stop)
@@ -163,16 +164,17 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 		//还没装满，还要继续去采矿
 		{
 			{
-				auto [spEntity资源, _] = Get目标资源(wp目标资源);
-				if (!spEntity资源)
+				auto wpEntity资源 = Get目标资源(wp目标资源);
+				if (wpEntity资源.expired())
 				{
 					提醒资源枯竭();
 					co_return false;//目标资源没了
 				}
-
-				if (!m_refEntity.DistanceLessEqual(*spEntity资源, m_refEntity.攻击距离()))
+				Entity& ref资源 = *wpEntity资源.lock();
+				if (!m_refEntity.DistanceLessEqual(ref资源, m_refEntity.攻击距离()))
 				{
-					EntitySystem::BroadcastEntity描述(m_refEntity, std::format("走向{0}", spEntity资源->m_类型 == 晶体矿 ? "晶体矿" : "燃气矿"));
+					CHECK_CO_RET_FALSE(ref资源.m_up资源);
+					EntitySystem::BroadcastEntity描述(m_refEntity, std::format("走向{0}", ref资源.m_up资源->m_类型 == 晶体矿 ? "晶体矿" : "燃气矿"));
 					//m_refEntity.m_upAttack->TryCancel();
 
 					CHECK_CO_RET_FALSE(m_refEntity.m_up走);
@@ -188,21 +190,22 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 			if (co_await CoTimer::Wait(1s, m_TaskCancel.cancel))//采矿1个矿耗时
 				co_return true;//中断
 
-			auto [spEntity资源, sp资源] = Get目标资源(wp目标资源);
-			if (!spEntity资源 || !sp资源)
+			auto wpEntity资源 = Get目标资源(wp目标资源);
+			if (wpEntity资源.expired())
 			{
 				提醒资源枯竭();
 				co_return false;//目标资源已采空
 			}
-
-			if (sp资源->m_类型 != m_携带矿类型)
+			Entity& ref资源 = *wpEntity资源.lock();
+			
+			if (ref资源.m_类型 != m_携带矿类型)
 			{
 				m_u32携带矿 = 0;
-				m_携带矿类型 = sp资源->m_类型;
+				m_携带矿类型 = ref资源.m_类型;
 			}
 			if (0 == m_u32携带矿)
 			{
-				switch (sp资源->m_类型)
+				switch (ref资源.m_类型)
 				{
 				case 晶体矿:PlayerComponent::播放声音(m_refEntity, "TSCMin00"); break;
 				case 燃气矿:PlayerComponent::播放声音(m_refEntity, "TSCMin01"); break;
@@ -210,8 +213,9 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 				}
 			}
 
-			--sp资源->m_可采集数量;
-			EntitySystem::BroadcastEntity描述(*spEntity资源, std::format("剩余:{0}", sp资源->m_可采集数量));
+			CHECK_CO_RET_FALSE(ref资源.m_up资源);
+			--ref资源.m_up资源->m_可采集数量;
+			EntitySystem::BroadcastEntity描述(ref资源, std::format("剩余:{0}", ref资源.m_up资源->m_可采集数量));
 
 			++m_u32携带矿;
 			EntitySystem::BroadcastEntity描述(m_refEntity, std::format("已采集{0}", m_u32携带矿));
@@ -230,7 +234,7 @@ void 采集Component::提醒资源枯竭()
 }
 void 采集Component::AddComponent(Entity& refEntity)
 {
-	refEntity.m_up采集 = std::make_shared<采集Component, Entity&>(refEntity);
+	refEntity.AddComponentOnDestroy(&Entity::m_up采集, new 采集Component(refEntity));
 }
 
 bool 采集Component::正在采集(Entity& refEntity)
@@ -241,3 +245,7 @@ bool 采集Component::正在采集(Entity& refEntity)
 	return !refEntity.m_up采集->m_TaskCancel.co.Finished();
 }
 
+void 采集Component::OnEntityDestroy(const bool bDestroy)
+{
+	m_TaskCancel.TryCancel();
+}

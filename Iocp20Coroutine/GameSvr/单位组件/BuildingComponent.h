@@ -13,7 +13,7 @@ public:
 	static void AddComponent(Entity& refThis, float f半边长);
 	void StartCo建造过程();
 	void 直接造好();
-	void TryCancel();
+	void OnEntityDestroy(const bool bDestroy);
 	int m_n建造进度百分比 = 0;
 	bool 已造好()const;
 	static float 建筑半边长(const Entity& refEntity);

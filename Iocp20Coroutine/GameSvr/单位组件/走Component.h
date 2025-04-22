@@ -13,7 +13,7 @@ public:
 	void WalkToPos手动控制(const Position& posTarget);
 	void WalkToTarget(SpEntity spTarget);
 	void WalkToPos(const Position& posTarget);
-	void TryCancel();
+	void OnEntityDestroy(const bool bDestroy);
 	void 走进地堡(WpEntity wpEntity地堡);
 	static void AddComponent(Entity& refEntity);
 	static void Cancel所有包含走路的协程(Entity& refEntity, const bool b停止攻击 = false);

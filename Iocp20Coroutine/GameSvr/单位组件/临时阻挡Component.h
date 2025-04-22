@@ -6,6 +6,7 @@ class 還奀郯結Component
 public:
 	還奀郯結Component(Entity& refEntity, float f圉晚酗);
 	~還奀郯結Component();
+	void OnEntityDestroy(const bool bDestroy);
 	static bool AddComponent(Entity& refEntity, float f圉晚酗);
 	uint32_t m_u32DtObstacleRef = 0;
 	Space& m_refSpace;

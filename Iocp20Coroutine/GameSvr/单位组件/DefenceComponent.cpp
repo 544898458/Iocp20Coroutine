@@ -17,13 +17,13 @@ DefenceComponent::DefenceComponent(Entity& refEntity, const int i32HpMax) : m_re
 void DefenceComponent::AddComponent(Entity& refEntity, uint16_t u16初始Hp)
 {
 	CHECK_VOID(!refEntity.m_upDefence);
-	refEntity.m_upDefence = std::make_shared<DefenceComponent, Entity&, const int>(refEntity, u16初始Hp);
+	refEntity.m_upDefence.reset(new DefenceComponent(refEntity, u16初始Hp));
 }
 
 uint16_t DefenceComponent::升级后的防御(Entity& refEntity)
 {
 	//uint16_t u16等级(0);
-	//if (refEntity.m_spPlayerNickName)
+	//if (refEntity.m_upPlayerNickName)
 	//{
 	//	const auto& spacePlayer = refEntity.m_refSpace.GetSpacePlayer(refEntity);
 	//	u16等级 = spacePlayer.单位属性等级(refEntity.m_类型, 防御);
@@ -58,7 +58,7 @@ void DefenceComponent::受伤(const int 攻击, const uint64_t idAttacker)
 		{
 			LOG(WARNING) << "没有类型:" << m_refEntity.m_类型;
 		}
-		m_refEntity.CoDelayDelete().RunNew();
+		m_refEntity.DelayDelete();
 		CoEvent<MyEvent::单位阵亡>::OnRecvEvent({ .wpEntity = m_refEntity.weak_from_this() });
 		PlayerComponent::Send资源(m_refEntity);
 	}
@@ -110,6 +110,6 @@ void DefenceComponent::加血(int16_t i16变化)
 
 	m_hp = std::min(m_i32HpMax, m_hp + i16变化);
 
-	if(old != m_hp)
+	if (old != m_hp)
 		m_refEntity.BroadcastNotifyPos();
 }

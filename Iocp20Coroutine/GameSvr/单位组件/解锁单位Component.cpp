@@ -19,7 +19,7 @@ void 解锁单位Component::AddComponent(Entity& refEntity)
 	refEntity.m_up解锁单位.reset(new 解锁单位Component(refEntity));
 }
 
-void 解锁单位Component::TryCancel()
+void 解锁单位Component::OnEntityDestroy(const bool bDestroy)
 {
 	if (m_cancel解锁单位)
 		m_cancel解锁单位();

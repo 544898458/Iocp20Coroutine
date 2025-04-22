@@ -11,7 +11,7 @@ class ³æ³²Component
 public:
 	³æ³²Component(Entity &ref);
 	static void AddComponent(Entity& refEntity);
-	void TryCancel();
+	void OnEntityDestroy(const bool bDestroy);
 	void OnLoad();
 	void Set¼¯½áµã(const Position& pos);
 	//void OnDestroy();

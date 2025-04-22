@@ -617,7 +617,7 @@ WpEntity Space::造活动单位(Entity& ref视口, const std::string& refStrNickName, c
 	return wp;
 }
 
-WpEntity Space::造活动单位(std::shared_ptr<PlayerComponent>& refSpPlayer可能空, const std::string& strNickName, const Position& pos, const 单位类型 类型)
+WpEntity Space::造活动单位(UpPlayerComponent& refSpPlayer可能空, const std::string& strNickName, const Position& pos, const 单位类型 类型)
 {
 	单位::活动单位配置 活动;
 	单位::单位配置 单位;

@@ -27,7 +27,7 @@
 
 void Ôì½¨ÖşComponent::AddComponent(Entity& refEntity)
 {
-	refEntity.m_upÔì½¨Öş = std::make_shared<Ôì½¨ÖşComponent, Entity&>(refEntity);
+	refEntity.AddComponentOnDestroy(&Entity::m_upÔì½¨Öş, new Ôì½¨ÖşComponent(refEntity));
 }
 
 bool Ôì½¨ÖşComponent::ÕıÔÚ½¨Ôì(const Entity& refEntity)
@@ -119,7 +119,7 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position pos, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 		co_return true;
 
 	//È»ºó¿ªÊ¼¿ÛÇ®½¨Ôì
-	//CHECK_CO_RET_FALSE(m_refEntity.m_spPlayer);
+	//CHECK_CO_RET_FALSE(m_refEntity.m_upPlayer);
 	auto wpEntity½¨Öş = AddBuilding(ÀàĞÍ, pos);
 	if (wpEntity½¨Öş.expired())
 		co_return false;
@@ -142,7 +142,7 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position pos, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 	else
 	{
 		using namespace std;
-		m_refEntity.CoDelayDelete(1ms).RunNew();
+		m_refEntity.DelayDelete(1ms);
 		ref½¨Öş.m_upBuilding->StartCo½¨Ôì¹ı³Ì();
 	}
 
@@ -154,27 +154,33 @@ CoTaskBool Ôì½¨ÖşComponent::Co½¨Ôì¹ı³Ì(WpEntity wpEntity½¨Öş, FunCancel& cancel)
 	PlayerComponent::²¥·ÅÉùÒô(m_refEntity, "ÒôĞ§/´ò×®»úÆÆËé¸ä");
 
 	KeepCancel kc(cancel);
-	std::weak_ptr<BuildingComponent> wpBuilding(wpEntity½¨Öş.lock()->m_upBuilding);
+	//std::weak_ptr<BuildingComponent> wpBuilding(wpEntity½¨Öş.lock()->m_upBuilding);
 
-	while (!wpBuilding.expired() && BuildingComponent::MAX½¨Ôì°Ù·Ö±È > wpBuilding.lock()->m_n½¨Ôì½ø¶È°Ù·Ö±È)
+	while (true)
 	{
 		if (co_await CoTimer::WaitNextUpdate(cancel))
 			co_return true;
-		if (wpBuilding.expired())
-			co_return true;
+	
+		if (wpEntity½¨Öş.expired())
+			co_return false;
 
-		BuildingComponent& refBuilding = *wpBuilding.lock();
+		CHECK_WP_CO_RET_FALSE(wpEntity½¨Öş);
+		auto& ref½¨Öş = *wpEntity½¨Öş.lock();
+		CHECK_CO_RET_FALSE(ref½¨Öş.m_upBuilding); 
+		auto& ref½¨Ôì½ø¶È°Ù·Ö±È = ref½¨Öş.m_upBuilding->m_n½¨Ôì½ø¶È°Ù·Ö±È;
+		if (BuildingComponent::MAX½¨Ôì°Ù·Ö±È <= ref½¨Ôì½ø¶È°Ù·Ö±È)
+			co_return false;
 
-		if (refBuilding.m_n½¨Ôì½ø¶È°Ù·Ö±È > 0 && 0 == refBuilding.m_n½¨Ôì½ø¶È°Ù·Ö±È % 20)
+		if (ref½¨Ôì½ø¶È°Ù·Ö±È > 0 && 0 == ref½¨Ôì½ø¶È°Ù·Ö±È % 25)
 			PlayerComponent::²¥·ÅÉùÒô(m_refEntity, "EDrRep00");//Repair
 
-		++refBuilding.m_n½¨Ôì½ø¶È°Ù·Ö±È;
+		++ref½¨Ôì½ø¶È°Ù·Ö±È;
 
 		std::ostringstream oss;
-		if (BuildingComponent::MAX½¨Ôì°Ù·Ö±È <= refBuilding.m_n½¨Ôì½ø¶È°Ù·Ö±È)
+		if (BuildingComponent::MAX½¨Ôì°Ù·Ö±È <= ref½¨Ôì½ø¶È°Ù·Ö±È)
 			oss << "½¨ÔìÍê³É";
 		else
-			oss << "ÕıÔÚ½¨Ôì:" << refBuilding.m_n½¨Ôì½ø¶È°Ù·Ö±È << "%";
+			oss << "ÕıÔÚ½¨Ôì:" << ref½¨Ôì½ø¶È°Ù·Ö±È << "%";
 
 		_ASSERT(!wpEntity½¨Öş.expired());
 		EntitySystem::BroadcastEntityÃèÊö(*wpEntity½¨Öş.lock(), oss.str());
@@ -192,7 +198,7 @@ CoTaskBool Ôì½¨ÖşComponent::Co½¨Ôì¹ı³Ì(WpEntity wpEntity½¨Öş, FunCancel& cancel)
 	co_return 0;
 }
 
-void Ôì½¨ÖşComponent::TryCancel()
+void Ôì½¨ÖşComponent::OnEntityDestroy(const bool bDestroy)
 {
 	if (m_cancelÔì½¨Öş)
 	{
@@ -273,7 +279,7 @@ bool Ôì½¨ÖşComponent::´Ë´¦ÓĞÌ¦ÂûÂğ(const Position pos)
 	return false;
 }
 
-WpEntity Ôì½¨ÖşComponent::´´½¨½¨Öş(Space& refSpace, const Position& pos, const µ¥Î»ÀàĞÍ ÀàĞÍ, SpPlayerComponent spPlayer, const std::string& strPlayerNickName)
+WpEntity Ôì½¨ÖşComponent::´´½¨½¨Öş(Space& refSpace, const Position& pos, const µ¥Î»ÀàĞÍ ÀàĞÍ, UpPlayerComponent& spPlayer, const std::string& strPlayerNickName)
 {
 	µ¥Î»::µ¥Î»ÅäÖÃ µ¥Î»;
 	CHECK_RET_DEFAULT(µ¥Î»::Findµ¥Î»ÅäÖÃ(ÀàĞÍ, µ¥Î»));
@@ -287,7 +293,7 @@ WpEntity Ôì½¨ÖşComponent::´´½¨½¨Öş(Space& refSpace, const Position& pos, const µ
 	return spNewEntity;
 }
 
-void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ ÀàĞÍ, Entity& refNewEntity, SpPlayerComponent spPlayer, const std::string& strPlayerNickName)
+void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ ÀàĞÍ, Entity& refNewEntity, UpPlayerComponent& spPlayer, const std::string& strPlayerNickName)
 {
 	µ¥Î»::½¨Öşµ¥Î»ÅäÖÃ ½¨Öş;
 	µ¥Î»::µ¥Î»ÅäÖÃ µ¥Î»;

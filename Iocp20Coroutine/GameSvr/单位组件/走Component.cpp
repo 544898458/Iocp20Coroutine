@@ -21,7 +21,7 @@
 void 走Component::AddComponent(Entity& refEntity)
 {
 	CHECK_VOID(!refEntity.m_up走);
-	refEntity.m_up走 = std::make_shared<走Component, Entity&>(refEntity);
+	refEntity.AddComponentOnDestroy(&Entity::m_up走, new 走Component(refEntity));
 	//float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z};
 	//int CrowToolAddAgent(float arrF[]);
 	//refEntity.m_upAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);
@@ -75,7 +75,7 @@ bool 已走到目标附近(Entity& refThis, const Position localTarget, const float f距
 
 CoTaskBool 走Component::WalkToTarget(SpEntity spTarget, FunCancel& funCancel, const bool b检查警戒距离, const std::function<bool(Entity&)>& fun可停下)
 {
-	//if (!refThis.m_sp走)
+	//if (!refThis.m_up走)
 	//	co_return false;
 
 	if (m_refEntity.IsDead())
@@ -269,13 +269,13 @@ void 走Component::WalkToPos手动控制(const Position& posTarget)
 	}
 	//m_coStop = true;
 
-	TryCancel();
+	OnEntityDestroy(false);
 
 	m_coWalk.Run();
 	_ASSERT(m_coWalk.Finished());//20240205
 	//if (m_refEntity.m_upAttack)
 	//{
-	//	m_refEntity.m_upAttack->TryCancel();
+	//	m_refEntity.m_upAttack->OnEntityDestroy(const bool bDestroy);
 	//	//_ASSERT(m_refEntity.m_upAttack->m_coAttack.Finished());//20240205
 	//}
 	EntitySystem::停止攻击和治疗(m_refEntity);
@@ -286,7 +286,7 @@ void 走Component::WalkToPos手动控制(const Position& posTarget)
 }
 
 
-void 走Component::TryCancel()
+void 走Component::OnEntityDestroy(const bool bDestroy)
 {
 	if (m_cancel)
 	{
@@ -311,13 +311,13 @@ void 走Component::TryCancel()
 void 走Component::走进地堡(WpEntity wpEntity地堡)
 {
 	//if (m_refEntity.m_upAttack)
-	//	m_refEntity.m_upAttack->TryCancel();
+	//	m_refEntity.m_upAttack->OnEntityDestroy(const bool bDestroy);
 
 	//if (m_refEntity.m_up找目标走过去)
-	//	m_refEntity.m_up找目标走过去->TryCancel();
+	//	m_refEntity.m_up找目标走过去->OnEntityDestroy(const bool bDestroy);
 
 	//if (m_refEntity.m_up医疗兵)
-	//	m_refEntity.m_up医疗兵->TryCancel();
+	//	m_refEntity.m_up医疗兵->OnEntityDestroy(const bool bDestroy);
 	EntitySystem::停止攻击和治疗(m_refEntity);
 
 	if (wpEntity地堡.expired())
@@ -339,7 +339,7 @@ void 走Component::走进地堡(WpEntity wpEntity地堡)
 	}
 
 	//if (m_refEntity.m_upAttack)
-	//	m_refEntity.m_upAttack->TryCancel();
+	//	m_refEntity.m_upAttack->OnEntityDestroy(const bool bDestroy);
 	EntitySystem::停止攻击和治疗(m_refEntity);
 	Cancel所有包含走路的协程(m_refEntity);
 	_ASSERT(!m_cancel);
@@ -390,6 +390,6 @@ void 走Component::Cancel所有包含走路的协程(Entity& refEntity, const bool b停止攻
 {
 	if (b停止攻击 )EntitySystem::停止攻击和治疗(refEntity);
 	if (refEntity.m_up采集)		refEntity.m_up采集->m_TaskCancel.TryCancel();
-	if (refEntity.m_up走)		refEntity.m_up走->TryCancel();
-	if (refEntity.m_up造建筑)	refEntity.m_up造建筑->TryCancel();
+	if (refEntity.m_up走)		refEntity.m_up走->OnEntityDestroy(false);
+	if (refEntity.m_up造建筑)	refEntity.m_up造建筑->OnEntityDestroy(false);
 }

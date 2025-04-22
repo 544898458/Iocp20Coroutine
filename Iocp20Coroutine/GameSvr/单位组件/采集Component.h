@@ -11,10 +11,11 @@ class 采集Component
 public:
 	采集Component(Entity&);
 	void 采集(WpEntity wp);
-	std::tuple<SpEntity, std::shared_ptr<资源Component>> Get目标资源(WpEntity& refWp目标资源);
+	WpEntity Get目标资源(WpEntity& refWp目标资源);
 	CoTaskBool Co采集(WpEntity wp);
 	static void AddComponent(Entity& spEntity);
 	static bool 正在采集(Entity& refEntity);
+	void OnEntityDestroy(const bool bDestroy);
 	CoTaskCancel m_TaskCancel;
 private:
 	static constexpr uint32_t Max携带矿() { return 5; }

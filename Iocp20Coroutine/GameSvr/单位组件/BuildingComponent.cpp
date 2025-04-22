@@ -10,7 +10,7 @@
 
 void BuildingComponent::AddComponent(Entity& refThis, float f半边长)
 {
-	refThis.m_upBuilding = std::make_shared<BuildingComponent, Entity&>(refThis);
+	refThis.AddComponentOnDestroy(&Entity::m_upBuilding, new BuildingComponent(refThis));
 	if (苔蔓 != refThis.m_类型)
 		临时阻挡Component::AddComponent(refThis, f半边长);
 }
@@ -25,7 +25,7 @@ void BuildingComponent::直接造好()
 	m_n建造进度百分比 = MAX建造百分比;
 }
 
-void BuildingComponent::TryCancel()
+void BuildingComponent::OnEntityDestroy(const bool bDestroy)
 {
 	if (m_cancel建造)
 		m_cancel建造();

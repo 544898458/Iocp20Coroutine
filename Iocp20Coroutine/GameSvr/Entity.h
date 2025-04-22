@@ -63,8 +63,7 @@ public:
 	void BroadcastEnter();
 	void BroadcastNotifyPos();
 	void BroadcastChangeSkeleAnim(const std::string& refAniClipName, bool loop = true);
-	void DelayDelete(const uint32_t u32∫¡√Î = 0);
-	CoTaskBool CoDelayDelete(const std::chrono::system_clock::duration& dura = std::chrono::seconds(3));
+	void DelayDelete(const std::chrono::system_clock::duration& dura = std::chrono::seconds(3));
 	template<class T> void Broadcast(const T& msg);
 	bool IsEnemy(const Entity& refEntity);
 	const Position& Pos()const { return m_Pos; }
@@ -146,6 +145,7 @@ public:
 	//private:
 	Space& m_refSpace;
 private:
+	CoTaskBool CoDelayDelete(const std::chrono::system_clock::duration& dura = std::chrono::seconds(3));
 	Position m_Pos;
 	std::map<std::string, pro::proxy<Component> > m_mapComponentOnEntityDstroy;
 

@@ -19,7 +19,7 @@
 
 void 造活动单位Component::AddComponent(Entity& refEntity)
 {
-	refEntity.m_up造活动单位 = std::make_shared<造活动单位Component, Entity& >(refEntity);
+	refEntity.AddComponentOnDestroy(&Entity::m_up造活动单位, new 造活动单位Component(refEntity));
 }
 
 造活动单位Component::造活动单位Component(Entity& refEntity) :m_refEntity(refEntity)
@@ -148,7 +148,7 @@ bool 造活动单位Component::Is幼虫正在蜕变()
 	return !m_TaskCancel造活动单位.co.Finished() && Is幼虫();
 }
 
-void 造活动单位Component::TryCancel(Entity& refEntity)
+void 造活动单位Component::OnEntityDestroy(const bool bDestroy)
 {
 	m_TaskCancel造活动单位.TryCancel();
 }
@@ -244,17 +244,17 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 		{
 			if (!采集集结点附近的资源(ref资源))
 			{
-				CHECK_CO_RET_FALSE(ref资源.m_sp走);
+				CHECK_CO_RET_FALSE(ref资源.m_up走);
 				auto pos = m_pos集结点;
 				m_refEntity.m_refSpace.CrowdToolFindNerestPos(pos);
-				ref资源.m_sp走->WalkToPos(pos);
+				ref资源.m_up走->WalkToPos(pos);
 			}
 		}
 	}
 
 	using namespace std;
 	if (幼虫 == m_refEntity.m_类型)
-		m_refEntity.CoDelayDelete(1ms).RunNew();
+		m_refEntity.DelayDelete(1ms);
 	else
 		EntitySystem::BroadcastEntity描述(m_refEntity, "造完了");
 }

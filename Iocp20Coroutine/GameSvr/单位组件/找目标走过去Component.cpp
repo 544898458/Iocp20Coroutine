@@ -254,7 +254,7 @@ void 找目标走过去Component::播放攻击音效(Entity& refEntity)
 	//switch (m_类型)
 	//{
 	//case 兵:
-	//	if (!m_refEntity.m_spPlayer)
+	//	if (!m_refEntity.m_upPlayer)
 	//		EntitySystem::Broadcast播放声音(m_refEntity, "TMaFir00");
 	//	break;
 	//case 近战兵:EntitySystem::Broadcast播放声音(m_refEntity, "Tfrshoot"); break;

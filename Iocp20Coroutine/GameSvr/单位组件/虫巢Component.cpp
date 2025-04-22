@@ -14,10 +14,10 @@ inline ³æ³²Component::³æ³²Component(Entity& ref) :m_refEntity(ref), m_posÓ×³æ¼¯½
 
 void ³æ³²Component::AddComponent(Entity& refEntity)
 {
-	refEntity.m_up³æ³² = std::make_shared<³æ³²Component, Entity&>(refEntity);
+	refEntity.AddComponentOnDestroy(&Entity::m_up³æ³², new ³æ³²Component(refEntity));
 }
 
-void ³æ³²Component::TryCancel()
+void ³æ³²Component::OnEntityDestroy(const bool bDestroy)
 {
 	if (m_CancelÔìÓ×³æ)
 		m_CancelÔìÓ×³æ();
@@ -67,8 +67,8 @@ CoTaskBool ³æ³²Component::CoÔìÓ×³æ()
 		CHECK_WP_CONTINUE(wp);
 		m_listWpÓ×³æ.emplace_back(wp);
 		auto& ref = *wp.lock();
-		if(ref.m_spÔì»î¶¯µ¥Î»)
-			ref.m_spÔì»î¶¯µ¥Î»->m_pos¼¯½áµã = m_posÓ×³æ¼¯½áµã;
+		if(ref.m_upÔì»î¶¯µ¥Î»)
+			ref.m_upÔì»î¶¯µ¥Î»->m_pos¼¯½áµã = m_posÓ×³æ¼¯½áµã;
 
 	}
 

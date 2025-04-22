@@ -11,7 +11,7 @@ class 解锁单位Component
 public:
 	解锁单位Component(Entity &ref);
 	static void AddComponent(Entity& refEntity);
-	void TryCancel();
+	void OnEntityDestroy(const bool bDestroy);
 	void 解锁单位(const 单位类型 类型);
 	bool 正在解锁()const;
 private:

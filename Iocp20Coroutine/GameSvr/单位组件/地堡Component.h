@@ -10,7 +10,7 @@ class 地堡Component
 public:
 	地堡Component(Entity &ref):m_refEntity(ref){}
 	static void AddComponent(Entity& refEntity);
-	void OnDestroy();
+	void OnEntityDestroy(const bool bDestroy);
 	void OnBeforeDelayDelete();
 	void 进(Space& refSpace, Entity& refEntity);
 	void 全都出地堡();

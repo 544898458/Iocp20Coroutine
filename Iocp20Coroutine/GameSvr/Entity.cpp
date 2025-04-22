@@ -36,6 +36,9 @@
 #include "单位组件/苔蔓Component.h"
 #include "单位组件/无苔蔓就持续掉血Component.h"
 #include "单位组件/太岁Component.h"
+#include "单位组件/临时阻挡Component.h"
+#include "单位组件/资源Component.h"
+
 
 using namespace std;
 
@@ -105,17 +108,16 @@ bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
 		SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, 单位类型, const 单位::单位配置&>(
 			load.m_Pos, refSpace, std::forward<单位类型&&>(load.m_类型), load.m_配置);
 		PlayerComponent::AddComponent(*spNewEntity, {}, load.m_strNickName);
-		造建筑Component::根据建筑类型AddComponent(refSpace, load.m_类型, *spNewEntity, {}, load.m_strNickName);
+		造建筑Component::根据建筑类型AddComponent(refSpace, load.m_类型, *spNewEntity, std::forward<UpPlayerComponent>({}), load.m_strNickName);
 
 		CHECK_NOTNULL_RET_FALSE(spNewEntity->m_upBuilding);
 		wpNew = spNewEntity;
 	}
 	else if (EntitySystem::Is活动单位(load.m_类型)) {
-		std::shared_ptr<PlayerComponent> spNull;
 		单位::活动单位配置 活动单位配置;
 		CHECK_FALSE(单位::Find活动单位配置(load.m_类型, 活动单位配置));
 
-		wpNew = refSpace.造活动单位(spNull, load.m_strNickName, load.m_Pos, load.m_类型);
+		wpNew = refSpace.造活动单位(std::forward<UpPlayerComponent>({}), load.m_strNickName, load.m_Pos, load.m_类型);
 	}
 	else
 	{
@@ -216,29 +218,29 @@ void Entity::OnDestroy()
 	//	m_up找目标走过去->TryCancel(true);
 
 
-	if (m_up造活动单位)
-		m_up造活动单位->TryCancel(*this);
+	//if (m_up造活动单位)
+	//	m_up造活动单位->TryCancel(*this);
 
-	if (m_up采集)
-		m_up采集->m_TaskCancel.TryCancel();
+	//if (m_up采集)
+	//	m_up采集->m_TaskCancel.TryCancel();
 
-	if (m_up走)
-		m_up走->TryCancel();
+	//if (m_up走)
+	//	m_up走->TryCancel();
 
-	if (m_up地堡)
-		m_up地堡->OnDestroy();
+	//if (m_up地堡)
+	//	m_up地堡->OnDestroy();
 
-	if (m_up临时阻挡)
-		m_up临时阻挡.reset();
+	//if (m_up临时阻挡)
+	//	m_up临时阻挡.reset();
 
-	if (m_up造建筑)
-		m_up造建筑->TryCancel();
+	//if (m_up造建筑)
+	//	m_up造建筑->TryCancel();
 
-	if (m_upBuilding)
-		m_upBuilding->TryCancel();
+	//if (m_upBuilding)
+	//	m_upBuilding->TryCancel();
 
-	if (m_up虫巢)
-		m_up虫巢->TryCancel();
+	//if (m_up虫巢)
+	//	m_up虫巢->TryCancel();
 
 	//if (m_up飞向目标)
 	//	m_up飞向目标->TryCancel();
@@ -349,9 +351,9 @@ void Entity::Broadcast(const T& msg)
 	//m_refSpace.Broadcast(msg);
 }
 
-void Entity::DelayDelete(const uint32_t u32毫秒)
+void Entity::DelayDelete(const std::chrono::system_clock::duration& dura)
 {
-	CoDelayDelete(std::chrono::milliseconds(u32毫秒)).RunNew();
+	CoDelayDelete(dura).RunNew();
 }
 CoTaskBool Entity::CoDelayDelete(const std::chrono::system_clock::duration& dura)
 {

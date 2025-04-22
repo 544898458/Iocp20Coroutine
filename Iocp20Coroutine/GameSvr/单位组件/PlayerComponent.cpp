@@ -63,7 +63,7 @@ void PlayerComponent::播放声音(const std::string& refStrNickName, const std::str
 		wpPlayerSession.lock()->播放声音(refStr声音, str文本);
 }
 
-void PlayerComponent::播放声音(SpPlayerComponent& spPlayer可能空, const std::string& refStr声音, const std::string& str文本)
+void PlayerComponent::播放声音(UpPlayerComponent& spPlayer可能空, const std::string& refStr声音, const std::string& str文本)
 {
 	if (spPlayer可能空)
 		spPlayer可能空->m_refSession.播放声音(refStr声音, str文本);
@@ -75,24 +75,24 @@ void PlayerComponent::Send资源(Entity& refEntity)
 		refEntity.m_upPlayer->m_refSession.Send资源();
 }
 
-void PlayerComponent::AddComponent(Entity& refEntity, std::weak_ptr<PlayerComponent> wpPlayer, const std::string& strNickName)
+void PlayerComponent::AddComponent(Entity& refEntity, UpPlayerComponent& wpPlayer, const std::string& strNickName)
 {
-	if (wpPlayer.expired())
+	if (wpPlayer) 
+	{
+		AddComponent(refEntity, wpPlayer->m_refSession);
+	}
+	else
 	{
 		//CHECK_RET_VOID(!strNickName.empty());
 		if (!strNickName.empty())//没有玩家昵称说明就是怪（敌人）
-			refEntity.m_upPlayerNickName = std::make_shared<PlayerNickNameComponent, const std::string&>(strNickName);
-	}
-	else 
-	{
-		AddComponent(refEntity ,wpPlayer.lock()->m_refSession);
+			refEntity.m_upPlayerNickName.reset(new PlayerNickNameComponent(strNickName));
 	}
 }
 
 void PlayerComponent::AddComponent(Entity& refEntity, PlayerGateSession_Game &refSession)
 {
-	refEntity.m_upPlayer = std::make_shared<PlayerComponent, PlayerGateSession_Game&>(refSession);
-	refEntity.m_upPlayerNickName = std::make_shared<PlayerNickNameComponent, const std::string&>(refSession.NickName());
+	refEntity.m_upPlayer.reset(new PlayerComponent(refSession));
+	refEntity.m_upPlayerNickName.reset(new PlayerNickNameComponent(refSession.NickName()));
 }
 void PlayerComponent::Say(const std::string& str, const SayChannel channel)
 {
@@ -100,9 +100,9 @@ void PlayerComponent::Say(const std::string& str, const SayChannel channel)
 }
 
 template<class T>
-void PlayerComponent::Send(const std::shared_ptr<PlayerComponent>& spPlayer可能空, const T& ref)
+void PlayerComponent::Send(const UpPlayerComponent& spPlayer可能空, const T& ref)
 {
 	if (spPlayer可能空)
 		spPlayer可能空->m_refSession.Send(ref);
 }
-template void PlayerComponent::Send(const std::shared_ptr<PlayerComponent>& spPlayer可能空, const Msg显示界面& ref);
+template void PlayerComponent::Send(const UpPlayerComponent& spPlayer可能空, const Msg显示界面& ref);

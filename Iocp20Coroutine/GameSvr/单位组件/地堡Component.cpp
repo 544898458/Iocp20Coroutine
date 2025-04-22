@@ -10,10 +10,10 @@
 
 void 地堡Component::AddComponent(Entity& refEntity)
 {
-	refEntity.m_up地堡 = std::make_shared<地堡Component,Entity&>(refEntity);
+	refEntity.AddComponentOnDestroy(&Entity::m_up地堡, new 地堡Component(refEntity));
 }
 
-void 地堡Component::OnDestroy()
+void 地堡Component::OnEntityDestroy(const bool bDestroy)
 {
 	for (auto& sp : m_listSpEntity)
 		sp->OnDestroy();
