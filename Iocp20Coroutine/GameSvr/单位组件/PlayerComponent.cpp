@@ -75,7 +75,7 @@ void PlayerComponent::Send资源(Entity& refEntity)
 		refEntity.m_upPlayer->m_refSession.Send资源();
 }
 
-void PlayerComponent::AddComponent(Entity& refEntity, UpPlayerComponent& wpPlayer, const std::string& strNickName)
+void PlayerComponent::AddComponent(Entity& refEntity, UpPlayerComponent&& wpPlayer, const std::string& strNickName)
 {
 	if (wpPlayer) 
 	{

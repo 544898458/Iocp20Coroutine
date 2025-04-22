@@ -42,7 +42,7 @@ void 太岁Component::分裂(const Position& refPos)
 		return;
 	}
 
-	m_wp分裂 = 造建筑Component::创建建筑(m_refEntity.m_refSpace, refPos, 太岁, m_refEntity.m_upPlayer, EntitySystem::GetNickName(m_refEntity));
+	m_wp分裂 = 造建筑Component::创建建筑(m_refEntity.m_refSpace, refPos, 太岁, std::forward<UpPlayerComponent>(m_refEntity.m_upPlayer), EntitySystem::GetNickName(m_refEntity));
 	CHECK_WP_RET_VOID(m_wp分裂);
 }
 

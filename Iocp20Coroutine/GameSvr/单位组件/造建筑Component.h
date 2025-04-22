@@ -22,8 +22,8 @@ class 造建筑Component final
 public:
 	static void AddComponent(Entity& refEntity);
 	static bool 正在建造(const Entity& refEntity);
-	static void 根据建筑类型AddComponent(Space& refSpace, const 单位类型 类型, Entity& refNewEntity, UpPlayerComponent& spPlayer, const std::string& strPlayerNickName);
-	static WpEntity 创建建筑(Space& refSpace, const Position& pos, const 单位类型 类型, UpPlayerComponent& spPlayer, const std::string& strPlayerNickName);
+	static void 根据建筑类型AddComponent(Space& refSpace, const 单位类型 类型, Entity& refNewEntity, UpPlayerComponent&& spPlayer, const std::string& strPlayerNickName);
+	static WpEntity 创建建筑(Space& refSpace, const Position& pos, const 单位类型 类型, UpPlayerComponent&& spPlayer, const std::string& strPlayerNickName);
 	造建筑Component(Entity& refEntity);
 	~造建筑Component();
 	bool 可造(const 单位类型 类型) const;

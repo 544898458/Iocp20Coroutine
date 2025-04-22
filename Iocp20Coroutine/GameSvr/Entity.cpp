@@ -108,7 +108,7 @@ bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
 		SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, 单位类型, const 单位::单位配置&>(
 			load.m_Pos, refSpace, std::forward<单位类型&&>(load.m_类型), load.m_配置);
 		PlayerComponent::AddComponent(*spNewEntity, {}, load.m_strNickName);
-		造建筑Component::根据建筑类型AddComponent(refSpace, load.m_类型, *spNewEntity, std::forward<UpPlayerComponent>({}), load.m_strNickName);
+		造建筑Component::根据建筑类型AddComponent(refSpace, load.m_类型, *spNewEntity, {}, load.m_strNickName);
 
 		CHECK_NOTNULL_RET_FALSE(spNewEntity->m_upBuilding);
 		wpNew = spNewEntity;
@@ -117,7 +117,7 @@ bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
 		单位::活动单位配置 活动单位配置;
 		CHECK_FALSE(单位::Find活动单位配置(load.m_类型, 活动单位配置));
 
-		wpNew = refSpace.造活动单位(std::forward<UpPlayerComponent>({}), load.m_strNickName, load.m_Pos, load.m_类型);
+		wpNew = refSpace.造活动单位({}, load.m_strNickName, load.m_Pos, load.m_类型);
 	}
 	else
 	{

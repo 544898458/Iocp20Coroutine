@@ -6,7 +6,7 @@
 #include "../../CoRoutine/CoTimer.h"
 #include "../Space.h"
 #include "../EntitySystem.h"
-
+#include "../SpPlayerComponent.h"
 inline 虫巢Component::虫巢Component(Entity& ref) :m_refEntity(ref), m_pos幼虫集结点(ref.Pos())
 {
 	Co造幼虫().RunNew();
@@ -63,7 +63,7 @@ CoTaskBool 虫巢Component::Co造幼虫()
 		auto pos = m_refEntity.Pos();
 		pos.x += Rand(-10, 10);
 		m_refEntity.m_refSpace.CrowdToolFindNerestPos(pos);
-		auto wp = m_refEntity.m_refSpace.造活动单位(m_refEntity.m_upPlayer, EntitySystem::GetNickName(m_refEntity), pos, 幼虫);
+		auto wp = m_refEntity.m_refSpace.造活动单位(std::forward<UpPlayerComponent>(m_refEntity.m_upPlayer), EntitySystem::GetNickName(m_refEntity), pos, 幼虫);
 		CHECK_WP_CONTINUE(wp);
 		m_listWp幼虫.emplace_back(wp);
 		auto& ref = *wp.lock();

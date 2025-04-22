@@ -605,7 +605,7 @@ std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& re
 
 WpEntity Space::造活动单位(Entity& ref视口, const std::string& refStrNickName, const 单位类型 类型, const Position& refPos, bool b设置视口)
 {
-	auto wp = 造活动单位(ref视口.m_upPlayer, refStrNickName, refPos, 类型);
+	auto wp = 造活动单位(std::forward<UpPlayerComponent>(ref视口.m_upPlayer), refStrNickName, refPos, 类型);
 	CHECK_WP_RET_DEFAULT(wp);
 	if (b设置视口)
 	{
@@ -617,7 +617,7 @@ WpEntity Space::造活动单位(Entity& ref视口, const std::string& refStrNickName, c
 	return wp;
 }
 
-WpEntity Space::造活动单位(UpPlayerComponent& refSpPlayer可能空, const std::string& strNickName, const Position& pos, const 单位类型 类型)
+WpEntity Space::造活动单位(UpPlayerComponent&& refSpPlayer可能空, const std::string& strNickName, const Position& pos, const 单位类型 类型)
 {
 	单位::活动单位配置 活动;
 	单位::单位配置 单位;
@@ -629,7 +629,7 @@ WpEntity Space::造活动单位(UpPlayerComponent& refSpPlayer可能空, const std::stri
 
 	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
 		pos, *this, std::forward<const 单位类型&&>(类型), 单位);
-	PlayerComponent::AddComponent(*spNewEntity, refSpPlayer可能空, strNickName);
+	PlayerComponent::AddComponent(*spNewEntity, std::forward<UpPlayerComponent>(refSpPlayer可能空), strNickName);
 	switch (类型)
 	{
 	case 医疗兵:

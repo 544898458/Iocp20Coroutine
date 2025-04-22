@@ -133,7 +133,7 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 
 		if (绿色坦克 == m_refEntity.m_类型)
 		{
-			auto wp光刺 = m_refEntity.m_refSpace.造活动单位(m_refEntity.m_upPlayer, EntitySystem::GetNickName(m_refEntity), m_refEntity.Pos(), 光刺);
+			auto wp光刺 = m_refEntity.m_refSpace.造活动单位(std::forward<UpPlayerComponent>(m_refEntity.m_upPlayer), EntitySystem::GetNickName(m_refEntity), m_refEntity.Pos(), 光刺);
 			_ASSERT(!wp光刺.expired());
 			CHECK_WP_CO_RET_FALSE(wp光刺);
 			auto& ref光刺 = *wp光刺.lock();

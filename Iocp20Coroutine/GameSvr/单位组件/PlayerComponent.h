@@ -10,7 +10,7 @@ class PlayerComponent;
 class PlayerComponent
 {
 public:
-	static void AddComponent(Entity& refEntity, UpPlayerComponent& wpSession, const std::string& strNickName);
+	static void AddComponent(Entity& refEntity, UpPlayerComponent&& wpSession, const std::string& strNickName);
 	static void AddComponent(Entity& refEntity, PlayerGateSession_Game& refSession);
 	static void Say(Entity& refEntity, const std::string& str, const SayChannel channel);
 	static void Sayϵͳ(Entity& refEntity, const std::string& str);
