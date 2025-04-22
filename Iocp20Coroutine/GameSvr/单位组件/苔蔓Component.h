@@ -11,7 +11,7 @@ public:
 	static const uint16_t MAX半径 = 20;
 	苔蔓Component(Entity&);
 	static void AddComponent(Entity& refEntity);
-	void TryCancel();
+	void OnEntityDestroy(const bool bDestroy);
 	bool 在半径内(const Position& pos)const;
 	bool 扩张结束() const;
 	

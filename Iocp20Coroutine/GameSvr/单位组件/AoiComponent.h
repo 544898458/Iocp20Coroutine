@@ -32,7 +32,7 @@ public:
 	void 离开Space();
 	void 看到(Entity& refEntity被看);
 	void 看不到(Entity& refEntity被看);
-	void OnDestory();
+	void OnEntityDestroy(const bool bDestroy);
 	std::unordered_map<uint64_t, WpEntity> m_map我能看到的;
 	std::unordered_map<uint64_t, WpEntity> m_map能看到我的;
 

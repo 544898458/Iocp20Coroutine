@@ -45,7 +45,7 @@ void Space::Save(const uint8_t idSpace)
 	std::ofstream file(strFileName, std::ios::binary);
 	for (auto [id, spEntity] : m_mapEntity)
 	{
-		if (!spEntity->m_spPlayerNickName)
+		if (!spEntity->m_upPlayerNickName)
 			continue;//只存玩家单位
 
 		if (EntitySystem::Is视口(*spEntity) || 苔蔓 == spEntity->m_类型)
@@ -237,8 +237,8 @@ Space::SpacePlayer& Space::GetSpacePlayer(const std::string strPlayerNickName)
 }
 Space::SpacePlayer& Space::GetSpacePlayer(const Entity& ref)
 {
-	if (ref.m_spPlayerNickName)
-		return ref.m_refSpace.GetSpacePlayer(ref.m_spPlayerNickName->m_strNickName);
+	if (ref.m_upPlayerNickName)
+		return ref.m_refSpace.GetSpacePlayer(ref.m_upPlayerNickName->m_strNickName);
 
 	LOG(ERROR) << ref.Id << ",不是玩家";
 	_ASSERT(false);
@@ -259,9 +259,9 @@ void Space::EraseEntity(const bool bForceEraseAll)
 			continue;
 		}
 
-		if (spEntity->m_spPlayerNickName)
+		if (spEntity->m_upPlayerNickName)
 		{
-			const auto sizeErase = m_mapPlayer[spEntity->m_spPlayerNickName->m_strNickName].Erase(spEntity->Id);
+			const auto sizeErase = m_mapPlayer[spEntity->m_upPlayerNickName->m_strNickName].Erase(spEntity->Id);
 			CHECK_NOT_RETURN(1 == sizeErase);
 		}
 
@@ -289,7 +289,7 @@ int Space::Get怪物单位数(const 单位类型 类型)const
 {
 	return Get单位数([类型](const Entity& refEntity)
 		{
-			if (refEntity.m_spPlayerNickName)//属于玩家制的单位
+			if (refEntity.m_upPlayerNickName)//属于玩家制的单位
 				return false;
 			if (EntitySystem::Is资源(refEntity.m_类型))
 				return false;
@@ -304,10 +304,10 @@ int Space::Get资源单位数(const 单位类型 类型)
 {
 	return Get单位数([类型](const Entity& refEntity)
 		{
-			if (nullptr == refEntity.m_sp资源)
+			if (nullptr == refEntity.m_up资源)
 				return false;
 
-			return 类型 == refEntity.m_sp资源->m_类型;
+			return 类型 == refEntity.m_up资源->m_类型;
 		});
 }
 
@@ -323,10 +323,10 @@ int Space::Get玩家单位数(const std::string& strPlayerNickName, const 单位类型 类
 {
 	return Get单位数([&strPlayerNickName, 类型](const Entity& refEntity)
 		{
-			if (nullptr == refEntity.m_spPlayerNickName)
+			if (nullptr == refEntity.m_upPlayerNickName)
 				return false;
 
-			if (strPlayerNickName != refEntity.m_spPlayerNickName->m_strNickName)
+			if (strPlayerNickName != refEntity.m_upPlayerNickName->m_strNickName)
 				return false;
 
 			if (EntitySystem::Is视口(refEntity))
@@ -338,7 +338,7 @@ int Space::Get玩家单位数(const std::string& strPlayerNickName, const 单位类型 类
 			if (类型 != 单位类型::单位类型_Invalid_0 && 类型 != refEntity.m_类型)
 				return false;
 
-			if (refEntity.m_spBuilding && !refEntity.m_spBuilding->已造好())
+			if (refEntity.m_upBuilding && !refEntity.m_upBuilding->已造好())
 				return false;
 
 			return true;
@@ -380,8 +380,8 @@ void Space::所有玩家全退出()
 		CHECK_WP_CONTINUE(wp);
 		auto& ref视口 = *wp.lock();
 		CHECK_RET_VOID(EntitySystem::Is视口(ref视口));
-		CHECK_RET_VOID(ref视口.m_spPlayer);
-		ref视口.m_spPlayer->m_refSession.OnDestroy();//旁观的人退出
+		CHECK_RET_VOID(ref视口.m_upPlayer);
+		ref视口.m_upPlayer->m_refSession.OnDestroy();//旁观的人退出
 	}
 }
 
@@ -587,7 +587,7 @@ void Space::SpacePlayer::OnDestroy(const bool b删除玩家所有单位, Space& refSpace
 		}
 		else//不删，只删除Session引用
 		{
-			ref.m_spPlayer.reset();
+			ref.m_upPlayer.reset();
 			//refSpace.m_map已离线PlayerEntity[refStrNickName].insert({ sp->Id,sp });
 		}
 	}
@@ -605,7 +605,7 @@ std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& re
 
 WpEntity Space::造活动单位(Entity& ref视口, const std::string& refStrNickName, const 单位类型 类型, const Position& refPos, bool b设置视口)
 {
-	auto wp = 造活动单位(ref视口.m_spPlayer, refStrNickName, refPos, 类型);
+	auto wp = 造活动单位(ref视口.m_upPlayer, refStrNickName, refPos, 类型);
 	CHECK_WP_RET_DEFAULT(wp);
 	if (b设置视口)
 	{

@@ -10,7 +10,7 @@
 
 void BuildingComponent::AddComponent(Entity& refThis, float f半边长)
 {
-	refThis.m_spBuilding = std::make_shared<BuildingComponent, Entity&>(refThis);
+	refThis.m_upBuilding = std::make_shared<BuildingComponent, Entity&>(refThis);
 	if (苔蔓 != refThis.m_类型)
 		临时阻挡Component::AddComponent(refThis, f半边长);
 }
@@ -78,7 +78,7 @@ bool BuildingComponent::已造好() const
 float BuildingComponent::建筑半边长(const Entity& refEntity)
 {
 	单位::建筑单位配置 配置;
-	if (!refEntity.m_spBuilding)
+	if (!refEntity.m_upBuilding)
 		return 0;
 
 	if (单位::Find建筑单位配置(refEntity.m_类型, 配置))

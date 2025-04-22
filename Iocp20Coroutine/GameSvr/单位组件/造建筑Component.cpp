@@ -27,15 +27,15 @@
 
 void 造建筑Component::AddComponent(Entity& refEntity)
 {
-	refEntity.m_sp造建筑 = std::make_shared<造建筑Component, Entity&>(refEntity);
+	refEntity.m_up造建筑 = std::make_shared<造建筑Component, Entity&>(refEntity);
 }
 
 bool 造建筑Component::正在建造(const Entity& refEntity)
 {
-	if (!refEntity.m_sp造建筑)
+	if (!refEntity.m_up造建筑)
 		return false;
 
-	return refEntity.m_sp造建筑->m_cancel造建筑.operator bool();
+	return refEntity.m_up造建筑->m_cancel造建筑.operator bool();
 }
 
 造建筑Component::造建筑Component(Entity& refEntity) :m_refEntity(refEntity)
@@ -114,8 +114,8 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 单位类型 类型)
 
 	EntitySystem::BroadcastEntity描述(m_refEntity, "走向建造点");
 
-	CHECK_CO_RET_FALSE(m_refEntity.m_sp走);
-	if (co_await m_refEntity.m_sp走->WalkToPos(pos, m_cancel造建筑, 配置.f半边长 + 1))
+	CHECK_CO_RET_FALSE(m_refEntity.m_up走);
+	if (co_await m_refEntity.m_up走->WalkToPos(pos, m_cancel造建筑, 配置.f半边长 + 1))
 		co_return true;
 
 	//然后开始扣钱建造
@@ -125,7 +125,7 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 单位类型 类型)
 		co_return false;
 
 	auto& ref建筑 = *wpEntity建筑.lock();
-	CHECK_CO_RET_FALSE(ref建筑.m_spBuilding);
+	CHECK_CO_RET_FALSE(ref建筑.m_upBuilding);
 
 	if (工程车 == m_refEntity.m_类型)
 	{
@@ -143,7 +143,7 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 单位类型 类型)
 	{
 		using namespace std;
 		m_refEntity.CoDelayDelete(1ms).RunNew();
-		ref建筑.m_spBuilding->StartCo建造过程();
+		ref建筑.m_upBuilding->StartCo建造过程();
 	}
 
 	co_return false;
@@ -154,7 +154,7 @@ CoTaskBool 造建筑Component::Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel)
 	PlayerComponent::播放声音(m_refEntity, "音效/打桩机破碎镐");
 
 	KeepCancel kc(cancel);
-	std::weak_ptr<BuildingComponent> wpBuilding(wpEntity建筑.lock()->m_spBuilding);
+	std::weak_ptr<BuildingComponent> wpBuilding(wpEntity建筑.lock()->m_upBuilding);
 
 	while (!wpBuilding.expired() && BuildingComponent::MAX建造百分比 > wpBuilding.lock()->m_n建造进度百分比)
 	{
@@ -254,7 +254,7 @@ WpEntity 造建筑Component::AddBuilding(const 单位类型 类型, const Position pos)
 	//加建筑
 	//CHECK_CO_RET_0(!m_wpSpace.expired());
 	//auto spSpace = m_wpSpace.lock();
-	auto wpNew = 创建建筑(m_refEntity.m_refSpace, pos, 类型, m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity));
+	auto wpNew = 创建建筑(m_refEntity.m_refSpace, pos, 类型, m_refEntity.m_upPlayer, EntitySystem::GetNickName(m_refEntity));
 	PlayerComponent::Send资源(m_refEntity);
 	return wpNew;
 }

@@ -112,20 +112,20 @@ public:
 	单位::单位配置 m_配置;
 
 	//静态ECS，没有基类强转子类
-	std::shared_ptr<PlayerComponent> m_spPlayer;
-	std::shared_ptr<PlayerNickNameComponent> m_spPlayerNickName;
+	std::unique_ptr<PlayerComponent> m_upPlayer;
+	std::unique_ptr<PlayerNickNameComponent> m_upPlayerNickName;
 	std::unique_ptr<AttackComponent> m_upAttack;
-	std::shared_ptr<DefenceComponent> m_spDefence;
-	std::shared_ptr<MonsterComponent> m_spMonster;
-	std::shared_ptr<BuildingComponent> m_spBuilding;
-	std::shared_ptr<采集Component> m_sp采集;
-	std::shared_ptr<资源Component> m_sp资源;
-	std::shared_ptr<地堡Component> m_sp地堡;
-	std::shared_ptr<走Component> m_sp走;
-	std::shared_ptr<临时阻挡Component> m_sp临时阻挡;
-	std::shared_ptr<造活动单位Component> m_sp造活动单位;
-	std::shared_ptr<造建筑Component> m_sp造建筑;
-	std::shared_ptr<虫巢Component> m_sp虫巢;
+	std::unique_ptr<DefenceComponent> m_upDefence;
+	//std::unique_ptr<MonsterComponent> m_spMonster;
+	std::unique_ptr<BuildingComponent> m_upBuilding;
+	std::unique_ptr<采集Component> m_up采集;
+	std::unique_ptr<资源Component> m_up资源;
+	std::unique_ptr<地堡Component> m_up地堡;
+	std::unique_ptr<走Component> m_up走;
+	std::unique_ptr<临时阻挡Component> m_up临时阻挡;
+	std::unique_ptr<造活动单位Component> m_up造活动单位;
+	std::unique_ptr<造建筑Component> m_up造建筑;
+	std::unique_ptr<虫巢Component> m_up虫巢;
 	std::unique_ptr<AoiComponent> m_upAoi;
 	std::unique_ptr<飞向目标Component> m_up飞向目标;
 	std::unique_ptr<解锁单位Component> m_up解锁单位;

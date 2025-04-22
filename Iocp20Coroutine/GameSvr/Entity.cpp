@@ -61,9 +61,9 @@ float Entity::Distance(const Entity& refEntity)const
 
 bool Entity::IsDead() const
 {
-	if (!m_spDefence)
+	if (!m_upDefence)
 		return false;
-	return m_spDefence->IsDead();
+	return m_upDefence->IsDead();
 }
 
 Entity::~Entity()
@@ -107,7 +107,7 @@ bool Entity::Load(Space& refSpace, char(&buf)[1024], const uint16_t u16Size)
 		PlayerComponent::AddComponent(*spNewEntity, {}, load.m_strNickName);
 		造建筑Component::根据建筑类型AddComponent(refSpace, load.m_类型, *spNewEntity, {}, load.m_strNickName);
 
-		CHECK_NOTNULL_RET_FALSE(spNewEntity->m_spBuilding);
+		CHECK_NOTNULL_RET_FALSE(spNewEntity->m_upBuilding);
 		wpNew = spNewEntity;
 	}
 	else if (EntitySystem::Is活动单位(load.m_类型)) {
@@ -135,14 +135,14 @@ void Entity::Update()
 
 bool Entity::IsEnemy(const Entity& refEntity)
 {
-	if (!m_spPlayerNickName && !refEntity.m_spPlayerNickName)
+	if (!m_upPlayerNickName && !refEntity.m_upPlayerNickName)
 		return false;//都是怪
 
-	if (!m_spPlayerNickName || !refEntity.m_spPlayerNickName)
+	if (!m_upPlayerNickName || !refEntity.m_upPlayerNickName)
 		return true;//有一个是怪
 
 	//都是玩家单位
-	return m_spPlayerNickName->m_strNickName != refEntity.m_spPlayerNickName->m_strNickName;
+	return m_upPlayerNickName->m_strNickName != refEntity.m_upPlayerNickName->m_strNickName;
 }
 
 void Entity::SetPos(const Position& refNewPos)
@@ -150,8 +150,8 @@ void Entity::SetPos(const Position& refNewPos)
 	if (m_Pos == refNewPos)
 		return;
 
-	if (m_sp临时阻挡)
-		m_sp临时阻挡.reset();//移动了，肯定要删除阻挡
+	if (m_up临时阻挡)
+		m_up临时阻挡.reset();//移动了，肯定要删除阻挡
 
 	if (m_upAoi)
 	{
@@ -181,11 +181,11 @@ float Entity::警戒距离() const
 
 void Entity::OnLoad()
 {
-	if (m_spBuilding)
-		m_spBuilding->直接造好();
+	if (m_upBuilding)
+		m_upBuilding->直接造好();
 
-	if (m_sp虫巢)
-		m_sp虫巢->OnLoad();
+	if (m_up虫巢)
+		m_up虫巢->OnLoad();
 }
 
 void Entity::OnDestroy()
@@ -216,47 +216,47 @@ void Entity::OnDestroy()
 	//	m_up找目标走过去->TryCancel(true);
 
 
-	if (m_sp造活动单位)
-		m_sp造活动单位->TryCancel(*this);
+	if (m_up造活动单位)
+		m_up造活动单位->TryCancel(*this);
 
-	if (m_sp采集)
-		m_sp采集->m_TaskCancel.TryCancel();
+	if (m_up采集)
+		m_up采集->m_TaskCancel.TryCancel();
 
-	if (m_sp走)
-		m_sp走->TryCancel();
+	if (m_up走)
+		m_up走->TryCancel();
 
-	if (m_sp地堡)
-		m_sp地堡->OnDestroy();
+	if (m_up地堡)
+		m_up地堡->OnDestroy();
 
-	if (m_sp临时阻挡)
-		m_sp临时阻挡.reset();
+	if (m_up临时阻挡)
+		m_up临时阻挡.reset();
 
-	if (m_sp造建筑)
-		m_sp造建筑->TryCancel();
+	if (m_up造建筑)
+		m_up造建筑->TryCancel();
 
-	if (m_spBuilding)
-		m_spBuilding->TryCancel();
+	if (m_upBuilding)
+		m_upBuilding->TryCancel();
 
-	if (m_sp虫巢)
-		m_sp虫巢->TryCancel();
+	if (m_up虫巢)
+		m_up虫巢->TryCancel();
 
-	if (m_up飞向目标)
-		m_up飞向目标->TryCancel();
+	//if (m_up飞向目标)
+	//	m_up飞向目标->TryCancel();
 
-	if (m_upAoi)
-		m_upAoi->OnDestory();
+	//if (m_upAoi)
+	//	m_upAoi->OnDestory();
 
-	if (m_upBuff)
-		m_upBuff->OnDestroy();
+	//if (m_upBuff)
+	//	m_upBuff->OnDestroy();
 
 	//if (m_up苔蔓扩张)
 	//	m_up苔蔓扩张->TryCancel();
 
-	if (m_up苔蔓)
-		m_up苔蔓->TryCancel();
+	//if (m_up苔蔓)
+	//	m_up苔蔓->TryCancel();
 
-	if (m_up无苔蔓就持续掉血)
-		m_up无苔蔓就持续掉血->TryCancel();
+	//if (m_up无苔蔓就持续掉血)
+	//	m_up无苔蔓就持续掉血->TryCancel();
 
 	if (m_cancelDelete)
 	{
@@ -278,10 +278,10 @@ void Entity::BroadcastLeave()
 
 const std::string& Entity::头顶Name()const
 {
-	if (m_spPlayerNickName)
-		return m_spPlayerNickName->m_strNickName;
+	if (m_upPlayerNickName)
+		return m_upPlayerNickName->m_strNickName;
 
-	if (m_sp资源)
+	if (m_up资源)
 	{
 		static const std::string str("资源");
 		return str;
@@ -342,8 +342,8 @@ void Entity::Broadcast(const T& msg)
 		if (!EntitySystem::Is视口(refEntity))
 			continue;
 
-		if (refEntity.m_spPlayer)
-			refEntity.m_spPlayer->m_refSession.Send(msg);
+		if (refEntity.m_upPlayer)
+			refEntity.m_upPlayer->m_refSession.Send(msg);
 	}
 
 	//m_refSpace.Broadcast(msg);
@@ -360,8 +360,8 @@ CoTaskBool Entity::CoDelayDelete(const std::chrono::system_clock::duration& dura
 	if (m_cancelDelete)
 		co_return false;
 
-	if (m_sp地堡)
-		m_sp地堡->OnBeforeDelayDelete();
+	if (m_up地堡)
+		m_up地堡->OnBeforeDelayDelete();
 
 	using namespace std;
 	if (co_await CoTimer::Wait(dura, m_cancelDelete))//服务器主工作线程大循环，每次循环触发一次

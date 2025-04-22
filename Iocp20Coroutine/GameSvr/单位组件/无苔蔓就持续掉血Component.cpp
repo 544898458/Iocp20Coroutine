@@ -9,8 +9,7 @@
 
 void 无苔蔓就持续掉血Component::AddComponent(Entity& refEntity)
 {
-	LOG_IF(ERROR, refEntity.m_up无苔蔓就持续掉血) << "m_up离开菌毯就持续掉血";
-	refEntity.m_up无苔蔓就持续掉血.reset(new 无苔蔓就持续掉血Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up无苔蔓就持续掉血,new 无苔蔓就持续掉血Component(refEntity));
 }
 
 无苔蔓就持续掉血Component::无苔蔓就持续掉血Component(Entity& ref) :m_refEntity(ref)
@@ -31,7 +30,7 @@ CoTaskBool 无苔蔓就持续掉血Component::Co反复加持续掉血Buff()
 	co_return false;
 }
 
-void 无苔蔓就持续掉血Component::TryCancel()
+void 无苔蔓就持续掉血Component::OnEntityDestroy(const bool bDestroy)
 {
 	if (m_funCancel)
 	{

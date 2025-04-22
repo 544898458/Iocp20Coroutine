@@ -11,8 +11,7 @@
 
 void 苔蔓Component::AddComponent(Entity& refEntity)
 {
-	LOG_IF(ERROR, refEntity.m_up苔蔓) << "m_up苔蔓";
-	refEntity.m_up苔蔓.reset(new 苔蔓Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up苔蔓, new 苔蔓Component(refEntity));
 }
 
 苔蔓Component::苔蔓Component(Entity& ref) :m_refEntity(ref)
@@ -21,7 +20,7 @@ void 苔蔓Component::AddComponent(Entity& refEntity)
 	Co给周围加Buff().RunNew();
 }
 
-void 苔蔓Component::TryCancel()
+void 苔蔓Component::OnEntityDestroy(const bool bDestroy)
 {
 	if (m_funCancel萎缩消亡)
 	{
@@ -85,18 +84,18 @@ CoTaskBool 苔蔓Component::Co给周围加Buff()
 			if (!refEntity.m_upBuff)
 				continue;
 
-			if (!refEntity.m_spDefence)
+			if (!refEntity.m_upDefence)
 				continue;
 
 			if (单位::Is虫(refEntity.m_类型)&& !m_refEntity.IsEnemy(refEntity))//只给友方虫族单位加速度
 			{
 				refEntity.m_upBuff->加属性(苔蔓给虫单位加移动速度);
 				refEntity.m_upBuff->删Buff(离开苔蔓的虫建筑持续扣血);
-				refEntity.m_spDefence->加血(1);
+				refEntity.m_upDefence->加血(1);
 			}
 			else if (EntitySystem::Is建筑(refEntity))//给人类建筑扣血（不分敌我）
 			{
-				refEntity.m_spDefence->受伤(1, m_refEntity.Id);
+				refEntity.m_upDefence->受伤(1, m_refEntity.Id);
 			}
 		}
 	}

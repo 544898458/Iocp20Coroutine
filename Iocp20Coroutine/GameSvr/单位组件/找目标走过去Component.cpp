@@ -79,7 +79,7 @@ CoTaskBool 找目标走过去Component::Co顶层(
 
 			continue;//这里可能有问题，无法区分是手动停止走路打断还是销毁对象打断
 		}
-		if (!m_b原地坚守 && m_refEntity.m_sp走 && m_fun空闲走向此处 && !走Component::正在走(m_refEntity) && !采集Component::正在采集(m_refEntity))//打完走向下一个目标
+		if (!m_b原地坚守 && m_refEntity.m_up走 && m_fun空闲走向此处 && !走Component::正在走(m_refEntity) && !采集Component::正在采集(m_refEntity))//打完走向下一个目标
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
@@ -87,7 +87,7 @@ CoTaskBool 找目标走过去Component::Co顶层(
 			m_refEntity.m_refSpace.CrowdToolFindNerestPos(posTarget);
 			if (m_refEntity.Pos().DistanceLessEqual(posTarget, 3))
 			{
-				m_fun空闲走向此处 = m_refEntity.m_spPlayerNickName ? nullptr : 怪物闲逛;
+				m_fun空闲走向此处 = m_refEntity.m_upPlayerNickName ? nullptr : 怪物闲逛;
 				continue;
 			}
 
@@ -164,19 +164,19 @@ CoTaskBool 找目标走过去Component::Co走向警戒范围内的目标然后操作(
 
 		if (m_refEntity.m_wpOwner.expired() && (b仇恨目标 || m_refEntity.DistanceLessEqual(refTarget, m_refEntity.警戒距离())) &&
 			//!走Component::正在走(m_refEntity) && 
-			(!m_refEntity.m_sp采集 || m_refEntity.m_sp采集->m_TaskCancel.co.Finished())
+			(!m_refEntity.m_up采集 || m_refEntity.m_up采集->m_TaskCancel.co.Finished())
 			)
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
-			if (m_refEntity.m_sp采集)
+			if (m_refEntity.m_up采集)
 			{
-				m_refEntity.m_sp采集->m_TaskCancel.TryCancel();
+				m_refEntity.m_up采集->m_TaskCancel.TryCancel();
 			}
 
-			if (m_refEntity.m_sp走)//炮台没有走组件
+			if (m_refEntity.m_up走)//炮台没有走组件
 			{
-				if (co_await m_refEntity.m_sp走->WalkToTarget(wpEntity.lock(), m_TaskCancel.cancel, !b仇恨目标, [this](Entity& ref) {return 检查穿墙(ref); }))
+				if (co_await m_refEntity.m_up走->WalkToTarget(wpEntity.lock(), m_TaskCancel.cancel, !b仇恨目标, [this](Entity& ref) {return 检查穿墙(ref); }))
 					co_return true;
 			}
 			continue;//可能已走到攻击距离内，再攻击试试

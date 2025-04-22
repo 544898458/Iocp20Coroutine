@@ -243,7 +243,7 @@ namespace 单人剧情
 						if (&spEntity->m_refSpace != &refSpace)
 							return false;
 
-						return !spEntity->m_spPlayer;//怪物阵亡
+						return !spEntity->m_upPlayer;//怪物阵亡
 					})))
 				{
 					co_return 0;
@@ -437,7 +437,7 @@ namespace 单人剧情
 						if (&spEntity->m_refSpace != &refSpace)
 							return false;
 
-						return !spEntity->m_spPlayer;//怪物阵亡
+						return !spEntity->m_upPlayer;//怪物阵亡
 					})))
 				{
 					co_return 0;
@@ -708,7 +708,7 @@ namespace 单人剧情
 		auto wp = 造建筑Component::创建建筑(refSpace, pos, 类型, {}, "");
 		CHECK_WP_RET_DEFAULT(wp);
 		auto& refEntity = *wp.lock();
-		refEntity.m_spBuilding->直接造好();
+		refEntity.m_upBuilding->直接造好();
 		return wp;
 	}
 

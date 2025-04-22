@@ -54,7 +54,7 @@ void AttackComponent::OnEntityDestroy(const bool bDestroy)
 
 bool AttackComponent::可以攻击()
 {
-	if (m_refEntity.m_spBuilding && !m_refEntity.m_spBuilding->已造好())
+	if (m_refEntity.m_upBuilding && !m_refEntity.m_upBuilding->已造好())
 		return false;
 
 	if (m_refEntity.IsDead())
@@ -63,10 +63,10 @@ bool AttackComponent::可以攻击()
 	if (造建筑Component::正在建造(m_refEntity))
 		return false;
 
-	if (m_refEntity.m_sp走)
+	if (m_refEntity.m_up走)
 	{
-		if (!m_refEntity.m_sp走->m_coWalk手动控制.Finished() ||
-			!m_refEntity.m_sp走->m_coWalk进地堡.Finished())
+		if (!m_refEntity.m_up走->m_coWalk手动控制.Finished() ||
+			!m_refEntity.m_up走->m_coWalk进地堡.Finished())
 			return false;//表示不允许打断
 	}
 	return true;
@@ -122,18 +122,18 @@ CoTaskBool AttackComponent::CoAttack目标(WpEntity wpDefencer, FunCancel& cancel)
 		if (!m_refEntity.DistanceLessEqual(refDefencer, m_refEntity.m_up找目标走过去->攻击距离(refDefencer)))
 			break;//要执行后摇
 
-		if (!refDefencer.m_spDefence)
+		if (!refDefencer.m_upDefence)
 			break;//目标打不了
 
 		找目标走过去Component::播放攻击音效(m_refEntity);
 
 		const uint16_t u16升级后的攻击 = EntitySystem::升级后攻击(m_refEntity);
 		if (0 < u16升级后的攻击)
-			refDefencer.m_spDefence->受伤(u16升级后的攻击, m_refEntity.Id);
+			refDefencer.m_upDefence->受伤(u16升级后的攻击, m_refEntity.Id);
 
 		if (绿色坦克 == m_refEntity.m_类型)
 		{
-			auto wp光刺 = m_refEntity.m_refSpace.造活动单位(m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity), m_refEntity.Pos(), 光刺);
+			auto wp光刺 = m_refEntity.m_refSpace.造活动单位(m_refEntity.m_upPlayer, EntitySystem::GetNickName(m_refEntity), m_refEntity.Pos(), 光刺);
 			_ASSERT(!wp光刺.expired());
 			CHECK_WP_CO_RET_FALSE(wp光刺);
 			auto& ref光刺 = *wp光刺.lock();
@@ -219,8 +219,8 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 				if (!EntitySystem::Is空地能打(m_refEntity.m_类型, refDefencer.m_类型))
 					continue;
 
-				if (refDefencer.m_spDefence && refDefencer.Pos().DistanceLessEqual(posTarget, 5))
-					refDefencer.m_spDefence->受伤(EntitySystem::升级后攻击(m_refEntity), m_refEntity.Id);
+				if (refDefencer.m_upDefence && refDefencer.Pos().DistanceLessEqual(posTarget, 5))
+					refDefencer.m_upDefence->受伤(EntitySystem::升级后攻击(m_refEntity), m_refEntity.Id);
 			}
 		}
 
@@ -240,10 +240,10 @@ CoTaskBool AttackComponent::CoAttack位置(const Position posTarget, const float f
 void AttackComponent::处理仇恨目标(WpEntity& wpEntity, bool& ref仇恨目标)
 {
 	//仇恨列表
-	if (m_refEntity.m_spDefence)
+	if (m_refEntity.m_upDefence)
 	{
 		//找对我伤害最大的敌人
-		auto& refMap = m_refEntity.m_spDefence->m_map对我伤害;
+		auto& refMap = m_refEntity.m_upDefence->m_map对我伤害;
 		while (!refMap.empty())
 		{
 			auto iterBegin = refMap.begin();
@@ -311,8 +311,8 @@ WpEntity AttackComponent::Get最近的敌人()
 		{
 			if (!EntitySystem::Is空地能打(m_refEntity.m_类型, ref.m_类型))
 				return false;
-			if (!ref.m_spDefence)
+			if (!ref.m_upDefence)
 				return false;
-			return nullptr != ref.m_spDefence;
+			return nullptr != ref.m_upDefence;
 		});
 }

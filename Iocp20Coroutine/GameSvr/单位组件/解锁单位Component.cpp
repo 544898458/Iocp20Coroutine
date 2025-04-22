@@ -28,8 +28,8 @@ void 解锁单位Component::TryCancel()
 
 void 解锁单位Component::解锁单位(const 单位类型 类型)
 {
-	CHECK_RET_VOID(m_refEntity.m_spBuilding);
-	if (!m_refEntity.m_spBuilding->已造好())
+	CHECK_RET_VOID(m_refEntity.m_upBuilding);
+	if (!m_refEntity.m_upBuilding->已造好())
 	{
 		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "还没造好建筑，不能解锁单位");
 		return;

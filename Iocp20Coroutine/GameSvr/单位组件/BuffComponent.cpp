@@ -16,17 +16,17 @@ CoTaskBool BuffComponent::Co∂® ±∏ƒ ˝÷µ(std::chrono::system_clock::duration duraº
 {
 	while (!co_await CoTimer::Wait(duraº‰∏Ù, funCancel))
 	{
-		CHECK_CO_RET_FALSE(m_refEntity.m_spDefence);
+		CHECK_CO_RET_FALSE(m_refEntity.m_upDefence);
 		if (m_refEntity.IsDead())
 			co_return false;
 
-		if(0<i16±‰ªØ)
-			m_refEntity.m_spDefence->º”—™(i16±‰ªØ);
-		else if(0>i16±‰ªØ)
-            m_refEntity.m_spDefence-> ‹…À(-i16±‰ªØ, idAttacker);
+		if (0 < i16±‰ªØ)
+			m_refEntity.m_upDefence->º”—™(i16±‰ªØ);
+		else if (0 > i16±‰ªØ)
+			m_refEntity.m_upDefence-> ‹…À(-i16±‰ªØ, idAttacker);
 		else
 			LOG(ERROR) << "BuffComponent::º” Ù–‘ ±‰ªØ÷µ¥ÌŒÛ";
-			
+
 		m_refEntity.BroadcastNotifyPos();
 	}
 	co_return false;
@@ -34,7 +34,7 @@ CoTaskBool BuffComponent::Co∂® ±∏ƒ ˝÷µ(std::chrono::system_clock::duration duraº
 
 BuffComponent& BuffComponent::AddComponent(Entity& refEntity)
 {
-	refEntity.m_upBuff.reset(new BuffComponent(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_upBuff, new BuffComponent(refEntity));
 	return *refEntity.m_upBuff;
 }
 
@@ -75,10 +75,10 @@ void BuffComponent::º” Ù–‘(BuffId idBuff±Ì)
 
 void BuffComponent::On Ù–‘±‰ªØ( Ù–‘¿‡–Õ  Ù–‘¿‡–Õ)
 {
-	if ( Ù–‘¿‡–Õ ==  Ù–‘¿‡–Õ::“∆∂ØÀŸ∂» && m_refEntity.m_sp◊ﬂ)
+	if ( Ù–‘¿‡–Õ ==  Ù–‘¿‡–Õ::“∆∂ØÀŸ∂» && m_refEntity.m_up◊ﬂ)
 	{
-		if (!m_refEntity.m_sp◊ﬂ->m_wpRecastNavigationCrowd.expired())
-			m_refEntity.m_sp◊ﬂ->m_wpRecastNavigationCrowd.lock()->SetSpeed();
+		if (!m_refEntity.m_up◊ﬂ->m_wpRecastNavigationCrowd.expired())
+			m_refEntity.m_up◊ﬂ->m_wpRecastNavigationCrowd.lock()->SetSpeed();
 	}
 }
 float BuffComponent:: Ù–‘( Ù–‘¿‡–Õ  Ù–‘) const
@@ -120,7 +120,7 @@ bool BuffComponent::“—”–Buff(BuffId id) const
 	return m_mapFunCancel.find(id) != m_mapFunCancel.end();
 }
 
-void BuffComponent::OnDestroy()
+void BuffComponent::OnEntityDestroy(const bool bDestroy)
 {
 	for (auto& [id, refFunCancel] : m_mapFunCancel)
 	{

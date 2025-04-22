@@ -11,7 +11,7 @@ class BuffComponent
 public:
 	BuffComponent(Entity& ref);
 	static BuffComponent& AddComponent(Entity& refEntity);
-	void OnDestroy();
+	void OnEntityDestroy(const bool bDestroy);
 
 	void 加属性(BuffId idBuff表);
 	float 属性(属性类型 属性类型)const;

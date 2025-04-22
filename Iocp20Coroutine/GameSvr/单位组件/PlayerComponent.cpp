@@ -10,14 +10,14 @@ std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& re
 
 void PlayerComponent::Say(Entity& refEntity, const std::string& str, const SayChannel channel)
 {
-	if (refEntity.m_spPlayer)
-		refEntity.m_spPlayer->Say(str, channel);
+	if (refEntity.m_upPlayer)
+		refEntity.m_upPlayer->Say(str, channel);
 }
 
 void PlayerComponent::Say系统(Entity& refEntity, const std::string& str)
 {
-	if (refEntity.m_spPlayer)
-		refEntity.m_spPlayer->m_refSession.Say系统(str);
+	if (refEntity.m_upPlayer)
+		refEntity.m_upPlayer->m_refSession.Say系统(str);
 }
 
 void PlayerComponent::剧情对话(Space& refSpace, const std::string& refStrNickName,
@@ -48,13 +48,13 @@ void PlayerComponent::剧情对话已看完(const std::string& refStrNickName)
 
 void PlayerComponent::播放声音Buzz(Entity& refEntity, const std::string& str文本) 
 {
-	if (refEntity.m_spPlayer)
-		refEntity.m_spPlayer->m_refSession.播放声音Buzz( str文本);
+	if (refEntity.m_upPlayer)
+		refEntity.m_upPlayer->m_refSession.播放声音Buzz( str文本);
 }
 void PlayerComponent::播放声音(Entity& refEntity, const std::string& refStr声音, const std::string& str文本)
 {
-	if (refEntity.m_spPlayer)
-		refEntity.m_spPlayer->m_refSession.播放声音(refStr声音, str文本);
+	if (refEntity.m_upPlayer)
+		refEntity.m_upPlayer->m_refSession.播放声音(refStr声音, str文本);
 }
 void PlayerComponent::播放声音(const std::string& refStrNickName, const std::string& refStr声音, const std::string& str文本)
 {
@@ -71,8 +71,8 @@ void PlayerComponent::播放声音(SpPlayerComponent& spPlayer可能空, const std::str
 
 void PlayerComponent::Send资源(Entity& refEntity)
 {
-	if (refEntity.m_spPlayer)
-		refEntity.m_spPlayer->m_refSession.Send资源();
+	if (refEntity.m_upPlayer)
+		refEntity.m_upPlayer->m_refSession.Send资源();
 }
 
 void PlayerComponent::AddComponent(Entity& refEntity, std::weak_ptr<PlayerComponent> wpPlayer, const std::string& strNickName)
@@ -81,7 +81,7 @@ void PlayerComponent::AddComponent(Entity& refEntity, std::weak_ptr<PlayerCompon
 	{
 		//CHECK_RET_VOID(!strNickName.empty());
 		if (!strNickName.empty())//没有玩家昵称说明就是怪（敌人）
-			refEntity.m_spPlayerNickName = std::make_shared<PlayerNickNameComponent, const std::string&>(strNickName);
+			refEntity.m_upPlayerNickName = std::make_shared<PlayerNickNameComponent, const std::string&>(strNickName);
 	}
 	else 
 	{
@@ -91,8 +91,8 @@ void PlayerComponent::AddComponent(Entity& refEntity, std::weak_ptr<PlayerCompon
 
 void PlayerComponent::AddComponent(Entity& refEntity, PlayerGateSession_Game &refSession)
 {
-	refEntity.m_spPlayer = std::make_shared<PlayerComponent, PlayerGateSession_Game&>(refSession);
-	refEntity.m_spPlayerNickName = std::make_shared<PlayerNickNameComponent, const std::string&>(refSession.NickName());
+	refEntity.m_upPlayer = std::make_shared<PlayerComponent, PlayerGateSession_Game&>(refSession);
+	refEntity.m_upPlayerNickName = std::make_shared<PlayerNickNameComponent, const std::string&>(refSession.NickName());
 }
 void PlayerComponent::Say(const std::string& str, const SayChannel channel)
 {

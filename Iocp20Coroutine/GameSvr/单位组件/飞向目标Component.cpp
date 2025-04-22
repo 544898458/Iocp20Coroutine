@@ -9,7 +9,7 @@
 #include "../EntitySystem.h"
 void ·ÉÏòÄ¿±êComponent::AddComponent(Entity& refEntity, const Position& posÆğÊ¼µã, const Position& pos·½Ïò, const float f×îÔ¶¾àÀë)
 {
-	refEntity.m_up·ÉÏòÄ¿±ê.reset(new ·ÉÏòÄ¿±êComponent(refEntity, posÆğÊ¼µã, pos·½Ïò, f×îÔ¶¾àÀë));
+	refEntity.AddComponentOnDestroy(&Entity::m_up·ÉÏòÄ¿±ê, new ·ÉÏòÄ¿±êComponent(refEntity, posÆğÊ¼µã, pos·½Ïò, f×îÔ¶¾àÀë));
 }
 
 ·ÉÏòÄ¿±êComponent::·ÉÏòÄ¿±êComponent(Entity& ref, const Position& posÆğÊ¼µã, const Position& vec·½Ïò, const float f×îÔ¶¾àÀë) :
@@ -21,7 +21,7 @@ void ·ÉÏòÄ¿±êComponent::AddComponent(Entity& refEntity, const Position& posÆğÊ¼µ
 	Co·ÉÏòÄ¿±êÓöµĞ±¬Õ¨().RunNew();
 }
 
-void ·ÉÏòÄ¿±êComponent::TryCancel()
+void ·ÉÏòÄ¿±êComponent::OnEntityDestroy(const bool bDestroy)
 {
 	if (m_funCancel) {
 		m_funCancel();
@@ -42,10 +42,10 @@ CoTaskBool ·ÉÏòÄ¿±êComponent::Co·ÉÏòÄ¿±êÓöµĞ±¬Õ¨()
 		{
 			auto &refÄ¿±ê = *wp.lock();
 			const auto f½¨Öş°ë±ß³¤ = BuildingComponent::½¨Öş°ë±ß³¤(refÄ¿±ê);
-			if (refÄ¿±ê.m_spDefence && refÄ¿±ê.Pos().DistanceLessEqual(m_refEntity.Pos(), 1 + f½¨Öş°ë±ß³¤))
+			if (refÄ¿±ê.m_upDefence && refÄ¿±ê.Pos().DistanceLessEqual(m_refEntity.Pos(), 1 + f½¨Öş°ë±ß³¤))
 			{
 				EntitySystem::Broadcast²¥·ÅÉùÒô(m_refEntity, ÅäÖÃ.str¹¥»÷ÒôĞ§);
-				refÄ¿±ê.m_spDefence->ÊÜÉË(EntitySystem::Éı¼¶ºó¹¥»÷(m_refEntity), m_refEntity.Id);
+				refÄ¿±ê.m_upDefence->ÊÜÉË(EntitySystem::Éı¼¶ºó¹¥»÷(m_refEntity), m_refEntity.Id);
 				m_refEntity.DelayDelete();
 				co_return false;
 			}

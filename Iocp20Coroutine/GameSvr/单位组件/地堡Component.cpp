@@ -10,7 +10,7 @@
 
 void 地堡Component::AddComponent(Entity& refEntity)
 {
-	refEntity.m_sp地堡 = std::make_shared<地堡Component,Entity&>(refEntity);
+	refEntity.m_up地堡 = std::make_shared<地堡Component,Entity&>(refEntity);
 }
 
 void 地堡Component::OnDestroy()
@@ -55,8 +55,8 @@ void 地堡Component::进(Space& refSpace, Entity& refEntity)
 	
 	refEntity.m_wpOwner = m_refEntity.weak_from_this();
 
-	if (refEntity.m_spPlayer)
-		refEntity.m_spPlayer->m_refSession.删除选中(refEntity.Id);
+	if (refEntity.m_upPlayer)
+		refEntity.m_upPlayer->m_refSession.删除选中(refEntity.Id);
 
 	EntitySystem::BroadcastEntity描述(m_refEntity, std::format("地堡内有{0}人", m_listSpEntity.size()));
 }

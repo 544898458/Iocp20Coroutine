@@ -38,7 +38,7 @@ bool 资源可采集(WpEntity& refWp目标资源)
 	if (refWp目标资源.expired())
 		return false;
 
-	auto sp资源 = refWp目标资源.lock()->m_sp资源;
+	auto sp资源 = refWp目标资源.lock()->m_up资源;
 	CHECK_FALSE(sp资源);
 	if (sp资源->m_可采集数量 <= 0)
 	{
@@ -66,7 +66,7 @@ std::tuple<SpEntity, std::shared_ptr<资源Component>> 采集Component::Get目标资源(
 	}
 
 	auto sp目标资源 = refWp目标资源.lock();
-	auto sp资源 = sp目标资源->m_sp资源;
+	auto sp资源 = sp目标资源->m_up资源;
 	m_目标资源类型 = sp资源->m_类型;
 	return { sp目标资源 ,sp资源 };
 }
@@ -87,7 +87,7 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 			co_return false;
 		}
 
-		if (!m_refEntity.m_spPlayerNickName)
+		if (!m_refEntity.m_upPlayerNickName)
 		{
 			LOG(WARNING) << "采集过程中玩家断线";
 			co_return false;
@@ -95,11 +95,11 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 
 		float min距离的平方 = std::numeric_limits<float>::max();
 		WpEntity wpEntity基地;
-		for (const auto [id, wp] : m_refEntity.m_refSpace.m_mapPlayer[m_refEntity.m_spPlayerNickName->m_strNickName].m_mapWpEntity)
+		for (const auto [id, wp] : m_refEntity.m_refSpace.m_mapPlayer[m_refEntity.m_upPlayerNickName->m_strNickName].m_mapWpEntity)
 		{
 			CHECK_WP_CONTINUE(wp);
 			const auto& refEntity = *wp.lock();
-			if (!refEntity.m_spBuilding || (refEntity.m_类型 != 基地 && refEntity.m_类型 != 虫巢))//找离自己最近的基地
+			if (!refEntity.m_upBuilding || (refEntity.m_类型 != 基地 && refEntity.m_类型 != 虫巢))//找离自己最近的基地
 				continue;
 
 			const auto pow2 = m_refEntity.DistancePow2(refEntity);
@@ -153,8 +153,8 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 			//m_refEntity.m_upAttack->TryCancel();
 			EntitySystem::停止攻击和治疗(m_refEntity);
 
-			CHECK_CO_RET_FALSE(m_refEntity.m_sp走);
-			if (co_await m_refEntity.m_sp走->WalkToTarget(wpEntity基地.lock(), m_TaskCancel.cancel, false))
+			CHECK_CO_RET_FALSE(m_refEntity.m_up走);
+			if (co_await m_refEntity.m_up走->WalkToTarget(wpEntity基地.lock(), m_TaskCancel.cancel, false))
 				co_return true;//中断，可能打怪去了
 
 			continue;
@@ -175,8 +175,8 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 					EntitySystem::BroadcastEntity描述(m_refEntity, std::format("走向{0}", spEntity资源->m_类型 == 晶体矿 ? "晶体矿" : "燃气矿"));
 					//m_refEntity.m_upAttack->TryCancel();
 
-					CHECK_CO_RET_FALSE(m_refEntity.m_sp走);
-					if (co_await m_refEntity.m_sp走->WalkToTarget(wp目标资源.lock(), m_TaskCancel.cancel, false))
+					CHECK_CO_RET_FALSE(m_refEntity.m_up走);
+					if (co_await m_refEntity.m_up走->WalkToTarget(wp目标资源.lock(), m_TaskCancel.cancel, false))
 						co_return true;//中断
 
 					m_refEntity.BroadcastChangeSkeleAnim(m_refEntity.m_类型 == 工虫 ? "采集" : "2", true);
@@ -230,14 +230,14 @@ void 采集Component::提醒资源枯竭()
 }
 void 采集Component::AddComponent(Entity& refEntity)
 {
-	refEntity.m_sp采集 = std::make_shared<采集Component, Entity&>(refEntity);
+	refEntity.m_up采集 = std::make_shared<采集Component, Entity&>(refEntity);
 }
 
 bool 采集Component::正在采集(Entity& refEntity)
 {
-	if (!refEntity.m_sp采集)
+	if (!refEntity.m_up采集)
 		return false;
 
-	return !refEntity.m_sp采集->m_TaskCancel.co.Finished();
+	return !refEntity.m_up采集->m_TaskCancel.co.Finished();
 }
 

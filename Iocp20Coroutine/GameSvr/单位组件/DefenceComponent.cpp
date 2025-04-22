@@ -16,8 +16,8 @@ DefenceComponent::DefenceComponent(Entity& refEntity, const int i32HpMax) : m_re
 
 void DefenceComponent::AddComponent(Entity& refEntity, uint16_t u16初始Hp)
 {
-	CHECK_VOID(!refEntity.m_spDefence);
-	refEntity.m_spDefence = std::make_shared<DefenceComponent, Entity&, const int>(refEntity, u16初始Hp);
+	CHECK_VOID(!refEntity.m_upDefence);
+	refEntity.m_upDefence = std::make_shared<DefenceComponent, Entity&, const int>(refEntity, u16初始Hp);
 }
 
 uint16_t DefenceComponent::升级后的防御(Entity& refEntity)

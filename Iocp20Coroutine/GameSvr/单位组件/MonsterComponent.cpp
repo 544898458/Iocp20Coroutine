@@ -10,22 +10,22 @@
 #include "单位.h"
 #include "../EntitySystem.h"
 
-
-void MonsterComponent::AddComponent(Entity& refEntity)
-{
-	refEntity.m_spMonster = std::make_shared<MonsterComponent, Entity&>(refEntity);
-}
-
-MonsterComponent::MonsterComponent(Entity& refThis)
-{
-	if (!refThis.m_upAttack)
-	{
-		LOG(ERROR) << "m_upAttack";
-		return;
-	}
-	//m_coIdle = AiCo::Idle(refThis.shared_from_this(), refThis.m_upAttack->m_cancel);
-	//m_coIdle.Run();
-}
+//
+//void MonsterComponent::AddComponent(Entity& refEntity)
+//{
+//	refEntity.m_spMonster = std::make_shared<MonsterComponent, Entity&>(refEntity);
+//}
+//
+//MonsterComponent::MonsterComponent(Entity& refThis)
+//{
+//	if (!refThis.m_upAttack)
+//	{
+//		LOG(ERROR) << "m_upAttack";
+//		return;
+//	}
+//	//m_coIdle = AiCo::Idle(refThis.shared_from_this(), refThis.m_upAttack->m_cancel);
+//	//m_coIdle.Run();
+//}
 
 
 std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const 单位类型 类型, const Position& refPos, const int count)
@@ -47,7 +47,7 @@ std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const 单位类
 
 		DefenceComponent::AddComponent(*spEntityMonster, 怪配置.u16初始Hp);
 		走Component::AddComponent(*spEntityMonster);
-		AddComponent(*spEntityMonster);
+		//AddComponent(*spEntityMonster);
 		
 		
 		refSpace.AddEntity(spEntityMonster);

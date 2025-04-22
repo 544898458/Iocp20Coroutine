@@ -7,7 +7,7 @@ class 无苔蔓就持续掉血Component
 public:
 	无苔蔓就持续掉血Component(Entity&);
 	CoTaskBool Co反复加持续掉血Buff();
-	void TryCancel();
+	void OnEntityDestroy(const bool bDestroy);
 	static void AddComponent(Entity& refEntity);
 	WpEntity m_wp苔蔓;
 

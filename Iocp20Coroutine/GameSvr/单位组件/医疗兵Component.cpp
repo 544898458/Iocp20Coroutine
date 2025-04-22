@@ -42,10 +42,10 @@ bool 医疗兵Component::可以治疗()
 	//if (造建筑Component::正在建造(m_refEntity))
 	//	return false;
 
-	if (m_refEntity.m_sp走)
+	if (m_refEntity.m_up走)
 	{
-		if (!m_refEntity.m_sp走->m_coWalk手动控制.Finished() ||
-			!m_refEntity.m_sp走->m_coWalk进地堡.Finished())
+		if (!m_refEntity.m_up走->m_coWalk手动控制.Finished() ||
+			!m_refEntity.m_up走->m_coWalk进地堡.Finished())
 			return false;//表示不允许打断
 	}
 	return true;
@@ -69,10 +69,10 @@ WpEntity 医疗兵Component::Get最近的可治疗友方单位()
 {
 	return m_refEntity.Get最近的Entity支持地堡中的单位(Entity::友方, [this](const Entity& ref)->bool
 		{
-			if (!ref.m_spDefence)
+			if (!ref.m_upDefence)
 				return false;
 
-			if (ref.m_spDefence->已满血())
+			if (ref.m_upDefence->已满血())
 				return false;
 
 			return true;
@@ -131,25 +131,25 @@ CoTaskBool 医疗兵Component::Co治疗目标(WpEntity wp目标, FunCancel& cancel)
 
 			auto& ref目标 = *wp目标.lock();
 
-			if (!ref目标.m_spDefence)
+			if (!ref目标.m_upDefence)
 			{
 				LOG(ERROR) << "!ref目标.m_spDefence";
 				break;
 			}
 
-			if(ref目标.m_spDefence->已满血())
+			if(ref目标.m_upDefence->已满血())
                 break;
 
 			CHECK_CO_RET_FALSE(m_refEntity.m_up找目标走过去);
 			if (!m_refEntity.DistanceLessEqual(ref目标, m_refEntity.m_up找目标走过去->攻击距离(ref目标)))
 				break;//要执行后摇
 
-			if (!ref目标.m_spDefence)
+			if (!ref目标.m_upDefence)
 				break;//目标打不了
 
 			找目标走过去Component::播放攻击音效(m_refEntity);
 
-			ref目标.m_spDefence->m_hp += EntitySystem::升级后攻击(m_refEntity);
+			ref目标.m_upDefence->m_hp += EntitySystem::升级后攻击(m_refEntity);
 			ref目标.BroadcastNotifyPos();
 		}
 

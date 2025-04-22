@@ -8,7 +8,7 @@
 #include "找目标走过去Component.h"
 void AoiComponent::Add(Space& refSpace, Entity& refEntity, const int32_t i32视野范围)
 {
-	refEntity.m_upAoi.reset(new AoiComponent(refSpace, refEntity));// std::make_unique<AoiComponent>();
+	refEntity.AddComponentOnDestroy(&Entity::m_upAoi, new AoiComponent(refSpace, refEntity));// std::make_unique<AoiComponent>();
 	refEntity.m_upAoi->m_i32视野范围 = i32视野范围;
 	refEntity.m_upAoi->进入Space();
 }
@@ -94,8 +94,8 @@ void AoiComponent::看到(Entity& refEntity被看)
 		{
 			m_refEntity.m_up找目标走过去->m_b搜索新的目标 = true;
 		}
-		else if (m_refEntity.m_sp地堡) {
-			for (auto sp : m_refEntity.m_sp地堡->m_listSpEntity)
+		else if (m_refEntity.m_up地堡) {
+			for (auto sp : m_refEntity.m_up地堡->m_listSpEntity)
 			{
 				if (sp->m_up找目标走过去)
 				{
@@ -185,7 +185,7 @@ void AoiComponent::OnBeforeChangePos(const Position& posNew)
 	看到这些格子(vec新增看到的格子);
 	能看到这一格的人都看到我(idNew);
 }
-void AoiComponent::OnDestory()
+void AoiComponent::OnEntityDestroy(const bool bDestroy)
 {
 	离开Space();
 	//for (auto [k, wp] : m_map我能看到的)

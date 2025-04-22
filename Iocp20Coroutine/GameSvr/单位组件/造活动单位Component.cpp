@@ -19,7 +19,7 @@
 
 void ‘ÏªÓ∂Øµ•ŒªComponent::AddComponent(Entity& refEntity)
 {
-	refEntity.m_sp‘ÏªÓ∂Øµ•Œª = std::make_shared<‘ÏªÓ∂Øµ•ŒªComponent, Entity& >(refEntity);
+	refEntity.m_up‘ÏªÓ∂Øµ•Œª = std::make_shared<‘ÏªÓ∂Øµ•ŒªComponent, Entity& >(refEntity);
 }
 
 ‘ÏªÓ∂Øµ•ŒªComponent::‘ÏªÓ∂Øµ•ŒªComponent(Entity& refEntity) :m_refEntity(refEntity)
@@ -121,7 +121,7 @@ void ‘ÏªÓ∂Øµ•ŒªComponent::‘Ï±¯(PlayerGateSession_Game& refGateSession, const µ•Œ
 		return;
 	}
 
-	if (m_refEntity.m_spBuilding && !m_refEntity.m_spBuilding->“—‘Ï∫√())
+	if (m_refEntity.m_upBuilding && !m_refEntity.m_upBuilding->“—‘Ï∫√())
 	{
 		refGateSession.SayœµÕ≥("Ω®÷˛ªπ√ª‘Ï∫√");
 		return;
@@ -231,7 +231,7 @@ CoTaskBool ‘ÏªÓ∂Øµ•ŒªComponent::Co‘ÏªÓ∂Øµ•Œª()
 
 		//LOG(INFO) << "–≠≥ÃRPC∑µªÿ,error=" << responce.error << ",finalMoney=" << responce.finalMoney;
 		//CHECK_CO_RET_0(!refGateSession.m_wpSpace.expired());
-		auto wpNewEntity = m_refEntity.m_refSpace.‘ÏªÓ∂Øµ•Œª(m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity), pos, ¿‡–Õ);
+		auto wpNewEntity = m_refEntity.m_refSpace.‘ÏªÓ∂Øµ•Œª(m_refEntity.m_upPlayer, EntitySystem::GetNickName(m_refEntity), pos, ¿‡–Õ);
 		CHECK_WP_CO_RET_FALSE(wpNewEntity);
 		auto& ref◊ ‘¥ = *wpNewEntity.lock();
 		//if (m_listµ»¥˝‘Ï.empty())
@@ -261,7 +261,7 @@ CoTaskBool ‘ÏªÓ∂Øµ•ŒªComponent::Co‘ÏªÓ∂Øµ•Œª()
 
 bool ‘ÏªÓ∂Øµ•ŒªComponent::≤…ºØºØΩ·µ„∏ΩΩ¸µƒ◊ ‘¥(Entity& refEntiy)const
 {
-	if (!refEntiy.m_sp≤…ºØ)
+	if (!refEntiy.m_up≤…ºØ)
 		return false;//≤ª « π§≥Ã≥µ ªÚ π§∑‰
 
 	const auto [i32∏Ò◊”Id, i32∏Ò◊”X, i32∏Ò◊”Z] = AoiComponent::∏Ò◊”(m_posºØΩ·µ„);
@@ -280,7 +280,7 @@ bool ‘ÏªÓ∂Øµ•ŒªComponent::≤…ºØºØΩ·µ„∏ΩΩ¸µƒ◊ ‘¥(Entity& refEntiy)const
 	if (!wp◊ ‘¥.lock()->Pos().DistanceLessEqual(m_posºØΩ·µ„, 1))
 		return false;
 
-	refEntiy.m_sp≤…ºØ->≤…ºØ(wp◊ ‘¥);
+	refEntiy.m_up≤…ºØ->≤…ºØ(wp◊ ‘¥);
 	return true;
 }
 

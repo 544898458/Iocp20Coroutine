@@ -20,8 +20,8 @@
 
 void 走Component::AddComponent(Entity& refEntity)
 {
-	CHECK_VOID(!refEntity.m_sp走);
-	refEntity.m_sp走 = std::make_shared<走Component, Entity&>(refEntity);
+	CHECK_VOID(!refEntity.m_up走);
+	refEntity.m_up走 = std::make_shared<走Component, Entity&>(refEntity);
 	//float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z};
 	//int CrowToolAddAgent(float arrF[]);
 	//refEntity.m_upAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);
@@ -34,10 +34,10 @@ void 走Component::AddComponent(Entity& refEntity)
 
 bool 走Component::正在走(const Entity& refEntity)
 {
-	if (!refEntity.m_sp走)
+	if (!refEntity.m_up走)
 		return false;
 
-	return !refEntity.m_sp走->m_coWalk.Finished();
+	return !refEntity.m_up走->m_coWalk.Finished();
 }
 
 void 走Component::WalkToTarget(SpEntity spTarget)
@@ -56,7 +56,7 @@ void 走Component::WalkToTarget(SpEntity spTarget)
 /// <returns>是否还要走下一步</returns>
 bool 已走到目标附近(Entity& refThis, const Position localTarget, const float f距离目标小于此距离停下 = 0)
 {
-	CHECK_RET_DEFAULT(refThis.m_sp走);
+	CHECK_RET_DEFAULT(refThis.m_up走);
 	const float step = std::max(EntitySystem::升级后速度每帧移动距离(refThis), f距离目标小于此距离停下);
 	auto& x = refThis.Pos().x;
 	auto& z = refThis.Pos().z;
@@ -148,8 +148,8 @@ CoTaskBool 走Component::WalkToTarget(SpEntity spTarget, FunCancel& funCancel, co
 
 bool 走Component::WalkToTarget(Entity& refThis, SpEntity spTarget)
 {
-	CHECK_RET_FALSE(refThis.m_sp走);
-	refThis.m_sp走->WalkToTarget(spTarget);
+	CHECK_RET_FALSE(refThis.m_up走);
+	refThis.m_up走->WalkToTarget(spTarget);
 	return true;
 }
 
@@ -163,8 +163,8 @@ void 走Component::WalkToPos(const Position& posTarget)
 
 bool 走Component::WalkToPos(Entity& refThis, const Position& posTarget)
 {
-	CHECK_RET_FALSE(refThis.m_sp走);
-	refThis.m_sp走->WalkToPos(posTarget);
+	CHECK_RET_FALSE(refThis.m_up走);
+	refThis.m_up走->WalkToPos(posTarget);
 	return true;
 }
 
@@ -220,7 +220,7 @@ CoTaskBool 走Component::WalkToPos(const Position posTarget, FunCancel& funCancel
 
 		if (已走到目标附近(m_refEntity, posLocalTarget, f距离目标小于此距离停下))
 		{
-			if (m_refEntity.m_spPlayer)
+			if (m_refEntity.m_upPlayer)
 			{
 				int a = 0;
 			}
@@ -323,10 +323,10 @@ void 走Component::走进地堡(WpEntity wpEntity地堡)
 	if (wpEntity地堡.expired())
 		return;
 
-	if (!wpEntity地堡.lock()->m_spBuilding)
+	if (!wpEntity地堡.lock()->m_upBuilding)
 		return;
 
-	if (!wpEntity地堡.lock()->m_spBuilding->已造好())
+	if (!wpEntity地堡.lock()->m_upBuilding->已造好())
 	{
 		PlayerComponent::播放声音Buzz(m_refEntity, "地堡还没造好，不能进地堡");
 		return;
@@ -367,12 +367,12 @@ CoTaskBool 走Component::Co走进地堡(WpEntity wpEntity地堡)
 			co_return false;
 
 		auto spEntity地堡 = wpEntity地堡.lock();
-		if (!spEntity地堡->m_sp地堡)
+		if (!spEntity地堡->m_up地堡)
 			co_return false;
 
 		if (m_refEntity.DistanceLessEqual(*spEntity地堡, m_refEntity.攻击距离() + BuildingComponent::建筑半边长(*spEntity地堡)))
 		{
-			spEntity地堡->m_sp地堡->进(m_refEntity.m_refSpace, m_refEntity);
+			spEntity地堡->m_up地堡->进(m_refEntity.m_refSpace, m_refEntity);
 
 			co_return false;
 		}
@@ -389,7 +389,7 @@ CoTaskBool 走Component::Co走进地堡(WpEntity wpEntity地堡)
 void 走Component::Cancel所有包含走路的协程(Entity& refEntity, const bool b停止攻击)
 {
 	if (b停止攻击 )EntitySystem::停止攻击和治疗(refEntity);
-	if (refEntity.m_sp采集)		refEntity.m_sp采集->m_TaskCancel.TryCancel();
-	if (refEntity.m_sp走)		refEntity.m_sp走->TryCancel();
-	if (refEntity.m_sp造建筑)	refEntity.m_sp造建筑->TryCancel();
+	if (refEntity.m_up采集)		refEntity.m_up采集->m_TaskCancel.TryCancel();
+	if (refEntity.m_up走)		refEntity.m_up走->TryCancel();
+	if (refEntity.m_up造建筑)	refEntity.m_up造建筑->TryCancel();
 }

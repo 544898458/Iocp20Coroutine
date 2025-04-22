@@ -14,7 +14,7 @@ inline ³æ³²Component::³æ³²Component(Entity& ref) :m_refEntity(ref), m_posÓ×³æ¼¯½
 
 void ³æ³²Component::AddComponent(Entity& refEntity)
 {
-	refEntity.m_sp³æ³² = std::make_shared<³æ³²Component, Entity&>(refEntity);
+	refEntity.m_up³æ³² = std::make_shared<³æ³²Component, Entity&>(refEntity);
 }
 
 void ³æ³²Component::TryCancel()
@@ -35,8 +35,8 @@ void ³æ³²Component::Set¼¯½áµã(const Position& pos)
 		if (wp.expired())
 			continue;
 
-		if (wp.lock()->m_spÔì»î¶¯µ¥Î»)
-			wp.lock()->m_spÔì»î¶¯µ¥Î»->m_pos¼¯½áµã = pos;
+		if (wp.lock()->m_upÔì»î¶¯µ¥Î»)
+			wp.lock()->m_upÔì»î¶¯µ¥Î»->m_pos¼¯½áµã = pos;
 	}
 }
 
@@ -63,7 +63,7 @@ CoTaskBool ³æ³²Component::CoÔìÓ×³æ()
 		auto pos = m_refEntity.Pos();
 		pos.x += Rand(-10, 10);
 		m_refEntity.m_refSpace.CrowdToolFindNerestPos(pos);
-		auto wp = m_refEntity.m_refSpace.Ôì»î¶¯µ¥Î»(m_refEntity.m_spPlayer, EntitySystem::GetNickName(m_refEntity), pos, Ó×³æ);
+		auto wp = m_refEntity.m_refSpace.Ôì»î¶¯µ¥Î»(m_refEntity.m_upPlayer, EntitySystem::GetNickName(m_refEntity), pos, Ó×³æ);
 		CHECK_WP_CONTINUE(wp);
 		m_listWpÓ×³æ.emplace_back(wp);
 		auto& ref = *wp.lock();

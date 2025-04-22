@@ -23,8 +23,8 @@ const float fExponent = 2.0f;
 
 MsgNotifyPos::MsgNotifyPos(Entity& ref) : entityId(ref.Id), x(ref.Pos().x), z(ref.Pos().z), eulerAnglesY(ref.m_eulerAnglesY)
 {
-	if (ref.m_spDefence)
-		hp = ref.m_spDefence->m_hp;
+	if (ref.m_upDefence)
+		hp = ref.m_upDefence->m_hp;
 }
 
 MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :
@@ -32,7 +32,7 @@ MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :
 	nickName(StrConv::GbkToUtf8(ref.头顶Name())),
 	entityName(StrConv::GbkToUtf8(ref.m_配置.strName)),
 	prefabName(StrConv::GbkToUtf8(ref.m_配置.strPrefabName)),
-	i32HpMax(ref.m_spDefence ? ref.m_spDefence->m_i32HpMax : 0),
+	i32HpMax(ref.m_upDefence ? ref.m_upDefence->m_i32HpMax : 0),
 	类型(ref.m_类型)
 {
 }
