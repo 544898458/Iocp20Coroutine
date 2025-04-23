@@ -18,7 +18,7 @@ namespace StrConv
 		const auto needCharCount = WideCharToMultiByte(CP_UTF8, 0, (LPWSTR)wStr.c_str(), -1, NULL, 0, NULL, NULL);
 		std::string str;
 		str.resize(needCharCount);
-		const auto writtenCharCount = WideCharToMultiByte(CP_UTF8, 0, wStr.c_str(), wStr.size(), (LPSTR)str.c_str(), needCharCount, NULL, NULL);
+		const auto writtenCharCount = WideCharToMultiByte(CP_UTF8, 0, wStr.c_str(), (int)wStr.size(), (LPSTR)str.c_str(), needCharCount, NULL, NULL);
 		LOG_IF(ERROR, writtenCharCount != needCharCount) << "ERR";
 		_ASSERT(writtenCharCount == needCharCount);
 		
