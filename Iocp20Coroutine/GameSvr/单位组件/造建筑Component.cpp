@@ -115,8 +115,15 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 单位类型 类型)
 	EntitySystem::BroadcastEntity描述(m_refEntity, "走向建造点");
 
 	CHECK_CO_RET_FALSE(m_refEntity.m_up走);
-	if (co_await m_refEntity.m_up走->WalkToPos(pos, m_cancel造建筑, 配置.f半边长 + 1))
+	const float f可建造距离 = 配置.f半边长 + 1;
+	if (co_await m_refEntity.m_up走->WalkToPos(pos, m_cancel造建筑, f可建造距离))
 		co_return true;
+
+	if (!m_refEntity.Pos().DistanceLessEqual(pos, f可建造距离))
+	{
+		PlayerGateSession_Game::播放声音Buzz(m_refEntity, "有阻挡，无法建造");
+		co_return false;
+	}
 
 	//然后开始扣钱建造
 	//CHECK_CO_RET_FALSE(m_refEntity.m_upPlayer);
