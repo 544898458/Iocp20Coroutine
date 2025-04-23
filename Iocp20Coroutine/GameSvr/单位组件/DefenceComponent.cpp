@@ -22,7 +22,7 @@ DefenceComponent::DefenceComponent(Entity& refEntity, const uint16_t i16HpMax) :
 void DefenceComponent::AddComponent(Entity& refEntity, uint16_t u16初始Hp)
 {
 	数值Component::AddComponent(refEntity);
-	CHECK_VOID(!refEntity.m_upDefence);
+	CHECK_RET_VOID(!refEntity.m_upDefence);
 	refEntity.m_upDefence.reset(new DefenceComponent(refEntity, u16初始Hp));
 }
 

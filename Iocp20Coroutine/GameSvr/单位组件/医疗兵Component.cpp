@@ -17,6 +17,7 @@
 #include "BuffComponent.h"
 
 
+
 医疗兵Component::医疗兵Component(Entity& refEntity) :m_refEntity(refEntity)
 {
 	CHECK_RET_VOID(m_refEntity.m_up找目标走过去);
@@ -27,14 +28,16 @@
 		[this](WpEntity& wpEntity, bool ref仇恨目标)->void {}
 	);
 
-	const int 最大能量 = 100;
+	const int 最大能量 = 50;
 	数值Component::Set(refEntity, 能量, 最大能量);
 	数值Component::Set(refEntity, 属性类型::最大能量, 最大能量);
+	CHECK_RET_VOID(m_refEntity.m_upBuff);
+	m_refEntity.m_upBuff->定时改数值(医疗兵自动恢复能量, m_refEntity.Id);
 }
 
 void 医疗兵Component::AddComponent(Entity& refEntity)
 {
-	CHECK_VOID(refEntity.m_upBuff);
+	CHECK_RET_VOID(refEntity.m_upBuff);
 	refEntity.m_upBuff->定时改数值(医疗兵自动恢复能量, refEntity.Id);
 
 	找目标走过去Component::AddComponent(refEntity);
@@ -160,7 +163,7 @@ CoTaskBool 医疗兵Component::Co治疗目标(WpEntity wp目标, FunCancel& cancel)
 			CHECK_CO_RET_FALSE(0 < 加满生命);
 			const auto 加生命 = std::min<int>(加满生命, 数值Component::Get(m_refEntity, 能量));
 			数值Component::改变(ref目标, 生命, 加生命);
-			数值Component::改变(m_refEntity, 能量, 加生命);
+			数值Component::改变(m_refEntity, 能量, -加生命);
 			ref目标.BroadcastNotifyPos();
 			m_refEntity.BroadcastNotifyPos();
 		}

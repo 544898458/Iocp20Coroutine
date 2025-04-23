@@ -58,7 +58,7 @@ bool 造活动单位Component::判断并提示缺少建筑(PlayerGateSession_Game& refGateSess
 
 void 造活动单位Component::造兵(PlayerGateSession_Game& refGateSession, const 单位类型 类型)
 {
-	//CHECK_VOID(m_fun造活动单位);
+	//CHECK_RET_VOID(m_fun造活动单位);
 	if (房虫 != 类型 && refGateSession.活动单位包括制造队列中的() >= refGateSession.活动单位上限())
 	{
 		//refGateSession.播放声音("tadErr02", "民房不足"); //Additional supply depots required.需要更多的食堂

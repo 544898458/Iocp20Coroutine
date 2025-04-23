@@ -97,14 +97,13 @@ class StrategyLog
 		return;\
 	}\
 }
-
-#define CHECK_VOID( exp ) \
+#define CHECK_CO_RET_DEFAULT( exp ) \
 {\
 	LOG_IF(ERROR, !(exp));\
 	if (!(exp))\
 	{\
 		_ASSERT(false);\
-		return; \
+		co_return {}; \
 	}\
 }
 
