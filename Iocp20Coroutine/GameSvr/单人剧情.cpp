@@ -342,7 +342,10 @@ namespace 单人剧情
 			co_return 0;
 
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等虫巢产出<color=#a0ff50>幼虫</color>后，请点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>工虫</color>”按钮，让幼虫蜕变为工虫");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, 
+			"很好。虫巢周围会形成<color=#a0ff50>苔蔓(wàn)</color>，苔蔓上的虫类单位移动速度会变快，并且回血速度也会加快。应该<color=#a0ff50>尽量在苔蔓上与敌方单位交战</color>。"
+			"等虫巢产出<color=#a0ff50>幼虫</color>后，请点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>工虫</color>”按钮，让幼虫蜕变为工虫"
+			"\n\n据1985年《普通话异读词审音表》：\n苔蔓(<color=#a0ff50>wàn</color>)、蔓(màn)延");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, std::bind(funSameSpace, std::placeholders::_1, 工虫))))
 			co_return 0;
@@ -370,7 +373,7 @@ namespace 单人剧情
 			co_return 0;
 		}
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！现在给您刷了一个晶体矿，请点击<color=#a0ff50>晶体矿</color>，让工虫在晶体矿和虫巢之间搬运晶体矿");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好！现在给您刷了一个晶体矿，请点击选中<color=#a0ff50>工虫</color>，再点击一次<color=#a0ff50>晶体矿</color>，让工虫在晶体矿和虫巢之间搬运晶体矿");
 		资源Component::Add(refSpace, 晶体矿, { pos基地.x,pos基地.z + 20 });
 		资源Component::Add(refSpace, 燃气矿, { pos基地.x + 15,pos基地.z });
 
@@ -778,11 +781,13 @@ namespace 单人剧情
 		const auto fun坦克手齐诺维说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {坦克手齐诺维说(refSpace, strPlayerNickName, str内容); };
 		const auto fun玩家说 = [&strPlayerNickName, &refSpace](const std::string& str内容) {玩家说(refSpace, strPlayerNickName, str内容); };
 
-		fun装甲指挥官海因茨说(strPlayerNickName + "，我的一个坦克连在调查无人区虫巢时失联，请前往营救。"); _等玩家读完returnTrue;
+		fun装甲指挥官海因茨说(strPlayerNickName + "，我的一个坦克连在调查无人区<color=#a0ff50>虫巢</color>时失联，请前往营救。"); _等玩家读完returnTrue;
 		fun玩家说("坦克没有步兵保护吗？");	_等玩家读完returnTrue;
 		fun装甲指挥官海因茨说("是的，步兵刚刚到位，两个班的兵力，现在全部交给你指挥。"); _等玩家读完returnTrue;
 		fun玩家说("虫巢是什么？无人区为什么会有虫巢呢？");	_等玩家读完returnTrue;
-		fun科学家玛丽亚说("虫巢是什么尚不清楚，好像是凭空出现的。无人侦察机拍摄的视频表明虫巢周围会形成无人区，人的去向不明。");	_等玩家读完returnTrue;
+		fun科学家玛丽亚说("侦察机传回的视频表明：虫巢周围会形成<color=#a0ff50>苔蔓(wàn)</color>，苔蔓上的虫类单位移动速度会变快，并且回血速度也会加快。应该<color=#a0ff50>避免在苔蔓上与虫类单位交战</color>。"
+			"\n\n据1985年《普通话异读词审音表》：\n苔蔓(<color=#a0ff50>wàn</color>)、蔓(màn)延"
+		);	_等玩家读完returnTrue;
 		fun玩家说("我想起一个古老的传说……");	_等玩家读完returnTrue;
 		fun装甲指挥官海因茨说("现在不是讲故事的时候，坦克连的伴随无人机也失联了。我们再次派侦察机到目标上空已找不到坦克连的踪迹。"); _等玩家读完returnTrue;
 		fun玩家说("一个坦克连应该有10辆坦克吧？这么多钢铁疙瘩能凭空消失吗？");	_等玩家读完returnTrue;
@@ -790,7 +795,7 @@ namespace 单人剧情
 		fun玩家说("居民失踪就派坦克连去调查，坦克连消失就派我的部队去营救。要是我和我的部队也消失了，还会有人去救我们吗？");	_等玩家读完returnTrue;
 		fun装甲指挥官海因茨说("现在人手紧缺，我不能做任何行动上的承诺。但我个人会竭尽全力，不放弃任何一个人，就像我不会放弃坦克连一样。"); _等玩家读完returnTrue;
 		fun玩家说("我也会尽力而为的。");	_等玩家读完returnTrue;
-		fun装甲指挥官海因茨说("要多用脑子，要多想。记住兵种克制关系：\n小兵 克制 坦克\n坦克 克制 炮台\n炮台 克制 小兵"); _等玩家读完returnTrue;
+		fun装甲指挥官海因茨说("要多用脑子，要多想。记住兵种克制关系：\n<color=#a0ff50>小兵 克制 坦克\n坦克 克制 炮台\n炮台 克制 小兵</color>"); _等玩家读完returnTrue;
 		fun玩家说("这我早就记住了，否则我也不会疑惑为什么坦克没有步兵保护。");	_等玩家读完returnTrue;
 		fun装甲指挥官海因茨说("我们相信你的能力，你一定能平安归来!"); _等玩家读完returnTrue;
 		PlayerComponent::剧情对话已看完(strPlayerNickName);
@@ -816,7 +821,7 @@ namespace 单人剧情
 				MonsterComponent::AddMonster(refSpace, 三色坦克, { 40,-49.f + i * 5 }, 1);
 				MonsterComponent::AddMonster(refSpace, 三色坦克, { -40,-49.f + i * 5 }, 1);
 			}
-			for (int i = 0; i < 6; ++i)
+			for (int i = 0; i < 5; ++i)
 			{
 				创建敌方建筑(refSpace, { 25,-49.f + i * 5 }, 炮台);
 				创建敌方建筑(refSpace, { 30,-49.f + i * 5 }, 炮台);
@@ -937,7 +942,7 @@ namespace 单人剧情
 				MonsterComponent::AddMonster(refSpace, 绿色坦克, { 40,-49.f + i * 5 }, 1);
 				MonsterComponent::AddMonster(refSpace, 绿色坦克, { -40,-49.f + i * 5 }, 1);
 			}
-			for (int i = 0; i < 6; ++i)
+			for (int i = 0; i < 5; ++i)
 			{
 				//创建敌方建筑(refSpace, { 20,-49.f + i * 5 }, 炮台);
 				创建敌方建筑(refSpace, { 25,-49.f + i * 5 }, 炮台);

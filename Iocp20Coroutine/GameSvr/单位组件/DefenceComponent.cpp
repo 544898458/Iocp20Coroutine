@@ -8,6 +8,8 @@
 #include "AttackComponent.h"
 #include "PlayerComponent.h"
 #include "BuildingComponent.h"
+#include "临时阻挡Component.h"
+
 #include "../Space.h"
 
 DefenceComponent::DefenceComponent(Entity& refEntity, const int i32HpMax) : m_refEntity(refEntity), m_i32HpMax(i32HpMax), m_hp(i32HpMax)
@@ -61,6 +63,10 @@ void DefenceComponent::受伤(const int 攻击, const uint64_t idAttacker)
 		m_refEntity.DelayDelete();
 		CoEvent<MyEvent::单位阵亡>::OnRecvEvent({ .wpEntity = m_refEntity.weak_from_this() });
 		PlayerComponent::Send资源(m_refEntity);
+        if (m_refEntity.m_up临时阻挡)
+        {
+			m_refEntity.m_up临时阻挡->OnEntityDestroy(false);
+        }
 	}
 }
 
