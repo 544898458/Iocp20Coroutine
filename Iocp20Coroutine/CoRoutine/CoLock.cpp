@@ -30,7 +30,8 @@ CoAwaiterBool& CoLock::Lock(const std::string& strLockKey, FunCancel& funCancel)
 {
 	m_strLockKey = strLockKey;
 	auto& refDeque = g_mapLock[strLockKey];
-	refDeque.push_front(CoAwaiterBool(1, funCancel));
+
+	refDeque.push_front(CoAwaiterBool(1, funCancel, strLockKey + "," + __FUNCTION__));
 	auto& refAwaiter = refDeque.front();
 	refAwaiter.m_bAwaitReady = refDeque.size() == 1;
 	refAwaiter.SetResult(false);

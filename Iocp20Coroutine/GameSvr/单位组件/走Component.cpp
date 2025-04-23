@@ -58,9 +58,7 @@ bool 已走到目标附近(Entity& refThis, const Position localTarget, const float f距
 {
 	CHECK_RET_DEFAULT(refThis.m_up走);
 	const float step = std::max(EntitySystem::升级后速度每帧移动距离(refThis), f距离目标小于此距离停下);
-	auto& x = refThis.Pos().x;
-	auto& z = refThis.Pos().z;
-	if (std::abs(localTarget.x - x) < step && std::abs(localTarget.z - z) < step)
+	if (refThis.Pos().DistanceLessEqual(localTarget, step))
 	{
 		//LOG(INFO) << "已走到" << localTarget.x << "," << localTarget.z << "附近，协程正常退出";
 		//EntitySystem::BroadcastChangeSkeleAnimIdle(refThis);
@@ -194,7 +192,7 @@ CoTaskBool 走Component::WalkToPos(const Position posTarget, FunCancel& funCancel
 		//ref.SetSpeed();
 	}
 
-	
+
 	m_wpRecastNavigationCrowd = sp;
 	KeepCancel kc(funCancel);
 	const auto posLocalTarget = posTarget;
@@ -388,7 +386,7 @@ CoTaskBool 走Component::Co走进地堡(WpEntity wpEntity地堡)
 
 void 走Component::Cancel所有包含走路的协程(Entity& refEntity, const bool b停止攻击)
 {
-	if (b停止攻击 )EntitySystem::停止攻击和治疗(refEntity);
+	if (b停止攻击)EntitySystem::停止攻击和治疗(refEntity);
 	if (refEntity.m_up采集)		refEntity.m_up采集->m_TaskCancel.TryCancel();
 	if (refEntity.m_up走)		refEntity.m_up走->OnEntityDestroy(false);
 	if (refEntity.m_up造建筑)	refEntity.m_up造建筑->OnEntityDestroy(false);

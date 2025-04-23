@@ -82,7 +82,15 @@ CoTaskBool 造建筑Component::Co造建筑(const Position pos, const 单位类型 类型)
 		_ASSERT(false);
 		co_return true;
 	}
-	if (!m_refEntity.m_refSpace.可放置建筑(pos, 配置.f半边长) && 方墩 != 类型)
+	if (方墩 == 类型)
+	{
+		if (!m_refEntity.m_refSpace.CrowdTool可站立(pos))
+		{
+			PlayerComponent::播放声音(m_refEntity, "语音/无法在这里建造可爱版", "目标点不可站立");
+			co_return{};
+		}
+	}
+	else if (!m_refEntity.m_refSpace.可放置建筑(pos, 配置.f半边长))
 	{
 		//播放声音("TSCErr00", "有阻挡，无法建造");//（Err00） I can't build it, something's in the way. 我没法在这建，有东西挡道
 		PlayerComponent::播放声音(m_refEntity, "语音/无法在这里建造可爱版", "有阻挡，无法建造");
@@ -176,7 +184,7 @@ CoTaskBool 造建筑Component::Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel)
 		CHECK_CO_RET_FALSE(ref建筑.m_upBuilding);
 		auto& ref建造进度百分比 = ref建筑.m_upBuilding->m_n建造进度百分比;
 		if (BuildingComponent::MAX建造百分比 <= ref建造进度百分比)
-			co_return false;
+			break;
 
 		if (ref建造进度百分比 > 0 && 0 == ref建造进度百分比 % 25)
 			PlayerComponent::播放声音(m_refEntity, "EDrRep00");//Repair

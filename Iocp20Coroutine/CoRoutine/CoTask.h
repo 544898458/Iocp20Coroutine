@@ -335,7 +335,7 @@ struct CoAwaiter
 	/// 
 	/// </summary>
 	/// <param name="initSn">用引用可以防止传bool进去</param>
-	CoAwaiter(const long& initSn, FunCancel& cancel) : m_Kc(cancel, true)
+	CoAwaiter(const long& initSn, FunCancel& cancel, const std::string& strDebugInfo) : m_Kc(cancel, true),m_strDebugInfo(strDebugInfo)
 	{
 		m_sn = initSn;
 	}
@@ -393,10 +393,11 @@ struct CoAwaiter
 	//	m_Result = other.m_Result;
 	//	m_Kc = other.m_Kc;
 	//}
-	CoAwaiter(CoAwaiter&& other) noexcept :m_Kc(std::move(other.m_Kc)), m_sn(other.m_sn), m_hAwaiter(other.m_hAwaiter), m_Result(other.m_Result)
+	CoAwaiter(CoAwaiter&& other) noexcept :m_Kc(std::move(other.m_Kc)), m_sn(other.m_sn), m_hAwaiter(other.m_hAwaiter), m_Result(other.m_Result), m_strDebugInfo(other.m_strDebugInfo)
 	{
 		other.m_hAwaiter = nullptr;
 		other.m_sn = 0;
+		other.m_strDebugInfo.clear();
 	}
 	void operator =(CoAwaiter&& other)noexcept = delete;
 	//{
@@ -411,7 +412,15 @@ struct CoAwaiter
 	{
 		m_Result = result;
 		m_Kc.Revert();
-		m_hAwaiter.resume();
+		try {
+			m_hAwaiter.resume();
+		}catch (const std::exception& e) {
+			LOG(ERROR) << m_strDebugInfo << "," << e.what();
+			_ASSERT(false);
+		}catch (...) {
+			LOG(ERROR) << m_strDebugInfo;
+			_ASSERT(false);
+		}
 	}
 	void SetResult(const T_Result& result)
 	{
@@ -432,6 +441,7 @@ private:
 	T_Result m_Result = {};//可等待对象的返回值
 	KeepCancel m_Kc;
 	std::coroutine_handle<> m_hAwaiter;
+	std::string m_strDebugInfo;
 };
 
 typedef CoAwaiter<bool> CoAwaiterBool;

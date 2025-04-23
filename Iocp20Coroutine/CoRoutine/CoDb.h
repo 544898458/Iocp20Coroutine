@@ -7,6 +7,10 @@ template<class T>
 class 慢操作
 {
 public:
+	慢操作():m_OverlappedWork("慢操作"), m_OverlappedNotify("慢操作")
+	{
+
+	}
 	/// <summary>
 	/// 对应到完成端口，注意不要和网络线程混在一起
 	/// </summary>
