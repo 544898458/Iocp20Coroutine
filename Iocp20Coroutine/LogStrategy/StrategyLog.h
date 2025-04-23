@@ -108,6 +108,16 @@ class StrategyLog
 	}\
 }
 
+#define CHECK_RET_VALUE( exp, val ) \
+{\
+	LOG_IF(ERROR, !(exp));\
+	if (!(exp))\
+	{\
+		_ASSERT(false);\
+		return val ; \
+	}\
+}
+
 #define CHECK_CO_RET_FALSE( exp ) \
 {\
 	LOG_IF(ERROR, !(exp));\
@@ -117,6 +127,7 @@ class StrategyLog
 		co_return false; \
 	}\
 }
+
 #define CHECK_CO_RET_VOID( exp ) \
 {\
 	LOG_IF(ERROR, !(exp));\

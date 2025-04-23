@@ -387,6 +387,9 @@
     <ClCompile Include="单位组件\太岁Component.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
+    <ClCompile Include="单位组件\数值Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -642,6 +645,9 @@
       <Filter>枚举</Filter>
     </ClInclude>
     <ClInclude Include="单位组件\太岁Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\数值Component.h">
       <Filter>单位组件</Filter>
     </ClInclude>
   </ItemGroup>

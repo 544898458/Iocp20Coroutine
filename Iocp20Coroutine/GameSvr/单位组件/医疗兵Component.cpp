@@ -5,12 +5,16 @@
 #include "../Space.h"
 #include "../CoRoutine/CoTimer.h"
 #include "../AiCo.h"
+#include "../枚举/BuffId.h"
+#include "../枚举/属性类型.h"
 #include "走Component.h"
 #include "采集Component.h"
 #include "AttackComponent.h"
 #include "BuildingComponent.h"
 #include "找目标走过去Component.h"
 #include "DefenceComponent.h"
+#include "数值Component.h"
+#include "BuffComponent.h"
 
 
 医疗兵Component::医疗兵Component(Entity& refEntity) :m_refEntity(refEntity)
@@ -22,32 +26,35 @@
 		[this](const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去)->CoTask<std::tuple<bool, bool>> {return Co治疗(refTarget, wpEntity, ref找目标走过去); },
 		[this](WpEntity& wpEntity, bool ref仇恨目标)->void {}
 	);
+
+	const int 最大能量 = 100;
+	数值Component::Set(refEntity, 能量, 最大能量);
+	数值Component::Set(refEntity, 属性类型::最大能量, 最大能量);
 }
 
 void 医疗兵Component::AddComponent(Entity& refEntity)
 {
+	CHECK_VOID(refEntity.m_upBuff);
+	refEntity.m_upBuff->定时改数值(医疗兵自动恢复能量, refEntity.Id);
+
 	找目标走过去Component::AddComponent(refEntity);
-	refEntity.AddComponentOnDestroy(&Entity::m_up医疗兵,new 医疗兵Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up医疗兵, new 医疗兵Component(refEntity));
 }
 
 
 bool 医疗兵Component::可以治疗()
 {
-	//if (m_refEntity.m_spBuilding && !m_refEntity.m_spBuilding->已造好())
-	//	return false;
-
 	if (m_refEntity.IsDead())
 		return false;
 
-	//if (造建筑Component::正在建造(m_refEntity))
-	//	return false;
+	if (数值Component::Get(m_refEntity, 能量) <= 0)
+		return false;
 
-	if (m_refEntity.m_up走)
-	{
-		if (!m_refEntity.m_up走->m_coWalk手动控制.Finished() ||
-			!m_refEntity.m_up走->m_coWalk进地堡.Finished())
-			return false;//表示不允许打断
-	}
+	CHECK_RET_FALSE(m_refEntity.m_up走);
+
+	if (!m_refEntity.m_up走->m_coWalk手动控制.Finished() || !m_refEntity.m_up走->m_coWalk进地堡.Finished())
+		return false;//表示不允许打断
+
 	return true;
 }
 
@@ -137,8 +144,8 @@ CoTaskBool 医疗兵Component::Co治疗目标(WpEntity wp目标, FunCancel& cancel)
 				break;
 			}
 
-			if(ref目标.m_upDefence->已满血())
-                break;
+			if (ref目标.m_upDefence->已满血())
+				break;
 
 			CHECK_CO_RET_FALSE(m_refEntity.m_up找目标走过去);
 			if (!m_refEntity.DistanceLessEqual(ref目标, m_refEntity.m_up找目标走过去->攻击距离(ref目标)))
@@ -149,8 +156,13 @@ CoTaskBool 医疗兵Component::Co治疗目标(WpEntity wp目标, FunCancel& cancel)
 
 			找目标走过去Component::播放攻击音效(m_refEntity);
 
-			ref目标.m_upDefence->m_hp += EntitySystem::升级后攻击(m_refEntity);
+			const auto 加满生命 = std::min<int>(EntitySystem::升级后攻击(m_refEntity), 数值Component::Get(ref目标, 最大生命) - 数值Component::Get(ref目标, 生命));
+			CHECK_CO_RET_FALSE(0 < 加满生命);
+			const auto 加生命 = std::min<int>(加满生命, 数值Component::Get(m_refEntity, 能量));
+			数值Component::改变(ref目标, 生命, 加生命);
+			数值Component::改变(m_refEntity, 能量, 加生命);
 			ref目标.BroadcastNotifyPos();
+			m_refEntity.BroadcastNotifyPos();
 		}
 
 		CHECK_终止治疗目标流程;

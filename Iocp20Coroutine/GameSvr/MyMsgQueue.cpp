@@ -11,20 +11,23 @@
 #include "AiCo.h"
 #include "Entity.h"
 #include "../CoRoutine/CoRpc.h"
-
+#include "枚举/属性类型.h"
 #include "单位组件/PlayerComponent.h"
 #include "单位组件/DefenceComponent.h"
 #include "单位组件/苔蔓Component.h"
+#include "单位组件/数值Component.h"
+
 
 /// <summary>
 /// 平方就是2次方
 /// </summary>
 const float fExponent = 2.0f;
 
-MsgNotifyPos::MsgNotifyPos(Entity& ref) : entityId(ref.Id), x(ref.Pos().x), z(ref.Pos().z), eulerAnglesY(ref.m_eulerAnglesY)
+MsgNotifyPos::MsgNotifyPos(const Entity& ref):
+	entityId(ref.Id), x(ref.Pos().x), z(ref.Pos().z), eulerAnglesY(ref.m_eulerAnglesY),
+	生命(数值Component::Get(ref, 属性类型::生命)),
+	能量(数值Component::Get(ref, 属性类型::能量))
 {
-	if (ref.m_upDefence)
-		hp = ref.m_upDefence->m_hp;
 }
 
 MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :
@@ -32,7 +35,8 @@ MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :
 	nickName(StrConv::GbkToUtf8(ref.头顶Name())),
 	entityName(StrConv::GbkToUtf8(ref.m_配置.strName)),
 	prefabName(StrConv::GbkToUtf8(ref.m_配置.strPrefabName)),
-	i32HpMax(ref.m_upDefence ? ref.m_upDefence->m_i32HpMax : 0),
+	最大生命(数值Component::Get(ref, 属性类型::最大生命)),
+	最大能量(数值Component::Get(ref, 属性类型::最大能量)),
 	类型(ref.m_类型)
 {
 }
@@ -82,7 +86,7 @@ Position Position::归一化()const
 	return { x / f范数, z / f范数 };
 }
 
-Msg苔蔓半径::Msg苔蔓半径(Entity& refEntity):idEntity(refEntity.Id)
+Msg苔蔓半径::Msg苔蔓半径(Entity& refEntity) :idEntity(refEntity.Id)
 {
 	CHECK_RET_VOID(refEntity.m_up苔蔓);
 	半径 = refEntity.m_up苔蔓->m_i16半径;

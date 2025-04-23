@@ -7,16 +7,17 @@
 #include "../../CoRoutine/CoTimer.h"
 #include "../Space.h"
 #include "../EntitySystem.h"
-void 飞向目标Component::AddComponent(Entity& refEntity, const Position& pos起始点, const Position& pos方向, const float f最远距离)
+void 飞向目标Component::AddComponent(Entity& refEntity, const Position& pos起始点, const Position& pos方向, const float f最远距离, const uint64_t idAttacker)
 {
-	refEntity.AddComponentOnDestroy(&Entity::m_up飞向目标, new 飞向目标Component(refEntity, pos起始点, pos方向, f最远距离));
+	refEntity.AddComponentOnDestroy(&Entity::m_up飞向目标, new 飞向目标Component(refEntity, pos起始点, pos方向, f最远距离, idAttacker));
 }
 
-飞向目标Component::飞向目标Component(Entity& ref, const Position& pos起始点, const Position& vec方向, const float f最远距离) :
+飞向目标Component::飞向目标Component(Entity& ref, const Position& pos起始点, const Position& vec方向, const float f最远距离, const uint64_t idAttacker) :
 	m_refEntity(ref),
 	m_pos起始点(pos起始点),
 	m_vec方向(vec方向),
-	m_f最远距离(f最远距离)
+	m_f最远距离(f最远距离),
+	m_idAttacker(idAttacker)
 {
 	Co飞向目标遇敌爆炸().RunNew();
 }
@@ -47,7 +48,7 @@ CoTaskBool 飞向目标Component::Co飞向目标遇敌爆炸()
 			if (ref目标.m_upDefence && ref目标.Pos().DistanceLessEqual(m_refEntity.Pos(), 1 + f建筑半边长))
 			{
 				EntitySystem::Broadcast播放声音(m_refEntity, 配置.str攻击音效);
-				ref目标.m_upDefence->受伤(EntitySystem::升级后攻击(m_refEntity), m_refEntity.Id);
+				ref目标.m_upDefence->受伤(EntitySystem::升级后攻击(m_refEntity), m_idAttacker);
 				m_refEntity.DelayDelete(0s);
 				co_return false;
 			}

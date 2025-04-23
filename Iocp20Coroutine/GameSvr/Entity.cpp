@@ -38,6 +38,7 @@
 #include "单位组件/太岁Component.h"
 #include "单位组件/临时阻挡Component.h"
 #include "单位组件/资源Component.h"
+#include "单位组件/数值Component.h"
 
 
 using namespace std;

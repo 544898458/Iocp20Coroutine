@@ -9,15 +9,19 @@
 #include "PlayerComponent.h"
 #include "BuildingComponent.h"
 #include "临时阻挡Component.h"
-
+#include "数值Component.h"
 #include "../Space.h"
+#include "../枚举/属性类型.h"
 
-DefenceComponent::DefenceComponent(Entity& refEntity, const int i32HpMax) : m_refEntity(refEntity), m_i32HpMax(i32HpMax), m_hp(i32HpMax)
+DefenceComponent::DefenceComponent(Entity& refEntity, const uint16_t i16HpMax) : m_refEntity(refEntity)
 {
+	数值Component::Set(refEntity, 生命, i16HpMax);
+	数值Component::Set(refEntity, 属性类型::最大生命, i16HpMax);
 }
 
 void DefenceComponent::AddComponent(Entity& refEntity, uint16_t u16初始Hp)
 {
+	数值Component::AddComponent(refEntity);
 	CHECK_VOID(!refEntity.m_upDefence);
 	refEntity.m_upDefence.reset(new DefenceComponent(refEntity, u16初始Hp));
 }
@@ -43,7 +47,7 @@ void DefenceComponent::受伤(const int 攻击, const uint64_t idAttacker)
 	const auto 防御 = 升级后的防御(m_refEntity);
 	const auto 伤害 = std::max(攻击 - 防御, 1);
 
-	this->m_hp -= 伤害;
+	数值Component::改变(m_refEntity, 生命, -伤害); //this->m_hp -= 伤害;
 	m_map对我伤害[idAttacker] += 伤害;
 
 	播放正遭到攻击语音();
@@ -73,7 +77,7 @@ void DefenceComponent::受伤(const int 攻击, const uint64_t idAttacker)
 
 bool DefenceComponent::IsDead() const
 {
-	return m_hp <= 0;
+	return 数值Component::Get(m_refEntity, 生命) <= 0;
 }
 
 void DefenceComponent::播放正遭到攻击语音()
@@ -99,9 +103,14 @@ void DefenceComponent::播放正遭到攻击语音()
 	PlayerComponent::播放声音(m_refEntity, sz语音, m_refEntity.m_配置.strName + " 遭到攻击");
 }
 
+int DefenceComponent::最大生命()const
+{
+	return 数值Component::Get(m_refEntity, 属性类型::最大生命);
+}
+
 bool DefenceComponent::已满血() const
 {
-	return m_hp >= m_i32HpMax;
+	return 最大生命() <= 数值Component::Get(m_refEntity, 生命);
 }
 
 void DefenceComponent::加血(int16_t i16变化)
@@ -110,12 +119,12 @@ void DefenceComponent::加血(int16_t i16变化)
 		return;
 
 	CHECK_RET_VOID(i16变化 > 0);
-	const auto old = m_hp;
-	if (m_hp >= m_i32HpMax)
+	const auto old = 数值Component::Get(m_refEntity, 生命);
+	if (old >= 最大生命())
 		return;
 
-	m_hp = std::min(m_i32HpMax, m_hp + i16变化);
+	数值Component::Set(m_refEntity, 生命, std::min(最大生命(), old + i16变化));
 
-	if (old != m_hp)
+	if (old != 数值Component::Get(m_refEntity, 生命))
 		m_refEntity.BroadcastNotifyPos();
 }

@@ -630,6 +630,15 @@ WpEntity Space::造活动单位(UpPlayerComponent&& refSpPlayer可能空, const std::str
 	SpEntity spNewEntity = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
 		pos, *this, std::forward<const 单位类型&&>(类型), 单位);
 	PlayerComponent::AddComponent(*spNewEntity, std::forward<UpPlayerComponent>(refSpPlayer可能空), strNickName);
+
+	if (光刺 != 类型)
+		DefenceComponent::AddComponent(*spNewEntity, 制造.u16初始Hp);
+
+	if (EntitySystem::Is活动单位建筑怪(类型))
+	{
+		BuffComponent::AddComponent(*spNewEntity);
+	}
+
 	switch (类型)
 	{
 	case 医疗兵:
@@ -639,9 +648,6 @@ WpEntity Space::造活动单位(UpPlayerComponent&& refSpPlayer可能空, const std::str
 		AttackComponent::AddComponent(*spNewEntity);
 		break;
 	}
-
-	if (光刺 != 类型)
-		DefenceComponent::AddComponent(*spNewEntity, 制造.u16初始Hp);
 
 	switch (类型)
 	{
@@ -670,10 +676,6 @@ WpEntity Space::造活动单位(UpPlayerComponent&& refSpPlayer可能空, const std::str
 	default:break;
 	}
 
-	if (EntitySystem::Is活动单位(类型) || EntitySystem::Is建筑(类型) || EntitySystem::Is怪(类型))
-	{
-		BuffComponent::AddComponent(*spNewEntity);
-	}
 
 	if (单位::Is虫(类型) && EntitySystem::Is活动单位(类型))
 	{

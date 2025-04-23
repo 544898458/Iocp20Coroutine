@@ -246,9 +246,10 @@ struct MsgAddRoleRet
 	std::string nickName;
 	std::string entityName;
 	std::string prefabName;
-	int32_t	i32HpMax;
 	单位类型 类型;
-	MSGPACK_DEFINE(msg, entityId, nickName, entityName, prefabName, i32HpMax, 类型);
+	int16_t	最大生命;
+	int16_t	最大能量;
+	MSGPACK_DEFINE(msg, entityId, nickName, entityName, prefabName, 类型, 最大生命, 最大能量);
 };
 
 struct MsgDelRoleRet
@@ -261,14 +262,15 @@ struct MsgDelRoleRet
 
 struct MsgNotifyPos
 {
-	MsgNotifyPos(Entity& ref);
+	MsgNotifyPos(const Entity& ref);
 	MsgHead msg{ .id = NotifyPos };
 	uint64_t entityId;
 	float x;
 	float z;
 	int eulerAnglesY;
-	int hp = 0;
-	MSGPACK_DEFINE(msg, entityId, x, z, eulerAnglesY, hp);
+	int 生命 = 0;
+	int 能量 = 0;
+	MSGPACK_DEFINE(msg, entityId, x, z, eulerAnglesY, 生命, 能量);
 };
 struct MsgChangeSkeleAnim
 {
