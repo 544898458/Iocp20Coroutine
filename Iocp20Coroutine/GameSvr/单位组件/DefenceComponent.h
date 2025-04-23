@@ -12,7 +12,6 @@ public:
 	void 播放正遭到攻击语音();
 	int 最大生命()const;
 	bool 已满血()const;
-	void 加血(int16_t i16变化);
 	std::map<uint64_t, int> m_map对我伤害;
 
 private:

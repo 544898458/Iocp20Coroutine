@@ -112,19 +112,3 @@ bool DefenceComponent::已满血() const
 {
 	return 最大生命() <= 数值Component::Get(m_refEntity, 生命);
 }
-
-void DefenceComponent::加血(int16_t i16变化)
-{
-	if (0 == i16变化)
-		return;
-
-	CHECK_RET_VOID(i16变化 > 0);
-	const auto old = 数值Component::Get(m_refEntity, 生命);
-	if (old >= 最大生命())
-		return;
-
-	数值Component::Set(m_refEntity, 生命, std::min(最大生命(), old + i16变化));
-
-	if (old != 数值Component::Get(m_refEntity, 生命))
-		m_refEntity.BroadcastNotifyPos();
-}

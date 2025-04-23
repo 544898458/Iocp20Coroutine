@@ -5,6 +5,7 @@
 #include "DefenceComponent.h"
 #include "×ßComponent.h"
 #include "Entity.h"
+#include "ÊıÖµComponent.h"
 #include "../../CoRoutine/CoTimer.h"
 #include "../RecastNavigationCrowd.h"
 
@@ -12,7 +13,7 @@ BuffComponent::BuffComponent(Entity& ref) :m_refEntity(ref)
 {
 }
 
-CoTaskBool BuffComponent::Co¶¨Ê±¸ÄÊıÖµ(std::chrono::system_clock::duration dura¼ä¸ô, int16_t i16±ä»¯, FunCancel& funCancel, const uint64_t idAttacker)
+CoTaskBool BuffComponent::Co¶¨Ê±¸ÄÊıÖµ(const ÊôĞÔÀàĞÍ ÊôĞÔ, std::chrono::system_clock::duration dura¼ä¸ô, int16_t i16±ä»¯, FunCancel& funCancel, const uint64_t idAttacker)
 {
 	while (!co_await CoTimer::Wait(dura¼ä¸ô, funCancel))
 	{
@@ -20,12 +21,10 @@ CoTaskBool BuffComponent::Co¶¨Ê±¸ÄÊıÖµ(std::chrono::system_clock::duration dura¼
 		if (m_refEntity.IsDead())
 			co_return false;
 
-		if (0 < i16±ä»¯)
-			m_refEntity.m_upDefence->¼ÓÑª(i16±ä»¯);
-		else if (0 > i16±ä»¯)
+		if (ÊôĞÔ == ÉúÃü && 0 < i16±ä»¯)
 			m_refEntity.m_upDefence->ÊÜÉË(-i16±ä»¯, idAttacker);
 		else
-			LOG(ERROR) << "BuffComponent::¼ÓÊôĞÔ ±ä»¯Öµ´íÎó";
+			ÊıÖµComponent::¸Ä±ä(m_refEntity, ÊôĞÔ, i16±ä»¯);
 
 		m_refEntity.BroadcastNotifyPos();
 	}
@@ -101,7 +100,7 @@ void BuffComponent::¶¨Ê±¸ÄÊıÖµ(const BuffId id, const uint64_t idAttacker)
 	µ¥Î»::BuffÅäÖÃ buffÅäÖÃ;
 	CHECK_RET_VOID(µ¥Î»::FindBuffÅäÖÃ(id, buffÅäÖÃ));
 	É¾Buff(id);
-	Co¶¨Ê±¸ÄÊıÖµ(buffÅäÖÃ.dura¼ä¸ô, (int16_t)buffÅäÖÃ.f±ä»¯Öµ, m_mapFunCancel[id], idAttacker).RunNew();
+	Co¶¨Ê±¸ÄÊıÖµ(buffÅäÖÃ.ÊôĞÔ, buffÅäÖÃ.dura¼ä¸ô, (int16_t)buffÅäÖÃ.f±ä»¯Öµ, m_mapFunCancel[id], idAttacker).RunNew();
 }
 
 void BuffComponent::É¾Buff(BuffId id)

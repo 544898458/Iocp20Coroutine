@@ -4,6 +4,7 @@
 #include "BuffComponent.h"
 #include "Entity.h"
 #include "DefenceComponent.h"
+#include "数值Component.h"
 #include "../../CoRoutine/CoTimer.h"
 #include "../EntitySystem.h"
 #include "../枚举/BuffId.h"
@@ -87,11 +88,11 @@ CoTaskBool 苔蔓Component::Co给周围加Buff()
 			if (!refEntity.m_upDefence)
 				continue;
 
-			if (单位::Is虫(refEntity.m_类型)&& !m_refEntity.IsEnemy(refEntity))//只给友方虫族单位加速度
+			if (单位::Is虫(refEntity.m_类型) && !m_refEntity.IsEnemy(refEntity))//只给友方虫族单位加速度
 			{
 				refEntity.m_upBuff->加属性(苔蔓给虫单位加移动速度);
 				refEntity.m_upBuff->删Buff(离开苔蔓的虫建筑持续扣血);
-				refEntity.m_upDefence->加血(1);
+				数值Component::改变(refEntity, 生命, 1);
 			}
 			else if (EntitySystem::Is建筑(refEntity))//给人类建筑扣血（不分敌我）
 			{

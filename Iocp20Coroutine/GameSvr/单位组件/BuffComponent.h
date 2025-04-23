@@ -20,7 +20,7 @@ public:
 	bool 已有Buff(BuffId id)const;
 private:
 	void On属性变化(属性类型 属性类型);
-	CoTaskBool Co定时改数值(std::chrono::system_clock::duration dura间隔, int16_t i16变化, FunCancel& funCancel, const uint64_t idAttacker);
+	CoTaskBool Co定时改数值(const 属性类型 属性, std::chrono::system_clock::duration dura间隔, int16_t i16变化, FunCancel& funCancel, const uint64_t idAttacker);
 	Entity& m_refEntity;
 	std::map<BuffId, FunCancel> m_mapFunCancel;
 	struct 属性数值 final
