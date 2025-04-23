@@ -28,9 +28,9 @@
 		[this](WpEntity& wpEntity, bool ref仇恨目标)->void {}
 	);
 
-	const int 最大能量 = 50;
-	数值Component::Set(refEntity, 能量, 最大能量);
+	const int 最大能量 = 20;
 	数值Component::Set(refEntity, 属性类型::最大能量, 最大能量);
+	数值Component::Set(refEntity, 能量, 最大能量);
 	CHECK_RET_VOID(m_refEntity.m_upBuff);
 	m_refEntity.m_upBuff->定时改数值(医疗兵自动恢复能量, m_refEntity.Id);
 }

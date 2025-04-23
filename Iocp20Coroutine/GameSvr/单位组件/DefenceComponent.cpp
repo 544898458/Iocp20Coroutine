@@ -15,8 +15,8 @@
 
 DefenceComponent::DefenceComponent(Entity& refEntity, const uint16_t i16HpMax) : m_refEntity(refEntity)
 {
-	数值Component::Set(refEntity, 生命, i16HpMax);
 	数值Component::Set(refEntity, 属性类型::最大生命, i16HpMax);
+	数值Component::Set(refEntity, 生命, i16HpMax);
 }
 
 void DefenceComponent::AddComponent(Entity& refEntity, uint16_t u16初始Hp)

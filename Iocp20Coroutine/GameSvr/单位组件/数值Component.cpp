@@ -68,8 +68,8 @@ int 数值Component::最大属性(const 属性类型& 属性)
 		return m_map属性数值[最大能量];
 		break;
 	default:
-		LOG(ERROR) << "属性类型错误" << 属性;
-		return 0;
+		//LOG(ERROR) << "属性类型错误" << 属性;
+		return std::numeric_limits<int>::max();
 		break;
 	}
 }
