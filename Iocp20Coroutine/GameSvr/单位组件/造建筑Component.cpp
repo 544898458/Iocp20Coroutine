@@ -43,10 +43,10 @@ bool Ôì½¨ÖşComponent::ÕıÔÚ½¨Ôì(const Entity& refEntity)
 	switch (refEntity.m_ÀàĞÍ)
 	{
 	case ¹¤³Ì³µ:
-		m_set¿ÉÔìÀàĞÍ = { »ùµØ,Ãñ·¿,±øÓª,µØ±¤,ÅÚÌ¨,»ú³¡,ÖØ³µ³§ };
+		m_set¿ÉÔìÀàĞÍ = { »ùµØ,Ãñ·¿,±øÓª,µØ±¤,ÅÚÌ¨,»ú³¡,ÖØ³µ³§,·½¶Õ };
 		break;
 	case ¹¤³æ:
-		m_set¿ÉÔìÀàĞÍ = { ³æ³²,³æÓª,·ÉËş,ÄâÌ¬Ô´,ÅÚÌ¨,Ì«Ëê };
+		m_set¿ÉÔìÀàĞÍ = { ³æ³²,³æÓª,·ÉËş,ÄâÌ¬Ô´,ÅÚÌ¨,Ì«Ëê,·½¶Õ };
 		break;
 	default:
 		break;
@@ -82,7 +82,7 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position pos, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 		_ASSERT(false);
 		co_return true;
 	}
-	if (!m_refEntity.m_refSpace.¿É·ÅÖÃ½¨Öş(pos, ÅäÖÃ.f°ë±ß³¤))
+	if (!m_refEntity.m_refSpace.¿É·ÅÖÃ½¨Öş(pos, ÅäÖÃ.f°ë±ß³¤) && ·½¶Õ != ÀàĞÍ)
 	{
 		//²¥·ÅÉùÒô("TSCErr00", "ÓĞ×èµ²£¬ÎŞ·¨½¨Ôì");//£¨Err00£© I can't build it, something's in the way. ÎÒÃ»·¨ÔÚÕâ½¨£¬ÓĞ¶«Î÷µ²µÀ
 		PlayerComponent::²¥·ÅÉùÒô(m_refEntity, "ÓïÒô/ÎŞ·¨ÔÚÕâÀï½¨Ôì¿É°®°æ", "ÓĞ×èµ²£¬ÎŞ·¨½¨Ôì");
@@ -160,13 +160,13 @@ CoTaskBool Ôì½¨ÖşComponent::Co½¨Ôì¹ı³Ì(WpEntity wpEntity½¨Öş, FunCancel& cancel)
 	{
 		if (co_await CoTimer::WaitNextUpdate(cancel))
 			co_return true;
-	
+
 		if (wpEntity½¨Öş.expired())
 			co_return false;
 
 		CHECK_WP_CO_RET_FALSE(wpEntity½¨Öş);
 		auto& ref½¨Öş = *wpEntity½¨Öş.lock();
-		CHECK_CO_RET_FALSE(ref½¨Öş.m_upBuilding); 
+		CHECK_CO_RET_FALSE(ref½¨Öş.m_upBuilding);
 		auto& ref½¨Ôì½ø¶È°Ù·Ö±È = ref½¨Öş.m_upBuilding->m_n½¨Ôì½ø¶È°Ù·Ö±È;
 		if (BuildingComponent::MAX½¨Ôì°Ù·Ö±È <= ref½¨Ôì½ø¶È°Ù·Ö±È)
 			co_return false;
@@ -222,7 +222,7 @@ WpEntity Ôì½¨ÖşComponent::AddBuilding(const µ¥Î»ÀàĞÍ ÀàĞÍ, const Position pos)
 	CHECK_RET_DEFAULT(µ¥Î»::FindÖÆÔìÅäÖÃ(ÀàĞÍ, ÖÆÔì));
 
 	//Position pos = { 35,float(std::rand() % 60) - 30 };
-	if (!m_refEntity.m_refSpace.¿É·ÅÖÃ½¨Öş(pos, ½¨Öş.f°ë±ß³¤))
+	if (!m_refEntity.m_refSpace.¿É·ÅÖÃ½¨Öş(pos, ½¨Öş.f°ë±ß³¤) && ·½¶Õ != ÀàĞÍ)
 	{
 		//²¥·ÅÉùÒô("TSCErr00", "ÓĞ×èµ²£¬ÎŞ·¨½¨Ôì");//£¨Err00£© I can't build it, something's in the way. ÎÒÃ»·¨ÔÚÕâ½¨£¬ÓĞ¶«Î÷µ²µÀ
 		PlayerComponent::²¥·ÅÉùÒô(m_refEntity, "ÓïÒô/ÎŞ·¨ÔÚÕâÀï½¨Ôì¿É°®°æ", "ÓĞ×èµ²");
@@ -299,7 +299,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	µ¥Î»::µ¥Î»ÅäÖÃ µ¥Î»;
 	CHECK_RET_VOID(µ¥Î»::Find½¨Öşµ¥Î»ÅäÖÃ(ÀàĞÍ, ½¨Öş));
 	CHECK_RET_VOID(µ¥Î»::Findµ¥Î»ÅäÖÃ(ÀàĞÍ, µ¥Î»));
-	
+
 
 	if (spPlayer)
 		PlayerComponent::AddComponent(refNewEntity, std::forward<UpPlayerComponent>(spPlayer), spPlayer->m_refSession.NickName());
@@ -351,7 +351,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 	default:
 		break;
 	}
-	if (Ì¦Âû != ÀàĞÍ)
+	if (EntitySystem::Is½¨Öş(ÀàĞÍ))
 	{
 		µ¥Î»::ÖÆÔìÅäÖÃ ÖÆÔì;
 		CHECK_RET_VOID(µ¥Î»::FindÖÆÔìÅäÖÃ(ÀàĞÍ, ÖÆÔì));
