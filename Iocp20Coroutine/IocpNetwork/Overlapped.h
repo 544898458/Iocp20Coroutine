@@ -12,7 +12,7 @@ namespace Iocp
 	/// </summary>
 	struct Overlapped
 	{
-		Overlapped(const std::string& strDebugInfo) :coAwait(0, funCancel, strDebugInfo), OnComplete(&Overlapped::OnCompleteNormal) {}
+		Overlapped(const std::string& strDebugInfo = "") :coAwait(0, funCancel, strDebugInfo), OnComplete(&Overlapped::OnCompleteNormal) {}
 		//enum Op
 		//{
 		//	Accept,
@@ -56,7 +56,7 @@ namespace Iocp
 			this->numberOfBytesTransferred = number_of_bytes;
 			this->GetQueuedCompletionStatusReturn = bGetQueuedCompletionStatusReturn;
 			this->GetLastErrorReturn = lastErr;
-			
+
 			if (this->coTask.Run())
 			{
 				LOG(INFO) << "协程结束";
@@ -64,13 +64,13 @@ namespace Iocp
 
 				LOG(INFO) << "Send协程结束，肯定断线了";
 				auto finalSendState = SendState_Sending;
-				const auto old =this->atomicSendState.load();
+				const auto old = this->atomicSendState.load();
 				auto changed = this->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sleep);
 				if (changed)
 				{
 					LOG(INFO) << "Send协程结束，SendState_Sending时断线,finalSendState:" << finalSendState << ",old=" << old;
 				}
-				else if( SendState_SendBeforeSleep == old)
+				else if (SendState_SendBeforeSleep == old)
 				{
 					LOG(WARNING) << "Send协程结束，SendState_SendBeforeSleep时断线,finalSendState:" << finalSendState << ",old=" << old;
 					changed = this->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sleep);
@@ -79,7 +79,7 @@ namespace Iocp
 						LOG(ERROR) << "Send协程结束,状态有问题,finalSendState:" << finalSendState << ",old=" << old;
 					}
 				}
-				
+
 				return;
 			}
 			auto yiledValue = this->coTask.GetValue();
@@ -160,7 +160,7 @@ namespace Iocp
 					return;
 				}
 				changed = this->pOverlapped->atomicSendState.compare_exchange_strong(finalSendState, SendState_Sending);//激活
-				LOG_IF(ERROR,!changed) << "";
+				LOG_IF(ERROR, !changed) << "";
 				_ASSERT(changed);
 				if (changed)
 				{

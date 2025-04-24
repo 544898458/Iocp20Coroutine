@@ -43,7 +43,7 @@ public:
 		}
 	}
 
-	static CoAwaiter<std::tuple<bool, T_Responce>>& Wait(FunCancel& funCancel, const std::string strDebugInfo, FunWant funWantEvent = [](const T_Responce&) {return true; })
+	static CoAwaiter<std::tuple<bool, T_Responce>>& Wait(FunCancel& funCancel, const std::string& strDebugInfo = "", FunWant funWantEvent = [](const T_Responce&) {return true; })
 	{
 		++g_rpcSnId;
 		const uint32_t rpcSnId = g_rpcSnId;

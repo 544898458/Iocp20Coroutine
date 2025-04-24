@@ -335,7 +335,7 @@ struct CoAwaiter
 	/// 
 	/// </summary>
 	/// <param name="initSn">用引用可以防止传bool进去</param>
-	CoAwaiter(const long& initSn, FunCancel& cancel, const std::string& strDebugInfo) : m_Kc(cancel, true),m_strDebugInfo(strDebugInfo)
+	CoAwaiter(const long& initSn, FunCancel& cancel, const std::string& strDebugInfo="") : m_Kc(cancel, true), m_strDebugInfo(strDebugInfo)
 	{
 		m_sn = initSn;
 	}

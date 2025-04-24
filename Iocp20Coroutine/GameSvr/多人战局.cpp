@@ -51,7 +51,7 @@ void 玩家带入单位进入四方对战(Space& refSpace, const Position& refPos, PlayerGat
 
 		for (int i = 1; i < _countof(arr方位玩家); )
 		{
-			const auto& [stop, event玩家进入Space] = co_await CoEvent<MyEvent::玩家进入Space>::Wait(funCancel,
+			const auto& [stop, event玩家进入Space] = co_await CoEvent<MyEvent::玩家进入Space>::Wait(funCancel, __FUNCTION__,
 				[&refSpace](auto& refPlayer) { return &*refPlayer.wpSpace.lock() == &refSpace; });
 			if (stop)
 			{

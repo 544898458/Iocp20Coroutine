@@ -103,8 +103,8 @@ CoAwaiter<T>& Âý²Ù×÷<T>::DoDb(DbFun funDb, FunCancel& cancel)
 
 	const auto sn = CoAwaiterBool::GenSn();
 
-	auto sp = std::make_shared<CoAwaiter<T>, const long&, FunCancel&>(sn, cancel);
-	this->m_dequeSave.push_back({ funDb, sp });
+	auto sp = std::make_shared<CoAwaiter<T>, const long&, FunCancel&, const std::string&>(sn, cancel, "");
+	this->m_dequeSave.push_back({ funDb, sp});
 	if (Iocp::Overlapped::SendState_Sending != this->m_OverlappedNotify.atomicSendState.load())
 	{
 		PostQueuedCompletionStatus(m_hIocp, 0, (ULONG_PTR)this, &m_OverlappedNotify.overlapped);
