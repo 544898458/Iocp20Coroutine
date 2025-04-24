@@ -36,7 +36,7 @@ public:
 		if (itFind == m_mapSession.end())
 		{
 			//_ASSERTfalse);
-			LOG(WARNING) << "Sessions找不到idSession=" << idSession;
+			//LOG(WARNING) << "Sessions找不到idSession=" << idSession;
 			return false;
 		}
 		Session* pSession = itFind->second;

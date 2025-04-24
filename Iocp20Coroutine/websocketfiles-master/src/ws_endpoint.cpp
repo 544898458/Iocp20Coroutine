@@ -65,7 +65,7 @@ template<class T_Callback, class T_Data>
 int32_t WebSocketEndpoint<T_Callback, T_Data>::from_wire(const void* readbuf, int32_t size)
 {
 	fromwire_buf_.append((const char*)readbuf, size);
-	LOG(INFO) << "WebSocketEndpoint - set fromwire_buf, current length:" << fromwire_buf_.length() << std::endl;
+	//LOG(INFO) << "WebSocketEndpoint - set fromwire_buf, current length:" << fromwire_buf_.length() << std::endl;
 	while (true)
 	{
 		const auto nrcv = parse_packet(fromwire_buf_);
@@ -205,7 +205,7 @@ int32_t WebSocketEndpoint<T_Callback, T_Data>::process_message_data(WebSocketPac
 		break;
 	case WebSocketPacket::WSOpcode_Binary:
 		// add your process code here
-		LOG(INFO) << "WebSocketEndpoint - recv a Binary opcode." << std::endl;
+		//LOG(INFO) << "WebSocketEndpoint - recv a Binary opcode." << std::endl;
 		user_defined_process(packet, frame_payload);
 		break;
 	case WebSocketPacket::WSOpcode_Close:
@@ -238,8 +238,7 @@ int32_t WebSocketEndpoint<T_Callback, T_Data>::user_defined_process(WebSocketPac
 {
 	// print received websocket payload from client
 	std::string str_recv(frame_payload.bytes(), frame_payload.length());
-	LOG(INFO) << "WebSocketEndpoint - received data, length:" << str_recv.length()
-		<< " ,content:" << str_recv.c_str() << std::endl;
+	//LOG(INFO) << "WebSocketEndpoint - received data, length:" << str_recv.length() << " ,content:" << str_recv.c_str() << std::endl;
 
 	WebSocketPacket wspacket;
 	// set FIN and opcode

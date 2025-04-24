@@ -79,7 +79,7 @@ int32_t WebSocketPacket::pack_handshake_rsp(std::string &hs_rsp)
 
 	std::string sha1_key = SHA1::SHA1HashString(raw_key);
 	char accept_key[128] = {0};
-	Base64encode(accept_key, sha1_key.c_str(), sha1_key.length());
+	Base64encode(accept_key, sha1_key.c_str(), (int)sha1_key.length());
 
 	std::ostringstream sstream;
 	sstream << "HTTP/1.1 101 Switching Protocols" << EOL;
@@ -113,8 +113,7 @@ uint64_t WebSocketPacket::recv_dataframe(ByteBuffer &input)
 
 	fetch_payload(input);
 
-	LOG(INFO)  << "WebSocketPacket: received data with header size: " << header_size << " payload size:" << payload_length_
-			  << " input oft size:" << input.getoft() << std::endl;
+	//LOG(INFO)  << "WebSocketPacket: received data with header size: " << header_size << " payload size:" << payload_length_<< " input oft size:" << input.getoft() << std::endl;
 	//return payload_length_;
 	return input.getoft();
 }

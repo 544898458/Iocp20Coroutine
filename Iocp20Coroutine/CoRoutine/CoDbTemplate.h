@@ -144,6 +144,7 @@ void Âý²Ù×÷<T>::DbThreadProcess()
 			auto& [fun, spCoAwait] = this->m_dequeSave.front();
 			dequeLocal.push_back({ fun, spCoAwait });
 			this->m_dequeSave.pop_front();
+			LOG(INFO) << "m_dequeSave.size:" << this->m_dequeSave.size();
 		}
 	}
 

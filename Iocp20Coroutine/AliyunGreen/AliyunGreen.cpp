@@ -74,7 +74,7 @@ std::string winhttp_client_post(const std::wstring& strHost, const std::wstring&
 	//strHeader += L"Authorization: Basic ";
 	//strHeader += string2wstring(tmsstring) +L"\r\n"; //tmsstring is client and secure after base64 encoding
 
-	bRet = WinHttpAddRequestHeaders(hRequest, strHeader.c_str(), strHeader.length(), WINHTTP_ADDREQ_FLAG_ADD | WINHTTP_ADDREQ_FLAG_REPLACE);
+	bRet = WinHttpAddRequestHeaders(hRequest, strHeader.c_str(), (DWORD)strHeader.length(), WINHTTP_ADDREQ_FLAG_ADD | WINHTTP_ADDREQ_FLAG_REPLACE);
 	//Send a Request.
 
 	std::string strTmp = "grant_type=client_credentials"; //OAuth认证模式是客户端模式

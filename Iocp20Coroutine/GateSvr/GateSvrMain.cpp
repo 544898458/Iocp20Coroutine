@@ -81,7 +81,7 @@ void SendToGateClient(const T& refMsg, uint64_t gateSessionId)
 		}
 		}))
 	{
-		LOG(WARNING) << "无法发给游戏客户端，找不到GateSession，可能早已断线,gateSessionId=" << gateSessionId << ",id=" << refMsg.msg.id << ",sn=" << refMsg.msg.sn << ",rpcSnId=" << refMsg.msg.rpcSnId;
+		//LOG(WARNING) << "无法发给游戏客户端，找不到GateSession，可能早已断线,gateSessionId=" << gateSessionId << ",id=" << refMsg.msg.id << ",sn=" << refMsg.msg.sn << ",rpcSnId=" << refMsg.msg.rpcSnId;
 	}
 }
 

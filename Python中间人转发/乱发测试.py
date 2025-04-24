@@ -61,6 +61,59 @@ class MsgId(Enum):
     苔蔓半径 = 49
     太岁分裂 = 50
 
+class 单位类型(Enum):
+    单位类型_Invalid_0 = 0  # Define the missing value
+    特效 = 1
+    视口 = 2
+    苔蔓 = 3  # Creep
+    方墩 = 4  # Player-built block
+
+    资源Min非法 = 100
+    晶体矿 = 101  # Minerals
+    燃气矿 = 102  # Vespene Gas
+
+    活动单位Min非法 = 200
+    工程车 = 201  # Space Construction Vehicle
+    枪兵 = 202  # Marine
+    近战兵 = 203  # Firebat
+    三色坦克 = 204
+    工虫 = 205
+    飞机 = 206
+    枪虫 = 207  # Hydralisk
+    近战虫 = 208  # Zergling
+    幼虫 = 209  # Larva
+    绿色坦克 = 210  # Swarm unit, actually a biological entity
+    光刺 = 211  # Emitted by green tank, moves forward and explodes on contact
+    房虫 = 212  # Overload
+    飞虫 = 213  # Mutalisk
+    医疗兵 = 214  # Medic
+
+    活动单位Max非法 = 300
+
+    建筑Min非法 = 300
+    基地 = 301  # Command Center
+    兵厂 = 302  # Barracks
+    民房 = 303  # Supply Depot
+    地堡 = 304  # Bunker
+    炮台 = 305  # Photon Cannon
+    虫巢 = 306  # Hatchery
+    机场 = 307  # Spaceport
+    重车厂 = 308  # Factory
+    虫营 = 309  # Corresponding to barracks
+    飞塔 = 310  # Spore Colony
+    拟态源 = 311  # Original, prerequisite for green tanks
+    太岁 = 312  # Creep Colony
+
+    建筑Max非法 = 400
+
+    怪Min非法 = 400
+    枪虫怪 = 401
+    近战虫怪 = 402
+    工虫怪 = 403
+    枪兵怪 = 404
+    近战兵怪 = 405
+    怪Max非法 = 500
+
 
 async def onRecvWorldSvr(arr,websocket) -> bool:
     idxArr = 0
@@ -101,12 +154,12 @@ async def onRecvWorldSvr(arr,websocket) -> bool:
             print('未处理',idMsg)
             return False
     
-随机 = 10000
+随机 = 1000
 async def 随机说话(websocket):
     rand = random.randint(1, 随机)
     if rand == 1:
         # 发送消息，随机说话
-        object =[[MsgId.Say.value, 0, 0], f'test{random.randint(1, 随机)}']
+        object =[[MsgId.Say.value, 0, 0], f'测试说话{random.randint(1, 5)}']
         await websocket.send(packb(object))
 
 #随机框选
@@ -117,12 +170,23 @@ async def 随机框选(websocket):
         object =[[MsgId.框选.value, 0, 0],[-100, -100],[100, 100]]
         await websocket.send(packb(object))
         
+#随机坐标点
+def 随机坐标点():
+    return [random.randint(-100, 100),random.randint(-100, 100)]
+
 #随机move
 async def 随机move(websocket):
     rand = random.randint(1, 随机)
     if rand == 1:
         # 发送消息，随机move
-        object =[[MsgId.Move.value, 0, 0], [random.randint(-100, 100),random.randint(-100, 100)], True]
+        object =[[MsgId.Move.value, 0, 0], 随机坐标点(), True]
+        await websocket.send(packb(object))
+
+#随机造炮台
+async def 造炮台(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        object =[[MsgId.AddBuilding.value, 0, 0], 单位类型.炮台.value, 随机坐标点()]
         await websocket.send(packb(object))
 async def onRecvGameSvr(arr, websocket) -> bool:
     idxArr = 0
@@ -143,6 +207,7 @@ async def onRecvGameSvr(arr, websocket) -> bool:
             await 随机说话(websocket)
             await 随机框选(websocket)
             await 随机move(websocket)
+            await 造炮台(websocket)
             return True
         case MsgId.进Space:
             print('进Space', idMsg)
@@ -172,6 +237,8 @@ async def onRecvGameSvr(arr, websocket) -> bool:
         case MsgId.升级单位属性:
             return True
         case MsgId.设置视口:
+            return True
+        case MsgId.SelectRoles:
             return True
         case _:
             print('onRecvGameSvr 未处理',idMsg)
