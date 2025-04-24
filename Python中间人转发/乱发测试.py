@@ -1,5 +1,7 @@
 from __future__ import annotations
+import argparse
 import asyncio
+import random
 import ssl
 import websockets
 from msgpack import unpackb, packb
@@ -99,6 +101,29 @@ async def onRecvWorldSvr(arr,websocket) -> bool:
             print('未处理',idMsg)
             return False
     
+随机 = 10000
+async def 随机说话(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 发送消息，随机说话
+        object =[[MsgId.Say.value, 0, 0], f'test{random.randint(1, 随机)}']
+        await websocket.send(packb(object))
+
+#随机框选
+async def 随机框选(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 发送消息，随机框选
+        object =[[MsgId.框选.value, 0, 0],[-100, -100],[100, 100]]
+        await websocket.send(packb(object))
+        
+#随机move
+async def 随机move(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 发送消息，随机move
+        object =[[MsgId.Move.value, 0, 0], [random.randint(-100, 100),random.randint(-100, 100)], True]
+        await websocket.send(packb(object))
 async def onRecvGameSvr(arr, websocket) -> bool:
     idxArr = 0
     
@@ -114,14 +139,39 @@ async def onRecvGameSvr(arr, websocket) -> bool:
             eulerAnglesY = arr[idxArr];  idxArr += 1
             hp = arr[idxArr];  idxArr += 1
             能量 = arr[idxArr];  idxArr += 1
-            print('NotifyPos', id)
-            
+            # print('NotifyPos', id)
+            await 随机说话(websocket)
+            await 随机框选(websocket)
+            await 随机move(websocket)
             return True
         case MsgId.进Space:
             print('进Space', idMsg)
             return True
         case MsgId.播放音乐:
             print('播放音乐', idMsg)
+            return True
+        case MsgId.ChangeSkeleAnim:
+            return True
+        case MsgId.播放声音:
+            return True
+        case MsgId.AddRoleRet:
+            return True
+        case MsgId.资源:
+            return True
+        case MsgId.Entity描述:
+            return True
+        case MsgId.DelRoleRet:
+            return True
+        case MsgId.Say:
+            content = arr[idxArr];  idxArr += 1
+            channel = arr[idxArr];  idxArr += 1
+            print(channel, '频道:', content)
+            return True
+        case MsgId.所有单位属性等级:
+            return True
+        case MsgId.升级单位属性:
+            return True
+        case MsgId.设置视口:
             return True
         case _:
             print('onRecvGameSvr 未处理',idMsg)
@@ -140,7 +190,7 @@ async def 收到消息(reply, websocket) -> bool:
         case MsgId.GateSvr转发GameSvr消息给游戏前端:
             arrGameMsg = reply[index]
             index += 1
-            print('GateSvr转发GameSvr消息给游戏前端 收到消息', arrGameMsg)
+            # print('GateSvr转发GameSvr消息给游戏前端 收到消息', arrGameMsg)
             await onRecvGameSvr(unpackb(arrGameMsg, strict_map_key=False), websocket)
             return True
         case MsgId.GateSvr转发WorldSvr消息给游戏前端:
@@ -152,8 +202,14 @@ async def 收到消息(reply, websocket) -> bool:
         case _:
             print('未处理',idMsg)
             return False
-
+       
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='中间人转发程序')
+    parser.add_argument('--username', type=str, required=True, help='登录用户名')
+    return parser.parse_args()
 async def main() -> None:
+    args = parse_arguments()
+    str登录名 = args.username
     # Create SSL context if necessary
     ssl_context = ssl.create_default_context()
 
@@ -162,8 +218,6 @@ async def main() -> None:
         
         sendMsgSn = 0
         sendMsgSn += 1  # Increment correctly
-        
-        str登录名 = 'test'  # Assign a proper value
         
         # Construct the object correctly
         obj = [
@@ -180,8 +234,9 @@ async def main() -> None:
         while True:
             reply = await websocket.recv()
             obj = unpackb(reply)
-            print('reply', obj)
+            # print('reply', obj)
             await 收到消息(obj, websocket)
             
+
 
 asyncio.run(main())
