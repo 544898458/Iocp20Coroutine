@@ -216,6 +216,7 @@ int32_t WebSocketEndpoint<T_Callback, T_Data>::process_message_data(WebSocketPac
 	case WebSocketPacket::WSOpcode_Ping:
 		// add your process code here
 		LOG(INFO) << "WebSocketEndpoint - recv a Ping opcode." << std::endl;
+		packet.set_opcode(WebSocketPacket::WSOpcode_Pong);
 		user_defined_process(packet, frame_payload);
 		break;
 	case WebSocketPacket::WSOpcode_Pong:

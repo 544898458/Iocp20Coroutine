@@ -78,7 +78,7 @@ CoTaskBool 走Component::WalkToTarget(SpEntity spTarget, FunCancel& funCancel, co
 
 	if (m_refEntity.IsDead())
 	{
-		LOG(WARNING) << m_refEntity.头顶Name() << ",已阵亡不用走";
+		//LOG(WARNING) << m_refEntity.头顶Name() << ",已阵亡不用走";
 		co_return false;
 	}
 
@@ -104,19 +104,19 @@ CoTaskBool 走Component::WalkToTarget(SpEntity spTarget, FunCancel& funCancel, co
 	{
 		if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
 		{
-			LOG(INFO) << "走向" << spTarget << "的协程取消了";
+			//LOG(INFO) << "走向" << spTarget << "的协程取消了";
 			co_return true;
 		}
 		if (m_refEntity.IsDead())
 		{
-			LOG(INFO) << "自己阵亡，走向[" << spTarget->头顶Name() << "]的协程取消了";
+			//LOG(INFO) << "自己阵亡，走向[" << spTarget->头顶Name() << "]的协程取消了";
 			//PlayerComponent::Say(m_refEntity, "自己阵亡", SayChannel::系统);
 
 			co_return false;
 		}
 		if (b检查警戒距离 && !m_refEntity.DistanceLessEqual(*spTarget, m_refEntity.警戒距离()))
 		{
-			LOG(INFO) << "离开自己的警戒距离" << spTarget << "的协程取消了";
+			//LOG(INFO) << "离开自己的警戒距离" << spTarget << "的协程取消了";
 			co_return false;
 		}
 		const bool b距离友方单位太近 = EntitySystem::距离友方单位太近(m_refEntity);
@@ -170,7 +170,7 @@ CoTaskBool 走Component::WalkToPos(const Position posTarget, FunCancel& funCancel
 {
 	if (m_refEntity.IsDead())
 	{
-		LOG(WARNING) << posTarget << ",已阵亡不用走";
+		//LOG(WARNING) << posTarget << ",已阵亡不用走";
 		co_return false;
 	}
 	if (!m_refEntity.m_refSpace.CrowdTool可站立(posTarget))
@@ -205,12 +205,12 @@ CoTaskBool 走Component::WalkToPos(const Position posTarget, FunCancel& funCancel
 	{
 		if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
 		{
-			LOG(INFO) << "走向" << posLocalTarget << "的协程取消了";
+			//LOG(INFO) << "走向" << posLocalTarget << "的协程取消了";
 			co_return true;
 		}
 		if (m_refEntity.IsDead())
 		{
-			LOG(INFO) << "自己阵亡，走向" << posLocalTarget << "的协程取消了";
+			//LOG(INFO) << "自己阵亡，走向" << posLocalTarget << "的协程取消了";
 			//PlayerComponent::Say(m_refEntity, "自己阵亡", SayChannel::系统);
 
 			co_return true;
@@ -238,7 +238,7 @@ CoTaskBool 走Component::WalkToPos(const Position posTarget, FunCancel& funCancel
 				}
 				if (co_await CoTimer::WaitNextUpdate(funCancel))//服务器主工作线程大循环，每次循环触发一次
 				{
-					LOG(INFO) << "已走到目标附近，走向" << posLocalTarget << "的协程取消了";
+					//LOG(INFO) << "已走到目标附近，走向" << posLocalTarget << "的协程取消了";
 					co_return true;
 				}
 			}

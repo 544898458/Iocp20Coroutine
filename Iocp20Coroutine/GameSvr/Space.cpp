@@ -87,7 +87,7 @@ WpEntity Space::GetEntity(const int64_t id)
 	auto itFind = m_mapEntity.find(id);
 	if (itFind == m_mapEntity.end())
 	{
-		LOG(INFO) << "选中的实体不存在:" << id;
+		LOG(INFO) << "找不到,GetEntity:" << id;
 		//_ASSERT(false);
 		return {};
 	}
@@ -265,7 +265,7 @@ void Space::EraseEntity(const bool bForceEraseAll)
 			CHECK_NOT_RETURN(1 == sizeErase);
 		}
 
-		LOG(INFO) << "删除过期对象," << spEntity->头顶Name() << ",Id=" << spEntity->Id << ",删除前剩余" << m_mapEntity.size();
+		//LOG(INFO) << "删除过期对象," << spEntity->头顶Name() << ",Id=" << spEntity->Id << ",删除前剩余" << m_mapEntity.size();
 		spEntity->OnDestroy();
 		iter = m_mapEntity.erase(iter);
 	}

@@ -61,7 +61,7 @@ namespace Iocp
 		usPackLen = *(uint16_t*)buf;
 		if (usPackLen > 1024 * 16)
 		{
-			LOG(ERROR) << "外挂,跳过数据包len=" << len;
+			LOG(ERROR) << usPackLen << "=usPackLen,外挂,跳过数据包len=" << len;
 			return std::make_tuple(nullptr, 0, len);
 		}
 		if (usPackLen + sizeofPackLen > len)

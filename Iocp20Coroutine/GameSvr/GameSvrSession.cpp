@@ -52,7 +52,7 @@ void GameSvrSession::OnRecvPack(const void* buf, const int len)
 {
 	msgpack::object_handle oh = msgpack::unpack((const char*)buf, len);//没判断越界，要加try
 	msgpack::object obj = oh.get();
-	LOG(INFO) << obj;
+	//LOG(INFO) << obj;
 	const auto msg = MsgHead::GetMsgId(obj);
 	//++m_snRecv;
 	//_ASSERT(m_snRecv == msg.sn);
@@ -83,6 +83,7 @@ void GameSvrSession::OnInit(GameSvr& server)
 //网络线程，多线程
 void GameSvrSession::OnDestroy()
 {
+	LOG(WARNING) << "GameSvrSession::OnDestroy";
 	for (auto& pair : m_mapPlayerGateSession)
 	{
 		pair.second->OnDestroy();
@@ -139,7 +140,7 @@ void GameSvrSession::OnRecv(const MsgGate转发& msg转发)
 	msgpack::object_handle oh = msgpack::unpack((const char*)&msg转发.vecByte[0], msg转发.vecByte.size());//没判断越界，要加try
 	msgpack::object obj = oh.get();
 	const auto msg = MsgHead::GetMsgId(obj);
-	LOG(INFO) << "OnRecv:" << obj;
+	//LOG(INFO) << "OnRecv:" << obj;
 
 	switch (msg.id)
 	{
@@ -201,5 +202,5 @@ void GameSvrSession::OnRecv(const MsgGateDeleteSession& msg, const uint64_t idGa
 
 	iterOld->second->OnDestroy();
 	m_mapPlayerGateSession.erase(iterOld);
-	LOG(INFO) << "已删除,idGateClientSession=" << idGateClientSession;
+	//LOG(INFO) << "已删除,idGateClientSession=" << idGateClientSession;
 }

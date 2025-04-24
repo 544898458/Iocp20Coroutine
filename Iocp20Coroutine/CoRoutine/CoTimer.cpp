@@ -31,7 +31,7 @@ namespace CoTimer
 		//FunCancel old = cancel;
 		cancel = [time, sn]()
 			{
-				LOG(INFO) << "Wait取消" << sn;
+				//LOG(INFO) << "Wait取消" << sn;
 				auto pair = g_multiTimer.equal_range(time);
 				for (auto iter = pair.first; iter != pair.second; )
 				{

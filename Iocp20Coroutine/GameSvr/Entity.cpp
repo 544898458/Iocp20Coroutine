@@ -72,7 +72,7 @@ bool Entity::IsDead() const
 
 Entity::~Entity()
 {
-	LOG(INFO) << "~Entity()," << Id;
+	//LOG(INFO) << "~Entity()," << Id;
 }
 
 struct SaveEntity
@@ -269,13 +269,13 @@ void Entity::OnDestroy()
 	}
 	else
 	{
-		LOG(INFO) << "没有删除协程";
+		//LOG(INFO) << "没有删除协程";
 	}
 }
 
 void Entity::BroadcastLeave()
 {
-	LOG(INFO) << 头顶Name() << "调用Entity::BroadcastLeave," << Id;
+	//LOG(INFO) << 头顶Name() << "调用Entity::BroadcastLeave," << Id;
 	Broadcast(MsgDelRoleRet(Id));
 }
 
@@ -358,7 +358,7 @@ void Entity::DelayDelete(const std::chrono::system_clock::duration& dura)
 }
 CoTaskBool Entity::CoDelayDelete(const std::chrono::system_clock::duration& dura)
 {
-	LOG(INFO) << "开始延时删除自己的协程";
+	//LOG(INFO) << "开始延时删除自己的协程";
 	//_ASSERT(!m_cancelDelete);//不可并行
 	if (m_cancelDelete)
 		co_return false;

@@ -39,7 +39,7 @@ void ClientSession_GameToWorld::OnAppExit()
 
 void ClientSession_GameToWorld::OnRecv(const MsgSay& msg)
 {
-	LOG(INFO) << "WorldSvr发来聊天:" << StrConv::Utf8ToGbk(msg.content);
+	//LOG(INFO) << "WorldSvr发来聊天:" << StrConv::Utf8ToGbk(msg.content);
 
 	m_funBroadcast(msg);
 }
