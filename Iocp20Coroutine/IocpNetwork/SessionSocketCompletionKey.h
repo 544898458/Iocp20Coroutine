@@ -59,7 +59,7 @@ namespace Iocp
 			return std::make_tuple(nullptr, 0, len);
 
 		usPackLen = *(uint16_t*)buf;
-		if (usPackLen > 8192)
+		if (usPackLen > 1024 * 16)
 		{
 			LOG(ERROR) << "外挂,跳过数据包len=" << len;
 			return std::make_tuple(nullptr, 0, len);

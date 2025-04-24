@@ -746,7 +746,7 @@ int SslTlsSvr::读出已解密的明文(char(&bufOut)[len])
 	}
 
 	const int i32收到明文字节 = SSL_read(m_pServer->ssl, bufOut, sizeof(bufOut));
-	LOG(INFO) << m_pServer->name << ",收到明文字节:" << i32收到明文字节;
+	//LOG(INFO) << m_pServer->name << ",收到明文字节:" << i32收到明文字节;
 	return i32收到明文字节;
 }
 

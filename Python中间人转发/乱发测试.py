@@ -240,6 +240,8 @@ async def onRecvGameSvr(arr, websocket) -> bool:
             return True
         case MsgId.SelectRoles:
             return True
+        case MsgId.弹丸特效:
+            return True
         case _:
             print('onRecvGameSvr 未处理',idMsg)
             return False
