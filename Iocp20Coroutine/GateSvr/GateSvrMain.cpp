@@ -123,6 +123,7 @@ int main()
 		Sleep(100);
 		g_upGateSvr->m_Server.m_Sessions.Update([]() {});
 		g_ConnectToWorldSvr->Session.Process();
+		g_ConnectToGameSvr->Session.Process();
 		CoTimer::Update();
 	}
 	g_upGateSvr->Stop();

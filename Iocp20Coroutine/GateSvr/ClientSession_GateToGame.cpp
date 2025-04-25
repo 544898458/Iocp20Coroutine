@@ -4,10 +4,11 @@
 #include "../GameSvr/MyMsgQueue.h"
 #include "../IocpNetwork/MsgPack.h"
 #include "../IocpNetwork/ThreadPool.h"
-
+#include "../IocpNetwork/MsgQueueMsgPackTemplate.h"
 //template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WorldClientSession, WorldClient >(HANDLE hIocp, SOCKET socketListen, WorldClient&);
 template Iocp::SessionSocketCompletionKey<ClientSession_GateToGame>;
 //std::function<void(MsgSay const&)> WorldClient::m_funBroadcast;
+template<> std::deque<MsgGateSvr转发GameSvr消息给游戏前端>& ClientSession_GateToGame::GetQueue() { return m_queueMsgGateSvr转发GameSvr消息给游戏前端; }
 
 int ClientSession_GateToGame::OnRecv(Iocp::SessionSocketCompletionKey<ClientSession_GateToGame>& refSession, const void* buf, int len)
 {
@@ -53,8 +54,9 @@ void ClientSession_GateToGame::OnRecvPack(const void* buf, const int len)
 				return;
 			}
 			MsgGateSvr转发GameSvr消息给游戏前端 msg给前端(&msg.vecByte[0], (int)msg.vecByte.size());
-			SendToGateClient(msg给前端, msg.gateClientSessionId);
-
+			msg给前端.idGateClientSession = msg.gateClientSessionId;
+			//SendToGateClient(msg给前端, msg.gateClientSessionId);
+			m_MsgQueue.PushMsg<MsgGateSvr转发GameSvr消息给游戏前端>(*this, msg给前端); break;
 		}
 		break;
 		default:
@@ -85,3 +87,30 @@ inline void ClientSession_GateToGame::Send(const T& ref)
 	MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_refSession.Send(buf, len); });
 }
 template void ClientSession_GateToGame::Send(const MsgGate转发& ref);
+
+
+/// <summary>
+/// 主线程，单线程
+/// </summary>
+void ClientSession_GateToGame::Process()
+{
+	while (true)
+	{
+		const MsgId msgId = this->m_MsgQueue.PopMsg();
+		if (MsgId::MsgId_Invalid_0 == msgId)//没有消息可处理
+			break;
+
+		switch (msgId)
+		{
+		case MsgId::GateSvr转发GameSvr消息给游戏前端:this->m_MsgQueue.OnRecv不处理序号(this->m_queueMsgGateSvr转发GameSvr消息给游戏前端, *this, &ClientSession_GateToGame::OnRecv); break;
+		default:
+			LOG(ERROR) << "msgId:" << msgId;
+			_ASSERT(false);
+			break;
+		}
+	}
+}
+void ClientSession_GateToGame::OnRecv(const MsgGateSvr转发GameSvr消息给游戏前端& msg)
+{
+	SendToGateClient(msg, msg.idGateClientSession);
+}

@@ -94,7 +94,7 @@ MSGPACK_ADD_ENUM(单位类型);
 enum 属性类型;
 MSGPACK_ADD_ENUM(属性类型);
 
-enum 种族 
+enum 种族
 {
 	无,//资源
 	人,
@@ -313,6 +313,10 @@ struct MsgGateSvr转发GameSvr消息给游戏前端
 	}
 	MsgHead msg{ .id = GateSvr转发GameSvr消息给游戏前端 };
 	std::vector<uint8_t> vecByte;
+	/// <summary>
+	/// 不序列化，临时存数据
+	/// </summary>
+	uint64_t idGateClientSession = 0;
 	MSGPACK_DEFINE(msg, vecByte);
 };
 struct MsgGateSvr转发WorldSvr消息给游戏前端
@@ -623,7 +627,7 @@ struct Msg苔蔓半径
 
 struct Msg太岁分裂
 {
-	MsgHead msg{ .id = 太岁分裂};
+	MsgHead msg{ .id = 太岁分裂 };
 	Position pos放置;
 	MSGPACK_DEFINE(msg, pos放置);
 };
