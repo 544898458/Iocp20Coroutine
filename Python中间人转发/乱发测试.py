@@ -279,6 +279,7 @@ def parse_arguments():
 async def main() -> None:
     args = parse_arguments()
     str登录名 = args.username
+    print(str登录名)
     # Create SSL context if necessary
     ssl_context = ssl.create_default_context()
 
