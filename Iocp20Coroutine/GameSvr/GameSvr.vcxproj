@@ -406,9 +406,7 @@
     <ClCompile Include="GameSvrApp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\IocpNetwork\ByteQueue.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\ByteQueue.cpp" />
     <ClCompile Include="..\IocpNetwork\ListenSocketCompletionKey.cpp" />
     <ClCompile Include="MyEvent.cpp" />
     <ClCompile Include="pch.cpp">

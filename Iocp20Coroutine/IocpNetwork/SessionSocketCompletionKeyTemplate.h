@@ -115,9 +115,10 @@ namespace Iocp {
 				break;
 			}
 			const auto [buf, len] = this->recvBuf.Complete(pOverlapped.numberOfBytesTransferred);
-			if (len % 1000 == 0)
+			if (len > m_n最大已收到待处理字节)
 			{
-				LOG(WARNING) << "待处理数据" << len;
+				m_n最大已收到待处理字节 = len;
+				LOG(WARNING) << "最大已收到待处理字节:" << len;
 			}
 			this->recvBuf.PopFront(this->Session.OnRecv(*this, buf, len));//回调用户自定义函数，这里是纯数据，连封包概念都没有，封包是WebSocket协议负责的工作
 		}
@@ -185,7 +186,12 @@ namespace Iocp {
 				//LOG(WARNING) << "ERROR_IO_PENDING还没发完，下次还要接着发";
 			}
 
-			this->sendBuf.Complete(overlapped.numberOfBytesTransferred);
+			const int n剩余待发送 = this->sendBuf.Complete(overlapped.numberOfBytesTransferred);
+			if (n剩余待发送 > m_n最大剩余待发送)
+			{
+				m_n最大剩余待发送 = n剩余待发送;
+				LOG(WARNING) << "m_n最大剩余待发送 " << n剩余待发送;
+			}
 			//overlapped.callSend = true;
 		}
 

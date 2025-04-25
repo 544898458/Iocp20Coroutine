@@ -49,6 +49,8 @@ namespace Iocp
 		bool recvFinish = false;
 		int maxSendQueue = 0;
 		HANDLE m_hIocp;
+		int m_n最大已收到待处理字节 = 0;
+		int m_n最大剩余待发送 = 0;
 	};
 
 	static std::tuple< const void*, int, int > OnRecv2(const void* buf, int len)

@@ -31,7 +31,7 @@ std::tuple<char*, int> ByteQueueSend::BuildSendBuf()
 	auto& refQueue = this->queue;
 	if (!refQueue.buf.empty() && refQueue.buf.end() != refQueue.head)//固定内存还没发完
 	{
-		return std::make_tuple(&(*refQueue.head), refQueue.buf.end() - refQueue.head);
+		return std::make_tuple(&(*refQueue.head), (int)(refQueue.buf.end() - refQueue.head));
 	}
 
 	auto size = refQueue.queue.size();
@@ -51,7 +51,7 @@ std::tuple<char*, int> ByteQueueRecv::BuildRecvBuf()
 	auto& refQueue = this->queue;
 	if (refQueue.buf.end() != refQueue.head)//固定内存还没收完
 	{
-		return std::make_tuple(&(*refQueue.head), refQueue.buf.end() - refQueue.head);
+		return std::make_tuple(&(*refQueue.head), (int)(refQueue.buf.end() - refQueue.head));
 	}
 
 	refQueue.queue.insert(refQueue.queue.end(), refQueue.buf.begin(), refQueue.buf.end());//memcpy替换
@@ -59,11 +59,14 @@ std::tuple<char*, int> ByteQueueRecv::BuildRecvBuf()
 	refQueue.head = refQueue.buf.begin();
 	return std::make_tuple(&(*refQueue.head), (int)refQueue.buf.size());
 }
-void ByteQueueSend::Complete(int sent)
+
+int ByteQueueSend::Complete(int sent)
 {
 	std::lock_guard lock(queue.mutex);
 	auto& refQueue = this->queue;
+	CHECK_RET_DEFAULT(refQueue.head + sent <= refQueue.buf.end());
 	refQueue.head += sent;
+	return int(refQueue.buf.end() - refQueue.head + refQueue.queue.size());
 }
 ByteQueueRecv::ByteQueueRecv()
 {
@@ -71,7 +74,7 @@ ByteQueueRecv::ByteQueueRecv()
 	queue.buf.resize(MAX_RECV_COUNT);
 	this->queue.head = queue.buf.begin();
 }
-std::tuple<char*, int>  ByteQueueRecv::Complete(int sent)
+std::tuple<char*, int> ByteQueueRecv::Complete(int sent)
 {
 	std::lock_guard lock(queue.mutex);
 	auto& refQueue = this->queue;

@@ -34,11 +34,12 @@ class ByteQueueSend
 {
 public:
 	std::tuple<char*, int> BuildSendBuf();
-	void Complete(int);
+	int Complete(int);
 	void PopFront(int);
 
 	ByteQueue queue;
 };
+
 class ByteQueueRecv
 {
 public:

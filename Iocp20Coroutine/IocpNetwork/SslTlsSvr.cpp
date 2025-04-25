@@ -6,7 +6,7 @@
 	openssl req -x509 -newkey rsa:2048 -days 3650 -nodes -keyout server-key.pem -out server-cert.pem
 
 */
-#include <glog/logging.h>
+#include "pch.h"
 #include "SslTlsSvr.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -96,7 +96,7 @@ int main2() {
 
 	/* encrypt some data and send it to the client */
 	char buf[521] = { 0 };
-	sprintf(buf, "%s", "Hello world");
+	snprintf(buf, sizeof(buf), "%s", "Hello world");
 	SSL_write(server.ssl, buf, sizeof(buf));
 	krx_ssl_handle_traffic(&server, &client);
 
@@ -164,8 +164,8 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 	char certfile[1024];
 	char keyfile[1024];
 	//char chainfile[1024];
-	sprintf(certfile, "./%s-cert.crt", keyname);//本网站域名专用证书	-cert
-	sprintf(keyfile, "./%s-private.key", keyname);//私钥	-key 
+	snprintf(certfile, sizeof(certfile), "./%s-cert.crt", keyname);//本网站域名专用证书	-cert
+	snprintf(keyfile, sizeof(keyfile), "./%s-private.key", keyname);//私钥	-key 
 	//sprintf(chainfile, "./%s-chain.crt", keyname);//证书链：颁发机构的证书， -CAfile
 
 	/* certificate file; contains also the public key */
@@ -200,7 +200,7 @@ int krx_ssl_ctx_init(krx* k, const char* keyname) {
 	//	return -15;
 	//}
 
-	sprintf(k->name, "+ %s", keyname);
+	snprintf(k->name, sizeof(k->name), "+ %s", keyname);
 
 	return 0;
 }

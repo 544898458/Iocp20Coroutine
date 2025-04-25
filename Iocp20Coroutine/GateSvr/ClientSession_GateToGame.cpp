@@ -81,7 +81,7 @@ inline void ClientSession_GateToGame::Send(const T& ref)
 
 	++m_snSend;
 	ref.msg.sn = m_snSend;
-	LOG(INFO) << "ClientSession_GateToGame,m_snSend=" << m_snSend;
+	//LOG(INFO) << "ClientSession_GateToGame,m_snSend=" << m_snSend;
 	MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_refSession.Send(buf, len); });
 }
 template void ClientSession_GateToGame::Send(const MsgGate×ª·¢& ref);
