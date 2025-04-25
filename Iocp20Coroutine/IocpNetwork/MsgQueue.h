@@ -19,7 +19,8 @@ public:
 
 	template<class T_Sub, class T_Msg>
 	bool OnRecv(std::deque<T_Msg>& queue, T_Sub& refSub, void (T_Sub::*funOnRecv)(const T_Msg&));
-
+	template<class T_Sub, class T_Msg>
+	bool OnRecv≤ª¥¶¿Ì–Ú∫≈(std::deque<T_Msg>& queue, T_Sub& refSub, void (T_Sub::* funOnRecv)(const T_Msg&));
 	std::deque<MsgId> m_queueMsgId;
 	std::mutex m_mutex;
 };

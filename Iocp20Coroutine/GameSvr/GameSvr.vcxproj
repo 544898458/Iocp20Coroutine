@@ -474,9 +474,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\websocketfiles-master\src\ws_endpoint.cpp" />
-    <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp" />
     <ClInclude Include="..\IocpNetwork\WsaStartUp.h" />
     <ClInclude Include="AiCo.h" />
     <ClInclude Include="EntitySystem.h" />

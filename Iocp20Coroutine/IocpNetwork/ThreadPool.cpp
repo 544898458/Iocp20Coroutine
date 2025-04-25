@@ -5,6 +5,7 @@
 namespace Iocp
 {
 	//std::set<HANDLE> g_setHandle;
+	std::thread::id ThreadPool::m_id主线程;
 
 	bool ThreadPool::NetworkThreadProcOneIocp()
 	{
@@ -78,6 +79,7 @@ namespace Iocp
 
 	void ThreadPool::Init(const uint16_t usThreadCount)
 	{
+		m_id主线程 = std::this_thread::get_id();
 		//创建完成端口	创建一个I/O完成端口对象，用它面向任意数量的套接字句柄，管理多个I/O请求。要做到这一点，需要调用CreateCompletionPort函数。
 		m_hIocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 		if (0 == m_hIocp)
@@ -113,4 +115,8 @@ namespace Iocp
 		}
 	}
 	const HANDLE& ThreadPool::GetIocp() const { return m_hIocp; }
+	bool ThreadPool::Is在主线程()
+	{
+		return m_id主线程 == std::this_thread::get_id();
+	}
 }

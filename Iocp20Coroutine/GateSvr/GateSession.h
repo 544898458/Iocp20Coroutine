@@ -37,6 +37,7 @@ public:
 	/// 这里保存的都是解析后的消息明文,反序列化在网络线程，处理明文消息在逻辑线程
 	/// </summary>
 	std::deque<MsgLogin> m_queueLogin;
+	std::deque<MsgGate转发> m_queueMsgGate转发;
 	MsgQueueMsgPack<GateSession> m_MsgQueue;
 	uint32_t m_snRecv = 0;
 	uint32_t m_snSendToGameSvr = 0;
@@ -45,6 +46,7 @@ public:
 	bool m_bLoginOk = false;
 private:
 	void OnRecv(const MsgLogin& msg);
+	void OnRecv(const MsgGate转发& msg);
 	CoTask<int> CoLogin(MsgLogin msg, FunCancel& funCancel);
 
 	CoTask<int> m_coLogin;

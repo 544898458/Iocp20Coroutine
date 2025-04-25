@@ -26,12 +26,10 @@
 
 std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GateToGame>> g_ConnectToGameSvr;
 bool g_running(true);
-void SendToGameSvr转发(const void* buf, const int len, uint64_t gateSessionId)// , uint32_t sn)
-{
-	static uint32_t sn = 0;
-	++sn;
-	g_ConnectToGameSvr->Session.Send(MsgGate转发(buf, len, gateSessionId, sn));
-}
+//void SendToGameSvr转发(const void* buf, const int len, uint64_t gateSessionId)// , uint32_t sn)
+//{
+//	g_ConnectToGameSvr->Session.Send(MsgGate转发(buf, len, gateSessionId, 0));
+//}
 
 /// <summary>
 /// 不需要转发的
@@ -46,6 +44,14 @@ void SendToGameSvr(const T& refMsg, const uint64_t gateSessionId, uint32_t snSen
 			g_ConnectToGameSvr->Session.Send(MsgGate转发(buf, len, gateSessionId, snSend));
 		}, false);
 }
+
+template<>
+void SendToGameSvr(const MsgGate转发& refMsg, const uint64_t gateSessionId, uint32_t snSend)
+{
+	refMsg.msg.sn = snSend;
+	g_ConnectToGameSvr->Session.Send(refMsg);
+}
+
 template void SendToGameSvr(const MsgGateDeleteSession&, const uint64_t gateSessionId, uint32_t);
 template void SendToGameSvr(const MsgGateAddSession&, const uint64_t gateSessionId, uint32_t);
 
@@ -70,7 +76,7 @@ std::unique_ptr<Iocp::Server<GateServer>> g_upGateSvr;
 template<class T>
 void SendToGateClient(const T& refMsg, uint64_t gateSessionId)
 {
-	if(!g_upGateSvr->m_Server.m_Sessions.GetSession(gateSessionId, [&refMsg, gateSessionId](auto& refGateSession) {
+	if (!g_upGateSvr->m_Server.m_Sessions.GetSession(gateSessionId, [&refMsg, gateSessionId](auto& refGateSession) {
 		if (refGateSession.Session.m_Session.m_bLoginOk || refMsg.msg.id == Login)
 		{
 			refMsg.msg.sn = ++refGateSession.Session.m_Session.m_snSendToClient;

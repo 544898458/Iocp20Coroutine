@@ -12,15 +12,9 @@ public:
 	ClientSession_GateToGame(CompletetionKeySession& refSession):m_refSession(refSession){}
 	int OnRecv(CompletetionKeySession& refSession, const void* buf, int len);
 	template<class T>
-	void Send(const T& ref)
-	{
-		++m_snSend;
-		ref.msg.sn = (m_snSend);
-		MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_refSession.Send(buf, len); });
-	}
+	void Send(const T& ref);
 private:
 	void OnRecvPack(const void* buf, const int len);
 	CompletetionKeySession &m_refSession;
 	uint32_t m_snSend = 0;
 };
-

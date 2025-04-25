@@ -23,9 +23,10 @@ template void WebSocketSession<GateSession>::OnInit<GateServer>(GateServer& serv
 //    return 0;
 //}
 
-void SendToGameSvr转发(const void* buf, const int len, uint64_t gateSessionId);// , uint32_t sn);
+//void SendToGameSvr转发(const void* buf, const int len, uint64_t gateSessionId);// , uint32_t sn);
 template<class T> void SendToWorldSvr转发(const T& refMsg, const uint64_t gateSessionId);// , uint32_t snSend);
 template<class T> void SendToGameSvr(const T& refMsg, const uint64_t gateSessionId, uint32_t snSend);
+template<> void SendToGameSvr(const MsgGate转发& refMsg, const uint64_t gateSessionId, uint32_t snSend);
 
 void GateSession::OnRecvWsPack(const void* buf, const int len)
 {
@@ -39,9 +40,13 @@ void GateSession::OnRecvWsPack(const void* buf, const int len)
 		switch (msg.id)
 		{
 		case MsgId::Login:	m_MsgQueue.PushMsg<MsgLogin>(*this, obj); break;
+		case MsgId::Gate转发:
+			LOG(ERROR) << "黑客发来转发Gate转发:" << msg.id;
+			break;
 		default:
 			//LOG(INFO) << "转发GameSvr消息:" << msg.id;
-			SendToGameSvr转发(buf, len, GetId());// , ++m_snSend);
+			//SendToGameSvr转发(buf, len, GetId());// , ++m_snSend);
+			m_MsgQueue.PushMsg<MsgGate转发>(*this, MsgGate转发(buf, len, GetId(), 0)); break;
 			break;
 		}
 	}
@@ -58,6 +63,7 @@ void GateSession::OnRecvWsPack(const void* buf, const int len)
 
 }
 template<> std::deque<MsgLogin>& GateSession::GetQueue() { return m_queueLogin; }
+template<> std::deque<MsgGate转发>& GateSession::GetQueue() { return m_queueMsgGate转发; }
 void GateSession::OnRecv(const MsgLogin& msg)
 {
 	if (msg.name.empty())
@@ -73,6 +79,12 @@ void GateSession::OnRecv(const MsgLogin& msg)
 	m_coLogin = CoLogin(msg, m_funCancelLogin);
 	m_coLogin.Run();
 }
+
+void GateSession::OnRecv(const MsgGate转发 & msg)
+{
+	SendToGameSvr(msg, GetId(), ++m_snSendToGameSvr);
+}
+
 template<class T>
 void SendToGateClient(const T& refMsg, uint64_t gateSessionId);
 CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
@@ -179,6 +191,7 @@ bool GateSession::Process()
 		case MsgId::MsgId_Invalid_0://没有消息可处理
 			return true;
 		case MsgId::Login:return this->m_MsgQueue.OnRecv(this->m_queueLogin, *this, &GateSession::OnRecv); break;
+		case MsgId::Gate转发:return this->m_MsgQueue.OnRecv不处理序号(this->m_queueMsgGate转发, *this, &GateSession::OnRecv); break;
 		default:
 			LOG(ERROR) << "msgId:" << msgId;
 			_ASSERT(false);

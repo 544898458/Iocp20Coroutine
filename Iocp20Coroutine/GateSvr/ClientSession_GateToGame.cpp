@@ -3,6 +3,7 @@
 #include "../IocpNetwork/SessionSocketCompletionKeyTemplate.h"
 #include "../GameSvr/MyMsgQueue.h"
 #include "../IocpNetwork/MsgPack.h"
+#include "../IocpNetwork/ThreadPool.h"
 
 //template void Iocp::ListenSocketCompletionKey::StartCoRoutine<WorldClientSession, WorldClient >(HANDLE hIocp, SOCKET socketListen, WorldClient&);
 template Iocp::SessionSocketCompletionKey<ClientSession_GateToGame>;
@@ -69,3 +70,18 @@ void ClientSession_GateToGame::OnRecvPack(const void* buf, const int len)
 		return;
 	}
 }
+
+
+
+template<class T>
+inline void ClientSession_GateToGame::Send(const T& ref)
+{
+	//判断此处是主线程
+	CHECK_RET_VOID(Iocp::ThreadPool::Is在主线程());
+
+	++m_snSend;
+	ref.msg.sn = m_snSend;
+	LOG(INFO) << "ClientSession_GateToGame,m_snSend=" << m_snSend;
+	MsgPack::SendMsgpack(ref, [this](const void* buf, int len) { this->m_refSession.Send(buf, len); });
+}
+template void ClientSession_GateToGame::Send(const MsgGate转发& ref);
