@@ -17,13 +17,13 @@
 #include "单位组件/苔蔓Component.h"
 #include "单位组件/数值Component.h"
 
-
+const std::initializer_list<const 属性类型> g_list所有属性 = { 生命, 能量 };
 /// <summary>
 /// 平方就是2次方
 /// </summary>
 const float fExponent = 2.0f;
 
-MsgNotifyPos::MsgNotifyPos(const Entity& ref):
+MsgNotifyPos::MsgNotifyPos(const Entity& ref) :
 	entityId(ref.Id), x(ref.Pos().x), z(ref.Pos().z), eulerAnglesY(ref.m_eulerAnglesY)
 {
 }
@@ -90,15 +90,15 @@ Msg苔蔓半径::Msg苔蔓半径(Entity& refEntity) :idEntity(refEntity.Id)
 	半径 = refEntity.m_up苔蔓->m_i16半径;
 }
 
-MsgNotify属性::MsgNotify属性(Entity& ref, std::initializer_list<const 属性类型> list):idEntity(ref.Id)
+MsgNotify属性::MsgNotify属性(Entity& ref, std::initializer_list<const 属性类型> list) :idEntity(ref.Id)
 {
-	for(auto& 属性 : list)
-        TryAdd属性(ref, 属性);
+	for (auto& 属性 : list)
+		TryAdd属性(ref, 属性);
 }
 
-void MsgNotify属性::TryAdd属性(Entity&ref, const 属性类型 属性)
+void MsgNotify属性::TryAdd属性(Entity& ref, const 属性类型 属性)
 {
 	const auto 值 = 数值Component::Get(ref, 属性);
 	if (值)
-		map属性.insert({ 属性, 值 });
+		map属性.insert({ 属性, (float)值 });
 }

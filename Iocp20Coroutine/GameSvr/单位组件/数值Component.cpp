@@ -52,7 +52,7 @@ int 数值Component::Set(const 属性类型 属性, const int 数值)
 	ref数值 = 数值;
 	确保属性在范围内(属性);
 	if (old != ref数值)
-		m_refEntity.BroadcastNotifyPos();
+		m_refEntity.BroadcastNotify属性({ 属性 });
 
 	return ref数值;
 }
@@ -83,7 +83,7 @@ int 数值Component::改变(const 属性类型 属性, const int 变化)
 	确保属性在范围内(属性);
 
 	if (old != ref数值)
-		m_refEntity.BroadcastNotify属性({属性});
+		m_refEntity.BroadcastNotify属性({ 属性 });
 
 	return ref数值;
 }

@@ -56,10 +56,12 @@ class MsgId(Enum):
     播放音乐 = 44
     原地坚守 = 45
     解锁单位 = 46
-    所有单位属性等级 = 47
-    升级单位属性 = 48
-    苔蔓半径 = 49
-    太岁分裂 = 50
+    已解锁单位 = 47
+    单位属性等级 = 48
+    升级单位属性 = 49
+    苔蔓半径 = 50
+    太岁分裂 = 51
+    Notify属性 = 52
 
 class 单位类型(Enum):
     单位类型_Invalid_0 = 0  # Define the missing value
@@ -197,8 +199,6 @@ async def onRecvGameSvr(arr, websocket) -> bool:
             posX = arr[idxArr];  idxArr += 1
             posZ = arr[idxArr];  idxArr += 1
             eulerAnglesY = arr[idxArr];  idxArr += 1
-            hp = arr[idxArr];  idxArr += 1
-            能量 = arr[idxArr];  idxArr += 1
             # print('NotifyPos', id)
             await 随机说话(websocket)
             await 随机move(websocket)
@@ -227,7 +227,7 @@ async def onRecvGameSvr(arr, websocket) -> bool:
             channel = arr[idxArr];  idxArr += 1
             print(channel, '频道:', content)
             return True
-        case MsgId.所有单位属性等级:
+        case MsgId.单位属性等级:
             return True
         case MsgId.升级单位属性:
             return True
@@ -236,6 +236,8 @@ async def onRecvGameSvr(arr, websocket) -> bool:
         case MsgId.SelectRoles:
             return True
         case MsgId.弹丸特效:
+            return True
+        case MsgId.Notify属性:
             return True
         case _:
             print('onRecvGameSvr 未处理',idMsg)

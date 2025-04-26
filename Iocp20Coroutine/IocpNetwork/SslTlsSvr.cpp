@@ -675,6 +675,7 @@ SslTlsSvr::SslTlsSvr() :m_pServer(new krx)
 
 SslTlsSvr::~SslTlsSvr()
 {
+	std::lock_guard lock(m_mutex);
 	krx_ssl_shutdown(m_pServer);
 	delete m_pServer;
 	m_pServer = nullptr;
@@ -687,6 +688,7 @@ void SslTlsSvr::InitAll()
 
 void SslTlsSvr::Init()
 {
+	std::lock_guard lock(m_mutex);
 	/* init server. */
 	//char szCert[1024] = { 0 };
 	//const DWORD ret = GetPrivateProfileStringA("SslTls", "Cert", "rtsgame_online", szCert, sizeof(szCert), "SslTlsSvr.ini");
@@ -705,6 +707,7 @@ void SslTlsSvr::Init()
 SslTlsSvr g_Test;
 int SslTlsSvr::处理前端发来的密文(const void* buf, const int len)
 {
+	std::lock_guard lock(m_mutex);
 	//g_Test.Init(false);
 	//g_Test.do_handshake();
 	//char buf密文[2048];
@@ -721,18 +724,21 @@ int SslTlsSvr::处理前端发来的密文(const void* buf, const int len)
 	return i32已处理密文字节;
 }
 
-bool SslTlsSvr::握手OK()const
+bool SslTlsSvr::握手OK()
 {
+	std::lock_guard lock(m_mutex);
 	return SSL_is_init_finished(m_pServer->ssl);
 }
 
 int SslTlsSvr::把要发给前端的明文交给Ssl处理(const void* buf, const int len)
 {
+	std::lock_guard lock(m_mutex);
 	return SSL_write(m_pServer->ssl, buf, len);
 }
 
 void SslTlsSvr::do_handshake()
 {
+	std::lock_guard lock(m_mutex);
 	SSL_do_handshake(m_pServer->ssl);
 }
 
@@ -740,6 +746,7 @@ void SslTlsSvr::do_handshake()
 template<int len>
 int SslTlsSvr::读出已解密的明文(char(&bufOut)[len])
 {
+	std::lock_guard lock(m_mutex);
 	if (!SSL_is_init_finished(m_pServer->ssl))
 	{
 		return 0;
@@ -753,6 +760,7 @@ int SslTlsSvr::读出已解密的明文(char(&bufOut)[len])
 template<int len>
 int SslTlsSvr::获取准备发往前端的密文(char(&bufOut)[len])
 {
+	std::lock_guard lock(m_mutex);
 	const auto pending = BIO_ctrl_pending(m_pServer->out_bio); //使用BIO_ctrl_pending()检查输出bio中存储了多少字节。请参阅krx_ssl_handle_traffic()本文底部的代码清单。
 	if (pending <= 0)
 		return 0;

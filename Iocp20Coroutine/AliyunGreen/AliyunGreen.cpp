@@ -171,7 +171,7 @@ public:
 		auto d = t - m_t;
 		using namespace std;
 		if (d > 500ms)
-			LOG(WARNING) << "ºÄÊ±£º" << d;
+			LOG(WARNING) << "ºÄÊ±£º" << std::chrono::duration_cast<std::chrono::milliseconds>(d).count() << "ºÁÃë";
 	}
 	std::chrono::high_resolution_clock::time_point m_t;
 	const std::string m_str;

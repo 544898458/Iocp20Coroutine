@@ -7,7 +7,7 @@
 
 LONG WINAPI UnhandledExceptionFilter_SpawnDmp(struct _EXCEPTION_POINTERS* ExceptionInfo)
 {
-	const auto strFileName = std::format("±¿¿£{0}.dmp", std::rand());
+	const auto strFileName = std::format("±¿¿£{0}{1}.dmp", std::rand(), ::GetCurrentThreadId());
 
 	HANDLE   hFile = CreateFileA(strFileName.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hFile != INVALID_HANDLE_VALUE)

@@ -280,7 +280,7 @@ void Entity::BroadcastNotify属性(std::initializer_list<const 属性类型> list)
 
 void Entity::BroadcastNotify所有属性()
 {
-	Broadcast(MsgNotify属性(*this, { 生命,能量 }));
+	Broadcast(MsgNotify属性(*this, g_list所有属性));
 }
 
 

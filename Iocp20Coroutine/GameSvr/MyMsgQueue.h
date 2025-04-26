@@ -93,6 +93,7 @@ MSGPACK_ADD_ENUM(单位类型);
 
 enum 属性类型;
 MSGPACK_ADD_ENUM(属性类型);
+extern const std::initializer_list<const 属性类型> g_list所有属性;
 
 enum 种族
 {
