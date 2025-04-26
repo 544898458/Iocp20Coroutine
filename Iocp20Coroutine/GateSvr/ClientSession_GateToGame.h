@@ -25,5 +25,5 @@ private:
 	MsgQueueMsgPack<ClientSession_GateToGame> m_MsgQueue;
 	std::deque<MsgGateSvr转发GameSvr消息给游戏前端> m_queueMsgGateSvr转发GameSvr消息给游戏前端;
 
-	uint32_t m_snSend = 0;
+	uint8_t m_snSend = 0;
 };

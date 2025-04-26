@@ -70,7 +70,7 @@ void GateSession::OnRecv(const MsgLogin& msg)
 	{
 		m_refSession.m_refSession.CloseSocket();
 	}
-	LOG(INFO) << "玩家发来登录";
+	LOG(INFO) << "玩家发来登录," << StrConv::Utf8ToGbk(msg.name);
 	if (!m_coLogin.Finished() || m_bLoginOk)
 	{
 		LOG(ERROR) << "m_coLogin.Finished=" << m_coLogin.Finished() << ",m_bLoginOk=" << m_bLoginOk;
@@ -80,7 +80,7 @@ void GateSession::OnRecv(const MsgLogin& msg)
 	m_coLogin.Run();
 }
 
-void GateSession::OnRecv(const MsgGate转发 & msg)
+void GateSession::OnRecv(const MsgGate转发& msg)
 {
 	SendToGameSvr(msg, GetId(), ++m_snSendToGameSvr);
 }
@@ -119,7 +119,7 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 
 		if (responce.result != MsgLoginResponce::OK)
 		{
-			LOG(WARNING) << "登录失败";
+			LOG(WARNING) << "登录失败," << responce.result;
 			SendToGateClient(responce, (uint64_t)this);
 			if (co_await CoTimer::Wait(1s, funCancel))
 				co_return 0;
@@ -168,7 +168,7 @@ void GateSession::OnRecvWorldSvr(const MsgLoginResponce& msg)
 void SendResponceToWorldSvr(const uint32_t rpcSnId, const uint64_t gateSessionId)
 {
 	MsgGateDeleteSessionResponce msgResponce;
-	msgResponce.msg.rpcSnId = rpcSnId;
+	msgResponce.rpcSnId = rpcSnId;
 	SendToWorldSvr转发(msgResponce, gateSessionId);
 }
 
@@ -178,7 +178,7 @@ void GateSession::OnRecvWorldSvr(const MsgGateDeleteSession& msg)
 		m_refSession.m_refSession.CloseSocket();
 
 	OnDestroy();
-	SendResponceToWorldSvr(msg.msg.rpcSnId, GetId());
+	SendResponceToWorldSvr(msg.rpcSnId, GetId());
 }
 
 bool GateSession::Process()

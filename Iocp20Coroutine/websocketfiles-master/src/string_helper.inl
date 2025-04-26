@@ -17,7 +17,7 @@ int strHelper::splitStr(TYPE& list,
         return 1;
     }
 
-    unsigned int size = strlen(delim);
+    auto size = strlen(delim);
 
     std::string::size_type prepos = 0;
     std::string::size_type pos = 0;

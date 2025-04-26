@@ -27,25 +27,6 @@ void GameSvr::Update()
 		{
 			//Space::StaticUpdate();
 		});
-	
-	/*
-	std::lock_guard lock(m_Sessions.m_setSessionMutex);
-	std::set<MyServer::Session*> setDelete;
-	for (auto p : m_Sessions.m_setSession)
-	{
-		p->Session.m_Session.m_msgQueue.Process();
-		if (p->Finished())
-			setDelete.insert(p);
-	}
-	for (auto p : setDelete)
-	{
-		p->Session.OnDestroy();
-		delete p;
-		LOG(INFO) << "ÒÑÉ¾³ý¶ÔÏó,GetCurrentThreadId=" << GetCurrentThreadId();
-
-	}
-	m_space.Update();
-	*/
 }
 
 void GameSvr::OnAppExit()

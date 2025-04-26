@@ -25,8 +25,8 @@ public:
 	WorldSvrAcceptGate* m_pServer = nullptr;
 	template<class T> std::deque<T>& GetQueue();
 	bool Process();
-	uint32_t m_snRecv = 0;
-	uint32_t m_snSend = 0;
+	uint8_t m_snRecv = 0;
+	uint8_t m_snSend = 0;
 
 	CompeletionKeySession& m_refSession;
 private:

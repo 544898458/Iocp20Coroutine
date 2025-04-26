@@ -39,10 +39,10 @@ public:
 	std::deque<MsgLogin> m_queueLogin;
 	std::deque<MsgGate转发> m_queueMsgGate转发;
 	MsgQueueMsgPack<GateSession> m_MsgQueue;
-	uint32_t m_snRecv = 0;
-	uint32_t m_snSendToGameSvr = 0;
-	uint32_t m_snSendToWorldSvr = 0;
-	uint32_t m_snSendToClient = 0;//发给游戏前端
+	uint8_t m_snRecv = 0;
+	uint8_t m_snSendToGameSvr = 0;
+	uint8_t m_snSendToWorldSvr = 0;
+	uint8_t m_snSendToClient = 0;//发给游戏前端
 	bool m_bLoginOk = false;
 private:
 	void OnRecv(const MsgLogin& msg);

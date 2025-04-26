@@ -23,7 +23,7 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 	auto utf8Name = msg.name;
 	auto gbkName = StrConv::Utf8ToGbk(msg.name);
 	MsgLoginResponce msgResponce;
-	msgResponce.msg.rpcSnId = msg.msg.rpcSnId;
+	msgResponce.rpcSnId = msg.rpcSnId;
 	if (gbkName.empty())
 	{
 		msgResponce.result = MsgLoginResponce::NameErr;

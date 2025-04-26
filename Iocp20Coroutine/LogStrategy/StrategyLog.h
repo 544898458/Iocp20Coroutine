@@ -97,6 +97,18 @@ class StrategyLog
 		return;\
 	}\
 }
+
+
+#define CHECK_EQ_VOID( val1, val2) \
+{\
+	if ((val1) != (val2))\
+	{\
+		LOG(ERROR) << #val1 << ":" << (val1) << "!=" << #val2 << ":" << (val2) ;\
+		_ASSERT(false);\
+		return;\
+	}\
+}
+
 #define CHECK_CO_RET_DEFAULT( exp ) \
 {\
 	LOG_IF(ERROR, !(exp));\

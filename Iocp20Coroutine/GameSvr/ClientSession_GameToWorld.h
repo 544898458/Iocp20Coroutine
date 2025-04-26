@@ -7,7 +7,7 @@
 #include "../IocpNetwork/StrConv.h"
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 
-enum MsgId;
+enum MsgId :uint16_t;
 //class Client_GateToWorld;
 
 class ClientSession_GameToWorld
@@ -45,7 +45,7 @@ public:
 	void OnAppExit();
 
 	template<class T> std::deque<T>& GetQueue();
-	uint32_t m_snRecv = 0;
+	uint8_t m_snRecv = 0;
 
 private:
 	/// <summary>

@@ -49,7 +49,7 @@ public:
 	/// </summary>
 	bool Process();
 	bool ProcessMsg();
-	uint32_t m_snRecv = 0;
+	uint8_t m_snRecv = 0;
 
 	Session& m_refSession;
 	std::map<uint64_t, std::shared_ptr<PlayerGateSession_Game>> m_mapPlayerGateSession;

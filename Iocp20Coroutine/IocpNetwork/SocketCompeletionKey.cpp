@@ -10,7 +10,10 @@ SOCKET SocketCompeletionKey::Socket() const
 
 void SocketCompeletionKey::CloseSocket()
 {
+	if (INVALID_SOCKET == socket)
+		return;
+
 	LOG(INFO) << "CloseSocket " << socket << ",this:" << this;
 	closesocket(socket);
-	socket = NULL;
+	socket = INVALID_SOCKET;
 }

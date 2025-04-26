@@ -31,7 +31,7 @@ namespace Iocp
 		void PostNotifySend();
 		bool Finished();
 		T_Session Session;
-		uint32_t m_snSend = 0;
+		uint8_t m_snSend = 0;
 	private:
 		CoTask<Overlapped::YieldReturn> PostSend(Overlapped& pOverlapped);
 		CoTask<Overlapped::YieldReturn> PostRecv(Overlapped& pOverlapped);

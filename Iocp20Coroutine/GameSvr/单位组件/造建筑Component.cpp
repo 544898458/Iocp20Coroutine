@@ -142,6 +142,12 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position pos, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 	auto& ref½¨Öş = *wpEntity½¨Öş.lock();
 	CHECK_CO_RET_FALSE(ref½¨Öş.m_upBuilding);
 
+	if (!ref½¨Öş.m_upPlayerNickName)
+	{
+		LOG(ERROR) << ref½¨Öş.Id << "Ã»ÓĞÍæ¼ÒÃû×Ö";
+		_ASSERT(false);
+	}
+
 	if (¹¤³Ì³µ == m_refEntity.m_ÀàĞÍ)
 	{
 		EntitySystem::BroadcastEntityÃèÊö(m_refEntity, "ÕıÔÚ½¨Ôì");
@@ -275,7 +281,13 @@ WpEntity Ôì½¨ÖşComponent::AddBuilding(const µ¥Î»ÀàĞÍ ÀàĞÍ, const Position pos)
 	//¼Ó½¨Öş
 	//CHECK_CO_RET_0(!m_wpSpace.expired());
 	//auto spSpace = m_wpSpace.lock();
-	auto wpNew = ´´½¨½¨Öş(m_refEntity.m_refSpace, pos, ÀàĞÍ, std::forward<UpPlayerComponent>(m_refEntity.m_upPlayer), EntitySystem::GetNickName(m_refEntity));
+	const auto strNickName = EntitySystem::GetNickName(m_refEntity);
+	if (strNickName.empty())
+	{
+		LOG(ERROR) << m_refEntity.Id << "Ã»ÓĞÃû×Ö";
+		_ASSERT(false);
+	}
+	auto wpNew = ´´½¨½¨Öş(m_refEntity.m_refSpace, pos, ÀàĞÍ, std::forward<UpPlayerComponent>(m_refEntity.m_upPlayer), strNickName);
 	PlayerComponent::Send×ÊÔ´(m_refEntity);
 	return wpNew;
 }
@@ -308,16 +320,14 @@ WpEntity Ôì½¨ÖşComponent::´´½¨½¨Öş(Space& refSpace, const Position& pos, const µ
 	return spNewEntity;
 }
 
-void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ ÀàĞÍ, Entity& refNewEntity, UpPlayerComponent&& spPlayer, const std::string& strPlayerNickName)
+void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ ÀàĞÍ, Entity& refNewEntity, UpPlayerComponent&& upPlayer, const std::string& strPlayerNickName)
 {
 	µ¥Î»::½¨Öşµ¥Î»ÅäÖÃ ½¨Öş;
 	µ¥Î»::µ¥Î»ÅäÖÃ µ¥Î»;
 	CHECK_RET_VOID(µ¥Î»::Find½¨Öşµ¥Î»ÅäÖÃ(ÀàĞÍ, ½¨Öş));
 	CHECK_RET_VOID(µ¥Î»::Findµ¥Î»ÅäÖÃ(ÀàĞÍ, µ¥Î»));
 
-
-	if (spPlayer)
-		PlayerComponent::AddComponent(refNewEntity, std::forward<UpPlayerComponent>(spPlayer), spPlayer->m_refSession.NickName());
+	PlayerComponent::AddComponent(refNewEntity, std::forward<UpPlayerComponent>(upPlayer), strPlayerNickName);
 
 	if (0 < ½¨Öş.f°ë±ß³¤)
 		BuildingComponent::AddComponent(refNewEntity, ½¨Öş.f°ë±ß³¤);
@@ -384,7 +394,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 
 	if (³æ³² == ÀàĞÍ || Ì«Ëê == ÀàĞÍ)
 	{
-		auto wpÌ¦Âû = Ôì½¨ÖşComponent::´´½¨½¨Öş(refSpace, refNewEntity.Pos(), Ì¦Âû, std::forward<UpPlayerComponent>(spPlayer), strPlayerNickName);
+		auto wpÌ¦Âû = Ôì½¨ÖşComponent::´´½¨½¨Öş(refSpace, refNewEntity.Pos(), Ì¦Âû, std::forward<UpPlayerComponent>(upPlayer), strPlayerNickName);
 		CHECK_WP_RET_VOID(wpÌ¦Âû);
 		auto& refÌ¦Âû = *wpÌ¦Âû.lock();
 

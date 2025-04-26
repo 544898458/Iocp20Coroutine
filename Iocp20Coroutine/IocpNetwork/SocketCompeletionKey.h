@@ -29,7 +29,7 @@ protected:
 public:
 	HANDLE hIocp = nullptr;
 private:
-	SOCKET socket = NULL;
+	SOCKET socket = INVALID_SOCKET;
 
 };
 

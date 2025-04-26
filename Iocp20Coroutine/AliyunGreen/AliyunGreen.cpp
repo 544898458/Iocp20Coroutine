@@ -157,8 +157,28 @@ std::wstring StrToW(const std::string& str)
 {
 	return std::wstring(str.begin(), str.end());
 }
+class 耗时 final
+{
+public:
+	耗时(const std::string& str) :m_str(str)
+	{
+		m_t = std::chrono::high_resolution_clock::now();
+
+	}
+	~耗时()
+	{
+		auto t = std::chrono::high_resolution_clock::now();
+		auto d = t - m_t;
+		using namespace std;
+		if (d > 500ms)
+			LOG(WARNING) << "耗时：" << d;
+	}
+	std::chrono::high_resolution_clock::time_point m_t;
+	const std::string m_str;
+};
 bool AliyunGreen::Check(const std::string& refContentGbk)
 {
+	耗时 _(refContentGbk + "AliyunGreen::Check");
 	std::string strHttpsHost;
 	std::string strHttpsVerb;
 	Try读Ini本地机器专用(strHttpsHost, "Aliyun", "HttpsHost");
@@ -166,5 +186,6 @@ bool AliyunGreen::Check(const std::string& refContentGbk)
 	const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("content={0}", StrConv::GbkToUtf8(refContentGbk)));// / wxa / msg_sec_check");
 	const auto strGbk = StrConv::Utf8ToGbk(strToken);
 	//std::cout << strGbk;
+	LOG(INFO) << strGbk;
 	return strGbk == "none";
 }

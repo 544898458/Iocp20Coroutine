@@ -146,7 +146,7 @@ int32_t WebSocketPacket::fetch_frame_info(ByteBuffer &input)
 		uint16_t len = 0;
 		uint8_t array[2] = {0};
 		input.read_bytes_x((char *)array, 2);
-		len = uint16_t(array[0] << 8) | uint16_t(array[1]);
+		len = uint16_t(array[0]) << 8 | uint16_t(array[1]);
 		payload_length_ = len;
 	}
 	else if (length_type_ == 127)
@@ -155,8 +155,8 @@ int32_t WebSocketPacket::fetch_frame_info(ByteBuffer &input)
 		uint64_t len = 0;
 		uint8_t array[8] = {0};
 		input.read_bytes_x((char *)array, 8);
-		len = (array[0] << 56) | array[1] << 48 | array[2] << 40 | array[3] << 32 
-		| array[4] << 24 | array[5] << 16 | array[6] << 8 | array[7];
+		len = (((uint64_t)array[0]) << 56) | (uint64_t)array[1] << 48 | (uint64_t)array[2] << 40 | (uint64_t)array[3] << 32
+		| (uint64_t)array[4] << 24 | (uint64_t)array[5] << 16 | (uint64_t)array[6] << 8 | array[7];
 
 		if (payload_length_ > 0xFFFFFFFF)
 		{
@@ -191,8 +191,8 @@ int32_t WebSocketPacket::fetch_payload(ByteBuffer &input)
 	}
 	else
 	{
-		payload_.append(input.curat(), payload_length_);
-		input.skip_x(payload_length_);
+		payload_.append(input.curat(), (int)payload_length_);
+		input.skip_x((int)payload_length_);
 	}
 	return 0;
 }
@@ -339,12 +339,12 @@ int32_t WebSocketPacket::fetch_hs_element(const std::string &msg)
 		LOG(INFO)  << "handshake element k:" << k.c_str() << " v:" << v.c_str() << std::endl;
 	}
 
-	return endpos + 4;
+	return (int)endpos + 4;
 }
 
 void WebSocketPacket::set_payload(const char *buf, uint64_t size)
 {
-	payload_.append(buf, size);
+	payload_.append(buf, (int)size);
 	payload_length_ = payload_.length();
 }
 
@@ -405,7 +405,7 @@ bool ByteBuffer::require(int require)
 {
 	int len = length();
 
-	return require <= len - oft;
+	return require <= len - (int)oft;
 }
 
 char *ByteBuffer::curat()

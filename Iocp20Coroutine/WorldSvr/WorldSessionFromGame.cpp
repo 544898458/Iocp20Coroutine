@@ -152,7 +152,7 @@ CoTask<int> WorldSessionFromGame::CoChangeMoney(const MsgChangeMoney msg, const 
 	co_await lock.Lock(strNickName, funCancel);
 	auto& refDb = *co_await DbPlayer::CoGet¾ø²»·µ»Ø¿Õ(strNickName);
 	MsgChangeMoneyResponce msgResponce;//{ .msg = {.rpcSnId = msg.msg.rpcSnId} };
-	msgResponce.msg.rpcSnId = msg.msg.rpcSnId;
+	msgResponce.rpcSnId = msg.rpcSnId;
 	_ASSERT(0 <= refDb.money);
 	LOG(INFO) << "msg.addMoney=" << msg.addMoney << ",refDb.money=" << refDb.money;
 

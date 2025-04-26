@@ -4,7 +4,7 @@
 /// 网页强制要求协议:外层是二进制WS(WebSocket)，二进制用 MsgPack 序列化
 /// 微信小程序强制要求协议：外层是WSS，也就是三层，最外层TLS1.3，中间是二进制WS(WebSocket)，最里面是 MsgPack 序列化
 /// </summary>
-enum MsgId
+enum MsgId :uint16_t
 {
 	/// <summary>
 	/// 无效

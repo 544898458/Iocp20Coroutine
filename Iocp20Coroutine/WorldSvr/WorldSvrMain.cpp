@@ -20,7 +20,35 @@
 #include "../GameSvr/AllPort.h"
 #include "../MiniDump/MiniDump.h"
 #include "../慢操作AliyunGreen/慢操作AliyunGreen.h"
+#include <sstream>
 
+struct Msg头
+{
+	MsgId id;
+	mutable uint8_t 序号;
+	//mutable uint16_t rpc序号;
+	MSGPACK_DEFINE(id, 序号);
+};
+
+struct Msg具体
+{
+	Msg头 msg;
+	uint32_t u32;
+	MSGPACK_DEFINE(msg, u32);
+};
+
+void 测试MsgPack序列化空间()
+{
+	{
+		Msg头 msg;
+		std::stringstream buffer;
+		msgpack::pack(buffer, msg);
+		buffer.seekg(0);
+
+		std::string str(buffer.str());
+		//CHECK_GE_VOID(3, str.size());
+	}
+}
 BOOL g_running = TRUE;
 BOOL WINAPI fun(DWORD dwCtrlType)
 {
@@ -75,6 +103,8 @@ int main()
 	FLAGS_colorlogtostdout = true;
 	FLAGS_colorlogtostderr = true;//20240216
 	google::InitGoogleLogging("WorldSvr");//使用glog之前必须先初始化库，仅需执行一次，括号内为程序名
+
+	测试MsgPack序列化空间();
 
 	Iocp::ThreadPool threadPoolNetwork;
 	threadPoolNetwork.Init();

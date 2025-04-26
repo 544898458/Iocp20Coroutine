@@ -607,7 +607,7 @@ void drawDetailOverlay(const dtTileCache* tc, const int tx, const int ty, double
 
 	const int rawSize = calcLayerBufferSize(tc->getParams()->width, tc->getParams()->height);
 
-	char text[128];
+	//char text[128];
 
 	for (int i = 0; i < ntiles; ++i)
 	{

@@ -165,11 +165,4 @@ void WorldSessionFromGate::OnInit(WorldSvrAcceptGate& refServer)
 
 void WorldSessionFromGate::OnDestroy()
 {
-	//m_entity.OnDestroy();
-	//m_pServer->m_Sessions.DeleteSession(this->m_pWsSession->m_pSession, [this]()
-	//	{
-	//		m_pServer->m_space.setEntity.erase(&m_entity);
-	//	});
-
-	//m_pServer = nullptr;//²»ÓÃ¼ÓËø
 }

@@ -53,7 +53,7 @@ public:
 	//	const std::string& str内容, const bool b显示退出场景按钮);
 	void 剧情对话已看完();
 
-	uint32_t m_snRecv = 0;
+	uint8_t m_snRecv = 0;
 	const uint64_t m_idPlayerGateSession;
 	/// <summary>
 	/// 当前这个玩家在哪个Space里
@@ -114,7 +114,7 @@ private:
 	std::vector<uint64_t> m_vecSelectedEntity;
 	uint64_t m_id上次单选选中 = 0;
 	std::string m_strNickName;
-	uint32_t m_snSend = 0;
+	uint8_t m_snSend = 0;
 	FunCancel m_funCancel进地图;
 	uint16_t m_idx切换工程车 = 0;
 	Position m_pos上次点击走路目标;

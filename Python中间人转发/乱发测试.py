@@ -115,10 +115,13 @@ class 单位类型(Enum):
     怪Max非法 = 500
 
 
+async def send(websocket, arr) -> bool:
+    print('发arr', arr)
+    await websocket.send(packb(arr))
 async def onRecvWorldSvr(arr,websocket) -> bool:
     idxArr = 0
     
-    msg, sn, rpc = arr[idxArr]
+    msg, sn = arr[idxArr]
     idxArr += 1
     
     idMsg = MsgId(msg)
@@ -146,29 +149,23 @@ async def onRecvWorldSvr(arr,websocket) -> bool:
             login_successful = True  # Set the flag to True
            
             #发消息，进多人联机混战
-            arr = [[MsgId.进Space.value, 0, 0, 0],1,]
-            print('发arr', arr)
-            await websocket.send(packb(arr))
+            await send(websocket, [[MsgId.进Space.value, 0, 0, 0],1,])
             return True
         case _:
             print('未处理',idMsg)
             return False
     
-随机 = 1000
+随机 = 10000
 async def 随机说话(websocket):
     rand = random.randint(1, 随机)
     if rand == 1:
         # 发送消息，随机说话
-        object =[[MsgId.Say.value, 0, 0], f'测试说话{random.randint(1, 5)}']
-        await websocket.send(packb(object))
+        await send(websocket, [[MsgId.Say.value, 0, 0], f'测试说话{random.randint(1, 5)}'])
 
 #随机框选
-async def 随机框选(websocket):
-    rand = random.randint(1, 随机)
-    if rand == 1:
-        # 发送消息，随机框选
-        object =[[MsgId.框选.value, 0, 0],[-100, -100],[100, 100]]
-        await websocket.send(packb(object))
+async def 框选全图(websocket):
+    # 发送消息，随机框选
+    await send(websocket, [[MsgId.框选.value, 0, 0],[-100, -100],[100, 100]])
         
 #随机坐标点
 def 随机坐标点():
@@ -178,20 +175,19 @@ def 随机坐标点():
 async def 随机move(websocket):
     rand = random.randint(1, 随机)
     if rand == 1:
-        # 发送消息，随机move
-        object =[[MsgId.Move.value, 0, 0], 随机坐标点(), True]
-        await websocket.send(packb(object))
+        await 框选全图(websocket)
+        
+        await send(websocket, [[MsgId.Move.value, 0, 0], 随机坐标点(), True])
 
 #随机造炮台
 async def 造炮台(websocket):
     rand = random.randint(1, 随机)
     if rand == 1:
-        object =[[MsgId.AddBuilding.value, 0, 0], 单位类型.炮台.value, 随机坐标点()]
-        await websocket.send(packb(object))
+        await send(websocket, [[MsgId.AddBuilding.value, 0], 单位类型.炮台.value, 随机坐标点()])
 async def onRecvGameSvr(arr, websocket) -> bool:
     idxArr = 0
     
-    msg, sn, rpc = arr[idxArr]
+    msg, sn = arr[idxArr]
     idxArr += 1
     
     idMsg = MsgId(msg)
@@ -205,7 +201,6 @@ async def onRecvGameSvr(arr, websocket) -> bool:
             能量 = arr[idxArr];  idxArr += 1
             # print('NotifyPos', id)
             await 随机说话(websocket)
-            await 随机框选(websocket)
             await 随机move(websocket)
             await 造炮台(websocket)
             return True
@@ -248,7 +243,7 @@ async def onRecvGameSvr(arr, websocket) -> bool:
   
 async def 收到消息(reply, websocket) -> bool:
     index = 0
-    msg, sn, rpc = reply[index]
+    msg, sn = reply[index]
     index += 1
     #idMsg转为 idMsg
     idMsg = MsgId(msg)
@@ -283,7 +278,11 @@ async def main() -> None:
     # Create SSL context if necessary
     ssl_context = ssl.create_default_context()
 
-    async with websockets.connect('wss://test.rtsgame.online:12348', ssl=ssl_context) as websocket:
+    async with websockets.connect('wss://test.rtsgame.online:12348', 
+                                ssl=ssl_context,
+                                ping_interval=30,  # Adjust the interval as needed
+                                ping_timeout=30      # Adjust the timeout as needed
+  ) as websocket:
         print('已连上')
         
         sendMsgSn = 0
@@ -291,7 +290,8 @@ async def main() -> None:
         
         # Construct the object correctly
         obj = [
-            [MsgId.Login.value, sendMsgSn, 0, 0],
+            [MsgId.Login.value, sendMsgSn],
+            0,
             str登录名,
             'Hello, world!pwd',
             15  # 版本号

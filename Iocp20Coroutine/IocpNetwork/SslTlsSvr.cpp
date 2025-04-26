@@ -753,7 +753,7 @@ int SslTlsSvr::读出已解密的明文(char(&bufOut)[len])
 template<int len>
 int SslTlsSvr::获取准备发往前端的密文(char(&bufOut)[len])
 {
-	int pending = BIO_ctrl_pending(m_pServer->out_bio); //使用BIO_ctrl_pending()检查输出bio中存储了多少字节。请参阅krx_ssl_handle_traffic()本文底部的代码清单。
+	const auto pending = BIO_ctrl_pending(m_pServer->out_bio); //使用BIO_ctrl_pending()检查输出bio中存储了多少字节。请参阅krx_ssl_handle_traffic()本文底部的代码清单。
 	if (pending <= 0)
 		return 0;
 

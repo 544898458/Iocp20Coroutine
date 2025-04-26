@@ -26,7 +26,7 @@ public:
 
 	template<class T> void SendToGate转发(const T& refMsg);
 	template<class T> void SendToGame转发(const T& refMsg);
-	uint32_t m_snRecv = 0;
+	uint8_t m_snRecv = 0;
 
 private:
 	template<class T_Msg> void RecvMsg(const msgpack::object& obj);
@@ -47,6 +47,6 @@ private:
 
 	std::vector<uint64_t> m_vecSelectedEntity;
 	std::string m_nickName;
-	uint32_t m_snSend = 0;
+	uint8_t m_snSend = 0;
 };
 

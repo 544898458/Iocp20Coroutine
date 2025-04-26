@@ -264,6 +264,19 @@ void Space::EraseEntity(const bool bForceEraseAll)
 			const auto sizeErase = m_mapPlayer[spEntity->m_upPlayerNickName->m_strNickName].Erase(spEntity->Id);
 			CHECK_NOT_RETURN(1 == sizeErase);
 		}
+		else
+		{
+#if true//_DEBUG
+			for (auto& [refStrNickName, refSpacePlayer] : m_mapPlayer)
+			{
+				if (refSpacePlayer.m_mapWpEntity.contains(spEntity->Id))
+				{
+					LOG(ERROR) << "没有m_upPlayerNickName组件却在m_mapWpEntity中," << spEntity->头顶Name() << ",Id=" << spEntity->Id << ",删除前剩余" << m_mapEntity.size();
+					_ASSERT(false);
+				}
+			}
+#endif
+		}
 
 		//LOG(INFO) << "删除过期对象," << spEntity->头顶Name() << ",Id=" << spEntity->Id << ",删除前剩余" << m_mapEntity.size();
 		spEntity->OnDestroy();

@@ -8,7 +8,7 @@
 #include "../IocpNetwork/MsgQueueMsgPack.h"
 #include "../IocpNetwork/MsgPack.h"
 
-enum MsgId;
+enum MsgId :uint16_t;
 //class Client_GateToWorld;
 
 class ClientSession_GateToWorld
@@ -42,7 +42,7 @@ public:
 	/// </summary>
 	void Process();
 	template<class T> std::deque<T>& GetQueue();
-	uint32_t m_snRecv = 0;
+	uint8_t m_snRecv = 0;
 	template<class T>
 	void Send(const T& ref)
 	{
@@ -70,7 +70,7 @@ private:
 	std::deque<Msg在线人数> m_queue在线人数;
 	MsgQueueMsgPack<ClientSession_GateToWorld> m_MsgQueue;
 	Session& m_refSession;
-	uint32_t m_snSend = 0;
+	uint8_t m_snSend = 0;
 };
 //class Client_GateToWorld
 //{

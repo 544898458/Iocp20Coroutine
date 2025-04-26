@@ -85,7 +85,7 @@ std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>&
 /// 网页强制要求协议:外层是二进制WS(WebSocket)，二进制用 MsgPack 序列化
 /// 微信小程序强制要求协议：外层是WSS，也就是三层，最外层TLS1.3，中间是二进制WS(WebSocket)，最里面是 MsgPack 序列化
 /// </summary>
-enum MsgId;
+enum MsgId :uint16_t;
 MSGPACK_ADD_ENUM(MsgId);
 
 enum 单位类型;
@@ -129,24 +129,28 @@ struct MsgHead
 		//return (MsgId)obj.via.array.ptr[0].via.array.ptr[0].via.i64;//没判断越界，要加try
 	}
 	MsgId id;
-	mutable uint32_t sn;//可以用这个防伪造数据，比如用伪随机序列算法生成序列
-	mutable uint32_t rpcSnId;
+	mutable uint8_t sn;//可以用这个防伪造数据，比如用伪随机序列算法生成序列
+	//mutable uint32_t rpcSnId;
 
-	MSGPACK_DEFINE(id, sn, rpcSnId);
+	MSGPACK_DEFINE(id, sn);
 };
 
 struct MsgLogin
 {
 	MsgHead msg;
+	mutable uint16_t rpcSnId;
+
 	std::string name;
 	std::string pwd;
 	uint32_t u32版本号;
-	MSGPACK_DEFINE(msg, name, pwd, u32版本号);
+	MSGPACK_DEFINE(msg, rpcSnId, name, pwd, u32版本号);
 };
 
 struct MsgLoginResponce
 {
 	MsgHead msg = { .id = MsgId::Login };
+	mutable uint16_t rpcSnId;
+	
 	enum Error
 	{
 		OK,
@@ -157,7 +161,7 @@ struct MsgLoginResponce
 	};
 	Error  result = OK;
 	std::string str提示;
-	MSGPACK_DEFINE(msg, result, str提示);
+	MSGPACK_DEFINE(msg, rpcSnId, result, str提示);
 };
 MSGPACK_ADD_ENUM(MsgLoginResponce::Error);
 
@@ -179,21 +183,25 @@ struct MsgAddBuilding
 struct MsgChangeMoney
 {
 	MsgHead msg{ .id = ChangeMoney };
+	mutable uint16_t rpcSnId;
+
 	bool addMoney;
 	int32_t changeMoney;
-	MSGPACK_DEFINE(msg, addMoney, changeMoney);
+	MSGPACK_DEFINE(msg, rpcSnId, addMoney, changeMoney);
 };
 
 struct MsgChangeMoneyResponce
 {
 	MsgHead msg{ .id = ChangeMoneyResponce };
+	mutable uint16_t rpcSnId;
+
 	/// <summary>
 	/// 1上一个DB协程还没结束
 	/// </summary>
 	int error = 0;
 	uint32_t consumeMoney;
 	int32_t finalMoney;
-	MSGPACK_DEFINE(msg, error, consumeMoney, finalMoney);
+	MSGPACK_DEFINE(msg, rpcSnId, error, consumeMoney, finalMoney);
 };
 
 struct MsgNotifyMoney
@@ -347,13 +355,15 @@ struct MsgGateAddSession
 struct MsgGateDeleteSession
 {
 	MsgHead msg{ .id = GateDeleteSession };
-	MSGPACK_DEFINE(msg);
+	mutable uint16_t rpcSnId;
+	MSGPACK_DEFINE(msg, rpcSnId);
 };
 
 struct MsgGateDeleteSessionResponce
 {
 	MsgHead msg{ .id = GateDeleteSessionResponce };
-	MSGPACK_DEFINE(msg);
+	mutable uint16_t rpcSnId;
+	MSGPACK_DEFINE(msg, rpcSnId);
 };
 
 struct Msg采集

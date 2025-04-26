@@ -65,7 +65,7 @@ namespace Iocp {
 	{
 		if (this->sendOverlapped.coTask.Finished())
 		{
-			LOG(WARNING) << "Sending Failed," << this;
+			//LOG(WARNING) << "Sending Failed," << this;
 			return;
 		}
 
@@ -142,7 +142,7 @@ namespace Iocp {
 	{
 		while (true)
 		{
-			if (0 == Socket())
+			if (INVALID_SOCKET == Socket())
 			{
 				LOG(INFO) << "断线了,退出Send协程,0 == Socket()" << this;
 				break;

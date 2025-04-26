@@ -209,58 +209,6 @@ void Entity::OnDestroy()
 		proComponent->OnEntityDestroy(true);
 	}
 
-	//if (m_upAttack)
-	//	m_upAttack->OnEntityDestroy(true);
-
-	//if (m_up医疗兵)
-	//	m_up医疗兵->TryCancel();
-
-	//if (m_up找目标走过去)
-	//	m_up找目标走过去->TryCancel(true);
-
-
-	//if (m_up造活动单位)
-	//	m_up造活动单位->TryCancel(*this);
-
-	//if (m_up采集)
-	//	m_up采集->m_TaskCancel.TryCancel();
-
-	//if (m_up走)
-	//	m_up走->TryCancel();
-
-	//if (m_up地堡)
-	//	m_up地堡->OnDestroy();
-
-	//if (m_up临时阻挡)
-	//	m_up临时阻挡.reset();
-
-	//if (m_up造建筑)
-	//	m_up造建筑->TryCancel();
-
-	//if (m_upBuilding)
-	//	m_upBuilding->TryCancel();
-
-	//if (m_up虫巢)
-	//	m_up虫巢->TryCancel();
-
-	//if (m_up飞向目标)
-	//	m_up飞向目标->TryCancel();
-
-	//if (m_upAoi)
-	//	m_upAoi->OnDestory();
-
-	//if (m_upBuff)
-	//	m_upBuff->OnDestroy();
-
-	//if (m_up苔蔓扩张)
-	//	m_up苔蔓扩张->TryCancel();
-
-	//if (m_up苔蔓)
-	//	m_up苔蔓->TryCancel();
-
-	//if (m_up无苔蔓就持续掉血)
-	//	m_up无苔蔓就持续掉血->TryCancel();
-
 	if (m_cancelDelete)
 	{
 		LOG(INFO) << "取消删除协程";

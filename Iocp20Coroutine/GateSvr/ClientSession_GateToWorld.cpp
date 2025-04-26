@@ -56,7 +56,7 @@ void ClientSession_GateToWorld::OnRecv(const MsgGate转发& msg转发)
 		case MsgId::GateDeleteSession:
 			LOG(WARNING) << "WorldSvr 请求 GateSvr 删除玩家 GateSession 时,此 Session 早已断线,直接返回删除成功,gateClientSessionId=" << msg转发.gateClientSessionId;
 			void SendResponceToWorldSvr(const uint32_t rpcSnId, const uint64_t gateSessionId);
-			SendResponceToWorldSvr(msg.rpcSnId, msg转发.gateClientSessionId);
+			SendResponceToWorldSvr(obj.as<MsgGateDeleteSession>().rpcSnId, msg转发.gateClientSessionId);
 			break;
 		default:
 			LOG(ERROR) << msg.id << "=msg.id,msg转发.gateClientSessionId=" << msg转发.gateClientSessionId;
