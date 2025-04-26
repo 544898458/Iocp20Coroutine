@@ -63,6 +63,8 @@ public:
 	const std::string& 头顶Name()const;
 	void BroadcastEnter();
 	void BroadcastNotifyPos();
+	void BroadcastNotify属性(std::initializer_list<const 属性类型> list);
+	void BroadcastNotify所有属性();
 	void BroadcastChangeSkeleAnim(const std::string& refAniClipName, bool loop = true);
 	void DelayDelete(const std::chrono::system_clock::duration& dura = std::chrono::seconds(3));
 	template<class T> void Broadcast(const T& msg);

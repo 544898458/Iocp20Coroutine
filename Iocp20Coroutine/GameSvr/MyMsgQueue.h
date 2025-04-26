@@ -275,10 +275,8 @@ struct MsgNotifyPos
 	uint64_t entityId;
 	float x;
 	float z;
-	int eulerAnglesY;
-	int 生命 = 0;
-	int 能量 = 0;
-	MSGPACK_DEFINE(msg, entityId, x, z, eulerAnglesY, 生命, 能量);
+	int16_t eulerAnglesY;
+	MSGPACK_DEFINE(msg, entityId, x, z, eulerAnglesY);
 };
 struct MsgChangeSkeleAnim
 {
@@ -640,4 +638,15 @@ struct Msg太岁分裂
 	MsgHead msg{ .id = 太岁分裂 };
 	Position pos放置;
 	MSGPACK_DEFINE(msg, pos放置);
+};
+
+struct MsgNotify属性
+{
+	MsgNotify属性(Entity& ref, std::initializer_list<const 属性类型> list);
+	void TryAdd属性(Entity& ref, const 属性类型 属性);
+
+	MsgHead msg{ .id = Notify属性};
+	uint64_t idEntity;
+	std::map<属性类型, float> map属性;
+	MSGPACK_DEFINE(msg, idEntity, map属性);
 };

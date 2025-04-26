@@ -280,8 +280,8 @@ async def main() -> None:
 
     async with websockets.connect('wss://test.rtsgame.online:12348', 
                                 ssl=ssl_context,
-                                ping_interval=30,  # Adjust the interval as needed
-                                ping_timeout=30      # Adjust the timeout as needed
+                                ping_interval=60,  # Adjust the interval as needed
+                                ping_timeout=60      # Adjust the timeout as needed
   ) as websocket:
         print('已连上')
         

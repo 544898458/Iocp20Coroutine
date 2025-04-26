@@ -39,6 +39,7 @@
 #include "单位组件/临时阻挡Component.h"
 #include "单位组件/资源Component.h"
 #include "单位组件/数值Component.h"
+#include "枚举/属性类型.h"
 
 
 using namespace std;
@@ -256,6 +257,7 @@ void Entity::BroadcastEnter()
 	//LOG(INFO) << NickName() << "调用Entity::BroadcastEnter," << Id;
 	Broadcast(MsgAddRoleRet(*this));//自己广播给别人
 	BroadcastNotifyPos();
+	BroadcastNotify所有属性();
 
 	if (苔蔓 == m_类型)
 		EntitySystem::BroadcastEntity苔蔓半径(*this);
@@ -267,6 +269,20 @@ void Entity::BroadcastNotifyPos()
 {
 	Broadcast(MsgNotifyPos(*this));
 }
+
+
+void Entity::BroadcastNotify属性(std::initializer_list<const 属性类型> list)
+{
+	MsgNotify属性 msg(*this,list);
+	Broadcast(msg);
+}
+
+
+void Entity::BroadcastNotify所有属性()
+{
+	Broadcast(MsgNotify属性(*this, { 生命,能量 }));
+}
+
 
 void Entity::BroadcastChangeSkeleAnim(const std::string& refAniClipName, bool loop)
 {

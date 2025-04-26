@@ -164,8 +164,6 @@ CoTaskBool 医疗兵Component::Co治疗目标(WpEntity wp目标, FunCancel& cancel)
 			const auto 加生命 = std::min<int>(加满生命, 数值Component::Get(m_refEntity, 能量));
 			数值Component::改变(ref目标, 生命, 加生命);
 			数值Component::改变(m_refEntity, 能量, -加生命);
-			ref目标.BroadcastNotifyPos();
-			m_refEntity.BroadcastNotifyPos();
 		}
 
 		CHECK_终止治疗目标流程;

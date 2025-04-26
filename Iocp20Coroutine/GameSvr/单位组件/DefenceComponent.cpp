@@ -51,7 +51,6 @@ void DefenceComponent::受伤(const int 攻击, const uint64_t idAttacker)
 	m_map对我伤害[idAttacker] += 伤害;
 
 	播放正遭到攻击语音();
-	m_refEntity.BroadcastNotifyPos();
 	if (IsDead())
 	{
 		单位::单位配置 单位;
