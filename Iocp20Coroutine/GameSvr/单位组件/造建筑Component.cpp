@@ -352,6 +352,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 		Ôì»î¶¯µ¥Î»Component::AddComponent(refNewEntity);
 		break;
 	case ·ÉËş:
+	case ÄâÌ¬Ô´:
 		Éı¼¶µ¥Î»ÊôĞÔComponent::AddComponent(refNewEntity);
 		break;
 	case µØ±¤:
