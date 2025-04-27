@@ -54,6 +54,8 @@ std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const 单位类
 		//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 		spEntityMonster->BroadcastEnter();
 		vecRet.emplace_back(spEntityMonster);
+		//auto [pair, ok] = refSpace.m_mapPlayer[""].m_mapWpEntity.insert({ spEntityMonster->Id, spEntityMonster });//怪物就是昵称为""的玩家
+		//CHECK_NOT_RETURN(ok);
 	}
 	return vecRet;
 }

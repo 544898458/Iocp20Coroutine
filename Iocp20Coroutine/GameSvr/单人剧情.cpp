@@ -401,7 +401,7 @@ namespace 单人剧情
 
 		if (0 == refSpace.Get单位数(虫营))
 		{
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请选中一只工虫，然后点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>虫营</color>按钮，就能造出一个虫营");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请选中一只工虫，然后点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>虫营</color>按钮，再点击覆盖有苔蔓(wàn)的地面，就能变异出一个虫营");
 			if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, __FUNCTION__, std::bind(funSameSpace, std::placeholders::_1, 虫营))))
 				co_return 0;
 

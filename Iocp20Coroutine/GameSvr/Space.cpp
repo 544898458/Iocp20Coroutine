@@ -671,8 +671,11 @@ WpEntity Space::造活动单位(UpPlayerComponent&& refSpPlayer可能空, const std::str
 		break;
 	}
 
-	auto [pair, ok] = m_mapPlayer[strNickName].m_mapWpEntity.insert({ spNewEntity->Id, spNewEntity });//自己控制的单位
-	CHECK_NOT_RETURN(ok);
+	if (!strNickName.empty())
+	{
+		auto [pair, ok] = m_mapPlayer[strNickName].m_mapWpEntity.insert({ spNewEntity->Id, spNewEntity });//自己控制的单位
+		CHECK_NOT_RETURN(ok);
+	}
 	AddEntity(spNewEntity);//全地图单位
 
 	PlayerComponent::播放声音(*spNewEntity, 活动.str入场语音); //SCV, good to go, sir. SCV可以开工了

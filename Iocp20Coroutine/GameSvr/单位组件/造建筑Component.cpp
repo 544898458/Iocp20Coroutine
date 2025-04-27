@@ -388,7 +388,9 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 		ÎŞÌ¦Âû¾Í³ÖĞøµôÑªComponent::AddComponent(refNewEntity);
 	}
 
-	refSpace.m_mapPlayer[strPlayerNickName].m_mapWpEntity[refNewEntity.Id] = refNewEntity.shared_from_this();//×Ô¼º¿ØÖÆµÄµ¥Î»
+	if(!strPlayerNickName.empty())
+		refSpace.m_mapPlayer[strPlayerNickName].m_mapWpEntity[refNewEntity.Id] = refNewEntity.shared_from_this();//×Ô¼º¿ØÖÆµÄµ¥Î»
+
 	const int i32ÊÓÒ°·¶Î§ = Ì¦Âû == ÀàĞÍ ? Ì¦ÂûComponent::MAX°ë¾¶ : 0;
 	refSpace.AddEntity(refNewEntity.shared_from_this(), i32ÊÓÒ°·¶Î§);
 

@@ -204,7 +204,7 @@ bool CrowdTool可走直线(CrowdToolState& refCrowTool, const Position& pos起始, con
 	}
 
 	const float f直线距离 = pos起始.Distance({ arr目标点可站立[0], arr目标点可站立[2] });
-	return f直线距离 + 0.01f > f总路径长;// refPos.DistanceLessEqual(pos, 0.1f);
+	return f直线距离 + 0.01f > f总路径长 || f总路径长 / f直线距离 < 1.03f;
 }
 
 bool CrowdTool判断单位重叠(const Position& refPosOld, const Position& refPosNew, const float fNew半边长)
