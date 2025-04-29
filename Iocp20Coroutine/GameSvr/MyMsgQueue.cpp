@@ -99,6 +99,16 @@ MsgNotify属性::MsgNotify属性(Entity& ref, std::initializer_list<const 属性
 void MsgNotify属性::TryAdd属性(Entity& ref, const 属性类型 属性)
 {
 	const auto 值 = 数值Component::Get(ref, 属性);
-	if (值)
-		map属性.insert({ 属性, (float)值 });
+	switch (属性)
+	{
+		case 属性类型::生命:
+		case 属性类型::能量:
+			break;
+	default:
+		if (0 >= 值)
+			return;
+		break;
+	}
+		
+	map属性.insert({ 属性, (float)值 });
 }
