@@ -101,7 +101,7 @@ CoTask<int> GateSession::CoLogin(MsgLogin msg, FunCancel& funCancel)
 		Try读Ini本地机器专用(版本号可进最低, "GateSvr", "VerMin");
 		if (版本号可进最高 < msg.u32版本号 || 版本号可进最低 > msg.u32版本号)
 		{
-			LOG(WARNING) << "[" << 版本号可进最高 << "," << 版本号可进最低 << "],版本:" << msg.u32版本号;
+			LOG(WARNING) << "版本范围[" << 版本号可进最高 << "," << 版本号可进最低 << "],前台发来版本:" << msg.u32版本号;
 			SendToGateClient<MsgLoginResponce>({ .result = MsgLoginResponce::客户端版本不匹配, .str提示 = StrConv::GbkToUtf8("版本不匹配") }, (uint64_t)this);
 			if (co_await CoTimer::Wait(1s, funCancel))
 				co_return 0;
