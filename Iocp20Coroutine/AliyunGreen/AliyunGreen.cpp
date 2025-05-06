@@ -7,8 +7,12 @@
 #include <string>
 #include <iostream>
 #include <format>
+#include <unordered_map>
 #include "../jsoncpp-master/include/json/json.h"
 #include "../读配置文件/Try读Ini本地机器专用.h"
+
+
+
 #pragma comment(lib, "Winhttp.lib")
 #pragma comment(lib, "Crypt32.lib")
 
@@ -56,7 +60,7 @@ std::string winhttp_client_post(const std::wstring& strHost, const std::wstring&
 			WINHTTP_FLAG_SECURE);
 
 	// Set HTTP Options
-	DWORD dwTimeOut = 3000;
+	DWORD dwTimeOut = 30000;
 	//DWORD dwFlags = SECURITY_FLAG_IGNORE_UNKNOWN_CA |
 	//	SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE |
 	//	SECURITY_FLAG_IGNORE_CERT_CN_INVALID |
@@ -176,9 +180,26 @@ public:
 	std::chrono::high_resolution_clock::time_point m_t;
 	const std::string m_str;
 };
+
+/// <summary>
+/// 阿里内容安全
+/// </summary>
+struct 阿里绿化结果
+{
+
+};
+
+std::unordered_map<std::string, 阿里绿化结果> m_map阿里绿化结果;
+
 bool AliyunGreen::Check(const std::string& refContentGbk)
 {
 	耗时 _(refContentGbk + "AliyunGreen::Check");
+	if (m_map阿里绿化结果.count(refContentGbk)) 
+	{
+        LOG(INFO) << "直接从缓存返回:"  << refContentGbk;
+		return true;
+	}
+
 	std::string strHttpsHost;
 	std::string strHttpsVerb;
 	Try读Ini本地机器专用(strHttpsHost, "Aliyun", "HttpsHost");
@@ -187,5 +208,9 @@ bool AliyunGreen::Check(const std::string& refContentGbk)
 	const auto strGbk = StrConv::Utf8ToGbk(strToken);
 	//std::cout << strGbk;
 	LOG(INFO) << strGbk;
-	return strGbk == "none";
+	if (strGbk != "none")
+		return false;
+
+    m_map阿里绿化结果[refContentGbk] = {};
+	return true;
 }
