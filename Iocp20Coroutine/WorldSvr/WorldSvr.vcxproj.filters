@@ -206,5 +206,8 @@
     <ClInclude Include="..\读配置文件\Try读Ini本地机器专用.h">
       <Filter>读配置文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\读配置文件\文件存取对象.h">
+      <Filter>读配置文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

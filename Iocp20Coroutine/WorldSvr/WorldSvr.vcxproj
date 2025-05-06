@@ -218,6 +218,7 @@
     <ClInclude Include="..\MiniDump\MiniDump.h" />
     <ClInclude Include="..\慢操作AliyunGreen\慢操作AliyunGreen.h" />
     <ClInclude Include="..\读配置文件\Try读Ini本地机器专用.h" />
+    <ClInclude Include="..\读配置文件\文件存取对象.h" />
     <ClInclude Include="DbPlayer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerGateSession_World.h" />

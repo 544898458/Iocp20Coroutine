@@ -1,4 +1,5 @@
 #include "pch.h"
+#include <WinSock2.h>
 #include <windows.h>
 #include <winhttp.h>
 #include <wchar.h>
@@ -10,6 +11,7 @@
 #include <unordered_map>
 #include "../jsoncpp-master/include/json/json.h"
 #include "../读配置文件/Try读Ini本地机器专用.h"
+#include "../读配置文件/文件存取对象.h"
 
 
 
@@ -184,33 +186,52 @@ public:
 /// <summary>
 /// 阿里内容安全
 /// </summary>
-struct 阿里绿化结果
+struct 阿里绿化结果缓存
 {
-
+	std::unordered_map<std::string, std::string> m_map;
+	MSGPACK_DEFINE(m_map);
 };
 
-std::unordered_map<std::string, 阿里绿化结果> m_map阿里绿化结果;
 
 bool AliyunGreen::Check(const std::string& refContentGbk)
 {
 	耗时 _(refContentGbk + "AliyunGreen::Check");
-	if (m_map阿里绿化结果.count(refContentGbk)) 
+	const char sz缓存文件[] = "阿里绿化结果缓存";
+
+	static 阿里绿化结果缓存 s_阿里绿化结果缓存;
+	if (s_阿里绿化结果缓存.m_map.empty())
 	{
-        LOG(INFO) << "直接从缓存返回:"  << refContentGbk;
-		return true;
+		s_阿里绿化结果缓存 = 从文件里读出对象<阿里绿化结果缓存>(sz缓存文件);
+		LOG(INFO) << "从文件里读出对象<阿里绿化结果缓存>成功,size=" << s_阿里绿化结果缓存.m_map.size();
+		for (const auto& [k, v] : s_阿里绿化结果缓存.m_map)
+		{
+			LOG(INFO) << k << ":" << v;
+		}
 	}
 
-	std::string strHttpsHost;
-	std::string strHttpsVerb;
-	Try读Ini本地机器专用(strHttpsHost, "Aliyun", "HttpsHost");
-	Try读Ini本地机器专用(strHttpsVerb, "Aliyun", "HttpsVerb");
-	const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("content={0}", StrConv::GbkToUtf8(refContentGbk)));// / wxa / msg_sec_check");
-	const auto strGbk = StrConv::Utf8ToGbk(strToken);
-	//std::cout << strGbk;
-	LOG(INFO) << strGbk;
-	if (strGbk != "none")
+	std::string strGbk响应;
+	auto iterFind = s_阿里绿化结果缓存.m_map.find(refContentGbk);
+	if (iterFind == s_阿里绿化结果缓存.m_map.end())
+	{
+		std::string strHttpsHost;
+		std::string strHttpsVerb;
+		Try读Ini本地机器专用(strHttpsHost, "Aliyun", "HttpsHost");
+		Try读Ini本地机器专用(strHttpsVerb, "Aliyun", "HttpsVerb");
+		const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("content={0}", StrConv::GbkToUtf8(refContentGbk)));// / wxa / msg_sec_check");
+		strGbk响应 = StrConv::Utf8ToGbk(strToken);
+		s_阿里绿化结果缓存.m_map[refContentGbk] = strGbk响应;
+		写对象进文件(s_阿里绿化结果缓存, sz缓存文件);
+		LOG(INFO) << "返回新的:" << strGbk响应;
+	}
+	else
+	{
+		strGbk响应 = iterFind->second;
+		LOG(INFO) << "返回缓存的:" << strGbk响应;
+	}
+
+	
+	if (strGbk响应 != "none")
 		return false;
 
-    m_map阿里绿化结果[refContentGbk] = {};
 	return true;
 }

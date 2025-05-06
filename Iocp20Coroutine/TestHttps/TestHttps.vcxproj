@@ -71,10 +71,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)\glog\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\glog\include;$(SolutionDir)\msgpack-c-cpp-2.1.2\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)\glog\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\glog\include;$(SolutionDir)\msgpack-c-cpp-2.1.2\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
