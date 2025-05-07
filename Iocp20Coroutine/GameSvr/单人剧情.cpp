@@ -128,7 +128,7 @@ namespace 单人剧情
 			refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::工程车, { 5, 10 }, true);
 			资源Component::Add(refSpace, 晶体矿, { 20, 10 });
 		}
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击<color=#a0ff50>工程车</color>选中，然后点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>基地</color>”按钮，再点击空白地面，10秒后就能造出一个基地");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>基地</color>”按钮，再点击空白地面，10秒后就能造出一个基地");
 
 		const auto funSameSpace = [&refSpace, &strPlayerNickName](const MyEvent::AddEntity& refAddEntity, 单位类型 类型)
 			{ return MyEvent::SameSpace(refAddEntity.wpEntity, refSpace, strPlayerNickName) && EntitySystem::Is单位类型(refAddEntity.wpEntity, 类型); };
@@ -147,7 +147,7 @@ namespace 单人剧情
 			co_return 0;
 
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击选中<color=#a0ff50>基地</color>（圆环特效表示选中），然后点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>工程车</color>”按钮，5秒后会在基地旁造出一个工程车");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>工程车</color>”按钮，5秒后会在基地旁造出一个工程车");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, __FUNCTION__, std::bind(funSameSpace, std::placeholders::_1, 工程车))))
 			co_return 0;
@@ -186,14 +186,14 @@ namespace 单人剧情
 		if (std::get<0>(co_await CoEvent<MyEvent::晶体矿已运回基地>::Wait(funCancel)))
 			co_return 0;
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "您的工程车已把第一车晶体矿运到基地，请查看左上角<<color=#a0ff50>晶体矿</color>数量变化");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "您的工程车已把第一车晶体矿运到基地，请查看左上角<color=#a0ff50>晶体矿</color>数量变化");
 
 		if (co_await CoTimer::Wait(5s, funCancel))
 			co_return 0;
 
 		if (0 == refSpace.Get单位数(民房))
 		{
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够20晶体矿后，请选中一辆工程车，然后点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>民房</color>”按钮，再点击一次空旷地面");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够20晶体矿后，请点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>民房</color>”按钮，再点击一次空旷地面");
 			if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, __FUNCTION__, std::bind(funSameSpace, std::placeholders::_1, 民房))))
 				co_return 0;
 
@@ -205,16 +205,16 @@ namespace 单人剧情
 
 		if (0 == refSpace.Get单位数(兵营))
 		{
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请选中一辆工程车，然后点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>兵营</color>”按钮，再点击一次空旷地面，就能造出一个兵营");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>兵营</color>”按钮，再点击一次空旷地面，就能造出一个兵营");
 			if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, __FUNCTION__, std::bind(funSameSpace, std::placeholders::_1, 兵营))))
 				co_return 0;
 
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好，兵营可以产出<color=#a0ff50>枪兵</color>和<color=#a0ff50>近战兵</color>");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好，兵营可以产出<color=#a0ff50>枪兵</color>和<color=#a0ff50>近战兵</color>。");
 			if (co_await CoTimer::Wait(10s, funCancel))
 				co_return 0;
 		}
 
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击选中兵营（圆环特效表示选中），然后点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>枪兵</color>”按钮，10秒后会在兵营旁造出一个枪兵");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>枪兵</color>”按钮，10秒后会在兵营旁造出一个枪兵");
 
 		if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, __FUNCTION__, std::bind(funSameSpace, std::placeholders::_1, 枪兵))))
 			co_return 0;
@@ -323,7 +323,7 @@ namespace 单人剧情
 			refSpace.造活动单位(ref视口, strPlayerNickName, 单位类型::工虫, { 5, 10 }, true);
 			资源Component::Add(refSpace, 晶体矿, { 20, 10 });
 		}
-		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击<color=#a0ff50>工虫</color>选中，然后点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>虫巢</color>”按钮，再点击空白地面，工虫会在10秒内变异为虫巢");
+		PlayerGateSession_Game::Say任务提示(strPlayerNickName, "请点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>虫巢</color>”按钮，再点击空白地面，工虫会在10秒内变异为虫巢");
 
 		const auto funSameSpace = [&refSpace, &strPlayerNickName](const MyEvent::AddEntity& refAddEntity, 单位类型 类型)
 			{ return MyEvent::SameSpace(refAddEntity.wpEntity, refSpace, strPlayerNickName) && EntitySystem::Is单位类型(refAddEntity.wpEntity, 类型); };
@@ -401,11 +401,11 @@ namespace 单人剧情
 
 		if (0 == refSpace.Get单位数(虫营))
 		{
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请选中一只工虫，然后点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>虫营</color>按钮，再点击覆盖有苔蔓(wàn)的地面，就能变异出一个虫营");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "等您存够30晶体矿后，请点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>虫营</color>按钮，再点击覆盖有苔蔓(wàn)的地面，就能变异出一个虫营。");
 			if (std::get<0>(co_await CoEvent<MyEvent::AddEntity>::Wait(funCancel, __FUNCTION__, std::bind(funSameSpace, std::placeholders::_1, 虫营))))
 				co_return 0;
 
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好，虫营可以解锁枪虫和近战虫");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "很好，虫营可以解锁枪虫和近战虫。虫营只要一个就够了，如果希望出兵更快，应该造更多的虫巢。");
 			if (co_await CoTimer::Wait(10s, funCancel))
 				co_return 0;
 		}
@@ -423,7 +423,7 @@ namespace 单人剧情
 			})))
 			co_return 0;
 
-			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "现在已在左边给您刷了一个敌人，控制近战虫<color=#a0ff50>走到敌人附近</color>，近战虫会自动攻击。您可以点右下角“取消选中”然后拖动地面看看敌人在哪里");
+			PlayerGateSession_Game::Say任务提示(strPlayerNickName, "现在已在左边给您刷了一个敌人，点击选中您的<color=#a0ff50>近战虫</color>，再<color=#a0ff50>点击敌人附近的地面</color>，近战虫会走向目标并自动攻击。您可以点右下角“取消选中”然后拖动地面看看敌人在哪里");
 			MonsterComponent::AddMonster(refSpace, 枪兵怪, { -30,20 });
 
 			if (std::get<0>(co_await CoEvent<MyEvent::单位阵亡>::Wait(funCancel, __FUNCTION__, [&refSpace](const MyEvent::单位阵亡& ref) {return &ref.wpEntity.lock()->m_refSpace == &refSpace; })))
