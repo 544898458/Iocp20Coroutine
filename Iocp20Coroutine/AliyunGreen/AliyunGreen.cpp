@@ -219,8 +219,12 @@ bool AliyunGreen::Check(const std::string& refContentGbk)
 		Try读Ini本地机器专用(strHttpsVerb, "Aliyun", "HttpsVerb");
 		const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("content={0}", StrConv::GbkToUtf8(refContentGbk)));// / wxa / msg_sec_check");
 		strGbk响应 = StrConv::Utf8ToGbk(strToken);
-		s_阿里绿化结果缓存.m_map[refContentGbk] = strGbk响应;
-		写对象进文件(s_阿里绿化结果缓存, sz缓存文件);
+		if (strToken.size() < 10)//<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">< html ><head> < title>504 Gateway Time - out< / title>< / head><body>< h1>504 Gateway Time - out< / h1><p>The gateway did not receive a timely response from the upstream server or application.<hr / >Powered by Tengine< / body>< / html>
+		{
+			s_阿里绿化结果缓存.m_map[refContentGbk] = strGbk响应;
+			写对象进文件(s_阿里绿化结果缓存, sz缓存文件);
+		}
+
 		LOG(INFO) << "返回新的:" << strGbk响应;
 	}
 	else
