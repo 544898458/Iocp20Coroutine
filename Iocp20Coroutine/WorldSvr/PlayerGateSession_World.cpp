@@ -10,7 +10,11 @@
 
 void PlayerGateSession_World::OnDestroy()
 {
-
+	if (m_funCancle) 
+	{
+		m_funCancle();
+        m_funCancle = nullptr;
+	}
 }
 
 std::map<std::string, uint64_t> g_mapPlayerNickNameGateSessionId;
@@ -31,9 +35,9 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 		co_return 0;
 	}
 	extern 慢操作AliyunGreen g_慢操作AliyunGreen;
-	static FunCancel funCancle;
+	
 
-	if (!co_await g_慢操作AliyunGreen.CoAliyunGreen(gbkName, funCancle))
+	if (!co_await g_慢操作AliyunGreen.CoAliyunGreen(gbkName, m_funCancle))
 	{
 		msgResponce.result = MsgLoginResponce::NameErr;
 		msgResponce.str提示 = StrConv::GbkToUtf8("请换一个名字");
@@ -66,7 +70,7 @@ CoTask<int> PlayerGateSession_World::CoLogin(const MsgLogin msg)
 		auto& refGateSession = itFindSession->second;
 		//通知GameSvr此Session是断线状态（不再接收消息）
 		LOG(INFO) << gbkName << "," << m_idPlayerGateSession << "踢" << refGateSession.m_idPlayerGateSession;
-		co_await CoRpc<MsgGateDeleteSessionResponce>::Send<MsgGateDeleteSession>({}, [&refGateSession](const MsgGateDeleteSession& refMsg) {refGateSession.SendToGate转发(refMsg); }, funCancle);
+		co_await CoRpc<MsgGateDeleteSessionResponce>::Send<MsgGateDeleteSession>({}, [&refGateSession](const MsgGateDeleteSession& refMsg) {refGateSession.SendToGate转发(refMsg); }, m_funCancle);
 		_ASSERT(g_mapPlayerNickNameGateSessionId.find(gbkName) == g_mapPlayerNickNameGateSessionId.end());
 	}
 	const auto pair = g_mapPlayerNickNameGateSessionId.insert({ gbkName, m_idPlayerGateSession });//g_mapPlayerNickNameGateSessionId[gbkName] = m_idPlayerGateSession;
