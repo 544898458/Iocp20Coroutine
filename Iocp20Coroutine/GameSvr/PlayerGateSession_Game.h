@@ -80,6 +80,7 @@ private:
 	void OnRecv(const Msg采集& msg);
 	void OnRecv(const Msg进地堡& msg);
 	void OnRecv(const Msg出地堡& msg);
+	void OnRecv(const Msg进房虫& msg);
 	void OnRecv(const Msg框选& msg);
 	void OnRecv(const Msg玩家个人战局列表& msg);
 	void OnRecv(const Msg玩家多人战局列表& msg);
