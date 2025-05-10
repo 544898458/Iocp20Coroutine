@@ -20,6 +20,7 @@
 #include "单位组件/BuildingComponent.h"
 #include "单位组件/医疗兵Component.h"
 #include "单位组件/BuffComponent.h"
+#include "单位组件/运输Component.h"
 
 Space::Space(const 副本配置& ref) :m_配置(ref)
 {
@@ -688,6 +689,9 @@ WpEntity Space::造活动单位(UpPlayerComponent&& refSpPlayer可能空, const std::str
 		break;
 	case 幼虫:
 		造活动单位Component::AddComponent(*spNewEntity);
+		break;
+	case 房虫:
+		运输Component::AddComponent(*spNewEntity);
 		break;
 	default:break;
 	}

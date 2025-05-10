@@ -390,6 +390,9 @@
     <ClCompile Include="单位组件\数值Component.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
+    <ClCompile Include="单位组件\运输Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -648,6 +651,9 @@
       <Filter>单位组件</Filter>
     </ClInclude>
     <ClInclude Include="单位组件\数值Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\运输Component.h">
       <Filter>单位组件</Filter>
     </ClInclude>
   </ItemGroup>
