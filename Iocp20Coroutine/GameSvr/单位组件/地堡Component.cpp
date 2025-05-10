@@ -15,18 +15,27 @@ void 地堡Component::AddComponent(Entity& refEntity)
 
 void 地堡Component::OnEntityDestroy(const bool bDestroy)
 {
+}
+
+void 可进活动单位Component::AddComponent(Entity& refEntity)
+{
+    refEntity.AddComponentOnDestroy(&Entity::m_up可进活动单位, new 可进活动单位Component(refEntity));
+}
+
+void 可进活动单位Component::OnEntityDestroy(const bool bDestroy)
+{
 	for (auto& sp : m_listSpEntity)
 		sp->OnDestroy();
 
 	m_listSpEntity.clear();
 }
 
-void 地堡Component::OnBeforeDelayDelete()
+void 可进活动单位Component::OnBeforeDelayDelete()
 {
-	全都出地堡();
+	全都出去();
 }
 
-void 地堡Component::进(Space& refSpace, Entity& refEntity)
+void 可进活动单位Component::进(Space& refSpace, Entity& refEntity)
 {
 	if (m_refEntity.IsDead())
 	{
@@ -61,7 +70,7 @@ void 地堡Component::进(Space& refSpace, Entity& refEntity)
 	EntitySystem::BroadcastEntity描述(m_refEntity, std::format("地堡内有{0}人", m_listSpEntity.size()));
 }
 
-void 地堡Component::全都出地堡()
+void 可进活动单位Component::全都出去()
 {
 	auto list = m_listSpEntity;
 	m_listSpEntity.clear();

@@ -94,8 +94,8 @@ void AoiComponent::看到(Entity& refEntity被看)
 		{
 			m_refEntity.m_up找目标走过去->m_b搜索新的目标 = true;
 		}
-		else if (m_refEntity.m_up地堡) {
-			for (auto sp : m_refEntity.m_up地堡->m_listSpEntity)
+		else if (m_refEntity.m_up可进活动单位) {
+			for (auto sp : m_refEntity.m_up可进活动单位->m_listSpEntity)
 			{
 				if (sp->m_up找目标走过去)
 				{
