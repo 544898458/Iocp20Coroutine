@@ -226,10 +226,10 @@ bool AliyunGreen::Check(const std::string& refContentGbk)
 		Try读Ini本地机器专用(u超时秒, "Aliyun", "超时秒");
 		if (0 == u超时秒)
 		{
-			LOG(WARNING) << "不判断文本合规，直接跳过";
+			LOG(WARNING) << "不判断文本违规，直接允许";
 			return true;
 		}
-		const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("content={0}", StrConv::GbkToUtf8(refContentGbk)), u超时秒);// / wxa / msg_sec_check");
+		const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("content={0}", StrConv::GbkToUtf8(refContentGbk)), u超时秒 * CLOCKS_PER_SEC);// / wxa / msg_sec_check");
 		strGbk响应 = StrConv::Utf8ToGbk(strToken);
 		if (strToken.size() > 10)//<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">< html ><head> < title>504 Gateway Time - out< / title>< / head><body>< h1>504 Gateway Time - out< / h1><p>The gateway did not receive a timely response from the upstream server or application.<hr / >Powered by Tengine< / body>< / html>
 		{
