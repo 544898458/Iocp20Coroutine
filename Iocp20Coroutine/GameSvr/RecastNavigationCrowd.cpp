@@ -155,6 +155,12 @@ bool CrowdTool可站立(CrowdToolState& refCrowTool, const Position& refPos)
 	return refPos.DistanceLessEqual(pos, 0.1f);
 }
 
+int CrowdToolGetAgentIdx(CrowdToolState& refCrowTool, const uint64_t idEntity)
+{
+	//refCrowTool.addAgent
+	return -1;
+}
+
 bool CrowdTool可走直线(CrowdToolState& refCrowTool, const Position& pos起始, const Position& pos目标)
 {
 	dtNavMeshQuery* navquery = refCrowTool.m_sample->getNavMeshQuery();
@@ -232,7 +238,10 @@ RecastNavigationCrowd::RecastNavigationCrowd(Entity& refEntity, const Position& 
 
 RecastNavigationCrowd::~RecastNavigationCrowd()
 {
-	CrowToolRemoveAgent(m_refEntity.m_refSpace.GetCrowdToolState(m_refEntity.m_类型), m_refEntity.m_up走->m_idxCrowdAgent);
+	auto& refCrowdToolState = m_refEntity.m_refSpace.GetCrowdToolState(m_refEntity.m_类型);
+	_ASSERT(走Component::INVALID_AGENT_IDX != m_refEntity.m_up走->m_idxCrowdAgent);
+	CrowToolRemoveAgent(refCrowdToolState, m_refEntity.m_up走->m_idxCrowdAgent);
+	refCrowdToolState.m_mapEntityId.erase(m_refEntity.m_up走->m_idxCrowdAgent);
 	m_refEntity.m_up走->m_idxCrowdAgent = 走Component::INVALID_AGENT_IDX;
 }
 

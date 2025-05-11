@@ -6,9 +6,12 @@
 #include "AttackComponent.h"
 #include "可进活动单位Component.h"
 #include "找目标走过去Component.h"
+
 void AoiComponent::Add(Space& refSpace, Entity& refEntity, const int32_t i32视野范围)
 {
-	refEntity.AddComponentOnDestroy(&Entity::m_upAoi, refSpace, refEntity);// std::make_unique<AoiComponent>();
+	if(!refEntity.m_upAoi)
+		refEntity.AddComponentOnDestroy(&Entity::m_upAoi, refSpace, refEntity);// std::make_unique<AoiComponent>();
+
 	refEntity.m_upAoi->m_i32视野范围 = i32视野范围;
 	refEntity.m_upAoi->进入Space();
 }

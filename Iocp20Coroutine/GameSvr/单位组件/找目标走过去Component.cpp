@@ -69,6 +69,9 @@ CoTaskBool 找目标走过去Component::Co顶层(
 		if (m_refEntity.IsDead())
 			co_return false;
 
+		if (!m_refEntity.m_wpOwner.expired() && 房虫 == m_refEntity.m_wpOwner.lock()->m_类型)
+			continue;
+
 		if (!fun可以操作())
 			continue;
 
@@ -79,7 +82,7 @@ CoTaskBool 找目标走过去Component::Co顶层(
 
 			continue;//这里可能有问题，无法区分是手动停止走路打断还是销毁对象打断
 		}
-		if (!m_b原地坚守 && m_refEntity.m_up走 && m_fun空闲走向此处 && !走Component::正在走(m_refEntity) && !采集Component::正在采集(m_refEntity))//打完走向下一个目标
+		if (m_refEntity.m_wpOwner.expired() && !m_b原地坚守 && m_refEntity.m_up走 && m_fun空闲走向此处 && !走Component::正在走(m_refEntity) && !采集Component::正在采集(m_refEntity))//打完走向下一个目标
 		{
 			走Component::Cancel所有包含走路的协程(m_refEntity); //TryCancel();
 
@@ -137,7 +140,7 @@ CoTaskBool 找目标走过去Component::Co走向警戒范围内的目标然后操作(
 		{
 			Entity& refTarget = *wpEntity.lock();
 			const auto [bStop, bContinue] = co_await fun操作最近的目标(refTarget, wpEntity, *this);
-			if(b外部取消协程)
+			if (b外部取消协程)
 				co_return true;
 
 			if (bStop)

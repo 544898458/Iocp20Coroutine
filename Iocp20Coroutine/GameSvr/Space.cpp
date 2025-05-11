@@ -714,6 +714,12 @@ bool Space::CrowdTool可走直线(const Position& pos起始, const Position& pos目标)
 {
 	return ::CrowdTool可走直线(*m_spCrowdToolState, pos起始, pos目标);
 }
+
+int CrowdToolGetAgentIdx(CrowdToolState& refCrowTool, const uint64_t idEntity);
+int Space::CrowdToolGetAgentIdx(const Entity& refEntity)
+{
+	return ::CrowdToolGetAgentIdx(GetCrowdToolState(refEntity.m_类型), refEntity.Id);
+}
 bool Space::可放置建筑(const Position& refPos, float f半边长)
 {
 	const Position pos左下 = { refPos.x - f半边长, refPos.z - f半边长 };

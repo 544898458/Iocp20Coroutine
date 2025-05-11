@@ -321,20 +321,17 @@ void 走Component::走进地堡(WpEntity wpEntity地堡)
 	if (wpEntity地堡.expired())
 		return;
 
-	if (!wpEntity地堡.lock()->m_upBuilding)
-		return;
-
-	if (!wpEntity地堡.lock()->m_upBuilding->已造好())
+	if (wpEntity地堡.lock()->m_upBuilding && !wpEntity地堡.lock()->m_upBuilding->已造好())
 	{
 		PlayerComponent::播放声音Buzz(m_refEntity, "地堡还没造好，不能进地堡");
 		return;
 	}
 
-	if (造建筑Component::正在建造(m_refEntity))
-	{
-		PlayerComponent::播放声音Buzz(m_refEntity, "正在建造，不能进地堡");
-		return;
-	}
+	//if (造建筑Component::正在建造(m_refEntity))
+	//{
+	//	PlayerComponent::播放声音Buzz(m_refEntity, "正在建造，不能进地堡");
+	//	return;
+	//}
 
 	//if (m_refEntity.m_upAttack)
 	//	m_refEntity.m_upAttack->OnEntityDestroy(const bool bDestroy);
