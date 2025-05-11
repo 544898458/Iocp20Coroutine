@@ -32,7 +32,7 @@ wstring string2wstring(const string& str)
 	return ret;
 }
 
-std::string winhttp_client_post(const std::wstring& strHost, const std::wstring& strVerb, const bool bPost, const std::string& strData) {
+std::string winhttp_client_post(const std::wstring& strHost, const std::wstring& strVerb, const bool bPost, const std::string& strData, const uint32_t u超时秒) {
 
 	DWORD dwBytesWritten = 0;
 	BOOL  bResults = FALSE;
@@ -62,15 +62,20 @@ std::string winhttp_client_post(const std::wstring& strHost, const std::wstring&
 			WINHTTP_FLAG_SECURE);
 
 	// Set HTTP Options
-	DWORD dwTimeOut = 30000;
-	//DWORD dwFlags = SECURITY_FLAG_IGNORE_UNKNOWN_CA |
-	//	SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE |
-	//	SECURITY_FLAG_IGNORE_CERT_CN_INVALID |
-	//	SECURITY_FLAG_IGNORE_CERT_DATE_INVALID;
+	DWORD dwTimeOut = u超时秒;
+	DWORD dwFlags = SECURITY_FLAG_IGNORE_UNKNOWN_CA |
+		SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE |
+		SECURITY_FLAG_IGNORE_CERT_CN_INVALID |
+		SECURITY_FLAG_IGNORE_CERT_DATE_INVALID;
 
 	BOOL bRet = WinHttpSetOption(hRequest, WINHTTP_OPTION_CONNECT_TIMEOUT, &dwTimeOut, sizeof(DWORD));
-	//bRet = WinHttpSetOption(hRequest, WINHTTP_OPTION_SECURITY_FLAGS, &dwFlags, sizeof(dwFlags));
-	//bRet = WinHttpSetOption(hRequest, WINHTTP_OPTION_CLIENT_CERT_CONTEXT, WINHTTP_NO_CLIENT_CERT_CONTEXT, 0);
+	LOG_IF(WARNING, !bRet) << "WINHTTP_OPTION_CONNECT_TIMEOUT Error: " << GetLastError();
+	bRet = WinHttpSetOption(hSession, WINHTTP_OPTION_RECEIVE_TIMEOUT, &dwTimeOut, sizeof(dwTimeOut));
+	LOG_IF(WARNING, !bRet) << "WINHTTP_OPTION_RECEIVE_TIMEOUT Error: " << GetLastError();
+	bRet = WinHttpSetOption(hRequest, WINHTTP_OPTION_SECURITY_FLAGS, &dwFlags, sizeof(dwFlags));
+	LOG_IF(WARNING, !bRet) << "WINHTTP_OPTION_SECURITY_FLAGS Error: " << GetLastError();
+	bRet = WinHttpSetOption(hRequest, WINHTTP_OPTION_CLIENT_CERT_CONTEXT, WINHTTP_NO_CLIENT_CERT_CONTEXT, 0);
+	LOG_IF(WARNING, !bRet) << "WINHTTP_OPTION_CLIENT_CERT_CONTEXT Error: " << GetLastError();
 
 	//加上OAuth认证需要的header信息：
 	//std::string client_id = "test client id";
@@ -215,13 +220,20 @@ bool AliyunGreen::Check(const std::string& refContentGbk)
 	{
 		std::string strHttpsHost;
 		std::string strHttpsVerb;
+		uint32_t u超时秒(0);
 		Try读Ini本地机器专用(strHttpsHost, "Aliyun", "HttpsHost");
 		Try读Ini本地机器专用(strHttpsVerb, "Aliyun", "HttpsVerb");
-		const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("content={0}", StrConv::GbkToUtf8(refContentGbk)));// / wxa / msg_sec_check");
+		Try读Ini本地机器专用(u超时秒, "Aliyun", "超时秒");
+		if (0 == u超时秒)
+		{
+			LOG(WARNING) << "不判断文本合规，直接跳过";
+			return true;
+		}
+		const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("content={0}", StrConv::GbkToUtf8(refContentGbk)), u超时秒);// / wxa / msg_sec_check");
 		strGbk响应 = StrConv::Utf8ToGbk(strToken);
 		if (strToken.size() > 10)//<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">< html ><head> < title>504 Gateway Time - out< / title>< / head><body>< h1>504 Gateway Time - out< / h1><p>The gateway did not receive a timely response from the upstream server or application.<hr / >Powered by Tengine< / body>< / html>
 		{
-            LOG(INFO) << "检查报错，当成合规处理:" << strToken ;
+			LOG(INFO) << "检查报错，当成合规处理:" << strToken;
 			return true;
 		}
 
