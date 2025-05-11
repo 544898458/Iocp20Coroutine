@@ -41,7 +41,7 @@ void 医疗兵Component::AddComponent(Entity& refEntity)
 	refEntity.m_upBuff->定时改数值(医疗兵自动恢复能量, refEntity.Id);
 
 	找目标走过去Component::AddComponent(refEntity);
-	refEntity.AddComponentOnDestroy(&Entity::m_up医疗兵, new 医疗兵Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up医疗兵, refEntity);
 }
 
 

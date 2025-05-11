@@ -33,7 +33,7 @@ bool 還奀郯結Component::AddComponent(Entity& refEntity, float f圉晚酗)
 		_ASSERT(false);
 		return false;
 	}
-	refEntity.AddComponentOnDestroy(&Entity::m_up還奀郯結, new 還奀郯結Component(refEntity, f圉晚酗));
+	refEntity.AddComponentOnDestroy(&Entity::m_up還奀郯結, refEntity, f圉晚酗);
 	return true;
 }
 

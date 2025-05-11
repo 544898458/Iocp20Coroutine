@@ -14,7 +14,7 @@ inline ³æ³²Component::³æ³²Component(Entity& ref) :m_refEntity(ref), m_posÓ×³æ¼¯½
 
 void ³æ³²Component::AddComponent(Entity& refEntity)
 {
-	refEntity.AddComponentOnDestroy(&Entity::m_up³æ³², new ³æ³²Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up³æ³², refEntity);
 }
 
 void ³æ³²Component::OnEntityDestroy(const bool bDestroy)

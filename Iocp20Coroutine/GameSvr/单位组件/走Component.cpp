@@ -21,7 +21,7 @@
 void 走Component::AddComponent(Entity& refEntity)
 {
 	CHECK_RET_VOID(!refEntity.m_up走);
-	refEntity.AddComponentOnDestroy(&Entity::m_up走, new 走Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up走, refEntity);
 	//float arrF[] = { refEntity.Pos().x,0,refEntity.Pos().z};
 	//int CrowToolAddAgent(float arrF[]);
 	//refEntity.m_upAttack->m_idxCrowdAgent = CrowToolAddAgent(arrF);

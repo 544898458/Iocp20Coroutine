@@ -234,7 +234,7 @@ void 采集Component::提醒资源枯竭()
 }
 void 采集Component::AddComponent(Entity& refEntity)
 {
-	refEntity.AddComponentOnDestroy(&Entity::m_up采集, new 采集Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up采集, refEntity);
 }
 
 bool 采集Component::正在采集(Entity& refEntity)

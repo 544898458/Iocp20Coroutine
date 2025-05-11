@@ -9,7 +9,7 @@
 #include "../EntitySystem.h"
 void 飞向目标Component::AddComponent(Entity& refEntity, const Position& pos起始点, const Position& pos方向, const float f最远距离, const uint64_t idAttacker)
 {
-	refEntity.AddComponentOnDestroy(&Entity::m_up飞向目标, new 飞向目标Component(refEntity, pos起始点, pos方向, f最远距离, idAttacker));
+	refEntity.AddComponentOnDestroy(&Entity::m_up飞向目标, refEntity, pos起始点, pos方向, f最远距离, idAttacker);
 }
 
 飞向目标Component::飞向目标Component(Entity& ref, const Position& pos起始点, const Position& vec方向, const float f最远距离, const uint64_t idAttacker) :

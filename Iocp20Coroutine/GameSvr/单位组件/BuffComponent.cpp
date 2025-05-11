@@ -31,7 +31,7 @@ CoTaskBool BuffComponent::Co定时改数值(const 属性类型 属性, std::chrono::system_
 
 BuffComponent& BuffComponent::AddComponent(Entity& refEntity)
 {
-	refEntity.AddComponentOnDestroy(&Entity::m_upBuff, new BuffComponent(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_upBuff, refEntity);
 	return *refEntity.m_upBuff;
 }
 

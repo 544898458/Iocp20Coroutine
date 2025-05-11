@@ -12,7 +12,7 @@
 
 void Ì¦ÂûComponent::AddComponent(Entity& refEntity)
 {
-	refEntity.AddComponentOnDestroy(&Entity::m_upÌ¦Âû, new Ì¦ÂûComponent(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_upÌ¦Âû, refEntity);
 }
 
 Ì¦ÂûComponent::Ì¦ÂûComponent(Entity& ref) :m_refEntity(ref)

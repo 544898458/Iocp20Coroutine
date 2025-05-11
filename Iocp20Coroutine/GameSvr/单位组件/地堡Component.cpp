@@ -10,16 +10,14 @@
 
 void 地堡Component::AddComponent(Entity& refEntity)
 {
-	refEntity.AddComponentOnDestroy(&Entity::m_up地堡, new 地堡Component(refEntity));
+	CHECK_RET_VOID(!refEntity.m_up地堡);
+	refEntity.m_up地堡.reset(new 地堡Component(refEntity));
 }
 
-void 地堡Component::OnEntityDestroy(const bool bDestroy)
-{
-}
 
 void 可进活动单位Component::AddComponent(Entity& refEntity)
 {
-    refEntity.AddComponentOnDestroy(&Entity::m_up可进活动单位, new 可进活动单位Component(refEntity));
+    refEntity.AddComponentOnDestroy(&Entity::m_up可进活动单位, refEntity);
 }
 
 void 可进活动单位Component::OnEntityDestroy(const bool bDestroy)

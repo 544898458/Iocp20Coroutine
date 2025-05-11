@@ -27,7 +27,7 @@
 
 void 造建筑Component::AddComponent(Entity& refEntity)
 {
-	refEntity.AddComponentOnDestroy(&Entity::m_up造建筑, new 造建筑Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up造建筑, refEntity);
 }
 
 bool 造建筑Component::正在建造(const Entity& refEntity)

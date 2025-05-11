@@ -19,7 +19,7 @@
 
 void 找目标走过去Component::AddComponent(Entity& refEntity)
 {
-	refEntity.AddComponentOnDestroy(&Entity::m_up找目标走过去, new 找目标走过去Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up找目标走过去, refEntity);
 }
 
 float 找目标走过去Component::攻击距离(const Entity& refTarget) const

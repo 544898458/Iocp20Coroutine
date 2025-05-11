@@ -10,7 +10,7 @@
 
 void BuildingComponent::AddComponent(Entity& refThis, float f半边长)
 {
-	refThis.AddComponentOnDestroy(&Entity::m_upBuilding, new BuildingComponent(refThis));
+	refThis.AddComponentOnDestroy(&Entity::m_upBuilding, refThis);
 	if (苔蔓 != refThis.m_类型)
 		临时阻挡Component::AddComponent(refThis, f半边长);
 }

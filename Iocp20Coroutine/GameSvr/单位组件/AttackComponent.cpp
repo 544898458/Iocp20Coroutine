@@ -24,7 +24,7 @@ extern std::unordered_map<int, uint64_t> m_mapEntityId;
 AttackComponent& AttackComponent::AddComponent(Entity& refEntity)
 {
 	找目标走过去Component::AddComponent(refEntity);
-	refEntity.AddComponentOnDestroy(&Entity::m_upAttack, new AttackComponent(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_upAttack, refEntity);
 	return *refEntity.m_upAttack;
 }
 

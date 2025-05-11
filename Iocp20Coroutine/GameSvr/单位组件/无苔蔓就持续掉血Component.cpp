@@ -9,7 +9,7 @@
 
 void 无苔蔓就持续掉血Component::AddComponent(Entity& refEntity)
 {
-	refEntity.AddComponentOnDestroy(&Entity::m_up无苔蔓就持续掉血,new 无苔蔓就持续掉血Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up无苔蔓就持续掉血,refEntity);
 }
 
 无苔蔓就持续掉血Component::无苔蔓就持续掉血Component(Entity& ref) :m_refEntity(ref)

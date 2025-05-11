@@ -19,7 +19,7 @@
 
 void 造活动单位Component::AddComponent(Entity& refEntity)
 {
-	refEntity.AddComponentOnDestroy(&Entity::m_up造活动单位, new 造活动单位Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up造活动单位, refEntity);
 }
 
 造活动单位Component::造活动单位Component(Entity& refEntity) :m_refEntity(refEntity)

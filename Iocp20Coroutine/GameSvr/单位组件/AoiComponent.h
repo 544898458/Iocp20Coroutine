@@ -41,6 +41,7 @@ public:
 	/// 炮台之类有AttackComponent的单位，警戒范围如果比视野范围大，将使用警戒范围
 	/// </summary>
 	int m_i32视野范围 = 0;
+	friend class Entity;
 private:
 	AoiComponent(Space& refSpace, Entity& refEntity);
 	Space& m_refSpace;

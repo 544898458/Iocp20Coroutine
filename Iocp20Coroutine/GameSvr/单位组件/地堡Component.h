@@ -23,7 +23,6 @@ class µØ±¤Component
 public:
 	µØ±¤Component(Entity &ref):m_refEntity(ref){}
 	static void AddComponent(Entity& refEntity);
-	void OnEntityDestroy(const bool bDestroy);
 	Entity& m_refEntity;
 };
 
