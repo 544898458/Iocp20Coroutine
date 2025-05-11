@@ -10,7 +10,7 @@
 #include "../CoRoutine/CoTimer.h"
 #include "../IocpNetwork/StrConv.h"
 #include "Ôì»î¶¯µ¥Î»Component.h"
-#include "µØ±¤Component.h"
+#include "¿É½ø»î¶¯µ¥Î»Component.h"
 #include "DefenceComponent.h"
 #include "BuildingComponent.h"
 #include "³æ³²Component.h"
@@ -356,7 +356,7 @@ void Ôì½¨ÖþComponent::¸ù¾Ý½¨ÖþÀàÐÍAddComponent(Space& refSpace, const µ¥Î»ÀàÐÍ À
 		Éý¼¶µ¥Î»ÊôÐÔComponent::AddComponent(refNewEntity);
 		break;
 	case µØ±¤:
-		µØ±¤Component::AddComponent(refNewEntity);
+		¿É½ø»î¶¯µ¥Î»Component::AddComponent(refNewEntity);
 		break;
 	case Ãñ·¿:
 		break;

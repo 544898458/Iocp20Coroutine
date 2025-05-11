@@ -18,11 +18,3 @@ public:
 	std::list<SpEntity> m_listSpEntity;
 };
 
-class µØ±¤Component
-{
-public:
-	µØ±¤Component(Entity &ref):m_refEntity(ref){}
-	static void AddComponent(Entity& refEntity);
-	Entity& m_refEntity;
-};
-

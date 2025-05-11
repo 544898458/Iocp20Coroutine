@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "地堡Component.h"
+#include "可进活动单位Component.h"
 #include "AttackComponent.h"
 #include "Entity.h"
 #include "Space.h"
@@ -8,16 +8,10 @@
 #include "AoiComponent.h"
 #include "PlayerGateSession_Game.h"
 
-void 地堡Component::AddComponent(Entity& refEntity)
-{
-	CHECK_RET_VOID(!refEntity.m_up地堡);
-	refEntity.m_up地堡.reset(new 地堡Component(refEntity));
-}
-
 
 void 可进活动单位Component::AddComponent(Entity& refEntity)
 {
-    refEntity.AddComponentOnDestroy(&Entity::m_up可进活动单位, refEntity);
+	refEntity.AddComponentOnDestroy(&Entity::m_up可进活动单位, refEntity);
 }
 
 void 可进活动单位Component::OnEntityDestroy(const bool bDestroy)
@@ -59,7 +53,7 @@ void 可进活动单位Component::进(Space& refSpace, Entity& refEntity)
 
 	m_listSpEntity.push_back(refEntity.shared_from_this());
 	refSpace.m_mapEntity.erase(refEntity.Id);
-	
+
 	refEntity.m_wpOwner = m_refEntity.weak_from_this();
 
 	if (refEntity.m_upPlayer)

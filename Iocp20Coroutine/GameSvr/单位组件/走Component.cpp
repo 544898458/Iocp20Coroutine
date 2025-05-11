@@ -9,7 +9,7 @@
 #include "AiCo.h"
 #include "MonsterComponent.h"
 #include "Space.h"
-#include "地堡Component.h"
+#include "可进活动单位Component.h"
 #include "采集Component.h"
 #include "造建筑Component.h"
 #include "BuildingComponent.h"

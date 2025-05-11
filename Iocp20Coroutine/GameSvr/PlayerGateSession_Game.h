@@ -94,6 +94,8 @@ private:
 	void OnRecv(const Msg太岁分裂& msg);
 	void OnRecv(const Msg升级单位属性& msg);
 
+	void OnRecv进(const uint64_t id单位容器);
+
 	void 选中单位(std::vector<uint64_t> vecId, bool b追加 = false);
 	std::vector<WpEntity> Get空闲工程车(单位类型 造活动单位类型, bool b包括采集中的工程车);
 

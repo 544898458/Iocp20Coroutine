@@ -4,7 +4,7 @@
 #include "EntitySystem.h"
 #include "Space.h"
 #include "AttackComponent.h"
-#include "地堡Component.h"
+#include "可进活动单位Component.h"
 #include "找目标走过去Component.h"
 void AoiComponent::Add(Space& refSpace, Entity& refEntity, const int32_t i32视野范围)
 {
