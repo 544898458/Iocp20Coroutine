@@ -200,6 +200,13 @@ struct 阿里绿化结果缓存
 	MSGPACK_DEFINE(m_map);
 };
 
+void replace_all(std::string& str, const std::string& old_sub, const std::string& new_sub) {
+	size_t pos = 0;
+	while ((pos = str.find(old_sub, pos)) != std::string::npos) { // 循环查找所有匹配项
+		str.replace(pos, old_sub.length(), new_sub);
+		pos += new_sub.length(); // 跳过已替换的部分，避免无限循环（当 new_sub 包含 old_sub 时）
+	}
+}
 
 bool AliyunGreen::Check(const std::string& refContentGbk)
 {
@@ -235,7 +242,10 @@ bool AliyunGreen::Check(const std::string& refContentGbk)
 			return true;
 		}
 		//const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("content={0}", StrConv::GbkToUtf8(refContentGbk)), u超时秒 * CLOCKS_PER_SEC, uPort);// / wxa / msg_sec_check");
-		const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("{{\"content\"\:\"{0}\"}}", StrConv::GbkToUtf8(refContentGbk)), u超时秒 * CLOCKS_PER_SEC, uPort);// / wxa / msg_sec_check");
+		auto str替换换行 = refContentGbk;
+		//替换\n
+		replace_all(str替换换行, "\n", "\\n");
+		const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("{{\"content\":\"{0}\"}}", StrConv::GbkToUtf8(str替换换行)), u超时秒 * CLOCKS_PER_SEC, uPort);// / wxa / msg_sec_check");
 		strGbk响应 = StrConv::Utf8ToGbk(strToken);
 		if (strToken.size() > 10 || strToken.empty())//<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">< html ><head> < title>504 Gateway Time - out< / title>< / head><body>< h1>504 Gateway Time - out< / h1><p>The gateway did not receive a timely response from the upstream server or application.<hr / >Powered by Tengine< / body>< / html>
 		{
