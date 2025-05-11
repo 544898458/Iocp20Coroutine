@@ -3,13 +3,16 @@
 #include "走Component.h"
 #include "AttackComponent.h"
 #include "找目标走过去Component.h"
-
+#include "数值Component.h"
 #include "Entity.h"
 #include "Space.h"
 #include "EntitySystem.h"
 #include "PlayerComponent.h"
 #include "AoiComponent.h"
 #include "PlayerGateSession_Game.h"
+#include "../../CoRoutine/CoEvent.h"
+#include "../MyEvent.h"
+#include "../枚举/属性类型.h"
 
 void 可进活动单位Component::AddComponent(Entity& refEntity)
 {
@@ -26,6 +29,13 @@ void 可进活动单位Component::OnEntityDestroy(const bool bDestroy)
 
 void 可进活动单位Component::OnBeforeDelayDelete()
 {
+	if (房虫 == m_refEntity.m_类型) 
+	{
+		for (auto& sp : m_listSpEntity)
+		{
+			数值Component::Set(*sp, 生命, 1);
+		}
+	}
 	全都出去();
 }
 
@@ -72,6 +82,7 @@ void 可进活动单位Component::进(Space& refSpace, Entity& refEntity)
 		refEntity.m_upPlayer->m_refSession.删除选中(refEntity.Id);
 
 	EntitySystem::BroadcastEntity描述(m_refEntity, std::format("内有{0}人", m_listSpEntity.size()));
+	CoEvent<MyEvent::进活动单位>::OnRecvEvent({ m_refEntity.shared_from_this() });
 }
 
 void 可进活动单位Component::全都出去()

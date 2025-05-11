@@ -14,7 +14,7 @@ public:
 	void WalkToTarget(SpEntity spTarget);
 	void WalkToPos(const Position& posTarget);
 	void OnEntityDestroy(const bool bDestroy);
-	void 走进地堡(WpEntity wpEntity地堡);
+	void 走进(WpEntity wpEntity地堡);
 	static void AddComponent(Entity& refEntity);
 	static void Cancel所有包含走路的协程(Entity& refEntity, const bool b停止攻击 = false);
 	static bool 正在走(const Entity& refEntity);

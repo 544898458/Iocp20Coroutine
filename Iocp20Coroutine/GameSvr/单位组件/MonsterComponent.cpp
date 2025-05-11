@@ -1,14 +1,17 @@
 #include "pch.h"
-#include "MonsterComponent.h"
 #include "Entity.h"
 #include "AiCo.h"
+#include "Space.h"
+#include "单位.h"
+#include "../EntitySystem.h"
+
+#include "MonsterComponent.h"
 #include "AttackComponent.h"
 #include "DefenceComponent.h"
 #include "找目标走过去Component.h"
-#include "Space.h"
+#include "可进活动单位Component.h"
 #include "走Component.h"
-#include "单位.h"
-#include "../EntitySystem.h"
+
 
 //
 //void MonsterComponent::AddComponent(Entity& refEntity)
@@ -41,15 +44,22 @@ std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const 单位类
 	{
 		SpEntity spEntityMonster = std::make_shared<Entity, const Position&, Space&, const 单位类型, const 单位::单位配置&>(
 			refPos, refSpace, std::forward<const 单位类型&&>(类型), 单位配置);
-		AttackComponent::AddComponent(*spEntityMonster);
-		CHECK_RET_DEFAULT(spEntityMonster->m_up找目标走过去);
-		spEntityMonster->m_up找目标走过去->m_fun空闲走向此处 = 找目标走过去Component::怪物闲逛;
+
+		if (房虫 == 类型)
+			可进活动单位Component::AddComponent(*spEntityMonster);
+		else 
+		{
+			AttackComponent::AddComponent(*spEntityMonster);
+			CHECK_RET_DEFAULT(spEntityMonster->m_up找目标走过去);
+			spEntityMonster->m_up找目标走过去->m_fun空闲走向此处 = 找目标走过去Component::怪物闲逛;
+		}
+
 
 		DefenceComponent::AddComponent(*spEntityMonster, 怪配置.u16初始Hp);
 		走Component::AddComponent(*spEntityMonster);
 		//AddComponent(*spEntityMonster);
-		
-		
+
+
 		refSpace.AddEntity(spEntityMonster);
 		//LOG(INFO) << "SpawnMonster:" << refSpace.m_mapEntity.size();
 		spEntityMonster->BroadcastEnter();

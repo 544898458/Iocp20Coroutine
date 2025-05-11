@@ -306,7 +306,7 @@ void 走Component::OnEntityDestroy(const bool bDestroy)
 
 }
 
-void 走Component::走进地堡(WpEntity wpEntity地堡)
+void 走Component::走进(WpEntity wpEntity地堡)
 {
 	//if (m_refEntity.m_upAttack)
 	//	m_refEntity.m_upAttack->OnEntityDestroy(const bool bDestroy);
