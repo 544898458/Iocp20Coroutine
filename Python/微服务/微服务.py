@@ -2,6 +2,7 @@
 #pip install fastapi
 #pip install uvicorn
 #pip install alibabacloud_green20220302==2.2.8
+#https://www.rtsgame.online:8000/阿里云内容安全/你好呀
 import os
 from fastapi import FastAPI
 import uvicorn
@@ -9,19 +10,21 @@ from alibabacloud_green20220302.client import Client
 from alibabacloud_green20220302 import models
 from alibabacloud_tea_openapi.models import Config
 import json
+from pydantic import BaseModel  # Add Pydantic import
 
 # 创建FastAPI应用实例
 app = FastAPI(title="MyFirstMicroservice", version="1.0.0")
-
+class 内容安全参数(BaseModel):
+    content: str
 # 定义基础路由
 @app.get("/")
 async def root():
     return {"message": "Hello 微服务世界！"}
   
 # 定义带参数的路由示例
-@app.get("/阿里云内容安全/{name}")
-async def 阿里云内容安全(name: str, age: int = 20):
-    # return {"message": f"你好 {name}！推测你大约{age}岁"}
+@app.post("/AliyunGreen/")
+async def 阿里云内容安全(text_request: 内容安全参数):  # Use Pydantic model
+    print('content', text_request.content)  # Get content from request body
     config = Config(
         # 阿里云账号AccessKey拥有所有API的访问权限，建议您使用RAM用户进行API访问或日常运维。
         # 强烈建议不要把AccessKey ID和AccessKey Secret保存到工程代码里，否则可能导致AccessKey泄露，威胁您账号下所有资源的安全。
@@ -39,7 +42,7 @@ async def 阿里云内容安全(name: str, age: int = 20):
     )
     clt = Client(config)
     serviceParameters = {
-        'content': '测试文本内容'
+        'content': text_request.content  # Update to use model data
     }
     textModerationPlusRequest = models.TextModerationPlusRequest(
         # 检测类型
@@ -70,6 +73,11 @@ if __name__ == "__main__":
         port=8000,       # 服务端口
         reload=True,     # 开发模式自动重载（生产环境应关闭）
         # HTTPS 配置（需要替换为你的证书路径）
-        ssl_keyfile="test.rtsgame.online-private.key",  # 私钥文件路径
-        ssl_certfile="test.rtsgame.online-cert.crt"  # 证书文件路径
+        ssl_keyfile="rtsgame.online-private.key",  # 私钥文件路径
+        ssl_certfile="rtsgame.online-cert.crt"  # 证书文件路径
     )
+
+
+# Define request body model
+class TextRequest(BaseModel):
+    content: str

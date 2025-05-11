@@ -9,6 +9,7 @@
 #include <iostream>
 #include <format>
 #include <unordered_map>
+#include <wininet.h>
 #include "../jsoncpp-master/include/json/json.h"
 #include "../读配置文件/Try读Ini本地机器专用.h"
 #include "../读配置文件/文件存取对象.h"
@@ -32,7 +33,7 @@ wstring string2wstring(const string& str)
 	return ret;
 }
 
-std::string winhttp_client_post(const std::wstring& strHost, const std::wstring& strVerb, const bool bPost, const std::string& strData, const uint32_t u超时秒) {
+std::string winhttp_client_post(const std::wstring& strHost, const std::wstring& strVerb, const bool bPost, const std::string& strData, const uint32_t u超时秒, const INTERNET_PORT port) {
 
 	DWORD dwBytesWritten = 0;
 	BOOL  bResults = FALSE;
@@ -51,7 +52,7 @@ std::string winhttp_client_post(const std::wstring& strHost, const std::wstring&
 	// Specify an HTTP server.
 	if (hSession)
 		hConnect = WinHttpConnect(hSession, strHost.c_str(),//L"www.wingtiptoys.com",
-			INTERNET_DEFAULT_HTTPS_PORT, 0);
+			port, 0);
 
 	// Create an HTTP Request handle.
 	if (hConnect)
@@ -81,7 +82,8 @@ std::string winhttp_client_post(const std::wstring& strHost, const std::wstring&
 	//std::string client_id = "test client id";
 	//std::string client_secure = "test client security";
 	// client id and secure need base64 encode
-	std::wstring strHeader = L"Content-type:application/x-www-form-urlencoded\r\n";
+	//std::wstring strHeader = L"Content-type:application/x-www-form-urlencoded\r\n";
+	std::wstring strHeader = L"Content-Type: application/json";
 	//strHeader += L"Authorization: Basic ";
 	//strHeader += string2wstring(tmsstring) +L"\r\n"; //tmsstring is client and secure after base64 encoding
 
@@ -117,6 +119,7 @@ std::string winhttp_client_post(const std::wstring& strHost, const std::wstring&
 		case ERROR_WINHTTP_INVALID_SERVER_RESPONSE: printf("无法分析服务器响应。"); break;
 		case ERROR_INVALID_HANDLE:printf("The handle is invalid."); break;
 		case ERROR_INVALID_PARAMETER:printf("The parameter is incorrect."); break;
+		case ERROR_INTERNET_TIMEOUT:printf("The parameter is incorrect."); break;
 		default:
 			printf("Error %d has occurred.\n", err);
 			break;
@@ -221,17 +224,20 @@ bool AliyunGreen::Check(const std::string& refContentGbk)
 		std::string strHttpsHost;
 		std::string strHttpsVerb;
 		uint32_t u超时秒(0);
+		uint32_t uPort(0);
 		Try读Ini本地机器专用(strHttpsHost, "Aliyun", "HttpsHost");
 		Try读Ini本地机器专用(strHttpsVerb, "Aliyun", "HttpsVerb");
 		Try读Ini本地机器专用(u超时秒, "Aliyun", "超时秒");
+		Try读Ini本地机器专用(uPort, "Aliyun", "Port");
 		if (0 == u超时秒)
 		{
 			LOG(WARNING) << "不判断文本违规，直接允许";
 			return true;
 		}
-		const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("content={0}", StrConv::GbkToUtf8(refContentGbk)), u超时秒 * CLOCKS_PER_SEC);// / wxa / msg_sec_check");
+		//const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("content={0}", StrConv::GbkToUtf8(refContentGbk)), u超时秒 * CLOCKS_PER_SEC, uPort);// / wxa / msg_sec_check");
+		const auto strToken = winhttp_client_post(StrToW(strHttpsHost), StrToW(strHttpsVerb), true, std::format("{{\"content\"\:\"{0}\"}}", StrConv::GbkToUtf8(refContentGbk)), u超时秒 * CLOCKS_PER_SEC, uPort);// / wxa / msg_sec_check");
 		strGbk响应 = StrConv::Utf8ToGbk(strToken);
-		if (strToken.size() > 10)//<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">< html ><head> < title>504 Gateway Time - out< / title>< / head><body>< h1>504 Gateway Time - out< / h1><p>The gateway did not receive a timely response from the upstream server or application.<hr / >Powered by Tengine< / body>< / html>
+		if (strToken.size() > 10 || strToken.empty())//<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">< html ><head> < title>504 Gateway Time - out< / title>< / head><body>< h1>504 Gateway Time - out< / h1><p>The gateway did not receive a timely response from the upstream server or application.<hr / >Powered by Tengine< / body>< / html>
 		{
 			LOG(INFO) << "检查报错，当成合规处理:" << strToken;
 			return true;
@@ -248,7 +254,7 @@ bool AliyunGreen::Check(const std::string& refContentGbk)
 	}
 
 
-	if (strGbk响应 != "none")
+	if (strGbk响应 != "\"none\"")
 		return false;
 
 	return true;
