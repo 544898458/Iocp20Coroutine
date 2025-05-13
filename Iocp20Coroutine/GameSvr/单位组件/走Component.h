@@ -30,7 +30,7 @@ public:
 	CoTaskBool m_coWalk;
 	CoTaskBool m_coWalk手动控制;
 	CoTaskBool m_coWalk进地堡;
-	FunCancel m_cancel;
+	FunCancel安全 m_cancel;
 	std::weak_ptr<RecastNavigationCrowd> m_wpRecastNavigationCrowd;
 private:
 	CoTaskBool Co走进地堡(WpEntity wpEntity地堡);

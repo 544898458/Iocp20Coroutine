@@ -50,7 +50,7 @@ private:
 	CoTask<int> CoLogin(MsgLogin msg, FunCancel& funCancel);
 
 	CoTask<int> m_coLogin;
-	FunCancel m_funCancelLogin;
+	FunCancel°²È« m_funCancelLogin;
 	bool m_bClosed = false;
 };
 

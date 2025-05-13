@@ -22,7 +22,7 @@ private:
 	CoTaskBool Co建造过程(FunCancel& cancel);
 
 	//CoTask<int> m_coAddMoney;
-	FunCancel m_cancel建造;
+	FunCancel安全 m_cancel建造;
 
 	Entity& m_refEntity;
 };

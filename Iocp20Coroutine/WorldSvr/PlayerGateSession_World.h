@@ -39,7 +39,7 @@ private:
 	CoTask<int> CoLogin(const MsgLogin msg);
 	
 	CoTask<int> m_coLogin;
-	FunCancel m_funCancle;
+	FunCancel°²È« m_funCancle;
 	bool m_bLoginOk = false;
 
 	WorldSessionFromGate& m_refSession;

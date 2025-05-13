@@ -22,7 +22,7 @@ public:
 	CoTaskBool Co造幼虫();
 	Entity& m_refEntity;
 	std::list<WpEntity> m_listWp幼虫;
-	FunCancel m_Cancel造幼虫;
+	FunCancel安全 m_Cancel造幼虫;
 private:
 	Position m_pos幼虫集结点;
 };

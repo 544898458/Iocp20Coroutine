@@ -402,12 +402,8 @@ void Space::所有玩家全退出()
 
 void Space::OnDestory()
 {
-	if (m_funCancel剧情)
-	{
-		m_funCancel剧情();
-		m_funCancel剧情 = nullptr;
-	}
-
+	m_funCancel剧情.TryCancel();
+	
 	所有玩家全退出();
 	EraseEntity(true);
 }

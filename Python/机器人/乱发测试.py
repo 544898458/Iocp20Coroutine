@@ -296,7 +296,7 @@ async def main() -> None:
             0,
             str登录名,
             'Hello, world!pwd',
-            15  # 版本号
+            17  # 版本号
         ]
         
         request = packb(obj)  # Pack the correct object

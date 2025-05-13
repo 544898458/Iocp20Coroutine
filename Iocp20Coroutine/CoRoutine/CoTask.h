@@ -13,6 +13,37 @@ CoAwaiter的返回值是co_return的返回值，直接返回给上一层协程变量。
 #include<functional>
 
 typedef std::function<void()> FunCancel;
+/// <summary>
+/// 析构时自动调用取消
+/// </summary>
+struct FunCancel安全
+{
+	void TryCancel()
+	{
+		if (m_funCancel)
+		{
+			m_funCancel();
+			m_funCancel = nullptr;
+		}
+	}
+	~FunCancel安全() 
+	{
+		if (m_funCancel)
+		{
+			LOG(ERROR) << "忘记取消";
+			_ASSERT(false);
+		}
+		TryCancel();
+	}
+	operator FunCancel&() 
+	{
+		return m_funCancel;
+	}
+	operator bool()const {
+		return m_funCancel.operator bool();
+	}
+	FunCancel m_funCancel;
+};
 typedef std::function<void()> FunRunCurrentCo;
 extern FunRunCurrentCo g_funRunCurrentCo;
 /// <summary>
@@ -335,7 +366,7 @@ struct CoAwaiter
 	/// 
 	/// </summary>
 	/// <param name="initSn">用引用可以防止传bool进去</param>
-	CoAwaiter(const long& initSn, FunCancel& cancel, const std::string& strDebugInfo="") : m_Kc(cancel, true), m_strDebugInfo(strDebugInfo)
+	CoAwaiter(const long& initSn, FunCancel& cancel, const std::string& strDebugInfo = "") : m_Kc(cancel, true), m_strDebugInfo(strDebugInfo)
 	{
 		m_sn = initSn;
 	}
@@ -414,10 +445,12 @@ struct CoAwaiter
 		m_Kc.Revert();
 		try {
 			m_hAwaiter.resume();
-		}catch (const std::exception& e) {
+		}
+		catch (const std::exception& e) {
 			LOG(ERROR) << m_strDebugInfo << "," << e.what();
 			_ASSERT(false);
-		}catch (...) {
+		}
+		catch (...) {
 			LOG(ERROR) << m_strDebugInfo;
 			_ASSERT(false);
 		}

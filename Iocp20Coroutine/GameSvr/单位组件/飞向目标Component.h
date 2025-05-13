@@ -13,7 +13,7 @@ private:
 	const Position m_vec方向;
 	const Position m_pos起始点;
 	const float m_f最远距离;
-	FunCancel m_funCancel;
+	FunCancel安全 m_funCancel;
 	const uint64_t m_idAttacker;
 };
 

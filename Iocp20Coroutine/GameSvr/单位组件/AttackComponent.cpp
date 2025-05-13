@@ -44,12 +44,7 @@ AttackComponent::AttackComponent(Entity& refEntity) :
 
 void AttackComponent::OnEntityDestroy(const bool bDestroy)
 {
-	if (m_cancelAttack)
-	{
-		//LOG(INFO) << "调用m_cancel";
-		m_cancelAttack();
-		m_cancelAttack = nullptr;
-	}
+	m_cancelAttack.TryCancel();
 }
 
 bool AttackComponent::可以攻击()

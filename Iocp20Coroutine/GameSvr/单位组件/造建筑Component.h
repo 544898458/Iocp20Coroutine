@@ -36,7 +36,7 @@ private:
 	bool 此处有苔蔓吗(const Position pos);
 	
 	std::unordered_set<单位类型> m_set可造类型;
-	FunCancel m_cancel造建筑;
+	FunCancel安全 m_cancel造建筑;
 	Entity& m_refEntity;
 };
 

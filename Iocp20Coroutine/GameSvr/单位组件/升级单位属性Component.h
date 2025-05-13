@@ -17,6 +17,6 @@ public:
 private:
 	CoTaskBool Co升级(const 单位类型 单位, const 属性类型 属性);
 	Entity& m_refEntity;
-	FunCancel m_cancel升级单位属性;
+	FunCancel安全 m_cancel升级单位属性;
 	std::map<单位类型, std::set<属性类型> > m_map可升级单位属性;
 };

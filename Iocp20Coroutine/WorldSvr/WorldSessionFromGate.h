@@ -37,5 +37,5 @@ private:
 	std::deque<MsgGate转发> m_queueGate转发;
 	
 	CoTask<int> m_coLogin;
-	FunCancel m_funCancelLogin;
+	FunCancel安全 m_funCancelLogin;
 };

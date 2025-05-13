@@ -50,5 +50,5 @@ private:
 	//CoTask<int> m_coChangeMoney;
 
 	CoTask<int> m_coLogin;
-	FunCancel m_funCancelLogin;
+	FunCancel°²È« m_funCancelLogin;
 };

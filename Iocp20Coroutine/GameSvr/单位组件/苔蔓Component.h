@@ -26,8 +26,8 @@ private:
 	CoTaskBool Co给周围加Buff();
 
 	
-	FunCancel m_funCancel萎缩消亡;
-	FunCancel m_funCancel给周围加Buff;
+	FunCancel安全 m_funCancel萎缩消亡;
+	FunCancel安全 m_funCancel给周围加Buff;
 	/// <summary>
 	/// 自己是苔蔓
 	/// </summary>

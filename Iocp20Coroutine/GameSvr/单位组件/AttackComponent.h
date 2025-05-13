@@ -14,7 +14,7 @@ public:
 	CoTaskBool CoAttack位置(const Position pos, const float f目标建筑半边长, FunCancel& cancel);
 	void 处理仇恨目标(WpEntity& wpEntity, bool& ref仇恨目标);
 	static AttackComponent& AddComponent(Entity& refEntity);
-	FunCancel m_cancelAttack;
+	FunCancel安全 m_cancelAttack;
 	Entity& m_refEntity;
 private:
 	CoTask<std::tuple<bool, bool>> Co攻击(const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去);

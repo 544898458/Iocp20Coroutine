@@ -12,7 +12,7 @@ public:
 	WpEntity m_wp苔蔓;
 
 private:
-	FunCancel m_funCancel;
+	FunCancel安全 m_funCancel;
 	/// <summary>
 	/// 自己是建筑，虫巢或者太岁
 	/// </summary>

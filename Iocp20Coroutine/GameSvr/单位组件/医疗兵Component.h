@@ -21,6 +21,6 @@ private:
 	CoTaskBool Co治疗目标(WpEntity wpDefencer, FunCancel& cancel);
 
 	Entity& m_refEntity;
-	FunCancel m_cancel治疗;
+	FunCancel安全 m_cancel治疗;
 };
 

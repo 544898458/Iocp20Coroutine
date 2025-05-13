@@ -10,11 +10,7 @@
 
 void PlayerGateSession_World::OnDestroy()
 {
-	if (m_funCancle) 
-	{
-		m_funCancle();
-        m_funCancle = nullptr;
-	}
+	m_funCancle.TryCancel();
 }
 
 std::map<std::string, uint64_t> g_mapPlayerNickNameGateSessionId;
