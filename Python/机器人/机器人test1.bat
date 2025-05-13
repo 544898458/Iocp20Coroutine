@@ -2,7 +2,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-python ÂÒ·¢²âÊÔ.py  --username test1
+python ä¹±å‘æµ‹è¯•.py  --username test1
 
 endlocal
 
