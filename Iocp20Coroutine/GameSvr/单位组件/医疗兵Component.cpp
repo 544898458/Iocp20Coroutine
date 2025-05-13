@@ -18,7 +18,7 @@
 
 
 
-医疗兵Component::医疗兵Component(Entity& refEntity) :m_refEntity(refEntity)
+医疗兵Component::医疗兵Component(Entity& refEntity) :m_refEntity(refEntity), m_cancel治疗("m_cancel治疗")
 {
 	CHECK_RET_VOID(m_refEntity.m_up找目标走过去);
 	m_refEntity.m_up找目标走过去->顶层大循环(

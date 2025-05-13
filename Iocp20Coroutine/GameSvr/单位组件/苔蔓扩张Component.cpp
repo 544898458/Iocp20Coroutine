@@ -10,7 +10,7 @@ void 苔蔓扩张Component::AddComponent(Entity& refEntity)
 	refEntity.AddComponentOnDestroy(&Entity::m_up苔蔓扩张, refEntity);
 }
 
-苔蔓扩张Component::苔蔓扩张Component(Entity& ref) :m_refEntity(ref)
+苔蔓扩张Component::苔蔓扩张Component(Entity& ref) :m_refEntity(ref), m_funCancel("苔蔓扩张Component")
 {
 	Co反复加持续掉血Buff().RunNew();
 }

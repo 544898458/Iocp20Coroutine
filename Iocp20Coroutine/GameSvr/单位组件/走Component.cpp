@@ -28,7 +28,7 @@ void 走Component::AddComponent(Entity& refEntity)
 	//m_mapEntityId[refEntity.m_upAttack->m_idxCrowdAgent] = refEntity.Id;
 }
 
-走Component::走Component(Entity& refEntity) :m_refEntity(refEntity)
+走Component::走Component(Entity& refEntity) :m_refEntity(refEntity), m_cancel("走Component")
 {
 }
 

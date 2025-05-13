@@ -12,7 +12,7 @@ void 无苔蔓就持续掉血Component::AddComponent(Entity& refEntity)
 	refEntity.AddComponentOnDestroy(&Entity::m_up无苔蔓就持续掉血,refEntity);
 }
 
-无苔蔓就持续掉血Component::无苔蔓就持续掉血Component(Entity& ref) :m_refEntity(ref)
+无苔蔓就持续掉血Component::无苔蔓就持续掉血Component(Entity& ref) :m_refEntity(ref), m_funCancel("无苔蔓就持续掉血Component")
 {
 	Co反复加持续掉血Buff().RunNew();
 }

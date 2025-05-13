@@ -47,7 +47,7 @@ void BuffComponent::加属性(BuffId idBuff表)
 		fOld变化 = iterOld属性->second.变化;
 		refMap属性.erase(iterOld属性);
 	}
-	auto [pair, ok] = refMap属性.insert({ idBuff表, {buff配置.f变化值} });
+	auto [pair, ok] = refMap属性.insert({ idBuff表, 属性数值(buff配置.f变化值) });
 	CHECK_RET_VOID(ok);
 	[buff配置, idBuff表, &refMap属性, this](FunCancel& fun)->CoTaskBool
 		{

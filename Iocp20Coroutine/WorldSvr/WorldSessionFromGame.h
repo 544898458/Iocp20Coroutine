@@ -11,7 +11,7 @@ class WorldSessionFromGame
 {
 public:
 	using CompeletionKeySession = Iocp::SessionSocketCompletionKey<WorldSessionFromGame>;
-	WorldSessionFromGame(CompeletionKeySession&ref):m_refSession(ref){}
+	WorldSessionFromGame(CompeletionKeySession&ref):m_refSession(ref), m_funCancelLogin("WorldSessionFromGame.m_funCancelLogin"){}
 	int OnRecv(CompeletionKeySession&, const void* buf, int len);
 	void OnDestroy();
 	void OnInit(WorldSvrAcceptGame&);

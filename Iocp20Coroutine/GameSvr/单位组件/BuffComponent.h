@@ -25,11 +25,14 @@ private:
 	std::map<BuffId, FunCancel> m_mapFunCancel;
 	struct 属性数值 final
 	{
+		属性数值(float f变化) :m_funCancel("属性数值"), 变化(f变化){
+
+		}
 		~属性数值()
 		{
 			m_funCancel.TryCancel();
 		}
-		float 变化;
+		const float 变化;
 		FunCancel安全 m_funCancel;
 	};
 	std::map<属性类型, std::map<BuffId, 属性数值>> m_map属性数值;

@@ -10,12 +10,12 @@ class WorldSessionFromGate;
 class PlayerGateSession_World
 {
 public:
-	PlayerGateSession_World(WorldSessionFromGate& ref, const uint64_t idPlayerGateSession) :m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession)
+	PlayerGateSession_World(WorldSessionFromGate& ref, const uint64_t idPlayerGateSession) :m_refSession(ref), m_idPlayerGateSession(idPlayerGateSession), m_funCancle("PlayerGateSession_World")
 	{
 
 	}
 	PlayerGateSession_World(const PlayerGateSession_World&) = delete;
-	PlayerGateSession_World(PlayerGateSession_World&& ref)noexcept :m_refSession(ref.m_refSession), m_idPlayerGateSession(ref.m_idPlayerGateSession)
+	PlayerGateSession_World(PlayerGateSession_World&& ref)noexcept :m_refSession(ref.m_refSession), m_idPlayerGateSession(ref.m_idPlayerGateSession), m_funCancle("PlayerGateSession_World")
 	{
 
 	}

@@ -151,9 +151,7 @@
     <ClInclude Include="..\CoRoutine\CoDbTemplate.h" />
     <ClCompile Include="..\AliyunGreen\AliyunGreen.cpp" />
     <ClCompile Include="..\CoRoutine\CoLock.cpp" />
-    <ClCompile Include="..\CoRoutine\CoTask.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\CoRoutine\CoTask.cpp" />
     <ClCompile Include="..\CoRoutine\CoTimer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -164,9 +162,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\Overlapped.cpp" />
-    <ClCompile Include="..\IocpNetwork\Server.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\Server.cpp" />
     <ClCompile Include="..\IocpNetwork\SocketCompeletionKey.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>

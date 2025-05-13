@@ -30,7 +30,7 @@ void BuildingComponent::OnEntityDestroy(const bool bDestroy)
 	m_cancel建造.TryCancel();
 }
 
-BuildingComponent::BuildingComponent(Entity& refEntity) :m_refEntity(refEntity)
+BuildingComponent::BuildingComponent(Entity& refEntity) :m_refEntity(refEntity), m_cancel建造("m_cancel建造")
 {
 	//if (!m_coAddMoney.Finished())
 	//{

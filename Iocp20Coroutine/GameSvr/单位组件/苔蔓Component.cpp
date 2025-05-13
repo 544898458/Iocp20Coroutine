@@ -15,7 +15,7 @@ void 苔蔓Component::AddComponent(Entity& refEntity)
 	refEntity.AddComponentOnDestroy(&Entity::m_up苔蔓, refEntity);
 }
 
-苔蔓Component::苔蔓Component(Entity& ref) :m_refEntity(ref)
+苔蔓Component::苔蔓Component(Entity& ref) :m_refEntity(ref), m_funCancel萎缩消亡("m_funCancel萎缩消亡"), m_funCancel给周围加Buff("m_funCancel给周围加Buff")
 {
 	Co萎缩消亡().RunNew();
 	Co给周围加Buff().RunNew();

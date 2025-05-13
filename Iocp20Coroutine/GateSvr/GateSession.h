@@ -11,7 +11,7 @@ class GateSession
 {
 public:
 	using CompeletionKeySession = WebSocketSession<GateSession>;
-	GateSession(CompeletionKeySession& ref) :m_refSession(ref)
+	GateSession(CompeletionKeySession& ref) :m_refSession(ref), m_funCancelLogin("m_funCancelLogin")
 	{
 	}
 	uint64_t GetId()const { return (uint64_t)this; }

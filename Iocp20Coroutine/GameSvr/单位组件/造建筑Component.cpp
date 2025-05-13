@@ -38,7 +38,7 @@ bool 造建筑Component::正在建造(const Entity& refEntity)
 	return refEntity.m_up造建筑->m_cancel造建筑.operator bool();
 }
 
-造建筑Component::造建筑Component(Entity& refEntity) :m_refEntity(refEntity)
+造建筑Component::造建筑Component(Entity& refEntity) :m_refEntity(refEntity), m_cancel造建筑("m_cancel造建筑")
 {
 	switch (refEntity.m_类型)
 	{

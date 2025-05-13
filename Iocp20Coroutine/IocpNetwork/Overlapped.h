@@ -12,7 +12,7 @@ namespace Iocp
 	/// </summary>
 	struct Overlapped
 	{
-		Overlapped(const std::string& strDebugInfo = "") :coAwait(0, funCancel, strDebugInfo), OnComplete(&Overlapped::OnCompleteNormal) {}
+		Overlapped(const std::string& strDebugInfo = "") :coAwait(0, funCancel, strDebugInfo), OnComplete(&Overlapped::OnCompleteNormal), funCancel(strDebugInfo){}
 		//enum Op
 		//{
 		//	Accept,

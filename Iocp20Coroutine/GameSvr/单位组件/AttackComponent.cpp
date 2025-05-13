@@ -30,7 +30,7 @@ AttackComponent& AttackComponent::AddComponent(Entity& refEntity)
 
 using namespace std;
 AttackComponent::AttackComponent(Entity& refEntity) :
-	m_refEntity(refEntity)
+	m_refEntity(refEntity), m_cancelAttack("m_cancelAttack")
 {
 	CHECK_RET_VOID(m_refEntity.m_up找目标走过去);
 

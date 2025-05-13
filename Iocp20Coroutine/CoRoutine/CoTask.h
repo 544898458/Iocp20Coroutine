@@ -16,26 +16,30 @@ typedef std::function<void()> FunCancel;
 /// <summary>
 /// 析构时自动调用取消
 /// </summary>
-struct FunCancel安全
+struct FunCancel安全 final
 {
+	FunCancel安全(const std::string& strDebugInfo) :m_strDebugInfo(strDebugInfo)
+	{
+	}
 	void TryCancel()
 	{
 		if (m_funCancel)
 		{
 			m_funCancel();
+			_ASSERT(!m_funCancel);
 			m_funCancel = nullptr;
 		}
 	}
-	~FunCancel安全() 
+	~FunCancel安全()
 	{
 		if (m_funCancel)
 		{
-			LOG(ERROR) << "忘记取消";
+			LOG(ERROR) << "忘记取消:" << m_strDebugInfo;
 			_ASSERT(false);
 		}
 		TryCancel();
 	}
-	operator FunCancel&() 
+	operator FunCancel& ()
 	{
 		return m_funCancel;
 	}
@@ -43,6 +47,7 @@ struct FunCancel安全
 		return m_funCancel.operator bool();
 	}
 	FunCancel m_funCancel;
+	std::string m_strDebugInfo;
 };
 typedef std::function<void()> FunRunCurrentCo;
 extern FunRunCurrentCo g_funRunCurrentCo;
@@ -478,6 +483,9 @@ typedef CoAwaiter<bool> CoAwaiterBool;
 typedef CoTask<bool> CoTaskBool;
 struct CoTaskCancel final
 {
+	CoTaskCancel():cancel("CoTaskCancel"){
+
+	}
 	~CoTaskCancel();
 	CoTaskBool co;
 	FunCancel安全 cancel;

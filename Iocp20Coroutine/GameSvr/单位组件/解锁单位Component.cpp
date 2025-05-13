@@ -10,13 +10,13 @@
 #include "../EntitySystem.h"
 #include "../PlayerGateSession_Game.h"
 
-解锁单位Component::解锁单位Component(Entity& ref) :m_refEntity(ref)
+解锁单位Component::解锁单位Component(Entity& ref) :m_refEntity(ref), m_cancel解锁单位("m_cancel解锁单位")
 {
 }
 
 void 解锁单位Component::AddComponent(Entity& refEntity)
 {
-	refEntity.m_up解锁单位.reset(new 解锁单位Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up解锁单位, refEntity);
 }
 
 void 解锁单位Component::OnEntityDestroy(const bool bDestroy)

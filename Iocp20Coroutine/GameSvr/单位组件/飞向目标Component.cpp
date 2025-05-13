@@ -17,7 +17,8 @@ void ·ÉÏòÄ¿±êComponent::AddComponent(Entity& refEntity, const Position& posÆğÊ¼µ
 	m_posÆğÊ¼µã(posÆğÊ¼µã),
 	m_vec·½Ïò(vec·½Ïò),
 	m_f×îÔ¶¾àÀë(f×îÔ¶¾àÀë),
-	m_idAttacker(idAttacker)
+	m_idAttacker(idAttacker),
+	m_funCancel("·ÉÏòÄ¿±êComponent")
 {
 	Co·ÉÏòÄ¿±êÓöµĞ±¬Õ¨().RunNew();
 }

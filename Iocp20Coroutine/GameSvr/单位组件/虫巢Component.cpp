@@ -7,7 +7,7 @@
 #include "../Space.h"
 #include "../EntitySystem.h"
 #include "../SpPlayerComponent.h"
-inline 單陴Component::單陴Component(Entity& ref) :m_refEntity(ref), m_pos衿單摩賦萸(ref.Pos())
+inline 單陴Component::單陴Component(Entity& ref) :m_refEntity(ref), m_pos衿單摩賦萸(ref.Pos()), m_Cancel婖衿單("m_Cancel婖衿單")
 {
 	Co婖衿單().RunNew();
 }

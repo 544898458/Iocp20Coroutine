@@ -23,7 +23,7 @@
 #include "单位组件/可进活动单位Component.h"
 
 
-Space::Space(const 副本配置& ref) :m_配置(ref)
+Space::Space(const 副本配置& ref) :m_配置(ref), m_funCancel剧情("m_funCancel剧情")
 {
 	std::shared_ptr<CrowdToolState> CreateCrowdToolState(const std::string & stf寻路文件);
 	m_spCrowdToolState = CreateCrowdToolState(ref.str寻路文件名);

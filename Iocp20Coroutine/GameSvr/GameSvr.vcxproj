@@ -430,12 +430,8 @@
     <ClInclude Include="..\IocpNetwork\SessionsTemplate.h" />
     <ClInclude Include="..\IocpNetwork\StrConv.h" />
     <ClInclude Include="..\IocpNetwork\ThreadPool.h" />
-    <ClCompile Include="..\IocpNetwork\Overlapped.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\IocpNetwork\Server.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\IocpNetwork\Overlapped.cpp" />
+    <ClCompile Include="..\IocpNetwork\Server.cpp" />
     <ClInclude Include="..\IocpNetwork\ServerTemplate.h">
       <FileType>CppCode</FileType>
     </ClInclude>

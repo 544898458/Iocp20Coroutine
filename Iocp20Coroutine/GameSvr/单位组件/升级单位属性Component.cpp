@@ -11,7 +11,7 @@
 #include "../PlayerGateSession_Game.h"
 #include "../枚举/属性类型.h"
 
-升级单位属性Component::升级单位属性Component(Entity& ref) :m_refEntity(ref)
+升级单位属性Component::升级单位属性Component(Entity& ref) :m_refEntity(ref), m_cancel升级单位属性("m_cancel升级单位属性")
 {
 	switch (m_refEntity.m_类型)
 	{
@@ -41,7 +41,7 @@
 
 void 升级单位属性Component::AddComponent(Entity& refEntity)
 {
-	refEntity.m_up升级单位属性.reset(new 升级单位属性Component(refEntity));
+	refEntity.AddComponentOnDestroy(&Entity::m_up升级单位属性, refEntity);
 }
 
 void 升级单位属性Component::OnEntityDestroy(const bool bDestroy)
