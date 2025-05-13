@@ -33,7 +33,7 @@ public:
 		req.rpcSnId = g_rpcSnId;
 		const uint16_t rpcSnId = g_rpcSnId;
 		funSend(req);
-		//auto iterCancel = g_mapRpcCancel.insert({ g_rpcSnId, funCancel });
+		
 		auto iter = g_mapRpc.insert({ g_rpcSnId, CoAwaiter< std::tuple<bool, T_Responce>>(rpcSnId, funCancel) });
 
 		funCancel = [rpcSnId]()

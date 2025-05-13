@@ -23,17 +23,8 @@ void 苔蔓Component::AddComponent(Entity& refEntity)
 
 void 苔蔓Component::OnEntityDestroy(const bool bDestroy)
 {
-	if (m_funCancel萎缩消亡)
-	{
-		m_funCancel萎缩消亡();
-		m_funCancel萎缩消亡 = nullptr;
-	}
-
-	if (m_funCancel给周围加Buff)
-	{
-		m_funCancel给周围加Buff();
-		m_funCancel给周围加Buff = nullptr;
-	}
+	m_funCancel萎缩消亡.TryCancel();
+	m_funCancel给周围加Buff.TryCancel();
 }
 
 bool 苔蔓Component::在半径内(const Position& pos) const

@@ -21,8 +21,7 @@ void 解锁单位Component::AddComponent(Entity& refEntity)
 
 void 解锁单位Component::OnEntityDestroy(const bool bDestroy)
 {
-	if (m_cancel解锁单位)
-		m_cancel解锁单位();
+	m_cancel解锁单位.TryCancel();
 }
 
 

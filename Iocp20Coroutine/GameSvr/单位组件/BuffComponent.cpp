@@ -62,7 +62,7 @@ void BuffComponent::加属性(BuffId idBuff表)
 			CHECK_CO_RET_FALSE(sizeErase == 1);
 			refEntity.On属性变化(local属性类型);
 			co_return true;
-		}(pair->second.funCancel).RunNew();
+		}(pair->second.m_funCancel).RunNew();
 
 		if (buff配置.f变化值 != fOld变化)
 		{

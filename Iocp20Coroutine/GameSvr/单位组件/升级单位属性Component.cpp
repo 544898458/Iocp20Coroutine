@@ -46,8 +46,7 @@ void 升级单位属性Component::AddComponent(Entity& refEntity)
 
 void 升级单位属性Component::OnEntityDestroy(const bool bDestroy)
 {
-	if (m_cancel升级单位属性)
-		m_cancel升级单位属性();
+	m_cancel升级单位属性.TryCancel();
 }
 
 

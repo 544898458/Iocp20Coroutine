@@ -289,7 +289,7 @@ void ×ßComponent::OnEntityDestroy(const bool bDestroy)
 	if (m_cancel)
 	{
 		//LOG(INFO) << "µ÷ÓÃm_cancel";
-		m_cancel();
+		m_cancel.TryCancel();
 	}
 	else
 	{

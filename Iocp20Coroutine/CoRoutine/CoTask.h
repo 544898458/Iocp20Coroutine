@@ -352,10 +352,6 @@ public:
 	FunCancel funCancelOld;
 	FunCancel& refFunCancel;
 	void operator=(const KeepCancel& other) = delete;
-	//{
-	//	funCancelOld = refFunCancel = other.refFunCancel;
-	//	m_autoRevert = other.m_autoRevert;
-	//}
 	bool m_autoRevert;
 };
 
@@ -484,7 +480,7 @@ struct CoTaskCancel final
 {
 	~CoTaskCancel();
 	CoTaskBool co;
-	FunCancel cancel;
+	FunCancel安全 cancel;
 	void TryCancel();
 	/// <summary>
 	/// 如果协程还未结束就不会执行新的

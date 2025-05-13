@@ -38,9 +38,5 @@ CoTaskBool 苔蔓扩张Component::Co反复加持续掉血Buff()
 
 void 苔蔓扩张Component::OnEntityDestroy(const bool bDestroy)
 {
-	if (m_funCancel)
-	{
-		m_funCancel();
-		m_funCancel = nullptr;
-	}
+	m_funCancel.TryCancel();
 }

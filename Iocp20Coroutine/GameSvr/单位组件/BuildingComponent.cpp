@@ -27,8 +27,7 @@ void BuildingComponent::直接造好()
 
 void BuildingComponent::OnEntityDestroy(const bool bDestroy)
 {
-	if (m_cancel建造)
-		m_cancel建造();
+	m_cancel建造.TryCancel();
 }
 
 BuildingComponent::BuildingComponent(Entity& refEntity) :m_refEntity(refEntity)

@@ -28,7 +28,7 @@ namespace CoTimer
 		const auto time = std::chrono::steady_clock::now() + milli;
 		const auto sn = CoAwaiterBool::GenSn();
 		auto iter = g_multiTimer.insert({ time ,CoAwaiterBool(sn, cancel, strDebugInfo + "," + __FUNCTION__) });
-		//FunCancel old = cancel;
+		
 		cancel = [time, sn]()
 			{
 				//LOG(INFO) << "WaitÈ¡Ïû" << sn;
@@ -61,7 +61,7 @@ namespace CoTimer
 		//co_await Wait2();
 		const auto sn = CoAwaiterBool::GenSn();
 		auto pair = g_NextUpdate.insert({ sn,CoAwaiterBool(sn, cancel, strDebugInfo + "," + __FUNCTION__) });
-		//FunCancel old = cancel;
+		
 		cancel = [sn]()
 			{
 				auto snLocal = sn;

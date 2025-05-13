@@ -221,15 +221,7 @@ CoTaskBool 造建筑Component::Co建造过程(WpEntity wpEntity建筑, FunCancel& cancel)
 
 void 造建筑Component::OnEntityDestroy(const bool bDestroy)
 {
-	if (m_cancel造建筑)
-	{
-		//LOG(INFO) << "调用m_cancel";
-		m_cancel造建筑();
-	}
-	else
-	{
-
-	}
+	m_cancel造建筑.TryCancel();
 }
 
 

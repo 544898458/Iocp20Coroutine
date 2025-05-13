@@ -60,7 +60,7 @@ CoTaskBool 找目标走过去Component::Co顶层(
 		{
 			b外部取消协程 = true;
 		};
-	m_TaskCancel顶层.cancel = funCancel;
+	//m_TaskCancel顶层.cancel = funCancel;
 	while (!co_await CoTimer::WaitNextUpdate(m_TaskCancel顶层.cancel))
 	{
 		if (b外部取消协程)
@@ -115,7 +115,7 @@ CoTaskBool 找目标走过去Component::Co走向警戒范围内的目标然后操作(
 		{
 			b外部取消协程 = true;
 		};
-	m_TaskCancel.cancel = funCancel;
+	//m_TaskCancel.cancel = funCancel;
 	while (true)
 	{
 		if (co_await CoTimer::WaitNextUpdate(m_TaskCancel.cancel))

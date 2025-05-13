@@ -32,9 +32,5 @@ CoTaskBool 无苔蔓就持续掉血Component::Co反复加持续掉血Buff()
 
 void 无苔蔓就持续掉血Component::OnEntityDestroy(const bool bDestroy)
 {
-	if (m_funCancel)
-	{
-		m_funCancel();
-		m_funCancel = nullptr;
-	}
+	m_funCancel.TryCancel();
 }

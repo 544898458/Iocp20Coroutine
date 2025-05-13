@@ -92,12 +92,7 @@ WpEntity 医疗兵Component::Get最近的可治疗友方单位()
 
 void 医疗兵Component::OnEntityDestroy(const bool bDestroy)
 {
-	if (m_cancel治疗)
-	{
-		//LOG(INFO) << "调用m_cancel";
-		m_cancel治疗();
-		m_cancel治疗 = nullptr;
-	}
+	m_cancel治疗.TryCancel();
 }
 
 #define CHECK_终止治疗目标流程 \

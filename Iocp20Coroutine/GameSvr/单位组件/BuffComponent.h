@@ -27,14 +27,10 @@ private:
 	{
 		~属性数值()
 		{
-			if (funCancel)
-			{
-				funCancel();
-				funCancel = nullptr;
-			}
+			m_funCancel.TryCancel();
 		}
 		float 变化;
-		FunCancel funCancel;
+		FunCancel安全 m_funCancel;
 	};
 	std::map<属性类型, std::map<BuffId, 属性数值>> m_map属性数值;
 };

@@ -24,10 +24,7 @@ void ·ÉÏòÄ¿±êComponent::AddComponent(Entity& refEntity, const Position& posÆğÊ¼µ
 
 void ·ÉÏòÄ¿±êComponent::OnEntityDestroy(const bool bDestroy)
 {
-	if (m_funCancel) {
-		m_funCancel();
-		m_funCancel = nullptr;
-	}
+	m_funCancel.TryCancel();
 }
 
 CoTaskBool ·ÉÏòÄ¿±êComponent::Co·ÉÏòÄ¿±êÓöµĞ±¬Õ¨()

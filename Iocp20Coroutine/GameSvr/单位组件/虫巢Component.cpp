@@ -19,8 +19,7 @@ void 單陴Component::AddComponent(Entity& refEntity)
 
 void 單陴Component::OnEntityDestroy(const bool bDestroy)
 {
-	if (m_Cancel婖衿單)
-		m_Cancel婖衿單();
+	m_Cancel婖衿單.TryCancel();
 }
 
 void 單陴Component::OnLoad()

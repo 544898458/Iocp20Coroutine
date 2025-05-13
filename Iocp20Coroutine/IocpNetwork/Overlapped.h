@@ -199,7 +199,7 @@ namespace Iocp
 		};
 		CoTask<YieldReturn> coTask;
 		Overlapped* pOverlapped = nullptr;
-		FunCancel funCancel;
+		FunCancel°²È« funCancel;
 		CoAwaiterBool coAwait;
 		bool needDeleteMe = false;
 	};
