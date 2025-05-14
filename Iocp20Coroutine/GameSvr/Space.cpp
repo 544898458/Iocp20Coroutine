@@ -165,7 +165,7 @@ bool Space::DeleteSpace单人(const std::string& refStrPlayerNickName)
 	_ASSERT(1 == sizeErase);
 	return true;
 }
-WpSpace Space::AddSpace(const uint8_t idSpace)
+WpSpace Space::AddSpace(const 副本ID idSpace)
 {
 	auto wpOld = GetSpace(idSpace);
 	if (!wpOld.expired())
@@ -174,7 +174,7 @@ WpSpace Space::AddSpace(const uint8_t idSpace)
 	副本配置 配置;
 	{
 		bool Get副本配置(const 副本ID id, 副本配置 & refOut);
-		const auto ok = Get副本配置(多人联机地图, 配置);
+		const auto ok = Get副本配置(多人混战, 配置);
 		CHECK_RET_DEFAULT(ok);
 	}
 	auto [iterNew, bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space,const 副本配置&>(配置) });
@@ -183,7 +183,7 @@ WpSpace Space::AddSpace(const uint8_t idSpace)
 	return iterNew->second;
 }
 
-WpSpace Space::GetSpace(const uint8_t idSpace)
+WpSpace Space::GetSpace(const 副本ID idSpace)
 {
 	auto iterFind = g_mapSpace.find(idSpace);
 	if (g_mapSpace.end() == iterFind)
