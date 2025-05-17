@@ -152,7 +152,7 @@ int main(void)
 	extern std::function<void(MsgSay const&)> m_funBroadcast;
 	m_funBroadcast = [](const MsgSay& msg) {g_upAccept->m_Server.m_Sessions.Broadcast(msg); };
 
-	auto wpSpace无限刷怪 = Space::AddSpace(副本ID::多人混战);
+	auto wpSpace无限刷怪 = Space::AddSpace(战局类型::多玩家混战);
 
 	FunCancel funCancelSpawnMonster;
 	AiCo::多人联机地图(*wpSpace无限刷怪.lock(), funCancelSpawnMonster).RunNew();

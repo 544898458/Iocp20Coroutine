@@ -24,6 +24,11 @@ namespace std
 		return _Ostr << "单位配置:" << _ref.strName << "\t" << _ref.种族 << "\t" << _ref.strPrefabName << "\t" << _ref.str选中音效 << "\t" << _ref.str阵亡音效 << "\t" << _ref.str阵亡动作;
 	}
 	template <class _Traits>
+	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::副本配置& _ref)
+	{
+		return _Ostr << "战局配置:" << _ref.id副本 << "\t" << _ref.strSceneName << "\t" << _ref.str寻路文件名 << "\t" << _ref.strHttps音乐;
+	}
+	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::战斗配置& _ref)
 	{
 		return _Ostr << "战斗配置," << _ref.f警戒距离 << "\t" << _ref.f攻击距离 << "\t" << _ref.u16攻击 << "\t" << _ref.u16防御 << "\t" << _ref.f每帧移动距离
@@ -68,6 +73,18 @@ namespace std
 }
 
 namespace YAML {
+	template<>
+	struct convert<战局类型> {
+		static Node encode(const 战局类型& rhs) {
+
+			return Node((int)rhs);
+		}
+		static bool decode(const Node& refNode, 战局类型& rhs) {
+			CHECK_RET_FALSE(refNode.IsScalar());
+			rhs = (战局类型)refNode.as<int>();
+			return true;
+		}
+	};
 	template<>
 	struct convert<单位类型> {
 		static Node encode(const 单位类型& rhs) {
@@ -269,6 +286,21 @@ namespace YAML {
 			return true;
 		}
 	};
+
+	template<>
+	struct convert<单位::副本配置> {
+		static Node encode(const 单位::副本配置& rhs) {
+
+			LOG(ERROR) << "";
+			_ASSERT(false);
+			return Node();
+		}
+		static bool decode(const Node& refNode, 单位::副本配置& rhs) {
+			CHECK_RET_FALSE(refNode.IsMap());
+			rhs = { refNode["类型"].as<战局类型>(), refNode["strSceneName"].as<std::string>(), refNode["寻路文件"].as<std::string>(),{}, refNode["Https音乐"].as<std::string>() };
+			return true;
+		}
+	};
 }
 
 namespace 单位
@@ -282,6 +314,20 @@ namespace 单位
 	std::unordered_map<单位类型, 单位属性等级配置> g_map单位属性等级配置;
 	std::unordered_map<单位类型, 消耗资源> g_map单位解锁配置;
 	std::unordered_map<BuffId, Buff配置> g_mapBuff配置;
+	std::unordered_map<战局类型, 副本配置> g_map副本配置;
+	//{
+	//	{训练战_人,{训练战_人,"all_tiles_tilecache.bin",		"scene战斗",	单人剧情::Co训练战,		"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
+	//	{训练战_虫,{训练战_虫,"all_tiles_tilecache.bin",	"scene战斗",	单人剧情::Co训练战_虫,	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
+	//	{防守战_人,{防守战_人,"防守战.bin",					"scene防守战",	单人剧情::Co防守战,		"https://www.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3"}},
+	//	{防守战_虫,{防守战_虫,"防守战.bin",				"scene防守战",	单人剧情::Co防守战_虫,	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3"}},
+	//	{攻坚战_人,{攻坚战_人,"攻坚战.bin",					"scene攻坚战",	单人剧情::Co攻坚战,		"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
+	//	{攻坚战_虫,{攻坚战_虫,"攻坚战.bin",				"scene攻坚战",	单人剧情::Co攻坚战_虫,	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
+	//	{反空降战_人,{反空降战_人,"攻坚战.bin",				"scene攻坚战",	单人剧情::Co反空降战_人,"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
+	//	{空降战_虫,{空降战_虫,"攻坚战.bin",				"scene攻坚战",	单人剧情::Co空降战_虫,	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
+	//	{多玩家混战,{多玩家混战,"all_tiles_tilecache.bin","scene战斗",	{},						"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
+	//	{四方对战,{四方对战,"四方对战.bin",				"scene四方对战",多人战局::Co四方对战,	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3"}},
+	//};
+
 
 	template<typename K, typename T>
 	bool 读配置文件(const std::string& strPathName, std::unordered_map<K, T>& map, const std::string& strKeyName = "类型")
@@ -329,6 +375,7 @@ namespace 单位
 		CHECK_RET_FALSE(读配置文件("配置/单位属性等级.yaml", g_map单位属性等级配置));
 		CHECK_RET_FALSE(读配置文件("配置/单位解锁.yaml", g_map单位解锁配置));
 		CHECK_RET_FALSE(读配置文件("配置/Buff.yaml", g_mapBuff配置, "ID"));
+		CHECK_RET_FALSE(读配置文件("配置/战局.yaml", g_map副本配置));
 		return true;
 	}
 	template<typename K, typename V>
@@ -347,6 +394,8 @@ namespace 单位
 	bool Find怪配置(const 单位类型 类型, 怪配置& refOut) { return FindMap(g_map怪配置, 类型, refOut); }
 	bool Find制造配置(const 单位类型 类型, 制造配置& refOut) { return FindMap(g_map制造配置, 类型, refOut); }
 	bool FindBuff配置(const BuffId 类型, Buff配置& refOut) { return FindMap(g_mapBuff配置, 类型, refOut); }
+	bool Find单位解锁配置(const 单位类型 单位, 消耗资源& refOut) { return FindMap(g_map单位解锁配置, 单位, refOut); }
+	bool Find战局配置(const 战局类型 类型, 副本配置& refOut) { return FindMap(g_map副本配置, 类型, refOut); }
 
 	bool Find单位属性等级配置(const 单位类型 单位, const 属性类型 属性, const uint16_t u16等级, 单位属性等级配置详情& refOut)
 	{
@@ -379,10 +428,6 @@ namespace 单位
 	template float 单位升级后属性(const 单位类型 单位, const 属性类型 属性, const uint16_t u16等级, float 战斗配置::* p成员);
 	template uint16_t 单位升级后属性(const 单位类型 单位, const 属性类型 属性, const uint16_t u16等级, uint16_t 战斗配置::* p成员);
 
-	bool Find单位解锁配置(const 单位类型 单位, 消耗资源& refOut)
-	{
-		return FindMap(g_map单位解锁配置, 单位, refOut);
-	}
 	bool Is虫(const 单位类型 单位)
 	{
 		单位配置 配置;

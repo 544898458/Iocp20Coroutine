@@ -165,7 +165,7 @@ bool Space::DeleteSpace单人(const std::string& refStrPlayerNickName)
 	_ASSERT(1 == sizeErase);
 	return true;
 }
-WpSpace Space::AddSpace(const 副本ID idSpace)
+WpSpace Space::AddSpace(const 战局类型 idSpace)
 {
 	auto wpOld = GetSpace(idSpace);
 	if (!wpOld.expired())
@@ -173,8 +173,8 @@ WpSpace Space::AddSpace(const 副本ID idSpace)
 
 	副本配置 配置;
 	{
-		bool Get副本配置(const 副本ID id, 副本配置 & refOut);
-		const auto ok = Get副本配置(多人混战, 配置);
+		bool Get副本配置(const 战局类型 id, 副本配置 & refOut);
+		const auto ok = Get副本配置(多玩家混战, 配置);
 		CHECK_RET_DEFAULT(ok);
 	}
 	auto [iterNew, bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space,const 副本配置&>(配置) });
@@ -183,7 +183,7 @@ WpSpace Space::AddSpace(const 副本ID idSpace)
 	return iterNew->second;
 }
 
-WpSpace Space::GetSpace(const 副本ID idSpace)
+WpSpace Space::GetSpace(const 战局类型 idSpace)
 {
 	auto iterFind = g_mapSpace.find(idSpace);
 	if (g_mapSpace.end() == iterFind)
