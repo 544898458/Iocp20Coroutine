@@ -94,7 +94,7 @@ namespace 单位
 	bool Find单位解锁配置(const 单位类型 单位, 消耗资源& refOut);
 	bool Find单位属性等级配置(const 单位类型 单位, const 属性类型 属性, const uint16_t u16等级, 单位属性等级配置详情& refOut);
 	bool FindBuff配置(const BuffId 类型, Buff配置& refOut);
-	bool Find战局配置(const 战局类型 类型, 副本配置& refOut) { return FindMap(g_map副本配置, 类型, refOut); }
+	bool Find战局配置(const 战局类型 类型, 副本配置& refOut);
 
 	template<typename T_成员>
 	T_成员 单位升级后属性(const 单位类型 单位, const 属性类型 属性, const uint16_t u16等级, T_成员 战斗配置::* p成员);
