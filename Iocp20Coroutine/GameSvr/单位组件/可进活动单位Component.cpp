@@ -29,7 +29,7 @@ void 可进活动单位Component::OnEntityDestroy(const bool bDestroy)
 
 void 可进活动单位Component::OnBeforeDelayDelete()
 {
-	if (房虫 == m_refEntity.m_类型) 
+	if (房虫 == m_refEntity.m_类型)
 	{
 		for (auto& sp : m_listSpEntity)
 		{
@@ -82,7 +82,7 @@ void 可进活动单位Component::进(Space& refSpace, Entity& refEntity)
 		refEntity.m_upPlayer->m_refSession.删除选中(refEntity.Id);
 
 	EntitySystem::BroadcastEntity描述(m_refEntity, std::format("内有{0}人", m_listSpEntity.size()));
-	CoEvent<MyEvent::进活动单位>::OnRecvEvent({ m_refEntity.shared_from_this() });
+	CoEvent<MyEvent::活动单位进入>::OnRecvEvent({ m_refEntity.shared_from_this() });
 }
 
 void 可进活动单位Component::全都出去()
@@ -99,6 +99,10 @@ void 可进活动单位Component::全都出去()
 		sp->BroadcastEnter();
 		sp->m_wpOwner.reset();
 	}
+
+	if (!list.empty())
+		CoEvent<MyEvent::活动单位离开>::OnRecvEvent({ m_refEntity.shared_from_this() });
+
 	list.clear();
 
 	EntitySystem::BroadcastEntity描述(m_refEntity, std::format("内有0人", m_listSpEntity.size()));

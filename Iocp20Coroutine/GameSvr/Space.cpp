@@ -302,61 +302,63 @@ CrowdToolState& Space::GetCrowdToolState(const 单位类型 类型)
 int Space::Get怪物单位数(const 单位类型 类型)const
 {
 	return Get单位数([类型](const Entity& refEntity)
-		{
-			if (refEntity.m_upPlayerNickName)//属于玩家制的单位
-				return false;
-			if (EntitySystem::Is资源(refEntity.m_类型))
-				return false;
-			if (类型 > 单位类型_Invalid_0 && 类型 != refEntity.m_类型)
-				return false;
+	{
+		if (活动单位Min非法 >= refEntity.m_类型)
+			return false;
+		if (refEntity.m_upPlayerNickName)//属于玩家制的单位
+			return false;
+		if (EntitySystem::Is资源(refEntity.m_类型))
+			return false;
+		if (类型 > 单位类型_Invalid_0 && 类型 != refEntity.m_类型)
+			return false;
 
-			return true;
-		});
+		return true;
+	});
 }
 
 int Space::Get资源单位数(const 单位类型 类型)
 {
 	return Get单位数([类型](const Entity& refEntity)
-		{
-			if (nullptr == refEntity.m_up资源)
-				return false;
+	{
+		if (nullptr == refEntity.m_up资源)
+			return false;
 
-			return 类型 == refEntity.m_up资源->m_类型;
-		});
+		return 类型 == refEntity.m_up资源->m_类型;
+	});
 }
 
 int Space::Get单位数(const 单位类型 arg类型)const
 {
 	return Get单位数([arg类型](const Entity& refEntity)
-		{
-			return refEntity.m_类型 == arg类型;
-		});
+	{
+		return refEntity.m_类型 == arg类型;
+	});
 }
 
 int Space::Get玩家单位数(const std::string& strPlayerNickName, const 单位类型 类型)
 {
 	return Get单位数([&strPlayerNickName, 类型](const Entity& refEntity)
-		{
-			if (nullptr == refEntity.m_upPlayerNickName)
-				return false;
+	{
+		if (nullptr == refEntity.m_upPlayerNickName)
+			return false;
 
-			if (strPlayerNickName != refEntity.m_upPlayerNickName->m_strNickName)
-				return false;
+		if (strPlayerNickName != refEntity.m_upPlayerNickName->m_strNickName)
+			return false;
 
-			if (EntitySystem::Is视口(refEntity))
-				return false;
+		if (EntitySystem::Is视口(refEntity))
+			return false;
 
-			if (EntitySystem::Is光刺(refEntity))
-				return false;
+		if (EntitySystem::Is光刺(refEntity))
+			return false;
 
-			if (类型 != 单位类型::单位类型_Invalid_0 && 类型 != refEntity.m_类型)
-				return false;
+		if (类型 != 单位类型::单位类型_Invalid_0 && 类型 != refEntity.m_类型)
+			return false;
 
-			if (refEntity.m_upBuilding && !refEntity.m_upBuilding->已造好())
-				return false;
+		if (refEntity.m_upBuilding && !refEntity.m_upBuilding->已造好())
+			return false;
 
-			return true;
-		});
+		return true;
+	});
 }
 int Space::Get单位数(const std::function<bool(const Entity&)>& fun是否统计此单位)const
 {
@@ -402,7 +404,7 @@ void Space::所有玩家全退出()
 void Space::OnDestory()
 {
 	m_funCancel剧情.TryCancel();
-	
+
 	所有玩家全退出();
 	EraseEntity(true);
 }

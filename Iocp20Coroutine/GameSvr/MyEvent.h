@@ -35,11 +35,14 @@ namespace MyEvent
 		std::weak_ptr<PlayerGateSession_Game> wpPlayerGateSession;
 	};
 
-	struct 进活动单位
+	struct 活动单位进入
 	{
 		WpEntity wpOwner;
 	};
-
+	struct 活动单位离开
+	{
+		WpEntity wpOwner;
+	};
 	struct 治疗
 	{
 		WpEntity wp医疗兵;
