@@ -1,12 +1,5 @@
 #include "pch.h"
 #include "医疗兵Component.h"
-#include "../Entity.h"
-#include "../EntitySystem.h"
-#include "../Space.h"
-#include "../CoRoutine/CoTimer.h"
-#include "../AiCo.h"
-#include "../枚举/BuffId.h"
-#include "../枚举/属性类型.h"
 #include "走Component.h"
 #include "采集Component.h"
 #include "AttackComponent.h"
@@ -16,7 +9,16 @@
 #include "数值Component.h"
 #include "BuffComponent.h"
 
+#include "../Entity.h"
+#include "../EntitySystem.h"
+#include "../Space.h"
+#include "../CoRoutine/CoTimer.h"
+#include "../AiCo.h"
+#include "../枚举/BuffId.h"
+#include "../枚举/属性类型.h"
 
+#include "../../CoRoutine/CoEvent.h"
+#include "../MyEvent.h"
 
 医疗兵Component::医疗兵Component(Entity& refEntity) :m_refEntity(refEntity), m_cancel治疗("m_cancel治疗")
 {
@@ -78,15 +80,15 @@ CoTask<std::tuple<bool, bool>> 医疗兵Component::Co治疗(const Entity& refTarget, 
 WpEntity 医疗兵Component::Get最近的可治疗友方单位()
 {
 	return m_refEntity.Get最近的Entity支持地堡中的单位(Entity::友方, [this](const Entity& ref)->bool
-		{
-			if (!ref.m_upDefence)
-				return false;
+	{
+		if (!ref.m_upDefence)
+			return false;
 
-			if (ref.m_upDefence->已满血())
-				return false;
+		if (ref.m_upDefence->已满血())
+			return false;
 
-			return true;
-		});
+		return true;
+	});
 }
 
 
@@ -159,6 +161,7 @@ CoTaskBool 医疗兵Component::Co治疗目标(WpEntity wp目标, FunCancel& cancel)
 			const auto 加生命 = std::min<int>(加满生命, 数值Component::Get(m_refEntity, 能量));
 			数值Component::改变(ref目标, 生命, 加生命);
 			数值Component::改变(m_refEntity, 能量, -加生命);
+			CoEvent<MyEvent::治疗>::OnRecvEvent({ .wp医疗兵 = m_refEntity.shared_from_this() });
 		}
 
 		CHECK_终止治疗目标流程;

@@ -40,6 +40,11 @@ namespace MyEvent
 		WpEntity wpOwner;
 	};
 
+	struct ÷Œ¡∆
+	{
+		WpEntity wp“Ω¡∆±¯;
+	};
+
 	bool SameSpace(const WpEntity& refWpEntity, const Space& refSpace, const std::string& stdNickName);
 }
 
