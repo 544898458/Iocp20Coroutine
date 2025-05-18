@@ -1474,7 +1474,8 @@ void Sample_TempObstacles::loadAll(const char* path)
 {
 	FILE* fp = nullptr;
 	fopen_s(&fp, path, "rb");
-	if (!fp) return;
+	LOG(INFO) << "loadAll: " << path;
+	CHECK_RET_VOID(fp); //if (!fp) return;
 
 	// Read header.
 	TileCacheSetHeader header;

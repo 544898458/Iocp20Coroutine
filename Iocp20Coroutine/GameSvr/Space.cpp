@@ -23,7 +23,7 @@
 #include "单位组件/可进活动单位Component.h"
 
 
-Space::Space(const 单位::副本配置& ref) :m_配置(ref), m_funCancel剧情("m_funCancel剧情")
+Space::Space(const 单位::战局配置& ref) :m_配置(ref), m_funCancel剧情("m_funCancel剧情")
 {
 	std::shared_ptr<CrowdToolState> CreateCrowdToolState(const std::string & stf寻路文件);
 	m_spCrowdToolState = CreateCrowdToolState(ref.str寻路文件名);
@@ -144,13 +144,13 @@ WpSpace Space::GetSpace单人(const std::string& refStrPlayerNickName)
 	return {};
 }
 
-std::tuple<bool, WpSpace> Space::GetSpace单人(const std::string& refStrPlayerNickName, const 单位::副本配置& 配置)
+std::tuple<bool, WpSpace> Space::GetSpace单人(const std::string& refStrPlayerNickName, const 单位::战局配置& 配置)
 {
 	auto itFind = g_mapSpace单人.find(refStrPlayerNickName);
 	if (g_mapSpace单人.end() != itFind)
 		return { false,itFind->second };
 
-	auto pair = g_mapSpace单人.insert({ refStrPlayerNickName, std::make_shared<Space, const 单位::副本配置&>(配置) });
+	auto pair = g_mapSpace单人.insert({ refStrPlayerNickName, std::make_shared<Space, const 单位::战局配置&>(配置) });
 	_ASSERT(pair.second);
 	return { true,pair.first->second };
 }
@@ -171,12 +171,12 @@ WpSpace Space::AddSpace(const 战局类型 idSpace)
 	if (!wpOld.expired())
 		return wpOld;
 
-	单位::副本配置 配置;
+	单位::战局配置 配置;
 	{
 		const auto ok = 单位::Find战局配置(多玩家混战, 配置);
 		CHECK_RET_DEFAULT(ok);
 	}
-	auto [iterNew, bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space,const 单位::副本配置&>(配置) });
+	auto [iterNew, bOk] = g_mapSpace.insert({ idSpace,std::make_shared<Space,const 单位::战局配置&>(配置) });
 	_ASSERT(bOk);
 	iterNew->second->Load(idSpace);
 	return iterNew->second;

@@ -153,6 +153,7 @@ int main(void)
 	m_funBroadcast = [](const MsgSay& msg) {g_upAccept->m_Server.m_Sessions.Broadcast(msg); };
 
 	auto wpSpace无限刷怪 = Space::AddSpace(战局类型::多玩家混战);
+	CHECK_WP_RET_DEFAULT(wpSpace无限刷怪);
 
 	FunCancel funCancelSpawnMonster;
 	AiCo::多人联机地图(*wpSpace无限刷怪.lock(), funCancelSpawnMonster).RunNew();
