@@ -100,8 +100,8 @@ void 可进活动单位Component::全都出去()
 		sp->m_wpOwner.reset();
 	}
 
-	if (!list.empty())
-		CoEvent<MyEvent::活动单位离开>::OnRecvEvent({ m_refEntity.shared_from_this() });
+	//if (!list.empty())
+	CoEvent<MyEvent::活动单位离开>::OnRecvEvent({ m_refEntity.shared_from_this() });
 
 	list.clear();
 
