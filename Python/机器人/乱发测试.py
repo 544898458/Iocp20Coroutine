@@ -10,6 +10,9 @@ from enum import Enum
 # 存储所有单位数据的字典
 单位数据字典 = {}
 
+# 存储玩家个人战局列表
+玩家个人战局列表 = []
+
 class MsgId(Enum):
     MsgId_Invalid_0 = 0
     Login = 1
@@ -696,6 +699,75 @@ async def 随机解锁单位(websocket):
         await send(websocket, [[MsgId.解锁单位.value, 0], 随机单位类型])
         print(f'开始解锁单位: {随机单位类型}')
 
+#随机进入单人剧情副本
+async def 随机进单人剧情副本(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        print('尝试进入单人剧情副本')
+        # 发送进入单人剧情副本命令
+        await send(websocket, [[MsgId.进单人剧情副本.value, 0]])
+        print('已发送进入单人剧情副本命令')
+
+#随机进入其他玩家多人战局
+async def 随机进多人战局(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        print('尝试获取玩家多人战局列表')
+        # 发送获取玩家多人战局列表命令
+        await send(websocket, [[MsgId.玩家多人战局列表.value, 0]])
+        print('已发送获取玩家多人战局列表命令')
+
+#随机创建多人战局
+async def 随机创建多人战局(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        print('尝试创建多人战局')
+        # 随机生成一个战局名称
+        战局名称 = f'随机战局_{random.randint(1000, 9999)}'
+        print(f'创建战局名称: {战局名称}')
+        
+        # 发送创建多人战局命令
+        await send(websocket, [[MsgId.创建多人战局.value, 0], 战局名称])
+        print(f'已发送创建多人战局命令: {战局名称}')
+
+#随机选中太岁分裂
+async def 随机太岁分裂(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 从单位数据字典中找出所有太岁
+        太岁列表 = []
+        for id, 数据 in 单位数据字典.items():
+            if 数据['类型'] == 单位类型.太岁.value:
+                太岁列表.append(id)
+        
+        if not 太岁列表:
+            print('没有找到太岁')
+            return
+            
+        # 随机选择一个太岁
+        随机太岁id = random.choice(太岁列表)
+        print(f'随机选择太岁: ID={随机太岁id}')
+        
+        # 选中太岁
+        await send(websocket, [[MsgId.SelectRoles.value, 0], [随机太岁id], False])
+        print('选中太岁')
+        
+        # 等待一小段时间让选中命令生效
+        await asyncio.sleep(0.1)
+        
+        # 发送分裂命令
+        await send(websocket, [[MsgId.太岁分裂.value, 0]])
+        print('太岁开始分裂')
+
+#随机进入其他玩家个人战局
+async def 随机进个人战局(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        print('尝试获取玩家个人战局列表')
+        # 发送获取玩家个人战局列表命令
+        await send(websocket, [[MsgId.玩家个人战局列表.value, 0]])
+        print('已发送获取玩家个人战局列表命令')
+
 async def onRecvGameSvr(arr, websocket) -> bool:
     idxArr = 0
     
@@ -709,6 +781,16 @@ async def onRecvGameSvr(arr, websocket) -> bool:
             posX = arr[idxArr];  idxArr += 1
             posZ = arr[idxArr];  idxArr += 1
             eulerAnglesY = arr[idxArr];  idxArr += 1
+            
+            # 更新单位的位置和朝向信息
+            if id in 单位数据字典:
+                单位数据字典[id].update({
+                    'posX': posX,
+                    'posZ': posZ,
+                    'eulerAnglesY': eulerAnglesY
+                })
+                print(f'更新单位位置: ID={id}, 位置=({posX}, {posZ}), 朝向={eulerAnglesY}')
+            
             # print('NotifyPos', id)
             await 随机说话(websocket)
             await 随机move(websocket)
@@ -724,6 +806,32 @@ async def onRecvGameSvr(arr, websocket) -> bool:
             await 随机出房虫(websocket)
             await 随机升级建筑属性(websocket)
             await 随机解锁单位(websocket)
+            await 随机进单人剧情副本(websocket)
+            await 随机进多人战局(websocket)
+            await 随机创建多人战局(websocket)
+            await 随机太岁分裂(websocket)
+            await 随机进个人战局(websocket)
+            return True
+        case MsgId.玩家多人战局列表:
+            # 收到多人战局列表
+            战局列表 = arr[idxArr]
+            idxArr += 1
+            print(f'收到多人战局列表，共{len(战局列表)}个战局')
+            
+            if not 战局列表:
+                print('没有可用的多人战局，无法加入')
+                return True
+                
+            # 随机选择一个战局
+            随机战局 = random.choice(战局列表)
+            print(f'随机选择战局: {随机战局}')
+            
+            try:
+                # 发送进入其他玩家多人战局命令
+                await send(websocket, [[MsgId.进其他玩家多人战局.value, 0], 随机战局])
+                print(f'已发送进入多人战局命令: {随机战局}')
+            except Exception as e:
+                print(f'进入多人战局失败: {str(e)}')
             return True
         case MsgId.剧情对话:
             # 收到剧情对话消息，自动回复已看完
@@ -749,22 +857,62 @@ async def onRecvGameSvr(arr, websocket) -> bool:
             hpMax = arr[idxArr];  idxArr += 1
             能量Max = arr[idxArr];  idxArr += 1
             
-            # 存储单位数据
+            # 存储单位数据，初始化位置和朝向为0
             单位数据字典[id] = {
                 'nickName': nickName,
                 'entityName': entityName,
                 'prefabName': prefabName,
                 '类型': 类型,
                 'hpMax': hpMax,
-                '能量Max': 能量Max
+                '能量Max': 能量Max,
+                'posX': 0,
+                'posZ': 0,
+                'eulerAnglesY': 0
             }
             print(f'收到单位数据: ID={id}, 类型={类型}, 名称={nickName}')
             return True
         case MsgId.资源:
             return True
         case MsgId.Entity描述:
+            id = arr[idxArr];  idxArr += 1
+            desc = arr[idxArr];  idxArr += 1
+            print(f'收到单位描述: ID={id}, 描述={desc}')
+            # 更新单位数据字典中的描述
+            单位数据字典[id]['描述'] = desc
+            return True
+        case MsgId.玩家个人战局列表:
+            arr玩家 = arr[idxArr]
+            idxArr += 1
+            
+            # 更新全局玩家个人战局列表
+            global 玩家个人战局列表
+            玩家个人战局列表 = arr玩家
+            print(f'更新玩家个人战局列表，共{len(arr玩家)}个战局')
+            
+            if not 玩家个人战局列表:
+                print('没有可用的个人战局')
+                return True
+                
+            # 随机选择一个战局
+            随机战局 = random.choice(玩家个人战局列表)
+            print(f'随机选择个人战局: {随机战局}')
+            
+            try:
+                # 发送进入其他玩家个人战局命令
+                await send(websocket, [[MsgId.进其他玩家个人战局.value, 0], 随机战局])
+                print(f'已发送进入个人战局命令: {随机战局}')
+            except Exception as e:
+                print(f'进入个人战局失败: {str(e)}')
             return True
         case MsgId.DelRoleRet:
+            id = arr[idxArr]
+            idxArr += 1
+            
+            # 从单位数据字典中删除该单位
+            if id in 单位数据字典:
+                del 单位数据字典[id]
+                print(f'单位已删除: ID={id}')
+            
             return True
         case MsgId.Say:
             content = arr[idxArr];  idxArr += 1
@@ -782,6 +930,10 @@ async def onRecvGameSvr(arr, websocket) -> bool:
         case MsgId.弹丸特效:
             return True
         case MsgId.Notify属性:
+            return True
+        case MsgId.离开Space:
+            print('离开Space，清空单位数据字典')
+            单位数据字典.clear()
             return True
         case _:
             print('onRecvGameSvr 未处理',idMsg)
