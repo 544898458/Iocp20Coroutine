@@ -7,9 +7,11 @@ import websockets
 from msgpack import unpackb, packb
 from enum import Enum
 
-# Define MsgId using Python's Enum
+# 存储所有单位数据的字典
+单位数据字典 = {}
+
 class MsgId(Enum):
-    Invalid = 0
+    MsgId_Invalid_0 = 0
     Login = 1
     Move = 2
     AddRoleRet = 3
@@ -57,11 +59,13 @@ class MsgId(Enum):
     原地坚守 = 45
     解锁单位 = 46
     已解锁单位 = 47
-    单位属性等级 = 48
+    所有单位属性等级 = 48
     升级单位属性 = 49
     苔蔓半径 = 50
     太岁分裂 = 51
     Notify属性 = 52
+    进房虫 = 53
+    出房虫 = 54
 
 class 单位类型(Enum):
     单位类型_Invalid_0 = 0  # Define the missing value
@@ -186,6 +190,398 @@ async def 造炮台(websocket):
     rand = random.randint(1, 随机)
     if rand == 1:
         await send(websocket, [[MsgId.AddBuilding.value, 0], 单位类型.炮台.value, 随机坐标点()])
+
+#随机造基地
+async def 造基地(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        await send(websocket, [[MsgId.AddBuilding.value, 0], 单位类型.基地.value, 随机坐标点()])
+
+#随机造工程车
+async def 造工程车(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        await send(websocket, [[MsgId.AddRole.value, 0], 单位类型.工程车.value, 随机坐标点()])
+
+#随机造民房
+async def 造民房(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        await send(websocket, [[MsgId.AddBuilding.value, 0], 单位类型.民房.value, 随机坐标点()])
+
+#随机造建筑
+async def 随机造建筑(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 所有可建造的建筑类型
+        建筑类型列表 = [
+            单位类型.基地.value,      # 基地
+            单位类型.兵厂.value,      # 兵营
+            单位类型.民房.value,      # 民房
+            单位类型.地堡.value,      # 地堡
+            单位类型.炮台.value,      # 炮台
+            单位类型.虫巢.value,      # 虫巢
+            单位类型.机场.value,      # 机场
+            单位类型.重车厂.value,    # 重车厂
+            单位类型.虫营.value,      # 虫营
+            单位类型.飞塔.value,      # 飞塔
+            单位类型.拟态源.value,    # 拟态源
+            单位类型.太岁.value       # 太岁
+        ]
+        # 随机选择一个建筑类型
+        随机建筑类型 = random.choice(建筑类型列表)
+        print(f'随机建造建筑: {随机建筑类型}')
+        await send(websocket, [[MsgId.AddBuilding.value, 0], 随机建筑类型, 随机坐标点()])
+
+#随机造人类单位
+async def 随机造人类单位(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 所有可建造的人类单位类型
+        人类单位列表 = [
+            单位类型.工程车.value,    # 工程车
+            单位类型.枪兵.value,      # 枪兵
+            单位类型.近战兵.value,    # 近战兵
+            单位类型.三色坦克.value,  # 三色坦克
+            单位类型.飞机.value,      # 飞机
+            单位类型.医疗兵.value     # 医疗兵
+        ]
+        # 随机选择一个单位类型
+        随机单位类型 = random.choice(人类单位列表)
+        print(f'随机建造人类单位: {随机单位类型}')
+
+        # 根据单位类型选择对应的建筑
+        if 随机单位类型 in [单位类型.枪兵.value, 单位类型.近战兵.value, 单位类型.医疗兵.value]:
+            # 选中兵营
+            await send(websocket, [[MsgId.SelectRoles.value, 0], 单位类型.兵厂.value])
+            print('选中兵营')
+        elif 随机单位类型 == 单位类型.三色坦克.value:
+            # 选中重车厂
+            await send(websocket, [[MsgId.SelectRoles.value, 0], 单位类型.重车厂.value])
+            print('选中重车厂')
+        elif 随机单位类型 == 单位类型.飞机.value:
+            # 选中机场
+            await send(websocket, [[MsgId.SelectRoles.value, 0], 单位类型.机场.value])
+            print('选中机场')
+        elif 随机单位类型 == 单位类型.工程车.value:
+            # 选中基地
+            await send(websocket, [[MsgId.SelectRoles.value, 0], 单位类型.基地.value])
+            print('选中基地')
+
+        # 等待一小段时间让选中命令生效
+        await asyncio.sleep(0.1)
+        
+        # 建造单位
+        await send(websocket, [[MsgId.AddRole.value, 0], 随机单位类型, 随机坐标点()])
+
+#随机选中工程车采矿
+async def 随机工程车采矿(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 从单位数据字典中找出所有工程车
+        工程车列表 = []
+        for id, 数据 in 单位数据字典.items():
+            if 数据['类型'] == 单位类型.工程车.value:
+                工程车列表.append(id)
+        
+        if not 工程车列表:
+            print('没有找到工程车')
+            return
+            
+        # 随机选择一个工程车
+        随机工程车id = random.choice(工程车列表)
+        print(f'随机选择工程车: ID={随机工程车id}')
+        
+        # 选中工程车
+        await send(websocket, [[MsgId.SelectRoles.value, 0], [随机工程车id], False])
+        print('选中工程车')
+        
+        # 等待一小段时间让选中命令生效
+        await asyncio.sleep(0.1)
+        
+        # 随机选择采集燃气矿或晶体矿
+        矿类型列表 = [
+            单位类型.晶体矿.value,  # 晶体矿
+            单位类型.燃气矿.value   # 燃气矿
+        ]
+        随机矿类型 = random.choice(矿类型列表)
+        矿名称 = "晶体矿" if 随机矿类型 == 单位类型.晶体矿.value else "燃气矿"
+        
+        # 发送采集命令
+        await send(websocket, [[MsgId.采集.value, 0], 随机矿类型])
+        print(f'工程车开始采集{矿名称}')
+
+#随机选择单位进入地堡
+async def 随机进地堡(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 从单位数据字典中找出所有地堡
+        地堡列表 = []
+        for id, 数据 in 单位数据字典.items():
+            if 数据['类型'] == 单位类型.地堡.value:
+                地堡列表.append(id)
+        
+        if not 地堡列表:
+            print('没有找到地堡')
+            return
+            
+        # 从单位数据字典中找出所有可以进入地堡的单位
+        可进地堡单位列表 = []
+        for id, 数据 in 单位数据字典.items():
+            if 数据['类型'] in [
+                单位类型.枪兵.value,      # 枪兵
+                单位类型.近战兵.value,    # 近战兵
+                单位类型.医疗兵.value     # 医疗兵
+            ]:
+                可进地堡单位列表.append(id)
+        
+        if not 可进地堡单位列表:
+            print('没有找到可以进入地堡的单位')
+            return
+            
+        # 随机选择一个地堡
+        随机地堡id = random.choice(地堡列表)
+        print(f'随机选择地堡: ID={随机地堡id}')
+        
+        # 随机选择1-3个单位进入地堡
+        进入单位数量 = random.randint(1, min(3, len(可进地堡单位列表)))
+        随机单位列表 = random.sample(可进地堡单位列表, 进入单位数量)
+        print(f'随机选择{进入单位数量}个单位进入地堡')
+        
+        # 选中这些单位
+        await send(websocket, [[MsgId.SelectRoles.value, 0], 随机单位列表, False])
+        print('选中单位')
+        
+        # 等待一小段时间让选中命令生效
+        await asyncio.sleep(0.1)
+        
+        # 发送进地堡命令
+        await send(websocket, [[MsgId.进地堡.value, 0], 随机地堡id])
+        print('单位开始进入地堡')
+
+#随机选择单位强制移动
+async def 随机强制移动(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 从单位数据字典中找出所有可以移动的单位
+        可移动单位列表 = []
+        for id, 数据 in 单位数据字典.items():
+            if 数据['类型'] in [
+                单位类型.枪兵.value,      # 枪兵
+                单位类型.近战兵.value,    # 近战兵
+                单位类型.医疗兵.value,    # 医疗兵
+                单位类型.工程车.value,    # 工程车
+                单位类型.三色坦克.value   # 三色坦克
+            ]:
+                可移动单位列表.append(id)
+        
+        if not 可移动单位列表:
+            print('没有找到可以移动的单位')
+            return
+            
+        # 随机选择1-5个单位
+        移动单位数量 = random.randint(1, min(5, len(可移动单位列表)))
+        随机单位列表 = random.sample(可移动单位列表, 移动单位数量)
+        print(f'随机选择{移动单位数量}个单位强制移动')
+        
+        # 选中这些单位
+        await send(websocket, [[MsgId.SelectRoles.value, 0], 随机单位列表, False])
+        print('选中单位')
+        
+        # 等待一小段时间让选中命令生效
+        await asyncio.sleep(0.1)
+        
+        # 随机选择一个目标位置
+        目标位置 = 随机坐标点()
+        
+        # 发送强制移动命令
+        await send(websocket, [[MsgId.Move.value, 0, 0], 目标位置, True])  # True表示强制移动
+        print(f'单位开始强制移动到位置: {目标位置}')
+
+#随机选择单位坚守原地
+async def 随机坚守原地(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 从单位数据字典中找出所有可以战斗的单位
+        可战斗单位列表 = []
+        for id, 数据 in 单位数据字典.items():
+            if 数据['类型'] in [
+                单位类型.枪兵.value,      # 枪兵
+                单位类型.近战兵.value,    # 近战兵
+                单位类型.医疗兵.value,    # 医疗兵
+                单位类型.三色坦克.value,  # 三色坦克
+                单位类型.炮台.value       # 炮台
+            ]:
+                可战斗单位列表.append(id)
+        
+        if not 可战斗单位列表:
+            print('没有找到可以战斗的单位')
+            return
+            
+        # 随机选择1-3个单位
+        坚守单位数量 = random.randint(1, min(3, len(可战斗单位列表)))
+        随机单位列表 = random.sample(可战斗单位列表, 坚守单位数量)
+        print(f'随机选择{坚守单位数量}个单位坚守原地')
+        
+        # 选中这些单位
+        await send(websocket, [[MsgId.SelectRoles.value, 0], 随机单位列表, False])
+        print('选中单位')
+        
+        # 等待一小段时间让选中命令生效
+        await asyncio.sleep(0.1)
+        
+        # 发送坚守原地命令
+        await send(websocket, [[MsgId.原地坚守.value, 0]])
+        print('单位开始坚守原地')
+
+#随机建造虫族单位
+async def 随机造虫族单位(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 所有可建造的虫族单位类型
+        虫族单位列表 = [
+            单位类型.工虫.value,      # 工虫
+            单位类型.枪虫.value,      # 枪虫
+            单位类型.近战虫.value,    # 近战虫
+            单位类型.房虫.value,      # 房虫
+            单位类型.飞虫.value,      # 飞虫
+            单位类型.幼虫.value       # 幼虫
+        ]
+        # 随机选择一个单位类型
+        随机单位类型 = random.choice(虫族单位列表)
+        print(f'随机建造虫族单位: {随机单位类型}')
+
+        # 根据单位类型选择对应的建筑
+        if 随机单位类型 in [单位类型.枪虫.value, 单位类型.近战虫.value]:
+            # 选中虫营
+            await send(websocket, [[MsgId.SelectRoles.value, 0], 单位类型.虫营.value])
+            print('选中虫营')
+        elif 随机单位类型 == 单位类型.飞虫.value:
+            # 选中飞塔
+            await send(websocket, [[MsgId.SelectRoles.value, 0], 单位类型.飞塔.value])
+            print('选中飞塔')
+        elif 随机单位类型 == 单位类型.工虫.value:
+            # 选中虫巢
+            await send(websocket, [[MsgId.SelectRoles.value, 0], 单位类型.虫巢.value])
+            print('选中虫巢')
+        elif 随机单位类型 == 单位类型.房虫.value:
+            # 选中太岁
+            await send(websocket, [[MsgId.SelectRoles.value, 0], 单位类型.太岁.value])
+            print('选中太岁')
+
+        # 等待一小段时间让选中命令生效
+        await asyncio.sleep(0.1)
+        
+        # 建造单位
+        await send(websocket, [[MsgId.AddRole.value, 0], 随机单位类型, 随机坐标点()])
+        print(f'开始建造虫族单位: {随机单位类型}')
+
+#随机选择单位进入房虫
+async def 随机进房虫(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 从单位数据字典中找出所有房虫
+        房虫列表 = []
+        for id, 数据 in 单位数据字典.items():
+            if 数据['类型'] == 单位类型.房虫.value:
+                房虫列表.append(id)
+        
+        if not 房虫列表:
+            print('没有找到房虫')
+            return
+            
+        # 从单位数据字典中找出所有可以进入房虫的单位
+        可进房虫单位列表 = []
+        for id, 数据 in 单位数据字典.items():
+            if 数据['类型'] in [
+                单位类型.枪虫.value,      # 枪虫
+                单位类型.近战虫.value,    # 近战虫
+                单位类型.工虫.value       # 工虫
+            ]:
+                可进房虫单位列表.append(id)
+        
+        if not 可进房虫单位列表:
+            print('没有找到可以进入房虫的单位')
+            return
+            
+        # 随机选择一个房虫
+        随机房虫id = random.choice(房虫列表)
+        print(f'随机选择房虫: ID={随机房虫id}')
+        
+        # 随机选择1-3个单位进入房虫
+        进入单位数量 = random.randint(1, min(3, len(可进房虫单位列表)))
+        随机单位列表 = random.sample(可进房虫单位列表, 进入单位数量)
+        print(f'随机选择{进入单位数量}个单位进入房虫')
+        
+        # 选中这些单位
+        await send(websocket, [[MsgId.SelectRoles.value, 0], 随机单位列表, False])
+        print('选中单位')
+        
+        # 等待一小段时间让选中命令生效
+        await asyncio.sleep(0.1)
+        
+        # 发送进房虫命令
+        await send(websocket, [[MsgId.进房虫.value, 0], 随机房虫id])
+        print('单位开始进入房虫')
+
+#随机选择地堡让里面单位出来
+async def 随机出地堡(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 从单位数据字典中找出所有地堡
+        地堡列表 = []
+        for id, 数据 in 单位数据字典.items():
+            if 数据['类型'] == 单位类型.地堡.value:
+                地堡列表.append(id)
+        
+        if not 地堡列表:
+            print('没有找到地堡')
+            return
+            
+        # 随机选择一个地堡
+        随机地堡id = random.choice(地堡列表)
+        print(f'随机选择地堡: ID={随机地堡id}')
+        
+        # 选中地堡
+        await send(websocket, [[MsgId.SelectRoles.value, 0], [随机地堡id], False])
+        print('选中地堡')
+        
+        # 等待一小段时间让选中命令生效
+        await asyncio.sleep(0.1)
+        
+        # 发送出地堡命令
+        await send(websocket, [[MsgId.出地堡.value, 0]])
+        print('地堡内的单位开始出来')
+
+#随机选择房虫让里面单位出来
+async def 随机出房虫(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 从单位数据字典中找出所有房虫
+        房虫列表 = []
+        for id, 数据 in 单位数据字典.items():
+            if 数据['类型'] == 单位类型.房虫.value:
+                房虫列表.append(id)
+        
+        if not 房虫列表:
+            print('没有找到房虫')
+            return
+            
+        # 随机选择一个房虫
+        随机房虫id = random.choice(房虫列表)
+        print(f'随机选择房虫: ID={随机房虫id}')
+        
+        # 选中房虫
+        await send(websocket, [[MsgId.SelectRoles.value, 0], [随机房虫id], False])
+        print('选中房虫')
+        
+        # 等待一小段时间让选中命令生效
+        await asyncio.sleep(0.1)
+        
+        # 发送出房虫命令
+        await send(websocket, [[MsgId.出房虫.value, 0]])
+        print('房虫内的单位开始出来')
+
 async def onRecvGameSvr(arr, websocket) -> bool:
     idxArr = 0
     
@@ -202,7 +598,16 @@ async def onRecvGameSvr(arr, websocket) -> bool:
             # print('NotifyPos', id)
             await 随机说话(websocket)
             await 随机move(websocket)
-            await 造炮台(websocket)
+            await 随机造建筑(websocket)
+            await 随机造人类单位(websocket)
+            await 随机造虫族单位(websocket)
+            await 随机工程车采矿(websocket)
+            await 随机进地堡(websocket)
+            await 随机强制移动(websocket)
+            await 随机坚守原地(websocket)
+            await 随机进房虫(websocket)
+            await 随机出地堡(websocket)
+            await 随机出房虫(websocket)
             return True
         case MsgId.进Space:
             print('进Space', idMsg)
@@ -215,6 +620,24 @@ async def onRecvGameSvr(arr, websocket) -> bool:
         case MsgId.播放声音:
             return True
         case MsgId.AddRoleRet:
+            id = arr[idxArr];  idxArr += 1
+            nickName = arr[idxArr];  idxArr += 1
+            entityName = arr[idxArr];  idxArr += 1
+            prefabName = arr[idxArr];  idxArr += 1
+            类型 = arr[idxArr];  idxArr += 1
+            hpMax = arr[idxArr];  idxArr += 1
+            能量Max = arr[idxArr];  idxArr += 1
+            
+            # 存储单位数据
+            单位数据字典[id] = {
+                'nickName': nickName,
+                'entityName': entityName,
+                'prefabName': prefabName,
+                '类型': 类型,
+                'hpMax': hpMax,
+                '能量Max': 能量Max
+            }
+            print(f'收到单位数据: ID={id}, 类型={类型}, 名称={nickName}')
             return True
         case MsgId.资源:
             return True
