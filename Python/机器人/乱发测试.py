@@ -582,6 +582,120 @@ async def 随机出房虫(websocket):
         await send(websocket, [[MsgId.出房虫.value, 0]])
         print('房虫内的单位开始出来')
 
+#随机选择建筑升级属性
+async def 随机升级建筑属性(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 从单位数据字典中找出所有可升级的建筑
+        可升级建筑列表 = []
+        for id, 数据 in 单位数据字典.items():
+            if 数据['类型'] in [
+                单位类型.基地.value,      # 基地
+                单位类型.兵厂.value,      # 兵营
+                单位类型.虫巢.value,      # 虫巢
+                单位类型.虫营.value,      # 虫营
+                单位类型.重车厂.value,    # 重车厂
+                单位类型.机场.value       # 机场
+            ]:
+                可升级建筑列表.append(id)
+        
+        if not 可升级建筑列表:
+            print('没有找到可升级的建筑')
+            return
+            
+        # 随机选择一个建筑
+        随机建筑id = random.choice(可升级建筑列表)
+        print(f'随机选择建筑: ID={随机建筑id}')
+        
+        # 选中建筑
+        await send(websocket, [[MsgId.SelectRoles.value, 0], [随机建筑id], False])
+        print('选中建筑')
+        
+        # 等待一小段时间让选中命令生效
+        await asyncio.sleep(0.1)
+        
+        # 随机选择一个属性升级
+        属性列表 = [
+            "攻击力",
+            "防御力",
+            "生命值",
+            "移动速度",
+            "攻击速度"
+        ]
+        随机属性 = random.choice(属性列表)
+        print(f'选择升级属性: {随机属性}')
+        
+        # 发送升级属性命令
+        await send(websocket, [[MsgId.升级单位属性.value, 0], 随机属性])
+        print(f'开始升级建筑属性: {随机属性}')
+
+#随机选择建筑解锁单位
+async def 随机解锁单位(websocket):
+    rand = random.randint(1, 随机)
+    if rand == 1:
+        # 从单位数据字典中找出所有可以解锁单位的建筑
+        可解锁建筑列表 = []
+        for id, 数据 in 单位数据字典.items():
+            if 数据['类型'] in [
+                单位类型.基地.value,      # 基地
+                单位类型.兵厂.value,      # 兵营
+                单位类型.虫巢.value,      # 虫巢
+                单位类型.虫营.value,      # 虫营
+                单位类型.重车厂.value,    # 重车厂
+                单位类型.机场.value,      # 机场
+                单位类型.飞塔.value,      # 飞塔
+                单位类型.拟态源.value     # 拟态源
+            ]:
+                可解锁建筑列表.append(id)
+        
+        if not 可解锁建筑列表:
+            print('没有找到可以解锁单位的建筑')
+            return
+            
+        # 随机选择一个建筑
+        随机建筑id = random.choice(可解锁建筑列表)
+        print(f'随机选择建筑: ID={随机建筑id}')
+        
+        # 选中建筑
+        await send(websocket, [[MsgId.SelectRoles.value, 0], [随机建筑id], False])
+        print('选中建筑')
+        
+        # 等待一小段时间让选中命令生效
+        await asyncio.sleep(0.1)
+        
+        # 根据建筑类型选择可解锁的单位
+        可解锁单位列表 = []
+        建筑类型 = 单位数据字典[随机建筑id]['类型']
+        
+        if 建筑类型 == 单位类型.基地.value:
+            可解锁单位列表 = [单位类型.工程车.value]
+        elif 建筑类型 == 单位类型.兵厂.value:
+            可解锁单位列表 = [单位类型.枪兵.value, 单位类型.近战兵.value, 单位类型.医疗兵.value]
+        elif 建筑类型 == 单位类型.虫巢.value:
+            可解锁单位列表 = [单位类型.工虫.value, 单位类型.幼虫.value]
+        elif 建筑类型 == 单位类型.虫营.value:
+            可解锁单位列表 = [单位类型.枪虫.value, 单位类型.近战虫.value]
+        elif 建筑类型 == 单位类型.重车厂.value:
+            可解锁单位列表 = [单位类型.三色坦克.value]
+        elif 建筑类型 == 单位类型.机场.value:
+            可解锁单位列表 = [单位类型.飞机.value]
+        elif 建筑类型 == 单位类型.飞塔.value:
+            可解锁单位列表 = [单位类型.飞虫.value]
+        elif 建筑类型 == 单位类型.拟态源.value:
+            可解锁单位列表 = [单位类型.绿色坦克.value]
+            
+        if not 可解锁单位列表:
+            print('该建筑没有可解锁的单位')
+            return
+            
+        # 随机选择一个单位解锁
+        随机单位类型 = random.choice(可解锁单位列表)
+        print(f'选择解锁单位: {随机单位类型}')
+        
+        # 发送解锁单位命令
+        await send(websocket, [[MsgId.解锁单位.value, 0], 随机单位类型])
+        print(f'开始解锁单位: {随机单位类型}')
+
 async def onRecvGameSvr(arr, websocket) -> bool:
     idxArr = 0
     
@@ -608,6 +722,13 @@ async def onRecvGameSvr(arr, websocket) -> bool:
             await 随机进房虫(websocket)
             await 随机出地堡(websocket)
             await 随机出房虫(websocket)
+            await 随机升级建筑属性(websocket)
+            await 随机解锁单位(websocket)
+            return True
+        case MsgId.剧情对话:
+            # 收到剧情对话消息，自动回复已看完
+            print('收到剧情对话，自动回复已看完')
+            await send(websocket, [[MsgId.剧情对话已看完.value, 0]])
             return True
         case MsgId.进Space:
             print('进Space', idMsg)
