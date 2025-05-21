@@ -173,6 +173,7 @@ namespace YAML {
 					refNode["str前摇动作"].as<std::string>(),
 					std::chrono::milliseconds(refNode["dura开始播放攻击动作"].as<int32_t>()),
 					refNode["str攻击动作"].as<std::string>(),
+					refNode["str弹丸特效"].as<std::string>(),
 					refNode["dura开始伤害"].as<uint16_t>(),
 					refNode["str攻击音效"].as<std::string>(),
 					std::chrono::milliseconds(refNode["dura后摇"].as<int32_t>())
