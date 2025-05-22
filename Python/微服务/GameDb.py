@@ -103,11 +103,28 @@ async def 战局结果(request: 战局结果参数):
         
         #整个表按赢排序后写入json文件
         cursor = await db.execute(
-            'SELECT * FROM player_stats ORDER BY wins DESC'
+            'SELECT nickname, type, wins, losses FROM player_stats ORDER BY wins DESC'
         )
         stats = await cursor.fetchall()
-        with open(Config.STATS_JSON_FILE, 'w') as f:
-            json.dump(stats, f)
+        
+        # 将数据转换为带字段名的字典列表
+        stats_list = [
+            {
+                "nickname": row[0],
+                "type": row[1],
+                "wins": row[2],
+                "losses": row[3],
+                "total_games": row[2] + row[3]
+            }
+            for row in stats
+        ]
+        
+        # 确保目录存在
+        os.makedirs(os.path.dirname(Config.STATS_JSON_FILE), exist_ok=True)
+        
+        # 写入JSON文件，使用缩进格式化
+        with open(Config.STATS_JSON_FILE, 'w', encoding='utf-8') as f:
+            json.dump(stats_list, f, ensure_ascii=False, indent=2)
 
         return {
             "message": "战局记录已更新",
