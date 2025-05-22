@@ -87,6 +87,7 @@ void SendToWorldSvr(const T& refMsg, const uint64_t idGateSession)
 }
 template void SendToWorldSvr(const MsgSay& msg, const uint64_t idGateSession);
 template void SendToWorldSvr(const MsgChangeMoney& msg, const uint64_t idGateSession);
+template void SendToWorldSvr(const Msg战局结束& msg, const uint64_t idGateSession);
 
 LONG WINAPI UnhandledExceptionFilter_SpawDmp(struct _EXCEPTION_POINTERS* ExceptionInfo);
 
