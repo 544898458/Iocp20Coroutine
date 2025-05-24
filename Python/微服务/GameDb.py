@@ -1,3 +1,4 @@
+#pip install fastapi uvicorn aiosqlite pydantic
 import os
 from fastapi import FastAPI
 import uvicorn
@@ -7,11 +8,44 @@ from pydantic import BaseModel  # Add Pydantic import
 # 新增数据库依赖导入
 import aiosqlite
 from contextlib import asynccontextmanager  # New import for lifespan
+# 枚举类在Python中使用enum模块实现，原代码是类似C++/Java的枚举语法，在Python中需要重写
+from enum import IntEnum
+
+class 战局类型(IntEnum):
+    # 单人模式ID范围
+    单人ID_非法_MIN = 0
+    新手训练_单位介绍_人 = 1
+    新手训练_单位介绍_虫 = 2
+    新手训练_反空降战_人 = 3
+    新手训练_空降战_虫 = 4
+    新手训练_战斗_人 = 5
+    新手训练_战斗_虫 = 6
+    防守战_人 = 7
+    防守战_虫 = 8
+    攻坚战_人 = 9
+    攻坚战_虫 = 10
+    单人ID_非法_MAX = 11
+
+    # 多人模式ID范围
+    多人ID_非法_MIN = 100
+    四方对战 = 101
+    多人ID_非法_MAX = 102
+
+    # 多人混战ID范围
+    多人混战ID_非法_MIN = 200
+    多玩家混战 = 201
+    多人混战ID_非法_MAX = 202
+
 
 # 配置文件
 class Config:
     DB_FILE = 'GameDb.sqlite3'
-    STATS_JSON_FILE = 'C:/inetpub/wwwroot/排行榜/player_stats.json'
+
+    @staticmethod
+    def get_type_stats_file(type_id: int, category: str) -> str:
+        if category:
+            return f'C:/inetpub/wwwroot/排行榜/战局_{type_id}_{category}.json'
+        return f'C:/inetpub/wwwroot/排行榜/战局_{type_id}.json'
 
 # 创建FastAPI应用实例
 # app = FastAPI(title="MyFirstMicroservice", version="1.0.0")
@@ -50,7 +84,7 @@ class PlayerStats(BaseModel):
 
 class 战局结果参数(BaseModel):
     nickName: str
-    type: int
+    type: 战局类型
     win: bool
 # 定义基础路由
 @app.get("/")
@@ -119,12 +153,52 @@ async def 战局结果(request: 战局结果参数):
             for row in stats
         ]
         
-        # 确保目录存在
-        os.makedirs(os.path.dirname(Config.STATS_JSON_FILE), exist_ok=True)
-        
-        # 写入JSON文件，使用缩进格式化
-        with open(Config.STATS_JSON_FILE, 'w', encoding='utf-8') as f:
-            json.dump(stats_list, f, ensure_ascii=False, indent=2)
+        # 获取所有战局类型
+        all_types = [e.value for e in 战局类型 if e.name.endswith("MAX") is False and e.name.endswith("MIN") is False]
+
+        # 为每个type生成“赢”和“输”排行榜文件
+        for t in all_types:
+            # 赢排行榜
+            cursor = await db.execute(
+                'SELECT nickname, type, wins, losses FROM player_stats WHERE type = ? AND wins > 0 ORDER BY wins DESC',
+                (t,)
+            )
+            win_stats = await cursor.fetchall()
+            win_stats_list = [
+                {
+                    "nickname": row[0],
+                    "type": row[1],
+                    "wins": row[2],
+                    "losses": row[3],
+                    "total_games": row[2] + row[3]
+                }
+                for row in win_stats
+            ]
+            win_file = Config.get_type_stats_file(t, "赢")
+            os.makedirs(os.path.dirname(win_file), exist_ok=True)
+            with open(win_file, 'w', encoding='utf-8') as f:
+                json.dump(win_stats_list, f, ensure_ascii=False, indent=2)
+
+            # 输排行榜
+            cursor = await db.execute(
+                'SELECT nickname, type, wins, losses FROM player_stats WHERE type = ? AND losses > 0 ORDER BY losses DESC',
+                (t,)
+            )
+            lose_stats = await cursor.fetchall()
+            lose_stats_list = [
+                {
+                    "nickname": row[0],
+                    "type": row[1],
+                    "wins": row[2],
+                    "losses": row[3],
+                    "total_games": row[2] + row[3]
+                }
+                for row in lose_stats
+            ]
+            lose_file = Config.get_type_stats_file(t, "输")
+            os.makedirs(os.path.dirname(lose_file), exist_ok=True)
+            with open(lose_file, 'w', encoding='utf-8') as f:
+                json.dump(lose_stats_list, f, ensure_ascii=False, indent=2)
 
         return {
             "message": "战局记录已更新",

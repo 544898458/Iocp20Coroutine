@@ -39,3 +39,4 @@ enc_temp_folder
 *x64*
 *.bin
 *.pch
+*.sqlite3
