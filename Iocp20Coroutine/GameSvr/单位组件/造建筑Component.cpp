@@ -82,6 +82,12 @@ CoTaskBool Ôì½¨ÖşComponent::CoÔì½¨Öş(const Position pos, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 		_ASSERT(false);
 		co_return true;
 	}
+
+	if (!EntitySystem::ÅĞ¶ÏÇ°ÖÃµ¥Î»´æÔÚ(m_refEntity, ÀàĞÍ))
+	{
+		co_return false;
+	}
+
 	if (·½¶Õ == ÀàĞÍ)
 	{
 		if (!m_refEntity.m_refSpace.CrowdTool¿ÉÕ¾Á¢(pos))
@@ -381,7 +387,7 @@ void Ôì½¨ÖşComponent::¸ù¾İ½¨ÖşÀàĞÍAddComponent(Space& refSpace, const µ¥Î»ÀàĞÍ À
 		ÎŞÌ¦Âû¾Í³ÖĞøµôÑªComponent::AddComponent(refNewEntity);
 	}
 
-	if(!strPlayerNickName.empty())
+	if (!strPlayerNickName.empty())
 		refSpace.m_mapPlayer[strPlayerNickName].m_mapWpEntity[refNewEntity.Id] = refNewEntity.shared_from_this();//×Ô¼º¿ØÖÆµÄµ¥Î»
 
 	const int i32ÊÓÒ°·¶Î§ = Ì¦Âû == ÀàĞÍ ? Ì¦ÂûComponent::MAX°ë¾¶ : 0;

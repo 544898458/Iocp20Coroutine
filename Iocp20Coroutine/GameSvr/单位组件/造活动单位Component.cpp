@@ -44,18 +44,6 @@ bool Ôì»î¶¯µ¥Î»Component::¿ÉÔì(const µ¥Î»ÀàĞÍ ÀàĞÍ)
 	return m_set¿ÉÔìÀàĞÍ.end() != m_set¿ÉÔìÀàĞÍ.find(ÀàĞÍ) && !IsÓ×³æÕıÔÚÍÉ±ä();
 }
 
-bool Ôì»î¶¯µ¥Î»Component::ÅĞ¶Ï²¢ÌáÊ¾È±ÉÙ½¨Öş(PlayerGateSession_Game& refGateSession, const µ¥Î»ÀàĞÍ µ¥Î»)
-{
-	if (0 < m_refEntity.m_refSpace.GetÍæ¼Òµ¥Î»Êı(refGateSession.NickName(), µ¥Î»))
-		return true;
-
-	µ¥Î»::µ¥Î»ÅäÖÃ ÅäÖÃ;
-	CHECK_RET_DEFAULT(µ¥Î»::Findµ¥Î»ÅäÖÃ(µ¥Î», ÅäÖÃ));
-
-	refGateSession.²¥·ÅÉùÒôBuzz(std::format("È±ÉÙ {0}", ÅäÖÃ.strName));
-	return false;
-}
-
 void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î»ÀàĞÍ ÀàĞÍ)
 {
 	//CHECK_RET_VOID(m_funÔì»î¶¯µ¥Î»);
@@ -84,22 +72,9 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 		return;
 	}
 
-#define CHECK_È±ÉÙµ¥Î»_RET(µ¥Î») if(!ÅĞ¶Ï²¢ÌáÊ¾È±ÉÙ½¨Öş(refGateSession, µ¥Î»))return;
-
-	switch (ÀàĞÍ)
+	if (!EntitySystem::ÅĞ¶ÏÇ°ÖÃµ¥Î»´æÔÚ(m_refEntity, ÀàĞÍ))
 	{
-	case Ç¹³æ:
-	case ½üÕ½³æ:
-		CHECK_È±ÉÙµ¥Î»_RET(³æÓª);
-		break;
-	case ·É³æ:
-		CHECK_È±ÉÙµ¥Î»_RET(·ÉËş);
-		break;
-	case ÂÌÉ«Ì¹¿Ë:
-		CHECK_È±ÉÙµ¥Î»_RET(ÄâÌ¬Ô´);
-		break;
-	default:
-		break;
+		return;
 	}
 
 	auto& spacePlayer = m_refEntity.m_refSpace.GetSpacePlayer(refGateSession.NickName());

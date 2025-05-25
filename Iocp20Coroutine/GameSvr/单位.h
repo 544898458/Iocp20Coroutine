@@ -23,8 +23,9 @@ namespace 单位
 	};
 	struct 制造配置
 	{
-		uint16_t u16初始Hp;
 		消耗资源 消耗;
+		uint16_t u16初始Hp;
+		单位类型 前置单位;
 	};
 	struct 建筑单位配置
 	{

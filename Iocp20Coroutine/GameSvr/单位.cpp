@@ -53,7 +53,7 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::制造配置& _ref)
 	{
-		return _Ostr << "制造配置," << _ref.消耗 << "\t" << _ref.u16初始Hp;
+		return _Ostr << "制造配置," << _ref.消耗 << "\t" << _ref.u16初始Hp << "\t" << _ref.前置单位;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::怪配置& _ref)
@@ -239,7 +239,7 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::制造配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["初始HP"].as<uint16_t>(), refNode.as<单位::消耗资源>() };
+			rhs = { refNode.as<单位::消耗资源>(),refNode["初始HP"].as<uint16_t>(), refNode["前置单位"].as<单位类型>()};
 			return true;
 		}
 	};
