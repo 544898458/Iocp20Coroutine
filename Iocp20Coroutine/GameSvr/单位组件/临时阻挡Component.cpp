@@ -39,7 +39,7 @@ bool 临时阻挡Component::AddComponent(Entity& refEntity, float f半边长)
 
 活动单位走完路加阻挡::活动单位走完路加阻挡(Entity& refEntity) :m_refEntity(refEntity)
 {
-	m_refEntity.m_up临时阻挡.reset();
+	m_refEntity.ResetComponent(&Entity::m_up临时阻挡);
 }
 
 活动单位走完路加阻挡::~活动单位走完路加阻挡()
