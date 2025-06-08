@@ -200,7 +200,7 @@ int main(void)
 
 	g_upAccept->m_Server.OnAppExit();
 	g_ConnectToWorldSvr->Session.OnAppExit();
-	Space::StaticOnAppExit();
+	Space::StaticSave();
 	CoTimer::OnAppExit();
 	CoTask<int>::OnAppExit();
 
