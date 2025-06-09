@@ -196,6 +196,7 @@ int main(void)
 		Space::StaticUpdate();
 		CoTimer::Update();
 		CoTask<int>::Process();
+		CoTaskBool::Process();
 	}
 
 	g_upAccept->m_Server.OnAppExit();

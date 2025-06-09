@@ -252,7 +252,8 @@ public:
 		const auto oldSize = m_listCo.size();
 		std::erase_if(m_listCo, [](CoTask& refCo)->bool {return refCo.Finished(); });
 		const auto newSize = m_listCo.size();
-		if (oldSize != newSize)
+		const uint16_t 被除数 = 10;
+		if (oldSize % 被除数 == 0 || newSize % 被除数 == 0)
 		{
 			LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
 		}
@@ -483,7 +484,7 @@ typedef CoAwaiter<bool> CoAwaiterBool;
 typedef CoTask<bool> CoTaskBool;
 struct CoTaskCancel final
 {
-	CoTaskCancel():cancel("CoTaskCancel"){
+	CoTaskCancel() :cancel("CoTaskCancel") {
 
 	}
 	~CoTaskCancel();
