@@ -51,7 +51,7 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 	{
 		if (bÒÑ´ïµ¥Íæ¼Ò»î¶¯µ¥Î»ÉÏÏŞ)
 		{
-			refGateSession.²¥·ÅÉùÒôBuzz(std::format("ÒÔ´ïµ½µ¥¸öÍæ¼Ò»î¶¯µ¥Î»ÉÏÏŞ"));
+			refGateSession.²¥·ÅÉùÒôBuzz(std::format("ÒÑ´ïµ½µ¥¸öÍæ¼Ò»î¶¯µ¥Î»ÉÏÏŞ"));
 			return;
 		}
 
