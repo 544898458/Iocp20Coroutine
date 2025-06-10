@@ -46,10 +46,15 @@ bool 造活动单位Component::可造(const 单位类型 类型)
 
 void 造活动单位Component::造兵(PlayerGateSession_Game& refGateSession, const 单位类型 类型)
 {
-	//CHECK_RET_VOID(m_fun造活动单位);
-	if (房虫 != 类型 && refGateSession.活动单位包括制造队列中的() >= refGateSession.活动单位上限())
+	bool b已达单玩家活动单位上限 = false;
+	if (房虫 != 类型 && refGateSession.活动单位包括制造队列中的() >= refGateSession.活动单位上限(std::forward<bool&&>(b已达单玩家活动单位上限)))
 	{
-		//refGateSession.播放声音("tadErr02", "民房不足"); //Additional supply depots required.需要更多的食堂
+		if (b已达单玩家活动单位上限)
+		{
+			refGateSession.播放声音Buzz(std::format("以达到单个玩家活动单位上限"));
+			return;
+		}
+
 		switch (类型)
 		{
 		case 工虫:

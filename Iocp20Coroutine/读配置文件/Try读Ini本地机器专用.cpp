@@ -23,6 +23,7 @@ bool Try读Ini本地机器专用(std::string& refInOut, const std::string& strAppName, 
 	DWORD ret = GetPrivateProfileStringA(strAppName.c_str(), strKey.c_str(), refInOut.c_str(), szRead, sizeof(szRead), "本地机器专用.ini");
 	if (ret == 0)
 	{
+        LOG(ERROR) << "GetPrivateProfileStringA:strAppName:" << strAppName << "strKey:" << strKey << ",szRead:" << szRead;
 		return false;
 	}
 

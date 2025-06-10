@@ -252,7 +252,7 @@ public:
 		const auto oldSize = m_listCo.size();
 		std::erase_if(m_listCo, [](CoTask& refCo)->bool {return refCo.Finished(); });
 		const auto newSize = m_listCo.size();
-		const uint16_t 被除数 = 10;
+		const uint16_t 被除数 = 50;
 		if (oldSize % 被除数 == 0 || newSize % 被除数 == 0)
 		{
 			LOG(INFO) << "oldSize:" << oldSize << ",newSize:" << newSize;
