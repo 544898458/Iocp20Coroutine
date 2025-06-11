@@ -241,7 +241,7 @@ private:
 	dtTileCacheObstacle* m_obstacles;
 	dtTileCacheObstacle* m_nextFreeObstacle;
 	
-	static const int MAX_REQUESTS = 64;
+	static const int MAX_REQUESTS = 1024;//临时阻挡请求上限，maxObstacles是临时阻挡上限
 	ObstacleRequest m_reqs[MAX_REQUESTS];
 	int m_nreqs;
 	

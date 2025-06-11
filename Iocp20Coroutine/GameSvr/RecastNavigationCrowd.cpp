@@ -61,7 +61,10 @@ uint32_t CrowToolAdd·½¿é×èµ²(CrowdToolState& ref, float arrF[], float f°ë±ß³¤)
 
 	if (DT_SUCCESS != result)
 	{
-		LOG(ERROR) << "" << result;
+		LOG(ERROR) << "addBoxObstacle:" << result;
+		if (DT_BUFFER_TOO_SMALL | result)
+			LOG(ERROR) << "DT_BUFFER_TOO_SMALL";
+
 		_ASSERT(false);
 	}
 	return u32Ret;

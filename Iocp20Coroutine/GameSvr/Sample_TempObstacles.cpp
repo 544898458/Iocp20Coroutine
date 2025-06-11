@@ -1516,6 +1516,7 @@ void Sample_TempObstacles::loadAll(const char* path)
 		fclose(fp);
 		return;
 	}
+	header.cacheParams.maxObstacles = 1024;//临时阻挡上限，MAX_REQUESTS 也要同步改
 	status = m_tileCache->init(&header.cacheParams, m_talloc, m_tcomp, m_tmproc);
 	if (dtStatusFailed(status))
 	{
