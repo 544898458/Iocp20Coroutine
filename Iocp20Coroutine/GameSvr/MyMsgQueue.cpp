@@ -24,7 +24,7 @@ const std::initializer_list<const 属性类型> g_list所有属性 = { 生命, �
 const float fExponent = 2.0f;
 
 MsgNotifyPos::MsgNotifyPos(const Entity& ref) :
-	entityId(ref.Id), x(ref.Pos().x), z(ref.Pos().z), eulerAnglesY(ref.m_eulerAnglesY)
+	entityId(ref.Id), pos(ref.Pos()), eulerAnglesY(ref.m_eulerAnglesY)
 {
 }
 
