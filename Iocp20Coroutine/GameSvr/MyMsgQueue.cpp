@@ -41,7 +41,7 @@ MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :
 
 Position Position::operator*(float f)const
 {
-	return { x * f,z * f };
+	return { x * f, 0, z * f };
 }
 
 bool Position::DistanceLessEqual(const Position& refPos, float fDistance) const
@@ -78,10 +78,10 @@ Position Position::归一化()const
 	if (0 == f范数)
 	{
 		LOG(ERROR) << "范数是0，无法归一化," << *this;
-		return { x ,z };
+		return { x , 0, z };
 	}
 
-	return { x / f范数, z / f范数 };
+	return { x / f范数, 0, z / f范数 };
 }
 
 Msg苔蔓半径::Msg苔蔓半径(Entity& refEntity) :idEntity(refEntity.Id)
@@ -101,14 +101,14 @@ void MsgNotify属性::TryAdd属性(Entity& ref, const 属性类型 属性)
 	const auto 值 = 数值Component::Get(ref, 属性);
 	switch (属性)
 	{
-		case 属性类型::生命:
-		case 属性类型::能量:
-			break;
+	case 属性类型::生命:
+	case 属性类型::能量:
+		break;
 	default:
 		if (0 >= 值)
 			return;
 		break;
 	}
-		
+
 	map属性.insert({ 属性, (float)值 });
 }

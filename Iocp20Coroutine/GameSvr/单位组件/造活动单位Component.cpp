@@ -156,7 +156,7 @@ CoTaskBool 造活动单位Component::Co造活动单位()
 		}
 		else
 		{
-			pos = { posBuilding.x - 5 + std::rand() % 10, posBuilding.z - 5 + std::rand() % 10 };
+			pos = { posBuilding.x - 5 + std::rand() % 10, 0, posBuilding.z - 5 + std::rand() % 10 };
 			const auto ok = refSpace.CrowdToolFindNerestPos(pos);
 			_ASSERT(ok);
 
