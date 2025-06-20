@@ -321,9 +321,6 @@
     <ClCompile Include="单位组件\DefenceComponent.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
-    <ClCompile Include="单位组件\MonsterComponent.cpp">
-      <Filter>单位组件</Filter>
-    </ClCompile>
     <ClCompile Include="单位组件\PlayerComponent.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
@@ -389,6 +386,9 @@
     </ClCompile>
     <ClCompile Include="单位组件\数值Component.cpp">
       <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="SpaceSystem.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -566,9 +566,6 @@
     <ClInclude Include="单位组件\DefenceComponent.h">
       <Filter>单位组件</Filter>
     </ClInclude>
-    <ClInclude Include="单位组件\MonsterComponent.h">
-      <Filter>单位组件</Filter>
-    </ClInclude>
     <ClInclude Include="单位组件\PlayerComponent.h">
       <Filter>单位组件</Filter>
     </ClInclude>
@@ -649,6 +646,9 @@
     </ClInclude>
     <ClInclude Include="单位组件\数值Component.h">
       <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="SpaceSystem.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -324,6 +324,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Sample_TempObstacles.cpp" />
+    <ClCompile Include="SpaceSystem.cpp" />
     <ClCompile Include="单人剧情.cpp" />
     <ClCompile Include="单位.cpp" />
     <ClCompile Include="单位组件\AoiComponent.cpp">
@@ -336,9 +337,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="单位组件\DefenceComponent.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="单位组件\MonsterComponent.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="单位组件\PlayerComponent.cpp">
@@ -480,6 +478,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerGateSession_Game.h" />
     <ClInclude Include="PlayerSystem.h" />
+    <ClInclude Include="SpaceSystem.h" />
     <ClInclude Include="SpEntity.h" />
     <ClInclude Include="ClientSession_GameToWorld.h" />
     <ClInclude Include="SpPlayerComponent.h" />
@@ -490,7 +489,6 @@
     <ClInclude Include="单位组件\AttackComponent.h" />
     <ClInclude Include="单位组件\BuildingComponent.h" />
     <ClInclude Include="单位组件\DefenceComponent.h" />
-    <ClInclude Include="单位组件\MonsterComponent.h" />
     <ClInclude Include="单位组件\PlayerComponent.h" />
     <ClInclude Include="单位组件\PlayerNickNameComponent.h" />
     <ClInclude Include="单位组件\临时阻挡Component.h" />

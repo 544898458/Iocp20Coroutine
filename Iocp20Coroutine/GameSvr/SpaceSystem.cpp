@@ -1,37 +1,13 @@
 #include "pch.h"
+#include "SpaceSystem.h"
 #include "Entity.h"
-#include "AiCo.h"
 #include "Space.h"
-#include "单位.h"
-#include "../EntitySystem.h"
+#include "单位组件/可进活动单位Component.h"
+#include "单位组件/AttackComponent.h"
+#include "单位组件/DefenceComponent.h"
+#include "单位组件/走Component.h"
 
-#include "MonsterComponent.h"
-#include "AttackComponent.h"
-#include "DefenceComponent.h"
-#include "找目标走过去Component.h"
-#include "可进活动单位Component.h"
-#include "走Component.h"
-
-
-//
-//void MonsterComponent::AddComponent(Entity& refEntity)
-//{
-//	refEntity.m_spMonster = std::make_shared<MonsterComponent, Entity&>(refEntity);
-//}
-//
-//MonsterComponent::MonsterComponent(Entity& refThis)
-//{
-//	if (!refThis.m_upAttack)
-//	{
-//		LOG(ERROR) << "m_upAttack";
-//		return;
-//	}
-//	//m_coIdle = AiCo::Idle(refThis.shared_from_this(), refThis.m_upAttack->m_cancel);
-//	//m_coIdle.Run();
-//}
-
-
-std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const 单位类型 类型, const Position& refPos, const int count)
+std::vector<SpEntity> SpaceSystem::AddMonster(Space& refSpace, const 单位类型 类型, const Position& refPos, const int count, 找目标走过去Component::Fun空闲走向目标 fun空闲走向目标)
 {
 	std::vector<SpEntity> vecRet;
 	单位::怪配置 怪配置;
@@ -47,11 +23,11 @@ std::vector<SpEntity> MonsterComponent::AddMonster(Space& refSpace, const 单位类
 
 		if (房虫 == 类型)
 			可进活动单位Component::AddComponent(*spEntityMonster);
-		else 
+		else
 		{
 			AttackComponent::AddComponent(*spEntityMonster);
 			CHECK_RET_DEFAULT(spEntityMonster->m_up找目标走过去);
-			spEntityMonster->m_up找目标走过去->m_fun空闲走向此处 = 找目标走过去Component::怪物闲逛;
+			spEntityMonster->m_up找目标走过去->m_fun空闲走向此处 = fun空闲走向目标;
 		}
 
 
