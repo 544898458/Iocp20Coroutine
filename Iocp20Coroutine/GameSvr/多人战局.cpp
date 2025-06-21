@@ -13,16 +13,16 @@ void 玩家带入单位进入四方对战(Space& refSpace, const Position& refPos, PlayerGat
 {
 	CHECK_WP_RET_VOID(refGateSession.m_wp视口);
 	refSpace.造活动单位(*refGateSession.m_wp视口.lock(), refGateSession.NickName(), 单位类型::工程车, refPos, true);
-	refSpace.造活动单位(*refGateSession.m_wp视口.lock(), refGateSession.NickName(), 单位类型::工虫, { refPos.x, refPos.z + 5 });
+	refSpace.造活动单位(*refGateSession.m_wp视口.lock(), refGateSession.NickName(), 单位类型::工虫, { refPos.x, 0, refPos.z + 5 });
 
-	资源Component::Add(refSpace, 晶体矿, { refPos.x,		refPos.z - 18 });
-	资源Component::Add(refSpace, 晶体矿, { refPos.x,		refPos.z - 22 });
-	资源Component::Add(refSpace, 晶体矿, { refPos.x,		refPos.z + 18 });
-	资源Component::Add(refSpace, 晶体矿, { refPos.x,		refPos.z + 22 });
-	资源Component::Add(refSpace, 晶体矿, { refPos.x - 18,	refPos.z	});
-	资源Component::Add(refSpace, 晶体矿, { refPos.x - 22,	refPos.z	});
-	资源Component::Add(refSpace, 燃气矿, { refPos.x + 18,	refPos.z	});
-	资源Component::Add(refSpace, 燃气矿, { refPos.x + 22,	refPos.z	});
+	资源Component::Add(refSpace, 晶体矿, { refPos.x,		0, refPos.z - 18 });
+	资源Component::Add(refSpace, 晶体矿, { refPos.x,		0, refPos.z - 22 });
+	资源Component::Add(refSpace, 晶体矿, { refPos.x,		0, refPos.z + 18 });
+	资源Component::Add(refSpace, 晶体矿, { refPos.x,		0, refPos.z + 22 });
+	资源Component::Add(refSpace, 晶体矿, { refPos.x - 18,	0, refPos.z	});
+	资源Component::Add(refSpace, 晶体矿, { refPos.x - 22,	0, refPos.z	});
+	资源Component::Add(refSpace, 燃气矿, { refPos.x + 18,	0, refPos.z	});
+	资源Component::Add(refSpace, 燃气矿, { refPos.x + 22,	0, refPos.z	});
 
 	}
 
@@ -37,10 +37,10 @@ void 玩家带入单位进入四方对战(Space& refSpace, const Position& refPos, PlayerGat
 		const uint16_t u16距离中心点 = 50;
 		方位玩家 arr方位玩家[] =
 		{
-			{{u16距离中心点	,		0			},""},
-			{{-u16距离中心点,		0			},""},
-			{{			0	,	u16距离中心点	},""},
-			{{			0	,	-u16距离中心点	},""},
+			{{u16距离中心点	, 0,		0			},""},
+			{{-u16距离中心点, 0,		0			},""},
+			{{			0	, 0,	u16距离中心点	},""},
+			{{			0	, 0,	-u16距离中心点	},""},
 		};
 
 		//房主进第一个点
