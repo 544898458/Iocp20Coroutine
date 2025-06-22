@@ -114,7 +114,7 @@ void Ôì»î¶¯µ¥Î»Component::Ôì±ø(PlayerGateSession_Game& refGateSession, const µ¥Î
 	}
 
 	m_listµÈ´ıÔì.emplace_back(ÀàĞÍ);//++m_iµÈ´ıÔì±øÊı;
-	if(m_TaskCancelÔì»î¶¯µ¥Î».co.Finished())
+	if (m_TaskCancelÔì»î¶¯µ¥Î».co.Finished())
 		m_TaskCancelÔì»î¶¯µ¥Î».TryRun(CoÔì»î¶¯µ¥Î»());
 }
 
@@ -246,17 +246,26 @@ bool Ôì»î¶¯µ¥Î»Component::²É¼¯¼¯½áµã¸½½üµÄ×ÊÔ´(Entity& refEntiy)const
 
 	const auto [i32¸ñ×ÓId, i32¸ñ×ÓX, i32¸ñ×ÓZ] = AoiComponent::¸ñ×Ó(m_pos¼¯½áµã);
 	const auto& mapEntity = m_refEntity.m_refSpace.m_mapÔÚÕâÒ»¸ñÀï[i32¸ñ×ÓId];
-	const auto iterFind = std::find_if(mapEntity.begin(), mapEntity.end(), [](const auto& pair)
-		{
-			CHECK_WP_RET_FALSE(pair.second);
-			const auto& refEntity = *pair.second.lock();
-			return EntitySystem::Is×ÊÔ´(refEntity.m_ÀàĞÍ);
-		});
-	if (mapEntity.end() == iterFind)
+	float f¾à¼¯½áµã¾àÀëµÄÆ½·½min = std::numeric_limits<float>::max();
+	WpEntity wp×ÊÔ´;
+	for(const auto& [k,wp] : mapEntity)
+	{
+		CHECK_WP_RET_FALSE(wp);
+		const auto& refEntity = *wp.lock();
+		if (!EntitySystem::Is×ÊÔ´(refEntity.m_ÀàĞÍ))
+			continue;
+
+		const float f¾à¼¯½áµã¾àÀëµÄÆ½·½ = refEntity.Pos().DistancePow2(m_pos¼¯½áµã);
+		if (f¾à¼¯½áµã¾àÀëµÄÆ½·½ > f¾à¼¯½áµã¾àÀëµÄÆ½·½min)
+            continue;
+
+        f¾à¼¯½áµã¾àÀëµÄÆ½·½min = f¾à¼¯½áµã¾àÀëµÄÆ½·½;
+		wp×ÊÔ´ = wp;
+	}
+
+	if (wp×ÊÔ´.expired())
 		return false;
 
-	CHECK_WP_RET_FALSE(iterFind->second);
-	const auto& wp×ÊÔ´ = iterFind->second;
 	if (!wp×ÊÔ´.lock()->Pos().DistanceLessEqual(m_pos¼¯½áµã, 1))
 		return false;
 
