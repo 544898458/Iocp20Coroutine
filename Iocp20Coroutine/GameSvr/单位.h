@@ -33,6 +33,8 @@ namespace 单位
 		/// 静态阻挡（园的半径或正方形的半边长）
 		/// </summary>
 		float f半边长 = 0;
+		std::string str建造动作;
+		float f建造动作播放速度 = 1.0f;
 	};
 	struct 战斗配置
 	{

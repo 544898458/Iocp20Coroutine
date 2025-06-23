@@ -43,7 +43,7 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::建筑单位配置& _ref)
 	{
-		return _Ostr << "建筑单位配置," << _ref.f半边长;
+		return _Ostr << "建筑单位配置," << _ref.f半边长 << "," << _ref.str建造动作 << "," << _ref.f建造动作播放速度;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::消耗资源& _ref)
@@ -209,7 +209,7 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::建筑单位配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["f半边长"].as<float>() };
+			rhs = { refNode["f半边长"].as<float>(), refNode["str建造动作"].as<std::string>(), refNode["f建造动作播放速度"].as<float>() };
 			return true;
 		}
 	};
