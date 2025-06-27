@@ -390,6 +390,9 @@
     <ClCompile Include="SpaceSystem.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Position.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -648,6 +651,9 @@
       <Filter>单位组件</Filter>
     </ClInclude>
     <ClInclude Include="SpaceSystem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Position.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

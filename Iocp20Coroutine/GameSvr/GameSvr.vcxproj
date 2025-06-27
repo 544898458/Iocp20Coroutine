@@ -320,6 +320,7 @@
     </ClCompile>
     <ClCompile Include="..\读配置文件\Try读Ini本地机器专用.cpp" />
     <ClCompile Include="EntitySystem.cpp" />
+    <ClCompile Include="Position.cpp" />
     <ClCompile Include="RecastNavigationCrowd.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -469,6 +470,7 @@
     <ClInclude Include="..\IocpNetwork\WsaStartUp.h" />
     <ClInclude Include="AiCo.h" />
     <ClInclude Include="EntitySystem.h" />
+    <ClInclude Include="Position.h" />
     <ClInclude Include="RecastNavigationCrowd.h" />
     <ClInclude Include="Sample_TempObstacles.h" />
     <ClInclude Include="Entity.h" />
