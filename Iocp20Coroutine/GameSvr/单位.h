@@ -84,6 +84,7 @@ namespace 单位
 		std::string strSceneName;
 		std::string str寻路文件名;
 		std::string strHttps音乐;
+		bool Is多人战局()const;
 	};
 
 
