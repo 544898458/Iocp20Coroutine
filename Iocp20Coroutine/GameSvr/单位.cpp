@@ -440,6 +440,6 @@ namespace 单位
 
 	bool 战局配置::Is多人战局()const
 	{
-		return 战局类型::多人ID_非法_MIN < this->id副本 && this->id副本 < 战局类型::多人ID_非法_MIN;
+		return 战局类型::多人ID_非法_MIN < this->id副本 && this->id副本 < 战局类型::多人ID_非法_MAX;
 	}
 }

@@ -48,7 +48,7 @@
   备注: 攻坚战_虫,
   寻路文件: 攻坚战.bin
   类型: 10
-- Https音乐: https://www.rtsgame.online/music/勇气低音质.mp3
+- Https音乐: https://www.rtsgame.online/music/Sc2_T1.mp3
   strSceneName: prefabs/map/map八方汇聚
   备注: 中央防守_人
   寻路文件: 八方汇聚.bin
@@ -58,6 +58,11 @@
   备注: 四方对战
   寻路文件: 四方对战.bin
   类型: 101
+- Https音乐: https://www.rtsgame.online/music/Sc2_T2.mp3
+  strSceneName: prefabs/map/map一打一
+  备注: 一打一
+  寻路文件: 一打一.bin
+  类型: 102
 - Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
   strSceneName: prefabs/map/map战斗
   备注: 多玩家混战
