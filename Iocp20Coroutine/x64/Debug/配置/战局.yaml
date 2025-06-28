@@ -1,69 +1,97 @@
 - Https音乐: https://www.rtsgame.online/music/suno后勤运营低音质.mp3
+  Https高清贴图: ''
+  MeshRenderer路径: ''
   strSceneName: prefabs/map/map战斗
   备注: 新手训练_战备运营_人
   寻路文件: all_tiles_tilecache.bin
   类型: 1
 - Https音乐: https://www.rtsgame.online/music/suno后勤运营低音质.mp3
+  Https高清贴图: ''
+  MeshRenderer路径: ''
   strSceneName: prefabs/map/map战斗
   备注: 新手训练_战备运营_虫
   寻路文件: all_tiles_tilecache.bin
   类型: 2
 - Https音乐: https://www.rtsgame.online/music/suno重工业浪漫低音质.mp3
+  Https高清贴图: ''
+  MeshRenderer路径: ''
   strSceneName: prefabs/map/map攻坚战
   备注: 反空降战_人,
   寻路文件: 攻坚战.bin
   类型: 3
 - Https音乐: https://www.rtsgame.online/music/suno重工业浪漫低音质.mp3
+  Https高清贴图: ''
+  MeshRenderer路径: ''
   strSceneName: prefabs/map/map攻坚战
   备注: 空降战_虫,
   寻路文件: 攻坚战.bin
   类型: 4
 - Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
+  Https高清贴图: ''
+  MeshRenderer路径: ''
   strSceneName: prefabs/map/map战斗
   备注: 训练战_人
   寻路文件: all_tiles_tilecache.bin
   类型: 5
 - Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
+  Https高清贴图: ''
+  MeshRenderer路径: ''
   strSceneName: prefabs/map/map战斗
   备注: 训练战_虫
   寻路文件: all_tiles_tilecache.bin
   类型: 6
 - Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3
+  Https高清贴图: ''
+  MeshRenderer路径: ''
   strSceneName: prefabs/map/map防守战
   备注: 防守战_人,
   寻路文件: 防守战.bin
   类型: 7
 - Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3
+  Https高清贴图: ''
+  MeshRenderer路径: ''
   strSceneName: prefabs/map/map防守战
   备注: 防守战_虫,
   寻路文件: 防守战.bin
   类型: 8
 - Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
+  Https高清贴图: ''
+  MeshRenderer路径: ''
   strSceneName: prefabs/map/map攻坚战
   备注: 攻坚战_人,
   寻路文件: 攻坚战.bin
   类型: 9
 - Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
+  Https高清贴图: ''
+  MeshRenderer路径: ''
   strSceneName: prefabs/map/map攻坚战
   备注: 攻坚战_虫,
   寻路文件: 攻坚战.bin
   类型: 10
 - Https音乐: https://www.rtsgame.online/music/Sc2_T1.mp3
+  Https高清贴图: https://www.rtsgame.online/图片/地图/ditu4_8_高清.png
+  MeshRenderer路径: map八方汇聚/地图27处理法向/Terrain/ditu4_8(Clone)/floor
   strSceneName: prefabs/map/map八方汇聚
   备注: 中央防守_人
   寻路文件: 八方汇聚.bin
   类型: 11
 - Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3
+  Https高清贴图: ''
+  MeshRenderer路径: ''
   strSceneName: prefabs/map/map四方对战
   备注: 四方对战
   寻路文件: 四方对战.bin
   类型: 101
 - Https音乐: https://www.rtsgame.online/music/Sc2_T2.mp3
+  Https高清贴图: https://www.rtsgame.online/图片/地图/ditu4_1_高清.png
+  MeshRenderer路径: map一打一/Terrain/ditu4_1(Clone)/floor
   strSceneName: prefabs/map/map一打一
   备注: 一打一
   寻路文件: 一打一.bin
   类型: 102
 - Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
+  Https高清贴图: ''
+  MeshRenderer路径: ''
   strSceneName: prefabs/map/map战斗
   备注: 多玩家混战
   寻路文件: all_tiles_tilecache.bin
