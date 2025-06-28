@@ -135,25 +135,7 @@ async def 战局结果(request: 战局结果参数):
             (request.nickName, request.type)
         )
         updated_stats = await cursor.fetchone()
-        
-        #整个表按赢排序后写入json文件
-        cursor = await db.execute(
-            'SELECT nickname, type, wins, losses FROM player_stats ORDER BY wins DESC'
-        )
-        stats = await cursor.fetchall()
-        
-        # 将数据转换为带字段名的字典列表
-        stats_list = [
-            {
-                "nickname": row[0],
-                "type": row[1],
-                "wins": row[2],
-                "losses": row[3],
-                "total_games": row[2] + row[3]
-            }
-            for row in stats
-        ]
-        
+                
         # 获取所有战局类型
         all_types = [e.value for e in 战局类型 if e.name.endswith("MAX") is False and e.name.endswith("MIN") is False]
 
@@ -161,7 +143,7 @@ async def 战局结果(request: 战局结果参数):
         for t in all_types:
             # 赢排行榜
             cursor = await db.execute(
-                'SELECT nickname, type, wins, losses FROM player_stats WHERE type = ? AND wins > 0 ORDER BY wins DESC',
+                'SELECT nickname, type, wins, losses FROM player_stats WHERE type = ? AND wins > 0 ORDER BY wins DESC LIMIT 16',
                 (t,)
             )
             win_stats = await cursor.fetchall()
@@ -182,7 +164,7 @@ async def 战局结果(request: 战局结果参数):
 
             # 输排行榜
             cursor = await db.execute(
-                'SELECT nickname, type, wins, losses FROM player_stats WHERE type = ? AND losses > 0 ORDER BY losses DESC',
+                'SELECT nickname, type, wins, losses FROM player_stats WHERE type = ? AND losses > 0 ORDER BY losses DESC LIMIT 16',
                 (t,)
             )
             lose_stats = await cursor.fetchall()
