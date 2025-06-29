@@ -205,6 +205,16 @@ class StrategyLog
 	}\
 }
 
+#define CHECK_BREAK( exp ) \
+{\
+	if (!(exp)) \
+	{\
+		LOG(ERROR)<< #exp << ",false";\
+		_ASSERT(false);\
+		break;\
+	}\
+}
+
 #define CHECK_WP_RET_VOID( wp ) \
 {\
 	if ((wp).expired()) \
