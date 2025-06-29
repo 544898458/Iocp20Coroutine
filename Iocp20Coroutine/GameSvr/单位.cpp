@@ -33,7 +33,7 @@ namespace std
 	{
 		return _Ostr << "战斗配置," << _ref.f警戒距离 << "\t" << _ref.f攻击距离 << "\t" << _ref.u16攻击 << "\t" << _ref.u16防御 << "\t" << _ref.f每帧移动距离
 			<< _ref.str前摇动作 << "\t" << _ref.dura开始播放攻击动作 << "\t" << _ref.str攻击动作 << "\t" << _ref.u16开始伤害
-			<< _ref.str攻击音效 << "\t" << _ref.dura后摇;
+			<< _ref.str攻击音效 << "\t" << _ref.dura后摇 << "\t" << _ref.b空中 << "\t" << _ref.b可打空中;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::活动单位配置& _ref)
@@ -53,7 +53,7 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::制造配置& _ref)
 	{
-		return _Ostr << "制造配置," << _ref.消耗 << "\t" << _ref.u16初始Hp << "\t" << _ref.前置单位;
+		return _Ostr << "制造配置," << _ref.消耗 << "\t" << _ref.u16初始Hp << "\t" << _ref.u16耗时帧 << "\t" << _ref.前置单位;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::怪配置& _ref)
@@ -176,7 +176,9 @@ namespace YAML {
 					refNode["str弹丸特效"].as<std::string>(),
 					refNode["dura开始伤害"].as<uint16_t>(),
 					refNode["str攻击音效"].as<std::string>(),
-					std::chrono::milliseconds(refNode["dura后摇"].as<int32_t>())
+					std::chrono::milliseconds(refNode["dura后摇"].as<int32_t>()),
+					refNode["b空中"].as<bool>(),
+					refNode["b可打空中"].as<bool>()
 			};
 			return true;
 		}
@@ -239,7 +241,7 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::制造配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode.as<单位::消耗资源>(),refNode["初始HP"].as<uint16_t>(), refNode["前置单位"].as<单位类型>()};
+			rhs = { refNode.as<单位::消耗资源>(),refNode["初始HP"].as<uint16_t>(), refNode["前置单位"].as<单位类型>(), refNode["耗时帧"].as<uint16_t>() };
 			return true;
 		}
 	};
@@ -316,20 +318,7 @@ namespace 单位
 	std::unordered_map<单位类型, 消耗资源> g_map单位解锁配置;
 	std::unordered_map<BuffId, Buff配置> g_mapBuff配置;
 	std::unordered_map<战局类型, 战局配置> g_map副本配置;
-	//{
-	//	{训练战_人,{训练战_人,"all_tiles_tilecache.bin",		"scene战斗",	单人剧情::Co训练战,		"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
-	//	{训练战_虫,{训练战_虫,"all_tiles_tilecache.bin",	"scene战斗",	单人剧情::Co训练战_虫,	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
-	//	{防守战_人,{防守战_人,"防守战.bin",					"scene防守战",	单人剧情::Co防守战,		"https://www.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3"}},
-	//	{防守战_虫,{防守战_虫,"防守战.bin",				"scene防守战",	单人剧情::Co防守战_虫,	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3"}},
-	//	{攻坚战_人,{攻坚战_人,"攻坚战.bin",					"scene攻坚战",	单人剧情::Co攻坚战,		"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
-	//	{攻坚战_虫,{攻坚战_虫,"攻坚战.bin",				"scene攻坚战",	单人剧情::Co攻坚战_虫,	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
-	//	{反空降战_人,{反空降战_人,"攻坚战.bin",				"scene攻坚战",	单人剧情::Co反空降战_人,"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
-	//	{空降战_虫,{空降战_虫,"攻坚战.bin",				"scene攻坚战",	单人剧情::Co空降战_虫,	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
-	//	{多玩家混战,{多玩家混战,"all_tiles_tilecache.bin","scene战斗",	{},						"https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3"}},
-	//	{四方对战,{四方对战,"四方对战.bin",				"scene四方对战",多人战局::Co四方对战,	"https://www.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3"}},
-	//};
-
-
+	
 	template<typename K, typename T>
 	bool 读配置文件(const std::string& strPathName, std::unordered_map<K, T>& map, const std::string& strKeyName = "类型")
 	{

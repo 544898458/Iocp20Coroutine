@@ -26,6 +26,7 @@ namespace 单位
 		消耗资源 消耗;
 		uint16_t u16初始Hp;
 		单位类型 前置单位;
+		uint16_t u16耗时帧;
 	};
 	struct 建筑单位配置
 	{
@@ -50,6 +51,8 @@ namespace 单位
 		uint16_t u16开始伤害;
 		std::string str攻击音效;
 		std::chrono::system_clock::duration dura后摇;
+		bool b空中 = false;
+		bool b可打空中 = false;
 	};
 	struct 活动单位配置
 	{
