@@ -186,7 +186,7 @@
   类型: 211
   防御: 0
 - b可打空中: false
-  b空中: false
+  b空中: true
   dura后摇: 0
   dura开始伤害: 0
   dura开始播放攻击动作: 0
