@@ -19,9 +19,14 @@
 namespace std
 {
 	template <class _Traits>
+	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::动作& _ref)
+	{
+		return _Ostr << _ref.str动作名字或索引 << "," << _ref.f播放速度 << "," << _ref.f起始时刻秒 << "," << _ref.f结束时刻秒;
+	}
+	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::单位配置& _ref)
 	{
-		return _Ostr << "单位配置:" << _ref.strName << "\t" << _ref.种族 << "\t" << _ref.strPrefabName << "\t" << _ref.str选中音效 << "\t" << _ref.str阵亡音效 << "\t" << _ref.str阵亡动作;
+		return _Ostr << "单位配置:" << _ref.strName << "\t" << _ref.种族 << "\t" << _ref.strPrefabName << "\t" << _ref.b骨骼动画 << "\t" << _ref.str选中音效 << "\t" << _ref.空闲 << "\t" << _ref.阵亡 << "\t" << _ref.str阵亡音效;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::战局配置& _ref)
@@ -43,7 +48,7 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::建筑单位配置& _ref)
 	{
-		return _Ostr << "建筑单位配置," << _ref.f半边长 << "," << _ref.str建造动作 << "," << _ref.f建造动作播放速度;
+		return _Ostr << "建筑单位配置," << _ref.f半边长 << "," << _ref.建造 << "," << _ref.f建造动作播放速度 << "," << _ref.f动作起始时刻秒 << "," << _ref.f动作结束时刻秒;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::消耗资源& _ref)
@@ -134,6 +139,19 @@ namespace YAML {
 		}
 	};
 	template<>
+	struct convert<单位::动作> {
+		static Node encode(const 单位::动作& rhs) {
+			LOG(ERROR) << "";
+			_ASSERT(false);
+			return Node();
+		}
+		static bool decode(const Node& refNode, 单位::动作& rhs) {
+			CHECK_RET_FALSE(refNode.IsMap());
+			rhs = { refNode["str动作名字或索引"].as<std::string>(), refNode["f播放速度"].as<float>(), refNode["f起始时刻秒"].as<float>(), refNode["f结束时刻秒"].as<float>() };
+			return true;
+		}
+	};
+	template<>
 	struct convert<单位::单位配置> {
 		static Node encode(const 单位::单位配置& rhs) {
 
@@ -146,11 +164,11 @@ namespace YAML {
 			rhs = { refNode["名字"].as<std::string>(),
 					refNode["种族"].as<种族>(),
 					refNode["PrefabPathName"].as<std::string>(),
-					refNode["选中音效"].as<std::string>() ,
-					refNode["空闲动作"].as<std::string>(),
-					refNode["str阵亡动作"].as<std::string>(),
-					refNode["str阵亡音效"].as<std::string>()
-
+					refNode["是骨骼动画"].as<bool>(),
+					refNode["选中音效"].as<std::string>(),
+					refNode["空闲动作"].as<单位::动作>(),
+					refNode["阵亡动作"].as<单位::动作>(),
+					refNode["阵亡音效"].as<std::string>(),
 			};
 			return true;
 		}
@@ -211,7 +229,7 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::建筑单位配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["f半边长"].as<float>(), refNode["str建造动作"].as<std::string>(), refNode["f建造动作播放速度"].as<float>() };
+			rhs = { refNode["f半边长"].as<float>(), refNode["str建造动作"].as<单位::动作>(), refNode["f建造动作播放速度"].as<float>(), refNode["f动作起始时刻秒"].as<float>(), refNode["f动作结束时刻秒"].as<float>() };
 			return true;
 		}
 	};

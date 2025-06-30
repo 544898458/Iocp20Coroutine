@@ -4,17 +4,29 @@
 class Space;
 namespace 单位
 {
+	struct 动作
+	{
+		std::string str动作名字或索引;
+		float f播放速度 = 1.0f;
+		float f起始时刻秒 = 0;
+		float f结束时刻秒 = 0;
+		MSGPACK_DEFINE(str动作名字或索引, f播放速度, f起始时刻秒, f结束时刻秒);
+	};
+	
+	/// <summary>
+	/// 序列化进混战地图里，只能在后面加字段，不能插入字段
+	/// </summary>
 	struct 单位配置
 	{
 		std::string strName;
 		种族 种族;
 		std::string strPrefabName;
+		bool b骨骼动画 = true;
 		std::string str选中音效;
-		std::string str空闲动作;
-		std::string str阵亡动作;
+		动作 空闲;
+		动作 阵亡;
 		std::string str阵亡音效;
-		MSGPACK_DEFINE(strName, 种族, strPrefabName, str选中音效, str空闲动作, str阵亡动作, str阵亡音效);
-
+		MSGPACK_DEFINE(strName, 种族, strPrefabName, b骨骼动画	, str选中音效, 空闲, 阵亡, str阵亡音效);
 	};
 	struct 消耗资源
 	{
@@ -34,8 +46,7 @@ namespace 单位
 		/// 静态阻挡（园的半径或正方形的半边长）
 		/// </summary>
 		float f半边长 = 0;
-		std::string str建造动作;
-		float f建造动作播放速度 = 1.0f;
+		动作 建造;
 	};
 	struct 战斗配置
 	{
