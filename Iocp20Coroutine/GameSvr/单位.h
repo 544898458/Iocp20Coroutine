@@ -6,11 +6,11 @@ namespace 单位
 {
 	struct 动作
 	{
-		std::string str动作名字或索引;
+		std::string str名字或索引;
 		float f播放速度 = 1.0f;
 		float f起始时刻秒 = 0;
 		float f结束时刻秒 = 0;
-		MSGPACK_DEFINE(str动作名字或索引, f播放速度, f起始时刻秒, f结束时刻秒);
+		MSGPACK_DEFINE(str名字或索引, f播放速度, f起始时刻秒, f结束时刻秒);
 	};
 	
 	/// <summary>

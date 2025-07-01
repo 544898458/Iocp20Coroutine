@@ -4,6 +4,32 @@ import pandas as pd
 import yaml
 import os
 
+def parse_column_name(col_name):
+    """解析列名，支持嵌套结构，如 '坐标1.X', '坐标1.Y', '坐标1.Z'"""
+    if '.' in col_name:
+        parts = col_name.split('.')
+        return parts[0], parts[1]
+    return col_name, None
+
+def build_nested_dict(row, columns):
+    """构建嵌套字典结构"""
+    result = {}
+    
+    for col in columns:
+        parent_key, child_key = parse_column_name(col)
+        value = row[col] if pd.notna(row[col]) else ''
+        
+        if child_key is None:
+            # 简单字段
+            result[parent_key] = value
+        else:
+            # 嵌套字段
+            if parent_key not in result:
+                result[parent_key] = {}
+            result[parent_key][child_key] = value
+    
+    return result
+
 def excel_to_yaml(excel_file_path, output_dir):
     # 确保输出目录存在
     if not os.path.exists(output_dir):
@@ -22,11 +48,11 @@ def excel_to_yaml(excel_file_path, output_dir):
             # 获取列名
             columns = df.columns
             
-            # 将DataFrame转换为字典列表，确保列顺序，并将NaN值替换为空字符串
+            # 将DataFrame转换为字典列表，支持嵌套结构
             data_list = []
             for _, row in df.iterrows():
-                data_dict = {col: (row[col] if pd.notna(row[col]) else '') for col in columns}
-                data_list.append(data_dict)
+                nested_dict = build_nested_dict(row, columns)
+                data_list.append(nested_dict)
             
             # 打印当前工作表的内容
             print(f"处理工作表: {sheet_name}")

@@ -21,7 +21,7 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::动作& _ref)
 	{
-		return _Ostr << _ref.str动作名字或索引 << "," << _ref.f播放速度 << "," << _ref.f起始时刻秒 << "," << _ref.f结束时刻秒;
+		return _Ostr << _ref.str名字或索引 << "," << _ref.f播放速度 << "," << _ref.f起始时刻秒 << "," << _ref.f结束时刻秒;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::单位配置& _ref)
@@ -48,7 +48,7 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::建筑单位配置& _ref)
 	{
-		return _Ostr << "建筑单位配置," << _ref.f半边长 << "," << _ref.建造 << "," << _ref.f建造动作播放速度 << "," << _ref.f动作起始时刻秒 << "," << _ref.f动作结束时刻秒;
+		return _Ostr << "建筑单位配置," << _ref.f半边长 << "," << _ref.建造;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::消耗资源& _ref)
@@ -78,6 +78,22 @@ namespace std
 }
 
 namespace YAML {
+	// 辅助函数：安全获取YAML节点值，支持默认值
+	template<typename T>
+	T safe_get(const Node& node, const std::string& key, const T& default_value) {
+		return node[key] ? node[key].as<T>() : default_value;
+	}
+
+	// 辅助函数：安全获取时间值
+	std::chrono::milliseconds safe_get_duration(const Node& node, const std::string& key, int32_t default_ms = 0) {
+		return node[key] ? std::chrono::milliseconds(node[key].as<int32_t>()) : std::chrono::milliseconds(default_ms);
+	}
+
+	// 辅助函数：安全获取时间值（int16_t版本）
+	std::chrono::milliseconds safe_get_duration16(const Node& node, const std::string& key, int16_t default_ms = 0) {
+		return node[key] ? std::chrono::milliseconds(node[key].as<int16_t>()) : std::chrono::milliseconds(default_ms);
+	}
+
 	template<>
 	struct convert<战局类型> {
 		static Node encode(const 战局类型& rhs) {
@@ -147,7 +163,12 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::动作& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["str动作名字或索引"].as<std::string>(), refNode["f播放速度"].as<float>(), refNode["f起始时刻秒"].as<float>(), refNode["f结束时刻秒"].as<float>() };
+			rhs = { 
+				safe_get<std::string>(refNode, "名字或索引", ""),
+				safe_get<float>(refNode, "播放速度", 1.0f),
+				safe_get<float>(refNode, "起始时刻秒", 0.0f),
+				safe_get<float>(refNode, "结束时刻秒", 0.0f)
+			};
 			return true;
 		}
 	};
@@ -161,14 +182,16 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::单位配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["名字"].as<std::string>(),
-					refNode["种族"].as<种族>(),
-					refNode["PrefabPathName"].as<std::string>(),
-					refNode["是骨骼动画"].as<bool>(),
-					refNode["选中音效"].as<std::string>(),
-					refNode["空闲动作"].as<单位::动作>(),
-					refNode["阵亡动作"].as<单位::动作>(),
-					refNode["阵亡音效"].as<std::string>(),
+			static const 单位::动作 默认动作 = {"", 1.0f, 0.0f, 0.0f};
+			rhs = { 
+				safe_get<std::string>(refNode, "名字", ""),
+				safe_get<种族>(refNode, "种族", 种族(0)),
+				safe_get<std::string>(refNode, "PrefabPathName", ""),
+				safe_get<bool>(refNode, "是骨骼动画", false),
+				safe_get<std::string>(refNode, "选中音效", ""),
+				safe_get<单位::动作>(refNode, "空闲动作", 默认动作),
+				safe_get<单位::动作>(refNode, "阵亡动作", 默认动作),
+				safe_get<std::string>(refNode, "阵亡音效", ""),
 			};
 			return true;
 		}
@@ -183,20 +206,21 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::战斗配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["f警戒距离"].as<float>(),
-					refNode["f攻击距离"].as<float>(),
-					refNode["攻击"].as<uint16_t>(),
-					refNode["防御"].as<uint16_t>(),
-					refNode["f每帧移动距离"].as<float>(),
-					refNode["str前摇动作"].as<std::string>(),
-					std::chrono::milliseconds(refNode["dura开始播放攻击动作"].as<int32_t>()),
-					refNode["str攻击动作"].as<std::string>(),
-					refNode["str弹丸特效"].as<std::string>(),
-					refNode["dura开始伤害"].as<uint16_t>(),
-					refNode["str攻击音效"].as<std::string>(),
-					std::chrono::milliseconds(refNode["dura后摇"].as<int32_t>()),
-					refNode["b空中"].as<bool>(),
-					refNode["b可打空中"].as<bool>()
+			rhs = { 
+				safe_get<float>(refNode, "f警戒距离", 0.0f),
+				safe_get<float>(refNode, "f攻击距离", 0.0f),
+				safe_get<uint16_t>(refNode, "攻击", 0),
+				safe_get<uint16_t>(refNode, "防御", 0),
+				safe_get<float>(refNode, "f每帧移动距离", 0.0f),
+				safe_get<std::string>(refNode, "str前摇动作", ""),
+				safe_get_duration(refNode, "dura开始播放攻击动作", 0),
+				safe_get<std::string>(refNode, "str攻击动作", ""),
+				safe_get<std::string>(refNode, "str弹丸特效", ""),
+				safe_get<uint16_t>(refNode, "dura开始伤害", 0),
+				safe_get<std::string>(refNode, "str攻击音效", ""),
+				safe_get_duration(refNode, "dura后摇", 0),
+				safe_get<bool>(refNode, "b空中", false),
+				safe_get<bool>(refNode, "b可打空中", false)
 			};
 			return true;
 		}
@@ -211,10 +235,11 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::活动单位配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["入场语音"].as<std::string>(),
-					refNode["走路动作"].as<std::string>(),
-					refNode["普通走语音"].as<std::string>(),
-					refNode["强行走语音"].as<std::string>(),
+			rhs = { 
+				safe_get<std::string>(refNode, "入场语音", ""),
+				safe_get<std::string>(refNode, "走路动作", ""),
+				safe_get<std::string>(refNode, "普通走语音", ""),
+				safe_get<std::string>(refNode, "强行走语音", ""),
 			};
 			return true;
 		}
@@ -229,7 +254,11 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::建筑单位配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["f半边长"].as<float>(), refNode["str建造动作"].as<单位::动作>(), refNode["f建造动作播放速度"].as<float>(), refNode["f动作起始时刻秒"].as<float>(), refNode["f动作结束时刻秒"].as<float>() };
+			static const 单位::动作 默认建造动作 = {"", 1.0f, 0.0f, 0.0f};
+			rhs = { 
+				safe_get<float>(refNode, "f半边长", 0.0f), 
+				safe_get<单位::动作>(refNode, "建造动作", 默认建造动作) 
+			};
 			return true;
 		}
 	};
@@ -244,7 +273,10 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::消耗资源& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["消耗晶体矿"].as<uint16_t>(),refNode["消耗燃气矿"].as<uint16_t>() };
+			rhs = { 
+				safe_get<uint16_t>(refNode, "消耗晶体矿", 0),
+				safe_get<uint16_t>(refNode, "消耗燃气矿", 0) 
+			};
 			return true;
 		}
 	};
@@ -259,7 +291,12 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::制造配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode.as<单位::消耗资源>(),refNode["初始HP"].as<uint16_t>(), refNode["前置单位"].as<单位类型>(), refNode["耗时帧"].as<uint16_t>() };
+			rhs = { 
+				refNode.as<单位::消耗资源>(),
+				safe_get<uint16_t>(refNode, "初始HP", 0), 
+				safe_get<单位类型>(refNode, "前置单位", 单位类型(0)),
+				safe_get<uint16_t>(refNode, "耗时帧", 0) 
+			};
 			return true;
 		}
 	};
@@ -274,7 +311,7 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::怪配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["u16初始Hp"].as<uint16_t>() };
+			rhs = { safe_get<uint16_t>(refNode, "u16初始Hp", 0) };
 			return true;
 		}
 	};
@@ -289,7 +326,10 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::单位属性等级配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs[refNode["属性"].as<属性类型>()][refNode["等级"].as<uint16_t>()] = { refNode["数值"].as<float>(), refNode.as<单位::消耗资源>() };
+			rhs[safe_get<属性类型>(refNode, "属性", 属性类型(0))][safe_get<uint16_t>(refNode, "等级", 0)] = { 
+				safe_get<float>(refNode, "数值", 0.0f), 
+				refNode.as<单位::消耗资源>() 
+			};
 			return true;
 		}
 	};
@@ -303,7 +343,11 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::Buff配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["属性"].as<属性类型>(), refNode["变化值"].as<float>(), std::chrono::milliseconds(refNode["间隔时长"].as<int16_t>()) };
+			rhs = { 
+				safe_get<属性类型>(refNode, "属性", 属性类型(0)), 
+				safe_get<float>(refNode, "变化值", 0.0f), 
+				safe_get_duration16(refNode, "间隔时长", 0) 
+			};
 			return true;
 		}
 	};
@@ -318,7 +362,12 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::战局配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			rhs = { refNode["类型"].as<战局类型>(), refNode["strSceneName"].as<std::string>(), refNode["寻路文件"].as<std::string>(), refNode["Https音乐"].as<std::string>() };
+			rhs = { 
+				safe_get<战局类型>(refNode, "类型", 战局类型(0)), 
+				safe_get<std::string>(refNode, "strSceneName", ""), 
+				safe_get<std::string>(refNode, "寻路文件", ""), 
+				safe_get<std::string>(refNode, "Https音乐", "") 
+			};
 			return true;
 		}
 	};
