@@ -155,7 +155,7 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 			EntitySystem::停止攻击和治疗(m_refEntity);
 
 			CHECK_CO_RET_FALSE(m_refEntity.m_up走);
-			if (co_await m_refEntity.m_up走->WalkToTarget(wpEntity基地.lock(), m_TaskCancel.cancel, false))
+			if (co_await m_refEntity.m_up走->WalkToTarget(wpEntity基地, m_TaskCancel.cancel, false))
 				co_return true;//中断，可能打怪去了
 
 			continue;
@@ -178,7 +178,7 @@ CoTaskBool 采集Component::Co采集(WpEntity wp目标资源)
 					//m_refEntity.m_upAttack->TryCancel();
 
 					CHECK_CO_RET_FALSE(m_refEntity.m_up走);
-					if (co_await m_refEntity.m_up走->WalkToTarget(wp目标资源.lock(), m_TaskCancel.cancel, false))
+					if (co_await m_refEntity.m_up走->WalkToTarget(wp目标资源, m_TaskCancel.cancel, false))
 						co_return true;//中断
 
 					m_refEntity.BroadcastChangeSkeleAnim(m_refEntity.m_类型 == 工虫 ? "采集" : "2", true);

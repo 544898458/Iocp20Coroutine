@@ -21,7 +21,7 @@ public:
 	static bool WalkToTarget(Entity& refThis, SpEntity spTarget);
 	static bool WalkToPos(Entity& refThis, const Position& posTarget);
 
-	CoTaskBool WalkToTarget(SpEntity spEntity, FunCancel& funCancel, const bool b检查警戒距离 = true, const std::function<bool(Entity&)>& fun可停下 = [](Entity&) {return true; });
+	CoTaskBool WalkToTarget(WpEntity wpEntity, FunCancel& funCancel, const bool b检查警戒距离 = true, const std::function<bool(Entity&)>& fun可停下 = [](Entity&) {return true; });
 	CoTaskBool WalkToPos(const Position posTarget, FunCancel& funCancel, const float f距离目标小于此距离停下 = 0);
 
 	static const int INVALID_AGENT_IDX = -1;//0是合法值

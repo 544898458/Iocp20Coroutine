@@ -179,7 +179,7 @@ CoTaskBool 找目标走过去Component::Co走向警戒范围内的目标然后操作(
 
 			if (m_refEntity.m_up走)//炮台没有走组件
 			{
-				if (co_await m_refEntity.m_up走->WalkToTarget(wpEntity.lock(), m_TaskCancel.cancel, !b仇恨目标, [this](Entity& ref) {return 检查穿墙(ref); }))
+				if (co_await m_refEntity.m_up走->WalkToTarget(wpEntity, m_TaskCancel.cancel, !b仇恨目标, [this](Entity& ref) {return 检查穿墙(ref); }))
 					co_return true;
 			}
 			continue;//可能已走到攻击距离内，再攻击试试
@@ -230,7 +230,7 @@ void 找目标走过去Component::OnEntityDestroy(const bool bDestroy)
 
 Position 找目标走过去Component::怪物闲逛(const Position& refOld)
 {
-	_ASSERT(0 != refOld.z);
+	//_ASSERT(0 != refOld.z);
 	auto posTarget = refOld;
 	posTarget.x += std::rand() % 11 - 5;//随机走
 	posTarget.z += std::rand() % 11 - 5;
