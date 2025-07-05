@@ -68,7 +68,7 @@ namespace 单位
 	struct 活动单位配置
 	{
 		std::string str入场语音;
-		std::string str走路动作;
+		动作 走路;
 		std::string str普通走语音;
 		std::string str强行走语音;
 	};

@@ -43,7 +43,7 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::活动单位配置& _ref)
 	{
-		return _Ostr << "活动单位配置," << _ref.str入场语音 << "," << _ref.str走路动作 << "," << _ref.str普通走语音 << "," << _ref.str强行走语音;
+		return _Ostr << "活动单位配置," << _ref.str入场语音 << "," << _ref.走路 << "," << _ref.str普通走语音 << "," << _ref.str强行走语音;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::建筑单位配置& _ref)
@@ -172,6 +172,7 @@ namespace YAML {
 			return true;
 		}
 	};
+	static const 单位::动作 默认动作 = {"", 1.0f, 0.0f, 0.0f};
 	template<>
 	struct convert<单位::单位配置> {
 		static Node encode(const 单位::单位配置& rhs) {
@@ -182,7 +183,7 @@ namespace YAML {
 		}
 		static bool decode(const Node& refNode, 单位::单位配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
-			static const 单位::动作 默认动作 = {"", 1.0f, 0.0f, 0.0f};
+			
 			rhs = { 
 				safe_get<std::string>(refNode, "名字", ""),
 				safe_get<种族>(refNode, "种族", 种族(0)),
@@ -237,7 +238,7 @@ namespace YAML {
 			CHECK_RET_FALSE(refNode.IsMap());
 			rhs = { 
 				safe_get<std::string>(refNode, "入场语音", ""),
-				safe_get<std::string>(refNode, "走路动作", ""),
+				safe_get<单位::动作>(refNode, "走路动作", 默认动作),
 				safe_get<std::string>(refNode, "普通走语音", ""),
 				safe_get<std::string>(refNode, "强行走语音", ""),
 			};
