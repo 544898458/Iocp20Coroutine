@@ -144,10 +144,15 @@ if(!ok)
 
 #### 安装教程
 
-1. 安装VS2022社区版的C++桌面开发后就能直接打开解决方案;
-2. 把此文件复制到C盘Windows文件夹下：Iocp20Coroutine/x64/Release/本地机器专用.ini
-3. 用这个批处理一次启动三个服务器：Iocp20Coroutine/x64/Release/启动全部服务器.bat
-4. 前端项目在 https://gitee.com/griffon2/cocos-creator38-demo
+1. 安装 VS2022社区版 的 C++桌面开发 后就能直接双击打开解决方案 Iocp20Coroutine\Iocp20Coroutine.sln;
+2. 左上角选择 Debug，然后 菜单 => 生成(B) => 生成解决方案(B) 生成执行文件，或者直接 Shift+Ctrl+B 生成执行文件；
+3. 把此文件复制到C盘Windows文件夹下：Iocp20Coroutine/x64/Release/本地机器专用.ini；
+4. 用这个批处理一次启动三个服务器：Iocp20Coroutine/x64/Debug/启动全部服务器.bat；
+5. 菜单 => 调试(D) => 附加到进程(P) => 选择 GameSvr.exe 来调试，或者直接 Ctrl+Alt+P 附加到 GameSvr.exe 调试，可下断点；
+6. 修改电脑本地hosts文件（C:\Windows\System32\drivers\etc\hosts）把域名 rtsgame.online 定位到 127.0.0.1  
+127.0.0.1 test.rtsgame.online
+7. 浏览器打开网页 https://www.rtsgame.online/h5/ ，在网页里直接点“登录体验测试服”，游戏就会连上本地服务器
+8. 前端项目在 https://gitee.com/griffon2/cocos-creator38-demo
 
 ### 贡献名单
 
