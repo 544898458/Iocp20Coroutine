@@ -43,7 +43,7 @@
   f警戒距离: 15
   str前摇动作: ''
   str弹丸特效: ''
-  str攻击动作: attack
+  str攻击动作: 2
   str攻击音效: Tfrshoot
   备注: 近战兵
   攻击: 5
