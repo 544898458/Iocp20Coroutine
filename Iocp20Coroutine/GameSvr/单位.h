@@ -57,7 +57,7 @@ namespace 单位
 		float f每帧移动距离;
 		std::string str前摇动作;
 		std::chrono::system_clock::duration dura开始播放攻击动作;
-		std::string str攻击动作;
+		动作 攻击;
 		std::string str弹丸特效;
 		uint16_t u16开始伤害;
 		std::string str攻击音效;

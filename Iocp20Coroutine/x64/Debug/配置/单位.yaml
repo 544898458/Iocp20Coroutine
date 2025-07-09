@@ -159,7 +159,7 @@
     起始时刻秒: 0
   阵亡音效: TMaDth00
 - PrefabPathName: 活动单位/近战兵
-  动画节点路径: Melee Soldier Idle
+  动画节点路径: 近战兵999面_Idle
   受击高度: 3
   名字: 近战兵
   描述: 近程攻击

@@ -37,7 +37,7 @@ namespace std
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::战斗配置& _ref)
 	{
 		return _Ostr << "战斗配置," << _ref.f警戒距离 << "\t" << _ref.f攻击距离 << "\t" << _ref.u16攻击 << "\t" << _ref.u16防御 << "\t" << _ref.f每帧移动距离
-			<< _ref.str前摇动作 << "\t" << _ref.dura开始播放攻击动作 << "\t" << _ref.str攻击动作 << "\t" << _ref.u16开始伤害
+			<< _ref.str前摇动作 << "\t" << _ref.dura开始播放攻击动作 << "\t" << _ref.攻击 << "\t" << _ref.u16开始伤害
 			<< _ref.str攻击音效 << "\t" << _ref.dura后摇 << "\t" << _ref.b空中 << "\t" << _ref.b可打空中;
 	}
 	template <class _Traits>
@@ -215,7 +215,7 @@ namespace YAML {
 				safe_get<float>(refNode, "f每帧移动距离", 0.0f),
 				safe_get<std::string>(refNode, "str前摇动作", ""),
 				safe_get_duration(refNode, "dura开始播放攻击动作", 0),
-				safe_get<std::string>(refNode, "str攻击动作", ""),
+				safe_get<单位::动作>(refNode, "攻击动作", 默认动作),
 				safe_get<std::string>(refNode, "str弹丸特效", ""),
 				safe_get<uint16_t>(refNode, "dura开始伤害", 0),
 				safe_get<std::string>(refNode, "str攻击音效", ""),
