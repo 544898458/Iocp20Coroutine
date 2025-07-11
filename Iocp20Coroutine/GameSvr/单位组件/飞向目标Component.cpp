@@ -38,7 +38,7 @@ CoTaskBool 飞向目标Component::Co飞向目标遇敌爆炸()
 	float f首次移动倍数 = 3.f;
 	while (!co_await CoTimer::WaitNextUpdate(m_funCancel))
 	{
-		auto wp = m_refEntity.Get最近的Entity(Entity::敌方);
+		auto wp = m_refEntity.Get最近的Entity(Entity::敌方, [this](const Entity& ref)->bool {return EntitySystem::Is空地能打(m_refEntity.m_类型, ref.m_类型);});
 		if (!wp.expired())
 		{
 			auto &ref目标 = *wp.lock();
