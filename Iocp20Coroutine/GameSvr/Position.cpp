@@ -53,3 +53,10 @@ Position Position::归一化()const
 
 	return { x / f范数, 0, z / f范数 };
 }
+
+Position 在方块里随机一个点(const uint16_t u16半径)
+{
+	const Rect rect = { {-u16半径, 0, -u16半径},{u16半径, 0, u16半径} };
+	const Position pos = { rect.pos左上.x + std::rand() % rect.宽Int32(), 0, rect.pos左上.z + std::rand() % rect.高Int32() };
+	return pos;
+}

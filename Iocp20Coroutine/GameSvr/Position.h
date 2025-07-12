@@ -79,3 +79,5 @@ std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>&
 {
 	return _Ostr << "(" << _ref.x << "," << _ref.y << "," << _ref.z << ")";
 }
+
+Position 在方块里随机一个点(const uint16_t u16半径);
