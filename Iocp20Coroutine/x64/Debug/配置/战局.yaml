@@ -96,3 +96,10 @@
   备注: 多玩家混战
   寻路文件: all_tiles_tilecache.bin
   类型: 201
+- Https音乐: https://www.rtsgame.online/music/Sc2_T3.mp3
+  Https高清贴图: https://www.rtsgame.online/图片/地图/ditu_boss2_高清.png
+  MeshRenderer路径: map圆坑/Terrain/ditu_boss2(Clone)/floor
+  strSceneName: prefabs/map/map圆坑
+  备注: 圆坑混战
+  寻路文件: 圆坑.bin
+  类型: 202

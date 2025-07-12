@@ -154,10 +154,13 @@ int main(void)
 	m_funBroadcast = [](const MsgSay& msg) {g_upAccept->m_Server.m_Sessions.Broadcast(msg); };
 
 	auto wpSpace无限刷怪 = Space::AddSpace(战局类型::多玩家混战);
+	auto wpSpace圆坑 = Space::AddSpace(战局类型::多玩家混战_圆坑);
 	CHECK_WP_RET_DEFAULT(wpSpace无限刷怪);
+	CHECK_WP_RET_DEFAULT(wpSpace圆坑);
 
 	FunCancel funCancelSpawnMonster;
-	AiCo::多人联机地图(*wpSpace无限刷怪.lock(), funCancelSpawnMonster).RunNew();
+	AiCo::多人联机地图(*wpSpace无限刷怪.lock(), 100, funCancelSpawnMonster).RunNew();
+	AiCo::多人联机地图(*wpSpace圆坑.lock(), 120, funCancelSpawnMonster).RunNew();
 
 	//主逻辑工作线程
 	using namespace std;
