@@ -71,6 +71,7 @@ void 可进活动单位Component::进(Space& refSpace, Entity& refEntity)
 
 	m_listSpEntity.push_back(refEntity.shared_from_this());
 	refSpace.m_mapEntity.erase(refEntity.Id);
+	refEntity.m_up走->停止延时删除RecastNavigationCrowd();
 	if (refEntity.m_up走 && 0 <= refEntity.m_up走->m_idxCrowdAgent)
 	{
 		LOG(ERROR) << "" << refEntity.Id;
