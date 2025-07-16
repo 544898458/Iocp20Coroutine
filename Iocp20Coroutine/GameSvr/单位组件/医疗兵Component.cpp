@@ -26,6 +26,7 @@
 	m_refEntity.m_up找目标走过去->顶层大循环(
 		[this]()->bool {return this->可以治疗(); },
 		[this]()->WpEntity {return Get最近的可治疗友方单位(); },
+		[this](const Entity& refTarget, 找目标走过去Component& ref找目标走过去)->bool {return this->可以直接治疗(refTarget, ref找目标走过去); },
 		[this](const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去)->CoTask<std::tuple<bool, bool>> {return Co治疗(refTarget, wpEntity, ref找目标走过去); },
 		[this](WpEntity& wpEntity, bool ref仇恨目标)->void {}
 	);
@@ -63,10 +64,14 @@ bool 医疗兵Component::可以治疗()
 	return true;
 }
 
+bool 医疗兵Component::可以直接治疗(const Entity& refTarget, 找目标走过去Component& ref找目标走过去)
+{
+	return m_refEntity.DistanceLessEqual(refTarget, ref找目标走过去.攻击距离(refTarget)) && ref找目标走过去.检查穿墙(refTarget);
+}
 
 CoTask<std::tuple<bool, bool>> 医疗兵Component::Co治疗(const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去)
 {
-	if (!m_refEntity.DistanceLessEqual(refTarget, ref找目标走过去.攻击距离(refTarget)) || !ref找目标走过去.检查穿墙(refTarget))
+	if (!可以直接治疗(refTarget, ref找目标走过去))
 		co_return{ false, false };
 
 	走Component::Cancel所有包含走路的协程(m_refEntity); //OnEntityDestroy(const bool bDestroy);

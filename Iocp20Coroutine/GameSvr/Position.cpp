@@ -13,6 +13,10 @@ Position Position::operator*(float f)const
 {
 	return { x * f, 0, z * f };
 }
+Position Position::operator/(const float f)const
+{
+	return { x / f, 0, z / f };
+}
 
 bool Position::DistanceLessEqual(const Position& refPos, float fDistance) const
 {

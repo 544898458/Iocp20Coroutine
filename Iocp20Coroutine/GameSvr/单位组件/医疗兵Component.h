@@ -14,6 +14,7 @@ public:
 	void OnEntityDestroy(const bool bDestroy);
 private:
 	bool 可以治疗();
+	bool 可以直接治疗(const Entity& refTarget, 找目标走过去Component& ref找目标走过去);
 	CoTask<std::tuple<bool, bool>> Co治疗(const Entity& refTarget, WpEntity wpEntity, 找目标走过去Component& ref找目标走过去);
 	WpEntity Get最近的可治疗友方单位();
 

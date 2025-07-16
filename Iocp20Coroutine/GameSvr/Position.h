@@ -16,6 +16,7 @@ struct Position
 		x += refRight.x;
 		z += refRight.z;
 	}
+	Position operator/(const float)const;
 	Position operator-(const Position& refRight)const
 	{
 		Position pos(*this);
