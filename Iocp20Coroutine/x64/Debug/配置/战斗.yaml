@@ -1,4 +1,5 @@
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 500
   dura开始伤害: 500
@@ -17,7 +18,8 @@
     播放速度: 1
   类型: 201
   防御: 0
-- b可打空中: true
+- b可打地面: true
+  b可打空中: true
   b空中: false
   dura后摇: 100
   dura开始伤害: 900
@@ -36,7 +38,8 @@
     播放速度: 1
   类型: 202
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 500
   dura开始伤害: 1300
@@ -55,7 +58,8 @@
     播放速度: 2
   类型: 203
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 100
   dura开始伤害: 300
@@ -74,7 +78,8 @@
     播放速度: 1
   类型: 204
   防御: 1
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 300
   dura开始伤害: 500
@@ -93,7 +98,8 @@
     播放速度: 1
   类型: 205
   防御: 0
-- b可打空中: true
+- b可打地面: true
+  b可打空中: true
   b空中: true
   dura后摇: 100
   dura开始伤害: 800
@@ -101,7 +107,7 @@
   f弹丸起始高度: 5.0
   f攻击距离: 18
   f每帧移动距离: 0.8
-  f警戒距离: 35
+  f警戒距离: 30
   str前摇动作: ''
   str弹丸特效: 特效/弹丸
   str攻击音效: TMaFir00
@@ -112,7 +118,8 @@
     播放速度: 1
   类型: 206
   防御: 1
-- b可打空中: true
+- b可打地面: true
+  b可打空中: true
   b空中: false
   dura后摇: 600
   dura开始伤害: 300
@@ -131,7 +138,8 @@
     播放速度: 1
   类型: 207
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 1030
   dura开始伤害: 570
@@ -150,7 +158,8 @@
     播放速度: 1
   类型: 208
   防御: 0
-- b可打空中: false
+- b可打地面: false
+  b可打空中: false
   b空中: false
   dura后摇: 200
   dura开始伤害: 600
@@ -169,7 +178,8 @@
     播放速度: 1
   类型: 209
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 900
   dura开始伤害: 500
@@ -188,7 +198,8 @@
     播放速度: 1
   类型: 210
   防御: 1
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 0
   dura开始伤害: 0
@@ -207,7 +218,8 @@
     播放速度: 1
   类型: 211
   防御: 0
-- b可打空中: false
+- b可打地面: false
+  b可打空中: false
   b空中: true
   dura后摇: 0
   dura开始伤害: 0
@@ -226,7 +238,8 @@
     播放速度: 1
   类型: 212
   防御: 0
-- b可打空中: true
+- b可打地面: true
+  b可打空中: true
   b空中: true
   dura后摇: 300
   dura开始伤害: 600
@@ -245,7 +258,8 @@
     播放速度: 1
   类型: 213
   防御: 1
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 100
   dura开始伤害: 1000
@@ -264,26 +278,28 @@
     播放速度: 1
   类型: 214
   防御: 0
-- b可打空中: true
+- b可打地面: false
+  b可打空中: true
   b空中: false
   dura后摇: 100
-  dura开始伤害: 900
-  dura开始播放攻击动作: 0
+  dura开始伤害: 530
+  dura开始播放攻击动作: 1000
   f弹丸起始高度: 3.8
-  f攻击距离: 10
-  f每帧移动距离: 0.5
-  f警戒距离: 20
+  f攻击距离: 18
+  f每帧移动距离: 0.4
+  f警戒距离: 30
   str前摇动作: ''
   str弹丸特效: 特效/弹丸
-  str攻击音效: 音效/TTaFir00
+  str攻击音效: 音效/TTaFi200
   备注: 防空兵
-  攻击: 2
+  攻击: 10
   攻击动作:
     名字或索引: attack
     播放速度: 1
   类型: 215
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 0
   dura开始伤害: 0
@@ -302,7 +318,8 @@
     播放速度: 1
   类型: 301
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 0
   dura开始伤害: 0
@@ -321,7 +338,8 @@
     播放速度: 1
   类型: 302
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 0
   dura开始伤害: 0
@@ -340,7 +358,8 @@
     播放速度: 1
   类型: 303
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 0
   dura开始伤害: 0
@@ -359,7 +378,8 @@
     播放速度: 1
   类型: 304
   防御: 0
-- b可打空中: true
+- b可打地面: true
+  b可打空中: true
   b空中: false
   dura后摇: 400
   dura开始伤害: 400
@@ -378,7 +398,8 @@
     播放速度: 1
   类型: 305
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 0
   dura开始伤害: 0
@@ -397,7 +418,8 @@
     播放速度: 1
   类型: 306
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 0
   dura开始伤害: 0
@@ -416,7 +438,8 @@
     播放速度: 1
   类型: 307
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 0
   dura开始伤害: 0
@@ -435,7 +458,8 @@
     播放速度: 1
   类型: 308
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 0
   dura开始伤害: 0
@@ -454,7 +478,8 @@
     播放速度: 1
   类型: 309
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 0
   dura开始伤害: 0
@@ -473,7 +498,8 @@
     播放速度: 1
   类型: 310
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 0
   dura开始伤害: 0
@@ -492,7 +518,8 @@
     播放速度: 1
   类型: 311
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 0
   dura开始伤害: 0
@@ -511,7 +538,8 @@
     播放速度: 1
   类型: 312
   防御: 0
-- b可打空中: true
+- b可打地面: true
+  b可打空中: true
   b空中: false
   dura后摇: 600
   dura开始伤害: 300
@@ -530,7 +558,8 @@
     播放速度: 1
   类型: 401
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 1030
   dura开始伤害: 570
@@ -549,7 +578,8 @@
     播放速度: 1
   类型: 402
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 300
   dura开始伤害: 600
@@ -568,7 +598,8 @@
     播放速度: 1
   类型: 403
   防御: 0
-- b可打空中: true
+- b可打地面: true
+  b可打空中: true
   b空中: false
   dura后摇: 100
   dura开始伤害: 900
@@ -587,7 +618,8 @@
     播放速度: 1
   类型: 404
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 500
   dura开始伤害: 1300
@@ -606,7 +638,8 @@
     播放速度: 2
   类型: 405
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 500
   dura开始伤害: 500
@@ -625,7 +658,8 @@
     播放速度: 1
   类型: 406
   防御: 0
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 200
   dura开始伤害: 600
@@ -644,7 +678,8 @@
     播放速度: 1
   类型: 407
   防御: 0
-- b可打空中: true
+- b可打地面: true
+  b可打空中: true
   b空中: true
   dura后摇: 300
   dura开始伤害: 600
@@ -663,7 +698,8 @@
     播放速度: 1
   类型: 408
   防御: 1
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 900
   dura开始伤害: 500
@@ -682,7 +718,8 @@
     播放速度: 1
   类型: 409
   防御: 1
-- b可打空中: false
+- b可打地面: true
+  b可打空中: false
   b空中: false
   dura后摇: 0
   dura开始伤害: 0

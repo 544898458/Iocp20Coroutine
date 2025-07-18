@@ -38,7 +38,7 @@ namespace std
 	{
 		return _Ostr << "战斗配置," << _ref.f警戒距离 << "\t" << _ref.f攻击距离 << "\t" << _ref.u16攻击 << "\t" << _ref.u16防御 << "\t" << _ref.f每帧移动距离
 			<< _ref.str前摇动作 << "\t" << _ref.dura开始播放攻击动作 << "\t" << _ref.攻击 << "\t" << _ref.u16开始伤害
-			<< _ref.str攻击音效 << "\t" << _ref.dura后摇 << "\t" << _ref.b空中 << "\t" << _ref.b可打空中;
+			<< _ref.str攻击音效 << "\t" << _ref.dura后摇 << "\t" << _ref.b空中 << "\t" << _ref.b可打空中 << "\t" << _ref.b可打地面;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::活动单位配置& _ref)
@@ -221,7 +221,8 @@ namespace YAML {
 				safe_get<std::string>(refNode, "str攻击音效", ""),
 				safe_get_duration(refNode, "dura后摇", 0),
 				safe_get<bool>(refNode, "b空中", false),
-				safe_get<bool>(refNode, "b可打空中", false)
+				safe_get<bool>(refNode, "b可打空中", false),
+				safe_get<bool>(refNode, "b可打地面", false)
 			};
 			return true;
 		}

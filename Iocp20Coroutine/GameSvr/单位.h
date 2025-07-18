@@ -64,6 +64,7 @@ namespace 单位
 		std::chrono::system_clock::duration dura后摇;
 		bool b空中 = false;
 		bool b可打空中 = false;
+		bool b可打地面 = false;
 	};
 	struct 活动单位配置
 	{
