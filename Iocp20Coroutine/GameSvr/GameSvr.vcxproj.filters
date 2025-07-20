@@ -393,6 +393,9 @@
     <ClCompile Include="Position.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="单位组件\跟随Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -655,6 +658,9 @@
     </ClInclude>
     <ClInclude Include="Position.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\跟随Component.h">
+      <Filter>单位组件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

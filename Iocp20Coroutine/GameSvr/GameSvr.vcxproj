@@ -369,6 +369,7 @@
     <ClCompile Include="单位组件\走Component.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="单位组件\跟随Component.cpp" />
     <ClCompile Include="单位组件\造建筑Component.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -508,6 +509,7 @@
     <ClInclude Include="单位组件\解锁单位Component.h" />
     <ClInclude Include="单位组件\资源Component.h" />
     <ClInclude Include="单位组件\走Component.h" />
+    <ClInclude Include="单位组件\跟随Component.h" />
     <ClInclude Include="单位组件\造建筑Component.h" />
     <ClInclude Include="单位组件\造活动单位Component.h" />
     <ClInclude Include="单位组件\采集Component.h" />
