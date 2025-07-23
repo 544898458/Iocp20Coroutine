@@ -18,9 +18,6 @@ from pydantic import BaseModel  # Add Pydantic import
 import aiosqlite
 from contextlib import asynccontextmanager  # New import for lifespan
 
-# 创建FastAPI应用实例
-# app = FastAPI(title="MyFirstMicroservice", version="1.0.0")
-
 # 新增：应用启动时初始化数据库表
 # Replace @app.on_event with lifespan context manager
 @asynccontextmanager

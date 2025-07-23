@@ -37,6 +37,64 @@ class 战局类型(IntEnum):
     多玩家混战 = 201
     多人混战ID_非法_MAX = 202
 
+class 单位类型(IntEnum):
+    单位类型_Invalid_0 = 0
+
+    特效 = 1
+    视口 = 2
+    苔蔓 = 3  # Creep
+    方墩 = 4  # 玩家造的阻挡
+
+    资源Min非法 = 100
+    晶体矿 = 101  # Minerals
+    燃气矿 = 102  # Vespene Gas
+    资源Max非法 = 103
+
+    活动单位Min非法 = 200
+    工程车 = 201  # 空间工程车Space Construction Vehicle。可以采矿，采气，也可以简单攻击
+    枪兵 = 202  # 陆战队员Marine。只能攻击，不能采矿
+    近战兵 = 203  # 火蝠，喷火兵Firebat
+    三色坦克 = 204  # 不是攻城坦克（Siege Tank）
+    工虫 = 205  # Drone
+    飞机 = 206
+    枪虫 = 207  # Hydralisk
+    近战虫 = 208  # Zergling
+    幼虫 = 209  # Larva
+    绿色坦克 = 210  # 虫群单位，实际上是生物体
+    光刺 = 211  # 由绿色坦克发射，直线前进，遇敌爆炸
+    房虫 = 212  # overload
+    飞虫 = 213  # Mutalisk
+    医疗兵 = 214  # Medic
+    防空兵 = 215
+    活动单位Max非法 = 216
+
+    建筑Min非法 = 300
+    基地 = 301  # 指挥中心(Command Center),可造工程车
+    兵营 = 302  # 兵营(Barracks)，造兵、近战兵、坦克（不需要重工厂）
+    民房 = 303  # 供给站(Supply Depot)
+    地堡 = 304  # 掩体; 地堡(Bunker),可以进兵
+    炮台 = 305  # Photon Cannon
+    虫巢 = 306  # hatchery
+    机场 = 307  # Spaceport
+    重车厂 = 308  # Factory
+    虫营 = 309  # 对应兵营
+    飞塔 = 310  # Spore Conlony
+    拟态源 = 311  # 拟态源，原创，绿色坦克前置建筑
+    太岁 = 312  # Creep Colony
+    建筑Max非法 = 313
+
+    怪Min非法 = 400
+    枪虫怪 = 401
+    近战虫怪 = 402
+    工虫怪 = 403
+    枪兵怪 = 404
+    近战兵怪 = 405
+    工程车怪 = 406
+    幼虫怪 = 407
+    飞虫怪 = 408
+    绿色坦克怪 = 409
+    房虫怪 = 410
+    怪Max非法 = 411
 
 # 配置文件
 class Config:
@@ -67,6 +125,17 @@ async def lifespan(app: FastAPI):
             )
         ''')
         await db.commit()
+        await db.execute('''
+            CREATE TABLE IF NOT EXISTS unit_kill (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                battle_type INTEGER,
+                killer TEXT,
+                victim TEXT,
+                killer_unit INTEGER,
+                victim_unit INTEGER,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
     yield  # This is where the app runs
     # Shutdown phase (add cleanup logic here if needed)
 
@@ -77,16 +146,19 @@ app = FastAPI(
     lifespan=lifespan  # Use the new lifespan context manager
 )
 
-# 定义玩家数据模型
-class PlayerStats(BaseModel):
-    nickname: str
-    wins: int = 0
-    losses: int = 0
 
 class 战局结果参数(BaseModel):
     nickName: str
     type: 战局类型
     win: bool
+
+class UnitKillRequest(BaseModel):
+    battle_type: 战局类型
+    killer: str
+    victim: str
+    killer_unit: 单位类型
+    victim_unit: 单位类型
+
 # 定义基础路由
 @app.get("/")
 async def root():
@@ -191,6 +263,20 @@ async def 战局结果(request: 战局结果参数):
             "losses": updated_stats[1],
             "total_games": updated_stats[0] + updated_stats[1]
         }
+
+@app.post("/UnitKill/")
+async def record_unit_kill(request: UnitKillRequest):
+    async with aiosqlite.connect(Config.DB_FILE) as db:
+        cursor = await db.execute(
+            '''
+            INSERT INTO unit_kill (battle_type, killer, victim, killer_unit, victim_unit)
+            VALUES (?, ?, ?, ?, ?)
+            ''',
+            (request.battle_type, request.killer, request.victim, request.killer_unit, request.victim_unit)
+        )
+        await db.commit()
+        last_id = cursor.lastrowid
+    return {"message": "击杀事件已记录", "id": last_id}
 
 # 获取玩家所有战局类型的统计信息
 @app.get("/player/{nickname}")

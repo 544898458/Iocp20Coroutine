@@ -381,6 +381,7 @@
     </ClCompile>
     <ClCompile Include="单位组件\飞向目标Component.cpp" />
     <ClCompile Include="多人战局.cpp" />
+    <ClCompile Include="混战.cpp" />
     <ClInclude Include="..\CoRoutine\CoLock.h" />
     <ClInclude Include="..\IocpNetwork\MsgQueueMsgPackTemplate.h">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -519,6 +520,7 @@
     <ClInclude Include="枚举\MsgId.h" />
     <ClInclude Include="枚举\单位类型.h" />
     <ClInclude Include="枚举\属性类型.h" />
+    <ClInclude Include="混战.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CoRoutine\CoTask.h" />
