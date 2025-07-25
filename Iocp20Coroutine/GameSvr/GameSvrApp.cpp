@@ -65,29 +65,27 @@ BOOL WINAPI fun(DWORD dwCtrlType)
 std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GameToWorld> > g_ConnectToWorldSvr;
 std::unique_ptr<Iocp::Server<GameSvr> > g_upAccept;
 template<class T>
-void SendToWorldSvr(const T& refMsg, const uint64_t idGateSession)
+void SendToWorldSvr(const T& refMsg)
 {
-	//msg.msg.sn = (++g_ConnectToWorldSvr->m_snSend);
-	//MsgPack::SendMsgpack(msg, [](const void* buf, int len) {g_ConnectToWorldSvr->Send(buf, len); }); 
-
-	//MsgPack::SendMsgpack(refMsg, [idGateSession](const void* buf, int len)
-	//	{
-	//		g_ConnectToWorldSvr->Session.Send(MsgGate转发(buf, len, idGateSession, ++g_ConnectToWorldSvr->m_snSend));
-	//	}, false);
-
-
+	MsgPack::SendMsgpack(refMsg, [](const void* buf, int len)
+		{
+			g_ConnectToWorldSvr->Send(buf, len);
+		});	
+}
+template<class T>
+void SendToWorldSvr转发(const T& refMsg, const uint64_t idGateSession)
+{
 	MsgPack::SendMsgpack(refMsg, [idGateSession](const void* buf, int len)
 		{
 			MsgGate转发 msg(buf, len, idGateSession, ++g_ConnectToWorldSvr->m_snSend);
-			MsgPack::SendMsgpack(msg, [](const void* buf转发, int len转发)
-				{
-					g_ConnectToWorldSvr->Send(buf转发, len转发);
-				});
+			SendToWorldSvr(msg);
 		}, false);
 }
-template void SendToWorldSvr(const MsgSay& msg, const uint64_t idGateSession);
-template void SendToWorldSvr(const MsgChangeMoney& msg, const uint64_t idGateSession);
-template void SendToWorldSvr(const Msg战局结束& msg, const uint64_t idGateSession);
+template void SendToWorldSvr转发(const MsgSay& msg, const uint64_t idGateSession);
+template void SendToWorldSvr转发(const MsgChangeMoney& msg, const uint64_t idGateSession);
+template void SendToWorldSvr(const MsgSay& msg);
+template void SendToWorldSvr(const MsgChangeMoney& msg);
+template void SendToWorldSvr(const Msg战局结束& msg);
 
 LONG WINAPI UnhandledExceptionFilter_SpawDmp(struct _EXCEPTION_POINTERS* ExceptionInfo);
 

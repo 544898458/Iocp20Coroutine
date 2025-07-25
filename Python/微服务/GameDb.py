@@ -155,8 +155,8 @@ class 战局结果参数(BaseModel):
 class UnitKillRequest(BaseModel):
     battle_type: 战局类型
     killer: str
-    victim: str
     killer_unit: 单位类型
+    victim: str
     victim_unit: 单位类型
 
 # 定义基础路由
