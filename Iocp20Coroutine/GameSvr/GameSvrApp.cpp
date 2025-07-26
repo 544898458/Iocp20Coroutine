@@ -78,7 +78,7 @@ void SendToWorldSvr转发(const T& refMsg, const uint64_t idGateSession)
 {
 	MsgPack::SendMsgpack(refMsg, [idGateSession](const void* buf, int len)
 		{
-			MsgGate转发 msg(buf, len, idGateSession, ++g_ConnectToWorldSvr->m_snSend);
+			MsgGate转发 msg(buf, len, idGateSession, 0);
 			SendToWorldSvr(msg);
 		}, false);
 }
