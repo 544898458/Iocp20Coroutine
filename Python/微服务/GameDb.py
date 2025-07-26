@@ -265,7 +265,7 @@ async def 战局结果(request: 战局结果参数):
         }
 
 @app.post("/UnitKill/")
-async def record_unit_kill(request: UnitKillRequest):
+async def add_unit_kill(request: UnitKillRequest):
     async with aiosqlite.connect(Config.DB_FILE) as db:
         cursor = await db.execute(
             '''
@@ -276,7 +276,38 @@ async def record_unit_kill(request: UnitKillRequest):
         )
         await db.commit()
         last_id = cursor.lastrowid
-    return {"message": "击杀事件已记录", "id": last_id}
+        
+        # 获取该战局类型的最新50条击杀记录
+        cursor = await db.execute(
+            'SELECT * FROM unit_kill WHERE battle_type = ? ORDER BY timestamp DESC LIMIT 50',
+            (request.battle_type,)
+        )
+        unit_kills = await cursor.fetchall()
+        
+        # 将查询结果转换为字典列表
+        unit_kills_list = []
+        for row in unit_kills:
+            unit_kills_list.append({
+                "id": row[0],
+                "battle_type": row[1],
+                "killer": row[2],
+                "victim": row[3],
+                "killer_unit": row[4],
+                "victim_unit": row[5],
+                "timestamp_utc": f"{row[6]} UTC"
+            })
+        
+        # 写入JSON文件
+        json_file = f'C:/inetpub/wwwroot/战报/战局_{request.battle_type}.json'
+        os.makedirs(os.path.dirname(json_file), exist_ok=True)
+        with open(json_file, 'w', encoding='utf-8') as f:
+            json.dump(unit_kills_list, f, ensure_ascii=False, indent=2)
+        
+    return {
+        "message": "击杀事件已记录并更新JSON文件", 
+        "id": last_id,
+        "json_file": json_file
+    }
 
 # 获取玩家所有战局类型的统计信息
 @app.get("/player/{nickname}")

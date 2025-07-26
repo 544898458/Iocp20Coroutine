@@ -31,7 +31,7 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::战局配置& _ref)
 	{
-		return _Ostr << "战局配置:" << _ref.id副本 << "\t" << _ref.strSceneName << "\t" << _ref.str寻路文件名 << "\t" << _ref.strHttps音乐;
+		return _Ostr << "战局配置:" << _ref.战局 << "\t" << _ref.strSceneName << "\t" << _ref.str寻路文件名 << "\t" << _ref.strHttps音乐;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::战斗配置& _ref)
@@ -498,6 +498,14 @@ namespace 单位
 
 	bool 战局配置::Is多人战局()const
 	{
-		return 战局类型::多人ID_非法_MIN < this->id副本 && this->id副本 < 战局类型::多人ID_非法_MAX;
+		return 战局类型::多人ID_非法_MIN < this->战局 && this->战局 < 战局类型::多人ID_非法_MAX;
+	}
+	bool 战局配置::Is多人混战()const
+	{
+		return 战局类型::多人混战ID_非法_MIN < this->战局 && this->战局 < 战局类型::多人混战ID_非法_MAX;
+	}
+	bool 战局配置::Is多人混战(const 战局类型 战局)
+	{
+		return 战局类型::多人混战ID_非法_MIN < 战局 && 战局 < 战局类型::多人混战ID_非法_MAX;
 	}
 }

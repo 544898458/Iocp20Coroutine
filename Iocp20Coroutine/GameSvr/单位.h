@@ -95,11 +95,13 @@ namespace 单位
 	{
 		typedef CoTask<int>(*funCo副本剧情)(Space& refSpace, FunCancel& funCancel, const std::string strPlayerNickName);
 
-		战局类型 id副本;
+		战局类型 战局;
 		std::string strSceneName;
 		std::string str寻路文件名;
 		std::string strHttps音乐;
 		bool Is多人战局()const;
+		bool Is多人混战()const;
+		static bool Is多人混战(const 战局类型 战局);
 	};
 
 

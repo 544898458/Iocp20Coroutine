@@ -67,6 +67,7 @@ std::unique_ptr<Iocp::Server<GameSvr> > g_upAccept;
 template<class T>
 void SendToWorldSvr(const T& refMsg)
 {
+	refMsg.msg.sn = ++g_ConnectToWorldSvr->m_snSend;
 	MsgPack::SendMsgpack(refMsg, [](const void* buf, int len)
 		{
 			g_ConnectToWorldSvr->Send(buf, len);
@@ -86,6 +87,7 @@ template void SendToWorldSvr转发(const MsgChangeMoney& msg, const uint64_t idG
 template void SendToWorldSvr(const MsgSay& msg);
 template void SendToWorldSvr(const MsgChangeMoney& msg);
 template void SendToWorldSvr(const Msg战局结束& msg);
+template void SendToWorldSvr(const Msg击杀& msg);
 
 LONG WINAPI UnhandledExceptionFilter_SpawDmp(struct _EXCEPTION_POINTERS* ExceptionInfo);
 

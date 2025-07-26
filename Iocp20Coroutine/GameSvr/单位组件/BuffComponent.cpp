@@ -22,7 +22,7 @@ CoTaskBool BuffComponent::Co定时改数值(const 属性类型 属性, std::chrono::system_
 			co_return false;
 
 		if (属性 == 生命 && 0 > i16变化)
-			m_refEntity.m_upDefence->受伤(-i16变化, idAttacker);
+			m_refEntity.m_upDefence->受伤(-i16变化, m_refEntity);
 		else
 			数值Component::改变(m_refEntity, 属性, i16变化);
 	}
