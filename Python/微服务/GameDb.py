@@ -279,7 +279,7 @@ async def add_unit_kill(request: UnitKillRequest):
         
         # 获取该战局类型的最新X条击杀记录
         cursor = await db.execute(
-            'SELECT * FROM unit_kill WHERE battle_type = ? ORDER BY timestamp DESC LIMIT 100',
+            'SELECT * FROM unit_kill WHERE battle_type = ? ORDER BY timestamp DESC LIMIT 200',
             (request.battle_type,)
         )
         unit_kills = await cursor.fetchall()
