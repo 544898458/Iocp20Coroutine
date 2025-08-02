@@ -101,10 +101,10 @@ class Config:
     DB_FILE = 'GameDb.sqlite3'
 
     @staticmethod
-    def get_type_stats_file(type_id: int, category: str) -> str:
+    def get_type_stats_file(svr_id: int, type_id: int, category: str) -> str:
         if category:
-            return f'C:/inetpub/wwwroot/排行榜/战局_{type_id}_{category}.json'
-        return f'C:/inetpub/wwwroot/排行榜/战局_{type_id}.json'
+            return f'C:/inetpub/wwwroot/排行榜/战局_{svr_id}_{type_id}_{category}.json'
+        return f'C:/inetpub/wwwroot/排行榜/战局_{svr_id}_{type_id}.json'
 
 # 创建FastAPI应用实例
 # app = FastAPI(title="MyFirstMicroservice", version="1.0.0")
@@ -117,11 +117,12 @@ async def lifespan(app: FastAPI):
     async with aiosqlite.connect(Config.DB_FILE) as db:
         await db.execute('''
             CREATE TABLE IF NOT EXISTS player_stats (
+                svr_id INTEGER,
                 nickname TEXT,
                 type INTEGER,
                 wins INTEGER DEFAULT 0,
                 losses INTEGER DEFAULT 0,
-                PRIMARY KEY (nickname, type)
+                PRIMARY KEY (svr_id, nickname, type)
             )
         ''')
         await db.commit()
@@ -148,11 +149,13 @@ app = FastAPI(
 
 
 class 战局结果参数(BaseModel):
+    svr_id: int
     nickName: str
     type: 战局类型
     win: bool
 
 class UnitKillRequest(BaseModel):
+    svr_id: int
     battle_type: 战局类型
     killer: str
     killer_unit: 单位类型
@@ -170,8 +173,8 @@ async def 战局结果(request: 战局结果参数):
     async with aiosqlite.connect(Config.DB_FILE) as db:
         # 首先检查玩家在该类型战局中是否存在
         cursor = await db.execute(
-            'SELECT wins, losses FROM player_stats WHERE nickname = ? AND type = ?',
-            (request.nickName, request.type)
+            'SELECT wins, losses FROM player_stats WHERE svr_id = ? AND nickname = ? AND type = ?',
+            (request.svr_id, request.nickName, request.type)
         )
         player = await cursor.fetchone()
         
@@ -179,32 +182,32 @@ async def 战局结果(request: 战局结果参数):
             # 如果玩家在该类型战局中不存在，创建新记录
             if request.win:
                 await db.execute(
-                    'INSERT INTO player_stats (nickname, type, wins, losses) VALUES (?, ?, 1, 0)',
-                    (request.nickName, request.type)
+                    'INSERT INTO player_stats (svr_id, nickname, type, wins, losses) VALUES (?, ?, ?, 1, 0)',
+                    (request.svr_id, request.nickName, request.type)
                 )
             else:
                 await db.execute(
-                    'INSERT INTO player_stats (nickname, type, wins, losses) VALUES (?, ?, 0, 1)',
-                    (request.nickName, request.type)
+                    'INSERT INTO player_stats (svr_id, nickname, type, wins, losses) VALUES (?, ?, ?, 0, 1)',
+                    (request.svr_id, request.nickName, request.type)
                 )
         else:
             # 如果玩家在该类型战局中存在，更新胜负次数
             if request.win:
                 await db.execute(
-                    'UPDATE player_stats SET wins = wins + 1 WHERE nickname = ? AND type = ?',
-                    (request.nickName, request.type)
+                    'UPDATE player_stats SET wins = wins + 1 WHERE svr_id = ? AND nickname = ? AND type = ?',
+                    (request.svr_id, request.nickName, request.type)
                 )
             else:
                 await db.execute(
-                    'UPDATE player_stats SET losses = losses + 1 WHERE nickname = ? AND type = ?',
-                    (request.nickName, request.type)
+                    'UPDATE player_stats SET losses = losses + 1 WHERE svr_id = ? AND nickname = ? AND type = ?',
+                    (request.svr_id, request.nickName, request.type)
                 )
         await db.commit()
         
         # 获取更新后的数据
         cursor = await db.execute(
-            'SELECT wins, losses FROM player_stats WHERE nickname = ? AND type = ?',
-            (request.nickName, request.type)
+            'SELECT wins, losses FROM player_stats WHERE svr_id = ? AND nickname = ? AND type = ?',
+            (request.svr_id, request.nickName, request.type)
         )
         updated_stats = await cursor.fetchone()
                 
@@ -215,8 +218,8 @@ async def 战局结果(request: 战局结果参数):
         for t in all_types:
             # 赢排行榜
             cursor = await db.execute(
-                'SELECT nickname, type, wins, losses FROM player_stats WHERE type = ? AND wins > 0 ORDER BY wins DESC LIMIT 16',
-                (t,)
+                'SELECT nickname, type, wins, losses FROM player_stats WHERE svr_id = ? AND type = ? AND wins > 0 ORDER BY wins DESC LIMIT 16',
+                (request.svr_id, t)
             )
             win_stats = await cursor.fetchall()
             win_stats_list = [
@@ -229,15 +232,15 @@ async def 战局结果(request: 战局结果参数):
                 }
                 for row in win_stats
             ]
-            win_file = Config.get_type_stats_file(t, "赢")
+            win_file = Config.get_type_stats_file(request.svr_id, t, "赢")
             os.makedirs(os.path.dirname(win_file), exist_ok=True)
             with open(win_file, 'w', encoding='utf-8') as f:
                 json.dump(win_stats_list, f, ensure_ascii=False, indent=2)
 
             # 输排行榜
             cursor = await db.execute(
-                'SELECT nickname, type, wins, losses FROM player_stats WHERE type = ? AND losses > 0 ORDER BY losses DESC LIMIT 16',
-                (t,)
+                'SELECT nickname, type, wins, losses FROM player_stats WHERE svr_id = ? AND type = ? AND losses > 0 ORDER BY losses DESC LIMIT 16',
+                (request.svr_id, t)
             )
             lose_stats = await cursor.fetchall()
             lose_stats_list = [
@@ -250,7 +253,7 @@ async def 战局结果(request: 战局结果参数):
                 }
                 for row in lose_stats
             ]
-            lose_file = Config.get_type_stats_file(t, "输")
+            lose_file = Config.get_type_stats_file(request.svr_id, t, "输")
             os.makedirs(os.path.dirname(lose_file), exist_ok=True)
             with open(lose_file, 'w', encoding='utf-8') as f:
                 json.dump(lose_stats_list, f, ensure_ascii=False, indent=2)
@@ -269,18 +272,18 @@ async def add_unit_kill(request: UnitKillRequest):
     async with aiosqlite.connect(Config.DB_FILE) as db:
         cursor = await db.execute(
             '''
-            INSERT INTO unit_kill (battle_type, killer, victim, killer_unit, victim_unit)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO unit_kill (svr_id, battle_type, killer, victim, killer_unit, victim_unit)
+            VALUES (?, ?, ?, ?, ?, ?)
             ''',
-            (request.battle_type, request.killer, request.victim, request.killer_unit, request.victim_unit)
+            (request.svr_id, request.battle_type, request.killer, request.victim, request.killer_unit, request.victim_unit)
         )
         await db.commit()
         last_id = cursor.lastrowid
         
         # 获取该战局类型的最新X条击杀记录
         cursor = await db.execute(
-            'SELECT * FROM unit_kill WHERE battle_type = ? ORDER BY timestamp DESC LIMIT 100',
-            (request.battle_type,)
+            'SELECT * FROM unit_kill WHERE svr_id = ? AND battle_type = ? ORDER BY timestamp DESC LIMIT 100',
+            (request.svr_id, request.battle_type)
         )
         unit_kills = await cursor.fetchall()
         
@@ -289,16 +292,17 @@ async def add_unit_kill(request: UnitKillRequest):
         for row in unit_kills:
             unit_kills_list.append({
                 "id": row[0],
-                "battle_type": row[1],
-                "killer": row[2],
-                "victim": row[3],
-                "killer_unit": row[4],
-                "victim_unit": row[5],
-                "timestamp_utc": f"{row[6]} UTC"
+                "svr_id": row[1],
+                "battle_type": row[2],
+                "killer": row[3],
+                "victim": row[4],
+                "killer_unit": row[5],
+                "victim_unit": row[6],
+                "timestamp_utc": f"{row[7]} UTC"
             })
         
         # 写入JSON文件
-        json_file = f'C:/inetpub/wwwroot/战报/战局_{request.battle_type}.json'
+        json_file = f'C:/inetpub/wwwroot/战报/战局_{request.svr_id}_{request.battle_type}.json'
         os.makedirs(os.path.dirname(json_file), exist_ok=True)
         with open(json_file, 'w', encoding='utf-8') as f:
             json.dump(unit_kills_list, f, ensure_ascii=False, indent=2)
@@ -308,79 +312,6 @@ async def add_unit_kill(request: UnitKillRequest):
         "id": last_id,
         "json_file": json_file
     }
-
-# 获取玩家所有战局类型的统计信息
-@app.get("/player/{nickname}")
-async def get_player_stats(nickname: str):
-    async with aiosqlite.connect(Config.DB_FILE) as db:
-        cursor = await db.execute(
-            'SELECT type, wins, losses FROM player_stats WHERE nickname = ?',
-            (nickname,)
-        )
-        stats = await cursor.fetchall()
-        
-        if not stats:
-            return {
-                "nickname": nickname,
-                "total_stats": {
-                    "wins": 0,
-                    "losses": 0,
-                    "total_games": 0
-                },
-                "type_stats": []
-            }
-        
-        # 计算总场次
-        total_wins = sum(row[1] for row in stats)
-        total_losses = sum(row[2] for row in stats)
-        
-        # 按类型整理数据
-        type_stats = [
-            {
-                "type": row[0],
-                "wins": row[1],
-                "losses": row[2],
-                "total_games": row[1] + row[2]
-            }
-            for row in stats
-        ]
-        
-        return {
-            "nickname": nickname,
-            "total_stats": {
-                "wins": total_wins,
-                "losses": total_losses,
-                "total_games": total_wins + total_losses
-            },
-            "type_stats": type_stats
-        }
-
-# 获取特定类型战局的统计信息
-@app.get("/player/{nickname}/type/{type}")
-async def get_player_type_stats(nickname: str, type: int):
-    async with aiosqlite.connect(Config.DB_FILE) as db:
-        cursor = await db.execute(
-            'SELECT wins, losses FROM player_stats WHERE nickname = ? AND type = ?',
-            (nickname, type)
-        )
-        stats = await cursor.fetchone()
-        
-        if stats is None:
-            return {
-                "nickname": nickname,
-                "type": type,
-                "wins": 0,
-                "losses": 0,
-                "total_games": 0
-            }
-            
-        return {
-            "nickname": nickname,
-            "type": type,
-            "wins": stats[0],
-            "losses": stats[1],
-            "total_games": stats[0] + stats[1]
-        }
 
 # 启动服务（仅在直接运行时执行）
 if __name__ == "__main__":
