@@ -129,6 +129,7 @@ async def lifespan(app: FastAPI):
         await db.execute('''
             CREATE TABLE IF NOT EXISTS unit_kill (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                svr_id INTEGER,
                 battle_type INTEGER,
                 killer TEXT,
                 victim TEXT,
