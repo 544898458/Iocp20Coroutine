@@ -1,0 +1,45 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/Iocp20Coroutine/**",
+                "${workspaceFolder}/Iocp20Coroutine/CoRoutine/**",
+                "${workspaceFolder}/Iocp20Coroutine/GameSvr/**",
+                "${workspaceFolder}/Iocp20Coroutine/GateSvr/**",
+                "${workspaceFolder}/Iocp20Coroutine/WorldSvr/**",
+                "${workspaceFolder}/Iocp20Coroutine/IocpNetwork/**",
+                "${workspaceFolder}/Iocp20Coroutine/glog/include/**",
+                "${workspaceFolder}/Iocp20Coroutine/jsoncpp-master/include/**",
+                "${workspaceFolder}/Iocp20Coroutine/msgpack-c-cpp-2.1.2/include/**",
+                "${workspaceFolder}/Iocp20Coroutine/OpenSsl340/**",
+                "${workspaceFolder}/Iocp20Coroutine/yaml-cpp-0.8.0/include/**",
+                "${workspaceFolder}/Iocp20Coroutine/recastnavigation-main/Detour/Include/**",
+                "${workspaceFolder}/Iocp20Coroutine/recastnavigation-main/Recast/Include/**",
+                "${workspaceFolder}/Iocp20Coroutine/recastnavigation-main/DetourCrowd/Include/**",
+                "${workspaceFolder}/Iocp20Coroutine/recastnavigation-main/DetourTileCache/Include/**",
+                "${workspaceFolder}/Iocp20Coroutine/recastnavigation-main/DebugUtils/Include/**",
+                "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.29.30133/include/**",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/um/**",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/ucrt/**",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/shared/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "WIN32",
+                "_WIN32",
+                "_WIN32_WINNT=0x0601"
+            ],
+            "windowsSdkVersion": "10.0.19041.0",
+            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/cl.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-msvc-x64",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ],
+    "version": 4
+} 

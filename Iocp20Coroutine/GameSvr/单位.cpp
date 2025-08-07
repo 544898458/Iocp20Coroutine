@@ -435,6 +435,17 @@ namespace 单位
 		CHECK_RET_FALSE(读配置文件("配置/单位解锁.yaml", g_map单位解锁配置));
 		CHECK_RET_FALSE(读配置文件("配置/Buff.yaml", g_mapBuff配置, "ID"));
 		CHECK_RET_FALSE(读配置文件("配置/战局.yaml", g_map副本配置));
+
+		//读取之后检查
+		{
+			建筑单位配置 地堡建筑配置;
+			战斗配置 地堡配置;
+			战斗配置 枪兵配置;
+			CHECK_RET_FALSE(Find建筑单位配置(单位类型::地堡, 地堡建筑配置));
+			CHECK_RET_FALSE(Find战斗配置(单位类型::地堡, 地堡配置));
+			CHECK_RET_FALSE(Find战斗配置(单位类型::枪兵, 枪兵配置));
+			CHECK_RET_FALSE(地堡配置.f警戒距离 >= 枪兵配置.f攻击距离);// 地堡警戒距离 > 枪兵攻击距离
+		}
 		return true;
 	}
 	template<typename K, typename V>
