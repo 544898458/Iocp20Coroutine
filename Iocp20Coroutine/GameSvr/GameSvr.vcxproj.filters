@@ -396,6 +396,9 @@
     <ClCompile Include="单位组件\跟随Component.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
+    <ClCompile Include="单位组件\巡逻Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
     <ClCompile Include="混战.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -663,6 +666,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="单位组件\跟随Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\巡逻Component.h">
       <Filter>单位组件</Filter>
     </ClInclude>
     <ClInclude Include="混战.h">
