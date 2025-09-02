@@ -1,9 +1,11 @@
 #环境变量要设置好 ALIBABA_CLOUD_ACCESS_KEY_ID ALIBABA_CLOUD_ACCESS_KEY_SECRET
+#Windows开始按钮搜"编辑系统环境变量"
 #pip install fastapi
 #pip install uvicorn
 #pip install alibabacloud_green20220302==2.2.8
 #pip install pydantic
 # pip install aiosqlite
+# pip install requests
 #https://www.rtsgame.online:8000/阿里云内容安全/你好呀
 import os
 from fastapi import FastAPI
@@ -13,10 +15,12 @@ from alibabacloud_green20220302 import models
 from alibabacloud_tea_openapi.models import Config
 import json
 from pydantic import BaseModel  # Add Pydantic import
+import requests  # 添加requests库导入
 
 # 新增数据库依赖导入
 import aiosqlite
 from contextlib import asynccontextmanager  # New import for lifespan
+import time  # 添加time模块用于时间计算
 
 # 新增：应用启动时初始化数据库表
 # Replace @app.on_event with lifespan context manager
@@ -115,6 +119,117 @@ async def 阿里云内容安全(text_request: 内容安全参数):  # Use Pydant
 
     return result.data.risk_level
 
+@app.post("/WxaGameContentSpam/")
+async def 微信游戏内容安全(text_request: 内容安全参数):
+    """
+    微信游戏内容安全检测接口
+    参考文档：https://api.weixin.qq.com/wxa/game/content_spam/msg_sec_check?access_token=ACCESS_TOKEN
+    """
+    # 获取access_token（这里需要您实现获取access_token的逻辑）
+    access_token = await get_wechat_access_token()
+    if not access_token:
+        return {"error": "无法获取微信access_token"}
+    
+    url = f"https://api.weixin.qq.com/wxa/game/content_spam/msg_sec_check?access_token={access_token}"
+    
+    # 构建请求数据
+    data = {
+        "content": text_request.content,
+        "version": 2,  # 使用v2版本
+        "scene": 1,    # 场景值，1表示游戏
+        "openid": "test_openid"  # 可选，用于标识用户
+    }
+    
+    try:
+        response = requests.post(url, json=data, timeout=10)
+        if response.status_code == 200:
+            result = response.json()
+            print(f"微信内容安全检测结果: {result}")
+            
+            # 处理返回结果
+            if result.get("errcode") == 0:
+                # 成功
+                return {
+                    "success": True,
+                    "risk_level": "pass" if result.get("result", {}).get("suggest") == "pass" else "reject",
+                    "detail": result.get("result", {})
+                }
+            else:
+                # 失败
+                return {
+                    "success": False,
+                    "error": result.get("errmsg", "未知错误"),
+                    "errcode": result.get("errcode")
+                }
+        else:
+            return {"error": f"HTTP请求失败: {response.status_code}"}
+            
+    except requests.exceptions.RequestException as e:
+        print(f"请求异常: {e}")
+        return {"error": f"网络请求异常: {str(e)}"}
+    except Exception as e:
+        print(f"其他异常: {e}")
+        return {"error": f"处理异常: {str(e)}"}
+
+# 全局变量用于缓存access_token
+_wechat_token_cache = {
+    "access_token": None,
+    "expires_at": 0
+}
+
+async def get_wechat_access_token():
+    """
+    获取微信access_token，带1小时缓存机制
+    """
+    global _wechat_token_cache
+    
+    # 检查缓存是否还有效（提前5分钟刷新）
+    current_time = time.time()
+    if (_wechat_token_cache["access_token"] and 
+        current_time < _wechat_token_cache["expires_at"] - 300):
+        print("使用缓存的access_token")
+        return _wechat_token_cache["access_token"]
+    
+    # 缓存过期或不存在，重新获取
+    appid = os.environ.get('WECHAT_APPID')
+    appsecret = os.environ.get('WECHAT_APPSECRET')
+    
+    if not appid or not appsecret:
+        print("警告: 未设置微信APPID或APPSECRET环境变量")
+        return None
+    
+    # 获取access_token的接口
+    token_url = f"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={appid}&secret={appsecret}"
+    
+    try:
+        response = requests.get(token_url, timeout=10)
+        if response.status_code == 200:
+            result = response.json()
+            if "access_token" in result:
+                access_token = result["access_token"]
+                expires_in = result.get("expires_in", 7200)  # 默认2小时
+                
+                # 更新缓存
+                _wechat_token_cache["access_token"] = access_token
+                _wechat_token_cache["expires_at"] = current_time + expires_in
+                
+                print(f"成功获取新的access_token，有效期至: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(_wechat_token_cache['expires_at']))}")
+                return access_token
+            else:
+                print(f"获取access_token失败: {result}")
+                return None
+        else:
+            print(f"获取access_token HTTP失败: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"获取access_token异常: {e}")
+        return None
+
+# 添加新的路由
+@app.post("/WechatGreen/")
+async def 微信内容安全接口(text_request: 内容安全参数):
+    """微信游戏内容安全检测接口"""
+    return await 微信游戏内容安全(text_request)
 
 # 启动服务（仅在直接运行时执行）
 if __name__ == "__main__":
