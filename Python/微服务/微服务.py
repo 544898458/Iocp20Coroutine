@@ -123,7 +123,7 @@ async def 阿里云内容安全(text_request: 内容安全参数):  # Use Pydant
 async def 微信游戏内容安全(text_request: 内容安全参数):
     """
     微信游戏内容安全检测接口
-    参考文档：https://api.weixin.qq.com/wxa/game/content_spam/msg_sec_check?access_token=ACCESS_TOKEN
+    参考文档：https://developers.weixin.qq.com/minigame/dev/api-backend/open-api/wxa-sec-check/gamesecurity.msgSecCheck.html
     """
     # 获取access_token（这里需要您实现获取access_token的逻辑）
     access_token = await get_wechat_access_token()
