@@ -8,12 +8,15 @@
 # pip install requests
 #https://www.rtsgame.online:8000/阿里云内容安全/你好呀
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, HTTPException
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 import uvicorn
+import json
 from alibabacloud_green20220302.client import Client
 from alibabacloud_green20220302 import models
 from alibabacloud_tea_openapi.models import Config
-import json
 from pydantic import BaseModel  # Add Pydantic import
 import requests  # 添加requests库导入
 
@@ -46,12 +49,196 @@ app = FastAPI(
     lifespan=lifespan  # Use the new lifespan context manager
 )
 
+# 添加请求日志中间件
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    print(f"\n=== 收到请求 ===")
+    print(f"URL: {request.url}")
+    print(f"方法: {request.method}")
+    print(f"路径: {request.url.path}")
+    print(f"查询参数: {request.query_params}")
+    print(f"请求头: {dict(request.headers)}")
+    
+    # 对于POST请求，记录请求体
+    if request.method == "POST":
+        try:
+            body = await request.body()
+            print(f"请求体长度: {len(body)}")
+            if body:
+                try:
+                    body_str = body.decode('utf-8')
+                    print(f"请求体内容: {body_str}")
+                except:
+                    print("请求体无法解码为字符串")
+        except Exception as e:
+            print(f"获取请求体时出错: {e}")
+    
+    response = await call_next(request)
+    print(f"响应状态码: {response.status_code}")
+    print("=== 请求处理完成 ===\n")
+    
+    return response
+
+# 添加全局异常处理器
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    print("=== 请求验证错误 ===")
+    print(f"错误详情: {exc}")
+    print(f"请求URL: {request.url}")
+    print(f"请求方法: {request.method}")
+    print(f"请求头: {dict(request.headers)}")
+    
+    try:
+        body = await request.body()
+        print(f"请求体: {body}")
+        if body:
+            try:
+                body_str = body.decode('utf-8')
+                print(f"请求体字符串: {body_str}")
+            except:
+                print("请求体无法解码为字符串")
+    except Exception as e:
+        print(f"获取请求体时出错: {e}")
+    
+    return JSONResponse(
+        status_code=400,
+        content={"error": "请求参数验证失败", "details": str(exc), "errcode": -20}
+    )
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    print(f"HTTP异常: {exc}")
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"error": exc.detail, "errcode": -21}
+    )
+
+# 添加JSON解析错误处理器
+@app.exception_handler(ValueError)
+async def json_parse_exception_handler(request: Request, exc: ValueError):
+    print(f"JSON解析错误: {exc}")
+    print(f"请求URL: {request.url}")
+    print(f"请求方法: {request.method}")
+    
+    # 尝试获取请求体
+    try:
+        body = await request.body()
+        print(f"请求体内容: {body}")
+        print(f"请求体类型: {type(body)}")
+        
+        # 尝试解析Content-Type
+        content_type = request.headers.get("content-type", "")
+        print(f"Content-Type: {content_type}")
+        
+    except Exception as e:
+        print(f"获取请求体时出错: {e}")
+    
+    return JSONResponse(
+        status_code=400,
+        content={
+            "error": "JSON解析错误", 
+            "details": str(exc),
+            "errcode": -22,
+            "suggestion": "请确保请求体是有效的JSON格式，并且Content-Type设置为application/json"
+        }
+    )
+
 class 内容安全参数(BaseModel):
     content: str
+    
+    class Config:
+        # 允许字段验证
+        validate_assignment = True
+
+class 微信小游戏内容安全参数(BaseModel):
+    content: str
+    openid: str
+    
+    class Config:
+        # 允许字段验证
+        validate_assignment = True
+
 # 定义基础路由
 @app.get("/")
 async def root():
     return {"message": "Hello 微服务世界！"}
+
+# 添加调试端点
+@app.post("/debug/WxaGameContentSpam")
+async def debug_微信小游戏内容安全(request: Request):
+    """
+    调试端点，用于检查原始请求数据
+    """
+    try:
+        # 获取请求头信息
+        headers = dict(request.headers)
+        print(f"请求头: {headers}")
+        
+        # 获取请求体
+        body = await request.body()
+        print(f"原始请求体: {body}")
+        print(f"请求体长度: {len(body)}")
+        print(f"请求体类型: {type(body)}")
+        
+        # 检查Content-Type
+        content_type = headers.get("content-type", "")
+        print(f"Content-Type: {content_type}")
+        
+        # 尝试解析JSON
+        if body:
+            try:
+                # 尝试解码为字符串
+                body_str = body.decode('utf-8')
+                print(f"请求体字符串: {body_str}")
+                
+                # 尝试解析JSON
+                json_data = json.loads(body_str)
+                print(f"解析后的JSON: {json_data}")
+                
+                # 验证必需字段
+                required_fields = ["content", "openid"]
+                missing_fields = [field for field in required_fields if field not in json_data]
+                
+                if missing_fields:
+                    return {
+                        "status": "error", 
+                        "message": f"缺少必需字段: {missing_fields}",
+                        "data": json_data,
+                        "missing_fields": missing_fields
+                    }
+                
+                return {
+                    "status": "success", 
+                    "data": json_data,
+                    "content_type": content_type,
+                    "body_length": len(body)
+                }
+                
+            except json.JSONDecodeError as e:
+                print(f"JSON解析错误: {e}")
+                return {
+                    "status": "error", 
+                    "message": f"JSON解析错误: {e}",
+                    "body_string": body_str if 'body_str' in locals() else "无法解码为字符串",
+                    "content_type": content_type
+                }
+            except UnicodeDecodeError as e:
+                print(f"字符串解码错误: {e}")
+                return {
+                    "status": "error", 
+                    "message": f"字符串解码错误: {e}",
+                    "content_type": content_type
+                }
+        else:
+            return {
+                "status": "error", 
+                "message": "请求体为空",
+                "content_type": content_type
+            }
+            
+    except Exception as e:
+        print(f"调试端点异常: {e}")
+        return {"status": "error", "message": str(e)}
   
 # 定义带参数的路由示例
 @app.post("/AliyunGreen/")
@@ -120,15 +307,32 @@ async def 阿里云内容安全(text_request: 内容安全参数):  # Use Pydant
     return result.data.risk_level
 
 @app.post("/WxaGameContentSpam/")
-async def 微信游戏内容安全(text_request: 内容安全参数):
+async def 微信小游戏内容安全(text_request: 微信小游戏内容安全参数):
     """
     微信游戏内容安全检测接口
     参考文档：https://developers.weixin.qq.com/minigame/dev/api-backend/open-api/wxa-sec-check/gamesecurity.msgSecCheck.html
     """
+    print("=== 微信小游戏内容安全检测开始 ===")
+    print(f"请求参数类型: {type(text_request)}")
+    print(f"请求参数内容: {text_request}")
+    
+    # 验证请求参数
+    print(f"收到微信内容安全检测请求 - 内容: {text_request.content[:50]}..., openid: {text_request.openid}")
+
+    if not text_request.content or not text_request.content.strip():
+        print("错误: 内容不能为空")
+        return {"error": "内容不能为空", "errcode": -10}
+    
+    if not text_request.openid or not text_request.openid.strip():
+        print("错误: openid不能为空")
+        return {"error": "openid不能为空", "errcode": -11}
+    
     # 获取access_token（这里需要您实现获取access_token的逻辑）
     access_token = await get_wechat_access_token()
+    print(f"access_token: {access_token}")
     if not access_token:
-        return {"error": "无法获取微信access_token"}
+        print("错误: 无法获取微信access_token")
+        return {"error": "无法获取微信access_token", "errcode": -1}
     
     url = f"https://api.weixin.qq.com/wxa/game/content_spam/msg_sec_check?access_token={access_token}"
     
@@ -137,30 +341,23 @@ async def 微信游戏内容安全(text_request: 内容安全参数):
         "content": text_request.content,
         "version": 2,  # 使用v2版本
         "scene": 1,    # 场景值，1表示游戏
-        "openid": "test_openid"  # 可选，用于标识用户
+        "openid": text_request.openid  # 可选，用于标识用户
     }
+    
+    print(f"发送请求到微信API: {url}")
     
     try:
         response = requests.post(url, json=data, timeout=10)
+        print(f"微信API响应状态码: {response.status_code}")
+        
         if response.status_code == 200:
             result = response.json()
             print(f"微信内容安全检测结果: {result}")
             
-            # 处理返回结果
             if result.get("errcode") == 0:
-                # 成功
-                return {
-                    "success": True,
-                    "risk_level": "pass" if result.get("result", {}).get("suggest") == "pass" else "reject",
-                    "detail": result.get("result", {})
-                }
+                return result.get("result", {}).get("suggest")# 成功
             else:
-                # 失败
-                return {
-                    "success": False,
-                    "error": result.get("errmsg", "未知错误"),
-                    "errcode": result.get("errcode")
-                }
+                return result.get("errcode")# 失败
         else:
             return {"error": f"HTTP请求失败: {response.status_code}"}
             
@@ -202,9 +399,12 @@ async def get_wechat_access_token():
     token_url = f"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={appid}&secret={appsecret}"
     
     try:
+        print(f"准备获取access_token的接口: {token_url}")
         response = requests.get(token_url, timeout=10)
+        print(f"获取access_token的接口响应: {response.status_code}")
         if response.status_code == 200:
             result = response.json()
+            print(f"获取access_token的接口响应结果: {result}")
             if "access_token" in result:
                 access_token = result["access_token"]
                 expires_in = result.get("expires_in", 7200)  # 默认2小时
@@ -212,7 +412,7 @@ async def get_wechat_access_token():
                 # 更新缓存
                 _wechat_token_cache["access_token"] = access_token
                 _wechat_token_cache["expires_at"] = current_time + expires_in
-                
+                print(f"更新缓存: {_wechat_token_cache}")
                 print(f"成功获取新的access_token，有效期至: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(_wechat_token_cache['expires_at']))}")
                 return access_token
             else:
@@ -224,12 +424,6 @@ async def get_wechat_access_token():
     except Exception as e:
         print(f"获取access_token异常: {e}")
         return None
-
-# 添加新的路由
-@app.post("/WechatGreen/")
-async def 微信内容安全接口(text_request: 内容安全参数):
-    """微信游戏内容安全检测接口"""
-    return await 微信游戏内容安全(text_request)
 
 # 启动服务（仅在直接运行时执行）
 if __name__ == "__main__":

@@ -40,3 +40,4 @@ enc_temp_folder
 *.bin
 *.pch
 *.sqlite3
+*.db

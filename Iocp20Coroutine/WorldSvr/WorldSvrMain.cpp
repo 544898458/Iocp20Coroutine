@@ -114,6 +114,7 @@ int main()
 
 	g_CoDbPlayer.m_慢操作.Init(threadPoolNetwork.GetIocp());
 	g_慢操作AliyunGreen.m_慢操作.Init(threadPoolNetwork.GetIocp());
+	g_慢操作AliyunGreen.m_慢操作String.Init(threadPoolNetwork.GetIocp());
 
 	Iocp::Server<WorldSvrAcceptGame> acceptGame(threadPoolNetwork.GetIocp());
 	g_upAcceptGate.reset(new Iocp::Server<WorldSvrAcceptGate>(threadPoolNetwork.GetIocp()));
@@ -129,6 +130,7 @@ int main()
 		CoTimer::Update();
 		g_CoDbPlayer.m_慢操作.Process();
 		g_慢操作AliyunGreen.m_慢操作.Process();
+		g_慢操作AliyunGreen.m_慢操作String.Process();
 	}
 	acceptGame.Stop();
 	LOG(INFO) << "WorldSvr正常退出,GetCurrentThreadId=" << GetCurrentThreadId();
