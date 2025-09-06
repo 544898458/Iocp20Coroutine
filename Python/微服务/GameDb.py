@@ -1,6 +1,8 @@
 #pip install fastapi uvicorn aiosqlite pydantic
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 import uvicorn
 import json
 from pydantic import BaseModel  # Add Pydantic import
@@ -148,6 +150,70 @@ app = FastAPI(
     lifespan=lifespan  # Use the new lifespan context manager
 )
 
+# 添加全局异常处理器
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    print("=== 请求验证错误 ===")
+    print(f"错误详情: {exc}")
+    print(f"请求URL: {request.url}")
+    print(f"请求方法: {request.method}")
+    print(f"请求头: {dict(request.headers)}")
+    
+    try:
+        body = await request.body()
+        print(f"请求体: {body}")
+        if body:
+            try:
+                body_str = body.decode('utf-8')
+                print(f"请求体字符串: {body_str}")
+                
+                # 检查是否是JSON解析错误
+                if "json_invalid" in str(exc):
+                    print("=== JSON解析错误分析 ===")
+                    print("可能的原因：")
+                    print("1. 中文字符编码问题")
+                    print("2. 控制字符干扰")
+                    print("3. JSON格式错误（缺少引号、逗号等）")
+                    print("4. 特殊字符未正确转义")
+                    
+                    # 尝试修复常见的JSON问题
+                    try:
+                        import re
+                        # 移除控制字符
+                        cleaned_body = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]', '', body_str)
+                        if cleaned_body != body_str:
+                            print(f"清理后的JSON: {cleaned_body}")
+                            
+                        # 尝试解析清理后的JSON
+                        import json
+                        parsed = json.loads(cleaned_body)
+                        print(f"清理后的JSON可以正常解析: {parsed}")
+                    except Exception as parse_error:
+                        print(f"清理后仍然无法解析: {parse_error}")
+                        
+            except UnicodeDecodeError as e:
+                print(f"UTF-8解码错误: {e}")
+                print("尝试使用其他编码...")
+                try:
+                    body_str = body.decode('gbk')
+                    print(f"使用GBK解码: {body_str}")
+                except:
+                    print("GBK解码也失败")
+            except:
+                print("请求体无法解码为字符串")
+    except Exception as e:
+        print(f"获取请求体时出错: {e}")
+    
+    return JSONResponse(
+        status_code=422,
+        content={
+            "error": "请求参数验证失败", 
+            "details": str(exc), 
+            "errcode": -20,
+            "suggestion": "请检查JSON格式，确保中文字符正确编码，移除控制字符，检查引号和逗号是否正确"
+        }
+    )
+
 
 class 战局结果参数(BaseModel):
     svr_id: int
@@ -171,6 +237,11 @@ async def root():
 # 定义带参数的路由示例
 @app.post("/BattleResult/")
 async def 战局结果(request: 战局结果参数):
+    print(f"=== 收到战局结果请求 ===")
+    print(f"svr_id: {request.svr_id} (类型: {type(request.svr_id)})")
+    print(f"nickName: {request.nickName} (类型: {type(request.nickName)})")
+    print(f"type: {request.type} (类型: {type(request.type)})")
+    print(f"win: {request.win} (类型: {type(request.win)})")
     async with aiosqlite.connect(Config.DB_FILE) as db:
         # 首先检查玩家在该类型战局中是否存在
         cursor = await db.execute(
@@ -270,6 +341,22 @@ async def 战局结果(request: 战局结果参数):
 
 @app.post("/UnitKill/")
 async def add_unit_kill(request: UnitKillRequest):
+    print(f"=== 收到单位击杀请求 ===")
+    print(f"svr_id: {request.svr_id} (类型: {type(request.svr_id)})")
+    print(f"battle_type: {request.battle_type} (类型: {type(request.battle_type)})")
+    print(f"killer: {request.killer} (类型: {type(request.killer)})")
+    print(f"killer_unit: {request.killer_unit} (类型: {type(request.killer_unit)})")
+    print(f"victim: {request.victim} (类型: {type(request.victim)})")
+    print(f"victim_unit: {request.victim_unit} (类型: {type(request.victim_unit)})")
+    
+    # 清理victim字段中的控制字符
+    if request.victim:
+        import re
+        # 移除控制字符（除了换行符和制表符）
+        cleaned_victim = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]', '', request.victim)
+        if cleaned_victim != request.victim:
+            print(f"清理victim字段: '{request.victim}' -> '{cleaned_victim}'")
+            request.victim = cleaned_victim
     async with aiosqlite.connect(Config.DB_FILE) as db:
         cursor = await db.execute(
             '''
