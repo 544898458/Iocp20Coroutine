@@ -31,11 +31,24 @@ T 从文件里读出对象(const std::string nickName)
 		else {
 			LOG(ERROR) << "读取文件失败" << std::endl;
 		}
-		msgpack::object_handle oh = msgpack::unpack(buffer.data(), buffer.size());//没判断越界，要加try
-		msgpack::object obj = oh.get();
-		objT = obj.as<T>();
-		in.close();
-		LOG(INFO) << "已读出" << strFileName;
+		try 
+		{
+			msgpack::object_handle oh = msgpack::unpack(buffer.data(), buffer.size());//没判断越界，要加try
+			msgpack::object obj = oh.get();
+			objT = obj.as<T>();
+			in.close();
+			LOG(INFO) << "已读出" << strFileName;
+		}
+		catch (const msgpack::type_error& error)
+		{
+			LOG(ERROR) << size << "=size, 从文件里读出对象,反序列化失败,type_error," << error.what();
+			_ASSERT(false);
+		}
+		catch(const msgpack::unpack_error& error)
+		{
+			LOG(ERROR) << size << "=size, 从文件里读出对象,反序列化失败,unpack_error," << error.what();
+			_ASSERT(false);
+		}
 	}
 	else
 	{
