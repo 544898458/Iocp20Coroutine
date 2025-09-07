@@ -539,7 +539,7 @@
     起始时刻秒: 0
   阵亡音效: 音效/ZBldgDth
 - PrefabPathName: 建筑/机场
-  动画节点路径: airport
+  动画节点路径: airport_500_1mesh
   受击高度: 3
   名字: 机场
   描述: 可产出飞机
