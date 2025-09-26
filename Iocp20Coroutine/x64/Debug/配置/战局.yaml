@@ -75,6 +75,13 @@
   备注: 中央防守_人
   寻路文件: 八方汇聚.bin
   类型: 11
+- Https音乐: https://www.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
+  Https高清贴图: ''
+  MeshRenderer路径: ''
+  strSceneName: prefabs/map/map攻坚战
+  备注: 防空战_人
+  寻路文件: 攻坚战.bin
+  类型: 12
 - Https音乐: https://www.rtsgame.online/music/电波暴击 - SPACE FIGHT 低音质.mp3
   Https高清贴图: ''
   MeshRenderer路径: ''
