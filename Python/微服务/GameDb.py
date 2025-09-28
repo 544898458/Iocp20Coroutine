@@ -396,11 +396,62 @@ async def add_unit_kill(request: UnitKillRequest):
         with open(json_file, 'w', encoding='utf-8') as f:
             json.dump(unit_kills_list, f, ensure_ascii=False, indent=2)
         
+        await 写入战报排行榜(request.svr_id, request.battle_type)
+        
     return {
         "message": "击杀事件已记录并更新JSON文件", 
         "id": last_id,
         "json_file": json_file
     }
+
+async def 写入战报排行榜(svr_id: int, battle_type: 战局类型):
+    print(f"=== 收到单位击杀排行榜请求 ===")
+    print(f"svr_id: {svr_id} (类型: {type(svr_id)})")
+    print(f"battle_type: {battle_type} (类型: {type(battle_type)})")
+    
+    # 定义统计配置：字段名、文件名后缀、显示名称
+    stats_configs = [
+        {
+            "field": "killer",
+            "key_name": "killer", 
+            "file_suffix": "击败单位数",
+            "display_name": "击杀"
+        },
+        {
+            "field": "victim", 
+            "key_name": "victim",
+            "file_suffix": "被击败单位数", 
+            "display_name": "被击杀"
+        }
+    ]
+    
+    async with aiosqlite.connect(Config.DB_FILE) as db:
+        for config in stats_configs:
+            # 执行查询
+            cursor = await db.execute(
+                f'SELECT {config["field"]}, COUNT(*) FROM unit_kill WHERE svr_id = ? AND battle_type = ? GROUP BY {config["field"]} ORDER BY COUNT(*) DESC LIMIT 200',
+                (svr_id, battle_type)
+            )
+            results = await cursor.fetchall()
+            
+            # 将查询结果转换为字典列表
+            stats_list = [
+                {
+                    config["key_name"]: row[0],
+                    "count": row[1]
+                }
+                for row in results
+            ]
+            
+            # 写入JSON文件
+            json_file = f'C:/inetpub/wwwroot/战报/战报排行_{svr_id}_{battle_type}_{config["file_suffix"]}.json'
+            os.makedirs(os.path.dirname(json_file), exist_ok=True)
+            with open(json_file, 'w', encoding='utf-8') as f:
+                json.dump(stats_list, f, ensure_ascii=False, indent=2)
+            
+            print(f"已生成{config['display_name']}排行榜: {json_file}")
+
+        
 
 # 启动服务（仅在直接运行时执行）
 if __name__ == "__main__":
