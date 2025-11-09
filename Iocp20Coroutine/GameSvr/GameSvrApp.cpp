@@ -19,6 +19,7 @@
 #include "AllPort.h"
 #include "../MiniDump/MiniDump.h"
 #include "单位.h"
+#include "枚举/战局类型.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")

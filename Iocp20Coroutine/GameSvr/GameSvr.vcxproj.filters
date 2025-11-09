@@ -674,6 +674,9 @@
     <ClInclude Include="混战.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="枚举\战局类型.h">
+      <Filter>枚举</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\websocketfiles-master\src\string_helper.inl">

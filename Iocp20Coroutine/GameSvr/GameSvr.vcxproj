@@ -522,6 +522,7 @@
     <ClInclude Include="枚举\MsgId.h" />
     <ClInclude Include="枚举\单位类型.h" />
     <ClInclude Include="枚举\属性类型.h" />
+    <ClInclude Include="枚举\战局类型.h" />
     <ClInclude Include="混战.h" />
   </ItemGroup>
   <ItemGroup>

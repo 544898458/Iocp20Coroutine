@@ -3,6 +3,7 @@
 #include "枚举/BuffId.h"
 #include "枚举/属性类型.h"
 #include "枚举/单位类型.h"
+#include "枚举/战局类型.h"
 #include <unordered_map>
 
 #define YAML_CPP_STATIC_DEFINE
@@ -31,7 +32,7 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::战局配置& _ref)
 	{
-		return _Ostr << "战局配置:" << _ref.战局 << "\t" << _ref.strSceneName << "\t" << _ref.str寻路文件名 << "\t" << _ref.strHttps音乐;
+		return _Ostr << "战局配置:" << _ref.战局 << "\t" << _ref.strSceneName << "\t" << _ref.str寻路文件名 << "\t" << _ref.strHttps音乐 << "\t" << _ref.b玩家同阵营;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::战斗配置& _ref)
@@ -368,7 +369,8 @@ namespace YAML {
 				safe_get<战局类型>(refNode, "类型", 战局类型(0)), 
 				safe_get<std::string>(refNode, "strSceneName", ""), 
 				safe_get<std::string>(refNode, "寻路文件", ""), 
-				safe_get<std::string>(refNode, "Https音乐", "") 
+				safe_get<std::string>(refNode, "Https音乐", ""),
+				safe_get<bool>(refNode, "玩家同阵营", false)
 			};
 			return true;
 		}
