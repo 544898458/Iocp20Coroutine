@@ -27,9 +27,9 @@ MsgNotifyPos::MsgNotifyPos(const Entity& ref) :
 
 MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :
 	entityId(ref.Id),
-	nickName(StrConv::GbkToUtf8(ref.头顶Name())),
-	entityName(StrConv::GbkToUtf8(ref.m_配置.strName)),
-	prefabName(StrConv::GbkToUtf8(ref.m_配置.strPrefabName)),
+	nickName(ref.头顶Name()),
+	entityName(ref.m_配置.strName),
+	prefabName(ref.m_配置.strPrefabName),
 	最大生命(数值Component::Get(ref, 属性类型::最大生命)),
 	最大能量(数值Component::Get(ref, 属性类型::最大能量)),
 	类型(ref.m_类型)

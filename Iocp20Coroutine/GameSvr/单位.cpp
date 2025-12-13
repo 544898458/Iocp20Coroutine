@@ -22,29 +22,29 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::动作& _ref)
 	{
-		return _Ostr << _ref.str名字或索引 << "," << _ref.f播放速度 << "," << _ref.f起始时刻秒 << "," << _ref.f结束时刻秒;
+		return _Ostr << StrConv::Utf8ToGbk(_ref.str名字或索引) << "," << _ref.f播放速度 << "," << _ref.f起始时刻秒 << "," << _ref.f结束时刻秒;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::单位配置& _ref)
 	{
-		return _Ostr << "单位配置:" << _ref.strName << "\t" << _ref.种族 << "\t" << _ref.strPrefabName << "\t" << _ref.b骨骼动画 << "\t" << _ref.str选中音效 << "\t" << _ref.空闲 << "\t" << _ref.阵亡 << "\t" << _ref.str阵亡音效;
+		return _Ostr << "单位配置:" << StrConv::Utf8ToGbk(_ref.strName) << "\t" << _ref.种族 << "\t" << StrConv::Utf8ToGbk(_ref.strPrefabName) << "\t" << _ref.b骨骼动画 << "\t" << StrConv::Utf8ToGbk(_ref.str选中音效) << "\t" << _ref.空闲 << "\t" << _ref.阵亡 << "\t" << StrConv::Utf8ToGbk(_ref.str阵亡音效);
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::战局配置& _ref)
 	{
-		return _Ostr << "战局配置:" << _ref.战局 << "\t" << _ref.strSceneName << "\t" << _ref.str寻路文件名 << "\t" << _ref.strHttps音乐 << "\t" << _ref.b玩家同阵营;
+		return _Ostr << "战局配置:" << _ref.战局 << "\t" << StrConv::Utf8ToGbk(_ref.strSceneName) << "\t寻路文件" << StrConv::Utf8ToGbk(_ref.str寻路文件名) << "\t" << StrConv::Utf8ToGbk(_ref.strHttps音乐) << "\t" << _ref.b玩家同阵营;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::战斗配置& _ref)
 	{
 		return _Ostr << "战斗配置," << _ref.f警戒距离 << "\t" << _ref.f攻击距离 << "\t" << _ref.u16攻击 << "\t" << _ref.u16防御 << "\t" << _ref.f每帧移动距离
-			<< _ref.str前摇动作 << "\t" << _ref.dura开始播放攻击动作 << "\t" << _ref.攻击 << "\t" << _ref.u16开始伤害
-			<< _ref.str攻击音效 << "\t" << _ref.dura后摇 << "\t" << _ref.b空中 << "\t" << _ref.b可打空中 << "\t" << _ref.b可打地面;
+			<< StrConv::Utf8ToGbk(_ref.str前摇动作) << "\t" << _ref.dura开始播放攻击动作 << "\t" << _ref.攻击 << "\t" << _ref.u16开始伤害
+			<< StrConv::Utf8ToGbk(_ref.str攻击音效) << "\t" << _ref.dura后摇 << "\t" << _ref.b空中 << "\t" << _ref.b可打空中 << "\t" << _ref.b可打地面;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::活动单位配置& _ref)
 	{
-		return _Ostr << "活动单位配置," << _ref.str入场语音 << "," << _ref.走路 << "," << _ref.str普通走语音 << "," << _ref.str强行走语音;
+		return _Ostr << "活动单位配置," << StrConv::Utf8ToGbk(_ref.str入场语音) << "," << _ref.走路 << "," << StrConv::Utf8ToGbk(_ref.str普通走语音) << "," << StrConv::Utf8ToGbk(_ref.str强行走语音);
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::建筑单位配置& _ref)
@@ -83,6 +83,10 @@ namespace YAML {
 	template<typename T>
 	T safe_get(const Node& node, const std::string& key, const T& default_value) {
 		return node[key] ? node[key].as<T>() : default_value;
+	}
+	template<>
+	std::string safe_get(const Node& node, const std::string& key, const std::string& default_value) {
+		return node[key] ? StrConv::GbkToUtf8(node[key].as<std::string>()) : default_value;
 	}
 
 	// 辅助函数：安全获取时间值

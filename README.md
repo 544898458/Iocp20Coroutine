@@ -147,7 +147,7 @@ if(!ok)
 
 #### 安装教程
 
-1. 安装 VS2022社区版 的 C++桌面开发 后就能直接双击打开解决方案 Iocp20Coroutine\Iocp20Coroutine.sln;
+1. 安装 VS2026社区版 的 C++桌面开发 后就能直接双击打开解决方案 Iocp20Coroutine\Iocp20Coroutine.sln;
 2. 左上角选择 Debug，然后 菜单 => 生成(B) => 生成解决方案(B) 生成执行文件，或者直接 Shift+Ctrl+B 生成执行文件；
 3. 把此文件复制到C盘Windows文件夹下：Iocp20Coroutine/x64/Release/本地机器专用.ini；
 4. 用这个批处理一次启动三个服务器：Iocp20Coroutine/x64/Debug/启动全部服务器.bat；

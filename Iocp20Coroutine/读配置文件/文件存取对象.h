@@ -6,13 +6,13 @@
 
 
 template<class T>
-T 从文件里读出对象(const std::string nickName)
+T 从文件里读出对象(const std::string& strNickNameUtf8)
 {
-	std::ostringstream oss;
-	oss << StrConv::Utf8ToGbk(typeid(T).name()) << "_" << nickName << ".msgpack";
-	const auto& strFileName = oss.str();
+	std::ostringstream ossGbk;
+	ossGbk << StrConv::Utf8ToGbk(typeid(T).name()) << "_" << StrConv::Utf8ToGbk(strNickNameUtf8) << ".msgpack";
+	const auto& strFileNameGbk = ossGbk.str();
 	// 打开文件
-	std::ifstream in(strFileName, std::ios::binary);
+	std::ifstream in(strFileNameGbk, std::ios::binary);
 	// 检查文件是否成功打开
 	T objT;
 	if (in)
@@ -37,7 +37,7 @@ T 从文件里读出对象(const std::string nickName)
 			msgpack::object obj = oh.get();
 			objT = obj.as<T>();
 			in.close();
-			LOG(INFO) << "已读出" << strFileName;
+			LOG(INFO) << "已读出" << strFileNameGbk;
 		}
 		catch (const msgpack::type_error& error)
 		{
@@ -52,7 +52,7 @@ T 从文件里读出对象(const std::string nickName)
 	}
 	else
 	{
-		LOG(WARNING) << "无法打开文件" << strFileName;
+		LOG(WARNING) << "无法打开文件" << strFileNameGbk;
 		//dequeLocal.pop_front();
 	}
 
@@ -62,17 +62,17 @@ T 从文件里读出对象(const std::string nickName)
 template<class T>
 T 写对象进文件(const T& ref, const std::string& strNickName)
 {
-	std::ostringstream oss;
-	oss << StrConv::Utf8ToGbk(typeid(T).name()) << "_" << strNickName << ".msgpack";
-	const auto& strFileName = oss.str();
+	std::ostringstream ossGbk;
+	ossGbk << StrConv::Utf8ToGbk(typeid(T).name()) << "_" << StrConv::Utf8ToGbk(strNickName) << ".msgpack";
+	const auto& strFileNameGbk = ossGbk.str();
 
 	// 打开文件
-	std::ofstream out(strFileName, std::ios::binary);
+	std::ofstream out(strFileNameGbk, std::ios::binary);
 
 	// 检查文件是否成功打开
 	if (!out)
 	{
-		LOG(ERROR) << "无法打开文件" << strFileName;
+		LOG(ERROR) << "无法打开文件" << strFileNameGbk;
 		//dequeLocal.pop_front();
 		return ref;
 	}
@@ -81,7 +81,7 @@ T 写对象进文件(const T& ref, const std::string& strNickName)
 
 	// 关闭文件
 	out.close();
-	LOG(INFO) << "已写入" << strFileName;
+	LOG(INFO) << "已写入" << strFileNameGbk;
 	//模拟写硬盘很卡
 	std::this_thread::sleep_for(std::chrono::milliseconds(200));
 	return ref;
