@@ -4,12 +4,31 @@ class StrategyLog
 {
 };
 
+#ifdef _WIN32
+#define SAFE_ASSERT( exp ) \
+{\
+	if (!(exp)) \
+	{\
+		LOG(ERROR)<< #exp << ",false";\
+		_ASSERT(false);\
+	}\
+}
+#else
+#include <cassert>
+#define SAFE_ASSERT( exp ) \
+{\
+	if (!(exp)) \
+	{\
+		LOG(ERROR)<< #exp << ",false";\
+	}\
+}
+#endif
 #define CHECK_NOTNULL_VOID( PTR ) \
 {\
 	if (nullptr == (PTR)) \
 	{\
 		LOG(ERROR)<< #PTR << ",is null";\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		return;\
 	}\
 }
@@ -18,7 +37,7 @@ class StrategyLog
 	if (nullptr == (PTR)) \
 	{\
 		LOG(ERROR)<< #PTR << ",is null";\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		co_return 0;\
 	}\
 }
@@ -27,7 +46,7 @@ class StrategyLog
 	if (nullptr == (PTR)) \
 	{\
 		LOG(ERROR)<< #PTR << ",is null";\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		co_return false;\
 	}\
 }
@@ -36,7 +55,7 @@ class StrategyLog
 	if (!(EXP)) \
 	{\
 		LOG(ERROR)<< #EXP<< "is false";\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		co_return 0;\
 	}\
 }
@@ -45,7 +64,7 @@ class StrategyLog
 	if (!(EXP)) \
 	{\
 		LOG(ERROR)<< #EXP ;\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		return false;\
 	}\
 }
@@ -55,7 +74,7 @@ class StrategyLog
 	if (!(EXP)) \
 	{\
 		LOG(ERROR)<< #EXP ;\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		return ;\
 	}\
 }
@@ -64,7 +83,7 @@ class StrategyLog
 	if (!(EXP)) \
 	{\
 		LOG(ERROR)<< #EXP ;\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		return {};\
 	}\
 }
@@ -74,7 +93,7 @@ class StrategyLog
 	if (!(EXP)) \
 	{\
 		LOG(ERROR) << #EXP; \
-		_ASSERT(false); \
+		SAFE_ASSERT(false); \
 	}\
 }
 
@@ -83,7 +102,7 @@ class StrategyLog
 	if (nullptr == (PTR)) \
 	{\
 		LOG(ERROR)<< #PTR << ",is null";\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		return false;\
 	}\
 }
@@ -93,7 +112,7 @@ class StrategyLog
 	if (val1 < val2)\
 	{\
 		LOG(ERROR) << #val1 << ":" << val1 << ">=" << #val2 << ":" << val2 ;\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		return;\
 	}\
 }
@@ -104,7 +123,7 @@ class StrategyLog
 	if ((val1) != (val2))\
 	{\
 		LOG(ERROR) << #val1 << ":" << (val1) << "!=" << #val2 << ":" << (val2) ;\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		return;\
 	}\
 }
@@ -114,7 +133,7 @@ class StrategyLog
 	LOG_IF(ERROR, !(exp));\
 	if (!(exp))\
 	{\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		co_return {}; \
 	}\
 }
@@ -124,7 +143,7 @@ class StrategyLog
 	LOG_IF(ERROR, !(exp));\
 	if (!(exp))\
 	{\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		return val ; \
 	}\
 }
@@ -134,7 +153,7 @@ class StrategyLog
 	LOG_IF(ERROR, !(exp));\
 	if (!(exp))\
 	{\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		co_return false; \
 	}\
 }
@@ -144,7 +163,7 @@ class StrategyLog
 	LOG_IF(ERROR, !(exp));\
 	if (!(exp))\
 	{\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		co_return; \
 	}\
 }
@@ -162,7 +181,7 @@ class StrategyLog
 	LOG_IF(ERROR, !(exp));\
 	if (!(exp))\
 	{\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		return false; \
 	}\
 }
@@ -172,7 +191,7 @@ class StrategyLog
 	LOG_IF(ERROR, wp.expired());\
 	if ((wp).expired())\
 	{\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		co_return false; \
 	}\
 }
@@ -181,7 +200,7 @@ class StrategyLog
 	LOG_IF(ERROR, wp.expired());\
 	if ((wp).expired())\
 	{\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		co_return 0; \
 	}\
 }
@@ -190,7 +209,7 @@ class StrategyLog
 	if ((wp).expired()) \
 	{\
 		LOG(ERROR)<< #wp<< ",expired";\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		continue;\
 	}\
 }
@@ -200,7 +219,7 @@ class StrategyLog
 	if (!(exp)) \
 	{\
 		LOG(ERROR)<< #exp << ",false";\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		continue;\
 	}\
 }
@@ -210,7 +229,7 @@ class StrategyLog
 	if (!(exp)) \
 	{\
 		LOG(ERROR)<< #exp << ",false";\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		break;\
 	}\
 }
@@ -220,7 +239,7 @@ class StrategyLog
 	if ((wp).expired()) \
 	{\
 		LOG(ERROR)<< #wp<< ",expired";\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		return;\
 	}\
 }
@@ -230,7 +249,7 @@ class StrategyLog
 	if ((wp).expired()) \
 	{\
 		LOG(ERROR)<< #wp<< ",expired";\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		return {};\
 	}\
 }
@@ -240,7 +259,7 @@ class StrategyLog
 	if ((wp).expired()) \
 	{\
 		LOG(ERROR)<< #wp<< ",expired";\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		return false;\
 	}\
 }
@@ -250,7 +269,7 @@ class StrategyLog
 	if (!(ref).m_upAoi) \
 	{\
 		LOG(ERROR)<< #ref << ",m_upAoi";\
-		_ASSERT(false);\
+		SAFE_ASSERT(false);\
 		continue;\
 	}\
 }

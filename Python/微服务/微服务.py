@@ -314,6 +314,7 @@ async def get_wechat_access_token():
     appid = os.environ.get('WECHAT_APPID')
     appsecret = os.environ.get('WECHAT_APPSECRET')
     
+    print('get_wechat_access_token微信小游戏appid:', appid)
     if not appid or not appsecret:
         print("警告: 未设置微信APPID或APPSECRET环境变量")
         return None
