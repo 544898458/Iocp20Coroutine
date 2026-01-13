@@ -20,6 +20,7 @@
 #include "../MiniDump/MiniDump.h"
 #include "单位.h"
 #include "枚举/战局类型.h"
+#include "../读Yaml配置/翻译.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Mswsock.lib")
@@ -136,6 +137,7 @@ int main(void)
 	LOG(ERROR) << "Test GLOG_ERROR";
 	LOG(INFO) << "GameSvr已启动";
 	单位::读配置文件();
+	读Yaml配置::读翻译配置文件("配置/翻译.yaml");
 
 	SetConsoleCtrlHandler(fun, TRUE);
 	Iocp::ThreadPool threadPoolNetwork;

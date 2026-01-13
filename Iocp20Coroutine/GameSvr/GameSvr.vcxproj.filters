@@ -64,6 +64,9 @@
     <Filter Include="枚举">
       <UniqueIdentifier>{e13b46b3-596e-4fa9-b74e-c40de239efe2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="读Yaml配置">
+      <UniqueIdentifier>{07e4d044-dcf6-4564-8a9f-e17e9f18b4c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Space.cpp">
@@ -402,6 +405,9 @@
     <ClCompile Include="混战.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\读Yaml配置\翻译.cpp">
+      <Filter>读Yaml配置</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -676,6 +682,12 @@
     </ClInclude>
     <ClInclude Include="枚举\战局类型.h">
       <Filter>枚举</Filter>
+    </ClInclude>
+    <ClInclude Include="..\读Yaml配置\读Yaml配置.h">
+      <Filter>读Yaml配置</Filter>
+    </ClInclude>
+    <ClInclude Include="..\读Yaml配置\翻译.h">
+      <Filter>读Yaml配置</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
