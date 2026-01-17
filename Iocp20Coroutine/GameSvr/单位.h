@@ -18,7 +18,7 @@ namespace 单位
 	/// </summary>
 	struct 单位配置
 	{
-		std::string strName;
+		std::string str名字Key;
 		种族 种族;
 		std::string strPrefabName;
 		bool b骨骼动画 = true;
@@ -26,7 +26,7 @@ namespace 单位
 		动作 空闲;
 		动作 阵亡;
 		std::string str阵亡音效;
-		MSGPACK_DEFINE(strName, 种族, strPrefabName, b骨骼动画	, str选中音效, 空闲, 阵亡, str阵亡音效);
+		MSGPACK_DEFINE(str名字Key, 种族, strPrefabName, b骨骼动画	, str选中音效, 空闲, 阵亡, str阵亡音效);
 	};
 	struct 消耗资源
 	{

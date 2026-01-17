@@ -4,6 +4,7 @@
 #include "枚举/属性类型.h"
 #include "枚举/单位类型.h"
 #include "枚举/战局类型.h"
+#include "../../读Yaml配置/读Yaml配置.h"
 #include <unordered_map>
 
 #define YAML_CPP_STATIC_DEFINE
@@ -27,7 +28,7 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::单位配置& _ref)
 	{
-		return _Ostr << "单位配置:" << StrConv::Utf8ToGbk(_ref.strName) << "\t" << _ref.种族 << "\t" << StrConv::Utf8ToGbk(_ref.strPrefabName) << "\t" << _ref.b骨骼动画 << "\t" << StrConv::Utf8ToGbk(_ref.str选中音效) << "\t" << _ref.空闲 << "\t" << _ref.阵亡 << "\t" << StrConv::Utf8ToGbk(_ref.str阵亡音效);
+		return _Ostr << "单位配置:" << StrConv::Utf8ToGbk(_ref.str名字Key) << "\t" << _ref.种族 << "\t" << StrConv::Utf8ToGbk(_ref.strPrefabName) << "\t" << _ref.b骨骼动画 << "\t" << StrConv::Utf8ToGbk(_ref.str选中音效) << "\t" << _ref.空闲 << "\t" << _ref.阵亡 << "\t" << StrConv::Utf8ToGbk(_ref.str阵亡音效);
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::战局配置& _ref)
@@ -80,24 +81,24 @@ namespace std
 
 namespace YAML {
 	// 辅助函数：安全获取YAML节点值，支持默认值
-	template<typename T>
-	T safe_get(const Node& node, const std::string& key, const T& default_value) {
-		return node[key] ? node[key].as<T>() : default_value;
-	}
-	template<>
-	std::string safe_get(const Node& node, const std::string& key, const std::string& default_value) {
-		return node[key] ? StrConv::GbkToUtf8(node[key].as<std::string>()) : default_value;
-	}
+	// template<typename T>
+	// T safe_get(const Node& node, const std::string& key, const T& default_value) {
+	// 	return node[key] ? node[key].as<T>() : default_value;
+	// }
+	// template<>
+	// std::string safe_get(const Node& node, const std::string& key, const std::string& default_value) {
+	// 	return node[key] ? StrConv::GbkToUtf8(node[key].as<std::string>()) : default_value;
+	// }
 
-	// 辅助函数：安全获取时间值
-	std::chrono::milliseconds safe_get_duration(const Node& node, const std::string& key, int32_t default_ms = 0) {
-		return node[key] ? std::chrono::milliseconds(node[key].as<int32_t>()) : std::chrono::milliseconds(default_ms);
-	}
+	// // 辅助函数：安全获取时间值
+	// std::chrono::milliseconds safe_get_duration(const Node& node, const std::string& key, int32_t default_ms = 0) {
+	// 	return node[key] ? std::chrono::milliseconds(node[key].as<int32_t>()) : std::chrono::milliseconds(default_ms);
+	// }
 
-	// 辅助函数：安全获取时间值（int16_t版本）
-	std::chrono::milliseconds safe_get_duration16(const Node& node, const std::string& key, int16_t default_ms = 0) {
-		return node[key] ? std::chrono::milliseconds(node[key].as<int16_t>()) : std::chrono::milliseconds(default_ms);
-	}
+	// // 辅助函数：安全获取时间值（int16_t版本）
+	// std::chrono::milliseconds safe_get_duration16(const Node& node, const std::string& key, int16_t default_ms = 0) {
+	// 	return node[key] ? std::chrono::milliseconds(node[key].as<int16_t>()) : std::chrono::milliseconds(default_ms);
+	// }
 
 	template<>
 	struct convert<战局类型> {
@@ -190,7 +191,7 @@ namespace YAML {
 			CHECK_RET_FALSE(refNode.IsMap());
 			
 			rhs = { 
-				safe_get<std::string>(refNode, "名字", ""),
+				safe_get<std::string>(refNode, "名字Key", ""),
 				safe_get<种族>(refNode, "种族", 种族(0)),
 				safe_get<std::string>(refNode, "PrefabPathName", ""),
 				safe_get<bool>(refNode, "是骨骼动画", false),
@@ -399,8 +400,10 @@ namespace 单位
 	{
 		try {
 			std::ifstream file(strPathName);
-			if (!file.is_open())
+			if (!file.is_open()){
+				LOG(ERROR) << "文件打开失败:" << strPathName;
 				return false;
+			}
 			std::ostringstream oss;
 			oss << file.rdbuf();
 			std::string strUtf8(oss.str());

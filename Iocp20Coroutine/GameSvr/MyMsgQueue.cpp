@@ -16,6 +16,7 @@
 #include "单位组件/DefenceComponent.h"
 #include "单位组件/苔蔓Component.h"
 #include "单位组件/数值Component.h"
+#include "../../读Yaml配置/翻译.h"
 
 
 const std::initializer_list<const 属性类型> g_list所有属性 = { 生命, 能量 };
@@ -28,7 +29,7 @@ MsgNotifyPos::MsgNotifyPos(const Entity& ref) :
 MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :
 	entityId(ref.Id),
 	nickName(ref.头顶Name()),
-	entityName(ref.m_配置.strName),
+	entityName(读Yaml配置::翻译(ref.m_配置.str名字Key)),
 	prefabName(ref.m_配置.strPrefabName),
 	最大生命(数值Component::Get(ref, 属性类型::最大生命)),
 	最大能量(数值Component::Get(ref, 属性类型::最大能量)),

@@ -527,6 +527,7 @@
     <ClInclude Include="枚举\属性类型.h" />
     <ClInclude Include="枚举\战局类型.h" />
     <ClInclude Include="混战.h" />
+    <ClInclude Include="翻译Key.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CoRoutine\CoTask.h" />

@@ -1,5 +1,4 @@
-#pip install pandas pyyaml
-#pip install openpyxl
+#pip install pandas pyyaml openpyxl
 import pandas as pd
 import yaml
 import os

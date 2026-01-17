@@ -689,6 +689,9 @@
     <ClInclude Include="..\读Yaml配置\翻译.h">
       <Filter>读Yaml配置</Filter>
     </ClInclude>
+    <ClInclude Include="翻译Key.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\websocketfiles-master\src\string_helper.inl">

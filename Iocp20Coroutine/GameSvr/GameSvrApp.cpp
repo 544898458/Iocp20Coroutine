@@ -136,8 +136,8 @@ int main(void)
 	LOG(WARNING) << "Test GLOG_WARNING";
 	LOG(ERROR) << "Test GLOG_ERROR";
 	LOG(INFO) << "GameSvr已启动";
-	单位::读配置文件();
-	读Yaml配置::读翻译配置文件("配置/翻译.yaml");
+	CHECK_RET_DEFAULT(单位::读配置文件());
+	CHECK_RET_DEFAULT(读Yaml配置::读翻译配置文件("配置/翻译.yaml"));
 
 	SetConsoleCtrlHandler(fun, TRUE);
 	Iocp::ThreadPool threadPoolNetwork;
