@@ -1,0 +1,32 @@
+<size=24><b>Shortcut Operations</b></size><br/>
+Select the same unit twice in a row to automatically select all nearby units of the same type.<br/>
+After selecting multiple units, click the ground to make them move while maintaining their original formation; double-click the same spot, and the units will converge at the target location.<br/>
+You can set rally points for unit production in <color=#40a9ff>Command Centers, Barracks, Vehicle Factories, Airports</color> and <color=#ff4d4f>Hive Nests</color>. Assign the rally point of Construction Vehicles or Drone Larvae to a resource node, and newly produced units will automatically collect resources there.<br/>
+<outline color=#ffff00 width=1>Idle Construction Vehicles/Drone Larvae Button</outline>: A single click selects all idle units; a second click cycles through them one by one. If 5 seconds elapse between clicks, the next click will be treated as the first one.<br/>
+<br/>
+<size=24><b>Human Construction</b></size><br/>
+<outline color=#ffffff width=1>Construct Buildings</outline>: Click the button for <color=#40a9ff>Command Center/Civilian House/Bunker/Barracks/Battery Turret</color> => click the ground. The nearest idle Construction Vehicle will move to the target location to build. If you select a Construction Vehicle first before initiating construction, that specific vehicle will be forced to perform the build task.<br/>
+<outline color=#ffffff width=1>Produce Mobile Units</outline>: Click the button for <color=#40a9ff>Construction Vehicle/Soldier/Melee Infantry/Tank</color>. The least occupied production structure will start manufacturing the unit. If you select a Command Center or Barracks first, the unit will be produced in the specified structure.<br/>
+Civilian Houses or Transport Drones increase the maximum population cap of mobile units.<br/>
+A Bunker or Transport Drone can garrison up to 10 mobile units, and Bunkers have a very high health pool.<br/>
+<br/>
+<size=24><b>Human Unique Units</b></size><br/>
+<color=#ff9500><b>Bunker</b></color>: Garrisonable, high health points<br/>
+<color=#ff9500><b>Battery Turret</b></color>: Turret groups counter all units except Tanks<br/>
+<br/>
+<size=24><b>Insectoids Construction</b></size><br/>
+<outline color=#ffffff width=1>Construct Buildings</outline>: Insectoids buildings are created by mutating Drone Larvae, so each building constructed consumes one Drone Larva.<br/>
+<outline color=#ffffff width=1>Produce Mobile Units</outline>: Insectoids mobile units hatch from Larvae. To speed up production, you must build more Hive Nests.<br/>
+<br/>
+<size=24><b>Insectoids Unique Units</b></size><br/>
+<color=#ff9500><b>Transport Drone</b></color>: Can transport units<br/>
+<br/>
+<size=24><b>Resource Gathering</b></size><br/>
+Click to select a Construction Vehicle => click a <color=#b7b7a4>Mineral Field</color> or <color=#ff7a45>Vespene Geyser</color> to order resource collection.<br/>
+Click the <outline color=#ffff00 width=1>Idle Construction Vehicles</outline> button to quickly locate all idle construction units.<br/>
+Select a Command Center or Hive Nest, then set the rally point of Construction Vehicles or Drone Larvae to a resource node. Newly produced units will head directly to collect resources upon spawning.<br/>
+<br/>
+<size=24><b>Unit Counter Relationships (Rock-Paper-Scissors Mechanic)</b></size><br/>
+<color=#ff3b30>Tanks</color> counter <color=#5ac8fa>Bunkers</color> and <color=#5ac8fa>Battery Turrets</color><br/>
+<color=#5ac8fa>Bunkers</color> and <color=#5ac8fa>Battery Turrets</color> counter <color=#34c759>Infantry</color><br/>
+<color=#34c759>Infantry</color> counter <color=#ff3b30>Tanks</color>
