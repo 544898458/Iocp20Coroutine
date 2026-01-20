@@ -1,7 +1,19 @@
 #pip install pandas pyyaml openpyxl
 import pandas as pd
 import yaml
+from yaml.representer import SafeRepresenter
 import os
+
+class QuotedString(str):
+    """用于标记需要引号的字符串"""
+    pass
+
+def quoted_str_representer(dumper, data):
+    """自定义字符串表示器，确保以逗号开头的字符串被引号包裹"""
+    return dumper.represent_scalar('tag:yaml.org,2002:str', data, style="'")
+
+# 注册自定义表示器
+yaml.add_representer(QuotedString, quoted_str_representer)
 
 def parse_column_name(col_name):
     """解析列名，支持嵌套结构，如 '坐标1.X', '坐标1.Y', '坐标1.Z'"""
@@ -9,6 +21,12 @@ def parse_column_name(col_name):
         parts = col_name.split('.')
         return parts[0], parts[1]
     return col_name, None
+
+def ensure_quoted_if_needed(value):
+    """如果字符串以逗号开头，则包装为QuotedString以确保添加引号"""
+    if isinstance(value, str) and value and (value.startswith(',') or value.startswith('，')):
+        return QuotedString(value)
+    return value
 
 def build_nested_dict(row, columns):
     """构建嵌套字典结构"""
@@ -20,12 +38,12 @@ def build_nested_dict(row, columns):
         
         if child_key is None:
             # 简单字段
-            result[parent_key] = value
+            result[parent_key] = ensure_quoted_if_needed(value)
         else:
             # 嵌套字段
             if parent_key not in result:
                 result[parent_key] = {}
-            result[parent_key][child_key] = value
+            result[parent_key][child_key] = ensure_quoted_if_needed(value)
     
     return result
 
@@ -63,7 +81,8 @@ def excel_to_yaml(excel_file_path, output_dir):
             
             # 将字典列表写入YAML文件
             with open(yaml_file_path, 'w', encoding='utf-8') as yaml_file:
-                yaml.dump(data_list, yaml_file, default_flow_style=False, allow_unicode=True)
+                yaml.dump(data_list, yaml_file, default_flow_style=False, allow_unicode=True, 
+                         default_style=None, sort_keys=False)
             
             # 打印成功消息
             print(f"工作表 {sheet_name} 成功转换为 {yaml_file_path}")
