@@ -1,0 +1,1276 @@
+- Key: Key版本不匹配
+  中文: 版本不匹配
+  英文: Version Mismatch
+- Key: Key进来了
+  中文: ' 进来了'
+  英文: ' Entered'
+- Key: Key离开了
+  中文: ' 离开了'
+  英文: ' Left'
+- Key: Key说
+  中文: ' 说：'
+  英文: ' Said:'
+- Key: Key敌人
+  中文: 敌人
+  英文: Enemy
+- Key: Key请稍后再说
+  中文: 请稍后再说
+  英文: Please speak again later.
+- Key: Key单位介绍_虫_人类善于防守
+  中文: 人类善于防守。驻守枪兵的地堡拥有顶级的攻防。现在请先点击右下角的<color=#a0ff50>框选</color>按钮，然后在屏幕上从左上到右下拖动，框选所有枪兵，然后点击<color=#a0ff50>地堡</color>，让选中的枪兵都进入地堡
+  英文: Humans excel at defense. Bunkers garrisoned with Riflemen boast top-tier offense
+    and defense. Now please first click the <color=#a0ff50> Box Selection</color>
+    button at the bottom right corner, then drag from the top-left to bottom-right
+    on the screen to select all Riflemen. Next, click the <color=#a0ff50> Bunker</color>
+    to move all selected Riflemen inside.
+- Key: Key现在会刷出大量敌人进攻地堡
+  中文: 很好，现在会刷出大量敌人进攻地堡，让您对地堡的攻防有直观的体会。
+  英文: Great. Now a large number of enemies will spawn and assault the bunker, allowing
+    you to get a firsthand feel of the bunker's offensive and defensive capabilities.
+- Key: Key但你的地堡也快不行了
+  中文: '，祝贺你消灭了敌人，但你的地堡也快不行了。<color=#a0ff50>医疗兵</color>可以修复地堡。'
+  英文: ',Congratulations on eliminating the enemies, but your bunker is almost destroyed.
+    <color=#a0ff50>Medics</color> can repair the bunker.'
+- Key: Key点击选中医疗兵
+  中文: 点击选中<color=#a0ff50>医疗兵</color>，再点击一下地堡附近的空地，让医疗兵走到地堡附近。
+  英文: Click to select a <color=#a0ff50>Medic</color>, then click an empty spot near
+    the bunker to make the Medic move closer to it.
+- Key: Key您的地堡正在恢复
+  中文: 很好，您的地堡正在恢复。但是治疗会消耗医疗兵的能量，请注意医疗兵头顶的蓝色能量条变化
+  英文: Well done. Your bunker is being restored. However, healing consumes the Medic's
+    energy. Please pay attention to the changes in the blue energy bar above the Medic's
+    head.
+- Key: Key点击选中更多的医疗兵
+  中文: 点击选中更多的<color=#a0ff50>医疗兵</color>走到地堡附近，让她们共同修复地堡。
+  英文: Click to select more <color=#a0ff50>Medics</color> and move them near the bunker,
+    so they can work together to repair it.
+- Key: Key让地堡里的人出来
+  中文: 现在请先点右下角的<color=#a0ff50>取消选中</color>，再点击选中<color=#a0ff50>地堡</color>，然后点击底部的<color=#a0ff50>离开地堡</color>按钮，让地堡里的人出来。
+  英文: Now please first click <color=#a0ff50> Deselect</color> at the bottom right
+    corner, then click to select the <color=#a0ff50> Bunker</color>, and finally click
+    the <color=#a0ff50>Exit Bunker</color> button at the bottom to let the units inside
+    come out.
+- Key: Key医疗兵会治疗受伤的战斗单位
+  中文: 很好，现在会刷出大量敌人向您进攻，医疗兵会治疗受伤的战斗单位。
+  英文: Excellent. Now a swarm of enemies will spawn and launch an attack on you. The
+    Medics will heal the wounded combat units.
+- Key: Key左边出现了炮台群
+  中文: 很好，左边出现了<color=#a0ff50>炮台</color>群，请派所有单位过去攻击（此训练不必在乎伤亡）
+  英文: Great. A group of <color=#a0ff50>Turrets</color> has appeared on the left. Send
+    all your units to attack them (casualties are not a concern in this training).
+- Key: Key左边出现了炮台群_虫
+  中文: '左边出现了<color=#a0ff50>炮台</color>群。请先点击选中一个<color = #a0ff50>近战虫</color>，然后再次点击选中同一个近战虫，达到选中附近所有近战虫的效果。接着点击左边炮台附近的空地，让所有近战虫进攻炮台（不必在乎伤亡）'
+  英文: A group of <color=#a0ff50>Turrets</color> has appeared on the left. First, click
+    to select a <color=#a0ff50>Melee Bug</color>, then click the same Melee Bug again
+    to select all nearby Melee Bugs. Next, click an empty spot near the Turrets on
+    the left to order all Melee Bugs to assault them (casualties are not a concern).
+- Key: Key您可以试试攻城利器坦克
+  中文: '，炮台群对步兵有压倒性的优势。您可以试试攻城利器：<color=#a0ff50>坦克</color>。'
+  英文: ',Turrets have an overwhelming advantage against infantry. You can try using
+    a siege weapon: the <color=#a0ff50> Tank</color>.'
+- Key: Key坦克可以在炮台的射程外攻击
+  中文: 坦克可以在炮台的射程外攻击
+  英文: Tanks can attack from outside the Turrets' firing range.
+- Key: Key不要进入炮台的射程内
+  中文: 不要进入炮台的射程内！
+  英文: Do NOT enter the Turrets' firing range!
+- Key: Key你不早说……
+  中文: 你不早说？
+  英文: Why didn't you tell me earlier?
+- Key: Key坦克会遭到小兵克制
+  中文: '，坦克拥有射程优势，可以在炮台的射程外攻击。但是坦克爆炸溅射会伤害己方单位，并且前摇很长，会遭到小兵克制。现在请看效果。'
+  英文: ',Tanks have a range advantage and can attack from beyond the Turrets'' firing
+    range. However, tank explosion splash damage will harm friendly units, and their
+    long attack wind-up makes them vulnerable to enemy grunts. Now watch the effect.'
+- Key: Key敌方近战虫无法防空
+  中文: 敌方近战虫无法防空，现在给你刷一个飞机即可克制它们。
+  英文: Enemy melee bugs have no anti-air capabilities. Now I'll spawn an aircraft for
+    you to counter them.
+- Key: Key坦克和飞机的造价很高
+  中文: 坦克和飞机的造价很高，要根据战场形势酌情使用。
+  英文: Tanks and aircraft are expensive to build. Deploy them prudently based on battlefield
+    conditions.
+- Key: Key资源紧张时不造它们……
+  中文: 好。资源紧张时不造它们。
+  英文: Got it. Don't build them when resources are tight.
+- Key: Key使用强行走来手动中断攻击……
+  中文: 战斗单位会自动攻击警戒范围内的敌人，但你可以使用<color=#a0ff50>强行走</color>来手动中断攻击。
+  英文: Combat units will automatically attack enemies within their alert range, but
+    you can use <color=#a0ff50> Force Move</color> to manually interrupt their attacks.
+- Key: Key然后点击下方的强行走按钮
+  中文: 请单击选中飞机，然后点击下方的<color=#a0ff50>强行走</color>按钮，让飞机停止攻击并移动到炮台射程外。
+  英文: Click to select the aircraft, then click the <color=#a0ff50> Force Move</color>
+    button below to make the aircraft stop attacking and move outside the Turrets'
+    firing range.
+- Key: Key强行走的过程中……
+  中文: 强行走的过程中，不会攻击敌人。
+  英文: Unit will not attack enemies while performing a Force Move.
+- Key: Key我知道了
+  中文: 我知道了。
+  英文: Understood.
+- Key: Key了解地堡医疗兵坦克飞机的用法
+  中文: 这次训练，你将了解<color=#a0ff50>地堡</color>、<color=#a0ff50>医疗兵</color>、<color=#a0ff50>坦克</color>、<color=#a0ff50>飞机</color>的用法。
+  英文: In this training, you will learn how to use the <color=#a0ff50> Bunker</color>,
+    <color=#a0ff50>Medic</color>, <color=#a0ff50>Tank</color> and <color=#a0ff50>Aircraft</color>.
+- Key: Key好的。
+  中文: 好的。
+  英文: OK.
+- Key: Key此单位不可进入地堡
+  中文: 此单位不可进入地堡
+  英文: This unit cannot enter the Bunker.
+- Key: Key此单位不可进入房虫
+  中文: 此单位不可进入房虫
+  英文: This unit cannot enter the PopuLifter Drone.
+- Key: Key特效
+  中文: 特效
+  英文: Special Effects
+- Key: Key视口
+  中文: 视口
+  英文: Viewport
+- Key: Key苔蔓
+  中文: 苔蔓(wàn)
+  英文: Mossy Vines
+- Key: Key方墩
+  中文: 方墩
+  英文: Square Pillar
+- Key: Key晶体矿
+  中文: 晶体矿
+  英文: Crystal Ore
+- Key: Key燃气矿
+  中文: 燃气矿
+  英文: Gas Ore
+- Key: Key工程车
+  中文: 工程车
+  英文: Construction Vehicle
+- Key: Key枪兵
+  中文: 枪兵
+  英文: Rifleman
+- Key: Key近战兵
+  中文: 近战兵
+  英文: Melee Infantry
+- Key: Key三色坦克
+  中文: 三色坦克
+  英文: Tricolor Tank
+- Key: Key工虫
+  中文: 工虫
+  英文: Worker Larva
+- Key: Key飞机
+  中文: 飞机
+  英文: Aircraft
+- Key: Key枪虫
+  中文: 枪虫
+  英文: Rifle Bug
+- Key: Key近战虫
+  中文: 近战虫
+  英文: Melee Bug
+- Key: Key幼虫
+  中文: 幼虫
+  英文: Larva
+- Key: Key绿色坦克
+  中文: 绿色坦克
+  英文: Green Tank
+- Key: Key光刺
+  中文: 光刺
+  英文: Light Spiker
+- Key: Key房虫
+  中文: 房虫
+  英文: Population Drone
+- Key: Key飞虫
+  中文: 飞虫
+  英文: Flying Bug
+- Key: Key医疗兵
+  中文: 医疗兵
+  英文: Medic
+- Key: Key防空兵
+  中文: 防空兵
+  英文: Anti-Air Trooper
+- Key: Key基地
+  中文: 基地
+  英文: Command Center
+- Key: Key兵营
+  中文: 兵营
+  英文: Barracks
+- Key: Key民房
+  中文: 民房
+  英文: Supply Depots
+- Key: Key地堡
+  中文: 地堡
+  英文: Bunker
+- Key: Key炮台
+  中文: 炮台
+  英文: Turret
+- Key: Key虫巢
+  中文: 虫巢
+  英文: Hive
+- Key: Key机场
+  中文: 机场
+  英文: Airfield
+- Key: Key重车厂
+  中文: 重车厂
+  英文: Heavy Vehicle Factory
+- Key: Key虫营
+  中文: 虫营
+  英文: Bug Barracks
+- Key: Key飞塔
+  中文: 飞塔
+  英文: Anti-Air Tower
+- Key: Key拟态源
+  中文: 拟态源
+  英文: Mimic Source
+- Key: Key太岁
+  中文: 太岁
+  英文: Taisui
+- Key: Key枪虫怪
+  中文: 枪虫怪
+  英文: Rifle Bug Mutant
+- Key: Key近战虫怪
+  中文: 近战虫怪
+  英文: Melee Bug Mutant
+- Key: Key工虫怪
+  中文: 工虫怪
+  英文: Worker Mutant
+- Key: Key枪兵怪
+  中文: 枪兵怪
+  英文: Rifleman Mutant
+- Key: Key近战兵怪
+  中文: 近战兵怪
+  英文: Melee Infantry Mutant
+- Key: Key工程车怪
+  中文: 工程车怪
+  英文: Constructor Mutant
+- Key: Key幼虫怪
+  中文: 幼虫怪
+  英文: Larva Mutant
+- Key: Key飞虫怪
+  中文: 飞虫怪
+  英文: Flying Bug Mutant
+- Key: Key绿色坦克怪
+  中文: 绿色坦克怪
+  英文: Green Tank Mutant
+- Key: Key房虫怪
+  中文: 房虫怪
+  英文: PopuLifter Drone Mutant
+- Key: Key防空兵怪
+  中文: 防空兵怪
+  英文: Anti-Air Trooper Mutant
+- Key: Key缺少
+  中文: 缺少
+  英文: Insufficient
+- Key: Key已删除
+  中文: '已删除 '
+  英文: Deleted
+- Key: Key遭到攻击
+  中文: 遭到攻击
+  英文: ' is Under Attack'
+- Key: Key跟随
+  中文: '跟随 '
+  英文: Follow
+- Key: Key此单位无法采集资源
+  中文: 此单位无法采集资源
+  英文: This unit cannot harvest resources.
+- Key: Key已设定新工程车采集资源
+  中文: 已设定新工程车采集资源
+  英文: A new Construction Vehicle has been assigned to harvest resources.
+- Key: Key已设定新工虫采集资源
+  中文: 已设定新工虫采集资源
+  英文: A new Worker Larva has been assigned to harvest resources.
+- Key: Key玩家：
+  中文: 玩家：
+  英文: 'Player: '
+- Key: Key总教官：凌云
+  中文: 总教官：凌云
+  英文: 'Chief Instructor: Ling Yun'
+- Key: Key师兄：易万江
+  中文: 师兄：易万江
+  英文: 'Senior Brother: Yi Wanjiang'
+- Key: Key科学家：玛丽亚
+  中文: 科学家：玛丽亚
+  英文: 'Scientist: Maria'
+- Key: Key坦克手：齐诺维
+  中文: 坦克手：齐诺维
+  英文: 'Tankman: Zinoviev'
+- Key: Key绿色坦克：洪隆
+  中文: 绿色坦克：洪隆
+  英文: 'Green Tank: Hong Long'
+- Key: Key装甲指挥官：海因茨
+  中文: 装甲指挥官：海因茨
+  英文: 'Armored Commander: Heinz'
+- Key: Key房虫：胡噜
+  中文: 房虫：胡噜
+  英文: 'PopuLifter Drone: Hulu'
+- Key: Key内有{}人
+  中文: 内有{}人
+  英文: '{} unit(s) inside'
+- Key: Key资源
+  中文: 资源
+  英文: Resources
+- Key: Key准备开火
+  中文: 准备开火
+  英文: Ready to Fire
+- Key: Key强行走向目标位置
+  中文: 强行走向目标位置
+  英文: Force move to target location
+- Key: Key没有空闲的工程车或工虫
+  中文: 没有空闲的工程车或工虫
+  英文: No idle Construction Vehicles or Worker Larvae
+- Key: Key缺少{}不能采集
+  中文: 缺少 {} ，不能采集
+  英文: Cannot gather resources without {}.
+- Key: Key巡逻
+  中文: 巡逻
+  英文: Patrol
+- Key: Key停止巡逻
+  中文: 停止巡逻
+  英文: Stop Patrol
+- Key: Key正在卸矿
+  中文: 正在卸矿
+  英文: Unloading Ores
+- Key: Key没找到空闲的工虫
+  中文: 没找到空闲的工虫
+  英文: No idle Worker Larva found.
+- Key: Key没找到空闲的工程车
+  中文: 没找到空闲的工程车
+  英文: No idle Construction Vehicle found.
+- Key: Key如何指挥反空降作战？
+  中文: 如何指挥反空降作战？
+  英文: How to Command Anti-Airborne Operations?
+- Key: Key在途中击落敌方
+  中文: '，在途中击落敌方<color=#a0ff50>房虫</color>后，其运送的敌方单位就会变得非常虚弱，趁机一鼓作气消灭它们！'
+  英文: ',After shooting down the enemy <color=#a0ff50>Population Drone</color> mid-flight,
+    the enemy units it carries will be severely weakened—seize the moment and wipe
+    them out in one fell swoop!'
+- Key: Key我试试。
+  中文: 我试试。
+  英文: Let me give it a try.
+- Key: Key击落房虫……
+  中文: 击落<color=#a0ff50>房虫</color>，并且消灭其运送的敌方单位
+  英文: Shoot down the <color=#a0ff50>Population Drone</color> and eliminate the enemy
+    units it transports.
+- Key: Key这都能输，不可思议！
+  中文: 这都能输，不可思议！
+  英文: How could we lose this? Unbelievable!
+- Key: Key玩家的操作你别猜。
+  中文: 玩家的操作你别猜。
+  英文: Never try to second-guess a player’s moves.
+- Key: Key您已经掌握了反空降战术……
+  中文: 您已经掌握了反空降战术，可在今后的作战中择机运用。
+  英文: You have mastered anti-airborne tactics—feel free to deploy them opportunistically
+    in future battles.
+- Key: Key谨遵恩师教诲。
+  中文: 谨遵恩师教诲。
+  英文: I shall follow your teachings closely, Master.
+- Key: Key即时战略游戏的操作……
+  中文: "即时战略游戏的操作并不复杂，老年间便有四句童谣：\n    <color=#a0ff50>工程车</color>，造<color=#a0ff50>基地</color>；\n\
+    \    基地又产工程车。\n    工程车，造<color=#a0ff50>兵营</color>，\n    兵营产兵欢乐多！"
+  英文: "The controls of a real-time strategy game aren’t complicated. Back in the day,\
+    \ there was a little nursery rhyme that went like this:\n    \"<color=#a0ff50>Construction\
+    \ Vehicle</color>, build the <color=#a0ff50>Command Center</color>;\n    The Command\
+    \ Center spawns more Construction Vehicles.\n    Construction Vehicle, build the\
+    \ <color=#a0ff50>Barracks</color>,\n    Barracks pump out troops—endless joy for\
+    \ us all!\""
+- Key: Key听说还能造地堡炮台……
+  中文: 听说工程车还可以造<color=#a0ff50>地堡</color>和<color=#a0ff50>炮台</color>，我也要试试。
+  英文: I heard Construction Vehicles can also build <color=#a0ff50> Bunkers</color>
+    and <color=#a0ff50> Turrets</color>. I want to give that a shot too.
+- Key: Key造完基地应该……
+  中文: 造完基地应该先安排工程车去采集<color=#a0ff50>晶体矿</color>和<color=#a0ff50>燃气矿</color>，这是一切生产建造的基础。此外建造<color=#a0ff50>民房</color>可以提升活动单位上限。
+  英文: Once the Command Center is built, you should first send Construction Vehicles
+    to harvest <color=#a0ff50> Crystal Ore</color> and <color=#a0ff50> Gas Ore</color>—this
+    is the foundation of all production and construction. Additionally, building <color=#a0ff50>
+    Supply Depots</color> increases your mobile unit cap.
+- Key: Key我想单手拖动选中……
+  中文: 我只想单手操作，拖动视口 和 选中多个单位 如何操作呢？
+  英文: I only want to play with one hand. How do I pan the viewport and select multiple
+    units?
+- Key: Key拖动地面就可以……
+  中文: "  拖动地面就可以移动视口，此外设置（齿轮图标）界面还有视口镜头投影切换、放大、缩小按钮。当然也支持双指缩放视口。\n  先点击右边<color=#a0ff50>框选</color>按钮，然后在屏幕中拖动，即可<color=#a0ff50>框选</color>多个单位。在设置（齿轮图标）界面中可以切换菱形<color=#a0ff50>框选</color>或方形<color=#a0ff50>框选</color>。\n\
+    \  全程只要单手握持手机单指操作即可。"
+  英文: " Drag the ground to move the viewport. Moreover, the Settings (gear icon) menu\
+    \ has buttons for switching viewport projection, zooming in, and zooming out.\
+    \ Pinch-to-zoom is also supported.\n   First, tap the <color=#a0ff50>Box Select</color>\
+    \ button on the right, then drag across the screen to <color=#a0ff50>box-select</color>\
+    \ multiple units. You can switch between diamond-shaped and square <color=#a0ff50>box\
+    \ selection</color> modes in the Settings (gear icon) menu.\n The entire process\
+    \ can be done with one hand holding the phone and a single finger operating.\""
+- Key: Key只用一只手就能玩……
+  中文: 只用一只手就能玩的RTS即时战略游戏，那岂不是跟刷短视频一样轻松？我一定要体验一下！
+  英文: An RTS game you can play with one hand? That’s as effortless as scrolling through
+    short videos! I definitely need to give it a try!
+- Key: Key走你!
+  中文: 走你!
+  英文: Let’s go!
+- Key: Key欢迎来到……
+  中文: 欢迎来到<color=#a0ff50>即时战略指挥</color>，现在您要接受基础的训练
+  英文: Welcome to <color=#a0ff50>Real-Time Strategy Command</color>. You will now receive
+    basic training.
+- Key: Key造基地方法……
+  中文: 请点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>基地</color>按钮，再点击空白地面，稍后就能造出一个基地
+  英文: Please tap the <color=#a0ff50>Structures</color> => <color=#a0ff50>Command Center</color>
+    button, then tap an empty spot on the ground. A Command Center will be built shortly.
+- Key: Key造活动单位方法……
+  中文: 请点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>工程车</color>按钮，稍后会在基地旁造出一个工程车
+  英文: Please tap the <color=#a0ff50>Mobile Units</color> => <color=#a0ff50>Construction
+    Vehicle</color> button. A Construction Vehicle will spawn next to the Command
+    Center shortly.
+- Key: Key工程车移动方法……
+  中文: 现在您有工程车了，点击选中您的<color=#a0ff50>工程车</color>，再点击空旷地面，命令它走向目标点
+  英文: Now you have a Construction Vehicle. Tap to select your <color=#a0ff50>Construction
+    Vehicle</color>, then tap an open area on the ground to order it to move to the
+    target location.
+- Key: Key工程车采集晶体矿……
+  中文: 很好！现在给您刷了一个<color=#a0ff50>晶体矿</color>，请点击晶体矿，让工程车在晶体矿和基地之间搬运晶体矿
+  英文: Well done! A patch of <color=#a0ff50>Crystal Ore</color> has been spawned for
+    you. Tap the Crystal Ore to send the Construction Vehicle to transport ore between
+    the Crystal Ore deposit and the Command Center.
+- Key: Key工程车采集燃气矿……
+  中文: 很好！您的工程车正在采集晶体矿，请等他把晶体矿运回基地。现在，请先点<color=#a0ff50>取消选中</color>，再选中另一辆工程车去采集<color=#a0ff50>燃气矿</color>
+  英文: Great! Your Construction Vehicle is harvesting Crystal Ore—wait for it to deliver
+    the ore back to the Command Center. Now, please tap <color=#a0ff50> Deselect</color>
+    first, then select another Construction Vehicle to harvest <color=#a0ff50> Gas
+    Ore</color>.
+- Key: Key工程车晶体矿已运到基地……
+  中文: 您的工程车已把第一批晶体矿运到基地，请查看左上角<color=#a0ff50>晶体矿</color>数量变化
+  英文: Your Construction Vehicle has delivered the first batch of Crystal Ore to the
+    Command Center. Check the <color=#a0ff50>Crystal Ore</color> count in the top-left
+    corner to see the change.
+- Key: Key工程车造民房……
+  中文: 等您存够20晶体矿后，请点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>民房</color>按钮，再点击一次空旷地面
+  英文: Once you have saved up 20 Crystal Ore, tap the <color=#a0ff50>Structures</color>
+    => <color=#a0ff50>Supply Depot</color> button, then tap an open spot on the ground
+    again.
+- Key: Key民房可提高活动单位上限……
+  中文: 很好，民房可以提升您的活动单位数量上限
+  英文: Excellent—Supply Depots increase your mobile unit cap.
+- Key: Key工程车造兵营……
+  中文: 等您存够30晶体矿后，请点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>兵营</color>按钮，再点击一次空旷地面，就能造出一个兵营
+  英文: Once you have saved up 30 Crystal Ore, tap the <color=#a0ff50>Structures</color>
+    => <color=#a0ff50>Barracks</color> button, then tap an open spot on the ground
+    again to build a Barracks.
+- Key: Key兵营可产枪兵……
+  中文: 很好，兵营可以产出<color=#a0ff50>枪兵</color>和<color=#a0ff50>近战兵</color>。
+  英文: Well done—the Barracks can produce <color=#a0ff50>Riflemen</color> and <color=#a0ff50>Melee
+    Infantry</color>.
+- Key: Key兵营造枪兵方法……
+  中文: 请点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>枪兵</color>按钮，10秒后会在兵营旁造出一个枪兵
+  英文: Please tap the <color=#a0ff50>Mobile Units</color> => <color=#a0ff50>Rifleman</color>
+    button. A Rifleman will spawn next to the Barracks in 10 seconds.
+- Key: Key枪兵移动方法……
+  中文: 点击选中您的枪兵，再点击地面，可以指挥他走向目标处
+  英文: Tap to select your Rifleman, then tap the ground to command it to move to the
+    target location.
+- Key: Key让枪兵打怪……
+  中文: 现在已在左边给您刷了一个怪，控制兵走到怪附近，兵会自动打怪。您可以点右下角<color=#a0ff50>取消选中</color>，然后拖动地面看看怪在哪里
+  英文: An enemy unit has been spawned on the left side for you. Move your troops near
+    the enemy, and they will attack automatically. You can tap <color=#a0ff50> Deselect</color>
+    in the bottom-right corner, then drag the ground to locate the enemy.
+- Key: Key多造兵去围攻敌人……
+  中文: 您的兵阵亡了。可以多造点兵去围攻敌人
+  英文: Your troops have been defeated. You can build more troops to siege the enemy.
+- Key: Key造地堡防守……
+  中文: 恭喜您消灭了敌人！现在左边给您刷了更多的怪。您可以造<color=#a0ff50>建筑单位</color>=><color=#a0ff50>地堡</color>，让兵进入地堡中，立足防守，再伺机进攻
+  英文: Congratulations on eliminating the enemy! More enemy units have been spawned
+    on the left side for you. You can build <color=#a0ff50> Bunkers</color> under
+    <color=#a0ff50>Structures</color>, garrison your troops inside to hold your ground
+    defensively, then wait for the right moment to launch a counterattack.
+- Key: Key您胜利是天才！
+  中文: 您取得了胜利！您真是指挥天才！
+  英文: You have achieved victory! What a brilliant commander you are!
+- Key: Key你的悟性很高……
+  中文: '，你的悟性很高，10分钟就完成了其他学员一个月才能完成的训练，为师甚是欣慰！'
+  英文: ', You are an incredibly fast learner—you completed the training that takes
+    other students a whole month in just 10 minutes. Your master is truly delighted!'
+- Key: Key我这都是些什么同学啊……
+  中文: ……我这都是些什么同学啊，这么简单的操作还要学一个月吗？
+  英文: '...What kind of classmates do I have? How can it take them a whole month to
+    learn such simple controls?'
+- Key: Key世风不古……
+  中文: 唉，谁说不是呢！如今世风不古。遥想20年前，比你悟性更高的指挥天才比比皆是，大家经常自发研究切磋指挥技艺，更有无数学员的水平远超教官。实在令人怀念……
+  英文: Sigh, tell me about it! The current generation just isn’t what it used to be.
+    Thinking back to 20 years ago, there were countless commander prodigies with even
+    greater aptitude than yours. Everyone would spontaneously study and exchange command
+    skills, and countless students were far more skilled than their instructors. Those
+    were truly the days...
+- Key: Key这些前辈果真……
+  中文: 这些前辈果真如此厉害吗？学生倒是想领教领教！
+  英文: Were those seniors really that amazing? This student would love to test their
+    mettle!
+- Key: Key克制关系……
+  中文: "在<color=#a0ff50>多人联机混战</color>和<color=#a0ff50>其他人的多人战局列表</color>可能会遇到他们，不要轻敌。要善用战斗单位的克制关系：\n\
+    \  小兵 克制 坦克\n  坦克 克制 地堡和炮台\n  地堡和炮台 克制 小兵"
+  英文: "In <color=#a0ff50>Multiplayer FFA</color> and <color=#a0ff50>Other Players'\
+    \ Multiplayer Match List</color>, you might run into them—never underestimate\
+    \ your opponents. Make good use of the unit counter relationships:\n    Infantry\
+    \ counter Tanks.\n    Tanks counter Bunkers and Gun Turrets\n    Bunkers and Gun\
+    \ Turrets counter Infantry"
+- Key: Key这些克制关系是怎么……
+  中文: 这些克制关系是怎么产生的呢？
+  英文: How do these counter relationships work?
+- Key: Key坦克和近战兵……
+  中文: "    坦克虽然伤害最高，但是价格昂贵，攻击前摇最久，移动速度最慢；<color=#a0ff50>前摇开始后炸点无法改变</color>，敌方单位很容易躲开炸点，此外坦克炸点的爆炸溅射会伤害附近的己方单位。\n\
+    \    近战兵移动速度快，攻击速度快，价格便宜，很容易躲开坦克炸点，也很容易在坦克攻击前摇结束之前将坦克打掉。"
+  英文: " Although Tanks have the highest damage output, they are expensive, have the\
+    \ longest attack wind-up, and are the slowest-moving units; <color=#a0ff50>Once\
+    \ the attack wind-up starts, the blast point cannot be changed</color>, so enemy\
+    \ units can easily dodge it. Additionally, the splash damage from the tank’s blast\
+    \ point will harm friendly units nearby.\n  Melee Infantry are fast-moving, quick\
+    \ to attack, and cheap. They can easily dodge tank blast points and take down\
+    \ tanks before the attack wind-up is complete."
+- Key: Key坦克优势……
+  中文: 坦克，攻击距离最远，可以<color=#a0ff50>在炮台和地堡内单位的射程外攻击</color>，是拆除建筑的利器。
+  英文: Tanks have the longest attack range—they can <color=#a0ff50> attack from outside
+    the range of Bunker and Gun Turret garrisons</color>, making them excellent at
+    destroying structures.
+- Key: Key炮台介绍……
+  中文: 炮台价格便宜，攻击速度快，攻击距离仅次于坦克，集中放置后可对快速移动的敌方小兵群体造成有效伤害。
+  英文: Gun Turrets are cheap, have a fast attack speed, and their attack range is second
+    only to Tanks. When placed in groups, they can deal effective damage to swarms
+    of fast-moving enemy infantry.
+- Key: Key我会在实战中体会摸索。
+  中文: 我会在实战中体会摸索。
+  英文: I will learn and adapt through actual combat.
+- Key: Key推荐防守战和攻坚战……
+  中文: 一个人的时候，可以试试<color=#a0ff50>防守战</color>，有助于体会炮台、坦克、地堡的特点。也可以试试<color=#a0ff50>攻坚战</color>，练习步兵与坦克的配合
+  英文: When playing alone, you can try <color=#a0ff50> Defensive Battles</color> to
+    better understand the characteristics of Gun Turrets, Tanks, and Bunkers. You
+    can also try <color=#a0ff50> Assault Battles</color> to practice coordinating
+    Infantry and Tanks.
+- Key: Key训练失败鼓励……
+  中文: 这只是一次训练，不必过于在意。失败是成功之母，待情绪平复可以再试一次。
+  英文: This was just a training session—don’t dwell on it too much. Failure is the
+    mother of success. You can try again when you’re feeling calmer.
+- Key: Key有阻挡
+  中文: 有阻挡
+  英文: Obstructed
+- Key: Key晶体矿不足
+  中文: 晶体矿不足
+  英文: Insufficient Crystal Ore
+- Key: Key燃气矿不足
+  中文: 燃气矿不足
+  英文: Insufficient Gas Ore
+- Key: Key燃气矿不足，不能解锁
+  中文: 燃气矿不足，不能解锁
+  英文: Insufficient Gas Ore. Unlocking unavailable
+- Key: Key晶体矿不足，不能解锁
+  中文: 晶体矿不足，不能解锁
+  英文: Insufficient Crystal Ore. Unlocking unavailable
+- Key: Key蜕变进度{}/{}
+  中文: 蜕变进度{}/{}
+  英文: Metamorphosis Progress {}/{}
+- Key: Key待造队列{},当前单位进度{}/{}
+  中文: 待造队列{},当前单位进度{}/{}
+  英文: Queue Pending Construction {}, Current Unit Progress {}/{}
+- Key: Key走向建造点
+  中文: 走向建造点
+  英文: Proceed to Construction Site
+- Key: Key走向{}
+  中文: 走向{}
+  英文: Move toward {}
+- Key: Key造完了
+  中文: 造完了
+  英文: Construction Complete
+- Key: Key建造完成
+  中文: 建造完成
+  英文: Construction Complete
+- Key: Key民房不足
+  中文: 民房不足
+  英文: Insufficient Supply Depots
+- Key: Key房虫不足
+  中文: 房虫不足
+  英文: Insufficient Population Drones
+- Key: Key正在建造
+  中文: 正在建造
+  英文: Under Construction
+- Key: Key现在给你一批防空兵……
+  中文: 现在给你一批防空兵。先<color=#a0ff50>框选</color>全部，然后点击飞虫附近的空白地面，进攻飞虫。优势在我！
+  英文: You have been assigned a squad of anti-air units. First <color=#a0ff50> box-select</color>
+    all of them, then click the empty ground near the Flying Bugs to order an attack.
+    We hold the advantage!
+- Key: Key先框选全部防空兵……
+  中文: 先<color=#a0ff50>框选全部防空兵</color>，然后点击飞虫附近的空白地面，进攻飞虫。优势在我！
+  英文: First <color=#a0ff50> box-select all anti-air units</color>, then click the
+    empty ground near the Flying Bugs to order an attack. We hold the advantage!
+- Key: Key防空战胜利……
+  中文: 您胜利了！您真是防空天才！
+  英文: You win! What an anti-air ace you are!
+- Key: Key防空兵不可对地……
+  中文: 防空兵对空大范围高伤害（不分敌我），不能攻击地面单位，需要其他单位保护。
+  英文: Anti-air units deal massive area damage to airborne targets (friend or foe alike).
+    They cannot attack ground units and must be protected by other friendly forces.
+- Key: Key我会注意。
+  中文: 我会注意。
+  英文: I’ll keep that in mind.
+- Key: Key敌方布置了防空兵……
+  中文: 敌方布置了防空兵，我方飞虫损失惨重。
+  英文: The enemy has deployed anti-air units, and our Flying Bugs are sustaining heavy
+    casualties.
+- Key: Key防空兵移动缓慢……
+  中文: 防空兵<color=#a0ff50>移动缓慢，攻击前摇时间长，前摇过程中炸点不可改变位置</color>。只要手动操作飞虫避开空中炸点再找机会攻击，就有希望击败他们。
+  英文: Anti-air units <color=#a0ff50>move slowly and have a long attack wind-up. Once
+    the wind-up initiates, the blast point cannot be repositioned</color>. You can
+    defeat them by manually maneuvering your Flying Bugs to dodge the airborne blast
+    points, then seizing the chance to counterattack.
+- Key: Key具体如何操作呢？
+  中文: 具体如何操作呢？
+  英文: How exactly should I execute this?
+- Key: Key所有飞虫在后方……
+  中文: 所有飞虫在后方安全地区聚拢，然后派一只飞虫用<color=#a0ff50>强行走</color>吸引一个防空兵过来，群起而狙之。然后等飞虫自动恢复血量。如此反复，直至击败所有防空兵。
+  英文: Gather all Flying Bugs in a safe rear area. Then send a single drone to <color=#a0ff50>
+    Force Move</color> and lure one anti-air unit over, then focus fire to take it
+    down. After that, wait for the Flying Bugs to regenerate HP automatically. Repeat
+    this process until all enemy anti-air units are eliminated.
+- Key: Key好的，我试试看。
+  中文: 好的，我试试看。
+  英文: Got it, let’s give it a shot.
+- Key: Key反防空战胜利……
+  中文: 您胜利了！您真是微操天才！
+  英文: You win! You’re a micro-operation genius!
+- Key: Key我没看错你的悟性很强……
+  中文: 我果然没看错，你的悟性很强！
+  英文: I knew I was right about you—you’re a fast learner!
+- Key: Key您英材施教……
+  中文: 您因材施教，总能点醒弟子困顿之处。弟子能有今日，皆因您引路人做得好，这份教导之恩，弟子铭记于心！
+  英文: You tailor your teaching to the student, always clearing up the confusion that
+    plagues your disciples. I wouldn’t be where I am today without your guidance as
+    a mentor. I shall forever remember this debt of gratitude for your teachings!
+- Key: Key反防空战失败……
+  中文: 您失败了！您需要继续练习反防空技巧。
+  英文: You lose! You need more practice with anti-anti-air warfare counter tactics.
+- Key: Key再打防空战……
+  中文: 可以点右上角<color=#a0ff50>离开场景</color>离开，然后再次点击<color=#a0ff50>反防空战</color>，就可以重新来过。
+  英文: You can click <color=#a0ff50>Leave Scene</color> in the top-right corner to
+    leave, then click <color=#a0ff50>Anti-Anti-Air Warfare</color> again to restart
+    the mission.
+- Key: Key敌方飞虫进攻我方炮台……
+  中文: '，敌方飞虫进攻我方炮台，我方损失惨重。'
+  英文: ', Enemy Flying Bugs are assaulting our artillery emplacements; we are sustaining
+    heavy casualties.'
+- Key: Key没有吧？
+  中文: 没有吧？
+  英文: Really?
+- Key: Key现在请看……
+  中文: 现在请看（无需操作）：
+  英文: 'Now observe (no action required):'
+- Key: Key飞虫炮台无需操作……
+  中文: 敌方飞虫进攻我方炮台（此过程您无需操作）
+  英文: Enemy Flying Bugs are assaulting our artillery emplacements (no action required
+    on your part during this phase)
+- Key: Key传授闪避技巧……
+  中文: '，今日要传授你一门重要的闪避技巧。\n看，前方有一辆敌方坦克。坦克虽然伤害极高，但攻击前摇时间很长，且前摇开始后炸点位置无法改变。'
+  英文: ', Today I will teach you an essential evasion technique.\nLook, there is an
+    enemy tank ahead. While the tank deals devastating damage, it has an extremely
+    long attack wind-up, and once the wind-up begins, the blast point cannot be repositioned.'
+- Key: Key那弟子该如何应对？
+  中文: 那弟子该如何应对？
+  英文: What should this disciple do to counter it?
+- Key: Key当坦克开始攻击前摇……
+  中文: 当坦克开始攻击前摇时，地面上会出现炸点特效。仔细观察，一旦看到炸点特效出现，立刻使用<color=#a0ff50>强行走</color>身法，让枪兵迅速离开炸点位置。躲开炸点后，点击坦克附近的空白地面，让枪兵继续攻击坦克。如此反复，便能以弱胜强。
+  英文: When the tank initiates its attack wind-up, a blast point visual cue will appear
+    on the ground. Watch closely—once you see the blast point appear, immediately
+    use the <color=#a0ff50> Force Move</color> maneuver to move your riflemen out
+    of the blast zone quickly.After dodging the blast, click the empty ground near
+    the tank to order the riflemen to resume their attack. Repeat this process, and
+    you can defeat the stronger enemy with your weaker units.
+- Key: Key谨记枪兵挑坦克心法……
+  中文: 谨记此心法：<color=#a0ff50>观察炸点特效 → 强行走离开炸点 → 立刻继续攻击</color>。此乃枪兵对抗坦克的生存之道！
+  英文: 'Commit this core principle to memory: <color=#a0ff50>Spot the blast point visual
+    cue → Force Move away from the blast point → Resume attacking immediately</color>.
+    This is the survival strategy for riflemen facing off against tanks!'
+- Key: Key点枪兵再点击坦克……
+  中文: 点击选中枪兵，再点击坦克附近的空白地面，让枪兵攻击坦克。仔细观察地面上的炸点特效，一旦看到炸点出现，立即使用<color=#a0ff50>强行走</color>身法离开炸点位置，然后点击坦克附近的空白地面继续攻击
+  英文: Click to select the riflemen, then click the empty ground near the tank to order
+    them to attack. Watch the ground carefully for the blast point visual cue—once
+    it appears, use <color=#a0ff50> Force Move</color> to move away from the blast
+    zone at once, then click the empty ground near the tank to continue the attack.
+- Key: Key枪兵挑坦克失败……
+  中文: 您失败了！您需要继续练习闪避技巧。
+  英文: You lose! You need more practice with evasion techniques.
+- Key: Key枪兵败切记……
+  中文: '，枪兵已败。切记，面对强敌，闪避为先。仔细观察炸点特效，善用强行走身法躲开坦克炸点，方能在战场上立于不败之地。'
+  英文: ', your riflemen have been defeated. Remember this: when facing a superior foe,
+    evasion comes first. Watch closely for the blast point visual cue and master the
+    Force Move maneuver to dodge the tank’s blasts—only then can you prevail on the
+    battlefield.'
+- Key: Key弟子谨记前辈教诲。
+  中文: 弟子谨记前辈教诲。
+  英文: This disciple shall heed the elder’s teachings.
+- Key: Key兵挑坦克胜利……
+  中文: 您胜利了！您真是微操天才！
+  英文: You win! You’re a micro-operation genius!
+- Key: Key少侠领悟枪兵对抗坦克……
+  中文: '，你已领悟枪兵对抗坦克的闪避心法。\n切记，面对强敌，闪避比硬拼更为重要。仔细观察炸点特效，善用强行走身法躲开坦克炸点，你的枪兵便能在这险恶的战场上存活更久。'
+  英文: ', you have mastered the evasion strategy for riflemen against tanks.Remember:
+    when facing a stronger enemy, evasion is far more important than a head-on confrontation.
+    Watch closely for the blast point visual cue and master the Force Move maneuver
+    to dodge the tank’s blasts, and your riflemen will survive longer on this perilous
+    battlefield.'
+- Key: Key弟子谨记教诲心法……
+  中文: 弟子谨记前辈教诲，定当善用此心法。
+  英文: This disciple shall heed the elder’s teachings and make good use of this strategy.
+- Key: Key人类即将入侵……
+  中文: 情报显示：敌人已发现我们的巢穴入口，即将入侵，请做好准备。
+  英文: 'Intel indicates: The enemy has located our hive entrance and is launching an
+    invasion. Prepare for combat.'
+- Key: Key我仅受过简单训练……
+  中文: 可是我仅受过简单的指挥训练。
+  英文: But I only received basic command training.
+- Key: Key资源管够……
+  中文: 我们会提供足够的初始晶体矿和燃气矿，你<color=#a0ff50>不用再从零开始采集</color>。
+  英文: We will provide ample starting Crystal Ore and Gas Ore. You <color=#a0ff50>
+    won’t need to gather resources from scratch</color>.
+- Key: Key还是没把握……
+  中文: 我还是没有把握。
+  英文: I still don’t feel confident.
+- Key: Key传授速成口诀……
+  中文: 我会传授你指挥实战速成口诀，三分钟即可成为实战高手。
+  英文: I’ll teach you the Rapid Combat Command Mantra—master real combat skills in
+    just three minutes.
+- Key: Key真有这种口诀……
+  中文: 真有这种口诀的话就应该在训练战时告诉我啊！
+  英文: If this mantra exists, you should’ve taught it to me during training drills!
+- Key: Key只有在实战中才有用……
+  中文: 实战口诀只有在九死一生的实战中才有用！
+  英文: The mantra only works in do-or-die real battles!
+- Key: Key九死一生……
+  中文: 九死一生？形势严峻啊，我会全力以赴的!
+  英文: Do-or-die? The situation is grim. I’ll give it everything I’ve got!
+- Key: Key1个虫巢只能照顾……
+  中文: 1个虫巢只能照顾<color=#a0ff50>3只幼虫</color>。<color=#a0ff50>让工虫变异更多的虫巢</color>，才有更多的幼虫可供蜕变。<color=#a0ff50>多蜕变房虫</color>，增加活动单位上限。
+  英文: One Hive can only support <color=#a0ff50>3 Larvae</color>. <color=#a0ff50>Morph
+    Drones into more Hives</color> to produce additional Larvae for evolution. <color=#a0ff50>Evolve
+    more PopuLifter Drone</color> to increase your unit supply cap.
+- Key: Key一定要在数量……
+  中文: 就是一定要在数量上占据优势吗？
+  英文: So the key is to overwhelm the enemy with sheer numbers?
+- Key: Key进攻就是最好的防守……
+  中文: 是的，进攻就是最好的防守。派出地面单位堵住敌人的通道，再派出飞虫越过障碍物空袭敌人。
+  英文: Exactly. The best defense is a relentless offense. Deploy ground units to block
+    enemy chokepoints, then send Flyers over obstacles to bomb enemy positions.
+- Key: Key也不是很复杂……
+  中文: OK，也不是很复杂。我有信心完成任务！
+  英文: Alright, it’s not that complicated. I’m ready to complete the mission!
+- Key: Key防守战只要守住……
+  中文: 防守战：只要守住，就是胜利！
+  英文: 'Defensive Mission: Victory belongs to those who hold the line!'
+- Key: Key多造虫巢……
+  中文: 5秒后将出现第1波敌人。多造虫巢和房虫，多造近战虫枪虫和飞虫，一定要在数量上压倒敌人！
+  英文: Wave 1 incoming in 5 seconds. Build more Hives and PopuLifter Drone. Mass Melee
+    Bugs, Gunners, and Flyers—crush the enemy with superior numbers!
+- Key: Key前期不用采集……
+  中文: <color=#a0ff50>前期不用采集资源</color>。多造虫巢和房虫，多造近战虫枪虫和飞虫，一定要在数量上压制敌人！
+  英文: <color=#a0ff50>No resource gathering required early-game</color>. Build more
+    Hives and PopuLifter Drone. Mass Melee Bugs, Gunners, and Flyers—dominate the
+    enemy with sheer quantity!
+- Key: Key第{}波敌人正向您走来
+  中文: 第{}波敌人正向您走来
+  英文: Wave {} is approaching your position.
+- Key: Key虫族将进攻基地……
+  中文: 情报显示：将有大量敌方单位进攻我方基地，请做好准备。
+  英文: 'Intel update: A massive enemy battalion is assaulting our Command Center. Stand
+    your ground!'
+- Key: Key坦克超远超高伤害……
+  中文: <color=#a0ff50>坦克</color>可以超远距离造成超高伤害，而且是范围伤害，但是坦克锁定炮弹落点后有超长前摇时长，前摇结束后，敌方目标可能已经远离炮弹落点。炮弹落点附近的我方单位也会受到伤害。
+  英文: <color=#a0ff50>Tanks</color> deal devastating area damage at extreme range,
+    but they suffer from a long charge-up time after locking onto a target. By the
+    time the shell fires, enemy units may have already moved out of the blast zone.
+    Friendly units near the impact area will also take splash damage.
+- Key: Key有点鸡肋的感觉……
+  中文: 有点鸡肋的感觉，不是红警中的高速坦克，与星际中的攻城坦克也有些不同。感觉更像帝国里的投石车。
+  英文: Seems pretty underwhelming. Not like the fast tanks in Read Alert, or even the
+    Siege Tanks in StandCraft. More like the Catapults from Age of Emperors.
+- Key: Key有一种叫炮台的……
+  中文: …不知道你在说什么…有一种叫<color=#a0ff50>炮台</color>的建筑单位，攻击距离很远，仅次于坦克；前摇时长很短，可以快速攻击；缺陷是伤害较低；不过多造点集中防守某一块区域还是很实用的。
+  英文: …Not sure what you’re talking about… There’s a structure unit called the <color=#a0ff50>Turret</color>.
+    It boasts exceptional range—second only to Tanks—with minimal charge-up time for
+    rapid firing. Its downside is lower damage output, but massing them to defend
+    key chokepoints proves highly effective.
+- Key: Key坦克炮台就能……
+  中文: 看来<color=#a0ff50>只要有坦克和炮台就能守住</color>对吗？
+  英文: So <color=#a0ff50>as long as we have Tanks and Turrets, we can hold the line</color>,
+    right?
+- Key: Key是的能守住……
+  中文: 是的，这是其他指挥官总结的经验。大概<color=#a0ff50>10个炮台和5辆坦克沿墙边布置就能守住</color>。当然还有其他多种可行的防守方法，要靠你自行摸索。
+  英文: Affirmative. This is a proven strategy from veteran commanders. Position roughly
+    <color=#a0ff50> 10 Turrets and 5 Tanks along the perimeter walls</color> to secure
+    the Command Center. Of course, other viable defensive tactics exist—you’ll need
+    to discover them on your own.
+- Key: Key5秒出现虫族怪……
+  中文: 5秒后将出现第1波怪。您可以沿右边墙边造炮台、布置坦克、造地堡、让兵进驻地堡。
+  英文: Wave 1 incoming in 5 seconds. Construct Turrets along the right perimeter wall,
+    deploy Tanks, build Bunkers, and garrison troops inside for fortified defense.
+- Key: Key沿右边迷宫出口……
+  中文: <color=#a0ff50>前期不用采集资源</color>。沿右边迷宫出口墙边布置一排<color=#a0ff50>炮台</color>，再放置<color=#a0ff50>坦克</color>加强防御。
+  英文: <color=#a0ff50>No resource gathering required early-game</color>. Line the right
+    maze exit wall with a row of <color=#a0ff50>Turrets</color>, then place <color=#a0ff50>Tanks</color>
+    to reinforce your defenses.
+- Key: Key总算报仇了！
+  中文: 总算报仇了！
+  英文: Finally—revenge is ours!
+- Key: Key以后坦克不能……
+  中文: 以后坦克不能再单独行动了，一定要带上步兵。
+  英文: From now on, Tanks will never operate alone. Infantry escorts are mandatory.
+- Key: Key是指挥官！
+  中文: 是，指挥官！
+  英文: Yes, Commander!
+- Key: Key该听你的直接回去……
+  中文: 早知如此就该听你的直接回去！
+  英文: If only I’d listened to you and retreated earlier!
+- Key: Key现在说什么都……
+  中文: 现在说什么都晚了（惨叫）。
+  英文: It’s too late for regrets now! (Screams)
+- Key: Key下次先攻击虫巢……
+  中文: 可以试试操作慢一点，先进攻<color=#a0ff50>右下角的虫巢</color>。
+  英文: Try slowing your pace of operations. Prioritize attacking the <color=#a0ff50>Hive
+    in the bottom-right corner</color> first.
+- Key: Key只能下次再试试了。
+  中文: 只能下次再试试了。
+  英文: Guess we’ll have to go for the Key next time.
+- Key: Key下次先攻击基地……
+  中文: 可以试试操作慢一点，先进攻<color=#a0ff50>右下角的基地</color>。
+  英文: Try slowing your pace of operations. Prioritize attacking the <color=#a0ff50>enemy
+    Command Center in the bottom-right corner</color> first.
+- Key: Key坦克连失联……
+  中文: '，我的一个坦克连在调查<color=#a0ff50>虫巢</color>时失联，请前往营救。'
+  英文: ',One of our Tank Companies went missing while investigating an enemy <color=#a0ff50>
+    Hive</color>. Deploy immediately for search and rescue.'
+- Key: Key没有步兵保护吗……
+  中文: 坦克没有步兵保护吗？
+  英文: Why weren’t the Tanks accompanied by infantry?
+- Key: Key两个班的兵力……
+  中文: 是的，步兵刚刚到位，两个班的兵力，现在全部交给你指挥。
+  英文: Reinforcements just arrived—two infantry squads. They’re now under your full
+    command.
+- Key: Key虫巢是什么？
+  中文: 虫巢是什么？
+  英文: What exactly is a Hive?
+- Key: Key虫巢苔蔓……
+  中文: "侦察机传回的视频表明：虫巢周围会形成<color=#a0ff50>苔蔓(wàn)</color>，苔蔓上的虫类单位移动速度会变快，并且回血速度也会加快。应该<color=#a0ff50>避免在苔蔓上与虫类单位交战</color>。\n\
+    \    据1985年《普通话异读词审音表》：\\n苔蔓(<color=#a0ff50>wàn</color>)、蔓(màn)延"
+  英文: 'Recon drone footage confirms: <color=#a0ff50>Mossy Vines</color> grow around
+    Hives. Insectoid units on these vines gain increased movement and regeneration
+    speeds. <color=#a0ff50>Avoid engaging insectoid forces while on Mossy Vines</color>.'
+- Key: Key坦克凭空消失……
+  中文: 一个坦克连应该有10辆坦克吧？这么多钢铁疙瘩能凭空消失吗？
+  英文: A Tank Company should have 10 Tanks, right? How could an entire unit of steel
+    just vanish without a trace?
+- Key: Key不放弃任何人……
+  中文: 现在人手紧缺，我不能做任何行动上的承诺。但我个人会竭尽全力，不放弃任何一个人。
+  英文: We’re short on manpower—no promises can be made for additional support. But
+    personally, I’ll do everything in my power to bring every soldier home.
+- Key: Key我会尽力而为的。
+  中文: 我会尽力而为的。
+  英文: I won’t let you down.
+- Key: Key多想克制……
+  中文: "要多用脑子，要多想。记住兵种克制关系：\n    <color=#a0ff50>小兵 克制 坦克\n    坦克 克制 炮台\n    炮台 克制 小兵</color>"
+  英文: "Fight smart, not hard. Remember the unit counter rules:\n    <color=#a0ff50>Grunts\
+    \ counter Tanks\n    Tanks counter Turrets\n    Turrets counter Grunts</color>"
+- Key: Key早记住坦克步兵……
+  中文: 这我早就记住了，否则我也不会疑惑为什么坦克没有步兵保护。
+  英文: I already memorized them—that’s why I’m confused the Tanks were sent out without
+    infantry support.
+- Key: Key相信你归来……
+  中文: 我相信你的能力，你一定能平安归来!
+  英文: I have faith in your abilities. You will return victorious!
+- Key: Key无工程车打虫巢……
+  中文: 此局没有工程车。<color=#a0ff50>右下方的敌方虫巢防守薄弱</color>。
+  英文: No Construction Vehicle available in this mission. <color=#a0ff50>The enemy
+    Hive in the bottom-right corner is lightly defended</color>.
+- Key: Key谢谢你救了我们。
+  中文: 谢谢你救了我们。
+  英文: Thank you for rescuing us.
+- Key: Key你们怎么会在……
+  中文: 你们怎么会在虫巢里？
+  英文: What were you doing inside the Hive?
+- Key: Key仿佛做梦……
+  中文: 我也不知道，仿佛做了一场梦，什么都不记得了。
+  英文: I don’t know. It’s like I was in a daze—I can’t remember anything.
+- Key: Key我护送你……
+  中文: 现在我的部队会护送你们回基地。到时候再仔细回忆一下。
+  英文: My forces will escort you back to Command Center. We can try to piece together
+    your memories once you’re safe.
+- Key: Key两个虫巢……
+  中文: 上面还有两个虫巢，我要炸掉它们再回去。
+  英文: There are two more Hives up ahead. I’m destroying them before we retreat.
+- Key: Key虫巢有炮台把守……
+  中文: 上面的虫巢有敌方的炮台把守，我们过不去。
+  英文: Those Hives are guarded by enemy Turrets. We can’t break through.
+- Key: Key我的坦克专门……
+  中文: 我的坦克专门克制炮台。<color=#a0ff50>坦克的射程略远于炮台</color>。一辆坦克就能全灭它们，何况我现在有十辆。
+  英文: My Tanks are specifically designed to counter Turrets. <color=#a0ff50>Tanks
+    outrange Turrets by a small margin</color>. One Tank alone can wipe them out—now
+    imagine what 10 can do.
+- Key: Key坦克接受我指挥……
+  中文: 好的，但是坦克要接受我的指挥，我的步兵会保护坦克。
+  英文: Very well, but the Tanks will follow my orders. My infantry will provide escort.
+- Key: Key是明白指挥官……
+  中文: 是！明白！指挥官！
+  英文: Yes! Understood, Commander!
+- Key: Key消灭虫巢……
+  中文: 消灭上方两个敌方虫巢，控制好步兵保护您的坦克。<color=#a0ff50>让坦克在地方炮台的射程外攻击</color>。
+  英文: Eliminate the two enemy Hives ahead. Use your infantry to protect the Tanks.
+    <color=#a0ff50>Keep Tanks outside the Turrets’ firing range</color> at all times.
+- Key: Key好消息拟态……
+  中文: '，有一个好消息，我们的幼虫经过千万次的模仿，基本掌握了拟态复制人类三色坦克的方法。'
+  英文: ',Good news: After thousands of iterations, our Larvae have mastered mimicking
+    human Tri-Color Tank technology.'
+- Key: Key还有坏消息……
+  中文: 太好了……那么接下来肯定还有一个坏消息吧？
+  英文: That’s great… But I’m guessing there’s a catch, isn’t there?
+- Key: Key绿色坦克遭……
+  中文: '是的，蜕变出的第一批<color = #a0ff50>绿色坦克</color>的虫巢已遭人类攻占。'
+  英文: Regrettably, the Hive producing our first batch of <color=#a0ff50> Green Tanks</color>
+    has been captured by human forces.
+- Key: Key绿色坦克打不过……
+  中文: 绿色坦克看来仍然打不过人类的部队啊！
+  英文: So the Green Tanks still can’t stand up to human troops.
+- Key: Key绿色坦克劣势……
+  中文: 绿色坦克攻击距离远，但是面对贴近的人类步兵却处于劣势。此外绿色坦克发射出的光刺会被障碍物阻挡。现在人类的科学家正在研究我们的绿色坦克。
+  英文: Green Tanks excel at long-range combat but are vulnerable to enemy infantry
+    at close quarters. Additionally, their energy lances can be blocked by obstacles.
+    Worse yet, human scientists are now reverse-engineering our Green Tank technology.
+- Key: Key我现在去救它们。
+  中文: 我现在去救它们。
+  英文: I’m mounting a rescue mission—now!
+- Key: Key无工虫打基地……
+  中文: 此局没有工虫。<color=#a0ff50>右下方的敌方基地防守薄弱</color>。
+  英文: No Drones available in this mission. <color=#a0ff50>The enemy Command Center
+    in the bottom-right corner is lightly defended</color>.
+- Key: Key你们怎么会在基地里？
+  中文: 你们怎么会在基地里？
+  英文: What were you doing inside the enemy Command Center?
+- Key: Key护送回虫巢……
+  中文: 现在我的部队会护送你们回虫巢。到时候再仔细回忆一下。
+  英文: My forces will escort you back to the Hive. We can try to recover your memories
+    once you’re safe.
+- Key: Key炸掉基地……
+  中文: 上面还有两个基地，我要炸掉它们再回去。
+  英文: There are two more enemy Command Centers up ahead. I’m destroying them before
+    we retreat.
+- Key: Key基地有炮台……
+  中文: 上面的基地有敌方的炮台把守，我们过不去。
+  英文: Those Command Centers are guarded by enemy Turrets. We can’t break through.
+- Key: Key我克制炮台……
+  中文: 我专门克制炮台。<color=#a0ff50>坦克的射程略远于炮台</color>。一辆坦克就能全灭它们，何况我们现在有十辆。
+  英文: I specialize in countering Turrets. <color=#a0ff50>Tanks outrange Turrets by
+    a small margin</color>. One Tank alone can wipe them out—now imagine what 10 can
+    do.
+- Key: Key我保护你们……
+  中文: 好的，但是你们要接受我的指挥，我的部队会保护你们。
+  英文: Very well, but you will follow my orders. My forces will provide escort.
+- Key: Key消灭上方基地……
+  中文: 消灭上方两个敌方基地，控制好其它单位保护您的坦克。坦克的射程略远于炮台，<color=#a0ff50>不要让坦克进入敌方炮台的射程</color>。
+  英文: Eliminate the two enemy Command Centers ahead. Use your other units to protect
+    the Tanks. Tanks outrange Turrets by a small margin—<color=#a0ff50>never let Tanks
+    enter the Turrets’ firing range</color>.
+- Key: Key无坦克遇炮台……
+  中文: 没有坦克又遇到大片敌方炮台怎么办？
+  英文: What if we face a large battery of enemy Turrets without any Tanks?
+- Key: Key绕道空降……
+  中文: '，可以让<color=#a0ff50>房虫</color>运送战斗单位越过障碍物绕到炮台后方，实施空降作战。'
+  英文: ',You can use <color=#a0ff50>PopuLifter Drone</color> to transport combat units
+    over obstacles and deploy them behind enemy Turrets for airborne assaults.'
+- Key: Key近战虫进房虫……
+  中文: 请先点击选中<color=#a0ff50>近战虫</color>，再点击一次<color=#a0ff50>房虫</color>，可让近战虫进入房虫。
+  英文: First, select the <color=#a0ff50> Melee Bug</color>. Then, click on a <color=#a0ff50>PopuLifter
+    Drone</color> to load the Melee Bugs inside.
+- Key: Key放下近战虫……
+  中文: 很好，请点击选中<color=#a0ff50>房虫</color>，让它跃过左侧的障碍物到达左上角的敌方建筑附近，然后点击下方<color=#a0ff50>离开房虫</color>图标，放下近战虫攻击敌方建筑
+  英文: Excellent work. Now select the <color=#a0ff50> PopuLifter Drone</color> and
+    order it to jump over the obstacles on the left, moving near the enemy structures
+    in the top-left corner. Next, click the <color=#a0ff50> Disembark</color> icon
+    below to unload the Melee Bugs and launch an attack on the enemy structures.
+- Key: Key要远离敌方炮台。
+  中文: 要远离敌方炮台。
+  英文: Maintain distance from enemy Turrets.
+- Key: Key已掌握空空降……
+  中文: 您已经掌握了空降战术，但此战术风险较高，遭敌方拦截时会非常被动。可在今后的作战中择机运用。
+  英文: You have mastered the airborne assault tactic. Note that this tactic carries
+    high risks—you will be vulnerable if intercepted by the enemy. Use it strategically
+    in future battles.
+- Key: Key没看错你天才……
+  中文: '，我果然没有看错你，你是一个指挥天才！'
+  英文: I knew I made the right choice putting you in command—you’re a natural-born
+    tactician!
+- Key: Key都快打完了……
+  中文: 都快打完了你才来？
+  英文: Took you long enough to show up—we’re almost done fighting!
+- Key: Key兵家常事……
+  中文: 胜败乃兵家常事，我仍然看好你的潜力！
+  英文: Victory and defeat are part of war. I still see great potential in you!
+- Key: Key八个方向都……
+  中文: '，八个方向都会有敌人向你进攻！'
+  英文: ',Enemies are closing in on your position from eight directions!'
+- Key: Key谁敢欺负咱俩……
+  中文: 要战便战！谁敢欺负咱俩？
+  英文: Bring it on! No one dares to mess with us!
+- Key: Key星河孤守歌……
+  中文: "教官让我转给你1000晶体矿，如果不够就只能现场采集。你先顶住，我马上去找援军支援你！我现在赠你《星河孤守歌》与你共勉：\n     星河擂战鼓，虫影蔽天帷。\n\
+    \     孤城锁铁衣，硝烟裂云楣。\n     血浸山河脊，骨铸不摧碑。\n     待我踏风雪，元帅载曦归！\n               ————文小言AI"
+  英文: "The Drill Instructor sent 1000 Crystal Ores. If that’s not enough, you’ll have\
+    \ to gather more on-site. Hold the line—I’m mobilizing reinforcements right now!\
+    \ I leave you with this poem, Ode to the Lone Star Fortress, to keep your spirits\
+    \ high:\n    Battle drums roar across the starry river, insect swarms blot out\
+    \ the sky.\n    The lone fortress stands clad in iron, gunsmoke tears through\
+    \ the clouds.\n    Blood stains the backbone of mountains and rivers, bones forge\
+    \ an unyielding monument.\n    When I return through wind and snow, the Marshal\
+    \ shall come home with the dawn!\n        ————By ERNIE Bot Mini AI"
+- Key: Key像临阵逃脱……
+  中文: "！……这说的什么玩意？听起来还有点像临阵脱逃的说辞！\n  好吧，我一定守住！"
+  英文: "    !...What kind of nonsense is this? Sounds like an excuse to run away!\n\
+    \    Fine. I’ll hold the line—no matter what!"
+- Key: Key守中央基地……
+  中文: 守护中央<color=#a0ff50>基地</color>，否则任务失败。
+  英文: Defend the <color=#a0ff50>Central Command Center</color>, or the mission will
+    fail.
+- Key: Key援军来了。
+  中文: 援军来了。
+  英文: Reinforcements have arrived!
+- Key: Key来得正是时候……
+  中文: 来得正是时候，这回定要出口恶气！
+  英文: About time! This time, we’re settling the score once and for all!
+- Key: Key胜利就在眼前……
+  中文: 守护中央<color=#a0ff50>基地</color>，胜利就在眼前。
+  英文: Defend the <color=#a0ff50>Central Command Center</color> — victory is within
+    reach.
+- Key: Key了解绿色坦克飞虫……
+  中文: 这次训练，你将了解<color=#a0ff50>绿色坦克</color>、<color=#a0ff50>飞虫</color>的用法。
+  英文: In this training, you will learn how to use the <color=#a0ff50> Green Tank</color>
+    and <color=#a0ff50> Flying Bug</color>.
+- Key: Key选近战虫进攻炮台……
+  中文: '左边出现了<color=#a0ff50>炮台</color>群。请先点击选中一个<color = #a0ff50>近战虫</color>，然后再次点击选中同一个近战虫，达到选中附近所有近战虫的效果。接着点击左边炮台附近的空地，让所有近战虫进攻炮台（不必在乎伤亡）'
+  英文: A cluster of <color=#a0ff50>Turrets</color> has appeared on the left. First,
+    click to select a <color=#a0ff50>Melee Bug</color>, then click the same Melee
+    Bug again to select all nearby Melee Bugs. Next, click the empty area near the
+    left-side Turrets to order all Melee Bugs to attack the Turrets (casualties are
+    irrelevant).
+- Key: Key绿色坦克克制炮台……
+  中文: '，炮台群对地面单位有压倒性的优势。可以用<color=#a0ff50>绿色坦克</color>可以在炮台的射程外攻击。'
+  英文: ',Turret clusters hold overwhelming superiority over ground units. You can use
+    <color=#a0ff50> Green Tanks</color> to attack from outside the Turrets'' range.'
+- Key: Key绿色坦克可以……
+  中文: 绿色坦克可以在炮台的射程外攻击
+  英文: Green Tanks can strike from beyond the Turrets' firing range.
+- Key: Key绿色坦克拥有……
+  中文: '，绿色坦克拥有射程优势，可以在炮台的射程外攻击。但是绿色坦克发射的光刺会被障碍物阻挡，会遭到小兵克制。现在请看效果。'
+  英文: ',Green Tanks have a range advantage and can attack from outside the Turrets''
+    reach. However, the laser spikes they fire are blocked by obstacles, and they
+    are countered by basic infantry units. Observe the demonstration now.'
+- Key: Key飞虫克制……
+  中文: 敌方近战兵无法防空，现在给你刷一个飞虫即可克制它们。
+  英文: Enemy melee infantry have no anti-air capabilities. Deploy a Flying Bug to counter
+    them effectively.
+- Key: Key消灭所有敌方近战兵
+  中文: 消灭所有敌方近战兵
+  英文: Eliminate all enemy melee infantry units.
+- Key: Key绿色坦克造价……
+  中文: 绿色坦克和飞虫的造价很高，要根据战场形势酌情使用。
+  英文: Green Tanks and Flying Bugs have high production costs. Deploy them strategically
+    based on battlefield conditions.
+- Key: Key飞虫强行走……
+  中文: 请单击选中飞虫，然后点击下方的<color=#a0ff50>强行走</color>按钮，让飞虫停止攻击并移动到指定位置。
+  英文: Click to select a Flying Bug, then press the <color=#a0ff50> Force Move</color>
+    button below to make it cease attacking and move to the designated location.
+- Key: Key守住指挥天才……
+  中文: 您守住了！您真是指挥天才！
+  英文: You held your ground! What a tactical genius you are!
+- Key: Key少侠，欢迎来到虫族武学殿堂……
+  中文:  少侠，欢迎来到虫族武学殿堂。今日，老夫要传授你一门重要的保命心法。
+  英文: ' Young warrior, welcome to the Insectoid Martial Hall. Today, this old one
+    shall teach you a vital survival technique.'
+- Key: Key敢问前辈，是何心法？
+  中文: 敢问前辈，是何心法？
+  英文: Honorable master, what technique is this?
+- Key: Key看，前方有一座敌方的炮台……
+  中文: 看，前方有一座敌方的炮台。你的飞虫虽然身法灵活，但气血较少，若一味硬拼，必败无疑。
+  英文: Behold! An enemy Turret lies ahead. Your Flying Bugs are agile but frail. A
+    head-on assault will surely lead to defeat.
+- Key: Key切记观察飞虫的气血……
+  中文: 切记观察飞虫的气血。飞虫气血本就较少，当气血低于一半时，立刻施展<color=#a0ff50>强行走</color>身法，让飞虫回到<color=#a0ff50>苔蔓</color>之上。\n在苔蔓之上，飞虫可快速调息恢复气血。待气血回满之后，点击炮台附近的空白地面，让飞虫继续攻敌。如此反复，方能以弱胜强。\n谨记此心法：<color=#a0ff50>气血低于一半
+    → 强行走回苔蔓 → 调息回满气血 → 点击炮台附近空白地面继续攻敌</color>。此乃飞虫的生存之道！
+  英文: "  Always monitor your Flying Bugs' health. Their vitality is inherently low.\
+    \ When their health drops below 50%, immediately activate the <color=#a0ff50>\
+    \ Force Move</color> ability to retreat them to the <color=#a0ff50>Mossy Vines</color>.\n\
+    \  On the Mossy Vines, Flying Bugs recover health rapidly. Once fully healed,\
+    \ click the empty area near the Turret to resume the attack. Repeat this cycle\
+    \ to overcome a stronger foe with a weaker force.\n  Remember this core principle:\
+    \ <color=#a0ff50>Health Below 50% → Force Move to Mossy Vines → Regenerate Full\
+    \ Health → Click Turret Vicinity to Attack Again</color>. This is the way of survival\
+    \ for Flying Bugs!"
+- Key: Key点击选中飞虫……
+  中文: 点击选中飞虫，再点击炮台附近的空白地面，让飞虫攻击炮台。当气血低于一半时，使用<color=#a0ff50>强行走</color>身法回到苔蔓调息回血
+  英文: Click to select a Flying Bug, then click the empty area near the Turret to order
+    it to attack. When its health falls below half, use <color=#a0ff50> Force Move</color>
+    to retreat to the Mossy Vines and regenerate health.
+- Key: Key继续练习保命技巧……
+  中文: 您失败了！您需要继续练习保命技巧。
+  英文: You have failed! You must practice your survival skills further.
+- Key: Key少侠，飞虫已败……
+  中文: ' 少侠，飞虫已败。切记，江湖险恶，保命为先。善用苔蔓调息回血，方能在战场上立于不败之地。'
+  英文: ' Young warrior, your Flying Bugs have been defeated. Remember—danger lurks
+    everywhere in this battlefield. Survival comes first. Master the use of Mossy
+    Vines for health regeneration, and you will stand invincible in combat.'
+- Key: Key少侠已领悟飞虫的保命心法……
+  中文: 少侠已领悟飞虫的保命心法。\n切记，江湖之中，保命比硬拼更为重要。善用苔蔓调息回血，你的飞虫便能在这险恶的战场上存活更久。
+  英文: "  You have mastered the Flying Bug survival technique.\n  Always remember:\
+    \ survival outweighs reckless fighting in this world. Use the Mossy Vines to regenerate\
+    \ health wisely, and your Flying Bugs will endure longer in this perilous battlefield."
+- Key: Key训练失败。
+  中文: 训练失败。
+  英文: Training Failed.
+- Key: Key你醒了?
+  中文: 你醒了?
+  英文: You're awake?
+- Key: Key我们到家了吗？
+  中文: 我们到家了吗？
+  英文: Are we home yet?
+- Key: Key我们回到地球……
+  中文: 是的，我们回到地球了。但是地球已被人类占据。
+  英文: Yes, we have returned to Earth. But it is now occupied by humans.
+- Key: Key我们仅仅离开……
+  中文: 我们仅仅离开了6000万年而已，想不到啊……一定要夺回我们的家园！
+  英文: We were only gone for 60 million years... Unthinkable! We must reclaim our home!
+- Key: Key你睡得太久……
+  中文: 你睡得太久，需要一些恢复训练才能投入战斗！
+  英文: You have slumbered for far too long. You need recovery training before entering
+    battle.
+- Key: Key请点击虫巢按钮……
+  中文: 请点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>虫巢</color>按钮，再点击空白地面，工虫会在10秒内变异为虫巢
+  英文: Click the <color=#a0ff50>Structures</color> => <color=#a0ff50>Hive</color> button,
+    then click an empty spot on the ground. Worker Drones will mutate into a Hive
+    within 10 seconds.
+- Key: Key虫巢周围会形成……
+  中文: "  很好。虫巢周围会形成<color=#a0ff50>苔蔓(wàn)</color>，苔蔓上的虫类单位移动速度会变快，并且回血速度也会加快。应该<color=#a0ff50>尽量在苔蔓上与敌方单位交战</color>。\n\
+    \   等虫巢产出<color=#a0ff50>幼虫</color>后，请点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>工虫</color>按钮，让幼虫蜕变为工虫"
+  英文: 'Excellent. <color=#a0ff50>Mossy Vines</color> will spread around the Hive.
+    Insectoid units on the Mossy Vines gain increased movement speed and health regeneration
+    rate. <color=#a0ff50>Always engage enemy units on the Mossy Vines whenever possible</color>.
+
+    Once the Hive produces <color=#a0ff50>Larvae</color>, click the <color=#a0ff50>Mobile
+    Units</color> => <color=#a0ff50>Worker Drone</color> button to morph the Larvae
+    into Worker Drones.'
+- Key: Key现在您有工虫了……
+  中文: 现在您有工虫了，点击选中您的<color=#a0ff50>工虫</color>，再点击空旷地面，命令它走向目标点
+  英文: Now you have Worker Drones. Click to select a <color=#a0ff50>Worker Drone</color>,
+    then click an open area to command it to move to the target location.
+- Key: Key工虫采集晶体矿……
+  中文: 很好！现在给您刷了一个晶体矿，请点击选中<color=#a0ff50>工虫</color>，再点击一次<color=#a0ff50>晶体矿</color>，让工虫在晶体矿和虫巢之间搬运晶体矿
+  英文: Well done! A <color=#a0ff50>Crystal Ore</color> deposit has been spawned for
+    you. Click to select a <color=#a0ff50>Worker Drone</color>, then click the <color=#a0ff50>Crystal
+    Ore</color> to order it to transport ore between the deposit and the Hive.
+- Key: Key工虫采集燃气矿……
+  中文: 很好！您的工虫正在采集晶体矿，请等他把晶体矿运回虫巢。现在，请先点<color=#a0ff50>取消选中</color>，再蜕变一个工虫去采集<color=#a0ff50>燃气矿</color>
+  英文: Great! Your Worker Drone is harvesting Crystal Ore. Wait for it to deliver the
+    ore to the Hive. Now, first click <color=#a0ff50 > Deselect</color>, then morph
+    another Worker Drone to harvest the <color=#a0ff50> Gas Ores</color>.
+- Key: Key工虫已运晶体矿……
+  中文: 您的工虫已把第一车晶体矿运到基地，请查看<color=#a0ff50>左上角</color>晶体矿数量变化
+  英文: Your Worker Drone has delivered the first batch of Crystal Ore to the Command
+    Center. Check the <color=#a0ff50>top-left corner</color> to see the Crystal Ore
+    count increase.
+- Key: Key蜕变房虫……
+  中文: 等您存够20晶体矿后，请点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>房虫</color>按钮，让幼虫蜕变为房虫
+  英文: Once you have accumulated 20 units of Crystal Ore, click the <color=#a0ff50>Mobile
+    Units</color> => <color=#a0ff50>PopuLifter Drone</color> button to morph Larvae
+    into PopuLifter Drones.
+- Key: Key房虫提升……
+  中文: 很好，房虫可以提升您的<color=#a0ff50>活动单位数量上限</color>
+  英文: Excellent. PopuLifter Drones increase your <color=#a0ff50> Mobile Unit Cap</color>.
+- Key: Key变异虫营……
+  中文: 等您存够30晶体矿后，请点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>虫营</color>按钮，再点击覆盖有苔蔓(wàn)的地面，就能变异出一个虫营。
+  英文: When you have 30 units of Crystal Ore, click the <color=#a0ff50>Structures</color>
+    => <color=#a0ff50>Bug Barracks</color> button, then click the ground covered by
+    Mossy Vines to mutate a Bug Barracks.
+- Key: Key解锁枪虫……
+  中文: 很好，虫营可以解锁枪虫和近战虫。虫营只要一个就够了，如果希望出兵更快，应该造更多的虫巢。
+  英文: Well done. The Bug Barracks unlocks Gun Bugs and Melee Bugs. One Bug Barracks
+    is sufficient—build more Hives if you wish to produce units faster.
+- Key: Key变异近战虫……
+  中文: 请点击<color=#a0ff50>活动单位</color>=><color=#a0ff50>近战虫</color>按钮，让幼虫蜕变为近战虫
+  英文: Click the <color=#a0ff50>Mobile Units</color> => <color=#a0ff50>Melee Bug</color>
+    button to morph Larvae into Melee Bugs.
+- Key: Key近战虫走……
+  中文: 点击选中您的<color=#a0ff50>近战虫</color>，再点击地面，可以指挥它走向目标处
+  英文: Click to select your <color=#a0ff50>Melee Bug</color>, then click the ground
+    to direct it to move to the target location.
+- Key: Key近战虫攻击敌人……
+  中文: 现在已在左边给您刷了一个敌人，点击选中您的<color=#a0ff50>近战虫</color>，再<color=#a0ff50>点击敌人附近的地面</color>，近战虫会走向目标并自动攻击。您可以点右下角<color=#a0ff50>取消选中</color>然后拖动地面看看敌人在哪里
+  英文: Enemies have been spawned on the left. Click to select your <color=#a0ff50>Melee
+    Bug</color>, then <color=#a0ff50>click the ground near the enemies</color>—the
+    Melee Bug will move to the target and attack automatically. You can click <color=#a0ff50>
+    Deselect</color> in the bottom-right corner and drag the screen to locate the
+    enemies.
+- Key: Key近战虫阵亡……
+  中文: 您的单位阵亡了。可以多造点近战虫和枪虫去围攻敌人
+  英文: Your unit has been destroyed. Produce more Melee Bugs and Rifle Bugs to overwhelm
+    the enemy with numbers.
+- Key: Key变异更多虫巢……
+  中文: 恭喜您消灭了敌人！现在左边给您刷了更多的敌人。您可以变异更多的<color=#a0ff50>虫巢</color>加快幼虫的产出，蜕变更多的<color=#a0ff50>房虫</color>提升活动单位上限，加油
+  英文: Congratulations on eliminating the enemy! More enemies have been spawned on
+    the left. You can mutate additional <color=#a0ff50> Hives</color> to speed up
+    Larva production, and morph more <color=#a0ff50> PopuLifter Drones</color> to
+    increase your unit cap. Keep fighting!
+- Key: Key夺回地球……
+  中文: '，很好，夺回地球指日可待！'
+  英文: '，Excellent! Reclaiming Earth is within our grasp!'
+- Key: Key期待与人类……
+  中文: 期待与人类的实战。
+  英文: Looking forward to the real battle against humanity.
+- Key: Key承蒙谬赞……
+  中文: 承蒙谬赞。学生谨遵教诲，自不敢有一丝懈怠，定当不负所望，继续精进。
+  英文: Your praise humbles me, master. This student shall follow your teachings diligently,
+    never slacking off, and strive to live up to your expectations.
+- Key: Key兵家常事点击……
+  中文: 胜败乃兵家常事，请点击右上角<color=#a0ff50>离开场景</color>离开，就可以重新来过。
+  英文: Victory and defeat are common in warfare. Click <color=#a0ff50>Leave Scene</color>
+    in the top-right corner to restart the mission.
+- Key: Key功败垂成……
+  中文: 学生此次功败垂成，定会吸取教训，总结经验，再次努力，定不辜负教官的栽培与期望。
+  英文: This student fell short of success this time. I shall learn from my mistakes,
+    summarize experience, and redouble my efforts to live up to the instructor's training
+    and expectations.
+- Key: Key易万江不用谢……
+  中文: '  ……不用谢'
+  英文: '...You''re welcome.'
+- Key: Key飞虫气血不足……
+  中文: 飞虫气血已不足一半！速速施展<color=#a0ff50>强行走</color>身法，让飞虫回到苔蔓上调息回血！
+  英文: Your Flying Bug's health is below 50%! Activate the <color=#a0ff50> Force Move</color>
+    ability immediately and retreat it to the Mossy Vines to regenerate health!
+- Key: Key飞虫在苔蔓上……
+  中文: 飞虫正在苔蔓上调息恢复气血，请静待气血回满。
+  英文: Your Flying Bug is regenerating health on the Mossy Vines. Wait for it to recover
+    fully.
+- Key: Key飞虫满血……
+  中文: 飞虫气血已回满，可以继续攻敌了！
+  英文: Your Flying Bug's health is fully restored! It can resume attacking the enemy.
+- Key: Key变异完成
+  中文: 变异完成
+  英文: Mutation Complete
+- Key: 'Key正在变异:'
+  中文: '正在变异:'
+  英文: 'Mutating In Progress:'
+- Key: Key燃气矿不足无法建造
+  中文: 燃气矿不足，无法建造
+  英文: Insufficient Gas Ores. Construction Unavailable.
+- Key: Key燃气矿不足不能升级
+  中文: 燃气矿不足，不能升级
+  英文: Insufficient Gas Ores. Upgrade Unavailable.
+- Key: Key晶体矿不足不能升级
+  中文: 晶体矿不足，不能升级
+  英文: Insufficient Minerals. Upgrade Unavailable.
+- Key: Key已采集{}
+  中文: 已采集{}
+  英文: 'Harvested: {}'
+- Key: Key剩余{}
+  中文: 剩余{}
+  英文: 'Remaining: {}'
+- Key: Key升级进度{}/{}
+  中文: 升级进度{}/{}
+  英文: Upgrade Progress {}/{}
+- Key: Key解锁进度{}/{}
+  中文: 解锁进度{}/{}
+  英文: Unlock Progress {}/{}
+- Key: Key已解锁单位
+  中文: 已解锁单位
+  英文: Unit Unlocked
+- Key: Key属性已升级
+  中文: 属性已升级
+  英文: Attributes Upgraded
