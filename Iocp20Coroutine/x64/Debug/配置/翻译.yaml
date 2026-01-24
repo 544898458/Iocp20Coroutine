@@ -988,8 +988,8 @@
     in future battles.
 - Key: Key没看错你天才……
   中文: '，我果然没有看错你，你是一个指挥天才！'
-  英文: I knew I made the right choice putting you in command—you’re a natural-born
-    tactician!
+  英文: ',I knew I made the right choice putting you in command—you’re a natural-born
+    tactician!'
 - Key: Key都快打完了……
   中文: 都快打完了你才来？
   英文: Took you long enough to show up—we’re almost done fighting!
@@ -1298,3 +1298,6 @@
 - Key: Key请施展您的……
   中文: 请施展您的指挥艺术吧，加油！
   英文: Show off your art of command, go for it!
+- Key: Key已达到单玩家活动单位上限……
+  中文: 已达到单个玩家活动单位上限
+  英文: Maximum Mobile Unit limit per player reached

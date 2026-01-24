@@ -19,7 +19,7 @@ A Bunker or Transport Drone can garrison up to 10 mobile units, and Bunkers have
 <outline color=#ffffff width=1>Produce Mobile Units</outline>: Insectoids mobile units hatch from Larvae. To speed up production, you must build more Hive.<br/>
 <br/>
 <size=24><b>Insectoids Unique Units</b></size><br/>
-<color=#ff9500><b>Transport Drone</b></color>: Can transport units<br/>
+<color=#ff9500><b>PopuLifter Drone</b></color>: Can transport units<br/>
 <br/>
 <size=24><b>Resource Gathering</b></size><br/>
 Click to select a Construction Vehicle => click a <color=#b7b7a4>Mineral Field</color> or <color=#ff7a45>Vespene Geyser</color> to order resource collection.<br/>
