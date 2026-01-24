@@ -1274,3 +1274,27 @@
 - Key: Key属性已升级
   中文: 属性已升级
   英文: Attributes Upgraded
+- Key: Key这是每个玩家……
+  中文: 这是每个玩家都可以自由共同进入的场景，分布有一些资源和少量的怪，资源的再生速度很慢
+  英文: This is a scenario that all players can freely enter together, where some resources
+    and a small number of monsters are distributed, and the resource regeneration
+    rate is very slow.
+- Key: Key您开局只有一辆工程车和一个工虫……
+  中文: 您开局只有一辆工程车和一个工虫，工程车可以建造建筑，建筑中可以产出活动单位
+  英文: You only have one Construction Vehicle and one Worker Larva at the start of
+    the game. The Construction Vehicle can construct buildings, and active units can
+    be produced in these buildings.
+- Key: Key一旦您退出此……
+  中文: 一旦您离开此场景或断线后，您在此场景中的所有单位可能会因为缺少指挥而遭到攻击
+  英文: Once you Leave this scenario or disconnect, all your units in this scenario
+    may come under attack due to lack of command.
+- Key: Key其他玩家是您的敌人……
+  中文: 其他玩家是您的敌人，他们可能会向您进攻！
+  英文: Other players are your enemies, and they may launch attacks on you!
+- Key: Key如果局势对您不利……
+  中文: 如果局势对您不利，您可以离开此场景再次进入，就有机会东山再起！
+  英文: If the situation turns against you, you can Leave this scenario and re-enter,
+    and you will have the chance to make a comeback!
+- Key: Key请施展您的……
+  中文: 请施展您的指挥艺术吧，加油！
+  英文: Show off your art of command, go for it!
