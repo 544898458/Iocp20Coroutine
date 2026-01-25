@@ -15,7 +15,7 @@
   英文: Enemy
 - Key: Key请稍后再说
   中文: 请稍后再说
-  英文: Please speak again later.
+  英文: Please try again later.
 - Key: Key单位介绍_虫_人类善于防守
   中文: 人类善于防守。驻守枪兵的地堡拥有顶级的攻防。现在请先点击右下角的<color=#a0ff50>框选</color>按钮，然后在屏幕上从左上到右下拖动，框选所有枪兵，然后点击<color=#a0ff50>地堡</color>，让选中的枪兵都进入地堡
   英文: Humans excel at defense. Bunkers garrisoned with Riflemen boast top-tier offense
@@ -26,10 +26,10 @@
 - Key: Key现在会刷出大量敌人进攻地堡
   中文: 很好，现在会刷出大量敌人进攻地堡，让您对地堡的攻防有直观的体会。
   英文: Great. Now a large number of enemies will spawn and assault the bunker, allowing
-    you to get a firsthand feel of the bunker's offensive and defensive capabilities.
+    you to experience the bunker's attack and defense firsthand.
 - Key: Key但你的地堡也快不行了
   中文: '，祝贺你消灭了敌人，但你的地堡也快不行了。<color=#a0ff50>医疗兵</color>可以修复地堡。'
-  英文: ',Congratulations on eliminating the enemies, but your bunker is almost destroyed.
+  英文: ',Congratulations on defeating the enemies, but your bunker is almost destroyed.
     <color=#a0ff50> Medics</color> can repair the bunker.'
 - Key: Key点击选中医疗兵
   中文: 点击选中<color=#a0ff50>医疗兵</color>，再点击一下地堡附近的空地，让医疗兵走到地堡附近。
