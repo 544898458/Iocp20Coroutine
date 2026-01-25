@@ -1346,3 +1346,9 @@
 - Key: Key正在升属性不能解锁单位……
   中文: 正在升级，不能解锁单位
   英文: 'Cannot unlock unit: Upgrading in progress'
+- Key: Key晶体矿已枯竭
+  中文: 晶体矿 已枯竭
+  英文: Crystal Ore Depleted
+- Key: Key燃气矿已枯竭
+  中文: 燃气矿 已枯竭
+  英文: Gas Ore Depleted
