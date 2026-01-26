@@ -22,7 +22,7 @@ namespace 单位
 		种族 种族;
 		std::string strPrefabName;
 		bool b骨骼动画 = true;
-		std::string str选中音效;
+		std::string str选中音效Key;
 		动作 空闲;
 		动作 阵亡;
 		std::string str阵亡音效;

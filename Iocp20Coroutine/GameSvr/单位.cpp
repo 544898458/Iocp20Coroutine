@@ -28,7 +28,7 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::单位配置& _ref)
 	{
-		return _Ostr << "单位配置:" << StrConv::Utf8ToGbk(_ref.str名字Key) << "\t" << _ref.种族 << "\t" << StrConv::Utf8ToGbk(_ref.strPrefabName) << "\t" << _ref.b骨骼动画 << "\t" << StrConv::Utf8ToGbk(_ref.str选中音效) << "\t" << _ref.空闲 << "\t" << _ref.阵亡 << "\t" << StrConv::Utf8ToGbk(_ref.str阵亡音效);
+		return _Ostr << "单位配置:" << StrConv::Utf8ToGbk(_ref.str名字Key) << "\t" << _ref.种族 << "\t" << StrConv::Utf8ToGbk(_ref.strPrefabName) << "\t" << _ref.b骨骼动画 << "\t" << StrConv::Utf8ToGbk(_ref.str选中音效Key) << "\t" << _ref.空闲 << "\t" << _ref.阵亡 << "\t" << StrConv::Utf8ToGbk(_ref.str阵亡音效);
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::战局配置& _ref)
@@ -195,7 +195,7 @@ namespace YAML {
 				safe_get<种族>(refNode, "种族", 种族(0)),
 				safe_get<std::string>(refNode, "PrefabPathName", ""),
 				safe_get<bool>(refNode, "是骨骼动画", false),
-				safe_get<std::string>(refNode, "选中音效", ""),
+				safe_get<std::string>(refNode, "选中音效Key", ""),
 				safe_get<单位::动作>(refNode, "空闲动作", 默认动作),
 				safe_get<单位::动作>(refNode, "阵亡动作", 默认动作),
 				safe_get<std::string>(refNode, "阵亡音效", ""),
