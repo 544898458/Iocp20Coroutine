@@ -2,7 +2,7 @@
   名字Key: Key特效
   种族: 0
   PrefabPathName: ''
-  选中音效: ''
+  选中音效Key: ''
   动画节点路径: ''
   是骨骼动画: true
   空闲动作:
@@ -22,7 +22,7 @@
   名字Key: Key视口
   种族: 0
   PrefabPathName: ''
-  选中音效: ''
+  选中音效Key: ''
   动画节点路径: ''
   是骨骼动画: true
   空闲动作:
@@ -42,7 +42,7 @@
   名字Key: Key苔蔓
   种族: 2
   PrefabPathName: 建筑/苔蔓
-  选中音效: ''
+  选中音效Key: ''
   动画节点路径: ''
   是骨骼动画: true
   空闲动作:
@@ -62,7 +62,7 @@
   名字Key: Key方墩
   种族: 0
   PrefabPathName: 建筑/方墩
-  选中音效: ''
+  选中音效Key: ''
   动画节点路径: ''
   是骨骼动画: true
   空闲动作:
@@ -82,7 +82,7 @@
   名字Key: Key晶体矿
   种族: 0
   PrefabPathName: 资源/晶体矿
-  选中音效: 音效/BUTTON
+  选中音效Key: 音效/BUTTON
   动画节点路径: kuang_01
   是骨骼动画: false
   空闲动作:
@@ -102,7 +102,7 @@
   名字Key: Key燃气矿
   种族: 0
   PrefabPathName: 资源/燃气矿
-  选中音效: 音效/BUTTON
+  选中音效Key: 音效/BUTTON
   动画节点路径: ''
   是骨骼动画: true
   空闲动作:
@@ -122,7 +122,7 @@
   名字Key: Key工程车
   种族: 1
   PrefabPathName: 活动单位/工程车
-  选中音效: 语音/是女声可爱版
+  选中音效Key: Key工程车选中语音
   动画节点路径: wajueji_model_1mesh_v3
   是骨骼动画: true
   空闲动作:
@@ -142,7 +142,7 @@
   名字Key: Key枪兵
   种族: 1
   PrefabPathName: 活动单位/枪兵
-  选中音效: 语音/是男声正经版
+  选中音效Key: Key枪兵选中语音
   动画节点路径: p_A_rifle_01
   是骨骼动画: true
   空闲动作:
@@ -162,7 +162,7 @@
   名字Key: Key近战兵
   种族: 1
   PrefabPathName: 活动单位/近战兵
-  选中音效: tfbPss00
+  选中音效Key: Key近战兵选中语音
   动画节点路径: 近战兵999面_Idle
   是骨骼动画: true
   空闲动作:
@@ -182,7 +182,7 @@
   名字Key: Key三色坦克
   种族: 1
   PrefabPathName: 活动单位/三色坦克
-  选中音效: 音效/坦克行进声
+  选中音效Key: 音效/坦克行进声
   动画节点路径: ''
   是骨骼动画: true
   空闲动作:
@@ -202,7 +202,7 @@
   名字Key: Key工虫
   种族: 2
   PrefabPathName: 活动单位/工虫
-  选中音效: 语音/是男声年轻
+  选中音效Key: 语音/是男声年轻
   动画节点路径: 待机
   是骨骼动画: true
   空闲动作:
@@ -222,7 +222,7 @@
   名字Key: Key飞机
   种族: 1
   PrefabPathName: 活动单位/飞机
-  选中音效: 音效/飞机声
+  选中音效Key: 音效/飞机声
   动画节点路径: p_plane_01
   是骨骼动画: true
   空闲动作:
@@ -242,7 +242,7 @@
   名字Key: Key枪虫
   种族: 2
   PrefabPathName: 活动单位/枪虫
-  选中音效: 音效/zhyWht01
+  选中音效Key: 音效/zhyWht01
   动画节点路径: m_78
   是骨骼动画: true
   空闲动作:
@@ -262,7 +262,7 @@
   名字Key: Key近战虫
   种族: 2
   PrefabPathName: 活动单位/近战虫
-  选中音效: 音效/ZZeWht00
+  选中音效Key: 音效/ZZeWht00
   动画节点路径: chongmu_01
   是骨骼动画: true
   空闲动作:
@@ -282,7 +282,7 @@
   名字Key: Key幼虫
   种族: 2
   PrefabPathName: 活动单位/幼虫
-  选中音效: 音效/ZLaWht00
+  选中音效Key: 音效/ZLaWht00
   动画节点路径: 幼虫已加动作
   是骨骼动画: true
   空闲动作:
@@ -302,7 +302,7 @@
   名字Key: Key绿色坦克
   种族: 2
   PrefabPathName: 活动单位/绿色坦克
-  选中音效: 音效/ZLaPss00
+  选中音效Key: 音效/ZLaPss00
   动画节点路径: p_B_tank_01
   是骨骼动画: true
   空闲动作:
@@ -322,7 +322,7 @@
   名字Key: Key光刺
   种族: 0
   PrefabPathName: 活动单位/光刺
-  选中音效: ''
+  选中音效Key: ''
   动画节点路径: ''
   是骨骼动画: true
   空闲动作:
@@ -342,7 +342,7 @@
   名字Key: Key房虫
   种族: 2
   PrefabPathName: 活动单位/房虫
-  选中音效: 音效/zovWht00
+  选中音效Key: 音效/zovWht00
   动画节点路径: 房虫
   是骨骼动画: true
   空闲动作:
@@ -362,7 +362,7 @@
   名字Key: Key飞虫
   种族: 2
   PrefabPathName: 活动单位/飞虫
-  选中音效: 音效/zmuWht01
+  选中音效Key: 音效/zmuWht01
   动画节点路径: 飞虫-动作
   是骨骼动画: true
   空闲动作:
@@ -382,7 +382,7 @@
   名字Key: Key医疗兵
   种族: 1
   PrefabPathName: 活动单位/医疗兵
-  选中音效: 语音/TMdWht00
+  选中音效Key: 语音/TMdWht00
   动画节点路径: Dwarf Idle
   是骨骼动画: true
   空闲动作:
@@ -402,7 +402,7 @@
   名字Key: Key防空兵
   种族: 1
   PrefabPathName: 活动单位/防空兵
-  选中音效: 语音/是男声正经版
+  选中音效Key: 语音/是男声正经版
   动画节点路径: p_C_rpg_02
   是骨骼动画: true
   空闲动作:
@@ -422,7 +422,7 @@
   名字Key: Key基地
   种族: 1
   PrefabPathName: 建筑/基地
-  选中音效: 音效/BUTTON
+  选中音效Key: 音效/BUTTON
   动画节点路径: p_Base_02
   是骨骼动画: true
   空闲动作:
@@ -442,7 +442,7 @@
   名字Key: Key兵营
   种族: 1
   PrefabPathName: 建筑/兵营
-  选中音效: 音效/BUTTON
+  选中音效Key: 音效/BUTTON
   动画节点路径: Factory_1mesh_model
   是骨骼动画: false
   空闲动作:
@@ -462,7 +462,7 @@
   名字Key: Key民房
   种族: 1
   PrefabPathName: 建筑/民房
-  选中音效: 音效/BUTTON
+  选中音效Key: 音效/BUTTON
   动画节点路径: ''
   是骨骼动画: false
   空闲动作:
@@ -482,7 +482,7 @@
   名字Key: Key地堡
   种族: 1
   PrefabPathName: 建筑/地堡
-  选中音效: 音效/BUTTON
+  选中音效Key: 音效/BUTTON
   动画节点路径: 地堡872面
   是骨骼动画: false
   空闲动作:
@@ -502,7 +502,7 @@
   名字Key: Key炮台
   种族: 3
   PrefabPathName: 建筑/炮台
-  选中音效: 音效/BUTTON
+  选中音效Key: 音效/BUTTON
   动画节点路径: p_jiqiangbao_d_01
   是骨骼动画: true
   空闲动作:
@@ -522,7 +522,7 @@
   名字Key: Key虫巢
   种族: 2
   PrefabPathName: 建筑/虫巢
-  选中音效: 音效/zhaWht00
+  选中音效Key: 音效/zhaWht00
   动画节点路径: hatchery_skin
   是骨骼动画: true
   空闲动作:
@@ -542,7 +542,7 @@
   名字Key: Key机场
   种族: 1
   PrefabPathName: 建筑/机场
-  选中音效: 音效/BUTTON
+  选中音效Key: 音效/BUTTON
   动画节点路径: airport_500_1mesh
   是骨骼动画: false
   空闲动作:
@@ -562,7 +562,7 @@
   名字Key: Key重车厂
   种族: 1
   PrefabPathName: 建筑/重车厂
-  选中音效: 音效/BUTTON
+  选中音效Key: 音效/BUTTON
   动画节点路径: 风扇飞
   是骨骼动画: false
   空闲动作:
@@ -582,7 +582,7 @@
   名字Key: Key虫营
   种族: 2
   PrefabPathName: 建筑/虫营
-  选中音效: 音效/zspWht00
+  选中音效Key: 音效/zspWht00
   动画节点路径: 虫营
   是骨骼动画: true
   空闲动作:
@@ -602,7 +602,7 @@
   名字Key: Key飞塔
   种族: 2
   PrefabPathName: 建筑/飞塔
-  选中音效: 音效/zscWht00
+  选中音效Key: 音效/zscWht00
   动画节点路径: 飞塔
   是骨骼动画: true
   空闲动作:
@@ -622,7 +622,7 @@
   名字Key: Key拟态源
   种族: 2
   PrefabPathName: 建筑/拟态源
-  选中音效: 音效/zscWht00
+  选中音效Key: 音效/zscWht00
   动画节点路径: 拟态源
   是骨骼动画: true
   空闲动作:
@@ -642,7 +642,7 @@
   名字Key: Key太岁
   种族: 2
   PrefabPathName: 建筑/太岁
-  选中音效: ''
+  选中音效Key: ''
   动画节点路径: ''
   是骨骼动画: true
   空闲动作:
@@ -662,7 +662,7 @@
   名字Key: Key枪虫怪
   种族: 2
   PrefabPathName: 活动单位/枪虫
-  选中音效: ''
+  选中音效Key: ''
   动画节点路径: m_78
   是骨骼动画: true
   空闲动作:
@@ -682,7 +682,7 @@
   名字Key: Key近战虫怪
   种族: 2
   PrefabPathName: 活动单位/近战虫
-  选中音效: ''
+  选中音效Key: ''
   动画节点路径: chongmu_01
   是骨骼动画: true
   空闲动作:
@@ -702,7 +702,7 @@
   名字Key: Key工虫怪
   种族: 2
   PrefabPathName: 活动单位/工虫
-  选中音效: 音效/zdrWht00
+  选中音效Key: 音效/zdrWht00
   动画节点路径: 待机
   是骨骼动画: true
   空闲动作:
@@ -722,7 +722,7 @@
   名字Key: Key枪兵怪
   种族: 1
   PrefabPathName: 活动单位/枪兵
-  选中音效: 语音/是男声正经版
+  选中音效Key: 语音/是男声正经版
   动画节点路径: p_A_rifle_01
   是骨骼动画: true
   空闲动作:
@@ -742,7 +742,7 @@
   名字Key: Key近战兵怪
   种族: 1
   PrefabPathName: 活动单位/近战兵
-  选中音效: tfbPss00
+  选中音效Key: tfbPss00
   动画节点路径: 近战兵999面_Idle
   是骨骼动画: true
   空闲动作:
@@ -762,7 +762,7 @@
   名字Key: Key工程车怪
   种族: 1
   PrefabPathName: 活动单位/工程车
-  选中音效: 语音/是女声可爱版
+  选中音效Key: 语音/是女声可爱版
   动画节点路径: wajueji_model_1mesh_v3
   是骨骼动画: true
   空闲动作:
@@ -782,7 +782,7 @@
   名字Key: Key幼虫怪
   种族: 2
   PrefabPathName: 活动单位/幼虫
-  选中音效: 音效/ZLaWht00
+  选中音效Key: 音效/ZLaWht00
   动画节点路径: 幼虫已加动作
   是骨骼动画: true
   空闲动作:
@@ -802,7 +802,7 @@
   名字Key: Key飞虫怪
   种族: 2
   PrefabPathName: 活动单位/飞虫
-  选中音效: 音效/zmuWht01
+  选中音效Key: 音效/zmuWht01
   动画节点路径: 飞虫-动作
   是骨骼动画: true
   空闲动作:
@@ -822,7 +822,7 @@
   名字Key: Key绿色坦克怪
   种族: 2
   PrefabPathName: 活动单位/绿色坦克
-  选中音效: 音效/ZLaPss00
+  选中音效Key: 音效/ZLaPss00
   动画节点路径: p_B_tank_01
   是骨骼动画: true
   空闲动作:
@@ -842,7 +842,7 @@
   名字Key: Key房虫怪
   种族: 2
   PrefabPathName: 活动单位/房虫
-  选中音效: 音效/zovWht00
+  选中音效Key: 音效/zovWht00
   动画节点路径: 房虫
   是骨骼动画: true
   空闲动作:
@@ -862,7 +862,7 @@
   名字Key: Key防空兵怪
   种族: 1
   PrefabPathName: 活动单位/防空兵
-  选中音效: 语音/是男声正经版
+  选中音效Key: 语音/是男声正经版
   动画节点路径: p_C_rpg_02
   是骨骼动画: true
   空闲动作:

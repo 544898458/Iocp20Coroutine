@@ -1352,3 +1352,63 @@
 - Key: Key燃气矿已枯竭
   中文: 燃气矿 已枯竭
   英文: Gas Ore Depleted
+- Key: Key工程车入场语音
+  中文: 语音/工程车准备就绪女声可爱版
+  英文: 语音/Construction vehicle is in position 女声 Jenny
+- Key: Key工程车选中语音
+  中文: 语音/是女声可爱版
+  英文: 语音/ConstructionUnitHereJenny
+- Key: Key工程车普通走语音
+  中文: 语音/是女声可爱版
+  英文: 语音/Affirmative 女声 Jenny
+- Key: Key工程车强行走语音
+  中文: 语音/明白女声可爱版
+  英文: 语音/Confirm order 女声 Jenny
+- Key: Key枪兵入场语音
+  中文: 语音/准备战斗男声正经版
+  英文: 语音/Rifleman ready 男声 Guy
+- Key: Key枪兵选中语音
+  中文: 语音/是男声正经版
+  英文: 语音/LetsMoveOutGuy
+- Key: Key枪兵普通走语音
+  中文: 语音/是男声正经版
+  英文: 语音/Affirmative 男声 Guy
+- Key: Key枪兵强行走语音
+  中文: 语音/明白男声正经版
+  英文: 语音/Roger moving now 男声 Guy
+- Key: Key近战兵入场语音
+  中文: 语音/tfbRdy00
+  英文: 语音/Melee fighter standing by 男声 Guy
+- Key: Key近战兵选中语音
+  中文: 语音/tfbPss00
+  英文: 语音/LetsMoveOutGuy
+- Key: Key近战兵普通走语音
+  中文: 音效/zdrYes00
+  英文: 语音/Affirmative 男声 Guy
+- Key: Key近战兵强行走语音
+  中文: 音效/zdrYes01
+  英文: 语音/Roger moving now 男声 Guy
+- Key: Key建造完成女声
+  中文: 语音/建造完成女声可爱版
+  英文: 语音/Construction complete 女声 Jenny
+- Key: Key变异完成男声
+  中文: 语音/
+  英文: 语音/Mutation complete 男声 Alnilam
+- Key: Key无法在这里建造女声
+  中文: 语音/无法在这里建造可爱版
+  英文: 语音/Construction denied here 女声 Jenny
+- Key: Key无法在这里变异男声
+  中文: 语音/无法在这里变异男声年轻
+  英文: 语音/Can't mutate here 男声 Guy
+- Key: Key工程车晶体矿已枯竭语音
+  中文: 语音/晶体矿已枯竭女声可爱版
+  英文: 语音/Crystal Ore depleted 女声 Jenny
+- Key: Key工程车燃气矿已枯竭语音
+  中文: 语音/燃气矿已枯竭女声可爱版
+  英文: 语音/Gas Ore depleted 女声 Jenny
+- Key: Key工虫晶体矿已枯竭语音
+  中文: 语音/晶体矿已枯竭_男声
+  英文: 语音/Crystal Ore depleted 男声 Guy
+- Key: Key工虫燃气矿已枯竭语音
+  中文: 语音/燃气矿已枯竭_男声
+  英文: 语音/Gas Ore depleted 男声 Guy

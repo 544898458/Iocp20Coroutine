@@ -26,7 +26,7 @@ namespace 单位
 		动作 空闲;
 		动作 阵亡;
 		std::string str阵亡音效;
-		MSGPACK_DEFINE(str名字Key, 种族, strPrefabName, b骨骼动画	, str选中音效, 空闲, 阵亡, str阵亡音效);
+		MSGPACK_DEFINE(str名字Key, 种族, strPrefabName, b骨骼动画 , str选中音效Key, 空闲, 阵亡, str阵亡音效);
 	};
 	struct 消耗资源
 	{
@@ -68,10 +68,10 @@ namespace 单位
 	};
 	struct 活动单位配置
 	{
-		std::string str入场语音;
+		std::string str入场语音Key;
 		动作 走路;
-		std::string str普通走语音;
-		std::string str强行走语音;
+		std::string str普通走语音Key;
+		std::string str强行走语音Key;
 	};
 	struct 怪配置
 	{

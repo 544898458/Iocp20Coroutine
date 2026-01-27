@@ -45,7 +45,7 @@ namespace std
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::活动单位配置& _ref)
 	{
-		return _Ostr << "活动单位配置," << StrConv::Utf8ToGbk(_ref.str入场语音) << "," << _ref.走路 << "," << StrConv::Utf8ToGbk(_ref.str普通走语音) << "," << StrConv::Utf8ToGbk(_ref.str强行走语音);
+		return _Ostr << "活动单位配置," << _ref.str入场语音Key << "," << _ref.走路 << "," << _ref.str普通走语音Key << "," << _ref.str强行走语音Key;
 	}
 	template <class _Traits>
 	std::basic_ostream<char, _Traits>& operator<<(std::basic_ostream<char, _Traits>& _Ostr, const 单位::建筑单位配置& _ref)
@@ -244,10 +244,10 @@ namespace YAML {
 		static bool decode(const Node& refNode, 单位::活动单位配置& rhs) {
 			CHECK_RET_FALSE(refNode.IsMap());
 			rhs = { 
-				safe_get<std::string>(refNode, "入场语音", ""),
+				safe_get<std::string>(refNode, "入场语音Key", ""),
 				safe_get<单位::动作>(refNode, "走路动作", 默认动作),
-				safe_get<std::string>(refNode, "普通走语音", ""),
-				safe_get<std::string>(refNode, "强行走语音", ""),
+				safe_get<std::string>(refNode, "普通走语音Key", ""),
+				safe_get<std::string>(refNode, "强行走语音Key", ""),
 			};
 			return true;
 		}
