@@ -419,7 +419,7 @@
     target location.
 - Key: Key工程车采集晶体矿……
   中文: 很好！现在给您刷了一个<color=#a0ff50>晶体矿</color>，请点击晶体矿，让工程车在晶体矿和基地之间搬运晶体矿
-  英文: Well done! A patch of <color=#a0ff50>Crystal Ore</color> has been spawned for
+  英文: Well done! A patch of <color=#a0ff50> Crystal Ore</color> has been spawned for
     you. Tap the Crystal Ore to send the Construction Vehicle to transport ore between
     the Crystal Ore deposit and the Command Center.
 - Key: Key工程车采集燃气矿……
@@ -431,7 +431,7 @@
 - Key: Key工程车晶体矿已运到基地……
   中文: 您的工程车已把第一批晶体矿运到基地，请查看左上角<color=#a0ff50>晶体矿</color>数量变化
   英文: Your Construction Vehicle has delivered the first batch of Crystal Ore to the
-    Command Center. Check the <color=#a0ff50>Crystal Ore</color> count in the top-left
+    Command Center. Check the <color=#a0ff50> Crystal Ore</color> count in the top-left
     corner to see the change.
 - Key: Key工程车造民房……
   中文: 等您存够20晶体矿后，请点击<color=#a0ff50>建筑单位</color>=><color=#a0ff50>民房</color>按钮，再点击一次空旷地面
@@ -547,10 +547,10 @@
 - Key: Key燃气矿不足
   中文: 燃气矿不足
   英文: Insufficient Gas Ore
-- Key: Key燃气矿不足，不能解锁
+- Key: Key燃气矿不足不能解锁
   中文: 燃气矿不足，不能解锁
   英文: Insufficient Gas Ore. Unlocking unavailable
-- Key: Key晶体矿不足，不能解锁
+- Key: Key晶体矿不足不能解锁
   中文: 晶体矿不足，不能解锁
   英文: Insufficient Crystal Ore. Unlocking unavailable
 - Key: Key蜕变进度{}/{}
@@ -1165,7 +1165,7 @@
     then click an open area to command it to move to the target location.
 - Key: Key工虫采集晶体矿……
   中文: 很好！现在给您刷了一个晶体矿，请点击选中<color=#a0ff50>工虫</color>，再点击一次<color=#a0ff50>晶体矿</color>，让工虫在晶体矿和虫巢之间搬运晶体矿
-  英文: Well done! A <color=#a0ff50>Crystal Ore</color> deposit has been spawned for
+  英文: Well done! A <color=#a0ff50> Crystal Ore</color> deposit has been spawned for
     you. Click to select a <color=#a0ff50>Worker Drone</color>, then click the <color=#a0ff50>Crystal
     Ore</color> to order it to transport ore between the deposit and the Hive.
 - Key: Key工虫采集燃气矿……
@@ -1412,3 +1412,56 @@
 - Key: Key工虫燃气矿已枯竭语音
   中文: 语音/燃气矿已枯竭_男声
   英文: 语音/Gas Ore depleted 男声 Guy
+- Key: Key正建造不能采集……
+  中文: 正在建造，不能采集
+  英文: Under construction, harvesting unavailable.
+- Key: Key地堡没造好不能进……
+  中文: 地堡还没造好，不能进地堡
+  英文: Bunker not built yet, cannot enter.
+- Key: Key工程车燃气矿不足语音
+  中文: 语音/燃气矿不足可爱版
+  英文: 语音/Not enough gas or 女声 Achernar
+- Key: Key工虫燃气矿不足语音
+  中文: 语音/燃气矿不足男声浑厚
+  英文: 语音/Not enough gas ore 男声 Alnilam
+- Key: Key工程车晶体矿不足语音
+  中文: 语音/晶体矿不足可爱版
+  英文: 语音/Not enough crysta 女声 Achernar
+- Key: Key工虫晶体矿不足语音
+  中文: 语音/晶体矿不足男声年轻
+  英文: 语音/Not enough crysta 男声 Alnilam
+- Key: Key晶体矿不足已清空待造队列
+  中文: 晶体矿不足，已清空待造队列
+  英文: Insufficient crystal ore, construction queue cleared.
+- Key: Key房虫不足_男声
+  中文: 语音/房虫不足_男声
+  英文: 语音/Not enough PopuLifter Drones 男声 Alnilam
+- Key: Key民房不足女声正经版
+  中文: 语音/民房不足女声正经版
+  英文: 语音/Not enough PopuLifter Drones 女声 Achernar
+- Key: Key幼虫蜕变为{}集结……
+  中文: 修改已生效。已设置所有幼虫蜕变后的{}会自动走向此集结点。
+  英文: Changes applied. All larvae will automatically move to this rally point after
+    morphing into {}.
+- Key: Key建筑产出的{}集结……
+  中文: 修改已生效。此建筑新产出的{}将会自动走向此集结点。
+  英文: Changes applied. All newly produced {} from this structure will automatically
+    move to this rally point.
+- Key: Key单位解锁完成女声正经版
+  中文: 语音/单位解锁完成女声正经版
+  英文: '语音/Unit Unlocked 女声 Achernar '
+- Key: Key单位已解锁男声播音腔
+  中文: 语音/单位已解锁男声播音腔
+  英文: 语音/Unit Unlocked 男声 Alnilam
+- Key: Key属性升级完成女声正经版
+  中文: 语音/属性升级完成女声正经版
+  英文: 语音/Attributes Upgraded 女声 Achernar
+- Key: Key属性已升级男声播音腔
+  中文: 语音/属性已升级男声播音腔
+  英文: 语音/Attributes Upgraded 男声 Alnilam
+- Key: Key选中单位不能设置{}的集结点
+  中文: 选中单位不能设置{}的集结点
+  英文: Selected units cannot set the rally point for {}.
+- Key: Key工虫选中语音
+  中文: 语音/是男声年轻
+  英文: 音效/zhaWht00
