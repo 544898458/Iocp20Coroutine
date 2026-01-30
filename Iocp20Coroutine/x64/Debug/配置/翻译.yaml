@@ -153,7 +153,7 @@
   英文: Tricolor Tank
 - Key: Key工虫
   中文: 工虫
-  英文: Worker Larva
+  英文: Worker Drone
 - Key: Key飞机
   中文: 飞机
   英文: Aircraft
@@ -213,7 +213,7 @@
   英文: Bug Barracks
 - Key: Key飞塔
   中文: 飞塔
-  英文: Anti-Air Tower
+  英文: Air Tower
 - Key: Key拟态源
   中文: 拟态源
   英文: Mimic Source
@@ -258,7 +258,7 @@
   英文: Insufficient
 - Key: Key已删除
   中文: '已删除 '
-  英文: Deleted
+  英文: 'Deleted '
 - Key: Key遭到攻击
   中文: 遭到攻击
   英文: ' is Under Attack'
@@ -1465,3 +1465,33 @@
 - Key: Key工虫选中语音
   中文: 语音/是男声年轻
   英文: 音效/zhaWht00
+- Key: Key基地正遭到进攻女声正经版
+  中文: 语音/基地正遭到进攻女声正经版
+  英文: 语音/Command Center taking fire 女声 Achernar
+- Key: Key工程车遭到攻击女声可爱版
+  中文: 语音/工程车遭到攻击女声可爱版
+  英文: 语音/The Construction Vehicle is under attack. 女声 Achernar
+- Key: Key虫巢正遭到攻击_男声
+  中文: 语音/虫巢正遭到攻击_男声
+  英文: 语音/The Hive is under attack 男声 Alnilam
+- Key: Key工虫遭到攻击_男声
+  中文: 语音/工虫遭到攻击_男声
+  英文: 语音/The Worker Drone is under attack 男声 Alnilam
+- Key: Key无需重复解锁
+  中文: 无需重复解锁
+  英文: No repeated unlock
+- Key: Key无需解锁
+  中文: 无需解锁
+  英文: No unlock required
+- Key: Key请在有苔蔓的地方变异
+  中文: 请在有苔蔓的地方变异
+  英文: Mutate on Moss Vines.
+- Key: Key请在没有苔蔓的地方建造
+  中文: 请在没有苔蔓的地方建造
+  英文: Build outside Moss Vines.
+- Key: Key燃气矿不足清空待造队列
+  中文: 燃气矿不足，已清空待造队列
+  英文: Insufficient Gas Ore, build queue cleared.
+- Key: Key单位
+  中文: 单位
+  英文: Unit(s)

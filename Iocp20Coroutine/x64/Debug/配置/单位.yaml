@@ -402,7 +402,7 @@
   名字Key: Key防空兵
   种族: 1
   PrefabPathName: 活动单位/防空兵
-  选中音效Key: 语音/是男声正经版
+  选中音效Key: Key枪兵选中语音
   动画节点路径: p_C_rpg_02
   是骨骼动画: true
   空闲动作:

@@ -2,7 +2,7 @@
   备注: 新手训练_战备运营_人
   strSceneName: prefabs/map/map战斗
   寻路文件: all_tiles_tilecache.bin
-  Https音乐: https://www.rtsgame.online/music/suno后勤运营低音质.mp3
+  Https音乐: https://cdn.rtsgame.online/music/suno后勤运营低音质.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -10,7 +10,7 @@
   备注: 新手训练_战备运营_虫
   strSceneName: prefabs/map/map战斗
   寻路文件: all_tiles_tilecache.bin
-  Https音乐: https://www.rtsgame.online/music/suno后勤运营低音质.mp3
+  Https音乐: https://cdn.rtsgame.online/music/suno后勤运营低音质.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -18,7 +18,7 @@
   备注: 反空降战_人,
   strSceneName: prefabs/map/map攻坚战
   寻路文件: 攻坚战.bin
-  Https音乐: https://www.rtsgame.online/music/suno重工业浪漫低音质.mp3
+  Https音乐: https://cdn.rtsgame.online/music/suno重工业浪漫低音质.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -26,7 +26,7 @@
   备注: 空降战_虫,
   strSceneName: prefabs/map/map攻坚战
   寻路文件: 攻坚战.bin
-  Https音乐: https://www.rtsgame.online/music/suno重工业浪漫低音质.mp3
+  Https音乐: https://cdn.rtsgame.online/music/suno重工业浪漫低音质.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -34,7 +34,7 @@
   备注: 训练战_人
   strSceneName: prefabs/map/map战斗
   寻路文件: all_tiles_tilecache.bin
-  Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
+  Https音乐: https://cdn.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -42,7 +42,7 @@
   备注: 训练战_虫
   strSceneName: prefabs/map/map战斗
   寻路文件: all_tiles_tilecache.bin
-  Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
+  Https音乐: https://cdn.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -50,7 +50,7 @@
   备注: 防守战_人,
   strSceneName: prefabs/map/map防守战
   寻路文件: 防守战.bin
-  Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3
+  Https音乐: https://cdn.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -58,7 +58,7 @@
   备注: 防守战_虫,
   strSceneName: prefabs/map/map防守战
   寻路文件: 防守战.bin
-  Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3
+  Https音乐: https://cdn.rtsgame.online/music/Suno_Edge_of_Collapse_2.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -66,7 +66,7 @@
   备注: 攻坚战_人,
   strSceneName: prefabs/map/map攻坚战
   寻路文件: 攻坚战.bin
-  Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
+  Https音乐: https://cdn.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -74,7 +74,7 @@
   备注: 攻坚战_虫,
   strSceneName: prefabs/map/map攻坚战
   寻路文件: 攻坚战.bin
-  Https音乐: https://www.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
+  Https音乐: https://cdn.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -82,15 +82,15 @@
   备注: 中央防守_人
   strSceneName: prefabs/map/map八方汇聚
   寻路文件: 八方汇聚.bin
-  Https音乐: https://www.rtsgame.online/music/乌鸦Producer - Sample Killer - 低音质.mp3
+  Https音乐: https://cdn.rtsgame.online/music/乌鸦Producer - Sample Killer - 低音质.mp3
   MeshRenderer路径: map八方汇聚/地图27处理法向/Terrain/ditu4_8(Clone)/floor
-  Https高清贴图: https://www.rtsgame.online/图片/地图/ditu4_8_高清.png
+  Https高清贴图: https://cdn.rtsgame.online/图片/地图/ditu4_8_高清.png
   玩家同阵营: false
 - 类型: 12
   备注: 新手训练_防空战_人
   strSceneName: prefabs/map/map攻坚战
   寻路文件: 攻坚战.bin
-  Https音乐: https://www.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
+  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -98,7 +98,7 @@
   备注: 新手训练_反防空战_虫
   strSceneName: prefabs/map/map攻坚战
   寻路文件: 攻坚战.bin
-  Https音乐: https://www.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
+  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -106,7 +106,7 @@
   备注: 新手训练_苔蔓回血_虫
   strSceneName: prefabs/map/map攻坚战
   寻路文件: 攻坚战.bin
-  Https音乐: https://www.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
+  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -114,7 +114,7 @@
   备注: 新手训练_躲坦克前摇_人
   strSceneName: prefabs/map/map攻坚战
   寻路文件: 攻坚战.bin
-  Https音乐: https://www.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
+  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -122,7 +122,7 @@
   备注: 四方对战
   strSceneName: prefabs/map/map四方对战
   寻路文件: 四方对战.bin
-  Https音乐: https://www.rtsgame.online/music/电波暴击 - SPACE FIGHT 低音质.mp3
+  Https音乐: https://cdn.rtsgame.online/music/电波暴击 - SPACE FIGHT 低音质.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -130,23 +130,23 @@
   备注: 一打一
   strSceneName: prefabs/map/map一打一
   寻路文件: 一打一.bin
-  Https音乐: https://www.rtsgame.online/music/乌鸦Producer - Follow The Light - 低音质.mp3
+  Https音乐: https://cdn.rtsgame.online/music/乌鸦Producer - Follow The Light - 低音质.mp3
   MeshRenderer路径: map一打一/Terrain/ditu4_1(Clone)/floor
-  Https高清贴图: https://www.rtsgame.online/图片/地图/ditu4_1_高清.png
+  Https高清贴图: https://cdn.rtsgame.online/图片/地图/ditu4_1_高清.png
   玩家同阵营: false
 - 类型: 103
   备注: 中央防守_合作模式
   strSceneName: prefabs/map/map八方汇聚
   寻路文件: 八方汇聚.bin
-  Https音乐: https://www.rtsgame.online/music/乌鸦Producer - Sample Killer - 低音质.mp3
+  Https音乐: https://cdn.rtsgame.online/music/乌鸦Producer - Sample Killer - 低音质.mp3
   MeshRenderer路径: map八方汇聚/地图27处理法向/Terrain/ditu4_8(Clone)/floor
-  Https高清贴图: https://www.rtsgame.online/图片/地图/ditu4_8_高清.png
+  Https高清贴图: https://cdn.rtsgame.online/图片/地图/ditu4_8_高清.png
   玩家同阵营: true
 - 类型: 201
   备注: 多玩家混战
   strSceneName: prefabs/map/map战斗
   寻路文件: all_tiles_tilecache.bin
-  Https音乐: https://www.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
+  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -154,7 +154,7 @@
   备注: 圆坑混战
   strSceneName: prefabs/map/map圆坑
   寻路文件: 圆坑.bin
-  Https音乐: https://www.rtsgame.online/music/乌鸦Producer - Desert - 低音质.mp3
+  Https音乐: https://cdn.rtsgame.online/music/乌鸦Producer - Desert - 低音质.mp3
   MeshRenderer路径: map圆坑/Terrain/ditu_boss2(Clone)/floor
-  Https高清贴图: https://www.rtsgame.online/图片/地图/ditu_boss2_高清.png
+  Https高清贴图: https://cdn.rtsgame.online/图片/地图/ditu_boss2_高清.png
   玩家同阵营: false
