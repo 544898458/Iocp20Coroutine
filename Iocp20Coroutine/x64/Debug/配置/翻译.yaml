@@ -264,7 +264,7 @@
   英文: ' is Under Attack'
 - Key: Key跟随
   中文: '跟随 '
-  英文: Follow
+  英文: 'Follow '
 - Key: Key此单位无法采集资源
   中文: 此单位无法采集资源
   英文: This unit cannot harvest resources.
@@ -1495,3 +1495,6 @@
 - Key: Key单位
   中文: 单位
   英文: Unit(s)
+- Key: Key停止跟随
+  中文: 停止跟随
+  英文: Stop Following
