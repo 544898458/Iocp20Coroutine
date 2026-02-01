@@ -174,7 +174,7 @@
   英文: Light Orb
 - Key: Key房虫
   中文: 房虫
-  英文: Population Drone
+  英文: PopuLifter Drone
 - Key: Key飞虫
   中文: 飞虫
   英文: Flying Bug
@@ -336,7 +336,7 @@
   英文: How to Command Anti-Airborne Operations?
 - Key: Key在途中击落敌方
   中文: '，在途中击落敌方<color=#a0ff50>房虫</color>后，其运送的敌方单位就会变得非常虚弱，趁机一鼓作气消灭它们！'
-  英文: ',After shooting down the enemy <color=#a0ff50>Population Drone</color> mid-flight,
+  英文: ',After shooting down the enemy <color=#a0ff50>PopuLifter Drone</color> mid-flight,
     the enemy units it carries will be severely weakened—seize the moment and wipe
     them out in one fell swoop!'
 - Key: Key我试试。
@@ -344,7 +344,7 @@
   英文: Let me give it a try.
 - Key: Key击落房虫……
   中文: 击落<color=#a0ff50>房虫</color>，并且消灭其运送的敌方单位
-  英文: Shoot down the <color=#a0ff50>Population Drone</color> and eliminate the enemy
+  英文: Shoot down the <color=#a0ff50>PopuLifter Drone</color> and eliminate the enemy
     units it transports.
 - Key: Key这都能输，不可思议！
   中文: 这都能输，不可思议！
@@ -576,7 +576,7 @@
   英文: Insufficient Supply Depots
 - Key: Key房虫不足
   中文: 房虫不足
-  英文: Insufficient Population Drones
+  英文: Insufficient PopuLifter Drones
 - Key: Key正在建造
   中文: 正在建造
   英文: Under Construction

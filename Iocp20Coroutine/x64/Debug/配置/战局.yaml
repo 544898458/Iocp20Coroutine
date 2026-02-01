@@ -90,7 +90,7 @@
   备注: 新手训练_防空战_人
   strSceneName: prefabs/map/map攻坚战
   寻路文件: 攻坚战.bin
-  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
+  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -98,7 +98,7 @@
   备注: 新手训练_反防空战_虫
   strSceneName: prefabs/map/map攻坚战
   寻路文件: 攻坚战.bin
-  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
+  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -106,7 +106,7 @@
   备注: 新手训练_苔蔓回血_虫
   strSceneName: prefabs/map/map攻坚战
   寻路文件: 攻坚战.bin
-  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
+  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -114,7 +114,7 @@
   备注: 新手训练_躲坦克前摇_人
   strSceneName: prefabs/map/map攻坚战
   寻路文件: 攻坚战.bin
-  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
+  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -146,7 +146,7 @@
   备注: 多玩家混战
   strSceneName: prefabs/map/map战斗
   寻路文件: all_tiles_tilecache.bin
-  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质 .mp3
+  Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质.mp3
   MeshRenderer路径: ''
   Https高清贴图: ''
   玩家同阵营: false
@@ -154,7 +154,7 @@
   备注: 圆坑混战
   strSceneName: prefabs/map/map圆坑
   寻路文件: 圆坑.bin
-  Https音乐: https://cdn.rtsgame.online/music/乌鸦Producer - Desert - 低音质.mp3
+  Https音乐: https://cdn.rtsgame.online/music/乌鸦Producer - Desert - 低音质 3分钟.mp3
   MeshRenderer路径: map圆坑/Terrain/ditu_boss2(Clone)/floor
   Https高清贴图: https://cdn.rtsgame.online/图片/地图/ditu_boss2_高清.png
   玩家同阵营: false
