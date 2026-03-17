@@ -3,16 +3,16 @@
   strSceneName: prefabs/map/map战斗
   寻路文件: all_tiles_tilecache.bin
   Https音乐: https://cdn.rtsgame.online/music/suno后勤运营低音质.mp3
-  MeshRenderer路径: ''
-  Https高清贴图: ''
+  MeshRenderer路径: map战斗
+  Https高清贴图: https://cdn.rtsgame.online/图片/地图/奶白色大理石.png
   玩家同阵营: false
 - 类型: 2
   备注: 新手训练_战备运营_虫
   strSceneName: prefabs/map/map战斗
   寻路文件: all_tiles_tilecache.bin
   Https音乐: https://cdn.rtsgame.online/music/suno后勤运营低音质.mp3
-  MeshRenderer路径: ''
-  Https高清贴图: ''
+  MeshRenderer路径: map战斗
+  Https高清贴图: https://cdn.rtsgame.online/图片/地图/奶白色大理石.png
   玩家同阵营: false
 - 类型: 3
   备注: 反空降战_人,
@@ -35,16 +35,16 @@
   strSceneName: prefabs/map/map战斗
   寻路文件: all_tiles_tilecache.bin
   Https音乐: https://cdn.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
-  MeshRenderer路径: ''
-  Https高清贴图: ''
+  MeshRenderer路径: map战斗
+  Https高清贴图: https://cdn.rtsgame.online/图片/地图/奶白色大理石.png
   玩家同阵营: false
 - 类型: 6
   备注: 训练战_虫
   strSceneName: prefabs/map/map战斗
   寻路文件: all_tiles_tilecache.bin
   Https音乐: https://cdn.rtsgame.online/music/Suno_Edge_of_Collapse.mp3
-  MeshRenderer路径: ''
-  Https高清贴图: ''
+  MeshRenderer路径: map战斗
+  Https高清贴图: https://cdn.rtsgame.online/图片/地图/奶白色大理石.png
   玩家同阵营: false
 - 类型: 7
   备注: 防守战_人,
@@ -147,8 +147,8 @@
   strSceneName: prefabs/map/map战斗
   寻路文件: all_tiles_tilecache.bin
   Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质.mp3
-  MeshRenderer路径: ''
-  Https高清贴图: ''
+  MeshRenderer路径: map战斗
+  Https高清贴图: https://cdn.rtsgame.online/图片/地图/奶白色大理石.png
   玩家同阵营: false
 - 类型: 202
   备注: 圆坑混战
