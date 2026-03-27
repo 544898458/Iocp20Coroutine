@@ -142,6 +142,7 @@ int main(int argc, char* argv[])
 	LOG(INFO) << "GameSvr已启动 GameSvrId=" << gameSvrId;
 	单位::读配置文件();
 	CHECK_RET_DEFAULT(读Yaml配置::读翻译配置文件("配置/翻译.yaml"));
+	CHECK_RET_DEFAULT(读Yaml配置::读GameSvr配置文件("配置/GameSvr.yaml"));	
 
 	读Yaml配置::GameSvr配置 gameSvrConfig;
 	CHECK_RET_DEFAULT(读Yaml配置::FindGameSvr配置(gameSvrId, gameSvrConfig));
