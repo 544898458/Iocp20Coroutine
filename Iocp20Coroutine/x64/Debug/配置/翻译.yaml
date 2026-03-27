@@ -28,7 +28,7 @@
   英文: Great. Now a large number of enemies will spawn and assault the bunker, allowing
     you to experience the bunker's attack and defense firsthand.
 - Key: Key但你的地堡也快不行了
-  中文: '，祝贺你消灭了敌人，但你的地堡也快不行了。<color=#a0ff50>医疗兵</color>可以修复地堡。'
+  中文: ，祝贺你消灭了敌人，但你的地堡也快不行了。<color=#a0ff50>医疗兵</color>可以修复地堡。
   英文: ',Congratulations on defeating the enemies, but your bunker is almost destroyed.
     <color=#a0ff50> Medics</color> can repair the bunker.'
 - Key: Key点击选中医疗兵
@@ -65,7 +65,7 @@
     to select all nearby Melee Bugs. Next, click an empty spot near the Turrets on
     the left to order all Melee Bugs to assault them (casualties are not a concern).
 - Key: Key您可以试试攻城利器坦克
-  中文: '，炮台群对步兵有压倒性的优势。您可以试试攻城利器：<color=#a0ff50>坦克</color>。'
+  中文: ，炮台群对步兵有压倒性的优势。您可以试试攻城利器：<color=#a0ff50>坦克</color>。
   英文: ',Turrets have an overwhelming advantage against infantry. You can try using
     a siege weapon: the <color=#a0ff50> Tank</color>.'
 - Key: Key坦克可以在炮台的射程外攻击
@@ -78,7 +78,7 @@
   中文: 你不早说？
   英文: Why didn't you tell me earlier?
 - Key: Key坦克会遭到小兵克制
-  中文: '，坦克拥有射程优势，可以在炮台的射程外攻击。但是坦克爆炸溅射会伤害己方单位，并且前摇很长，会遭到小兵克制。现在请看效果。'
+  中文: ，坦克拥有射程优势，可以在炮台的射程外攻击。但是坦克爆炸溅射会伤害己方单位，并且前摇很长，会遭到小兵克制。现在请看效果。
   英文: ',Tanks have a range advantage and can attack from beyond the Turrets'' firing
     range. However, tank explosion splash damage will harm friendly units, and their
     long attack wind-up makes them vulnerable to enemy grunts. Now watch the effect.'
@@ -335,7 +335,7 @@
   中文: 如何指挥反空降作战？
   英文: How to Command Anti-Airborne Operations?
 - Key: Key在途中击落敌方
-  中文: '，在途中击落敌方<color=#a0ff50>房虫</color>后，其运送的敌方单位就会变得非常虚弱，趁机一鼓作气消灭它们！'
+  中文: ，在途中击落敌方<color=#a0ff50>房虫</color>后，其运送的敌方单位就会变得非常虚弱，趁机一鼓作气消灭它们！
   英文: ',After shooting down the enemy <color=#a0ff50>PopuLifter Drone</color> mid-flight,
     the enemy units it carries will be severely weakened—seize the moment and wipe
     them out in one fell swoop!'
@@ -476,7 +476,7 @@
   中文: 您取得了胜利！您真是指挥天才！
   英文: You have achieved victory! What a brilliant commander you are!
 - Key: Key你的悟性很高……
-  中文: '，你的悟性很高，10分钟就完成了其他学员一个月才能完成的训练，为师甚是欣慰！'
+  中文: ，你的悟性很高，10分钟就完成了其他学员一个月才能完成的训练，为师甚是欣慰！
   英文: ', You are an incredibly fast learner—you completed the training that takes
     other students a whole month in just 10 minutes. Your master is truly delighted!'
 - Key: Key我这都是些什么同学啊……
@@ -641,7 +641,7 @@
     leave, then click <color=#a0ff50>Anti-Anti-Air Warfare</color> again to restart
     the mission.
 - Key: Key敌方飞虫进攻我方炮台……
-  中文: '，敌方飞虫进攻我方炮台，我方损失惨重。'
+  中文: ，敌方飞虫进攻我方炮台，我方损失惨重。
   英文: ', Enemy Flying Bugs are assaulting our artillery emplacements; we are sustaining
     heavy casualties.'
 - Key: Key没有吧？
@@ -689,7 +689,7 @@
   中文: 您失败了！您需要继续练习闪避技巧。
   英文: You lose! You need more practice with evasion techniques.
 - Key: Key枪兵败切记……
-  中文: '，枪兵已败。切记，面对强敌，闪避为先。仔细观察炸点特效，善用强行走身法躲开坦克炸点，方能在战场上立于不败之地。'
+  中文: ，枪兵已败。切记，面对强敌，闪避为先。仔细观察炸点特效，善用强行走身法躲开坦克炸点，方能在战场上立于不败之地。
   英文: ', your riflemen have been defeated. Remember this: when facing a superior foe,
     evasion comes first. Watch closely for the blast point visual cue and master the
     Force Move maneuver to dodge the tank’s blasts—only then can you prevail on the
@@ -837,7 +837,7 @@
   英文: Try slowing your pace of operations. Prioritize attacking the <color=#a0ff50>enemy
     Command Center in the bottom-right corner</color> first.
 - Key: Key坦克连失联……
-  中文: '，我的一个坦克连在调查<color=#a0ff50>虫巢</color>时失联，请前往营救。'
+  中文: ，我的一个坦克连在调查<color=#a0ff50>虫巢</color>时失联，请前往营救。
   英文: ',One of our Tank Companies went missing while investigating an enemy <color=#a0ff50>
     Hive</color>. Deploy immediately for search and rescue.'
 - Key: Key没有步兵保护吗……
@@ -917,7 +917,7 @@
   英文: Eliminate the two enemy Hives ahead. Use your infantry to protect the Tanks.
     <color=#a0ff50>Keep Tanks outside the Turrets’ firing range</color> at all times.
 - Key: Key好消息拟态……
-  中文: '，有一个好消息，我们的幼虫经过千万次的模仿，基本掌握了拟态复制人类三色坦克的方法。'
+  中文: ，有一个好消息，我们的幼虫经过千万次的模仿，基本掌握了拟态复制人类三色坦克的方法。
   英文: ',Good news: After thousands of iterations, our Larvae have mastered mimicking
     human Tri-Color Tank technology.'
 - Key: Key还有坏消息……
@@ -973,7 +973,7 @@
   中文: 没有坦克又遇到大片敌方炮台怎么办？
   英文: What if we face a large battery of enemy Turrets without any Tanks?
 - Key: Key绕道空降……
-  中文: '，可以让<color=#a0ff50>房虫</color>运送战斗单位越过障碍物绕到炮台后方，实施空降作战。'
+  中文: ，可以让<color=#a0ff50>房虫</color>运送战斗单位越过障碍物绕到炮台后方，实施空降作战。
   英文: ',You can use <color=#a0ff50>PopuLifter Drone</color> to transport combat units
     over obstacles and deploy them behind enemy Turrets for airborne assaults.'
 - Key: Key近战虫进房虫……
@@ -995,7 +995,7 @@
     high risks—you will be vulnerable if intercepted by the enemy. Use it strategically
     in future battles.
 - Key: Key没看错你天才……
-  中文: '，我果然没有看错你，你是一个指挥天才！'
+  中文: ，我果然没有看错你，你是一个指挥天才！
   英文: ',I knew I made the right choice putting you in command—you’re a natural-born
     tactician!'
 - Key: Key都快打完了……
@@ -1005,7 +1005,7 @@
   中文: 胜败乃兵家常事，我仍然看好你的潜力！
   英文: Victory and defeat are part of war. I still see great potential in you!
 - Key: Key八个方向都……
-  中文: '，八个方向都会有敌人向你进攻！'
+  中文: ，八个方向都会有敌人向你进攻！
   英文: ',Enemies are closing in on your position from eight directions!'
 - Key: Key谁敢欺负咱俩……
   中文: 要战便战！谁敢欺负咱俩？
@@ -1051,14 +1051,14 @@
     left-side Turrets to order all Melee Bugs to attack the Turrets (casualties are
     irrelevant).
 - Key: Key绿色坦克克制炮台……
-  中文: '，炮台群对地面单位有压倒性的优势。可以用<color=#a0ff50>绿色坦克</color>可以在炮台的射程外攻击。'
+  中文: ，炮台群对地面单位有压倒性的优势。可以用<color=#a0ff50>绿色坦克</color>可以在炮台的射程外攻击。
   英文: ',Turret clusters hold overwhelming superiority over ground units. You can use
     <color=#a0ff50> Green Tanks</color> to attack from outside the Turrets'' range.'
 - Key: Key绿色坦克可以……
   中文: 绿色坦克可以在炮台的射程外攻击
   英文: Green Tanks can strike from beyond the Turrets' firing range.
 - Key: Key绿色坦克拥有……
-  中文: '，绿色坦克拥有射程优势，可以在炮台的射程外攻击。但是绿色坦克发射的光刺会被障碍物阻挡，会遭到小兵克制。现在请看效果。'
+  中文: ，绿色坦克拥有射程优势，可以在炮台的射程外攻击。但是绿色坦克发射的光刺会被障碍物阻挡，会遭到小兵克制。现在请看效果。
   英文: ',Green Tanks have a range advantage and can attack from outside the Turrets''
     reach. However, the Light Orbs they fire are blocked by obstacles, and they are
     countered by basic infantry units. Observe the demonstration now.'
@@ -1221,8 +1221,8 @@
     Larva production, and morph more <color=#a0ff50> PopuLifter Drones</color> to
     increase your unit cap. Keep fighting!
 - Key: Key夺回地球……
-  中文: '，很好，夺回地球指日可待！'
-  英文: '，Excellent! Reclaiming Earth is within our grasp!'
+  中文: ，很好，夺回地球指日可待！
+  英文: ，Excellent! Reclaiming Earth is within our grasp!
 - Key: Key期待与人类……
   中文: 期待与人类的实战。
   英文: Looking forward to the real battle against humanity.
