@@ -117,6 +117,9 @@
     <ClCompile Include="..\读配置文件\Try读Ini本地机器专用.cpp">
       <Filter>读配置文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\读Yaml配置\读GameSvr配置.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GateSession.h">
@@ -235,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="..\读配置文件\Try读Ini本地机器专用.h">
       <Filter>读配置文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\读Yaml配置\读GameSvr配置.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

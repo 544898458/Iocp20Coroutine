@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)\glog\include;$(SolutionDir)\msgpack-c-cpp-2.1.2\include;$(SolutionDir)\OpenSsl340;$($(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)yaml-cpp-0.8.0\include;$(SolutionDir)glog\include;$(SolutionDir)msgpack-c-cpp-2.1.2\include;$(SolutionDir)OpenSsl340;$($(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\glog\lib;$(SolutionDir)\VisualLeakDetector\lib\Win64;$(SolutionDir)\OpenSsl340Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -178,6 +178,7 @@
     <ClCompile Include="..\websocketfiles-master\src\ws_endpoint.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp" />
     <ClCompile Include="..\读配置文件\Try读Ini本地机器专用.cpp" />
+    <ClCompile Include="..\读Yaml配置\读GameSvr配置.cpp" />
     <ClCompile Include="ClientSession_GateToGame.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -233,6 +234,7 @@
     <ClInclude Include="..\websocketfiles-master\src\ws_endpoint.h" />
     <ClInclude Include="..\websocketfiles-master\src\ws_packet.h" />
     <ClInclude Include="..\读配置文件\Try读Ini本地机器专用.h" />
+    <ClInclude Include="..\读Yaml配置\读GameSvr配置.h" />
     <ClInclude Include="ClientSession_GateToGame.h" />
     <ClInclude Include="GateServer.h" />
     <ClInclude Include="GateSession.h" />
