@@ -152,7 +152,7 @@ int main(void)
 
 	//g_worldSvr->Init<WorldSession>(12346);
 	//g_worldSvr.reset(new Iocp::Server<WorldClient>(Iocp::ThreadPool::GetIocp()));
-	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<ClientSession_GameToWorld>(L"127.0.0.1", PORT_WORLDSVR_ACCEPT_GAME, threadPoolNetwork.GetIocp()));
+	g_ConnectToWorldSvr.reset(Iocp::Client::Connect<ClientSession_GameToWorld>("127.0.0.1", PORT_WORLDSVR_ACCEPT_GAME, threadPoolNetwork.GetIocp()));
 	extern std::function<void(MsgSay const&)> m_funBroadcast;
 	m_funBroadcast = [](const MsgSay& msg) {g_upAccept->m_Server.m_Sessions.Broadcast(msg); };
 
