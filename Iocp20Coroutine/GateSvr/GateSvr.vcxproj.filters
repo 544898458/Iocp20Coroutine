@@ -120,6 +120,12 @@
     <ClCompile Include="..\读Yaml配置\读GameSvr配置.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\读Yaml配置\读Yaml配置.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\读Yaml配置\翻译.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GateSession.h">
@@ -240,6 +246,12 @@
       <Filter>读配置文件</Filter>
     </ClInclude>
     <ClInclude Include="..\读Yaml配置\读GameSvr配置.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\读Yaml配置\读Yaml配置.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\读Yaml配置\翻译.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

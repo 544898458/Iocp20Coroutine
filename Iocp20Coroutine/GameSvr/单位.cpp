@@ -12,11 +12,7 @@
 
 #include <fstream>
 #include "../IocpNetwork/StrConv.h"
-#ifdef _DEBUG
-#pragma comment(lib, "../yaml-cpp-0.8.0/lib/yaml-cppd.lib")
-#else
-#pragma comment(lib, "../yaml-cpp-0.8.0/lib/yaml-cpp.lib")
-#endif
+
 
 namespace std
 {
@@ -100,18 +96,18 @@ namespace YAML {
 	// 	return node[key] ? std::chrono::milliseconds(node[key].as<int16_t>()) : std::chrono::milliseconds(default_ms);
 	// }
 
-	template<>
-	struct convert<战局类型> {
-		static Node encode(const 战局类型& rhs) {
+	//template<>
+	//struct convert<战局类型> {
+	//	static Node encode(const 战局类型& rhs) {
 
-			return Node((int)rhs);
-		}
-		static bool decode(const Node& refNode, 战局类型& rhs) {
-			CHECK_RET_FALSE(refNode.IsScalar());
-			rhs = (战局类型)refNode.as<int>();
-			return true;
-		}
-	};
+	//		return Node((int)rhs);
+	//	}
+	//	static bool decode(const Node& refNode, 战局类型& rhs) {
+	//		CHECK_RET_FALSE(refNode.IsScalar());
+	//		rhs = (战局类型)refNode.as<int>();
+	//		return true;
+	//	}
+	//};
 	template<>
 	struct convert<单位类型> {
 		static Node encode(const 单位类型& rhs) {

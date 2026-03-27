@@ -408,6 +408,9 @@
     <ClCompile Include="..\读Yaml配置\翻译.cpp">
       <Filter>读Yaml配置</Filter>
     </ClCompile>
+    <ClCompile Include="..\读Yaml配置\读Yaml配置.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">

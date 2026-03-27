@@ -177,6 +177,8 @@
     <ClCompile Include="..\websocketfiles-master\src\string_helper.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\ws_endpoint.cpp" />
     <ClCompile Include="..\websocketfiles-master\src\ws_packet.cpp" />
+    <ClCompile Include="..\读Yaml配置\翻译.cpp" />
+    <ClCompile Include="..\读Yaml配置\读Yaml配置.cpp" />
     <ClCompile Include="..\读配置文件\Try读Ini本地机器专用.cpp" />
     <ClCompile Include="..\读Yaml配置\读GameSvr配置.cpp" />
     <ClCompile Include="ClientSession_GateToGame.cpp">
@@ -233,6 +235,8 @@
     <ClInclude Include="..\websocketfiles-master\src\string_helper.h" />
     <ClInclude Include="..\websocketfiles-master\src\ws_endpoint.h" />
     <ClInclude Include="..\websocketfiles-master\src\ws_packet.h" />
+    <ClInclude Include="..\读Yaml配置\翻译.h" />
+    <ClInclude Include="..\读Yaml配置\读Yaml配置.h" />
     <ClInclude Include="..\读配置文件\Try读Ini本地机器专用.h" />
     <ClInclude Include="..\读Yaml配置\读GameSvr配置.h" />
     <ClInclude Include="ClientSession_GateToGame.h" />
