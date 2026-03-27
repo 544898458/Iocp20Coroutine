@@ -319,6 +319,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\读Yaml配置\翻译.cpp" />
+    <ClCompile Include="..\读Yaml配置\读GameSvr配置.cpp" />
     <ClCompile Include="..\读Yaml配置\读Yaml配置.cpp" />
     <ClCompile Include="..\读配置文件\Try读Ini本地机器专用.cpp" />
     <ClCompile Include="EntitySystem.cpp" />
@@ -400,6 +401,7 @@
     <ClCompile Include="AiCo.cpp" />
     <ClInclude Include="..\MiniDump\MiniDump.h" />
     <ClInclude Include="..\读Yaml配置\翻译.h" />
+    <ClInclude Include="..\读Yaml配置\读GameSvr配置.h" />
     <ClInclude Include="..\读Yaml配置\读Yaml配置.h" />
     <ClInclude Include="..\读配置文件\Try读Ini本地机器专用.h" />
     <ClInclude Include="AllPort.h">

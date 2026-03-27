@@ -411,6 +411,9 @@
     <ClCompile Include="..\读Yaml配置\读Yaml配置.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\读Yaml配置\读GameSvr配置.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -693,6 +696,9 @@
       <Filter>读Yaml配置</Filter>
     </ClInclude>
     <ClInclude Include="翻译Key.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\读Yaml配置\读GameSvr配置.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
