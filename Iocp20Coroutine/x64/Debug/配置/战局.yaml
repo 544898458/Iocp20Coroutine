@@ -142,6 +142,14 @@
   寻路文件: 八方汇聚.bin
   玩家同阵营: true
   类型: 103
+- Https音乐: https://cdn.rtsgame.online/music/乌鸦Producer - Follow The Light - 低音质.mp3
+  Https高清贴图: https://cdn.rtsgame.online/图片/地图/ditu4_1_高清.png
+  MeshRenderer路径: map一打一/Terrain/ditu4_1(Clone)/floor
+  strSceneName: prefabs/map/map一打一
+  备注: 一打一
+  寻路文件: 一打一.bin
+  玩家同阵营: false
+  类型: 104
 - Https音乐: https://cdn.rtsgame.online/music/星联-已注册版权-獬羽柏-低音质.mp3
   Https高清贴图: https://cdn.rtsgame.online/图片/地图/奶白色大理石.png
   MeshRenderer路径: map战斗

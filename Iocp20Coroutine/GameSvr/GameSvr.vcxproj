@@ -399,6 +399,8 @@
     </ClCompile>
     <ClCompile Include="..\IocpNetwork\WsaStartUp.cpp" />
     <ClCompile Include="AiCo.cpp" />
+    <ClCompile Include="AiPlayerController.cpp" />
+    <ClInclude Include="AiPlayerController.h" />
     <ClInclude Include="..\MiniDump\MiniDump.h" />
     <ClInclude Include="..\读Yaml配置\翻译.h" />
     <ClInclude Include="..\读Yaml配置\读GameSvr配置.h" />
