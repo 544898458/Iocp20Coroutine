@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "Win32",
+            "name": "x64",
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/Iocp20Coroutine/**",
@@ -20,10 +20,12 @@
                 "${workspaceFolder}/Iocp20Coroutine/recastnavigation-main/DetourCrowd/Include/**",
                 "${workspaceFolder}/Iocp20Coroutine/recastnavigation-main/DetourTileCache/Include/**",
                 "${workspaceFolder}/Iocp20Coroutine/recastnavigation-main/DebugUtils/Include/**",
-                "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.29.30133/include/**",
-                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/um/**",
-                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/ucrt/**",
-                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/shared/**"
+                "D:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.44.35207/include/**",
+                "D:/Windows Kits/10/Include/10.0.26100.0/ucrt/**",
+                "D:/Windows Kits/10/Include/10.0.26100.0/um/**",
+                "D:/Windows Kits/10/Include/10.0.26100.0/shared/**",
+                "D:/Windows Kits/10/Include/10.0.26100.0/winrt/**",
+                "D:/Windows Kits/10/Include/10.0.26100.0/cppwinrt/**"
             ],
             "defines": [
                 "_DEBUG",
@@ -31,15 +33,16 @@
                 "_UNICODE",
                 "WIN32",
                 "_WIN32",
-                "_WIN32_WINNT=0x0601"
+                "_WIN32_WINNT=0x0601",
+                "GLOG_NO_ABBREVIATED_SEVERITIES",
+                "GLOG_USE_GLOG_EXPORT"
             ],
-            "windowsSdkVersion": "10.0.19041.0",
-            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/cl.exe",
+            "windowsSdkVersion": "10.0.26100.0",
+            "compilerPath": "D:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.44.35207/bin/HostX86/x64/cl.exe",
             "cStandard": "c17",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "windows-msvc-x64",
-            "configurationProvider": "ms-vscode.cmake-tools"
+            "cppStandard": "c++20",
+            "intelliSenseMode": "windows-msvc-x64"
         }
     ],
     "version": 4
-} 
+}
