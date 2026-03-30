@@ -425,6 +425,7 @@
     <ClCompile Include="PlayerGateSession_Game.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PlayerGateSession.cpp" />
     <ClCompile Include="PlayerSystem.cpp" />
     <ClCompile Include="ClientSession_GameToWorld.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
