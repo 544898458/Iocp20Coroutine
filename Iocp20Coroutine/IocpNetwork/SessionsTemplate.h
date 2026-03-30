@@ -1,5 +1,4 @@
 #include "Sessions.h"
-#include "../LogStrategy/StrategyLog.h"
 
 /// <summary>
 /// 网络线程，多线程

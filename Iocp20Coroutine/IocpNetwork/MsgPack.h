@@ -1,7 +1,6 @@
 #pragma once
 #include <sstream>
 #include <msgpack.hpp>
-#include "../LogStrategy/StrategyLog.h"
 #include "ByteQueue.h"
 
 namespace MsgPack

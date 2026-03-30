@@ -1,6 +1,5 @@
 #pragma once
 #include"../IocpNetwork/SessionSocketCompletionKey.h"
-#include "../LogStrategy/StrategyLog.h"
 //#include "../IocpNetwork/WebSocketSession.h"
 #include <msgpack.hpp>
 #include "../IocpNetwork/MsgPack.h"
