@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="源文件">
@@ -70,6 +70,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Space.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SpacePlayer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
@@ -420,6 +423,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Space.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SpacePlayer.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\Iocp20Coroutine.h">
