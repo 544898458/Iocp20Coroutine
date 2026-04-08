@@ -425,6 +425,7 @@
     <ClCompile Include="PlayerGateSession_Game.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PlayerGateSession_Game_System.cpp" />
     <ClCompile Include="PlayerGateSession.cpp" />
     <ClCompile Include="PlayerSystem.cpp" />
     <ClCompile Include="ClientSession_GameToWorld.cpp">
@@ -492,6 +493,7 @@
     <ClInclude Include="MyEvent.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerGateSession_Game.h" />
+    <ClInclude Include="PlayerGateSession_Game_System.h" />
     <ClInclude Include="PlayerSystem.h" />
     <ClInclude Include="SpaceSystem.h" />
     <ClInclude Include="SpEntity.h" />
