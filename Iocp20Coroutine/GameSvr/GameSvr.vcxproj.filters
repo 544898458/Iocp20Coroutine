@@ -689,6 +689,9 @@
     <ClInclude Include="Position.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Msg机甲合金幸存者.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="单位组件\跟随Component.h">
       <Filter>单位组件</Filter>
     </ClInclude>

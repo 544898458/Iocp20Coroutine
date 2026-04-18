@@ -550,6 +550,7 @@
     <ClInclude Include="..\IocpNetwork\WebSocketSession.h" />
     <ClInclude Include="..\LogStrategy\StrategyLog.h" />
     <ClInclude Include="MyMsgQueue.h" />
+    <ClInclude Include="Msg机甲合金幸存者.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Space.h" />
     <ClInclude Include="SpacePlayer.h" />
