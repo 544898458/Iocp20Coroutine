@@ -33,7 +33,8 @@ MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :
 	prefabName(ref.m_配置.strPrefabName),
 	最大生命(数值Component::Get(ref, 属性类型::最大生命)),
 	最大能量(数值Component::Get(ref, 属性类型::最大能量)),
-	类型(ref.m_类型)
+	类型(ref.m_类型),
+	pos(ref.Pos())
 {
 }
 
