@@ -1,6 +1,10 @@
-# Repository Instructions
+# 仓库规则
 
-- Many `.h` and `.cpp` files in this repository use `Unicode UTF-16 LE` encoding.
-- When editing source files, preserve the original file encoding whenever possible.
-- Do not change file encodings unless it is clearly necessary for the task.
-- When building, build the `.sln` solution rather than an individual project.
+- 本仓库中的大部分 `.h` 和 `.cpp` 文件使用 `Unicode UTF-16 LE` 编码。
+- 修改源代码文件时，应尽量保持原文件编码不变。
+- 除非确有必要，否则不要修改文件编码。
+- 编译时必须构建 `.sln` 解决方案，不要单独构建某个项目。
+- 未经过有效性保护就解引用 `std::weak_ptr::lock()` 的结果，属于严重安全问题。
+- 有效的弱引用保护方式包括：使用合适的项目 `CHECK_WP_*` 系列宏（例如 `CHECK_WP_RET_VOID`、`CHECK_WP_RET_FALSE`、`CHECK_WP_RET_DEFAULT` 或 `CHECK_WP_CONTINUE`）、调用 `expired()` 检查，或者使用能够保证执行到解引用表达式时弱引用仍然有效的条件短路。
+- 禁止在没有保护的情况下编写 `m_wpSpace.lock()->GetEntity(...)` 之类的代码。代码审查时，只对不存在上述任何有效保护的弱引用解引用给出严重警告。
+- 弱引用通过 `lock()` 解开后，如果得到的强引用、解引用对象或函数返回值没有被实际使用，应提醒删除这段无效代码。

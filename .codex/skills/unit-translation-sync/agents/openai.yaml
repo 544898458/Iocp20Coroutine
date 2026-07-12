@@ -1,0 +1,4 @@
+interface:
+  display_name: "Unit Translation Sync"
+  short_description: "Check unit name keys and append missing translation rows."
+  default_prompt: "Use $unit-translation-sync to check 名字Key values in the 单位 worksheet and add missing 翻译 entries."
