@@ -464,8 +464,9 @@
     the enemy, and they will attack automatically. You can tap <color=#a0ff50> Deselect</color>
     in the bottom-right corner, then drag the ground to locate the enemy.
 - Key: Key多造兵去围攻敌人……
-  中文: 您的兵阵亡了。可以多造点兵去围攻敌人
-  英文: Your troops have been defeated. You can build more troops to siege the enemy.
+  中文: 您的兵阵亡了。可以多造点兵去围攻敌人，也可以在兵营升级兵的属性。
+  英文: Your troops have been defeated. You can build more troops to siege the enemy,
+    and you can also upgrade their attributes at the barracks.
 - Key: Key造地堡防守……
   中文: 恭喜您消灭了敌人！现在左边给您刷了更多的怪。您可以造<color=#a0ff50>建筑单位</color>=><color=#a0ff50>地堡</color>，让兵进入地堡中，立足防守，再伺机进攻
   英文: Congratulations on eliminating the enemy! More enemy units have been spawned

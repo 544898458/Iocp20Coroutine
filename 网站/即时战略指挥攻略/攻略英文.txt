@@ -7,6 +7,7 @@ You can set rally points for unit production in <color=#40a9ff>Command Centers, 
 <size=24><b>Human Construction</b></size><br/>
 <outline color=#ffffff width=1>Construct Buildings</outline>: Click the button for <color=#40a9ff>Command Center/Civilian House/Bunker/Barracks/Battery Turret</color> => click the ground. The nearest idle Construction Vehicle will move to the target location to build. If you select a Construction Vehicle first before initiating construction, that specific vehicle will be forced to perform the build task.<br/>
 <outline color=#ffffff width=1>Produce Mobile Units</outline>: Click the button for <color=#40a9ff>Construction Vehicle/Soldier/Melee Infantry/Tank</color>. The least occupied production structure will start manufacturing the unit. If you select a Command Center or Barracks first, the unit will be produced in the specified structure.<br/>
+Both Barracks and Bug Barracks can upgrade unit attributes.<br/>
 Civilian Houses or Transport Drones increase the maximum population cap of mobile units.<br/>
 A Bunker or Transport Drone can garrison up to 10 mobile units, and Bunkers have a very high health pool.<br/>
 <br/>
