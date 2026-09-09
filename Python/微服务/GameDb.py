@@ -124,11 +124,12 @@ async def lifespan(app: FastAPI):
         await db.execute('''
             CREATE TABLE IF NOT EXISTS player_stats (
                 svr_id INTEGER,
+                account_id INTEGER,
                 nickname TEXT,
                 type INTEGER,
                 wins INTEGER DEFAULT 0,
                 losses INTEGER DEFAULT 0,
-                PRIMARY KEY (svr_id, nickname, type)
+                PRIMARY KEY (svr_id, account_id, type)
             )
         ''')
         await db.commit()
@@ -137,7 +138,9 @@ async def lifespan(app: FastAPI):
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 svr_id INTEGER,
                 battle_type INTEGER,
+                killer_account_id INTEGER,
                 killer TEXT,
+                victim_account_id INTEGER,
                 victim TEXT,
                 killer_unit INTEGER,
                 victim_unit INTEGER,
@@ -221,12 +224,15 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 class 战局结果参数(BaseModel):
     svr_id: int
+    account_id: int
     nickName: str
     type: 战局类型
     win: bool
 
 class UnitKillRequest(BaseModel):
     svr_id: int
+    killer_account_id: int
+    victim_account_id: int
     battle_type: 战局类型
     killer: str
     killer_unit: 单位类型
@@ -243,14 +249,15 @@ async def root():
 async def 战局结果(request: 战局结果参数):
     print(f"=== 收到战局结果请求 ===")
     print(f"svr_id: {request.svr_id} (类型: {type(request.svr_id)})")
+    print(f"account_id: {request.account_id}")
     print(f"nickName: {request.nickName} (类型: {type(request.nickName)})")
     print(f"type: {request.type} (类型: {type(request.type)})")
     print(f"win: {request.win} (类型: {type(request.win)})")
     async with aiosqlite.connect(Config.DB_FILE) as db:
         # 首先检查玩家在该类型战局中是否存在
         cursor = await db.execute(
-            'SELECT wins, losses FROM player_stats WHERE svr_id = ? AND nickname = ? AND type = ?',
-            (request.svr_id, request.nickName, request.type)
+            'SELECT wins, losses FROM player_stats WHERE svr_id = ? AND account_id = ? AND type = ?',
+            (request.svr_id, request.account_id, request.type)
         )
         player = await cursor.fetchone()
         
@@ -258,32 +265,32 @@ async def 战局结果(request: 战局结果参数):
             # 如果玩家在该类型战局中不存在，创建新记录
             if request.win:
                 await db.execute(
-                    'INSERT INTO player_stats (svr_id, nickname, type, wins, losses) VALUES (?, ?, ?, 1, 0)',
-                    (request.svr_id, request.nickName, request.type)
+                    'INSERT INTO player_stats (svr_id, account_id, nickname, type, wins, losses) VALUES (?, ?, ?, ?, 1, 0)',
+                    (request.svr_id, request.account_id, request.nickName, request.type)
                 )
             else:
                 await db.execute(
-                    'INSERT INTO player_stats (svr_id, nickname, type, wins, losses) VALUES (?, ?, ?, 0, 1)',
-                    (request.svr_id, request.nickName, request.type)
+                    'INSERT INTO player_stats (svr_id, account_id, nickname, type, wins, losses) VALUES (?, ?, ?, ?, 0, 1)',
+                    (request.svr_id, request.account_id, request.nickName, request.type)
                 )
         else:
             # 如果玩家在该类型战局中存在，更新胜负次数
             if request.win:
                 await db.execute(
-                    'UPDATE player_stats SET wins = wins + 1 WHERE svr_id = ? AND nickname = ? AND type = ?',
-                    (request.svr_id, request.nickName, request.type)
+                    'UPDATE player_stats SET nickname = ?, wins = wins + 1 WHERE svr_id = ? AND account_id = ? AND type = ?',
+                    (request.nickName, request.svr_id, request.account_id, request.type)
                 )
             else:
                 await db.execute(
-                    'UPDATE player_stats SET losses = losses + 1 WHERE svr_id = ? AND nickname = ? AND type = ?',
-                    (request.svr_id, request.nickName, request.type)
+                    'UPDATE player_stats SET nickname = ?, losses = losses + 1 WHERE svr_id = ? AND account_id = ? AND type = ?',
+                    (request.nickName, request.svr_id, request.account_id, request.type)
                 )
         await db.commit()
         
         # 获取更新后的数据
         cursor = await db.execute(
-            'SELECT wins, losses FROM player_stats WHERE svr_id = ? AND nickname = ? AND type = ?',
-            (request.svr_id, request.nickName, request.type)
+            'SELECT wins, losses FROM player_stats WHERE svr_id = ? AND account_id = ? AND type = ?',
+            (request.svr_id, request.account_id, request.type)
         )
         updated_stats = await cursor.fetchone()
                 
@@ -336,6 +343,7 @@ async def 战局结果(request: 战局结果参数):
 
         return {
             "message": "战局记录已更新",
+            "account_id": request.account_id,
             "nickname": request.nickName,
             "type": request.type,
             "wins": updated_stats[0],
@@ -348,6 +356,8 @@ async def add_unit_kill(request: UnitKillRequest):
     print(f"=== 收到单位击杀请求 ===")
     print(f"svr_id: {request.svr_id} (类型: {type(request.svr_id)})")
     print(f"battle_type: {request.battle_type} (类型: {type(request.battle_type)})")
+    print(f"killer_account_id: {request.killer_account_id}")
+    print(f"victim_account_id: {request.victim_account_id}")
     print(f"killer: {request.killer} (类型: {type(request.killer)})")
     print(f"killer_unit: {request.killer_unit} (类型: {type(request.killer_unit)})")
     print(f"victim: {request.victim} (类型: {type(request.victim)})")
@@ -364,10 +374,11 @@ async def add_unit_kill(request: UnitKillRequest):
     async with aiosqlite.connect(Config.DB_FILE) as db:
         cursor = await db.execute(
             '''
-            INSERT INTO unit_kill (svr_id, battle_type, killer, victim, killer_unit, victim_unit)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO unit_kill (svr_id, battle_type, killer_account_id, killer, victim_account_id, victim, killer_unit, victim_unit)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ''',
-            (request.svr_id, request.battle_type, request.killer, request.victim, request.killer_unit, request.victim_unit)
+            (request.svr_id, request.battle_type, request.killer_account_id, request.killer,
+             request.victim_account_id, request.victim, request.killer_unit, request.victim_unit)
         )
         await db.commit()
         last_id = cursor.lastrowid
@@ -386,11 +397,13 @@ async def add_unit_kill(request: UnitKillRequest):
                 "id": row[0],
                 "svr_id": row[1],
                 "battle_type": row[2],
-                "killer": row[3],
-                "victim": row[4],
-                "killer_unit": row[5],
-                "victim_unit": row[6],
-                "timestamp_utc": f"{row[7]} UTC"
+                "killer_account_id": row[3],
+                "killer": row[4],
+                "victim_account_id": row[5],
+                "victim": row[6],
+                "killer_unit": row[7],
+                "victim_unit": row[8],
+                "timestamp_utc": f"{row[9]} UTC"
             })
         
         # 写入JSON文件
@@ -416,12 +429,14 @@ async def 写入战报排行榜(svr_id: int, battle_type: 战局类型):
     stats_configs = [
         {
             "field": "killer",
+            "account_field": "killer_account_id",
             "key_name": "killer", 
             "file_suffix": "击败单位数",
             "display_name": "击杀"
         },
         {
             "field": "victim", 
+            "account_field": "victim_account_id",
             "key_name": "victim",
             "file_suffix": "被击败单位数", 
             "display_name": "被击杀"
@@ -432,7 +447,9 @@ async def 写入战报排行榜(svr_id: int, battle_type: 战局类型):
         for config in stats_configs:
             # 执行查询
             cursor = await db.execute(
-                f'SELECT {config["field"]}, COUNT(*) FROM unit_kill WHERE svr_id = ? AND battle_type = ? GROUP BY {config["field"]} ORDER BY COUNT(*) DESC LIMIT 200',
+                f'''SELECT {config["account_field"]}, MAX({config["field"]}), COUNT(*)
+                    FROM unit_kill WHERE svr_id = ? AND battle_type = ?
+                    GROUP BY {config["account_field"]} ORDER BY COUNT(*) DESC LIMIT 200''',
                 (svr_id, battle_type)
             )
             results = await cursor.fetchall()
@@ -440,8 +457,9 @@ async def 写入战报排行榜(svr_id: int, battle_type: 战局类型):
             # 将查询结果转换为字典列表
             stats_list = [
                 {
-                    config["key_name"]: row[0],
-                    "count": row[1]
+                    "account_id": row[0],
+                    config["key_name"]: row[1],
+                    "count": row[2]
                 }
                 for row in results
             ]

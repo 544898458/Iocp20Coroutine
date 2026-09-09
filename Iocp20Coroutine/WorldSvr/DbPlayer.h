@@ -13,4 +13,6 @@ struct DbPlayer
 	CoTaskBool AliyunGreenCheck(const std::string strGbk);
 };
 
+uint32_t GetOrCreate’À∫≈Id(const std::string& refStr’À∫≈);
+
 extern std::map<std::string, DbPlayer> g_mapDbPlayer;

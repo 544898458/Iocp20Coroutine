@@ -64,6 +64,7 @@ void SignalHandler(int sig)
 
 std::unique_ptr<Iocp::SessionSocketCompletionKey<ClientSession_GameToWorld> > g_ConnectToWorldSvr;
 std::unique_ptr<Iocp::Server<GameSvr> > g_upAccept;
+std::map<uint32_t, std::weak_ptr<PlayerGateSession_Game>> g_mapPlayerGateSessionBy账号Id;
 
 template<class T>
 void SendToWorldSvr(const T& refMsg)
@@ -90,23 +91,27 @@ template void SendToWorldSvr(const MsgChangeMoney& msg);
 template void SendToWorldSvr(const Msg战局结束& msg);
 template void SendToWorldSvr(const Msg击杀& msg);
 
-std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string &refStrNickName)
+std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(uint32_t u32账号Id)
 {
-	std::weak_ptr<PlayerGateSession_Game> spRet;
-	g_upAccept->m_Server.m_Sessions.ForEach([&spRet, &refStrNickName](GameSvrSession& refSession) {
-		auto &refMap = refSession.m_mapPlayerGateSession;
-		auto iterFind = std::find_if(refMap.begin(), refMap.end(),
-		[&refStrNickName](const auto& pair)->bool
-		{
-			return pair.second->NickName() == refStrNickName;
-		});
-		if (refMap.end() == iterFind)
-			return;
+	const auto iterFind = g_mapPlayerGateSessionBy账号Id.find(u32账号Id);
+	if (iterFind == g_mapPlayerGateSessionBy账号Id.end())
+		return {};
+	if (iterFind->second.expired())
+	{
+		g_mapPlayerGateSessionBy账号Id.erase(iterFind);
+		return {};
+	}
+	return iterFind->second;
+}
 
-		spRet = iterFind->second;
-	});
-
-	return spRet;
+std::weak_ptr<PlayerGateSession_Game> GetPlayerGateSession(const std::string& refStr账号)
+{
+	for (const auto& [_, wpSession] : g_mapPlayerGateSessionBy账号Id)
+	{
+		if (!wpSession.expired() && wpSession.lock()->账号() == refStr账号)
+			return wpSession;
+	}
+	return {};
 }
 
 int main(int argc, char* argv[])

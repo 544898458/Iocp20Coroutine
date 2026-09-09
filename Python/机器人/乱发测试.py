@@ -12,6 +12,7 @@ from enum import Enum
 
 # 存储玩家个人战局列表
 玩家个人战局列表 = []
+我的账号Id = 0
 
 class MsgId(Enum):
     MsgId_Invalid_0 = 0
@@ -824,11 +825,12 @@ async def onRecvGameSvr(arr, websocket) -> bool:
                 
             # 随机选择一个战局
             随机战局 = random.choice(战局列表)
+            目标账号Id = 随机战局[0]
             print(f'随机选择战局: {随机战局}')
             
             try:
                 # 发送进入其他玩家多人战局命令
-                await send(websocket, [[MsgId.进其他玩家多人战局.value, 0], 随机战局])
+                await send(websocket, [[MsgId.进其他玩家多人战局.value, 0], 0, 目标账号Id])
                 print(f'已发送进入多人战局命令: {随机战局}')
             except Exception as e:
                 print(f'进入多人战局失败: {str(e)}')
@@ -850,6 +852,7 @@ async def onRecvGameSvr(arr, websocket) -> bool:
             return True
         case MsgId.AddRoleRet:
             id = arr[idxArr];  idxArr += 1
+            u32账号Id = arr[idxArr];  idxArr += 1
             nickName = arr[idxArr];  idxArr += 1
             entityName = arr[idxArr];  idxArr += 1
             prefabName = arr[idxArr];  idxArr += 1
@@ -869,7 +872,7 @@ async def onRecvGameSvr(arr, websocket) -> bool:
                 'posZ': 0,
                 'eulerAnglesY': 0
             }
-            print(f'收到单位数据: ID={id}, 类型={类型}, 名称={nickName}')
+            print(f'收到单位数据: ID={id}, 账号ID={u32账号Id}, 类型={类型}, 名称={nickName}')
             return True
         case MsgId.资源:
             return True
@@ -895,11 +898,12 @@ async def onRecvGameSvr(arr, websocket) -> bool:
                 
             # 随机选择一个战局
             随机战局 = random.choice(玩家个人战局列表)
+            目标账号Id = 随机战局[0]
             print(f'随机选择个人战局: {随机战局}')
             
             try:
                 # 发送进入其他玩家个人战局命令
-                await send(websocket, [[MsgId.进其他玩家个人战局.value, 0], 随机战局])
+                await send(websocket, [[MsgId.进其他玩家个人战局.value, 0], 0, 目标账号Id])
                 print(f'已发送进入个人战局命令: {随机战局}')
             except Exception as e:
                 print(f'进入个人战局失败: {str(e)}')
@@ -947,7 +951,14 @@ async def 收到消息(reply, websocket) -> bool:
     idMsg = MsgId(msg)
     match idMsg:
         case MsgId.Login:
-            print('登录成功')
+            # [msg, rpcSnId, result, 提示, svrId, 账号, DBID, 昵称]
+            global 我的账号Id
+            result = reply[index + 1]
+            if result == 0:
+                我的账号Id = reply[index + 5]
+                print(f'登录成功，账号ID={我的账号Id}')
+            else:
+                print(f'登录失败: {reply[index + 2]}')
             return True
         case MsgId.GateSvr转发GameSvr消息给游戏前端:
             arrGameMsg = reply[index]

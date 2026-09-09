@@ -10,6 +10,7 @@
 #include "../IocpNetwork/StrConv.h"
 #include "AiCo.h"
 #include "Entity.h"
+#include "EntitySystem.h"
 #include "../CoRoutine/CoRpc.h"
 #include "枚举/属性类型.h"
 #include "单位组件/PlayerComponent.h"
@@ -28,6 +29,7 @@ MsgNotifyPos::MsgNotifyPos(const Entity& ref) :
 
 MsgAddRoleRet::MsgAddRoleRet(Entity& ref) :
 	entityId(ref.Id),
+	u32账号Id(EntitySystem::Get账号Id(ref)),
 	nickName(ref.头顶Name()),
 	entityName(读Yaml配置::翻译(ref.m_配置.str名字Key)),
 	prefabName(ref.m_配置.strPrefabName),
