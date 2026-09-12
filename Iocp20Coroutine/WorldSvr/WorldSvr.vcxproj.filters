@@ -31,6 +31,9 @@
     <Filter Include="读配置文件">
       <UniqueIdentifier>{75594a77-054f-4bfe-98c2-9c3f49d7a5d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sqlite3">
+      <UniqueIdentifier>{D33A73AF-3A81-470D-A17B-BA763548F128}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WorldSvrMain.cpp">
@@ -107,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="..\读配置文件\Try读Ini本地机器专用.cpp">
       <Filter>读配置文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sqlite3\sqlite3.c">
+      <Filter>sqlite3</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="..\读配置文件\文件存取对象.h">
       <Filter>读配置文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sqlite3\sqlite3.h">
+      <Filter>sqlite3</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

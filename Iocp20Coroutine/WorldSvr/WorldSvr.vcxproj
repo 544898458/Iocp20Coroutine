@@ -70,6 +70,11 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\sqlite3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(SolutionDir)\msgpack-c-cpp-2.1.2\include;websocketfiles-master\src;$(SolutionDir)\glog\include;$(SolutionDir)\VisualLeakDetector\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\glog\lib;$(SolutionDir)\VisualLeakDetector\lib\Win64;$(LibraryPath)</LibraryPath>
@@ -176,6 +181,9 @@
     <ClCompile Include="..\MiniDump\MiniDump.cpp" />
     <ClCompile Include="..\慢操作AliyunGreen\慢操作AliyunGreen.cpp" />
     <ClCompile Include="..\读配置文件\Try读Ini本地机器专用.cpp" />
+    <ClCompile Include="..\sqlite3\sqlite3.c">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="DbPlayer.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -215,6 +223,7 @@
     <ClInclude Include="..\慢操作AliyunGreen\慢操作AliyunGreen.h" />
     <ClInclude Include="..\读配置文件\Try读Ini本地机器专用.h" />
     <ClInclude Include="..\读配置文件\文件存取对象.h" />
+    <ClInclude Include="..\sqlite3\sqlite3.h" />
     <ClInclude Include="DbPlayer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerGateSession_World.h" />

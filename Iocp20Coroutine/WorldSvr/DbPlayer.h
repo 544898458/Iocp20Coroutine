@@ -2,17 +2,24 @@
 #include <string>
 #include <msgpack.hpp>
 #include "../CoRoutine/CoTask.h"
-struct DbPlayer
-{
-	//std::string nickName;
-	std::string pwd="Hello, world!pwd";
-	int32_t money = 3;
-	MSGPACK_DEFINE(pwd, money);
 
-	static CoTask<DbPlayer*> CoGetæ¯≤ª∑µªÿø’(const std::string& refStrNickName);
-	CoTaskBool AliyunGreenCheck(const std::string strGbk);
+struct Db’À∫≈
+{
+	std::string str’À∫≈;
+	std::string strNickName;
+	std::string strPwd = "Hello, world!pwd";
+	uint32_t u32’À∫≈Id = 0;
+	MSGPACK_DEFINE(str’À∫≈, strNickName, strPwd, u32’À∫≈Id);
 };
 
-uint32_t GetOrCreate’À∫≈Id(const std::string& refStr’À∫≈);
+struct DbPlayer
+{
+	Db’À∫≈ ’À∫≈;
+	int32_t money = 3;
+	MSGPACK_DEFINE(’À∫≈, money);
+
+	static CoTask<DbPlayer*> CoGetæ¯≤ª∑µªÿø’(const std::string& refStr’À∫≈);
+	CoTaskBool AliyunGreenCheck(const std::string strGbk);
+};
 
 extern std::map<std::string, DbPlayer> g_mapDbPlayer;
