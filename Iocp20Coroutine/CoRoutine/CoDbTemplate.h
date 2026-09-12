@@ -20,21 +20,21 @@ void 慢操作<T>::Init(const HANDLE hIocp)
 }
 
 template<class T>
-T CoDb<T>::LoadFromDbThread(const std::string nickName) 
+T CoDb<T>::LoadFromDbThread(const std::string strUtf8文件名尾部文本) 
 {
-	return 从文件里读出对象<T>(nickName);
+	return 从文件里读出对象<T>(strUtf8文件名尾部文本);
 }
 
 template<class T>
-T CoDb<T>::SaveInDbThread(const T& ref, const std::string& strNickName)
+T CoDb<T>::SaveInDbThread(const T& ref, const std::string& strUtf8文件名尾部文本)
 {
-	return 写对象进文件(ref, strNickName);
+	return 写对象进文件(ref, strUtf8文件名尾部文本);
 }
 
 template<class T>
-CoAwaiter<T>& CoDb<T>::CoSave(const T& ref, const std::string& strNickName, FunCancel& cancel)
+CoAwaiter<T>& CoDb<T>::CoSave(const T& ref, const std::string& strUtf8文件名尾部文本, FunCancel& cancel)
 {
-	return m_慢操作.DoDb([this, &ref, strNickName]() {return this->SaveInDbThread(ref, strNickName); }, cancel);
+	return m_慢操作.DoDb([this, &ref, strUtf8文件名尾部文本]() {return this->SaveInDbThread(ref, strUtf8文件名尾部文本); }, cancel);
 }
 
 template<class T>
@@ -55,9 +55,9 @@ CoAwaiter<T>& 慢操作<T>::DoDb(DbFun funDb, FunCancel& cancel)
 }
 
 template<class T>
-CoAwaiter<T>& CoDb<T>::Load(const std::string nickName, FunCancel& cancel)
+CoAwaiter<T>& CoDb<T>::Load(const std::string strUtf8文件名尾部文本, FunCancel& cancel)
 {
-	return m_慢操作.DoDb([this, nickName]() { return this->LoadFromDbThread(nickName); }, cancel);
+	return m_慢操作.DoDb([this, strUtf8文件名尾部文本]() { return this->LoadFromDbThread(strUtf8文件名尾部文本); }, cancel);
 }
 
 template<class T>
