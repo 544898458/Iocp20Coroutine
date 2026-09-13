@@ -301,17 +301,18 @@ async def 战局结果(request: 战局结果参数):
         for t in all_types:
             # 赢排行榜
             cursor = await db.execute(
-                'SELECT nickname, type, wins, losses FROM player_stats WHERE svr_id = ? AND type = ? AND wins > 0 ORDER BY wins DESC LIMIT 16',
+                'SELECT account_id, nickname, type, wins, losses FROM player_stats WHERE svr_id = ? AND type = ? AND wins > 0 ORDER BY wins DESC LIMIT 16',
                 (request.svr_id, t)
             )
             win_stats = await cursor.fetchall()
             win_stats_list = [
                 {
-                    "nickname": row[0],
-                    "type": row[1],
-                    "wins": row[2],
-                    "losses": row[3],
-                    "total_games": row[2] + row[3]
+                    "account_id": row[0],
+                    "nickname": row[1],
+                    "type": row[2],
+                    "wins": row[3],
+                    "losses": row[4],
+                    "total_games": row[3] + row[4]
                 }
                 for row in win_stats
             ]
@@ -322,17 +323,18 @@ async def 战局结果(request: 战局结果参数):
 
             # 输排行榜
             cursor = await db.execute(
-                'SELECT nickname, type, wins, losses FROM player_stats WHERE svr_id = ? AND type = ? AND losses > 0 ORDER BY losses DESC LIMIT 16',
+                'SELECT account_id, nickname, type, wins, losses FROM player_stats WHERE svr_id = ? AND type = ? AND losses > 0 ORDER BY losses DESC LIMIT 16',
                 (request.svr_id, t)
             )
             lose_stats = await cursor.fetchall()
             lose_stats_list = [
                 {
-                    "nickname": row[0],
-                    "type": row[1],
-                    "wins": row[2],
-                    "losses": row[3],
-                    "total_games": row[2] + row[3]
+                    "account_id": row[0],
+                    "nickname": row[1],
+                    "type": row[2],
+                    "wins": row[3],
+                    "losses": row[4],
+                    "total_games": row[3] + row[4]
                 }
                 for row in lose_stats
             ]
