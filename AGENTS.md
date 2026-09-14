@@ -22,6 +22,8 @@
 
 - 不直接修改导出的 YAML；修改 `表` 目录下的 Excel 源文件后再导出。
 - 本仓库使用 Windows/Visual Studio 构建，必须构建 `Iocp20Coroutine.sln` 的完整解决方案。
+- 编译命令：`& 'D:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\devenv.com' 'F:\UGit\iocp20coroutine\Iocp20Coroutine\Iocp20Coroutine.sln' /Build 'Debug|x64' /Out 'F:\UGit\iocp20coroutine\build\devenv-build.log'`。
+- 编译前关闭正在运行的服务器及占用项目输出 `.log` 文件的进程；否则 `GameSvr` 或 `GateSvr` 可能因日志文件被占用而构建失败。
 - 本仓库大部分 C++ 文件是 UTF-16 LE；修改时必须保持原编码，不要转换为 UTF-8、GBK 或 ANSI。
 
 ## 消息与数据
