@@ -408,6 +408,18 @@
     <ClCompile Include="单位组件\巡逻Component.cpp">
       <Filter>单位组件</Filter>
     </ClCompile>
+    <ClCompile Include="单位组件\行进中发射Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\投射物Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\火箭弹Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
+    <ClCompile Include="单位组件\光刺Component.cpp">
+      <Filter>单位组件</Filter>
+    </ClCompile>
     <ClCompile Include="混战.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -696,6 +708,18 @@
       <Filter>单位组件</Filter>
     </ClInclude>
     <ClInclude Include="单位组件\巡逻Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\行进中发射Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\投射物Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\火箭弹Component.h">
+      <Filter>单位组件</Filter>
+    </ClInclude>
+    <ClInclude Include="单位组件\光刺Component.h">
       <Filter>单位组件</Filter>
     </ClInclude>
     <ClInclude Include="混战.h">

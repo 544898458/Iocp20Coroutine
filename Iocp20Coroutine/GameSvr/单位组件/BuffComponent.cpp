@@ -8,24 +8,59 @@
 #include "数值Component.h"
 #include "../../CoRoutine/CoTimer.h"
 #include "../RecastNavigationCrowd.h"
+#include "../Space.h"
+#include <algorithm>
 
-BuffComponent::BuffComponent(Entity& ref) :m_refEntity(ref)
+BuffComponent::BuffComponent(Entity& ref) :m_refEntity(ref), m_funCancel定时清理已结束的Buff("m_funCancel定时清理已结束的Buff")
 {
+	Co定时清理已结束的Buff().RunNew();
 }
 
-CoTaskBool BuffComponent::Co定时改数值(const 属性类型 属性, std::chrono::system_clock::duration dura间隔, int16_t i16变化, FunCancel& funCancel, const uint64_t idAttacker)
+CoTaskBool BuffComponent::Co定时清理已结束的Buff()
 {
-	while (!co_await CoTimer::Wait(dura间隔, funCancel))
+	using namespace std::chrono_literals;
+	while (!co_await CoTimer::Wait(1s, m_funCancel定时清理已结束的Buff))
+	{
+		bool bChanged = false;
+		for (auto& [id, listFunCancel] : m_mapFunCancel)
+		{
+			for (auto iterList = listFunCancel.begin(); iterList != listFunCancel.end(); )
+			{
+				if (!*iterList)
+				{
+					iterList = listFunCancel.erase(iterList);
+					bChanged = true;
+					continue;
+				}
+				++iterList;
+			}
+		}
+
+		if (bChanged)
+		{
+			广播Buff列表();
+		}
+	}
+
+	co_return false;
+}
+
+CoTaskBool BuffComponent::Co定时改数值(const 属性类型 属性, std::chrono::system_clock::duration dura间隔, int16_t i16变化, FunCancel& funCancel, WpEntity wpAttacker, std::chrono::system_clock::duration dura持续)
+{
+	const auto 开始时刻 = std::chrono::system_clock::now();
+	do
 	{
 		CHECK_CO_RET_FALSE(m_refEntity.m_upDefence);
 		if (m_refEntity.IsDead())
 			co_return false;
 
-		if (属性 == 生命 && 0 > i16变化)
-			m_refEntity.m_upDefence->受伤(-i16变化, m_refEntity);
+		if (属性 == 属性类型::生命 && 0 > i16变化)
+			m_refEntity.m_upDefence->受伤(-i16变化, wpAttacker);
 		else
 			数值Component::改变(m_refEntity, 属性, i16变化);
 	}
+	while (开始时刻 + dura持续 > std::chrono::system_clock::now() && !co_await CoTimer::Wait(dura间隔, funCancel));
+
 	co_return false;
 }
 
@@ -38,7 +73,7 @@ BuffComponent& BuffComponent::AddComponent(Entity& refEntity)
 void BuffComponent::加属性(BuffId idBuff表)
 {
 	单位::Buff配置 buff配置;
-	CHECK_RET_VOID(单位::FindBuff配置(idBuff表, buff配置));
+	CHECK_RET_VOID(单位::FindBuff配置(idBuff表, 1, buff配置));
 	auto& refMap属性 = m_map属性数值[buff配置.属性];
 	auto iterOld属性 = refMap属性.find(idBuff表);
 	float fOld变化 = 0;
@@ -64,10 +99,10 @@ void BuffComponent::加属性(BuffId idBuff表)
 			co_return true;
 		}(pair->second.m_funCancel).RunNew();
 
-		if (buff配置.f变化值 != fOld变化)
-		{
-			On属性变化(buff配置.属性);
-		}
+	if (buff配置.f变化值 != fOld变化)
+	{
+		On属性变化(buff配置.属性);
+	}
 }
 
 void BuffComponent::On属性变化(属性类型 属性类型)
@@ -94,41 +129,147 @@ float BuffComponent::属性(属性类型 属性) const
 
 void BuffComponent::定时改数值(const BuffId id, const uint64_t idAttacker)
 {
-	using namespace std;
 	单位::Buff配置 buff配置;
 	CHECK_RET_VOID(单位::FindBuff配置(id, buff配置));
 	删Buff(id);
-	Co定时改数值(buff配置.属性, buff配置.dura间隔, (int16_t)buff配置.f变化值, m_mapFunCancel[id], idAttacker).RunNew();
+	auto& refList = m_mapFunCancel[id];
+	refList.push_back(FunCancel());
+	Co定时改数值(buff配置.属性, buff配置.dura间隔, (int16_t)buff配置.f变化值, refList.back(), idAttacker).RunNew();
+}
+
+CoTaskBool BuffComponent::Co定时改数值(const 属性类型 属性, std::chrono::system_clock::duration dura间隔, int16_t i16变化, FunCancel& refFunCancel, const uint64_t idAttacker)
+{
+	while (!co_await CoTimer::Wait(dura间隔, refFunCancel))
+	{
+		CHECK_CO_RET_FALSE(m_refEntity.m_upDefence);
+		if (m_refEntity.IsDead())
+			co_return false;
+
+		if (属性 == 生命 && 0 > i16变化)
+			m_refEntity.m_upDefence->受伤(-i16变化, m_refEntity.m_refSpace.GetEntity(idAttacker));
+		else
+			数值Component::改变(m_refEntity, 属性, i16变化);
+	}
+	co_return false;
+}
+
+void BuffComponent::定时改数值(const BuffId id, WpEntity wpAttacker, const uint16_t u16等级)
+{
+	using namespace std;
+	单位::Buff配置 buff配置;
+	CHECK_RET_VOID(单位::FindBuff配置(id, u16等级, buff配置));
+	
+	if (! buff配置.b可叠加)
+	{
+		删Buff(id);
+	}
+	
+	auto& listFunCancel = m_mapFunCancel[id];
+	// 先查找是否有空闲位置（已结束的协程）
+	auto iter空闲 = std::find_if(listFunCancel.begin(), listFunCancel.end(), 
+		[](const FunCancel& funCancel) { return !funCancel; });
+	
+	FunCancel* pFunCancel = nullptr;
+	if (iter空闲 != listFunCancel.end())
+	{
+		// 复用空闲位置，不需要创建新的
+		pFunCancel = &(*iter空闲);
+	}
+	else
+	{
+		// 没有空闲位置，才创建新的空FunCancel
+		listFunCancel.push_back(FunCancel());
+		pFunCancel = &listFunCancel.back();
+	}
+	
+	CHECK_RET_VOID(pFunCancel);
+	
+	// 现在运行协程，协程会设置已经在list中的funCancel
+	Co定时改数值(buff配置.属性, buff配置.dura间隔, (int16_t)buff配置.f变化值, *pFunCancel, wpAttacker, buff配置.dura持续).RunNew();
+
+	广播Buff列表();
+}
+
+void BuffComponent::广播Buff列表()
+{
+	MsgBuff列表 msgBuff列表;
+	for (const auto& [id, listFunCancel] : m_mapFunCancel)
+	{
+		auto iter = std::find_if(listFunCancel.begin(), listFunCancel.end(), [](const FunCancel& funCancel)->bool { return (bool)funCancel; });
+		if (iter == listFunCancel.end())
+			continue;
+		msgBuff列表.setBuff.insert(id);
+	}
+	msgBuff列表.idEntity = m_refEntity.Id;
+	m_refEntity.Broadcast(msgBuff列表);
 }
 
 void BuffComponent::删Buff(BuffId id)
 {
 	auto iterFind = m_mapFunCancel.find(id);
-	if (iterFind != m_mapFunCancel.end() && iterFind->second)
+	if (iterFind != m_mapFunCancel.end())
 	{
-		iterFind->second();
-		iterFind->second = nullptr;
+		// 取消所有该BuffId的协程
+		for (auto& funCancel : iterFind->second)
+		{
+			if (funCancel)
+			{
+				funCancel();
+				funCancel = nullptr;
+			}
+		}
+		// 清理空闲位置
+		清理空闲Buff(id);
+		// 如果全部清空，删除整个条目
+		if (iterFind->second.empty())
+		{
+			m_mapFunCancel.erase(iterFind);
+		}
 	}
-	m_mapFunCancel.erase(id);
 }
 
 bool BuffComponent::已有Buff(BuffId id) const
 {
-	return m_mapFunCancel.find(id) != m_mapFunCancel.end();
+	auto iterFind = m_mapFunCancel.find(id);
+	if (iterFind == m_mapFunCancel.end())
+		return false;
+	// 检查是否有活跃的Buff（非空的FunCancel）
+	for (const auto& funCancel : iterFind->second)
+	{
+		if (funCancel)
+			return true;
+	}
+	return false;
 }
 
-void BuffComponent::OnEntityDestroy(const bool bDestroy)
+void BuffComponent::清理空闲Buff(BuffId id)
 {
-	for (auto& [id, refFunCancel] : m_mapFunCancel)
+	auto iterFind = m_mapFunCancel.find(id);
+	if (iterFind != m_mapFunCancel.end())
 	{
-		if (refFunCancel)
+		// 移除所有已结束的FunCancel（为nullptr的）
+		auto& listFunCancel = iterFind->second;
+		listFunCancel.remove_if([](const FunCancel& funCancel) { return !funCancel; });
+	}
+}
+
+void BuffComponent::OnEntityDestroy(const bool /*bDestroy*/)
+{
+	for (auto& [id, listFunCancel] : m_mapFunCancel)
+	{
+		// 取消所有该BuffId的协程
+		for (auto& funCancel : listFunCancel)
 		{
-			refFunCancel();
-			refFunCancel = nullptr;
+			if (funCancel)
+			{
+				funCancel();
+				funCancel = nullptr;
+			}
 		}
 	}
 	m_mapFunCancel.clear();
 
 	m_map属性数值.clear();
-}
 
+	m_funCancel定时清理已结束的Buff.TryCancel();
+}

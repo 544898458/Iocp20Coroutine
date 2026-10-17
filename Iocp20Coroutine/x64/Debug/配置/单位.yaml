@@ -1,4 +1,6 @@
 - PrefabPathName: null
+  u16初始Hp: 0
+  u16经验: 0
   动画节点路径: null
   受击高度: 0
   名字Key: Key特效
@@ -19,6 +21,8 @@
     起始时刻秒: 0
   阵亡音效: null
 - PrefabPathName: null
+  u16初始Hp: 0
+  u16经验: 0
   动画节点路径: null
   受击高度: 0
   名字Key: Key视口
@@ -39,6 +43,8 @@
     起始时刻秒: 0
   阵亡音效: null
 - PrefabPathName: 建筑/苔蔓
+  u16初始Hp: 0
+  u16经验: 0
   动画节点路径: null
   受击高度: 0
   名字Key: Key苔蔓
@@ -59,6 +65,8 @@
     起始时刻秒: 0
   阵亡音效: null
 - PrefabPathName: 建筑/方墩
+  u16初始Hp: 1
+  u16经验: 0
   动画节点路径: null
   受击高度: 0
   名字Key: Key方墩
@@ -79,6 +87,8 @@
     起始时刻秒: 0
   阵亡音效: null
 - PrefabPathName: 资源/晶体矿
+  u16初始Hp: 0
+  u16经验: 0
   动画节点路径: kuang_01
   受击高度: 0
   名字Key: Key晶体矿
@@ -99,6 +109,8 @@
     起始时刻秒: 0
   阵亡音效: null
 - PrefabPathName: 资源/燃气矿
+  u16初始Hp: 0
+  u16经验: 0
   动画节点路径: null
   受击高度: 0
   名字Key: Key燃气矿
@@ -119,6 +131,8 @@
     起始时刻秒: 0
   阵亡音效: null
 - PrefabPathName: 活动单位/工程车
+  u16初始Hp: 25
+  u16经验: 12
   动画节点路径: wajueji2026_model
   受击高度: 3
   名字Key: Key工程车
@@ -139,6 +153,8 @@
     起始时刻秒: 0
   阵亡音效: TSCDth00
 - PrefabPathName: 活动单位/枪兵
+  u16初始Hp: 15
+  u16经验: 7
   动画节点路径: p_A_rifle_01
   受击高度: 3
   名字Key: Key枪兵
@@ -159,6 +175,8 @@
     起始时刻秒: 0
   阵亡音效: TMaDth00
 - PrefabPathName: 活动单位/近战兵
+  u16初始Hp: 20
+  u16经验: 10
   动画节点路径: 近战兵999面_Idle
   受击高度: 3
   名字Key: Key近战兵
@@ -179,6 +197,8 @@
     起始时刻秒: 0
   阵亡音效: TFbDth00
 - PrefabPathName: 活动单位/三色坦克
+  u16初始Hp: 60
+  u16经验: 10
   动画节点路径: null
   受击高度: 2
   名字Key: Key三色坦克
@@ -199,6 +219,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/TTaDth00
 - PrefabPathName: 活动单位/工虫
+  u16初始Hp: 12
+  u16经验: 6
   动画节点路径: 待机
   受击高度: 2
   名字Key: Key工虫
@@ -219,6 +241,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/zdrDth00
 - PrefabPathName: 活动单位/飞机
+  u16初始Hp: 30
+  u16经验: 15
   动画节点路径: p_plane_01
   受击高度: 5
   名字Key: Key飞机
@@ -239,6 +263,8 @@
     起始时刻秒: 1
   阵亡音效: 音效/TTaDth00
 - PrefabPathName: 活动单位/枪虫
+  u16初始Hp: 15
+  u16经验: 7
   动画节点路径: m_78
   受击高度: 2
   名字Key: Key枪虫
@@ -259,6 +285,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/zhyDth00
 - PrefabPathName: 活动单位/近战虫
+  u16初始Hp: 12
+  u16经验: 6
   动画节点路径: chongmu_01
   受击高度: 2
   名字Key: Key近战虫
@@ -279,6 +307,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/ZZeDth00
 - PrefabPathName: 活动单位/幼虫
+  u16初始Hp: 10
+  u16经验: 5
   动画节点路径: 幼虫已加动作
   受击高度: 1
   名字Key: Key幼虫
@@ -299,6 +329,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/ZLaDth00
 - PrefabPathName: 活动单位/绿色坦克
+  u16初始Hp: 30
+  u16经验: 10
   动画节点路径: p_B_tank_01
   受击高度: 2
   名字Key: Key绿色坦克
@@ -319,6 +351,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/ZZeDth00
 - PrefabPathName: 活动单位/光刺
+  u16初始Hp: 10
+  u16经验: 5
   动画节点路径: null
   受击高度: 0
   名字Key: Key光刺
@@ -339,6 +373,8 @@
     起始时刻秒: 0
   阵亡音效: null
 - PrefabPathName: 活动单位/房虫
+  u16初始Hp: 45
+  u16经验: 10
   动画节点路径: 房虫
   受击高度: 4
   名字Key: Key房虫
@@ -359,6 +395,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/zovDth00
 - PrefabPathName: 活动单位/飞虫
+  u16初始Hp: 20
+  u16经验: 10
   动画节点路径: 飞虫-动作
   受击高度: 4
   名字Key: Key飞虫
@@ -379,6 +417,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/zmuDth00
 - PrefabPathName: 活动单位/医疗兵
+  u16初始Hp: 13
+  u16经验: 6
   动画节点路径: Dwarf Idle
   受击高度: 3
   名字Key: Key医疗兵
@@ -399,6 +439,8 @@
     起始时刻秒: 0
   阵亡音效: 语音/TMdDth00
 - PrefabPathName: 活动单位/防空兵
+  u16初始Hp: 25
+  u16经验: 12
   动画节点路径: p_C_rpg_02
   受击高度: 3
   名字Key: Key防空兵
@@ -419,6 +461,8 @@
     起始时刻秒: 0
   阵亡音效: TMaDth00
 - PrefabPathName: 活动单位/军绿色二足机甲
+  u16初始Hp: 50
+  u16经验: 25
   动画节点路径: '10_03'
   受击高度: 3
   名字Key: Key机甲
@@ -439,6 +483,8 @@
     起始时刻秒: 0
   阵亡音效: TMaDth00
 - PrefabPathName: 建筑/基地
+  u16初始Hp: 400
+  u16经验: 200
   动画节点路径: p_Base_02
   受击高度: 3
   名字Key: Key基地
@@ -459,6 +505,8 @@
     起始时刻秒: 0
   阵亡音效: explo4
 - PrefabPathName: 建筑/兵营
+  u16初始Hp: 100
+  u16经验: 50
   动画节点路径: Factory_1mesh_model
   受击高度: 3
   名字Key: Key兵营
@@ -479,6 +527,8 @@
     起始时刻秒: 0
   阵亡音效: EXPLOMED
 - PrefabPathName: 建筑/民房
+  u16初始Hp: 50
+  u16经验: 25
   动画节点路径: null
   受击高度: 3
   名字Key: Key民房
@@ -499,6 +549,8 @@
     起始时刻秒: 0
   阵亡音效: EXPLOMED
 - PrefabPathName: 建筑/地堡
+  u16初始Hp: 300
+  u16经验: 150
   动画节点路径: 地堡700面蓝色
   受击高度: 3
   名字Key: Key地堡
@@ -519,6 +571,8 @@
     起始时刻秒: 0
   阵亡音效: EXPLOMED
 - PrefabPathName: 建筑/炮台
+  u16初始Hp: 100
+  u16经验: 50
   动画节点路径: p_jiqiangbao_d_01
   受击高度: 3
   名字Key: Key炮台
@@ -539,6 +593,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/explo1
 - PrefabPathName: 建筑/虫巢
+  u16初始Hp: 200
+  u16经验: 100
   动画节点路径: hatchery_skin
   受击高度: 3
   名字Key: Key虫巢
@@ -559,6 +615,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/ZBldgDth
 - PrefabPathName: 建筑/机场
+  u16初始Hp: 150
+  u16经验: 75
   动画节点路径: airport_500_1mesh
   受击高度: 3
   名字Key: Key机场
@@ -579,6 +637,8 @@
     起始时刻秒: 0
   阵亡音效: EXPLOMED
 - PrefabPathName: 建筑/重车厂
+  u16初始Hp: 150
+  u16经验: 75
   动画节点路径: 风扇飞
   受击高度: 3
   名字Key: Key重车厂
@@ -599,6 +659,8 @@
     起始时刻秒: 0
   阵亡音效: EXPLOMED
 - PrefabPathName: 建筑/虫营
+  u16初始Hp: 80
+  u16经验: 40
   动画节点路径: 虫营
   受击高度: 3
   名字Key: Key虫营
@@ -619,6 +681,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/ZBldgDth
 - PrefabPathName: 建筑/飞塔
+  u16初始Hp: 120
+  u16经验: 60
   动画节点路径: 飞塔
   受击高度: 4
   名字Key: Key飞塔
@@ -639,6 +703,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/ZBldgDth
 - PrefabPathName: 建筑/拟态源
+  u16初始Hp: 120
+  u16经验: 60
   动画节点路径: 拟态源
   受击高度: 3
   名字Key: Key拟态源
@@ -659,6 +725,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/ZBldgDth
 - PrefabPathName: 建筑/太岁
+  u16初始Hp: 15
+  u16经验: 7
   动画节点路径: null
   受击高度: 1
   名字Key: Key太岁
@@ -679,6 +747,8 @@
     起始时刻秒: 0
   阵亡音效: null
 - PrefabPathName: 活动单位/枪虫
+  u16初始Hp: 15
+  u16经验: 10
   动画节点路径: m_78
   受击高度: 2
   名字Key: Key枪虫怪
@@ -699,6 +769,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/zhyDth00
 - PrefabPathName: 活动单位/近战虫
+  u16初始Hp: 12
+  u16经验: 10
   动画节点路径: chongmu_01
   受击高度: 2
   名字Key: Key近战虫怪
@@ -719,6 +791,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/ZZeDth00
 - PrefabPathName: 活动单位/工虫
+  u16初始Hp: 12
+  u16经验: 10
   动画节点路径: 待机
   受击高度: 2
   名字Key: Key工虫怪
@@ -739,6 +813,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/zdrDth00
 - PrefabPathName: 活动单位/枪兵
+  u16初始Hp: 15
+  u16经验: 10
   动画节点路径: p_A_rifle_01
   受击高度: 3
   名字Key: Key枪兵怪
@@ -759,6 +835,8 @@
     起始时刻秒: 0
   阵亡音效: TMaDth00
 - PrefabPathName: 活动单位/近战兵
+  u16初始Hp: 20
+  u16经验: 10
   动画节点路径: 近战兵999面_Idle
   受击高度: 3
   名字Key: Key近战兵怪
@@ -779,6 +857,8 @@
     起始时刻秒: 0
   阵亡音效: TFbDth00
 - PrefabPathName: 活动单位/工程车
+  u16初始Hp: 25
+  u16经验: 10
   动画节点路径: wajueji2026_model
   受击高度: 3
   名字Key: Key工程车怪
@@ -799,6 +879,8 @@
     起始时刻秒: 0
   阵亡音效: TSCDth00
 - PrefabPathName: 活动单位/幼虫
+  u16初始Hp: 10
+  u16经验: 10
   动画节点路径: 幼虫已加动作
   受击高度: 1
   名字Key: Key幼虫怪
@@ -819,6 +901,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/ZLaDth00
 - PrefabPathName: 活动单位/飞虫
+  u16初始Hp: 20
+  u16经验: 10
   动画节点路径: 飞虫-动作
   受击高度: 4
   名字Key: Key飞虫怪
@@ -839,6 +923,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/zmuDth00
 - PrefabPathName: 活动单位/绿色坦克
+  u16初始Hp: 30
+  u16经验: 10
   动画节点路径: p_B_tank_01
   受击高度: 2
   名字Key: Key绿色坦克怪
@@ -859,6 +945,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/ZZeDth00
 - PrefabPathName: 活动单位/房虫
+  u16初始Hp: 45
+  u16经验: 10
   动画节点路径: 房虫
   受击高度: 4
   名字Key: Key房虫怪
@@ -879,6 +967,8 @@
     起始时刻秒: 0
   阵亡音效: 音效/zovDth00
 - PrefabPathName: 活动单位/防空兵
+  u16初始Hp: 25
+  u16经验: 10
   动画节点路径: p_C_rpg_02
   受击高度: 3
   名字Key: Key防空兵怪
@@ -898,3 +988,25 @@
     结束时刻秒: 0
     起始时刻秒: 0
   阵亡音效: TMaDth00
+- PrefabPathName: 活动单位/火箭弹
+  u16初始Hp: 1
+  u16经验: 0
+  动画节点路径: null
+  受击高度: 0
+  名字Key: Key火箭弹
+  描述Key: MiaoShu_HuoJianDan
+  是骨骼动画: false
+  种族: 0
+  空闲动作:
+    名字或索引: null
+    播放速度: 1
+    结束时刻秒: 0
+    起始时刻秒: 0
+  类型: 217
+  选中音效Key: null
+  阵亡动作:
+    名字或索引: null
+    播放速度: 1
+    结束时刻秒: 0
+    起始时刻秒: 0
+  阵亡音效: null
