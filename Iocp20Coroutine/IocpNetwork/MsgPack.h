@@ -35,7 +35,7 @@ namespace MsgPack
 		//const auto&& [bufAll, lenAll] = sendBuff.BuildSendBuf();
 		//refFun(bufAll, lenAll);
 		//上面代码太慢了
-		static std::vector<char> vec(1024 * 16);
+		std::vector<char> vec(1024 * 16);
 		vec.resize(sizeof(usSize) + usSize);
 		*(uint16_t*)&vec[0] = usSize;
 		memcpy(&vec[2], str.data(), usSize);

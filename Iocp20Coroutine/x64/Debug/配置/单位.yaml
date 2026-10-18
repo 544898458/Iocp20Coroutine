@@ -988,7 +988,7 @@
     结束时刻秒: 0
     起始时刻秒: 0
   阵亡音效: TMaDth00
-- PrefabPathName: 活动单位/火箭弹
+- PrefabPathName: 活动单位/导弹
   u16初始Hp: 1
   u16经验: 0
   动画节点路径: null
