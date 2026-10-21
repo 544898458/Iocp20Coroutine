@@ -20,7 +20,7 @@
 #include "../../读Yaml配置/翻译.h"
 
 
-const std::initializer_list<const 属性类型> g_list所有属性 = { 生命, 能量, 经验, 等级, 火箭弹等级, 光刺等级, 射程等级, 火焰等级 };
+const std::initializer_list<const 属性类型> g_list所有属性 = { 生命, 最大生命, 能量, 经验, 等级, 火箭弹等级, 光刺等级, 射程等级, 火焰等级 };
 
 MsgNotifyPos::MsgNotifyPos(const Entity& ref) :
 	entityId(ref.Id), pos(ref.Pos()), eulerAnglesY(ref.m_eulerAnglesY)
