@@ -344,7 +344,7 @@
   类型: 215
   防御: 0
 - b可打地面: true
-  b可打空中: false
+  b可打空中: true
   b空中: false
   dura后摇: 100
   dura开始伤害: 530
