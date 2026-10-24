@@ -1,13 +1,13 @@
 <size=24><b>Shortcut Operations</b></size><br/>
 Select the same unit twice in a row to automatically select all nearby units of the same type.<br/>
 After selecting multiple units, click the ground to make them move while maintaining their original formation; double-click the same spot, and the units will converge at the target location.<br/>
-Normal movement makes combat units attack enemies they encounter, while Medics automatically heal nearby wounded allies. Use <outline color=#ffffff width=1>Force Move</outline> to ignore enemies and continue to the destination. You can also set patrol points, follow a target, or hold position.<br/>
+Normal movement makes combat units attack enemies they encounter, while Medics automatically heal nearby wounded allies. Use <color=#ffd666><b>Force Move</b></color> to ignore enemies and continue to the destination. You can also set patrol points, follow a target, or hold position.<br/>
 You can set rally points for unit production in <color=#40a9ff>Command Centers, Barracks, Vehicle Factories, Airports</color> and <color=#ff4d4f> Hive</color>. Assign the rally point of Construction Vehicles or Drones to a resource node, and newly produced workers will automatically collect resources there.<br/>
-<outline color=#ffff00 width=1>Idle Construction Vehicles/Drones Button</outline>: A single click selects all idle workers; subsequent clicks cycle through them one by one. After the server-configured interval, the next click selects all idle workers again (10 seconds by default).<br/>
+<color=#ffd666><b>Idle Construction Vehicles/Drones Button</b></color>: A single click selects all idle workers; subsequent clicks cycle through them one by one. After the server-configured interval, the next click selects all idle workers again (10 seconds by default).<br/>
 <br/>
 <size=24><b>Human Construction</b></size><br/>
-<outline color=#ffffff width=1>Construct Buildings</outline>: Click the button for <color=#40a9ff>Command Center/Civilian House/Bunker/Barracks/Battery Turret/Airport/Vehicle Factory</color> => click the ground. The nearest idle Construction Vehicle will move to the target location to build. If you select a Construction Vehicle first, that vehicle will perform the build task. Some buildings have prerequisites.<br/>
-<outline color=#ffffff width=1>Produce Mobile Units</outline>: Command Centers produce Construction Vehicles and Medics; Barracks produce Soldiers and Firebats; Vehicle Factories produce Tanks and Mechs; Airports produce Aircraft and Anti-Air units. Select one or more structures that can produce the unit to use them; otherwise production is assigned to an eligible structure with a shorter queue. Some units require prerequisite buildings or must be unlocked first.<br/>
+<color=#ffd666><b>Construct Buildings</b></color>: Click the button for <color=#40a9ff>Command Center/Civilian House/Bunker/Barracks/Battery Turret/Airport/Vehicle Factory</color> => click the ground. The nearest idle Construction Vehicle will move to the target location to build. If you select a Construction Vehicle first, that vehicle will perform the build task. Some buildings have prerequisites.<br/>
+<color=#ffd666><b>Produce Mobile Units</b></color>: Command Centers produce Construction Vehicles and Medics; Barracks produce Soldiers and Firebats; Vehicle Factories produce Tanks and Mechs; Airports produce Aircraft and Anti-Air units. Select one or more structures that can produce the unit to use them; otherwise production is assigned to an eligible structure with a shorter queue. Some units require prerequisite buildings or must be unlocked first.<br/>
 Barracks, Bug Barracks, Vehicle Factories, Airports, Spore Towers and Mimic Sources provide different unit upgrades. Select a structure to see its available upgrades.<br/>
 Completed Command Centers add 6 population, Hives add 5, Civilian Houses add 8, and Transport Drones add 6. The default per-player population cap is 100; check the in-game counter for the active limit.<br/>
 A Bunker or Transport Drone can garrison up to 10 mobile units. Select units and left-click the Bunker or Transport Drone to load them; right-click it to unload them. If a Transport Drone is destroyed, its passengers are released with 1 HP. Bunkers have a very high health pool.<br/>
@@ -18,7 +18,7 @@ A Bunker or Transport Drone can garrison up to 10 mobile units. Select units and
 <color=#ff9500><b>Medic</b></color>: Automatically heals nearby wounded allies<br/>
 <br/>
 <size=24><b>Hero Unit: Mech</b></size><br/>
-<color=#ff9500><b>Mechs</b></color> are produced by Vehicle Factories. Their progression is different from building-based unit upgrades: a Mech that contributes to an enemy kill earns experience based on its share of the damage. When its experience is full, it levels up automatically, increases and fully restores its health, and gains one <outline color=#ffff00 width=1>skill point</outline>.<br/>
+<color=#ff9500><b>Mechs</b></color> are produced by Vehicle Factories. Their progression is different from building-based unit upgrades: a Mech that contributes to an enemy kill earns experience based on its share of the damage. When its experience is full, it levels up automatically, increases and fully restores its health, and gains one <color=#ffd666><b>skill point</b></color>.<br/>
 Each level-up presents skill choices. Spend skill points on <color=#ff3b30>Rockets</color>, <color=#5ac8fa>Light Spikes</color>, <color=#ff9500>Flames</color>, or <color=#34c759>Range</color>. These points apply only to that Mech; they are not bought from buildings and cannot be reset.<br/>
 <color=#ff3b30><b>Rockets</b></color>: Fire in a straight line toward the current target for reliable damage. Upgrades increase projectile count, range, and flight speed; high levels pierce additional enemies.<br/>
 <color=#5ac8fa><b>Light Spikes</b></color>: Automatically home in on nearby enemies and acquire a new target if the current one is lost. Upgrades improve range, flight speed, and piercing; high levels also fire more spikes in succession.<br/>
@@ -26,8 +26,8 @@ Each level-up presents skill choices. Spend skill points on <color=#ff3b30>Rocke
 <color=#34c759><b>Range</b></color>: Increases the range of Rockets, Light Spikes, and Flames at the same time. It pairs well with any offensive skill for safer long-range damage.<br/>
 <br/>
 <size=24><b>Insectoids Construction</b></size><br/>
-<outline color=#ffffff width=1>Construct Buildings</outline>: Insectoids buildings are created by mutating Drones, so each building constructed consumes one Drone. All Insectoids buildings except Hives must be placed on Creep; buildings off Creep continuously lose health.<br/>
-<outline color=#ffffff width=1>Produce Mobile Units</outline>: Insectoids mobile units hatch from Larvae. Each Hive can support up to 3 Larvae and produces about one every 10 seconds; more Hives increase Larva supply.<br/>
+<color=#ffd666><b>Construct Buildings</b></color>: Insectoids buildings are created by mutating Drones, so each building constructed consumes one Drone. All Insectoids buildings except Hives must be placed on Creep; buildings off Creep continuously lose health.<br/>
+<color=#ffd666><b>Produce Mobile Units</b></color>: Insectoids mobile units hatch from Larvae. Each Hive can support up to 3 Larvae and produces about one every 10 seconds; more Hives increase Larva supply.<br/>
 <br/>
 <size=24><b>Insectoids Unique Units</b></size><br/>
 <color=#ff9500><b>PopuLifter Drone</b></color>: Can transport units<br/>
@@ -35,7 +35,7 @@ Each level-up presents skill choices. Spend skill points on <color=#ff3b30>Rocke
 <size=24><b>Resource Gathering</b></size><br/>
 Click to select a Construction Vehicle => click a <color=#b7b7a4>Mineral Field</color> or <color=#ff7a45>Vespene Geyser</color> to order resource collection.<br/>
 Workers automatically travel between a resource node and the nearest Command Center or Hive to deposit resources. Resource nodes are finite and disappear when depleted.<br/>
-Click the <outline color=#ffff00 width=1>Idle Construction Vehicles/Drones</outline> button to quickly locate idle workers.<br/>
+Click the <color=#ffd666><b>Idle Construction Vehicles/Drones</b></color> button to quickly locate idle workers.<br/>
 Select a Command Center or Hive, then set the Construction Vehicle or Drone rally point on a resource node. Newly produced workers will head directly there and begin gathering.<br/>
 <br/>
 <size=24><b>Basic Unit Counters (Simplified)</b></size><br/>
