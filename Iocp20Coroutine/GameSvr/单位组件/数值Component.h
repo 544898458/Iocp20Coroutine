@@ -19,6 +19,8 @@ public:
 	int 最大属性(const 属性类型& 属性);
 	int 改变(const 属性类型 属性, const int 变化);
 	int 确保属性在范围内(const 属性类型 属性);
+	const std::map<属性类型, int>& GetMap属性数值()const;
+	void SetMap属性数值(const std::map<属性类型, int>& map属性数值);
 private:
 	Entity& m_refEntity;
 	std::map<属性类型, int> m_map属性数值;

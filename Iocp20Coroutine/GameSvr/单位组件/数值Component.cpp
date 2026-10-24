@@ -95,3 +95,13 @@ int 数值Component::确保属性在范围内(const 属性类型 属性)
 	ref数值 = std::max(0, std::min(ref数值, max数值));
 	return ref数值;
 }
+
+const std::map<属性类型, int>& 数值Component::GetMap属性数值()const
+{
+	return m_map属性数值;
+}
+
+void 数值Component::SetMap属性数值(const std::map<属性类型, int>& map属性数值)
+{
+	m_map属性数值 = map属性数值;
+}
