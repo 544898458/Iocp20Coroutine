@@ -1511,3 +1511,9 @@
 - Key: Key机甲
   中文: 机甲
   英文: Mech
+- Key: Key玩家战败！AI获胜！
+  中文: 玩家战败！AI获胜！
+  英文: Player defeated! AI wins!
+- Key: Key恭喜！你击败了AI！
+  中文: 恭喜！你击败了AI！
+  英文: Congratulations! You defeated the AI!
