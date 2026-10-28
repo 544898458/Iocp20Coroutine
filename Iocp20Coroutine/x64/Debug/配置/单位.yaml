@@ -154,7 +154,7 @@
   阵亡音效: TSCDth00
 - PrefabPathName: 活动单位/枪兵
   u16初始Hp: 15
-  u16经验: 1
+  u16经验: 2
   动画节点路径: p_A_rifle_01
   受击高度: 3
   名字Key: Key枪兵
@@ -176,7 +176,7 @@
   阵亡音效: TMaDth00
 - PrefabPathName: 活动单位/近战兵
   u16初始Hp: 20
-  u16经验: 1
+  u16经验: 2
   动画节点路径: 近战兵999面_Idle
   受击高度: 3
   名字Key: Key近战兵
@@ -264,7 +264,7 @@
   阵亡音效: 音效/TTaDth00
 - PrefabPathName: 活动单位/枪虫
   u16初始Hp: 15
-  u16经验: 1
+  u16经验: 2
   动画节点路径: m_78
   受击高度: 2
   名字Key: Key枪虫
@@ -286,7 +286,7 @@
   阵亡音效: 音效/zhyDth00
 - PrefabPathName: 活动单位/近战虫
   u16初始Hp: 12
-  u16经验: 1
+  u16经验: 2
   动画节点路径: chongmu_01
   受击高度: 2
   名字Key: Key近战虫
@@ -352,7 +352,7 @@
   阵亡音效: 音效/ZZeDth00
 - PrefabPathName: 活动单位/光刺
   u16初始Hp: 10
-  u16经验: 1
+  u16经验: 0
   动画节点路径: null
   受击高度: 0
   名字Key: Key光刺
@@ -440,7 +440,7 @@
   阵亡音效: 语音/TMdDth00
 - PrefabPathName: 活动单位/防空兵
   u16初始Hp: 25
-  u16经验: 2
+  u16经验: 3
   动画节点路径: p_C_rpg_02
   受击高度: 3
   名字Key: Key防空兵
@@ -462,7 +462,7 @@
   阵亡音效: TMaDth00
 - PrefabPathName: 活动单位/军绿色二足机甲
   u16初始Hp: 50
-  u16经验: 4
+  u16经验: 15
   动画节点路径: '10_03'
   受击高度: 3
   名字Key: Key机甲
@@ -506,7 +506,7 @@
   阵亡音效: explo4
 - PrefabPathName: 建筑/兵营
   u16初始Hp: 100
-  u16经验: 3
+  u16经验: 5
   动画节点路径: Factory_1mesh_model
   受击高度: 3
   名字Key: Key兵营
@@ -528,7 +528,7 @@
   阵亡音效: EXPLOMED
 - PrefabPathName: 建筑/民房
   u16初始Hp: 50
-  u16经验: 1
+  u16经验: 3
   动画节点路径: null
   受击高度: 3
   名字Key: Key民房
@@ -572,7 +572,7 @@
   阵亡音效: EXPLOMED
 - PrefabPathName: 建筑/炮台
   u16初始Hp: 100
-  u16经验: 4
+  u16经验: 6
   动画节点路径: p_jiqiangbao_d_01
   受击高度: 3
   名字Key: Key炮台
@@ -594,7 +594,7 @@
   阵亡音效: 音效/explo1
 - PrefabPathName: 建筑/虫巢
   u16初始Hp: 200
-  u16经验: 6
+  u16经验: 8
   动画节点路径: hatchery_skin
   受击高度: 3
   名字Key: Key虫巢
@@ -638,7 +638,7 @@
   阵亡音效: EXPLOMED
 - PrefabPathName: 建筑/重车厂
   u16初始Hp: 150
-  u16经验: 5
+  u16经验: 6
   动画节点路径: 风扇飞
   受击高度: 3
   名字Key: Key重车厂
@@ -660,7 +660,7 @@
   阵亡音效: EXPLOMED
 - PrefabPathName: 建筑/虫营
   u16初始Hp: 80
-  u16经验: 3
+  u16经验: 4
   动画节点路径: 虫营
   受击高度: 3
   名字Key: Key虫营
@@ -748,7 +748,7 @@
   阵亡音效: null
 - PrefabPathName: 活动单位/枪虫
   u16初始Hp: 15
-  u16经验: 1
+  u16经验: 2
   动画节点路径: m_78
   受击高度: 2
   名字Key: Key枪虫怪
@@ -770,7 +770,7 @@
   阵亡音效: 音效/zhyDth00
 - PrefabPathName: 活动单位/近战虫
   u16初始Hp: 12
-  u16经验: 1
+  u16经验: 2
   动画节点路径: chongmu_01
   受击高度: 2
   名字Key: Key近战虫怪
@@ -814,7 +814,7 @@
   阵亡音效: 音效/zdrDth00
 - PrefabPathName: 活动单位/枪兵
   u16初始Hp: 15
-  u16经验: 1
+  u16经验: 2
   动画节点路径: p_A_rifle_01
   受击高度: 3
   名字Key: Key枪兵怪
@@ -836,7 +836,7 @@
   阵亡音效: TMaDth00
 - PrefabPathName: 活动单位/近战兵
   u16初始Hp: 20
-  u16经验: 1
+  u16经验: 2
   动画节点路径: 近战兵999面_Idle
   受击高度: 3
   名字Key: Key近战兵怪
@@ -902,7 +902,7 @@
   阵亡音效: 音效/ZLaDth00
 - PrefabPathName: 活动单位/飞虫
   u16初始Hp: 20
-  u16经验: 2
+  u16经验: 3
   动画节点路径: 飞虫-动作
   受击高度: 4
   名字Key: Key飞虫怪
@@ -968,7 +968,7 @@
   阵亡音效: 音效/zovDth00
 - PrefabPathName: 活动单位/防空兵
   u16初始Hp: 25
-  u16经验: 2
+  u16经验: 3
   动画节点路径: p_C_rpg_02
   受击高度: 3
   名字Key: Key防空兵怪
