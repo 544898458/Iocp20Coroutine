@@ -1,2 +1,6 @@
-                       January 25th Announcement
-Add smoke effect to the chimney of the heavy vehicle factory
+                       October 23rd Announcement
+Hero unit: Mech. Gain experience by killing enemies to upgrade skills:
+Rocket: Pierces multiple enemies in a straight line
+Light Spiker: Homes in on multiple enemies
+Flame: Damages enemies within a cone area
+Range: Increases the range of other skills
