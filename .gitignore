@@ -41,3 +41,4 @@ enc_temp_folder
 *.pch
 *.sqlite3
 *.db
+.CodeBuddyTemp

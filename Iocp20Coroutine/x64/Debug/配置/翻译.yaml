@@ -1529,3 +1529,9 @@
 - Key: Key请放置在选中太岁的苔蔓上
   中文: 请放置在选中太岁的苔蔓(wàn)上
   英文: Please place it on the selected Taisui's Mossy Vines
+- Key: 装备已升到{}级
+  中文: 装备已升到{}级
+  英文: Equipment Upgraded to Lv. {}
+- Key: 已升到{}级
+  中文: 已升到{}级
+  英文: Upgraded to Lv. {}
